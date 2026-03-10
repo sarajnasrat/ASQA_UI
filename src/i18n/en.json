@@ -1,0 +1,50 @@
+{
+  "navbar": {
+    "welcome": "Welcome",
+    "notifications": "Notifications",
+    "unread": "unread",
+    "viewAllNotifications": "View All Notifications",
+    "myProfile": "My Profile",
+    "accountSettings": "Account Settings",
+    "logout": "Logout"
+  },
+  "notification": {
+    "newUser": "A new user has joined",
+    "systemUpdate": "System update available",
+    "reportReady": "Your report is ready"
+  },
+  "languages": {
+    "english": "English",
+    "persian": "Persian (Farsi)",
+    "pashto": "Pashto"
+  },
+  "country": {
+    "code":{
+      "label": "Country Code",
+      "placeholder": "sdafkdsakf"
+    },
+    "form": {
+      "labels": {
+        "countryCode": "Country Code",
+        "translations": "Translations"
+      },
+      "placeholder": {
+        "countryCode": "qwjerkwqjrkewqjrlkqwejlkqewrWWWWF",
+        "enterName": "Enter {{language}} name"
+      },
+      "validation": {
+        "countryCode": {
+          "required": "Country code is required",
+          "minLength": "Country code must be at least 2 characters",
+          "maxLength": "Country code must not exceed 3 characters"
+        },
+        "translations": {
+          "required": "English name is required"
+        }
+      },
+      "hint": {
+        "translations": "All translations are optional except English"
+      }
+    }
+  }
+}

@@ -1,0 +1,67 @@
+{
+    "navbar": {
+        "welcome": "ښه راغلاست",
+        "notifications": "خبرتیاوې",
+        "unread": "نه لوستل شوې",
+        "viewAllNotifications": "ټولې خبرتیاوې وګورئ",
+        "myProfile": "زما پروفایل",
+        "accountSettings": "د حساب ترتیبات",
+        "logout": "وتل"
+    },
+    "notification": {
+        "newUser": "یو نوی کارونکی شامل شو",
+        "systemUpdate": "د سیسټم تازه معلومات موجود دي",
+        "reportReady": "ستاسو راپور چمتو دی"
+    },
+    "languages": {
+        "english": "انګلیسي",
+        "persian": "فارسي (دری)",
+        "pashto": "پښتو"
+    },
+    "country": {
+        "create": "افزودن کشور",
+        "edit": "اصلاح کشور",
+        "delete": "حذف کشور",
+        "refersh": "تازه سازی",
+        "list": "لیست کشورها",
+        "name": "نام کشور",
+        "code": "کد کشور",
+        
+        "deleteConfirm": "آیا مطمئن هستید که می‌خواهید کشور {{name}} را حذف کنید؟",
+        "form": {
+            "labels": {
+                "countryCode": "د هېواد کوډ",
+                "translations": "ژباړې"
+            },
+            "placeholder": {
+                "countryCode": "لکه +93",
+                "enterName": "د {{language}} نوم دننه کړئ"
+            },
+            "validation": {
+                "countryCode": {
+                    "required": "د هېواد کوډ اړین دی",
+                    "minLength": "د هېواد کوډ باید لږ تر لږه ۲ توري وي",
+                    "maxLength": "د هېواد کوډ باید له ۳ تورو زیات نه وي"
+                },
+                "translations": {
+                    "required": "انګلیسي نوم اړین دی"
+                }
+            },
+            "hint": {
+                "translations": "ټولې ژباړې اختیاري دي پرته له انګلیسي"
+            }
+        }
+    },
+    "common": {
+        "save": "ذخیره",
+        "cancel": "لغو",
+        "delete": "حذف",
+        "edit": "اصلاح",
+        "create": "ایجاد",
+        "view": "مشاهده",
+        "refersh": "تازه سازی",
+        "total": "مجموع",
+        "action": "عملیات",
+        "saving":"در حال ذخیره..."
+    }
+}

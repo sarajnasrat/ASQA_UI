@@ -1,0 +1,46 @@
+{
+  "navbar": {
+    "welcome": "خوش آمدید",
+    "notifications": "اطلاعیه‌ها",
+    "unread": "خوانده نشده",
+    "viewAllNotifications": "مشاهده همه اطلاعیه‌ها",
+    "myProfile": "پروفایل من",
+    "accountSettings": "تنظیمات حساب",
+    "logout": "خروج"
+  },
+  "notification": {
+    "newUser": "کاربر جدید ثبت شد",
+    "systemUpdate": "به‌روزرسانی سیستم موجود است",
+    "reportReady": "گزارش آماده است"
+  },
+  "languages": {
+    "english": "انگلیسی",
+    "persian": "فارسی",
+    "pashto": "پشتو"
+  },
+  "country": {
+    "form": {
+      "labels": {
+        "countryCode": "کد کشور",
+        "translations": "ترجمه‌ها"
+      },
+      "placeholder": {
+        "countryCode": "مثال: USA، CAN، GBR",
+        "enterName": "نام {{language}} را وارد کنید"
+      },
+      "validation": {
+        "countryCode": {
+          "required": "کد کشور الزامی است",
+          "minLength": "کد کشور باید حداقل ۲ حرف باشد",
+          "maxLength": "کد کشور نباید بیشتر از ۳ حرف باشد"
+        },
+        "translations": {
+          "required": "نام انگلیسی الزامی است"
+        }
+      },
+      "hint": {
+        "translations": "تمام ترجمه‌ها به جز انگلیسی اختیاری هستند"
+      }
+    }
+  }
+}

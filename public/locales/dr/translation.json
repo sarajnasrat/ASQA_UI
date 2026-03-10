@@ -1,0 +1,94 @@
+{
+  "navbar": {
+    "welcome": "خوش آمدید",
+    "notifications": "اطلاعیه‌ها",
+    "unread": "خوانده نشده",
+    "viewAllNotifications": "مشاهده همه اطلاعیه‌ها",
+    "myProfile": "پروفایل من",
+    "accountSettings": "تنظیمات حساب",
+    "logout": "خروج"
+  },
+  "notification": {
+    "newUser": "کاربر جدید ثبت شد",
+    "systemUpdate": "به‌روزرسانی سیستم موجود است",
+    "reportReady": "گزارش آماده است"
+  },
+  "languages": {
+    "english": "انگلیسی",
+    "persian": "فارسی",
+    "pashto": "پشتو"
+  },
+  "country": {
+    "create": "افزودن کشور",
+    "edit": "اصلاح کشور",
+    "delete": "حذف کشور",
+    "refersh": "تازه سازی",
+    "list": "لیست کشورها",
+    "name": "نام کشور",
+    "code": "کد کشور",
+    "created": "کشور ایجاد شد",
+    "deleteConfirm": "آیا مطمئن هستید که می‌خواهید کشور {{name}} را حذف کنید؟",
+    "form": {
+      "labels": {
+        "countryCode": "کد کشور",
+        "translations": "ترجمه‌ها"
+      },
+      "placeholder": {
+        "countryCode": "+3",
+        "enterName": "نام {{language}} را وارد کنید"
+      },
+      "validation": {
+        "countryCode": {
+          "required": "کد کشور الزامی است",
+          "minLength": "کد کشور باید حداقل ۲ حرف باشد",
+          "maxLength": "کد کشور نباید بیشتر از ۳ حرف باشد"
+        },
+        "translations": {
+          "required": "نام انگلیسی الزامی است"
+        }
+      },
+      "hint": {
+        "translations": "تمام ترجمه‌ها به جز انگلیسی اختیاری هستند"
+      }
+    }
+  },
+  "district": {
+    "create": "Create District",
+    "edit": "Edit District",
+    "delete": "Delete District",
+    "refersh": "Refresh",
+    "list": "District List",
+    "name": "District Name",
+    "code": "District Code",
+    "created": "District created successfully",
+    "deleteConfirm": "Are you sure you want to delete district {{name}} ?",
+    
+    "form": {
+      "labels": {
+        "province": "Province"
+      },
+      "placeholder": {
+        "province": "Select a province",
+        "name": "Enter name in {{language}}"
+      },
+      "validation": {
+        "province": {
+          "required": "Province is required"
+        },
+        "name": {
+          "required": "District name in English is required"
+        }
+      }
+    }},
+  "common": {
+    "save": "ذخیره",
+    "cancel": "لغو",
+    "delete": "حذف",
+    "edit": "اصلاح",
+    "create": "ایجاد",
+    "view": "مشاهده",
+    "refersh": "تازه سازی",
+    "total": "مجموع",
+    "action": "عملیات"
+  }
+}

@@ -1,0 +1,9 @@
+@import "tailwindcss";
+.p-button .pi {
+  margin-inline-end: 0.5rem;
+}
+
+
+[dir="rtl"] .p-datatable .p-datatable-tbody > tr > td {
+    text-align: right;
+}
