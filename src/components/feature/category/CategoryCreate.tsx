@@ -1,11 +1,11 @@
-
-import React, { useRef, useState, useEffect } from "react";
-import { Toast } from "primereact/toast";
+import React, { useState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
+
 import CategoryService from "../../../services/category.service";
+import { handleApi } from "../../../hooks/handleApi";
+import { useToast } from "../../../hooks/ToastContext";
 
 interface CategoryCreateProps {
   onClose: () => void;
@@ -21,32 +21,19 @@ export const CategoryCreate: React.FC<CategoryCreateProps> = ({
   onClose,
   onSuccess,
 }) => {
-  const toast = useRef<Toast>(null);
   const { t } = useTranslation();
+  const { showSuccess } = useToast(); // Global toast
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const categoryTypes = [
-    { label: "COMPANY", value: "COMPANY" },
-    { label: "BOTH", value: "BOTH" },
-    { label: "TECHNOLOGY", value: "TECHNOLOGY" },
-    { label: "SERVICE", value: "SERVICE" },
-    { label: "EDUCATION", value: "EDUCATION" },
-    { label: "JOB", value: "JOB" },
-  ];
- 
 
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<CategoryFormValues>({
-    defaultValues: {
-      name: "",
-      categoryType: null,
-    },
+    defaultValues: { name: "", categoryType: null },
   });
 
-  // ESC key close
+  // ESC key to close
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -55,36 +42,26 @@ export const CategoryCreate: React.FC<CategoryCreateProps> = ({
     return () => window.removeEventListener("keydown", handleEscape);
   }, [onClose]);
 
-  const onSubmit = async (data: CategoryFormValues) => {
-    setIsSubmitting(true);
-    try {
-      const response = await CategoryService.createCategory(data);
+  // Submit handler
+const {  showError } = useToast();
 
-      toast.current?.show({
-        severity: "success",
-        summary: t("common.success"),
-        detail: response.data?.message || "Category created successfully",
-        life: 3000,
-      });
+const onSubmit = async (data: CategoryFormValues) => {
+  setIsSubmitting(true);
+  const response = await handleApi(
+    () => CategoryService.createCategory(data),
+    showSuccess,
+    showError,
+    t 
+  );
 
-      onSuccess();
-    } catch (error: any) {
-      toast.current?.show({
-        severity: "error",
-        summary: t("common.error"),
-        detail:
-          error.response?.data?.message || t("category.createFailed"),
-        life: 4000,
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  if (response) {
+    setTimeout(() => onSuccess(), 500);
+  }
 
+  setIsSubmitting(false);
+};
   return (
     <>
-      <Toast ref={toast} position="top-right" />
-
       {/* Background */}
       <div
         className="fixed inset-3 bg-black/50 z-50 animate-fadeIn"
@@ -117,10 +94,7 @@ export const CategoryCreate: React.FC<CategoryCreateProps> = ({
           </div>
 
           {/* Form */}
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="p-6 space-y-5"
-          >
+          <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-5">
             {/* Category Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -135,9 +109,7 @@ export const CategoryCreate: React.FC<CategoryCreateProps> = ({
                 render={({ field }) => (
                   <InputText
                     {...field}
-                    className={`w-full ${
-                      errors.name ? "p-invalid" : ""
-                    }`}
+                    className={`w-full ${errors.name ? "p-invalid" : ""}`}
                     placeholder={t("category.placeholder.name")}
                     disabled={isSubmitting}
                   />
@@ -147,39 +119,6 @@ export const CategoryCreate: React.FC<CategoryCreateProps> = ({
               {errors.name && (
                 <p className="text-sm text-red-600 mt-1">
                   {errors.name.message}
-                </p>
-              )}
-            </div>
-
-            {/* Category Type */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t("category.type")}
-                <span className="text-red-500 ml-1">*</span>
-              </label>
-
-              <Controller
-                name="categoryType"
-                control={control}
-                rules={{ required: t("category.validation.typeRequired") }}
-                render={({ field }) => (
-                  <Dropdown
-                    {...field}
-                    value={field.value}
-                    options={categoryTypes}
-                    onChange={(e) => field.onChange(e.value)}
-                    placeholder={t("category.placeholder.type")}
-                    className={`w-full ${
-                      errors.categoryType ? "p-invalid" : ""
-                    }`}
-                    disabled={isSubmitting}
-                  />
-                )}
-              />
-
-              {errors.categoryType && (
-                <p className="text-sm text-red-600 mt-1">
-                  {errors.categoryType.message}
                 </p>
               )}
             </div>

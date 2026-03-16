@@ -16,6 +16,12 @@ import { CountryList } from "../feature/location/country/CountryList";
 import { DistrictList } from "../feature/location/district/DistrictList";
 import { ProvinceList } from "../feature/location/province/ProvinceList";
 import { CategoryList } from "../feature/category/CategoryList";
+import CompanyList from "../feature/company/CompanyList";
+import { CompanyDetails } from "../feature/company/CompanyDetails";
+import { CompanyCreate } from "../feature/company/CompanyCreate";
+import CompanyUpdate from "../feature/company/CompanyUpdate";
+import { CertificationRequestList } from "../feature/certification-request/CertificationRequestList";
+import { CertificationRequestUpdate } from "../feature/certification-request/CertificationRequestUpdate";
 
 export const MainLayout = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -67,8 +73,14 @@ export const MainLayout = () => {
 
               <Route path="/country" element={<CountryList />} />
               <Route path="/district" element={<DistrictList />} />
-                  <Route path="/province" element={<ProvinceList />} />
+              <Route path="/province" element={<ProvinceList />} />
               <Route path="/category" element={<CategoryList />} />
+                      <Route path="/certification-request" element={<CertificationRequestList />} />
+                           <Route path="/certification-request/edit/:id" element={<CertificationRequestUpdate />} />
+              <Route path="/company" element={<CompanyList />} />
+              <Route path="/company/create" element={<CompanyCreate />} />
+              <Route path="/company/view/:id" element={<CompanyDetails />} />
+              <Route path="/company/edit/:id" element={<CompanyUpdate />} />
               <Route path="*" element={<div>404 Not Found</div>} />
             </Routes>
           </div>

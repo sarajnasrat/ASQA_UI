@@ -57,7 +57,6 @@ export const CategoryList: React.FC = () => {
     const handleCreateSuccess = () => {
         setShowCreateDialog(false);
         getAllCategories();
-        showToast("success", t("common.success"), t("category.created"));
     };
 
     const handleEditSuccess = () => {
@@ -121,11 +120,6 @@ export const CategoryList: React.FC = () => {
                 label: t("common.delete"),
                 icon: "pi pi-trash",
                 command: () => confirmDelete(rowData)
-            },
-            {
-                label: t("common.view"),
-                icon: "pi pi-eye",
-                command: () => navigate(`/categories/view/${rowData.id}`)
             }
         ];
 

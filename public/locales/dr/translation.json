@@ -34,7 +34,7 @@
         "translations": "ترجمه‌ها"
       },
       "placeholder": {
-        "countryCode": "+3",
+        "countryCode": "+93",
         "enterName": "نام {{language}} را وارد کنید"
       },
       "validation": {
@@ -53,33 +53,350 @@
     }
   },
   "district": {
-    "create": "Create District",
-    "edit": "Edit District",
-    "delete": "Delete District",
-    "refersh": "Refresh",
-    "list": "District List",
-    "name": "District Name",
-    "code": "District Code",
-    "created": "District created successfully",
-    "deleteConfirm": "Are you sure you want to delete district {{name}} ?",
-    
+    "create": "ایجاد ولسوالی",
+    "edit": "ویرایش ولسوالی",
+    "delete": "حذف ولسوالی",
+    "refersh": "تازه‌سازی",
+    "list": "لیست ولسوالی‌ها",
+    "name": "نام ولسوالی",
+    "code": "کد ولسوالی",
+    "created": "ولسوالی با موفقیت ایجاد شد",
+    "deleteConfirm": "آیا مطمئن هستید که می‌خواهید ولسوالی {{name}} را حذف کنید؟",
     "form": {
       "labels": {
-        "province": "Province"
+        "province": "ولایت"
       },
       "placeholder": {
-        "province": "Select a province",
-        "name": "Enter name in {{language}}"
+        "province": "یک ولایت انتخاب کنید",
+        "name": "نام را به {{language}} وارد کنید"
       },
       "validation": {
         "province": {
-          "required": "Province is required"
+          "required": "ولایت الزامی است"
         },
         "name": {
-          "required": "District name in English is required"
+          "required": "نام ولسوالی به انگلیسی الزامی است"
         }
       }
-    }},
+    }
+  },
+  "province": {
+    "create": "ایجاد ولایت",
+    "edit": "ویرایش ولایت",
+    "delete": "حذف ولایت",
+    "refersh": "تازه‌سازی",
+    "list": "لیست ولایت‌ها",
+    "name": "نام ولایت",
+    "code": "کد ولایت",
+    "created": "ولایت با موفقیت ایجاد شد",
+    "deleteConfirm": "آیا مطمئن هستید که می‌خواهید ولایت {{name}} را حذف کنید؟",
+    "country": "نام کشور",
+    "form": {
+      "labels": {
+        "country": "کشور"
+      },
+      "placeholder": {
+        "country": "یک کشور انتخاب کنید",
+        "name": "نام را به {{language}} وارد کنید"
+      },
+      "validation": {
+        "country": {
+          "required": "کشور الزامی است"
+        },
+        "name": {
+          "required": "نام ولایت به انگلیسی الزامی است"
+        }
+      }
+    }
+  },
+  "category": {
+    "create": "ایجاد دسته",
+    "edit": "ویرایش دسته",
+    "delete": "حذف دسته",
+    "list": "لیست دسته‌ها",
+    "name": "نام دسته",
+    "alreadyexists": "دسته با این نام قبلاً وجود دارد",
+    "type": "نوع دسته",
+    "created": "دسته با موفقیت ایجاد شد",
+    "updated": "دسته با موفقیت به‌روزرسانی شد",
+    "deleted": "دسته با موفقیت حذف شد",
+    "loadFailed": "بارگیری دسته失敗 شد",
+    "updateFailed": "به‌روزرسانی دسته失敗 شد",
+    "placeholder": {
+      "name": "نام دسته را وارد کنید",
+      "type": "نوع دسته را انتخاب کنید"
+    },
+    "validation": {
+      "name": {
+        "required": "نام دسته الزامی است"
+      },
+      "type": {
+        "required": "نوع دسته الزامی است"
+      }
+    }
+  },
+  "company": {
+    "create": "ایجاد شرکت",
+    "edit": "ویرایش شرکت",
+    "delete": "حذف شرکت",
+    "list": "لیست شرکت‌ها",
+    "refersh": "تازه‌سازی",
+    "deleted": "شرکت با موفقیت حذف شد",
+    "deleteConfirm": "آیا مطمئن هستید که می‌خواهید شرکت {{name}} را حذف کنید؟",
+    "loadFailed": "بارگیری شرکت‌ها失敗 شد",
+    "deleteFailed": "حذف شرکت失敗 شد",
+    "labels": {
+      "companyNameEN": "نام شرکت انگلیسی",
+      "companyNameDR": "نام شرکت به دری",
+      "companyNamePS": "نام شرکت به پشتو",
+      "email": "ایمیل",
+      "phoneNumber": "شماره تلفن",
+      "address": "آدرس",
+      "logoUrl": "لوگوی شرکت",
+      "bussinessLogoUrl": "لوگوی تجاری",
+      "isActive": "فعال است",
+      "mainBranchAddress": "آدرس شعبه اصلی",
+      "activityPlace": "مکان فعالیت",
+      "activityType": "نوع فعالیت",
+      "jawazNumber": "شماره جواز",
+      "jawazExpiryDate": "تاریخ انقضای جواز",
+      "jawazIssueDate": "تاریخ صدور جواز",
+      "tinNumber": "شماره مالیاتی",
+      "aboutCompanyEn": "درباره شرکت (انگلیسی)",
+      "aboutCompanyDr": "درباره شرکت (دری)",
+      "aboutCompanyPs": "درباره شرکت (پشتو)",
+      "websiteUrl": "آدرس وبسایت",
+      "establishYear": "سال تأسیس",
+      "companyOwnerNameEn": "نام مالک شرکت (انگلیسی)",
+      "companyOwnerNameDr": "نام مالک شرکت (دری)",
+      "companyOwnerNamePs": "نام مالک شرکت (پشتو)",
+      "companyType": "نوع شرکت",
+      "nosocialLinksAdded": "هنوز لینک اجتماعی اضافه نشده است. برای افزودن لینک رسانه‌های اجتماعی روی 'افزودن لینک' کلیک کنید.",
+      "categories": "دسته‌ها",
+      "addLink": "افزودن لینک اجتماعی",
+      "selectCategories": "انتخاب دسته‌ها",
+      "selectType": "انتخاب نوع",
+      "selectCategoriesHint": "حداقل یک دسته را انتخاب کنید",
+      "aboutCompany": "درباره شرکت",
+      "compantyType": "نوع شرکت",
+      "companyLogo": "لوگوی شرکت",
+      "bussinessLogo": "لوگوی تجاری",
+      "ownerNamePs": "نام مالک به پشتو",
+      "ownerNameDr": "نام مالک به دری",
+      "ownerNameEn": "نام مالک به انگلیسی",
+      "socialLinks": "لینک‌های اجتماعی"
+    },
+    "placeholder": {
+      "companyNameEN": "نام شرکت را به انگلیسی وارد کنید",
+      "companyNameDR": "نام شرکت را به دری وارد کنید",
+      "companyNamePS": "نام شرکت را به پشتو وارد کنید",
+      "email": "ایمیل را وارد کنید",
+      "phoneNumber": "شماره تلفن را وارد کنید",
+      "address": "آدرس را وارد کنید",
+      "logoUrl": "لوگوی شرکت را آپلود کنید",
+      "bussinessLogoUrl": "لوگوی تجاری را آپلود کنید",
+      "mainBranchAddress": "آدرس شعبه اصلی را وارد کنید",
+      "activityPlace": "مکان فعالیت را وارد کنید",
+      "activityType": "نوع فعالیت را وارد کنید",
+      "jawazNumber": "شماره جواز را وارد کنید",
+      "jawazExpiryDate": "تاریخ انقضای جواز را انتخاب کنید",
+      "jawazIssueDate": "تاریخ صدور جواز را انتخاب کنید",
+      "tinNumber": "شماره مالیاتی را وارد کنید",
+      "aboutCompanyEn": "اطلاعات شرکت را به انگلیسی وارد کنید",
+      "aboutCompanyDr": "اطلاعات شرکت را به دری وارد کنید",
+      "aboutCompanyPs": "اطلاعات شرکت را به پشتو وارد کنید",
+      "websiteUrl": "آدرس وبسایت را وارد کنید",
+      "establishYear": "سال تأسیس را انتخاب کنید",
+      "companyOwnerNameEn": "نام مالک را به انگلیسی وارد کنید",
+      "companyOwnerNameDr": "نام مالک را به دری وارد کنید",
+      "companyOwnerNamePs": "نام مالک را به پشتو وارد کنید"
+    },
+    "validation": {
+      "companyNameEN": {
+        "required": "نام شرکت (انگلیسی) الزامی است"
+      },
+      "companyNameDR": {
+        "required": "نام شرکت (دری) الزامی است"
+      },
+      "companyNamePS": {
+        "required": "نام شرکت (پشتو) الزامی است"
+      },
+      "email": {
+        "required": "ایمیل الزامی است",
+        "invalid": "ایمیل نامعتبر است"
+      },
+      "phoneNumber": {
+        "required": "شماره تلفن الزامی است"
+      },
+      "address": {
+        "required": "آدرس الزامی است"
+      },
+      "activityType": {
+        "required": "نوع فعالیت الزامی است"
+      },
+      "companyType": {
+        "required": "نوع شرکت الزامی است"
+      },
+      "categories": {
+        "required": "حداقل یک دسته را انتخاب کنید"
+      }
+    },
+    "typeOptions": {
+      "PRIVATE": "خصوصی",
+      "PUBLIC": "عام",
+      "GOVERNMENT": "دولتی"
+    }
+  },
+  "nav": {
+    "home": "خانه",
+    "services": "خدمات",
+    "companies": "شرکت‌ها",
+    "contact": "تماس",
+    "register": "ثبت شرکت",
+    "subtitle": "اداره معیارهای کیفیت افغانستان",
+    "language": "زبان",
+    "profile": "پروفایل",
+    "dashboard": "داشبورد",
+    "logout": "خروج",
+    "certicificationrequest": "درخواست تصدیق"
+  },
+  "certification": {
+    "page": {
+      "leftSide": {
+        "title": "تصدیق خود را آغاز کنید",
+        "subtitle": "مسیر درست تصدیق را برای کسب و کار خود انتخاب کنید",
+        "steps": {
+          "1": "نوع درخواست را انتخاب کنید",
+          "2": "نوع تصدیق را انتخاب کنید",
+          "3": "شرکت را ثبت کنید",
+          "4": "مدارک را تکمیل کنید",
+          "5": "تصدیق دریافت کنید"
+        },
+        "progress": "مرحله ۱ از ۵",
+        "progressLabel": "انتخاب درخواست و تصدیق"
+      },
+      "requestType": {
+        "title": "۱. نوع درخواست را انتخاب کنید",
+        "subtitle": "انتخاب کنید که این درخواست جدید است یا تمدید",
+        "new": {
+          "title": "درخواست جدید",
+          "description": "تصدیق برای اولین بار برای کسب و کار شما"
+        },
+        "renewal": {
+          "title": "تمدید",
+          "description": "تصدیق موجود خود را تمدید کنید"
+        }
+      },
+      "certificationType": {
+        "title": "۲. نوع تصدیق را انتخاب کنید",
+        "subtitle": "تصدیقی را انتخاب کنید که با نیازهای کسب و کار شما مطابقت دارد",
+        "domestic": {
+          "title": "کیفیت داخلی",
+          "description": "برای عملیات تجاری محلی",
+          "benefits": {
+            "1": "شناخته شده در سطح ملی",
+            "2": "مطابقت با مقررات محلی",
+            "3": "اعتبار بازار"
+          }
+        },
+        "international": {
+          "title": "کیفیت بین‌المللی",
+          "description": "برای گسترش بازار جهانی",
+          "benefits": {
+            "1": "شناخته شده در سطح جهانی",
+            "2": "دسترسی بین‌المللی",
+            "3": "هماهنگی با ISO"
+          }
+        },
+        "standard": {
+          "title": "نشان استاندارد",
+          "description": "برای استانداردهای محصول/خدمت",
+          "benefits": {
+            "1": "نشان کیفیت",
+            "2": "اعتماد مصرف‌کننده",
+            "3": "برتری رقابتی"
+          }
+        },
+        "popular": "محبوب‌ترین"
+      },
+      "button": {
+        "creating": "در حال ایجاد...",
+        "continue": "ادامه با انتخاب"
+      },
+      "trust": "⚡ بیش از ۱۰۰۰ شرکت با موفقیت تصدیق خود را تکمیل کرده‌اند",
+      "validation": {
+        "requestTypeRequired": "لطفاً یک نوع درخواست را انتخاب کنید",
+        "certificationTypeRequired": "لطفاً یک نوع تصدیق را انتخاب کنید"
+      },
+      "messages": {
+        "created": "درخواست تصدیق با موفقیت ایجاد شد!",
+        "createFailed": "ایجاد درخواست تصدیق ناموفق بود"
+      }
+    }
+  },
+  "certificationRequest": {
+    "create": "ایجاد درخواست تصدیق",
+    "edit": "ویرایش درخواست تصدیق",
+    "delete": "حذف درخواست تصدیق",
+    "list": "لیست درخواست‌های تصدیق",
+    "refersh": "تازه‌سازی",
+    "created": "درخواست تصدیق با موفقیت ایجاد شد",
+    "updated": "درخواست تصدیق با موفقیت به‌روزرسانی شد",
+    "deleted": "درخواست تصدیق با موفقیت حذف شد",
+    "loadFailed": "بارگیری درخواست‌های تصدیق ناموفق بود",
+    "deleteFailed": "حذف درخواست تصدیق ناموفق بود",
+    "deleteConfirm": "آیا مطمئن هستید که می‌خواهید درخواست {{serial}} را حذف کنید؟",
+    "updateStatus": "به‌روزرسانی وضعیت درخواست تصدیق",
+    "status": "وضعیت درخواست",
+    "labels": {
+      "serialNumber": "شماره سریال",
+      "requestType": "نوع درخواست",
+      "requestStatus": "وضعیت درخواست",
+      "certificationType": "نوع تصدیق",
+      "createdDate": "تاریخ ایجاد",
+      "updatedDate": "تاریخ به‌روزرسانی",
+      "deleted": "حذف شده"
+    },
+    "placeholder": {
+      "requestType": "نوع درخواست را انتخاب کنید",
+      "requestStatus": "وضعیت را انتخاب کنید",
+      "certificationType": "نوع تصدیق را انتخاب کنید"
+    },
+    "validation": {
+      "requestType": {
+        "required": "نوع درخواست الزامی است"
+      },
+      "certificationType": {
+        "required": "نوع تصدیق الزامی است"
+      }
+    },
+    "typeOptions": {
+      "NEW": "جدید",
+      "RENEWAL": "تمدید",
+      "EXTENSION": "تمدید مهلت"
+    },
+    "statusOptions": {
+      "DRAFT": "پیش‌نویس",
+      "SUBMITTED": "ارسال شده",
+      "REGISTERED": "ثبت شده",
+      "STANDARDS_PROVIDED": "استانداردها ارائه شده",
+      "DEADLINE_ASSIGNED": "مهلت تعیین شده",
+      "INSPECTION_IN_PROGRESS": "بازرسی در حال انجام",
+      "REPORTED_TO_COMMITTEE": "گزارش به کمیته",
+      "REPORT_APPROVED": "گزارش تأیید شد",
+      "PAYMENT_PENDING": "در انتظار پرداخت",
+      "PAYMENT_COMPLETED": "پرداخت انجام شد",
+      "CERTIFICATE_ISSUED": "گواهی صادر شد",
+      "UNDER_SUPERVISION": "تحت نظارت",
+      "REJECTED": "رد شده",
+      "CANCELLED": "لغو شده"
+    },
+    "certificationTypeOptions": {
+      "DOMESTIC_QUALITY_CERTIFICATION": "تصدیق کیفیت داخلی",
+      "INTERNATIONAL_QUALITY_CERTIFICATION": "تصدیق کیفیت بین‌المللی",
+      "STANDARD_MARK_CERTIFICATION": "تصدیق نشان استاندارد"
+    }
+  },
   "common": {
     "save": "ذخیره",
     "cancel": "لغو",
@@ -89,6 +406,111 @@
     "view": "مشاهده",
     "refersh": "تازه سازی",
     "total": "مجموع",
-    "action": "عملیات"
+    "action": "عملیات",
+    "saving": "در حال ذخیره...",
+    "success": "موفقیت",
+    "error": "خطا",
+    "updating": "در حال به‌روزرسانی...",
+    "update": "به‌روزرسانی",
+    "select": "انتخاب"
+  },
+  "home": {
+    "badge": "اداره معیارهای کیفیت افغانستان",
+    "hero": {
+      "title": "دروازه شما به سوی تصدیق کیفیت",
+      "description": "فرآیند تصدیق خود را با ASQA ساده کنید. شناخته شوید، اعتماد بسازید و فرصت‌های تجاری خود را گسترش دهید.",
+      "cta": {
+        "start": "تصدیق خود را آغاز کنید",
+        "learn": "بیشتر بیاموزید"
+      }
+    },
+    "certificationTypes": {
+      "title": "مسیر تصدیق خود را انتخاب کنید",
+      "subtitle": "تصدیقی را انتخاب کنید که با نیازهای تجاری شما مطابقت دارد",
+      "domestic": {
+        "title": "کیفیت داخلی",
+        "description": "برای عملیات تجاری محلی",
+        "features": {
+          "1": "شناخته شده در سطح ملی",
+          "2": "مطابقت با مقررات محلی",
+          "3": "اعتبار بازار"
+        }
+      },
+      "international": {
+        "title": "کیفیت بین‌المللی",
+        "description": "برای گسترش بازار جهانی",
+        "features": {
+          "1": "شناخته شده در سطح جهانی",
+          "2": "دسترسی بین‌المللی",
+          "3": "هماهنگی با ISO"
+        }
+      },
+      "standard": {
+        "title": "نشان استاندارد",
+        "description": "برای استانداردهای محصول/خدمت",
+        "features": {
+          "1": "نشان کیفیت",
+          "2": "اعتماد مصرف‌کننده",
+          "3": "برتری رقابتی"
+        }
+      },
+      "learnMore": "بیشتر بیاموزید"
+    },
+    "process": {
+      "badge": "فرآیند ساده ۴ مرحله‌ای",
+      "title": "سفر تصدیق خود را آغاز کنید",
+      "subtitle": "فرآیند ساده ما را دنبال کنید و سریع‌تر از همیشه تصدیق شوید",
+      "steps": {
+        "1": {
+          "title": "انتخاب تصدیق",
+          "description": "تصدیقی را که با نیازهای شما مطابقت دارد انتخاب کنید"
+        },
+        "2": {
+          "title": "ثبت شرکت",
+          "description": "جزئیات شرکت خود را ثبت کنید"
+        },
+        "3": {
+          "title": "شخص تماس",
+          "description": "اطلاعات تماس اولیه را اضافه کنید"
+        },
+        "4": {
+          "title": "بررسی و تصدیق",
+          "description": "پس از تأیید، تصدیق دریافت کنید"
+        }
+      }
+    },
+    "features": {
+      "badge": "چرا ما را انتخاب کنید",
+      "title": "همه چیز برای تصدیق کیفیت",
+      "subtitle": "ما راه‌حل‌های جامع تصدیق را متناسب با نیازهای تجاری شما ارائه می‌دهیم",
+      "items": {
+        "1": {
+          "title": "ثبت نام ساده",
+          "description": "فرآیند ثبت نام دو مرحله‌ای شرکت و شخص تماس"
+        },
+        "2": {
+          "title": "تأیید امن",
+          "description": "فرآیند بررسی کامل برای اطمینان از انطباق"
+        },
+        "3": {
+          "title": "تصدیق دیجیتال",
+          "description": "تولید تصدیق رسمی ASQA پس از تأیید"
+        }
+      }
+    },
+    "cta": {
+      "title": "آماده دریافت تصدیق هستید؟",
+      "subtitle": "به صدها شرکتی بپیوندید که از طریق ASQA تصدیق دریافت کرده‌اند و کسب و کار خود را به سطح بعدی برسانید.",
+      "buttons": {
+        "start": "سفر خود را آغاز کنید",
+        "contact": "تماس با ما"
+      },
+      "badges": {
+        "iso": "دارای گواهی ISO",
+        "government": "تأیید شده توسط دولت",
+        "international": "شناخته شده بین‌المللی",
+        "support": "پشتیبانی ۲۴/۷"
+      }
+    }
   }
 }

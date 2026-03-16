@@ -109,6 +109,294 @@
             }
         }
     },
+    "category": {
+        "create": "Create Category",
+        "edit": "Edit Category",
+        "delete": "Delete Category",
+        "list": "Category List",
+        "name": "Category Name",
+        "alreadyexists": "Category with this name already exists",
+        "type": "Category Type",
+        "created": "Category created successfully",
+        "updated": "Category updated successfully",
+        "deleted": "Category deleted successfully",
+        "loadFailed": "Failed to load category",
+        "updateFailed": "Failed to update category",
+        "placeholder": {
+            "name": "Enter category name",
+            "type": "Select category type"
+        },
+        "validation": {
+            "name": {
+                "required": "Category name is required"
+            },
+            "type": {
+                "required": "Category type is required"
+            }
+        }
+    },
+    "company": {
+        "create": "Create Company",
+        "edit": "Edit Company",
+        "delete": "Delete Company",
+        "list": "Company List",
+        "refersh": "Refresh",
+        "deleted": "Company deleted successfully",
+        "deleteConfirm": "Are you sure you want to delete company {{name}}?",
+        "loadFailed": "Failed to load companies",
+        "deleteFailed": "Failed to delete company",
+        "labels": {
+            "companyNameEN": "Company name english",
+            "companyNameDR": "نام شرکت به دری",
+            "companyNamePS": "نام شرکت به پشتو",
+            "email": "Email",
+            "phoneNumber": "Phone Number",
+            "address": "Address",
+            "logoUrl": "Company Logo",
+            "bussinessLogoUrl": "Business Logo",
+            "isActive": "Is Active",
+            "mainBranchAddress": "Main Branch Address",
+            "activityPlace": "Activity Place",
+            "activityType": "Activity Type",
+            "jawazNumber": "Jawaz Number",
+            "jawazExpiryDate": "Jawaz Expiry Date",
+            "jawazIssueDate": "Jawaz Issue Date",
+            "tinNumber": "TIN Number",
+            "aboutCompanyEn": "About Company (EN)",
+            "aboutCompanyDr": "About Company (DR)",
+            "aboutCompanyPs": "About Company (PS)",
+            "websiteUrl": "Website URL",
+            "establishYear": "Establish Year",
+            "companyOwnerNameEn": "Company Owner Name (EN)",
+            "companyOwnerNameDr": "Company Owner Name (DR)",
+            "companyOwnerNamePs": "Company Owner Name (PS)",
+            "companyType": "Company Type",
+            "nosocialLinksAdded": "No social links added yet. Click 'Add Link' to add social media links.",
+            "categories": "Categories",
+            "addLink": "Add Social Link",
+            "selectCategories": "Select Categories",
+            "selectType": "Select Type",
+            "selectCategoriesHint": "Select at least one category",
+            "aboutCompany": "About Company",
+            "compantyType": "Company Type",
+            "companyLogo": "Company Logo",
+            "bussinessLogo": "Business Logo",
+            "ownerNamePs": "Owner Name Pashto",
+            "ownerNameDr": "Owner Name Dari",
+            "ownerNameEn": "Owner Name English",
+            "socialLinks": "Social Links"
+        },
+        "placeholder": {
+            "companyNameEN": "Enter company name in English",
+            "companyNameDR": "Enter company name in Dari",
+            "companyNamePS": "Enter company name in Pashto",
+            "email": "Enter email",
+            "phoneNumber": "Enter phone number",
+            "address": "Enter address",
+            "logoUrl": "Upload company logo",
+            "bussinessLogoUrl": "Upload business logo",
+            "mainBranchAddress": "Enter main branch address",
+            "activityPlace": "Enter activity place",
+            "activityType": "Enter activity type",
+            "jawazNumber": "Enter jawaz number",
+            "jawazExpiryDate": "Select jawaz expiry date",
+            "jawazIssueDate": "Select jawaz issue date",
+            "tinNumber": "Enter TIN number",
+            "aboutCompanyEn": "Enter company info in English",
+            "aboutCompanyDr": "Enter company info in Dari",
+            "aboutCompanyPs": "Enter company info in Pashto",
+            "websiteUrl": "Enter website URL",
+            "establishYear": "Select establish year",
+            "companyOwnerNameEn": "Enter owner name in English",
+            "companyOwnerNameDr": "Enter owner name in Dari",
+            "companyOwnerNamePs": "Enter owner name in Pashto"
+        },
+        "validation": {
+            "companyNameEN": {
+                "required": "Company name (EN) is required"
+            },
+            "companyNameDR": {
+                "required": "Company name (DR) is required"
+            },
+            "companyNamePS": {
+                "required": "Company name (PS) is required"
+            },
+            "email": {
+                "required": "Email is required",
+                "invalid": "Email is invalid"
+            },
+            "phoneNumber": {
+                "required": "Phone number is required"
+            },
+            "address": {
+                "required": "Address is required"
+            },
+            "activityType": {
+                "required": "Activity type is required"
+            },
+            "companyType": {
+                "required": "Company type is required"
+            },
+            "categories": {
+                "required": "Select at least one category"
+            }
+        },
+        "typeOptions": {
+            "PRIVATE": "Private",
+            "PUBLIC": "Public",
+            "GOVERNMENT": "Government"
+        }
+    },
+    "nav": {
+        "home": "Home",
+        "services": "Services",
+        "companies": "Companies",
+        "contact": "Contact",
+        "register": "Register Company",
+        "subtitle": "Afghanistan Quality Standards Authority",
+        "language": "Language",
+        "profile": "Profile",
+        "dashboard": "Dashboard",
+        "logout": "Logout",
+        "certicificationrequest": "Certification Request"
+    },
+    "certification": {
+        "page": {
+            "leftSide": {
+                "title": "Start Your Certification",
+                "subtitle": "Choose the right certification path for your business",
+                "steps": {
+                    "1": "Select Request Type",
+                    "2": "Select Certification Type",
+                    "3": "Register Company",
+                    "4": "Complete Documentation",
+                    "5": "Get Certified"
+                },
+                "progress": "Step 1 of 5",
+                "progressLabel": "Request & Certification Selection"
+            },
+            "requestType": {
+                "title": "1. Select Request Type",
+                "subtitle": "Choose whether this is a new certification or renewal",
+                "new": {
+                    "title": "New Certification",
+                    "description": "First-time certification for your business"
+                },
+                "renewal": {
+                    "title": "Renewal",
+                    "description": "Renew your existing certification"
+                }
+            },
+            "certificationType": {
+                "title": "2. Select Certification Type",
+                "subtitle": "Choose the certification that matches your business needs",
+                "domestic": {
+                    "title": "Domestic Quality",
+                    "description": "For local business operations",
+                    "benefits": {
+                        "1": "Nationally recognized",
+                        "2": "Local compliance",
+                        "3": "Market credibility"
+                    }
+                },
+                "international": {
+                    "title": "International Quality",
+                    "description": "For global market expansion",
+                    "benefits": {
+                        "1": "Globally recognized",
+                        "2": "International access",
+                        "3": "ISO alignment"
+                    }
+                },
+                "standard": {
+                    "title": "Standard Mark",
+                    "description": "For product/service standards",
+                    "benefits": {
+                        "1": "Quality mark",
+                        "2": "Consumer trust",
+                        "3": "Competitive edge"
+                    }
+                },
+                "popular": "Most Popular"
+            },
+            "button": {
+                "creating": "Creating...",
+                "continue": "Continue with Selection"
+            },
+            "trust": "⚡ 1000+ companies have successfully completed their certification",
+            "validation": {
+                "requestTypeRequired": "Please select a request type",
+                "certificationTypeRequired": "Please select a certification type"
+            },
+            "messages": {
+                "created": "Certification request created successfully!",
+                "createFailed": "Failed to create certification request"
+            }
+        }
+    },
+    "certificationRequest": {
+        "create": "Create Certification Request",
+        "edit": "Edit Certification Request",
+        "delete": "Delete Certification Request",
+        "list": "Certification Request List",
+        "refersh": "Refresh",
+        "created": "Certification request created successfully",
+        "updated": "Certification request updated successfully",
+        "deleted": "Certification request deleted successfully",
+        "loadFailed": "Failed to load certification requests",
+        "deleteFailed": "Failed to delete certification request",
+        "deleteConfirm": "Are you sure you want to delete request {{serial}}?",
+        "updateStatus": "Update Certification Request Status",
+        "status": "Request Status",
+        "labels": {
+            "serialNumber": "Serial Number",
+            "requestType": "Request Type",
+            "requestStatus": "Request Status",
+            "certificationType": "Certification Type",
+            "createdDate": "Created Date",
+            "updatedDate": "Updated Date",
+            "deleted": "Deleted"
+        },
+        "placeholder": {
+            "requestType": "Select request type",
+            "requestStatus": "Select status",
+            "certificationType": "Select certification type"
+        },
+        "validation": {
+            "requestType": {
+                "required": "Request type is required"
+            },
+            "certificationType": {
+                "required": "Certification type is required"
+            }
+        },
+        "typeOptions": {
+            "NEW": "New",
+            "RENEWAL": "Renewal",
+            "EXTENSION": "Extension"
+        },
+        "statusOptions": {
+            "DRAFT": "Draft",
+            "SUBMITTED": "Submitted",
+            "REGISTERED": "Registered",
+            "STANDARDS_PROVIDED": "Standards Provided",
+            "DEADLINE_ASSIGNED": "Deadline Assigned",
+            "INSPECTION_IN_PROGRESS": "Inspection In Progress",
+            "REPORTED_TO_COMMITTEE": "Reported To Committee",
+            "REPORT_APPROVED": "Report Approved",
+            "PAYMENT_PENDING": "Payment Pending",
+            "PAYMENT_COMPLETED": "Payment Completed",
+            "CERTIFICATE_ISSUED": "Certificate Issued",
+            "UNDER_SUPERVISION": "Under Supervision",
+            "REJECTED": "Rejected",
+            "CANCELLED": "Cancelled"
+        },
+        "certificationTypeOptions": {
+            "DOMESTIC_QUALITY_CERTIFICATION": "Domestic Quality Certification",
+            "INTERNATIONAL_QUALITY_CERTIFICATION": "International Quality Certification",
+            "STANDARD_MARK_CERTIFICATION": "Standard Mark Certification"
+        }
+    },
     "common": {
         "save": "Save",
         "cancel": "Cancel",
@@ -123,6 +411,106 @@
         "success": "Success",
         "error": "Error",
         "updating": "Updating...",
-        "update": "Update"
+        "update": "Update",
+        "select": "Select"
+    },
+    "home": {
+        "badge": "Afghanistan Quality Standards Authority",
+        "hero": {
+            "title": "Your Gateway to Quality Certification",
+            "description": "Streamline your certification process with ASQA. Get recognized, build trust, and expand your business opportunities.",
+            "cta": {
+                "start": "Start Your Certification",
+                "learn": "Learn More"
+            }
+        },
+        "certificationTypes": {
+            "title": "Choose Your Certification Path",
+            "subtitle": "Select the certification that best fits your business needs",
+            "domestic": {
+                "title": "Domestic Quality",
+                "description": "For local business operations",
+                "features": {
+                    "1": "Nationally recognized",
+                    "2": "Local compliance",
+                    "3": "Market credibility"
+                }
+            },
+            "international": {
+                "title": "International Quality",
+                "description": "For global market expansion",
+                "features": {
+                    "1": "Globally recognized",
+                    "2": "International access",
+                    "3": "ISO alignment"
+                }
+            },
+            "standard": {
+                "title": "Standard Mark",
+                "description": "For product/service standards",
+                "features": {
+                    "1": "Quality mark",
+                    "2": "Consumer trust",
+                    "3": "Competitive edge"
+                }
+            },
+            "learnMore": "Learn More"
+        },
+        "process": {
+            "badge": "Simple 4-Step Process",
+            "title": "Start Your Certification Journey",
+            "subtitle": "Follow our streamlined process and get certified faster than ever before",
+            "steps": {
+                "1": {
+                    "title": "Choose Certification",
+                    "description": "Select the certification that fits your needs"
+                },
+                "2": {
+                    "title": "Company Registration",
+                    "description": "Register your company details"
+                },
+                "3": {
+                    "title": "Contact Person",
+                    "description": "Add primary contact information"
+                },
+                "4": {
+                    "title": "Review & Certificate",
+                    "description": "Get certified upon approval"
+                }
+            }
+        },
+        "features": {
+            "badge": "Why Choose Us",
+            "title": "Everything You Need for Quality Certification",
+            "subtitle": "We provide comprehensive certification solutions tailored to your business needs",
+            "items": {
+                "1": {
+                    "title": "Simple Registration",
+                    "description": "Two-step company and contact person registration process"
+                },
+                "2": {
+                    "title": "Secure Verification",
+                    "description": "Thorough review process to ensure compliance"
+                },
+                "3": {
+                    "title": "Digital Certificate",
+                    "description": "Generate official ASQA certificates upon approval"
+                }
+            }
+        },
+        "cta": {
+            "title": "Ready to Get Certified?",
+            "subtitle": "Join hundreds of companies that have achieved certification through ASQA and take your business to the next level.",
+            "buttons": {
+                "start": "Start Your Journey",
+                "contact": "Contact Us"
+            },
+            "badges": {
+                "iso": "ISO Certified",
+                "government": "Government Approved",
+                "international": "Internationally Recognized",
+                "support": "24/7 Support"
+            }
+        }
     }
 }

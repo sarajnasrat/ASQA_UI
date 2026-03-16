@@ -26,15 +26,22 @@ const httpClient = axios.create({
 
 // 🔹 Request Interceptor
 httpClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem("accessToken");
+  // 🚫 Skip token if skipAuth is true
+  if (!config.headers?.skipAuth) {
+    const token = localStorage.getItem("accessToken");
 
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
   }
 
-  // 🌍 Language from i18next
-  const lang = i18n.language || "en";
+  // Remove skipAuth so backend does not receive it
+  if (config.headers?.skipAuth) {
+    delete config.headers.skipAuth;
+  }
 
+  // 🌍 Language header
+  const lang = i18n.language || "en";
   config.headers["Accept-Language"] = lang;
 
   return config;

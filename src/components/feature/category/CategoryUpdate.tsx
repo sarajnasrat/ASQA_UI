@@ -2,7 +2,6 @@ import React, { useRef, useState, useEffect } from "react";
 import { Toast } from "primereact/toast";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import CategoryService from "../../../services/category.service";
 
@@ -14,7 +13,6 @@ interface CategoryUpdateProps {
 
 interface CategoryFormValues {
   name: string;
-  categoryType: string | null;
 }
 
 export const CategoryUpdate: React.FC<CategoryUpdateProps> = ({
@@ -28,14 +26,6 @@ export const CategoryUpdate: React.FC<CategoryUpdateProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const categoryTypes = [
-    { label: "COMPANY", value: "COMPANY" },
-    { label: "BOTH", value: "BOTH" },
-    { label: "TECHNOLOGY", value: "TECHNOLOGY" },
-    { label: "SERVICE", value: "SERVICE" },
-    { label: "EDUCATION", value: "EDUCATION" },
-    { label: "JOB", value: "JOB" },
-  ];
 
   const {
     control,
@@ -45,7 +35,6 @@ export const CategoryUpdate: React.FC<CategoryUpdateProps> = ({
   } = useForm<CategoryFormValues>({
     defaultValues: {
       name: "",
-      categoryType: null,
     },
   });
 
@@ -61,7 +50,6 @@ export const CategoryUpdate: React.FC<CategoryUpdateProps> = ({
 
         reset({
           name: category.name || "",
-          categoryType: category.categoryType || null,
         });
       } catch (error: any) {
         toast.current?.show({
@@ -188,41 +176,6 @@ export const CategoryUpdate: React.FC<CategoryUpdateProps> = ({
               )}
             </div>
 
-            {/* Category Type */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t("category.type")}
-                <span className="text-red-500 ml-1">*</span>
-              </label>
-
-              <Controller
-                name="categoryType"
-                control={control}
-                rules={{ required: t("category.validation.typeRequired") }}
-                render={({ field }) => (
-                  <Dropdown
-                    {...field}
-                    value={field.value}
-                    options={categoryTypes}
-                    onChange={(e) => field.onChange(e.value)}
-                    optionLabel="label"
-                    optionValue="value"
-                    placeholder={t("category.placeholder.type")}
-                    className={`w-full ${
-                      errors.categoryType ? "p-invalid" : ""
-                    }`}
-                    disabled={isSubmitting}
-                  />
-                )}
-              />
-
-              {errors.categoryType && (
-                <p className="text-sm text-red-600 mt-1">
-                  {errors.categoryType.message}
-                </p>
-              )}
-            </div>
-
             {/* Footer */}
             <div className="flex items-center justify-end gap-3 pt-2">
               <button
@@ -238,7 +191,7 @@ export const CategoryUpdate: React.FC<CategoryUpdateProps> = ({
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 flex items-center gap-2 min-w-[110px] justify-center"
+                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 flex items-center gap-2 min-w-27.5 justify-center"
               >
                 {isSubmitting ? (
                   <>

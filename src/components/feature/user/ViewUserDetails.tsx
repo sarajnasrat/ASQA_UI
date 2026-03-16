@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import UserService from "../../../services/role.service";
 import DetailsCard from "../../../components/common/DetailsCard";
 import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
+import UserService from "../../../services/user.service";
 
 export const ViewUserDetails = () => {
   const { id } = useParams();

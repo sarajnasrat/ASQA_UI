@@ -141,7 +141,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
               className="border-round shadow-1 object-cover"
               style={{ objectFit: 'cover' }}
             />
-            <div className="absolute top-0 right-0">
+            {/* <div className="absolute top-0 right-0">
               <Tag 
                 value="New" 
                 severity="success" 
@@ -149,13 +149,13 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
                 className="text-xs"
                 style={{ transform: 'translate(50%, -50%)' }}
               />
-            </div>
+            </div> */}
           </div>
 
           {/* File Details */}
           <div className="flex flex-column gap-1">
             <div className="font-semibold text-base">{file.name}</div>
-            <div className="flex align-items-center gap-3 text-sm text-gray-500">
+            {/* <div className="flex align-items-center gap-3 text-sm text-gray-500">
               <span className="flex align-items-center gap-1">
                 <i className="pi pi-calendar"></i>
                 {new Date().toLocaleDateString()}
@@ -164,13 +164,13 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
                 <i className="pi pi-file"></i>
                 {props.formatSize}
               </span>
-            </div>
+            </div> */}
           </div>
         </div>
 
         {/* Actions */}
         <div className="flex align-items-center gap-2">
-          <Button
+          {/* <Button
             type="button"
             icon="pi pi-download"
             className="p-button-rounded p-button-text p-button-sm"
@@ -183,15 +183,15 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
               link.download = file.name;
               link.click();
             }}
-          />
-          <Button
+          /> */}
+          {/* <Button
             type="button"
             icon="pi pi-times"
             className="p-button-rounded p-button-text p-button-danger p-button-sm"
             tooltip="Remove"
             tooltipOptions={{ position: 'top' }}
             onClick={(event) => handleRemove(file, () => props.onRemove(event))}
-          />
+          /> */}
         </div>
       </div>
     );
@@ -217,7 +217,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
           </div>
         </div>
         
-        <span className="text-xl font-medium text-gray-700 mb-2">
+        {/* <span className="text-xl font-medium text-gray-700 mb-2">
           Drag & Drop Your File Here
         </span>
         
@@ -228,7 +228,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
         <div className="flex align-items-center gap-2 mt-2">
           <i className="pi pi-check-circle text-green-500"></i>
           <span className="text-xs text-gray-500">Securely uploaded</span>
-        </div>
+        </div> */}
       </div>
     );
   };
@@ -294,7 +294,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
 />
 
       {/* Additional Info */}
-      {selectedFile && (
+      {/* {selectedFile && (
         <div className="mt-2 flex align-items-center gap-2 text-xs">
           <i className="pi pi-check-circle text-green-500"></i>
           <span className="text-green-600">File ready for upload</span>
@@ -303,7 +303,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
           <span className="text-gray-400 mx-1">•</span>
           <span className="text-gray-500">Size: {formatSize(selectedFile.size)}</span>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
