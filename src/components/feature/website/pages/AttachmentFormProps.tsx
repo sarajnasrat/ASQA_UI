@@ -131,7 +131,7 @@ const AttachmentForm: React.FC<AttachmentFormProps> = ({
     }
   };
 
-const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
 
   if (files.length === 0) {
@@ -142,12 +142,11 @@ const handleSubmit = async (e: React.FormEvent) => {
   setIsSubmitting(true);
 
   try {
-
     for (let i = 0; i < files.length; i++) {
 
       if (files[i].status === 'success') continue;
 
-      // set uploading state
+      // uploading state
       setFiles(prev =>
         prev.map((f, idx) =>
           idx === i ? { ...f, status: 'uploading', progress: 30 } : f
@@ -159,7 +158,8 @@ const handleSubmit = async (e: React.FormEvent) => {
         await AttachmentService.create(
           files[i].file,
           files[i].file.name,
-          companyId
+          companyId,        // ✅ referenceId
+          "COMPANY"         // ✅ referenceType
         );
 
         // success state
@@ -177,7 +177,8 @@ const handleSubmit = async (e: React.FormEvent) => {
               ? {
                   ...f,
                   status: 'error',
-                  error: err?.response?.data?.message || 'Upload failed'
+                  error:
+                    err?.response?.data?.message || 'Upload failed',
                 }
               : f
           )
@@ -198,6 +199,75 @@ const handleSubmit = async (e: React.FormEvent) => {
     setIsSubmitting(false);
   }
 };
+
+// const handleSubmit = async (e: React.FormEvent) => {
+//   e.preventDefault();
+
+//   if (files.length === 0) {
+//     showToast('error', 'Error', 'Please select at least one file');
+//     return;
+//   }
+
+//   setIsSubmitting(true);
+
+//   try {
+
+//     for (let i = 0; i < files.length; i++) {
+
+//       if (files[i].status === 'success') continue;
+
+//       // set uploading state
+//       setFiles(prev =>
+//         prev.map((f, idx) =>
+//           idx === i ? { ...f, status: 'uploading', progress: 30 } : f
+//         )
+//       );
+
+//       try {
+
+//         await AttachmentService.create(
+//           files[i].file,
+//           files[i].file.name,
+//           companyId
+
+//         );
+
+//         // success state
+//         setFiles(prev =>
+//           prev.map((f, idx) =>
+//             idx === i ? { ...f, status: 'success', progress: 100 } : f
+//           )
+//         );
+
+//       } catch (err: any) {
+
+//         setFiles(prev =>
+//           prev.map((f, idx) =>
+//             idx === i
+//               ? {
+//                   ...f,
+//                   status: 'error',
+//                   error: err?.response?.data?.message || 'Upload failed'
+//                 }
+//               : f
+//           )
+//         );
+
+//         showToast('error', 'Error', 'File upload failed');
+//         setIsSubmitting(false);
+//         return;
+//       }
+//     }
+
+//     showToast('success', 'Success', 'All files uploaded successfully');
+//     onSuccess();
+
+//   } catch (error) {
+//     showToast('error', 'Error', 'Upload process failed');
+//   } finally {
+//     setIsSubmitting(false);
+//   }
+// };
 
   const getFileIcon = (file: File) => {
     if (file.type.startsWith('image/')) {

@@ -115,11 +115,11 @@ useEffect(() => {
     const menu = useRef<any>(null);
 
     const items: MenuItem[] = [
-      {
-        label: "Edit Menu",
-        icon: "pi pi-pencil",
-        command: () => handleEdit(rowData),
-      },
+      // {
+      //   label: "Edit Menu",
+      //   icon: "pi pi-pencil",
+      //   command: () => handleEdit(rowData),
+      // },
       {
         label: "Delete Menu",
         icon: "pi pi-trash",

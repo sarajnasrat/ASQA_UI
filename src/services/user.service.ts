@@ -1,8 +1,11 @@
 import httpClient from "../api/httpClient";
+import type ForgotPassword from "../components/feature/forgotpassword/ForgotPassword";
 
-const USER_BASE = '/users';
+const USER_BASE = "/users";
 
 export const UserService = {
+  /* ================= USERS ================= */
+
   getAllUsers() {
     return httpClient.get(`${USER_BASE}/all-users`);
   },
@@ -14,25 +17,64 @@ export const UserService = {
   registerUser(data: any) {
     return httpClient.post(`${USER_BASE}/register`, data, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
       },
     });
   },
 
-  getUser(id: number ) {
+  getUser(id: number) {
     return httpClient.get(`${USER_BASE}/${id}`);
   },
 
   updateUser(id: string | number, data: any) {
     return httpClient.put(`${USER_BASE}/update/${id}`, data, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
       },
     });
   },
 
   deleteUser(id: string | number) {
     return httpClient.delete(`${USER_BASE}/delete/${id}`);
+  },
+
+  /* ================= EMAIL OTP ================= */
+ forgotPassword(email: string) {
+    return httpClient.post(`${USER_BASE}/forgot-password`, {
+      email,
+    });
+  },
+  // ✅ Send OTP Code
+  sendOtp(email: string) {
+    return httpClient.post(`${USER_BASE}/send-otp`, {
+      email,
+    });
+  },
+
+  // ✅ Verify OTP Code
+  verifyOtp(email: string, otp: string) {
+    return httpClient.post(`${USER_BASE}/verify-otp-code`, null, {
+      params: { email, otp },
+    });
+  },
+
+  /* ================= VALIDATE OTP ================= */
+
+// ✅ Validate OTP Code (ONLY otpCode)
+validateOtpCode(otpCode: string) {
+  return httpClient.post(`${USER_BASE}/validate-otp-code`, {
+    otpCode,
+  });
+},
+  /* ================= RESET PASSWORD ================= */
+
+  resetPassword(resetToken: string, data: any) {
+    return httpClient.post(`${USER_BASE}/reset-password`, data, {
+      headers: {
+        Authorization: resetToken,
+        "Content-Type": "application/json",
+      },
+    });
   },
 };
 

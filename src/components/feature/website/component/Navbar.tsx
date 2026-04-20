@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Building2, Globe } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { Dropdown } from "primereact/dropdown";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,6 +37,17 @@ const Navbar = () => {
   const changeLanguage = (lang: string) => {
     i18n.changeLanguage(lang);
     setShowLanguageMenu(false);
+  };
+  type LangOption = { label: string; value: "en" | "ps" | "dr"; icon: string };
+  const languageOptions: LangOption[] = [
+    { label: "English", value: "en", icon: "/us.png" },
+    { label: "پښتو", value: "ps", icon: "/af.png" },
+    { label: "دری", value: "dr", icon: "/af.png" },
+  ];
+  const handleLanguageChange = (e: any) => {
+    const lang = e.value;
+    console.log("Language changed to:", lang);
+    i18n.changeLanguage(lang);
   };
 
   return (
@@ -80,7 +92,7 @@ const Navbar = () => {
               <Link
                 key={link.path}
                 to={link.path}
-                className={`text-sm font-bold transition-colors hover:text-blue-600 ${
+                className={`text-lg font-bold transition-colors hover:text-blue-600 ${
                   location.pathname === link.path
                     ? "text-blue-600 border-b-2 border-blue-600"
                     : "text-gray-600"
@@ -89,9 +101,8 @@ const Navbar = () => {
                 {link.name}
               </Link>
             ))}
-
-            {/* Language Dropdown */}
-            <div className="relative">
+       {/* Language Dropdown */}
+            {/* <div className="relative">
               <button
                 onClick={() => setShowLanguageMenu(!showLanguageMenu)}
                 className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-300 ${
@@ -128,7 +139,6 @@ const Navbar = () => {
 
               {showLanguageMenu && (
                 <div className="absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-xl py-2 border border-gray-100 animate-fadeIn">
-                  {/* English Option */}
                   <button
                     onClick={() => changeLanguage("en")}
                     className={`w-full flex items-center px-4 py-3 text-sm transition-all duration-200 ${
@@ -137,7 +147,7 @@ const Navbar = () => {
                         : "text-gray-700 hover:bg-gray-50 hover:text-blue-600"
                     }`}
                   >
-                    <span className="flex-1 text-left">🇬🇧 English</span>
+                    <span className="flex-1 text-left"> English</span>
                     {i18n.language === "en" && (
                       <svg
                         className="w-4 h-4 text-blue-600"
@@ -155,7 +165,6 @@ const Navbar = () => {
                     )}
                   </button>
 
-                  {/* Pashto Option */}
                   <button
                     onClick={() => changeLanguage("ps")}
                     className={`w-full flex items-center px-4 py-3 text-sm transition-all duration-200 ${
@@ -164,7 +173,7 @@ const Navbar = () => {
                         : "text-gray-700 hover:bg-gray-50 hover:text-blue-600"
                     }`}
                   >
-                    <span className="flex-1 text-left">🇦🇫 پښتو</span>
+                    <span className="flex-1 text-left">پښتو</span>
                     {i18n.language === "ps" && (
                       <svg
                         className="w-4 h-4 text-blue-600"
@@ -182,7 +191,6 @@ const Navbar = () => {
                     )}
                   </button>
 
-                  {/* Dari Option */}
                   <button
                     onClick={() => changeLanguage("dr")}
                     className={`w-full flex items-center px-4 py-3 text-sm transition-all duration-200 ${
@@ -191,7 +199,7 @@ const Navbar = () => {
                         : "text-gray-700 hover:bg-gray-50 hover:text-blue-600"
                     }`}
                   >
-                    <span className="flex-1 text-left">🇦🇫 دری</span>
+                    <span className="flex-1 text-left">دری</span>
                     {i18n.language === "dr" && (
                       <svg
                         className="w-4 h-4 text-blue-600"
@@ -209,11 +217,45 @@ const Navbar = () => {
                     )}
                   </button>
 
-                  {/* Decorative bottom gradient */}
                   <div className="h-1 bg-linear-to-r from-blue-500 via-indigo-500 to-purple-500 rounded-b-xl"></div>
                 </div>
               )}
-            </div>
+            </div> */}
+            <Dropdown
+              value={i18n.language}
+              options={languageOptions}
+              onChange={handleLanguageChange}
+              optionLabel="label"
+              optionValue="value"
+              itemTemplate={(option: LangOption) => (
+                <div className="flex items-center gap-2 px-2 py-1.5">
+                  <img
+                    src={option.icon}
+                    alt={option.label}
+                    className="w-5 h-5 rounded-sm "
+                  />
+                  <span className="text-sm">{option.label}</span>
+                </div>
+              )}
+              valueTemplate={(option: LangOption | null) =>
+                option ? (
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={option.icon}
+                      alt={option.label}
+                      className="w-5 h-5 rounded-sm "
+                    />
+                    <span className="hidden sm:inline text-sm">
+                      {option.label}
+                    </span>
+                  </div>
+                ) : (
+                  <span className="text-sm text-gray-500">Select language</span>
+                )
+              }
+              className="w-12 sm:w-auto border-none hover:bg-gray-100 rounded-lg transition-colors"
+              panelClassName="min-w-[120px]"
+            />
 
             <Link
               to="/certification/select-type"
@@ -234,7 +276,7 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         {isOpen && (
-          <div className="md:hidden mt-4 pb-4">
+          <div className="md:hidden mt-4 pb-4 font-bold">
             {navLinks.map((link) => (
               <Link
                 key={link.path}

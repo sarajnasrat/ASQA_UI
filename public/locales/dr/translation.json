@@ -1,6 +1,6 @@
 {
   "navbar": {
-    "welcome": "خوش آمدید",
+    "welcome": "ادراه ملی معیار و کیفیت افغانستان",
     "notifications": "اطلاعیه‌ها",
     "unread": "خوانده نشده",
     "viewAllNotifications": "مشاهده همه اطلاعیه‌ها",
@@ -120,8 +120,8 @@
     "created": "دسته با موفقیت ایجاد شد",
     "updated": "دسته با موفقیت به‌روزرسانی شد",
     "deleted": "دسته با موفقیت حذف شد",
-    "loadFailed": "بارگیری دسته失敗 شد",
-    "updateFailed": "به‌روزرسانی دسته失敗 شد",
+    "loadFailed": "بارگیری دسته شد",
+    "updateFailed": "اصحلاح سازی دسته شد",
     "placeholder": {
       "name": "نام دسته را وارد کنید",
       "type": "نوع دسته را انتخاب کنید"
@@ -135,101 +135,191 @@
       }
     }
   },
+
+   "forgotPassword": {
+    "title": "رمز عبور خود را فراموش کرده اید",
+    "description": "نگران نباشید! ایمیل خود را وارد کنید تا ما یک کد تأیید برای بازنشانی رمز عبورتان برایتان بفرستیم.",
+    "secureEncrypted": "امن و رمزگذاری شده",
+    "secureEncryptedDesc": "اطلاعات شما همیشه با امنیت درجه بانکی محافظت می‌شود",
+    "twoStepVerification": "تأیید دو مرحله‌ای",
+    "twoStepVerificationDesc": "لایه امنیتی اضافی با تأیید OTP",
+    "quickRecovery": "بازیابی سریع",
+    "quickRecoveryDesc": "رمز عبور خود را تنها در چند دقیقه بازنشانی کنید",
+    "rememberPassword": "رمز عبور خود را به یاد دارید؟",
+    "backToLogin": "بازگشت به ورود",
+    
+    "stepEmail": "ایمیل",
+    "stepVerify": "تأیید",
+    "stepReset": "بازنشانی",
+    "stepEmailDesc": "آدرس ایمیل خود را وارد کنید",
+    "stepVerifyDesc": "کد OTP را وارد کنید",
+    "stepResetDesc": "رمز عبور جدید ایجاد کنید",
+    
+    "emailAddress": "آدرس ایمیل",
+    "emailPlaceholder": "شما@example.com",
+    "emailHint": "ما یک کد تأیید 6 کاراکتری به این ایمیل خواهیم فرستاد",
+    "sendCode": "ارسال کد تأیید",
+    "sending": "در حال ارسال...",
+    
+    "verificationCode": "کد تأیید",
+    "otpHint": "کد 6 کاراکتری را وارد کنید",
+    "otpCodeSent": "کد 6 کاراکتری ارسال شده به",
+    "otpAllowedChars": "کد می‌تواند شامل حروف (A-Z) و اعداد (0-9) باشد",
+    "back": "بازگشت",
+    "verifyCode": "تأیید کد",
+    "resendCode": "ارسال مجدد کد",
+    
+    "newPassword": "رمز عبور جدید",
+    "newPasswordPlaceholder": "رمز عبور جدید را وارد کنید",
+    "confirmPassword": "تأیید رمز عبور",
+    "confirmPasswordPlaceholder": "رمز عبور جدید را تأیید کنید",
+    "passwordHint": "حداقل باید 8 کاراکتر باشد",
+    "passwordSecurity": "رمز عبور شما رمزگذاری شده و با امنیت ذخیره می‌شود",
+    "resetPassword": "بازنشانی رمز عبور",
+    "resettingPassword": "در حال بازنشانی رمز عبور...",
+    
+    "otpSentSuccess": "OTP با موفقیت به ایمیل شما ارسال شد!",
+    "otpVerifiedSuccess": "OTP با موفقیت تأیید شد!",
+    "passwordResetSuccess": "رمز عبور با موفقیت بازنشانی شد! در حال انتقال به صفحه ورود...",
+    "otpResendSuccess": "OTP جدید با موفقیت به ایمیل شما ارسال شد!",
+    
+    "otpIncomplete": "لطفاً OTP کامل 6 رقمی/کاراکتری را وارد کنید",
+    "passwordsMismatch": "رمزهای عبور مطابقت ندارند",
+    "passwordMinLength": "رمز عبور باید حداقل 8 کاراکتر باشد",
+    "failedInitiate": "شروع بازنشانی رمز عبور ناموفق بود",
+    "failedSendOtp": "ارسال OTP ناموفق بود",
+    "invalidOtp": "OTP نامعتبر است. لطفاً دوباره تلاش کنید.",
+    "failedReset": "بازنشانی رمز عبور ناموفق بود",
+    "networkError": "خطای شبکه. لطفاً دوباره تلاش کنید."
+  },
   "company": {
+       "companytyperequired": "نوع شرکت الزامی است",
+    "selectvalid": "لطفاً نوع شرکت معتبر را انتخاب کنید",
+    "invalidformat": "فرمت نامعتبر",
+    "invalidjson": "فرمت JSON نامعتبر",
     "create": "ایجاد شرکت",
-    "edit": "ویرایش شرکت",
+    "edit": "تصیح شرکت",
     "delete": "حذف شرکت",
-    "list": "لیست شرکت‌ها",
-    "refersh": "تازه‌سازی",
+    "list": "لیست شرکت‌ ها",
+    "refresh": "تازه سازی",
     "deleted": "شرکت با موفقیت حذف شد",
     "deleteConfirm": "آیا مطمئن هستید که می‌خواهید شرکت {{name}} را حذف کنید؟",
-    "loadFailed": "بارگیری شرکت‌ها失敗 شد",
-    "deleteFailed": "حذف شرکت失敗 شد",
+    "loadFailed": "بارگذاری شرکت‌ها ناموفق بود",
+    "deleteFailed": "حذف شرکت ناموفق بود",
+    "createSuccess": "شرکت با موفقیت ثبت شد!",
+    "createNoId": "شرکت ایجاد شد اما شناسه برگشت داده نشد",
+    "createFailed": "ایجاد شرکت ناموفق بود",
+    "updateSuccess": "شرکت با موفقیت به روز شد",
+    "updateFailed": "به روز رسانی شرکت ناموفق بود",
+    "basicInformation": "اطلاعات اولیه",
+    "businessDetails": "جزئیات تجاری",
+    "jawazInformation": "اطلاعات جواز",
+    "ownerInformation": "اطلاعات مالک",
+    "changeLogo": "تغییر لوگو",
+    "selectLogo": "انتخاب لوگو",
     "labels": {
-      "companyNameEN": "نام شرکت انگلیسی",
-      "companyNameDR": "نام شرکت به دری",
-      "companyNamePS": "نام شرکت به پشتو",
+      "companyNameEN": "نام شرکت (انگلیسی)",
+      "companyNameDR": "نام شرکت (دری)",
+      "companyNamePS": "نام شرکت (پشتو)",
       "email": "ایمیل",
-      "phoneNumber": "شماره تلفن",
+      "phoneNumber": "شماره تماس",
       "address": "آدرس",
-      "logoUrl": "لوگوی شرکت",
-      "bussinessLogoUrl": "لوگوی تجاری",
+      "logoUrl": "نشان شرکت",
+      "bussinessLogoUrl": "نشان تجاری شرکت",
       "isActive": "فعال است",
       "mainBranchAddress": "آدرس شعبه اصلی",
-      "activityPlace": "مکان فعالیت",
+      "activityPlace": "محل فعالیت",
       "activityType": "نوع فعالیت",
       "jawazNumber": "شماره جواز",
       "jawazExpiryDate": "تاریخ انقضای جواز",
       "jawazIssueDate": "تاریخ صدور جواز",
-      "tinNumber": "شماره مالیاتی",
+      "tinNumber": "شماره شناسایی مالیاتی",
       "aboutCompanyEn": "درباره شرکت (انگلیسی)",
       "aboutCompanyDr": "درباره شرکت (دری)",
       "aboutCompanyPs": "درباره شرکت (پشتو)",
       "websiteUrl": "آدرس وبسایت",
-      "establishYear": "سال تأسیس",
+      "establishYear": "سال تاسیس",
       "companyOwnerNameEn": "نام مالک شرکت (انگلیسی)",
       "companyOwnerNameDr": "نام مالک شرکت (دری)",
       "companyOwnerNamePs": "نام مالک شرکت (پشتو)",
       "companyType": "نوع شرکت",
-      "nosocialLinksAdded": "هنوز لینک اجتماعی اضافه نشده است. برای افزودن لینک رسانه‌های اجتماعی روی 'افزودن لینک' کلیک کنید.",
-      "categories": "دسته‌ها",
+      "noSocialLinksAdded": "هنوز لینک‌های اجتماعی اضافه نشده است. برای افزودن لینک‌های شبکه‌های اجتماعی روی 'افزودن لینک' کلیک کنید.",
+      "categories": "دسته‌بندی‌ها",
       "addLink": "افزودن لینک اجتماعی",
-      "selectCategories": "انتخاب دسته‌ها",
-      "selectType": "انتخاب نوع",
-      "selectCategoriesHint": "حداقل یک دسته را انتخاب کنید",
+      "selectCategories": "انتخاب دسته‌بندی‌ها",
+      "selectCategoriesHint": "حداقل یک دسته‌بندی را انتخاب کنید",
       "aboutCompany": "درباره شرکت",
-      "compantyType": "نوع شرکت",
-      "companyLogo": "لوگوی شرکت",
-      "bussinessLogo": "لوگوی تجاری",
-      "ownerNamePs": "نام مالک به پشتو",
-      "ownerNameDr": "نام مالک به دری",
-      "ownerNameEn": "نام مالک به انگلیسی",
-      "socialLinks": "لینک‌های اجتماعی"
+      "companyLogo": "نشان شرکت",
+      "bussinessLogo": "نشان تجاری شرکت",
+      "ownerNamePs": "نام مالک (پشتو)",
+      "ownerNameDr": "نام مالک (دری)",
+      "ownerNameEn": "نام مالک (انگلیسی)",
+      "socialLinks": "لینک‌های اجتماعی",
+      "selectPlatform": "انتخاب پلتفرم",
+      "companyLogos": "لوگوهای شرکت",
+      "basicInfo": "معلومات اولیه",
+      "contactInfo": "معلومات تماس",
+      "registrationInfo": "معلومات ثبت نام",
+      "additionalInfo": "معلومات اضافی"
     },
     "placeholder": {
       "companyNameEN": "نام شرکت را به انگلیسی وارد کنید",
       "companyNameDR": "نام شرکت را به دری وارد کنید",
       "companyNamePS": "نام شرکت را به پشتو وارد کنید",
-      "email": "ایمیل را وارد کنید",
-      "phoneNumber": "شماره تلفن را وارد کنید",
-      "address": "آدرس را وارد کنید",
-      "logoUrl": "لوگوی شرکت را آپلود کنید",
-      "bussinessLogoUrl": "لوگوی تجاری را آپلود کنید",
+      "email": "آدرس ایمیل را وارد کنید",
+      "phoneNumber": "شماره تماس را وارد کنید",
+      "address": "آدرس کامل را وارد کنید",
+      "logoUrl": "برای آپلود لوگو شرکت کلیک کنید",
+      "bussinessLogoUrl": "برای آپلود لوگو تجاری کلیک کنید",
       "mainBranchAddress": "آدرس شعبه اصلی را وارد کنید",
-      "activityPlace": "مکان فعالیت را وارد کنید",
+      "activityPlace": "محل فعالیت را وارد کنید",
       "activityType": "نوع فعالیت را وارد کنید",
       "jawazNumber": "شماره جواز را وارد کنید",
       "jawazExpiryDate": "تاریخ انقضای جواز را انتخاب کنید",
       "jawazIssueDate": "تاریخ صدور جواز را انتخاب کنید",
-      "tinNumber": "شماره مالیاتی را وارد کنید",
+      "tinNumber": "شماره شناسایی مالیاتی را وارد کنید",
       "aboutCompanyEn": "اطلاعات شرکت را به انگلیسی وارد کنید",
       "aboutCompanyDr": "اطلاعات شرکت را به دری وارد کنید",
       "aboutCompanyPs": "اطلاعات شرکت را به پشتو وارد کنید",
-      "websiteUrl": "آدرس وبسایت را وارد کنید",
-      "establishYear": "سال تأسیس را انتخاب کنید",
+      "websiteUrl": "آدرس وبسایت را وارد کنید (مثال: https://www.company.com)",
+      "establishYear": "سال تاسیس را انتخاب کنید",
       "companyOwnerNameEn": "نام مالک را به انگلیسی وارد کنید",
       "companyOwnerNameDr": "نام مالک را به دری وارد کنید",
       "companyOwnerNamePs": "نام مالک را به پشتو وارد کنید"
     },
     "validation": {
       "companyNameEN": {
-        "required": "نام شرکت (انگلیسی) الزامی است"
+        "required": "نام شرکت (انگلیسی) الزامی است",
+        "minLength": "نام شرکت باید حداقل ۲ کاراکتر باشد",
+        "maxLength": "نام شرکت نمی‌تواند بیشتر از ۱۰۰ کاراکتر باشد"
       },
       "companyNameDR": {
-        "required": "نام شرکت (دری) الزامی است"
+        "required": "نام شرکت (دری) الزامی است",
+        "minLength": "نام شرکت باید حداقل ۲ کاراکتر باشد",
+        "maxLength": "نام شرکت نمی‌تواند بیشتر از ۱۰۰ کاراکتر باشد"
       },
       "companyNamePS": {
-        "required": "نام شرکت (پشتو) الزامی است"
+        "required": "نام شرکت (پشتو) الزامی است",
+        "minLength": "نام شرکت باید حداقل ۲ کاراکتر باشد",
+        "maxLength": "نام شرکت نمی‌تواند بیشتر از ۱۰۰ کاراکتر باشد"
       },
       "email": {
         "required": "ایمیل الزامی است",
-        "invalid": "ایمیل نامعتبر است"
+        "invalid": "لطفاً یک آدرس ایمیل معتبر وارد کنید"
       },
       "phoneNumber": {
-        "required": "شماره تلفن الزامی است"
+        "required": "شماره تماس الزامی است",
+        "invalid": "لطفاً یک شماره تماس معتبر وارد کنید"
       },
       "address": {
-        "required": "آدرس الزامی است"
+        "required": "آدرس الزامی است",
+        "minLength": "آدرس باید حداقل ۵ کاراکتر باشد"
+      },
+      "mainBranchAddress": {
+        "required": "آدرس شعبه اصلی الزامی است"
+      },
+      "activityPlace": {
+        "required": "محل فعالیت الزامی است"
       },
       "activityType": {
         "required": "نوع فعالیت الزامی است"
@@ -237,14 +327,103 @@
       "companyType": {
         "required": "نوع شرکت الزامی است"
       },
+      "jawazNumber": {
+        "required": "شماره جواز الزامی است"
+      },
+      "jawazIssueDate": {
+        "required": "تاریخ صدور جواز الزامی است"
+      },
+      "jawazExpiryDate": {
+        "required": "تاریخ انقضای جواز الزامی است",
+        "invalid": "تاریخ انقضا باید بعد از تاریخ صدور باشد"
+      },
+      "tinNumber": {
+        "required": "شماره شناسایی مالیاتی الزامی است"
+      },
+      "establishYear": {
+        "required": "سال تاسیس الزامی است",
+        "invalid": "لطفاً یک سال معتبر وارد کنید"
+      },
+      "companyOwnerNameEn": {
+        "required": "نام مالک (انگلیسی) الزامی است"
+      },
+      "companyOwnerNameDr": {
+        "required": "نام مالک (دری) الزامی است"
+      },
+      "companyOwnerNamePs": {
+        "required": "نام مالک (پشتو) الزامی است"
+      },
+      "aboutCompanyEn": {
+        "required": "درباره شرکت (انگلیسی) الزامی است",
+        "minLength": "لطفاً حداقل ۱۰ کاراکتر وارد کنید"
+      },
+      "aboutCompanyDr": {
+        "required": "درباره شرکت (دری) الزامی است",
+        "minLength": "لطفاً حداقل ۱۰ کاراکتر وارد کنید"
+      },
+      "aboutCompanyPs": {
+        "required": "درباره شرکت (پشتو) الزامی است",
+        "minLength": "لطفاً حداقل ۱۰ کاراکتر وارد کنید"
+      },
       "categories": {
-        "required": "حداقل یک دسته را انتخاب کنید"
+        "required": "لطفاً حداقل یک دسته‌بندی را انتخاب کنید"
+      },
+      "websiteUrl": {
+        "invalid": "لطفاً یک آدرس معتبر وارد کنید (مثال: https://www.example.com)"
       }
     },
     "typeOptions": {
-      "PRIVATE": "خصوصی",
-      "PUBLIC": "عام",
-      "GOVERNMENT": "دولتی"
+      "PRIVATE": "شرکت خصوصی",
+      "PUBLIC": "شرکت عمومی",
+      "GOVERNMENT": "موسسه دولتی",
+      "EDUCATIONAL_INSTITUTIONS": "موسسه آموزشی",
+      "OTHER": "سایر"
+    },
+    "status": {
+      "ACTIVE": "فعال",
+      "INACTIVE": "غیرفعال",
+      "PENDING": "در انتظار",
+      "SUSPENDED": "معلق"
+    },
+    "messages": {
+      "createSuccess": "شرکت با موفقیت ثبت شد",
+      "updateSuccess": "اطلاعات شرکت با موفقیت به روز شد",
+      "deleteSuccess": "شرکت با موفقیت حذف شد",
+      "activateSuccess": "شرکت با موفقیت فعال شد",
+      "deactivateSuccess": "شرکت با موفقیت غیرفعال شد",
+      "loadSuccess": "شرکت‌ها با موفقیت بارگذاری شدند",
+      "noData": "هیچ شرکتی یافت نشد",
+      "confirmDelete": "آیا مطمئن هستید که می‌خواهید این شرکت را حذف کنید؟",
+      "confirmDeactivate": "آیا مطمئن هستید که می‌خواهید این شرکت را غیرفعال کنید؟",
+      "confirmActivate": "آیا مطمئن هستید که می‌خواهید این شرکت را فعال کنید؟"
+    },
+    "filters": {
+      "all": "همه شرکت‌ها",
+      "active": "شرکت‌های فعال",
+      "inactive": "شرکت‌های غیرفعال",
+      "byType": "فیلتر بر اساس نوع",
+      "byStatus": "فیلتر بر اساس وضعیت",
+      "search": "جستجوی شرکت‌ها...",
+      "searchPlaceholder": "جستجو بر اساس نام شرکت، ایمیل یا شماره تماس..."
+    },
+    "table": {
+      "companyName": "نام شرکت",
+      "email": "ایمیل",
+      "phone": "شماره تماس",
+      "type": "نوع",
+      "status": "وضعیت",
+      "actions": "عملیات",
+      "createdAt": "تاریخ ایجاد",
+      "updatedAt": "تاریخ به روز رسانی"
+    },
+    "sections": {
+      "companyInfo": "اطلاعات شرکت",
+      "ownerInfo": "اطلاعات مالک",
+      "registrationInfo": "اطلاعات ثبت نام",
+      "contactInfo": "اطلاعات تماس",
+      "socialMedia": "شبکه‌های اجتماعی",
+      "documents": "اسناد",
+      "certificates": "تائید نامه ها"
     }
   },
   "nav": {
@@ -258,40 +437,76 @@
     "profile": "پروفایل",
     "dashboard": "داشبورد",
     "logout": "خروج",
-    "certicificationrequest": "درخواست تصدیق"
+    "certicificationrequest": "درخواست تائید نامه کیفیت"
   },
   "certification": {
+    "list": "جدول تائید نامه های کیفی ",
+    "management": "مدیریت تائید نمامه های کینفی",
+    "type:": "نوعیت تائید نامه کیفی",
+    "number": "شماره تائید نامه کیفی",
+    "id": "آی دی",
+    "issuedDate": "تاریخ صدور",
+    "expiryDate": "تاریخ انقضا",
+    "type": "نوع",
+    "print": "چاپ تائید نامه کیفی",
+    "preview": "پیش‌ نمایش تائید نامه کیفی",
+    "download": "دانلود تائید نامه کیفی",
+    "status": "وضعیت",
+    "active": "فعال",
+    "inactive": "غیرفعال",
+
+    "trackBadge": "تعقیب  تائید نامه کیفی درخواست شده",
+    "trackTitle": "  وضعیت تائید نامه  ",
+    "certificationStatus": "تحت تعقیب شما",
+    "trackDescription": "لطفا شماره درخواست ثبت شده خود را وارد نمائید",
+    "searchPlaceholder": "لطفا شماره تعقیب درخواست شده خود را وارد نمایید ",
+    "searchingMessage": "درحال جستجو...",
+    "showingResult": "نمایش نتایج برای شماره تعقیب:",
+    "request": "درخواست",
+    "requestDetails": "جزییات تائید  نامه درخواست شده",
+    "trackProgress": "تعقیب تائید نامه کیفی درخواست شده ",
+    "noResults": "No results found",
+    "noResultsMessage": "هیچ نتیجه مطابق به شماره درخواست شما در سیستم یاقت نگردید.",
+    "tryAnotherSearch": "لطفا شماره تعقیب دیگری را امتحان کنید.",
+    "easyTracking": "تعقیب آسان",
+    "easyTrackingDesc": "فقط شماره تعقیب درخواست ثبت شده خود را وارد کنید تا وضعیت تائید نامه خود را مشاهده کنید",
+    "realTimeUpdates": "به‌روزرسانی‌های لحظه‌ای",
+    "realTimeUpdatesDesc": "دریافت اطلاعات جدید درباره درخواست تائید نامه کیفی شما",
+    "secureReliable": "امن & قابل اعتماد",
+    "secureReliableDesc": "داده‌های تائید نامه کیفی شما محافظت شده و تأیید شده‌اند",
+    "helpFinding": "نیاز به کمک برای یافتن شماره تعقیب خود دارید؟",
+    "helpFindingDesc": "شماره تعقیب شما می‌تواند در درخواست تائید نامه کیفی شما یا ایمیل تأیید شما یافت شود.",
     "page": {
       "leftSide": {
-        "title": "تصدیق خود را آغاز کنید",
-        "subtitle": "مسیر درست تصدیق را برای کسب و کار خود انتخاب کنید",
+        "title": "تائید نامه خود را آغاز کنید",
+        "subtitle": "مسیر درست تائید نامه را برای کسب و کار خود انتخاب کنید ",
         "steps": {
-          "1": "نوع درخواست را انتخاب کنید",
-          "2": "نوع تصدیق را انتخاب کنید",
+          "1": "نوعیت درخواست را انتخاب کنید",
+          "2": "نوع تائید نامه کیفی را انتخاب کنید",
           "3": "شرکت را ثبت کنید",
-          "4": "مدارک را تکمیل کنید",
-          "5": "تصدیق دریافت کنید"
+          "4": "اسناد لازم را ضافه کنید",
+          "5": "تائید نامه دریافت کنید"
         },
         "progress": "مرحله ۱ از ۵",
-        "progressLabel": "انتخاب درخواست و تصدیق"
+        "progressLabel": "انتخاب درخواست  تائید نامه"
       },
       "requestType": {
         "title": "۱. نوع درخواست را انتخاب کنید",
         "subtitle": "انتخاب کنید که این درخواست جدید است یا تمدید",
         "new": {
           "title": "درخواست جدید",
-          "description": "تصدیق برای اولین بار برای کسب و کار شما"
+          "description": "تائید نامه برای اولین بار برای کسب و کار شما"
         },
         "renewal": {
           "title": "تمدید",
-          "description": "تصدیق موجود خود را تمدید کنید"
+          "description": "تائید نامه موجود خود را تمدید کنید"
         }
       },
       "certificationType": {
-        "title": "۲. نوع تصدیق را انتخاب کنید",
-        "subtitle": "تصدیقی را انتخاب کنید که با نیازهای کسب و کار شما مطابقت دارد",
+        "title": "۲. نوع تائید نامه را انتخاب کنید",
+        "subtitle": "لطفا یکی از انواع تائید نامه کیفی را انتخاب کنید که با نیازهای کسب و کار شما مطابقت دارد",
         "domestic": {
-          "title": "کیفیت داخلی",
+          "title": "تائید نامه کیفی سیستم مدیریتی یا خدمات محصول(داخلی)",
           "description": "برای عملیات تجاری محلی",
           "benefits": {
             "1": "شناخته شده در سطح ملی",
@@ -300,7 +515,7 @@
           }
         },
         "international": {
-          "title": "کیفیت بین‌المللی",
+          "title": "تائید نامه کیفی سیستم مدیرتی یا خدمات، محصول(بین المللی)",
           "description": "برای گسترش بازار جهانی",
           "benefits": {
             "1": "شناخته شده در سطح جهانی",
@@ -309,7 +524,7 @@
           }
         },
         "standard": {
-          "title": "نشان استاندارد",
+          "title": "تائید نامه کیفی سیستم مدیریتی بای اخذ علامت معیار",
           "description": "برای استانداردهای محصول/خدمت",
           "benefits": {
             "1": "نشان کیفیت",
@@ -323,36 +538,37 @@
         "creating": "در حال ایجاد...",
         "continue": "ادامه با انتخاب"
       },
-      "trust": "⚡ بیش از ۱۰۰۰ شرکت با موفقیت تصدیق خود را تکمیل کرده‌اند",
+      "trust": "⚡ بیش از ۱۰۰۰ شرکت با موفقیت تائید نامه خود را تکمیل کرده‌اند",
       "validation": {
         "requestTypeRequired": "لطفاً یک نوع درخواست را انتخاب کنید",
-        "certificationTypeRequired": "لطفاً یک نوع تصدیق را انتخاب کنید"
+        "certificationTypeRequired": "لطفاً یک نوع تائید نامه را انتخاب کنید"
       },
       "messages": {
-        "created": "درخواست تصدیق با موفقیت ایجاد شد!",
-        "createFailed": "ایجاد درخواست تصدیق ناموفق بود"
+        "created": "درخواست تائید نامه با موفقیت ایجاد شد!",
+        "createFailed": "ایجاد درخواست تائید نامه ناموفق بود"
       }
     }
   },
   "certificationRequest": {
-    "create": "ایجاد درخواست تصدیق",
-    "edit": "ویرایش درخواست تصدیق",
-    "delete": "حذف درخواست تصدیق",
-    "list": "لیست درخواست‌های تصدیق",
+    "create": "ایجاد درخواست تائید نامه",
+    "edit": "ویرایش درخواست تائید نامه",
+    "delete": "حذف درخواست تائید نامه",
+    "list": "لیست درخواست‌های تائید نامه",
     "refersh": "تازه‌سازی",
-    "created": "درخواست تصدیق با موفقیت ایجاد شد",
-    "updated": "درخواست تصدیق با موفقیت به‌روزرسانی شد",
-    "deleted": "درخواست تصدیق با موفقیت حذف شد",
-    "loadFailed": "بارگیری درخواست‌های تصدیق ناموفق بود",
-    "deleteFailed": "حذف درخواست تصدیق ناموفق بود",
+    "created": "درخواست تائید نامه با موفقیت ایجاد شد",
+    "updated": "درخواست تائید نامه با موفقیت به‌روزرسانی شد",
+    "deleted": "درخواست تائید نامه با موفقیت حذف شد",
+    "loadFailed": "بارگیری درخواست‌های تائید نامه ناموفق بود",
+    "deleteFailed": "حذف درخواست تائید نامه ناموفق بود",
     "deleteConfirm": "آیا مطمئن هستید که می‌خواهید درخواست {{serial}} را حذف کنید؟",
-    "updateStatus": "به‌روزرسانی وضعیت درخواست تصدیق",
+    "updateStatus": "به‌روزرسانی وضعیت درخواست تائید نامه",
     "status": "وضعیت درخواست",
     "labels": {
       "serialNumber": "شماره سریال",
+      "trackingNumber": "شماره پیگیری",
       "requestType": "نوع درخواست",
       "requestStatus": "وضعیت درخواست",
-      "certificationType": "نوع تصدیق",
+      "certificationType": "نوع تائید نامه",
       "createdDate": "تاریخ ایجاد",
       "updatedDate": "تاریخ به‌روزرسانی",
       "deleted": "حذف شده"
@@ -376,9 +592,9 @@
       "EXTENSION": "تمدید مهلت"
     },
     "statusOptions": {
-      "DRAFT": "پیش‌نویس",
+      "DRAFT": "پیش‌ نویس",
       "SUBMITTED": "ارسال شده",
-      "REGISTERED": "ثبت شده",
+      "REGISTERED": "اهدای سند ثبت دیتابیس",
       "STANDARDS_PROVIDED": "استانداردها ارائه شده",
       "DEADLINE_ASSIGNED": "مهلت تعیین شده",
       "INSPECTION_IN_PROGRESS": "بازرسی در حال انجام",
@@ -389,7 +605,8 @@
       "CERTIFICATE_ISSUED": "گواهی صادر شد",
       "UNDER_SUPERVISION": "تحت نظارت",
       "REJECTED": "رد شده",
-      "CANCELLED": "لغو شده"
+      "CANCELLED": "لغو شده",
+      "UNDER_REVIEW": "در حال بررسی"
     },
     "certificationTypeOptions": {
       "DOMESTIC_QUALITY_CERTIFICATION": "تصدیق کیفیت داخلی",
@@ -397,9 +614,195 @@
       "STANDARD_MARK_CERTIFICATION": "تصدیق نشان استاندارد"
     }
   },
+
+ "attachment": {
+    "management_title": "مدیریت ضمیمه‌ها",
+    "list": "لیست ضمیمه‌ها",
+    "add": "اضافه نمودن ضمیمه",
+    "create_menu": "ایجاد منو",
+    "refresh": "تازه سازی",
+    "delete": "حذف",
+    "cancel": "لغو",
+    "delete_header": "حذف ضمیمه",
+    "delete_confirmation": "آیا ضمیمه \"{{name}}\" حذف شود؟",
+    "attachment_deleted_successfully": "ضمیمه با موفقیت حذف شد",
+    "delete_failed": "حذف ناموفق بود",
+    "failed_to_load_attachments": "بارگیری ضمیمه‌ها ناموفق بود",
+    "total_records": "مجموع {{count}}",
+    "breadcrumb": "مدیریت ضمیمه‌ها",
+    "success": "موفقیت",
+    "error": "خطا",
+    "warning": "هشدار",
+    "columns": {
+      "id": "شماره ",
+      "attachment_name": "نام ضمیمه",
+      "module": "نوعیت ضمیمه",
+      "reference_id": "",
+      "file": "فایل",
+      "type": "نوع",
+      "size": "سایز",
+      "actions": "عملیات"
+    },
+    "COMPANY": "شرکت",
+    "CERTIFICATION": "تائید نامه",
+    "USER": "کاربر",
+    "REQUEST": "درخواست",
+    "STANDARD": "معیار",
+    "add_attachment": "اضافه نمودن ضمیمه",
+    "attachment_type": "نوع ضمیمه",
+    "select_attachment_type": "نوعیت ضمیمه را انتخاب نمائید",
+    "select_attachment_type_first": "اولاً نوعیت ضمیمه را انتخاب نمایید",
+    "company": "شرکت",
+    "certification": "تائید نامه",
+    "user": "کاربر",
+    "request": "درخواست",
+    "select_company": "انتخاب شرکت",
+    "select_certification": "انتخاب تائید نامه",
+    "select_user": "انتخاب کاربر",
+    "select_request": "انتخاب درخواست",
+    "attachment_name": "نام ضمیمه",
+    "enter_attachment_name": "نام ضمیمه را وارد نمائید",
+    "select_file": "انتخاب فایل",
+    "supported_formats": "فرمت های پشتیبانی شده: Image, PDF, Word, Excel (حداکثر 5MB)",
+    "upload_attachment": "اضافه نمودن ضمیمه",
+    "please_select_file": "لطفاً یک فایل انتخاب کنید",
+    "please_enter_attachment_name": "لطفاً نام ضمیمه را وارد کنید",
+    "please_select_attachment_type": "لطفاً نوع ضمیمه را انتخاب کنید",
+    "please_select_company": "لطفاً یک شرکت انتخاب کنید",
+    "please_select_certification": "لطفاً یک تائید نامه انتخاب کنید",
+    "please_select_user": "لطفاً یک کاربر انتخاب کنید",
+    "please_select_request": "لطفاً یک درخواست انتخاب کنید",
+    "attachment_uploaded_successfully": "ضمیمه با موفقیت اضافه شد",
+    "failed_to_upload_attachment": "اضافه نمودن ضمیمه با شکست مواجه شد",
+    "failed_to_load_companies": "بارگیری شرکت‌ها با شکست مواجه شد",
+    "no_companies_found": "شرکتی یافت نشد. لطفاً ابتدا یک شرکت اضافه کنید."
+  },
+  "zone": {
+    "create": "ایجاد زون",
+    "edit": "تصحیح زون",
+    "delete": " خذف زون",
+    "list": "جدول زون ها",
+    "refersh": "تازه سازی",
+    "created": "زون موفقانه ایجاد شد",
+    "updated": "زون  انتخاب شده موفقانه تصحیح شد",
+    "deleted": "زون انتخاب شده خذف گردید",
+    "servererror": "خطا در بارگذاری زون ها",
+    "deleteFailed": "خطا در حذف زون",
+    "deleteConfirm": "آیا مطمئن هستید که می‌خواهید زون {{name}} را حذف کنید؟",
+    "notfound": "زون یافت نشد",
+    "fetched": "زون ها با موفقیت بارگذاری شد",
+    "locationrequired": "انتخاب موقعیت ضروری است",
+    "location": "موقعیت",
+    "name": {
+      "label": "نام زون",
+      "required": "نام زون ضروری است",
+      "exists": "زون با این نام موجود است"
+    }
+  },
+  "registration": {
+    "title": "ثبت نام شرکت",
+    "subtitle": "فرآیند ثبت نام چند مرحله‌ای را تکمیل کنید",
+    "steps": {
+      "companyInfo": "اطلاعات شرکت",
+      "contactPerson": "شخص تماس",
+      "documents": "اسناد و رسانه",
+      "review": "بررسی و ارسال"
+    },
+    "leftPanel": {
+      "title": "هر مرحله را برای دریافت گواهینامه خود تکمیل کنید",
+      "inProgress": "در حال انجام",
+      "selected": "انتخاب شده"
+    },
+    "review": {
+      "title": "بررسی و ارسال",
+      "selectedCertification": "تائید نامه کیفیت انتخاب شده",
+      "stepCompleted": "تکمیل شد",
+      "submitButton": "ارسال برای بررسی"
+    },
+    "toasts": {
+      "companySuccess": "شرکت با موفقیت ایجاد شد!",
+      "contactSuccess": "شخص تماس با موفقیت ایجاد شد!",
+      "documentsSuccess": "اسناد با موفقیت بارگذاری شد!",
+      "submitSuccess": "درخواست گواهینامه برای بررسی ارسال شد!",
+      "submitError": "ارسال درخواست گواهینامه ناموفق بود!",
+      "noRequestError": "هیچ درخواست گواهینامه یافت نشد!"
+    },
+    "errors": {
+      "submitFailed": "ارسال درخواست گواهینامه ناموفق بود!"
+    }
+  },
+ "contactPerson": {
+    "info": "معلومات نماینده شرکت",
+    "firstName": "نام",
+    "lastName": "نام خانوادگی",
+    "position": "موقف/نقش",
+    "email": "ایمیل",
+    "phoneNumber": "شماره تماس",
+    "successMessage": "نماینده شرکت با موفقیت اضافه شد!",
+    "errorMessage": "اضافه کردن نماینده شرکت ناموفق بود",
+    "errors": {
+      "firstNameRequired": "نام ضروری است",
+      "lastNameRequired": "نام خانوادگی ضروری است",
+      "positionRequired": "موقف ضروری است",
+      "emailRequired": "ایمیل ضروری است",
+      "emailInvalid": "ایمیل نامعتبر است",
+      "phoneRequired": "شماره تماس ضروری است"
+    },
+    "placeholders": {
+      "firstName": "نام را وارد کنید",
+      "lastName": "نام خانوادگی را وارد کنید",
+      "position": "مثلاً، مدیر عامل، مدیر",
+      "email": "example@email.com",
+      "phoneNumber": "۹۳+ ۱۲۳ ۴۵۶ ۷۸۹"
+    },
+    "addresses": {
+      "title": "آدرس‌ها",
+      "addAddress": "اضافه کردن آدرس",
+      "addressLabel": "آدرس",
+      "district": "ولسوالی",
+      "selectDistrict": "ولسوالی را انتخاب کنید",
+      "addressType": "نوع آدرس",
+      "details": "جزئیات",
+      "detailsPlaceholder": "معلومات مختصر آدرس خویش را اضافه کنید",
+      "districtRequired": "ولسوالی ضروری است",
+      "detailsRequired": "جزئیات آدرس ضروری است",
+      "addressTypeRequired": "نوع آدرس ضروری است",
+      "addressTypes": {
+        "HEAD_OFFICE": "دفتر مرکزی",
+        "BRANCH_OFFICE": "دفتر شعبه",
+        "FACTORY": "کارخانه",
+        "HOME":"خانه",
+        "WAREHOUSE": "انبار",
+        "OTHER": "سایر"
+      }
+    }
+  },
+    "commitee": {
+    "list": "لیست کمیته",
+    "create": "ایجاد کمیته",
+    "edit": "ویرایش کمیته",
+    "delete": "حذف کمیته",
+    "name": "نام کمیته",
+    "description": "توضیحات",
+    "type": "نوع کمیته",
+    "active": "فعال",
+    "updated": "کمیته با موفقیت به‌روزرسانی شد",
+    "deleted": "کمیته با موفقیت حذف شد",
+    "deleteConfirm": "آیا از حذف کمیته \"{{name}}\" مطمئن هستید؟",
+    "technical": "کمیته تخنیکی",
+    "quality": "کمیته کیفیت",
+    "memberCount":"تعداد اعضا",
+    "administrative": "کمیته اداری",
+      "status": "حالت",
+    "createdDate": "تاریخ ایجاد",
+    "commiteeType": "نوع کمیته",
+    "Active": "فعال",
+    "Inactive": "غیرفعال"
+  },
   "common": {
     "save": "ذخیره",
     "cancel": "لغو",
+    "saveAndContinue":"ذخیره و ادامه به مرحله بعد",
     "delete": "حذف",
     "edit": "اصلاح",
     "create": "ایجاد",
@@ -412,15 +815,21 @@
     "error": "خطا",
     "updating": "در حال به‌روزرسانی...",
     "update": "به‌روزرسانی",
-    "select": "انتخاب"
+    "select": "انتخاب",
+    "home": "خانه",
+    "searhc": "جستجو",
+    "noData": "هیچ داده‌ای یافت نشد",
+      "back":"مرحله قبلی",
+    "searching": "در حال جستجو...",
+    "createdDate": "تاریخ ایجاد"
   },
   "home": {
     "badge": "اداره معیارهای کیفیت افغانستان",
     "hero": {
-      "title": "دروازه شما به سوی تصدیق کیفیت",
-      "description": "فرآیند تصدیق خود را با ASQA ساده کنید. شناخته شوید، اعتماد بسازید و فرصت‌های تجاری خود را گسترش دهید.",
+      "title": "راه آسان  جهت بدست آوردن  تائید نامه کیفیت در افغانستان",
+      "description": "پروسه دریافت تائید نامه کیفیت خود را با ASQA ساده کنید. شناخته شوید، اعتماد بسازید و فرصت‌های تجاری خود را گسترش دهید.",
       "cta": {
-        "start": "تصدیق خود را آغاز کنید",
+        "start": "تائید نامه خود را آغاز کنید",
         "learn": "بیشتر بیاموزید"
       }
     },
@@ -428,16 +837,20 @@
       "title": "مسیر تصدیق خود را انتخاب کنید",
       "subtitle": "تصدیقی را انتخاب کنید که با نیازهای تجاری شما مطابقت دارد",
       "domestic": {
-        "title": "کیفیت داخلی",
+        "title": "تائید نامه کیفی سیستم مدیریتی یا خدمات محصول(داخلی)",
         "description": "برای عملیات تجاری محلی",
         "features": {
           "1": "شناخته شده در سطح ملی",
           "2": "مطابقت با مقررات محلی",
           "3": "اعتبار بازار"
-        }
+        },
+
+        "DOMESTIC_QUALITY_CERTIFICATION": "د کورني کیفیت تصدیق",
+        "INTERNATIONAL_QUALITY_CERTIFICATION": "نړیوال کیفیت تصدیق",
+        "STANDARD_MARK_CERTIFICATION": "د معیاري نښې تصدیق"
       },
       "international": {
-        "title": "کیفیت بین‌المللی",
+        "title": "تائید نامه کیفی سیستم مدیرتی یا خدمات، محصول(بین المللی)",
         "description": "برای گسترش بازار جهانی",
         "features": {
           "1": "شناخته شده در سطح جهانی",
@@ -446,7 +859,7 @@
         }
       },
       "standard": {
-        "title": "نشان استاندارد",
+        "title": "اخذ علامت معیار",
         "description": "برای استانداردهای محصول/خدمت",
         "features": {
           "1": "نشان کیفیت",

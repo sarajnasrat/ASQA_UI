@@ -20,6 +20,7 @@ export interface ILoginResponse {
   active: boolean;
   profileImage?: string;
   roles: string[];
+  committeeIds?: number[]; // ✅ include committee IDs in login response
   menus: IMenu[]; // ✅ include menus in login response
 }
 

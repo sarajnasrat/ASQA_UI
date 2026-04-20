@@ -1,54 +1,67 @@
 // pages/Contact.js
-import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
+import { useState } from "react";
+import { Mail, Phone, MapPin, Clock, Send } from "lucide-react";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import  { type LatLngExpression } from "leaflet";
+import "leaflet/dist/leaflet.css";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
   });
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleChange = (e) => {
+  const handleChange = (e:any) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const validateForm = () => {
-    const newErrors = {};
-    
-    if (!formData.name) newErrors.name = 'Name is required';
+    const newErrors = {
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+    };
+
+    if (!formData.name) newErrors.name = "Name is required";
     if (!formData.email) {
-      newErrors.email = 'Email is required';
+      newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
+      newErrors.email = "Email is invalid";
     }
-    if (!formData.subject) newErrors.subject = 'Subject is required';
-    if (!formData.message) newErrors.message = 'Message is required';
-    
+    if (!formData.subject) newErrors.subject = "Subject is required";
+    if (!formData.message) newErrors.message = "Message is required";
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e:any) => {
     e.preventDefault();
     if (validateForm()) {
       // Handle form submission
-      console.log('Form submitted:', formData);
+      console.log("Form submitted:", formData);
       setIsSubmitted(true);
       setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: ''
+        name: "",
+        email: "",
+        subject: "",
+        message: "",
       });
-      
+
       // Reset success message after 5 seconds
       setTimeout(() => setIsSubmitted(false), 5000);
     }
@@ -57,52 +70,38 @@ const Contact = () => {
   const contactInfo = [
     {
       icon: <Phone className="h-6 w-6 text-blue-600" />,
-      title: 'Phone',
-      details: ['+93 (555) 123-4567', '+93 (555) 987-6543'],
-      action: 'Call us'
+      title: "Phone",
+      details: ["+93 (555) 123-4567", "+93 (555) 987-6543"],
+      action: "Call us",
     },
     {
       icon: <Mail className="h-6 w-6 text-blue-600" />,
-      title: 'Email',
-      details: ['info@asqa.com', 'support@asqa.com'],
-      action: 'Email us'
+      title: "Email",
+      details: ["info@asqa.com", "support@asqa.com"],
+      action: "Email us",
     },
     {
       icon: <MapPin className="h-6 w-6 text-blue-600" />,
-      title: 'Office',
-      details: ['123 Certification Ave', 'Suite 100, Kabul, 10001'],
-      action: 'Visit us'
+      title: "Office",
+      details: ["123 Certification Ave", "Suite 100, Kabul, 10001"],
+      action: "Visit us",
     },
     {
       icon: <Clock className="h-6 w-6 text-blue-600" />,
-      title: 'Hours',
-      details: ['Monday - Friday: 9am - 6pm', 'Saturday: 10am - 4pm'],
-      action: 'Working days'
-    }
+      title: "Hours",
+      details: ["Saturday - Wednesday: 8am - 1pm", "Thursday : 8am - 1pm"],
+      action: "Working days",
+    },
   ];
+
+  // Kabul coordinates
+  const position: LatLngExpression = [34.5553, 69.2075];
 
   return (
     <div className="pt-24 pb-20">
       {/* Header */}
       <section className="bg-linear-to-r from-blue-600 to-blue-800 text-white py-16">
-        <div className="container mx-auto px-4 text-center">Youtube
-LinkedIn
-Facebook
-Twitter
-0202321056
-  پارک های صنعتی، سرک کابل - جلال آباد
-
-  لست تماس و ایمیل آدرس ها ریاست ها
-
-  دریافت موقعیت از طریق گوگل مپ
-
-  اوقات کاری : از 08:30 صبح الی 3:30 ظهر
-
- 
-
-    
-
-Standard and Quality Authorit
+        <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Contact Us</h1>
           <p className="text-xl text-blue-100 max-w-2xl mx-auto">
             Get in touch with our team for any questions or support
@@ -122,11 +121,17 @@ Standard and Quality Authorit
                 <div className="inline-block p-3 bg-blue-100 rounded-full mb-4">
                   {info.icon}
                 </div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">{info.title}</h3>
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                  {info.title}
+                </h3>
                 {info.details.map((detail, i) => (
-                  <p key={i} className="text-gray-600 text-sm mb-1">{detail}</p>
+                  <p key={i} className="text-gray-600 text-sm mb-1">
+                    {detail}
+                  </p>
                 ))}
-                <p className="text-blue-600 text-sm font-medium mt-2">{info.action}</p>
+                <p className="text-blue-600 text-sm font-medium mt-2">
+                  {info.action}
+                </p>
               </div>
             ))}
           </div>
@@ -139,8 +144,10 @@ Standard and Quality Authorit
           <div className="grid lg:grid-cols-2 gap-8">
             {/* Contact Form */}
             <div className="bg-white rounded-xl shadow-lg p-8">
-              <h2 className="text-2xl font-bold text-gray-800 mb-6">Send us a Message</h2>
-              
+              <h2 className="text-2xl font-bold text-gray-800 mb-6">
+                Send us a Message
+              </h2>
+
               {isSubmitted && (
                 <div className="mb-6 p-4 bg-green-100 text-green-700 rounded-lg">
                   Thank you for your message! We'll get back to you soon.
@@ -157,9 +164,8 @@ Standard and Quality Authorit
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                      errors.name ? 'border-red-500' : 'border-gray-300'
-                    }`}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.name ? "border-red-500" : "border-gray-300"
+                      }`}
                   />
                   {errors.name && (
                     <p className="mt-1 text-sm text-red-500">{errors.name}</p>
@@ -175,9 +181,8 @@ Standard and Quality Authorit
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                      errors.email ? 'border-red-500' : 'border-gray-300'
-                    }`}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.email ? "border-red-500" : "border-gray-300"
+                      }`}
                   />
                   {errors.email && (
                     <p className="mt-1 text-sm text-red-500">{errors.email}</p>
@@ -193,12 +198,13 @@ Standard and Quality Authorit
                     name="subject"
                     value={formData.subject}
                     onChange={handleChange}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                      errors.subject ? 'border-red-500' : 'border-gray-300'
-                    }`}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.subject ? "border-red-500" : "border-gray-300"
+                      }`}
                   />
                   {errors.subject && (
-                    <p className="mt-1 text-sm text-red-500">{errors.subject}</p>
+                    <p className="mt-1 text-sm text-red-500">
+                      {errors.subject}
+                    </p>
                   )}
                 </div>
 
@@ -210,13 +216,14 @@ Standard and Quality Authorit
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
-                    rows="5"
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                      errors.message ? 'border-red-500' : 'border-gray-300'
-                    }`}
+                    rows={5}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.message ? "border-red-500" : "border-gray-300"
+                      }`}
                   />
                   {errors.message && (
-                    <p className="mt-1 text-sm text-red-500">{errors.message}</p>
+                    <p className="mt-1 text-sm text-red-500">
+                      {errors.message}
+                    </p>
                   )}
                 </div>
 
@@ -231,27 +238,53 @@ Standard and Quality Authorit
             </div>
 
             {/* Map */}
-            <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-              <div className="h-64 lg:h-full bg-gray-200 relative">
-                {/* Placeholder for actual map - in production, use Google Maps or similar */}
-                <div className="absolute inset-0 flex items-center justify-center bg-blue-50">
-                  <div className="text-center">
-                    <MapPin className="h-12 w-12 text-blue-600 mx-auto mb-2" />
-                    <p className="text-gray-600 mb-2">ASQA Headquarters</p>
-                    <p className="text-sm text-gray-500">123 Certification Avenue</p>
-                    <p className="text-sm text-gray-500">Kabul,Afghanistan,  10001</p>
-                  </div>
-                </div>
+            <div className="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col">
+              <div className="h-100 lg:h-125 w-full relative">
+                <MapContainer
+                  center={position}
+                  zoom={13}
+                  scrollWheelZoom={false}
+                  style={{ height: "100%", width: "100%" }}
+                  className="z-0"
+                  attributionControl={false} // This removes the attribution control
+                >
+                  <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  />
+                  <Marker position={position}>
+                    <Popup>
+                      <div className="text-center">
+                        <strong>ASQA Office</strong>
+                        <br />
+                        123 Certification Ave
+                        <br />
+                        Suite 100, Kabul, 10001
+                        <br />
+                        <span className="text-sm text-gray-600">
+                          Afghanistan
+                        </span>
+                      </div>
+                    </Popup>
+                  </Marker>
+                </MapContainer>
               </div>
               <div className="p-6">
-                <h3 className="font-semibold text-gray-800 mb-2">Visit Our Office</h3>
+                <h3 className="font-semibold text-gray-800 mb-2">
+                  Visit Our Office
+                </h3>
                 <p className="text-gray-600 text-sm mb-4">
-                  Our team is available for in-person consultations during business hours.
-                  Please schedule an appointment in advance.
+                  Our team is available for in-person consultations during
+                  business hours. Please schedule an appointment in advance.
                 </p>
-                <button className="text-blue-600 font-medium hover:text-blue-700">
+                <a
+                  href="https://maps.google.com/?q=34.5553,69.2075"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 font-medium hover:text-blue-700 inline-flex items-center"
+                >
                   Get Directions →
-                </button>
+                </a>
               </div>
             </div>
           </div>
@@ -267,23 +300,26 @@ Standard and Quality Authorit
           <div className="max-w-3xl mx-auto space-y-4">
             {[
               {
-                q: 'How long does the certification process take?',
-                a: 'The certification process typically takes 2-3 weeks from initial registration to final approval.'
+                q: "How long does the certification process take?",
+                a: "The certification process typically takes 2-3 weeks from initial registration to final approval.",
               },
               {
-                q: 'What documents are required for registration?',
-                a: 'Required documents include business license, tax registration, and company incorporation documents.'
+                q: "What documents are required for registration?",
+                a: "Required documents include business license, tax registration, and company incorporation documents.",
               },
               {
-                q: 'Is ASQA certification internationally recognized?',
-                a: 'Yes, ASQA certification is recognized in over 50 countries worldwide.'
+                q: "Is ASQA certification internationally recognized?",
+                a: "Yes, ASQA certification is recognized in over 50 countries worldwide.",
               },
               {
-                q: 'How can I check my application status?',
-                a: 'You can track your application status through your company dashboard or contact our support team.'
-              }
+                q: "How can I check my application status?",
+                a: "You can track your application status through your company dashboard or contact our support team.",
+              },
             ].map((faq, index) => (
-              <div key={index} className="border border-gray-200 rounded-lg p-4">
+              <div
+                key={index}
+                className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+              >
                 <h3 className="font-semibold text-gray-800 mb-2">{faq.q}</h3>
                 <p className="text-gray-600 text-sm">{faq.a}</p>
               </div>

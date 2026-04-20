@@ -6,7 +6,7 @@ export const WebsiteLayout = () => {
   return (
     <>
       <Navbar />
-      <main>
+      <main className="website-main">
         <Outlet />
       </main>
       <Footer />

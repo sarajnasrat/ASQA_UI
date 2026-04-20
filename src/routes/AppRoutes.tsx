@@ -11,12 +11,12 @@ import Registration from "../components/feature/website/pages/Registration";
 import Companies from "../components/feature/website/pages/Companies";
 import { WebsiteLayout } from "./WebsiteLayout";
 import CertificationTypeSelection from "../components/feature/website/pages/CertificationTypeSelection";
-
+import { CertificationDetails } from "../components/feature/certification-request/CertificationDetails";
+import ForgotPassword from "../components/feature/forgotpassword/ForgotPassword";
 
 export const AppRoutes = () => {
   return (
     <ToastProvider>
-
       <Routes>
         {/* Public route */}
         <Route element={<WebsiteLayout />}>
@@ -25,14 +25,22 @@ export const AppRoutes = () => {
           <Route path="/services" element={<Services />} />
           <Route path="/companies" element={<Companies />} />
           <Route path="/registration" element={<Registration />} />
+          <Route
+            path="/certification-detals"
+            element={<CertificationDetails />}
+          />
+
           <Route path="/contact" element={<Contact />} />
-             <Route path="/certification/select-type" element={<CertificationTypeSelection />} />
+          <Route
+            path="/certification/select-type"
+            element={<CertificationTypeSelection />}
+          />
         </Route>
 
         {/* Protected routes with MainLayout */}
-             <Route path="/login" element={<Login />} />
-
-            <Route
+        <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route
           path="/*"
           element={
             <ProtectedRoute>
@@ -40,7 +48,6 @@ export const AppRoutes = () => {
             </ProtectedRoute>
           }
         />
-
       </Routes>
     </ToastProvider>
   );

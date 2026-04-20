@@ -13,7 +13,21 @@ export const CertificationRequestService = {
   getAllPaginated(params?: any) {
     return httpClient.get(`${BASE_URL}`, { params });
   },
-
+getAllPaginatedByStatus(
+  status: string,
+  page: number = 0,
+  size: number = 10,
+  sort: string = 'id,desc'
+) {
+  return httpClient.get(`${BASE_URL}/get-all`, {
+    params: {
+      status: status,
+      page: page,
+      size: size,
+      sort: sort,
+    },
+  });
+},
   // ✅ Get by ID
   getById(id: number) {
     return httpClient.get(`${BASE_URL}/${id}`);
@@ -35,11 +49,49 @@ export const CertificationRequestService = {
   },
 
   // ✅ PATCH - Update request status
-  updateStatus(id: number, status: string) {
-    return httpClient.patch(`${BASE_URL}/${id}/status`, null, {
-      params: { status },
-    });
-  }
+updateStatus(id: number, formData: FormData) {
+  return httpClient.patch(
+    `${BASE_URL}/${id}/status`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+},
+
+standardProvided(id: number, formData: FormData) {
+  return httpClient.patch(
+    `${BASE_URL}/${id}/status`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+},
+assignCommittee(requestId: number, committeeId: number) {
+  return httpClient.post(
+    `${BASE_URL}/${requestId}/assign-committee`,
+    null,
+    {
+      params: {
+        committeeId,
+      },
+    }
+  );
+},
+setDeadline(requestId: number, startDate: string, endDate: string) {
+  return httpClient.patch(
+    `${BASE_URL}/${requestId}/assign-deadline`,
+    {
+      startDate,
+      endDate,
+    }
+  );
+},
 };
 
 export default CertificationRequestService;

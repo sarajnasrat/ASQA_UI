@@ -86,7 +86,7 @@ const getAllPermissions = async () => {
           <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
             <Button
               icon="pi pi-plus"
-              label="Create Role"
+              label="Create Permission"
               raised
               severity="info"
               text

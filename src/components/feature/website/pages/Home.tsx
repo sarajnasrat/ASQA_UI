@@ -124,7 +124,7 @@ const Home = () => {
   return (
     <div className="overflow-hidden pt-24 pb-20">
       {/* Hero Section */}
-      <section className="relative min-h-[500px] md:min-h-[550px] flex items-center justify-center bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-900 text-white overflow-hidden">
+      <section className="relative min-h-125 md:min-h-137.5 flex items-center justify-center bg-linear-to-br from-gray-900 via-blue-900 to-indigo-900 text-white overflow-hidden">
         {/* Animated background pattern */}
         <div className="absolute inset-0 opacity-10">
           <div
@@ -187,10 +187,10 @@ const Home = () => {
               </button>
 
               <button
-                onClick={() => navigate("/about")}
+                onClick={() => navigate("/certification-detals")}
                 className="inline-flex items-center bg-white/10 backdrop-blur-md text-white px-6 py-3 rounded-xl font-semibold text-base hover:bg-white/20 transition-all duration-300 border border-white/20"
               >
-                {t("home.hero.cta.learn")}
+                {t("home.hero.cta.search")}
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>

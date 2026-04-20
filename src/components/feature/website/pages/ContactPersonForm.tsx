@@ -5,11 +5,13 @@ import { User, Mail, Phone, Briefcase, MapPin, Home, Building } from 'lucide-rea
 import DistrictService from '../../../../services/district.service';
 import { useAppToast } from '../../../../hooks/useToast';
 import CompanyContactPersonService from '../../../../services/company-contact-person.service';
+import { AddressType } from '../enum/AddressType';
+import { useTranslation } from 'react-i18next';
 
 // Define types based on backend entities
 interface District {
   id: number;
-  name?: string;
+  districtName?: string;
   nameEn?: string;
   nameDr?: string;
   namePs?: string;
@@ -19,15 +21,7 @@ interface Address {
   district?: District | null;
   districtId?: number;
   details: string;
-  addressType: AddressType;
-}
-
-enum AddressType {
-  HEAD_OFFICE = 'HOME',
-  BRANCH_OFFICE = 'WORK',
-  FACTORY = 'FACTORY',
-  WAREHOUSE = 'WAREHOUSE',
-  OTHER = 'OTHER'
+  addressType: AddressType
 }
 
 interface ContactPersonFormProps {
@@ -48,7 +42,7 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
   const { showToast } = useAppToast();
   const [districts, setDistricts] = useState<District[]>([]);
   const [loadingDistricts, setLoadingDistricts] = useState(false);
-  
+  const { t, i18n } = useTranslation();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -69,11 +63,10 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
   const [addressErrors, setAddressErrors] = useState<any[]>([]);
 
   const addressTypeOptions = [
-    { value: AddressType.HEAD_OFFICE, label: 'Head Office' },
-    { value: AddressType.BRANCH_OFFICE, label: 'Branch Office' },
-    { value: AddressType.FACTORY, label: 'Factory' },
-    { value: AddressType.WAREHOUSE, label: 'Warehouse' },
-    { value: AddressType.OTHER, label: 'Other' }
+    { value: AddressType.HEAD_OFFICE, label: t('contactPerson.addresses.addressTypes.HEAD_OFFICE') },
+    { value: AddressType.BRANCH_OFFICE, label: t('contactPerson.addresses.addressTypes.BRANCH_OFFICE') },
+    { value: AddressType.FACTORY, label: t('contactPerson.addresses.addressTypes.HOME') },
+    { value: AddressType.OTHER, label: t('contactPerson.addresses.addressTypes.OTHER') }
   ];
 
   useEffect(() => {
@@ -87,7 +80,7 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
       setDistricts(response.data || []);
     } catch (error) {
       console.error('Error loading districts:', error);
-      showToast('error', 'Error', 'Failed to load districts');
+      showToast('error', t('common.error'), t('common.districtLoadFailed'));
     } finally {
       setLoadingDistricts(false);
     }
@@ -96,12 +89,12 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
   const validateForm = (): boolean => {
     const newErrors: Partial<Record<keyof typeof formData, string>> = {};
 
-    if (!formData.firstName) newErrors.firstName = 'First name is required';
-    if (!formData.lastName) newErrors.lastName = 'Last name is required';
-    if (!formData.position) newErrors.position = 'Position is required';
-    if (!formData.email) newErrors.email = 'Email is required';
-    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
-    if (!formData.phoneNumber) newErrors.phoneNumber = 'Phone number is required';
+    if (!formData.firstName) newErrors.firstName = t('contactPerson.errors.firstNameRequired');
+    if (!formData.lastName) newErrors.lastName = t('contactPerson.errors.lastNameRequired');
+    if (!formData.position) newErrors.position = t('contactPerson.errors.positionRequired');
+    if (!formData.email) newErrors.email = t('contactPerson.errors.emailRequired');
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = t('contactPerson.errors.emailInvalid');
+    if (!formData.phoneNumber) newErrors.phoneNumber = t('contactPerson.errors.phoneRequired');
 
     setErrors(newErrors);
 
@@ -112,15 +105,15 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
     addresses.forEach((address, index) => {
       const addressError: any = {};
       if (!address.districtId) {
-        addressError.districtId = 'District is required';
+        addressError.districtId = t('contactPerson.addresses.districtRequired');
         hasAddressError = true;
       }
       if (!address.details) {
-        addressError.details = 'Address details are required';
+        addressError.details = t('contactPerson.addresses.detailsRequired');
         hasAddressError = true;
       }
       if (!address.addressType) {
-        addressError.addressType = 'Address type is required';
+        addressError.addressType = t('contactPerson.addresses.addressTypeRequired');
         hasAddressError = true;
       }
       newAddressErrors[index] = addressError;
@@ -175,7 +168,7 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
     e.preventDefault();
 
     if (!validateForm()) {
-      showToast('error', 'Error', 'Please fill in all required fields');
+      showToast('error', t('common.error'), t('common.fillRequiredFields'));
       return;
     }
 
@@ -206,7 +199,7 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
       
       console.log('Contact person response:', response);
       
-      showToast('success', 'Success', 'Contact person added successfully!');
+      showToast('success', t('common.success'), t('contactPerson.successMessage'));
       onSuccess();
     } catch (error: any) {
       console.error('Error creating contact person:', error);
@@ -214,8 +207,8 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
       
       const errorMessage = error.response?.data?.message || 
                           error.response?.data?.errors?.[0] || 
-                          'Failed to add contact person';
-      showToast('error', 'Error', errorMessage);
+                          t('contactPerson.errorMessage');
+      showToast('error', t('common.error'), errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -225,7 +218,7 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
     <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-lg p-8">
       <h2 className="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
         <User className="h-6 w-6 text-blue-600 mr-2" />
-        Contact Person Information
+        {t('contactPerson.info')}
       </h2>
 
       <div className="space-y-6">
@@ -234,7 +227,7 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
               <User className="h-4 w-4 text-gray-400 mr-2" />
-              First Name *
+              {t('contactPerson.firstName')} *
             </label>
             <input
               type="text"
@@ -244,7 +237,7 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
               className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-all ${
                 errors.firstName ? 'border-red-500' : 'border-gray-300'
               }`}
-              placeholder="Enter first name"
+              placeholder={t('contactPerson.placeholders.firstName')}
             />
             {errors.firstName && (
               <p className="mt-1 text-sm text-red-500">{errors.firstName}</p>
@@ -254,7 +247,7 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
               <User className="h-4 w-4 text-gray-400 mr-2" />
-              Last Name *
+              {t('contactPerson.lastName')} *
             </label>
             <input
               type="text"
@@ -264,7 +257,7 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
               className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-all ${
                 errors.lastName ? 'border-red-500' : 'border-gray-300'
               }`}
-              placeholder="Enter last name"
+              placeholder={t('contactPerson.placeholders.lastName')}
             />
             {errors.lastName && (
               <p className="mt-1 text-sm text-red-500">{errors.lastName}</p>
@@ -274,7 +267,7 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
               <Briefcase className="h-4 w-4 text-gray-400 mr-2" />
-              Position/Role *
+              {t('contactPerson.position')} *
             </label>
             <input
               type="text"
@@ -284,7 +277,7 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
               className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-all ${
                 errors.position ? 'border-red-500' : 'border-gray-300'
               }`}
-              placeholder="e.g., CEO, Manager"
+              placeholder={t('contactPerson.placeholders.position')}
             />
             {errors.position && (
               <p className="mt-1 text-sm text-red-500">{errors.position}</p>
@@ -294,7 +287,7 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
               <Mail className="h-4 w-4 text-gray-400 mr-2" />
-              Email *
+              {t('contactPerson.email')} *
             </label>
             <input
               type="email"
@@ -304,7 +297,7 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
               className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-all ${
                 errors.email ? 'border-red-500' : 'border-gray-300'
               }`}
-              placeholder="email@example.com"
+              placeholder={t('contactPerson.placeholders.email')}
             />
             {errors.email && (
               <p className="mt-1 text-sm text-red-500">{errors.email}</p>
@@ -314,7 +307,7 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
               <Phone className="h-4 w-4 text-gray-400 mr-2" />
-              Phone Number *
+              {t('contactPerson.phoneNumber')} *
             </label>
             <input
               type="tel"
@@ -324,7 +317,7 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
               className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-all ${
                 errors.phoneNumber ? 'border-red-500' : 'border-gray-300'
               }`}
-              placeholder="+93 123 456 789"
+              placeholder={t('contactPerson.placeholders.phoneNumber')}
             />
             {errors.phoneNumber && (
               <p className="mt-1 text-sm text-red-500">{errors.phoneNumber}</p>
@@ -337,7 +330,7 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-800 flex items-center">
               <MapPin className="h-5 w-5 text-blue-600 mr-2" />
-              Addresses
+              {t('contactPerson.addresses.title')}
             </h3>
             <button
               type="button"
@@ -345,7 +338,7 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
               className="px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium flex items-center"
             >
               <Building className="h-4 w-4 mr-2" />
-              Add Address
+              {t('contactPerson.addresses.addAddress')}
             </button>
           </div>
 
@@ -362,14 +355,14 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
               )}
               
               <h4 className="text-sm font-medium text-gray-700 mb-3">
-                Address {index + 1}
+                {t('contactPerson.addresses.addressLabel')} {index + 1}
               </h4>
               
               <div className="grid md:grid-cols-3 gap-4">
                 {/* District Selection */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    District *
+                    {t('contactPerson.addresses.district')} *
                   </label>
                   <select
                     value={address.districtId || ''}
@@ -379,10 +372,10 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
                     }`}
                     disabled={loadingDistricts}
                   >
-                    <option value="">Select District</option>
+                    <option value="">{t('contactPerson.addresses.selectDistrict')}</option>
                     {districts.map((district) => (
                       <option key={district.id} value={district.id}>
-                        {district.nameEn || district.name || `District ${district.id}`}
+                        {district.districtName || district.districtName || `${t('contactPerson.addresses.district')} ${district.id}`}
                       </option>
                     ))}
                   </select>
@@ -394,7 +387,7 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
                 {/* Address Type */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Address Type *
+                    {t('contactPerson.addresses.addressType')} *
                   </label>
                   <select
                     value={address.addressType}
@@ -417,13 +410,13 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
                 {/* Address Details */}
                 <div className="md:col-span-1">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Details *
+                    {t('contactPerson.addresses.details')} *
                   </label>
                   <input
                     type="text"
                     value={address.details}
                     onChange={(e) => handleAddressChange(index, 'details', e.target.value)}
-                    placeholder="Street, building, etc."
+                    placeholder={t('contactPerson.addresses.detailsPlaceholder')}
                     className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
                       addressErrors[index]?.details ? 'border-red-500' : 'border-gray-300'
                     }`}
@@ -445,7 +438,7 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
             className="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
             disabled={isSubmitting}
           >
-            Back
+            {t('common.back')}
           </button>
           <button
             type="submit"
@@ -455,10 +448,10 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
             {isSubmitting ? (
               <>
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                Saving...
+                {t('common.saving')}
               </>
             ) : (
-              'Save & Continue'
+              t('common.saveAndContinue')
             )}
           </button>
         </div>

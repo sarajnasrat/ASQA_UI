@@ -12,6 +12,7 @@ import { useAppToast } from "../../../hooks/useToast.js";
 import DynamicBreadcrumb from "../../common/DynamicBreadcrumb.js";
 import SkeletonForm from "../../common/SkeletonForm.js";
 import FileUploadField from "../../common/FileUploadField";
+import ZoneService from "../../../services/zone.service.ts";
 
 type FormValues = {
   firstName: string;
@@ -19,6 +20,7 @@ type FormValues = {
   email: string;
   phoneNumber: string;
   role: string;
+  zoneId: number;
 };
 
 export const EditUser = () => {
@@ -29,7 +31,24 @@ export const EditUser = () => {
   const [loading, setLoading] = useState(false);
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [existingImageUrl, setExistingImageUrl] = useState<string | null>(null);
+  const [zones, setZones] = useState<any[]>([]);
+  useEffect(() => {
+    const fetchZones = async () => {
+      try {
+        const response = await ZoneService.getAllZones();
+        // Assuming response.data is array of Zone objects [{id, name, location}]
+        const zoneOptions = response.data.map((zone: any) => ({
+          label: zone.name,
+          value: zone.id,
+        }));
+        setZones(zoneOptions);
+      } catch (error) {
+        showToast("error", "Error", "Failed to load zones");
+      }
+    };
 
+    fetchZones();
+  }, []);
   const {
     control,
     handleSubmit,
@@ -51,6 +70,7 @@ export const EditUser = () => {
           email: user.email,
           phoneNumber: user.phoneNumber,
           role: user.roles?.[0]?.name || "ROLE_USER",
+          zoneId: user.zone?.id || null,
         });
 
         // Set existing image URL (adjust field name if needed)
@@ -91,6 +111,7 @@ export const EditUser = () => {
               active: true,
               phoneNumber: data.phoneNumber,
               roles: [data.role],
+              zoneId: data.zoneId,
             }),
           ],
           { type: "application/json" },
@@ -138,7 +159,6 @@ export const EditUser = () => {
           <Toast ref={toast} />
 
           <Card className="w-full max-w-7xl mx-auto">
-
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               {/* 3 COLUMN GRID */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -252,6 +272,30 @@ export const EditUser = () => {
                     </div>
                   )}
                 />
+
+                <Controller
+                  name="zoneId"
+                  control={control}
+                  rules={{ required: "Zone is required" }}
+                  render={({ field }) => (
+                    <div>
+                      <label className="block text-sm font-medium mb-1">
+                        Zone <span className="text-red-500">*</span>
+                      </label>
+                      <Dropdown
+                        {...field}
+                        options={zones}
+                        placeholder="Select zone"
+                        className={`w-full ${errors.zoneId ? "p-invalid" : ""}`}
+                      />
+                      {errors.zoneId && (
+                        <small className="text-red-500 block mt-1">
+                          {errors.zoneId.message}
+                        </small>
+                      )}
+                    </div>
+                  )}
+                />
               </div>
 
               {/* Existing Image Preview */}
@@ -278,12 +322,23 @@ export const EditUser = () => {
               />
 
               {/* Buttons */}
-              <div className="flex justify-end gap-2 pt-4">
-                <Button label="Update" type="submit" loading={isSubmitting} />
+              <div className="flex justify-start gap-2 pt-4">
+                <Button
+                  label="Update"
+                  icon="pi pi-save"
+                  text
+                  raised
+                  severity="info"
+                  type="submit"
+                  loading={isSubmitting}
+                />
                 <Button
                   label="Cancel"
                   type="button"
                   severity="secondary"
+                  text
+                  raised
+                  icon="pi pi-times"
                   onClick={() => navigate("/users")}
                 />
               </div>

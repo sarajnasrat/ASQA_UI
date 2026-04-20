@@ -105,3 +105,15 @@
 [dir="ltr"] .p-paginator .p-paginator-last .p-icon {
   transform: none !important;
 }
+
+:focus-visible {
+  outline: none !important;
+}
+.website-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px; /* 👈 important */
+  z-index: 1000;
+}

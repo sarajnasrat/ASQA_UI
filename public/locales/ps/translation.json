@@ -1,516 +1,903 @@
 {
-    "navbar": {
-        "welcome": "ښه راغلاست",
-        "notifications": "خبرتیاوې",
-        "unread": "نه لوستل شوې",
-        "viewAllNotifications": "ټولې خبرتیاوې وګورئ",
-        "myProfile": "زما پروفایل",
-        "accountSettings": "د حساب ترتیبات",
-        "logout": "وتل"
-    },
-    "notification": {
-        "newUser": "یو نوی کارونکی شامل شو",
-        "systemUpdate": "د سیسټم تازه معلومات موجود دي",
-        "reportReady": "ستاسو راپور چمتو دی"
-    },
-    "languages": {
-        "english": "انګلیسي",
-        "persian": "فارسي (دری)",
-        "pashto": "پښتو"
-    },
-    "country": {
-        "create": "هېواد اضافه کړئ",
-        "edit": "هېواد سمول",
-        "delete": "هېواد ړنګول",
-        "refersh": "تازه کول",
-        "list": "د هېوادونو لېست",
-        "name": "د هېواد نوم",
-        "code": "د هېواد کوډ",
-        "created": "هېواد په بریالیتوب سره جوړ شو",
-        "deleteConfirm": "آیا تاسو ډاډه یاست چې غواړئ هېواد {{name}} ړنګ کړئ؟",
-        "form": {
-            "labels": {
-                "countryCode": "د هېواد کوډ",
-                "translations": "ژباړې"
-            },
-            "placeholder": {
-                "countryCode": "لکه +93",
-                "enterName": "د {{language}} نوم دننه کړئ"
-            },
-            "validation": {
-                "countryCode": {
-                    "required": "د هېواد کوډ اړین دی",
-                    "minLength": "د هېواد کوډ باید لږ تر لږه ۲ توري وي",
-                    "maxLength": "د هېواد کوډ باید له ۳ تورو زیات نه وي"
-                },
-                "translations": {
-                    "required": "انګلیسي نوم اړین دی"
-                }
-            },
-            "hint": {
-                "translations": "ټولې ژباړې اختیاري دي پرته له انګلیسي"
-            }
+  "navbar": {
+    "welcome": "ښه راغلاست",
+    "notifications": "خبرتیاوې",
+    "unread": "نه لوستل شوې",
+    "viewAllNotifications": "ټولې خبرتیاوې وګورئ",
+    "myProfile": "زما پروفایل",
+    "accountSettings": "د حساب ترتیبات",
+    "logout": "وتل"
+  },
+  "notification": {
+    "newUser": "یو نوی کارونکی شامل شو",
+    "systemUpdate": "د سیسټم تازه معلومات موجود دي",
+    "reportReady": "ستاسو راپور چمتو دی"
+  },
+  "languages": {
+    "english": "انګلیسي",
+    "persian": "فارسي (دری)",
+    "pashto": "پښتو"
+  },
+  "country": {
+    "create": "هېواد اضافه کړئ",
+    "edit": "هېواد سمول",
+    "delete": "هېواد ړنګول",
+    "refersh": "تازه کول",
+    "list": "د هېوادونو لېست",
+    "name": "د هېواد نوم",
+    "code": "د هېواد کوډ",
+    "created": "هېواد په بریالیتوب سره جوړ شو",
+    "deleteConfirm": "آیا تاسو ډاډه یاست چې غواړئ هېواد {{name}} ړنګ کړئ؟",
+    "form": {
+      "labels": {
+        "countryCode": "د هېواد کوډ",
+        "translations": "ژباړې"
+      },
+      "placeholder": {
+        "countryCode": "لکه +93",
+        "enterName": "د {{language}} نوم دننه کړئ"
+      },
+      "validation": {
+        "countryCode": {
+          "required": "د هېواد کوډ اړین دی",
+          "minLength": "د هېواد کوډ باید لږ تر لږه ۲ توري وي",
+          "maxLength": "د هېواد کوډ باید له ۳ تورو زیات نه وي"
+        },
+        "translations": {
+          "required": "انګلیسي نوم اړین دی"
         }
-    },
-    "district": {
-        "create": "ولسوالی جوړه کړئ",
-        "edit": "ولسوالی سموله",
-        "delete": "ولسوالی ړنګه کړئ",
-        "refersh": "تازه کول",
-        "list": "د ولسوالیو لېست",
-        "name": "د ولسوالۍ نوم",
-        "code": "د ولسوالۍ کوډ",
-        "created": "ولسوالی په بریالیتوب سره جوړه شوه",
-        "deleteConfirm": "آیا تاسو ډاډه یاست چې غواړئ ولسوالی {{name}} ړنګه کړئ؟",
-        "form": {
-            "labels": {
-                "province": "ولایت"
-            },
-            "placeholder": {
-                "province": "یو ولایت وټاکئ",
-                "name": "نوم په {{language}} کې دننه کړئ"
-            },
-            "validation": {
-                "province": {
-                    "required": "ولایت اړین دی"
-                },
-                "name": {
-                    "required": "د ولسوالۍ نوم په انګلیسي اړین دی"
-                }
-            }
-        }
-    },
-    "province": {
-        "create": "ولایت جوړ کړئ",
-        "edit": "ولایت سمول",
-        "delete": "ولایت ړنګ کړئ",
-        "refersh": "تازه کول",
-        "list": "د ولایتونو لېست",
-        "name": "د ولایت نوم",
-        "code": "د ولایت کوډ",
-        "created": "ولایت په بریالیتوب سره جوړ شو",
-        "deleteConfirm": "آیا تاسو ډاډه یاست چې غواړئ ولایت {{name}} ړنګ کړئ؟",
-        "country": "د هېواد نوم",
-        "form": {
-            "labels": {
-                "country": "هېواد"
-            },
-            "placeholder": {
-                "country": "یو هېواد وټاکئ",
-                "name": "نوم په {{language}} کې دننه کړئ"
-            },
-            "validation": {
-                "country": {
-                    "required": "هېواد اړین دی"
-                },
-                "name": {
-                    "required": "د ولایت نوم په انګلیسي اړین دی"
-                }
-            }
-        }
-    },
-    "category": {
-        "create": "کټګوري جوړه کړئ",
-        "edit": "کټګوري سموله",
-        "delete": "کټګوري ړنګه کړئ",
-        "list": "د کټګوریو لېست",
-        "name": "د کټګورۍ نوم",
-        "alreadyexists": "کټګوري د دې نوم سره دمخه شتون لري",
-        "type": "د کټګورۍ ډول",
-        "created": "کټګوري په بریالیتوب سره جوړه شوه",
-        "updated": "کټګوري په بریالیتوب سره تازه شوه",
-        "deleted": "کټګوري په بریالیتوب سره ړنګه شوه",
-        "loadFailed": "کټګوري بارول ناکام شول",
-        "updateFailed": "کټګوري تازه کول ناکام شول",
-        "placeholder": {
-            "name": "د کټګورۍ نوم دننه کړئ",
-            "type": "د کټګورۍ ډول وټاکئ"
-        },
-        "validation": {
-            "name": {
-                "required": "د کټګورۍ نوم اړین دی"
-            },
-            "type": {
-                "required": "د کټګورۍ ډول اړین دی"
-            }
-        }
-    },
-    "company": {
-        "create": "شرکت جوړ کړئ",
-        "edit": "شرکت سمول",
-        "delete": "شرکت ړنګ کړئ",
-        "list": "د شرکتونو لېست",
-        "refersh": "تازه کول",
-        "deleted": "شرکت په بریالیتوب سره ړنګ شو",
-        "deleteConfirm": "آیا تاسو ډاډه یاست چې غواړئ شرکت {{name}} ړنګ کړئ؟",
-        "loadFailed": "شرکتونه بارول ناکام شول",
-        "deleteFailed": "شرکت ړنګول ناکام شو",
-        "labels": {
-            "companyNameEN": "د شرکت نوم انګلیسي",
-            "companyNameDR": "د شرکت نوم دری",
-            "companyNamePS": "د شرکت نوم پښتو",
-            "email": "بریښنالیک",
-            "phoneNumber": "د تلیفون شمېره",
-            "address": "پته",
-            "logoUrl": "د شرکت لوگو",
-            "bussinessLogoUrl": "سوداګریز لوگو",
-            "isActive": "فعال دی",
-            "mainBranchAddress": "د اصلي څانګې پته",
-            "activityPlace": "د فعالیت ځای",
-            "activityType": "د فعالیت ډول",
-            "jawazNumber": "جواز نمبر",
-            "jawazExpiryDate": "د جواز د پای نېټه",
-            "jawazIssueDate": "د جواز د صادرېدو نېټه",
-            "tinNumber": "د مالیه شمېره",
-            "aboutCompanyEn": "د شرکت په اړه (انګلیسي)",
-            "aboutCompanyDr": "د شرکت په اړه (دری)",
-            "aboutCompanyPs": "د شرکت په اړه (پښتو)",
-            "websiteUrl": "ویب پاڼه",
-            "establishYear": "د تاسیس کال",
-            "companyOwnerNameEn": "د شرکت د مالک نوم (انګلیسي)",
-            "companyOwnerNameDr": "د شرکت د مالک نوم (دری)",
-            "companyOwnerNamePs": "د شرکت د مالک نوم (پښتو)",
-            "companyType": "د شرکت ډول",
-            "nosocialLinksAdded": "تر اوسه ټولنیزې اړیکې نه دي اضافه شوي. د ټولنیزو رسنیو د اړیکو د اضافه کولو لپاره 'اړیکه اضافه کړئ' کلیک وکړئ.",
-            "categories": "کټګورۍ",
-            "addLink": "ټولنیزه اړیکه اضافه کړئ",
-            "selectCategories": "کټګورۍ وټاکئ",
-            "selectType": "ډول وټاکئ",
-            "selectCategoriesHint": "لږ تر لږه یوه کټګوري وټاکئ",
-            "aboutCompany": "د شرکت په اړه",
-            "compantyType": "د شرکت ډول",
-            "companyLogo": "د شرکت لوگو",
-            "bussinessLogo": "سوداګریز لوگو",
-            "ownerNamePs": "د مالک نوم پښتو",
-            "ownerNameDr": "د مالک نوم دری",
-            "ownerNameEn": "د مالک نوم انګلیسي",
-            "socialLinks": "ټولنیزې اړیکې"
-        },
-        "placeholder": {
-            "companyNameEN": "د شرکت نوم په انګلیسي دننه کړئ",
-            "companyNameDR": "د شرکت نوم په دری دننه کړئ",
-            "companyNamePS": "د شرکت نوم په پښتو دننه کړئ",
-            "email": "بریښنالیک دننه کړئ",
-            "phoneNumber": "د تلیفون شمېره دننه کړئ",
-            "address": "پته دننه کړئ",
-            "logoUrl": "د شرکت لوگو پورته کړئ",
-            "bussinessLogoUrl": "سوداګریز لوگو پورته کړئ",
-            "mainBranchAddress": "د اصلي څانګې پته دننه کړئ",
-            "activityPlace": "د فعالیت ځای دننه کړئ",
-            "activityType": "د فعالیت ډول دننه کړئ",
-            "jawazNumber": "جواز نمبر دننه کړئ",
-            "jawazExpiryDate": "د جواز د پای نېټه وټاکئ",
-            "jawazIssueDate": "د جواز د صادرېدو نېټه وټاکئ",
-            "tinNumber": "د مالیه شمېره دننه کړئ",
-            "aboutCompanyEn": "د شرکت معلومات په انګلیسي دننه کړئ",
-            "aboutCompanyDr": "د شرکت معلومات په دری دننه کړئ",
-            "aboutCompanyPs": "د شرکت معلومات په پښتو دننه کړئ",
-            "websiteUrl": "ویب پاڼه دننه کړئ",
-            "establishYear": "د تاسیس کال وټاکئ",
-            "companyOwnerNameEn": "د مالک نوم په انګلیسي دننه کړئ",
-            "companyOwnerNameDr": "د مالک نوم په دری دننه کړئ",
-            "companyOwnerNamePs": "د مالک نوم په پښتو دننه کړئ"
-        },
-        "validation": {
-            "companyNameEN": {
-                "required": "د شرکت نوم (انګلیسي) اړین دی"
-            },
-            "companyNameDR": {
-                "required": "د شرکت نوم (دری) اړین دی"
-            },
-            "companyNamePS": {
-                "required": "د شرکت نوم (پښتو) اړین دی"
-            },
-            "email": {
-                "required": "بریښنالیک اړین دی",
-                "invalid": "بریښنالیک ناسم دی"
-            },
-            "phoneNumber": {
-                "required": "د تلیفون شمېره اړینه ده"
-            },
-            "address": {
-                "required": "پته اړینه ده"
-            },
-            "activityType": {
-                "required": "د فعالیت ډول اړین دی"
-            },
-            "companyType": {
-                "required": "د شرکت ډول اړین دی"
-            },
-            "categories": {
-                "required": "لږ تر لږه یوه کټګوري وټاکئ"
-            }
-        },
-        "typeOptions": {
-            "PRIVATE": "شخصي",
-            "PUBLIC": "عام",
-            "GOVERNMENT": "حکومتي"
-        }
-    },
-    "nav": {
-        "home": "کور",
-        "services": "خدمتونه",
-        "companies": "شرکتونه",
-        "contact": "اړیکه",
-        "register": "شرکت ثبت کړئ",
-        "subtitle": "د افغانستان د کیفیت معیارونو اداره",
-        "language": "ژبه",
-        "profile": "پروفایل",
-        "dashboard": "ډشبورډ",
-        "logout": "وتل",
-        "certicificationrequest": "د تصدیق غوښتنه"
-    },
-    "certification": {
-        "page": {
-            "leftSide": {
-                "title": "خپل تصدیق پیل کړئ",
-                "subtitle": "د خپل سوداګرۍ لپاره د تصدیق سمه لاره غوره کړئ",
-                "steps": {
-                    "1": "د غوښتنې ډول وټاکئ",
-                    "2": "د تصدیق ډول وټاکئ",
-                    "3": "شرکت ثبت کړئ",
-                    "4": "اسناد بشپړ کړئ",
-                    "5": "تصدیق ترلاسه کړئ"
-                },
-                "progress": "۱ ګام له ۵",
-                "progressLabel": "د غوښتنې او تصدیق انتخاب"
-            },
-            "requestType": {
-                "title": "۱. د غوښتنې ډول وټاکئ",
-                "subtitle": "غوره کړئ چې دا نوی تصدیق دی یا نوي کول",
-                "new": {
-                    "title": "نوی تصدیق",
-                    "description": "ستاسو د سوداګرۍ لپاره د لومړي ځل تصدیق"
-                },
-                "renewal": {
-                    "title": "نوي کول",
-                    "description": "خپل موجوده تصدیق نوي کړئ"
-                }
-            },
-            "certificationType": {
-                "title": "۲. د تصدیق ډول وټاکئ",
-                "subtitle": "هغه تصدیق غوره کړئ چې ستاسو د سوداګرۍ اړتیاو سره سمون لري",
-                "domestic": {
-                    "title": "کورنی کیفیت",
-                    "description": "د کورنیو سوداګریزو عملیاتو لپاره",
-                    "benefits": {
-                        "1": "په ملي کچه پیژندل شوی",
-                        "2": "محلي اطاعت",
-                        "3": "د بازار اعتبار"
-                    }
-                },
-                "international": {
-                    "title": "نړیوال کیفیت",
-                    "description": "د نړیوال بازار پراختیا لپاره",
-                    "benefits": {
-                        "1": "په نړیواله کچه پیژندل شوی",
-                        "2": "نړیوال لاسرسی",
-                        "3": "ISO سمون"
-                    }
-                },
-                "standard": {
-                    "title": "معیاري نښه",
-                    "description": "د محصول/خدمت معیارونو لپاره",
-                    "benefits": {
-                        "1": "کیفیت نښه",
-                        "2": "د مصرف کونکي باور",
-                        "3": "سیالي ګټه"
-                    }
-                },
-                "popular": "ډېر مشهور"
-            },
-            "button": {
-                "creating": "جوړول...",
-                "continue": "د انتخاب سره ادامه ورکړئ"
-            },
-            "trust": "⚡ ۱۰۰۰+ شرکتونو په بریالیتوب سره خپل تصدیق بشپړ کړی",
-            "validation": {
-                "requestTypeRequired": "مهرباني وکړئ د غوښتنې یو ډول وټاکئ",
-                "certificationTypeRequired": "مهرباني وکړئ د تصدیق یو ډول وټاکئ"
-            },
-            "messages": {
-                "created": "د تصدیق غوښتنه په بریالیتوب سره جوړه شوه!",
-                "createFailed": "د تصدیق غوښتنه جوړول ناکام شول"
-            }
-        }
-    },
-    "certificationRequest": {
-        "create": "د تصدیق غوښتنه جوړول",
-        "edit": "د تصدیق غوښتنه سمول",
-        "delete": "د تصدیق غوښتنه ړنګول",
-        "list": "د تصدیق غوښتنو لېست",
-        "refersh": "تازه کول",
-        "created": "د تصدیق غوښتنه په بریالیتوب سره جوړه شوه",
-        "updated": "د تصدیق غوښتنه په بریالیتوب سره سمه شوه",
-        "deleted": "د تصدیق غوښتنه په بریالیتوب سره ړنګه شوه",
-        "loadFailed": "د تصدیق غوښتنې بارول ناکام شول",
-        "deleteFailed": "د تصدیق غوښتنې ړنګول ناکام شول",
-        "deleteConfirm": "آیا تاسو ډاډه یاست چې غواړئ غوښتنه {{serial}} ړنګه کړئ؟",
-        "updateStatus": "د تصدیق غوښتنې حالت تازه کړئ",
-        "status": "د غوښتنې حالت",
-        "labels": {
-            "serialNumber": "سریال نمبر",
-            "requestType": "د غوښتنې ډول",
-            "requestStatus": "د غوښتنې حالت",
-            "certificationType": "د تصدیق ډول",
-            "createdDate": "د جوړېدو نېټه",
-            "updatedDate": "د تازه کېدو نېټه",
-            "deleted": "ړنګ شوی"
-        },
-        "placeholder": {
-            "requestType": "د غوښتنې ډول وټاکئ",
-            "requestStatus": "حالت وټاکئ",
-            "certificationType": "د تصدیق ډول وټاکئ"
-        },
-        "validation": {
-            "requestType": {
-                "required": "د غوښتنې ډول اړین دی"
-            },
-            "certificationType": {
-                "required": "د تصدیق ډول اړین دی"
-            }
-        },
-        "typeOptions": {
-            "NEW": "نوی",
-            "RENEWAL": "نوي کول",
-            "EXTENSION": "غځول"
-        },
-        "statusOptions": {
-            "DRAFT": "مسوده",
-            "SUBMITTED": "سپارل شوې",
-            "REGISTERED": "ثبت شوې",
-            "STANDARDS_PROVIDED": "معیارونه چمتو شوي",
-            "DEADLINE_ASSIGNED": "نېټه ټاکل شوې",
-            "INSPECTION_IN_PROGRESS": "ارزونه روانه ده",
-            "REPORTED_TO_COMMITTEE": "کمیټې ته راپور شوی",
-            "REPORT_APPROVED": "راپور تصویب شو",
-            "PAYMENT_PENDING": "تادیه په تمه ده",
-            "PAYMENT_COMPLETED": "تادیه بشپړه شوه",
-            "CERTIFICATE_ISSUED": "تصدیق صادر شو",
-            "UNDER_SUPERVISION": "تر څارنې لاندې",
-            "REJECTED": "رد شوې",
-            "CANCELLED": "لغوه شوې"
-        },
-        "certificationTypeOptions": {
-            "DOMESTIC_QUALITY_CERTIFICATION": "د کورني کیفیت تصدیق",
-            "INTERNATIONAL_QUALITY_CERTIFICATION": "د نړیوال کیفیت تصدیق",
-            "STANDARD_MARK_CERTIFICATION": "د معیاري نښې تصدیق"
-        }
-    },
-    "common": {
-        "save": "خوندي کول",
-        "cancel": "لغوه کول",
-        "delete": "ړنګول",
-        "edit": "سمول",
-        "create": "جوړول",
-        "view": "کتل",
-        "refersh": "تازه کول",
-        "total": "ټول",
-        "action": "عمل",
-        "saving": "خوندي کېږي...",
-        "success": "بریالیتوب",
-        "error": "تېروتنه",
-        "updating": "تازه کېږي...",
-        "update": "تازه کول",
-        "select": "انتخاب"
-    },
-    "home": {
-        "badge": "د افغانستان د کیفیت معیارونو اداره",
-        "hero": {
-            "title": "د کیفیت تصدیق کولو ته ستاسو دروازه",
-            "description": "د ASQA سره د خپل تصدیق پروسه منظمه کړئ. وپیژندل شئ، باور جوړ کړئ، او خپل سوداګریز فرصتونه پراخ کړئ.",
-            "cta": {
-                "start": "خپل تصدیق پیل کړئ",
-                "learn": "نور زده کړئ"
-            }
-        },
-        "certificationTypes": {
-            "title": "د تصدیق خپله لاره غوره کړئ",
-            "subtitle": "هغه تصدیق غوره کړئ چې ستاسو د سوداګرۍ اړتیاو سره سمون لري",
-            "domestic": {
-                "title": "کورنی کیفیت",
-                "description": "د کورنیو سوداګریزو عملیاتو لپاره",
-                "features": {
-                    "1": "په ملي کچه پیژندل شوی",
-                    "2": "محلي اطاعت",
-                    "3": "د بازار اعتبار"
-                }
-            },
-            "international": {
-                "title": "نړیوال کیفیت",
-                "description": "د نړیوال بازار پراختیا لپاره",
-                "features": {
-                    "1": "په نړیواله کچه پیژندل شوی",
-                    "2": "نړیوال لاسرسی",
-                    "3": "ISO سمون"
-                }
-            },
-            "standard": {
-                "title": "معیاري نښه",
-                "description": "د محصول/خدمت معیارونو لپاره",
-                "features": {
-                    "1": "کیفیت نښه",
-                    "2": "د مصرف کونکي باور",
-                    "3": "سیالي ګټه"
-                }
-            },
-            "learnMore": "نور زده کړئ"
-        },
-        "process": {
-            "badge": "ساده ۴-ګام پروسه",
-            "title": "خپل تصدیق سفر پیل کړئ",
-            "subtitle": "زموږ منظمه پروسه تعقیب کړئ او د مخکې نه په چټکۍ سره تصدیق ترلاسه کړئ",
-            "steps": {
-                "1": {
-                    "title": "تصدیق غوره کړئ",
-                    "description": "هغه تصدیق غوره کړئ چې ستاسو اړتیاو سره سمون لري"
-                },
-                "2": {
-                    "title": "د شرکت ثبت",
-                    "description": "د خپل شرکت توضیحات ثبت کړئ"
-                },
-                "3": {
-                    "title": "اړیکه نیونکی کس",
-                    "description": "د لومړني اړیکې معلومات اضافه کړئ"
-                },
-                "4": {
-                    "title": "بیاکتنه او تصدیق",
-                    "description": "د تایید وروسته تصدیق ترلاسه کړئ"
-                }
-            }
-        },
-        "features": {
-            "badge": "ولې موږ غوره کوئ",
-            "title": "د کیفیت تصدیق لپاره هرڅه چې تاسو ورته اړتیا لرئ",
-            "subtitle": "موږ ستاسو د سوداګرۍ اړتیاو سره سم د تصدیق هراړخیز حلونه وړاندې کوو",
-            "items": {
-                "1": {
-                    "title": "ساده ثبت",
-                    "description": "دوه ګامه شرکت او اړیکه نیونکی کس د ثبت پروسه"
-                },
-                "2": {
-                    "title": "خوندي تایید",
-                    "description": "د اطاعت ډاډ ترلاسه کولو لپاره بشپړه بیاکتنه پروسه"
-                },
-                "3": {
-                    "title": "ډیجیټل تصدیق",
-                    "description": "د تایید وروسته رسمي ASQA تصدیق تولید کړئ"
-                }
-            }
-        },
-        "cta": {
-            "title": "د تصدیق ترلاسه کولو ته چمتو یاست؟",
-            "subtitle": "د هغو سلګونو شرکتونو سره یوځای شئ چې د ASQA له لارې یې تصدیق ترلاسه کړی او خپل سوداګرۍ بلې کچې ته ورسوئ.",
-            "buttons": {
-                "start": "خپل سفر پیل کړئ",
-                "contact": "موږ سره اړیکه ونیسئ"
-            },
-            "badges": {
-                "iso": "ISO تصدیق شوی",
-                "government": "د حکومت لخوا تایید شوی",
-                "international": "په نړیواله کچه پیژندل شوی",
-                "support": "۲۴/۷ ملاتړ"
-            }
-        }
+      },
+      "hint": {
+        "translations": "ټولې ژباړې اختیاري دي پرته له انګلیسي"
+      }
     }
+  },
+  "district": {
+    "create": "ولسوالی جوړه کړئ",
+    "edit": "ولسوالی سموله",
+    "delete": "ولسوالی ړنګه کړئ",
+    "refersh": "تازه کول",
+    "list": "د ولسوالیو لېست",
+    "name": "د ولسوالۍ نوم",
+    "code": "د ولسوالۍ کوډ",
+    "created": "ولسوالی په بریالیتوب سره جوړه شوه",
+    "deleteConfirm": "آیا تاسو ډاډه یاست چې غواړئ ولسوالی {{name}} ړنګه کړئ؟",
+    "form": {
+      "labels": {
+        "province": "ولایت"
+      },
+      "placeholder": {
+        "province": "یو ولایت وټاکئ",
+        "name": "نوم په {{language}} کې دننه کړئ"
+      },
+      "validation": {
+        "province": {
+          "required": "ولایت اړین دی"
+        },
+        "name": {
+          "required": "د ولسوالۍ نوم په انګلیسي اړین دی"
+        }
+      }
+    }
+  },
+  "province": {
+    "create": "ولایت جوړ کړئ",
+    "edit": "ولایت سمول",
+    "delete": "ولایت ړنګ کړئ",
+    "refersh": "تازه کول",
+    "list": "د ولایتونو لېست",
+    "name": "د ولایت نوم",
+    "code": "د ولایت کوډ",
+    "created": "ولایت په بریالیتوب سره جوړ شو",
+    "deleteConfirm": "آیا تاسو ډاډه یاست چې غواړئ ولایت {{name}} ړنګ کړئ؟",
+    "country": "د هېواد نوم",
+    "form": {
+      "labels": {
+        "country": "هېواد"
+      },
+      "placeholder": {
+        "country": "یو هېواد وټاکئ",
+        "name": "نوم په {{language}} کې دننه کړئ"
+      },
+      "validation": {
+        "country": {
+          "required": "هېواد اړین دی"
+        },
+        "name": {
+          "required": "د ولایت نوم په انګلیسي اړین دی"
+        }
+      }
+    }
+  },
+  "category": {
+    "create": "کټګوري جوړه کړئ",
+    "edit": "کټګوري سموله",
+    "delete": "کټګوري ړنګه کړئ",
+    "list": "د کټګوریو لېست",
+    "name": "د کټګورۍ نوم",
+    "alreadyexists": "کټګوري د دې نوم سره دمخه شتون لري",
+    "type": "د کټګورۍ ډول",
+    "created": "کټګوري په بریالیتوب سره جوړه شوه",
+    "updated": "کټګوري په بریالیتوب سره تازه شوه",
+    "deleted": "کټګوري په بریالیتوب سره ړنګه شوه",
+    "loadFailed": "کټګوري بارول ناکام شول",
+    "updateFailed": "کټګوري تازه کول ناکام شول",
+    "placeholder": {
+      "name": "د کټګورۍ نوم دننه کړئ",
+      "type": "د کټګورۍ ډول وټاکئ"
+    },
+    "validation": {
+      "name": {
+        "required": "د کټګورۍ نوم اړین دی"
+      },
+      "type": {
+        "required": "د کټګورۍ ډول اړین دی"
+      }
+    }
+  },
+
+  "company": {
+    "create": "شرکت جوړول",
+    "edit": "شرکت سمول",
+    "delete": "شرکت ړنګول",
+    "list": "د شرکتونو لیست",
+    "refresh": "تازه کول",
+    "deleted": "شرکت په بریالیتوب سره ړنګ شو",
+    "deleteConfirm": "آیا تاسو ډاډه یاست چې غواړئ شرکت {{name}} ړنګ کړئ؟",
+    "loadFailed": "د شرکتونو بارول ناکام شول",
+    "deleteFailed": "د شرکت ړنګول ناکام شول",
+    "createSuccess": "شرکت په بریالیتوب سره ثبت شو!",
+    "createNoId": "شرکت جوړ شو مګر پیژندنه بیرته نه راستانه شوه",
+    "createFailed": "د شرکت جوړول ناکام شول",
+    "updateSuccess": "شرکت په بریالیتوب سره تازه شو",
+    "updateFailed": "د شرکت تازه کول ناکام شول",
+    "basicInformation": "اساسی معلومات",
+    "businessDetails": "سوداګریز جزئیات",
+    "jawazInformation": "د جواز معلومات",
+    "ownerInformation": "د مالک معلومات",
+    "changeLogo": "لوګو بدلول",
+    "selectLogo": "لوګو غوره کول",
+    "labels": {
+      "companyNameEN": "د شرکت نوم (انګلیسي)",
+      "companyNameDR": "د شرکت نوم (دری)",
+      "companyNamePS": "د شرکت نوم (پښتو)",
+      "email": "بریښنالیک",
+      "phoneNumber": "د تلیفون شمېره",
+      "address": "پته",
+      "logoUrl": "د شرکت لوګو",
+      "bussinessLogoUrl": "سوداګریز لوګو",
+      "isActive": "فعال دی",
+      "mainBranchAddress": "د اصلي څانګې پته",
+      "activityPlace": "د فعالیت ځای",
+      "activityType": "د فعالیت ډول",
+      "jawazNumber": "د جواز شمېره",
+      "jawazExpiryDate": "د جواز ختمیدو نیټه",
+      "jawazIssueDate": "د جواز د صدور نیټه",
+      "tinNumber": "مالیاتی پیژندنې شمېره",
+      "aboutCompanyEn": "د شرکت په اړه (انګلیسي)",
+      "aboutCompanyDr": "د شرکت په اړه (دری)",
+      "aboutCompanyPs": "د شرکت په اړه (پښتو)",
+      "websiteUrl": "ویب پته",
+      "establishYear": "د تاسیس کال",
+      "companyOwnerNameEn": "د شرکت د مالک نوم (انګلیسي)",
+      "companyOwnerNameDr": "د شرکت د مالک نوم (دری)",
+      "companyOwnerNamePs": "د شرکت د مالک نوم (پښتو)",
+      "companyType": "د شرکت ډول",
+      "noSocialLinksAdded": "تر اوسه ټولنیز لینکونه نه دي اضافه شوي. د ټولنیزو رسنیو لینکونو اضافه کولو لپاره 'لینک اضافه کړئ' کلیک وکړئ.",
+      "categories": "کټګورۍ",
+      "addLink": "ټولنیز لینک اضافه کړئ",
+      "selectCategories": "کټګورۍ غوره کړئ",
+      "selectCategoriesHint": "لږ تر لږه یوه کټګوري غوره کړئ",
+      "aboutCompany": "د شرکت په اړه",
+      "companyType": "د شرکت ډول",
+      "companyLogo": "د شرکت لوګو",
+      "bussinessLogo": "سوداګریز لوګو",
+      "ownerNamePs": "د مالک نوم (پښتو)",
+      "ownerNameDr": "د مالک نوم (دری)",
+      "ownerNameEn": "د مالک نوم (انګلیسي)",
+      "socialLinks": "ټولنیز لینکونه",
+      "selectPlatform": "پلیټ فارم غوره کړئ",
+      "companyLogos": "د شرکت لوګوګان",
+      "basicInfo": "اساسی معلومات",
+      "contactInfo": "د اړیکو معلومات",
+      "registrationInfo": "د ثبت معلومات",
+      "additionalInfo": "اضافي معلومات"
+    },
+    "placeholder": {
+      "companyNameEN": "د شرکت نوم په انګلیسي کې دننه کړئ",
+      "companyNameDR": "د شرکت نوم په دری کې دننه کړئ",
+      "companyNamePS": "د شرکت نوم په پښتو کې دننه کړئ",
+      "email": "بریښنالیک آدرس دننه کړئ",
+      "phoneNumber": "د تلیفون شمېره دننه کړئ",
+      "address": "بشپړه پته دننه کړئ",
+      "logoUrl": "د شرکت لوګو اپلوډ کولو لپاره کلیک وکړئ",
+      "bussinessLogoUrl": "د سوداګریز لوګو اپلوډ کولو لپاره کلیک وکړئ",
+      "mainBranchAddress": "د اصلي څانګې پته دننه کړئ",
+      "activityPlace": "د فعالیت ځای دننه کړئ",
+      "activityType": "د فعالیت ډول دننه کړئ",
+      "jawazNumber": "د جواز شمېره دننه کړئ",
+      "jawazExpiryDate": "د جواز ختمیدو نیټه وټاکئ",
+      "jawazIssueDate": "د جواز د صدور نیټه وټاکئ",
+      "tinNumber": "مالیاتی پیژندنې شمېره دننه کړئ",
+      "aboutCompanyEn": "د شرکت معلومات په انګلیسي کې دننه کړئ",
+      "aboutCompanyDr": "د شرکت معلومات په دری کې دننه کړئ",
+      "aboutCompanyPs": "د شرکت معلومات په پښتو کې دننه کړئ",
+      "websiteUrl": "ویب پته دننه کړئ (مثال: https://www.company.com)",
+      "establishYear": "د تاسیس کال وټاکئ",
+      "companyOwnerNameEn": "د مالک نوم په انګلیسي کې دننه کړئ",
+      "companyOwnerNameDr": "د مالک نوم په دری کې دننه کړئ",
+      "companyOwnerNamePs": "د مالک نوم په پښتو کې دننه کړئ"
+    },
+    "validation": {
+      "companyNameEN": {
+        "required": "د شرکت نوم (انګلیسي) اړین دی",
+        "minLength": "د شرکت نوم باید لږ تر لږه ۲ توري وي",
+        "maxLength": "د شرکت نوم له ۱۰۰ تورو څخه زیات نشي"
+      },
+      "companyNameDR": {
+        "required": "د شرکت نوم (دری) اړین دی",
+        "minLength": "د شرکت نوم باید لږ تر لږه ۲ توري وي",
+        "maxLength": "د شرکت نوم له ۱۰۰ تورو څخه زیات نشي"
+      },
+      "companyNamePS": {
+        "required": "د شرکت نوم (پښتو) اړین دی",
+        "minLength": "د شرکت نوم باید لږ تر لږه ۲ توري وي",
+        "maxLength": "د شرکت نوم له ۱۰۰ تورو څخه زیات نشي"
+      },
+      "email": {
+        "required": "بریښنالیک اړین دی",
+        "invalid": "مهرباني وکړئ یو معتبر بریښنالیک آدرس دننه کړئ"
+      },
+      "phoneNumber": {
+        "required": "د تلیفون شمېره اړینه ده",
+        "invalid": "مهرباني وکړئ یوه معتبره تلیفون شمېره دننه کړئ"
+      },
+      "address": {
+        "required": "پته اړینه ده",
+        "minLength": "پته باید لږ تر لږه ۵ توري وي"
+      },
+      "mainBranchAddress": {
+        "required": "د اصلي څانګې پته اړینه ده"
+      },
+      "activityPlace": {
+        "required": "د فعالیت ځای اړین دی"
+      },
+      "activityType": {
+        "required": "د فعالیت ډول اړین دی"
+      },
+      "companyType": {
+        "required": "د شرکت ډول اړین دی"
+      },
+      "jawazNumber": {
+        "required": "د جواز شمېره اړینه ده"
+      },
+      "jawazIssueDate": {
+        "required": "د جواز د صدور نیټه اړینه ده"
+      },
+      "jawazExpiryDate": {
+        "required": "د جواز ختمیدو نیټه اړینه ده",
+        "invalid": "د ختمیدو نیټه باید د صدور نیټې وروسته وي"
+      },
+      "tinNumber": {
+        "required": "مالیاتی پیژندنې شمېره اړینه ده"
+      },
+      "establishYear": {
+        "required": "د تاسیس کال اړین دی",
+        "invalid": "مهرباني وکړئ یو معتبر کال دننه کړئ"
+      },
+      "companyOwnerNameEn": {
+        "required": "د مالک نوم (انګلیسي) اړین دی"
+      },
+      "companyOwnerNameDr": {
+        "required": "د مالک نوم (دری) اړین دی"
+      },
+      "companyOwnerNamePs": {
+        "required": "د مالک نوم (پښتو) اړین دی"
+      },
+      "aboutCompanyEn": {
+        "required": "د شرکت په اړه (انګلیسي) اړین دی",
+        "minLength": "مهرباني وکړئ لږ تر لږه ۱۰ توري دننه کړئ"
+      },
+      "aboutCompanyDr": {
+        "required": "د شرکت په اړه (دری) اړین دی",
+        "minLength": "مهرباني وکړئ لږ تر لږه ۱۰ توري دننه کړئ"
+      },
+      "aboutCompanyPs": {
+        "required": "د شرکت په اړه (پښتو) اړین دی",
+        "minLength": "مهرباني وکړئ لږ تر لږه ۱۰ توري دننه کړئ"
+      },
+      "categories": {
+        "required": "مهرباني وکړئ لږ تر لږه یوه کټګوري غوره کړئ"
+      },
+      "websiteUrl": {
+        "invalid": "مهرباني وکړئ یوه معتبره ویب پته دننه کړئ (مثال: https://www.example.com)"
+      }
+    },
+    "typeOptions": {
+      "PRIVATE": "خصوصي شرکت",
+      "PUBLIC": "عامه شرکت",
+      "GOVERNMENT": "دولتي اداره",
+      "EDUCATIONAL_INSTITUTIONS": "تعلیمي اداره",
+      "OTHER": "نور"
+    },
+    "status": {
+      "ACTIVE": "فعال",
+      "INACTIVE": "غیر فعال",
+      "PENDING": "په انتظار کې",
+      "SUSPENDED": "ځنډول شوی"
+    },
+    "messages": {
+      "createSuccess": "شرکت په بریالیتوب سره ثبت شو",
+      "updateSuccess": "د شرکت معلومات په بریالیتوب سره تازه شول",
+      "deleteSuccess": "شرکت په بریالیتوب سره ړنګ شو",
+      "activateSuccess": "شرکت په بریالیتوب سره فعال شو",
+      "deactivateSuccess": "شرکت په بریالیتوب سره غیر فعال شو",
+      "loadSuccess": "شرکتونه په بریالیتوب سره بار شول",
+      "noData": "هیچ شرکت ونه موندل شو",
+      "confirmDelete": "آیا تاسو ډاډه یاست چې غواړئ دا شرکت ړنګ کړئ؟",
+      "confirmDeactivate": "آیا تاسو ډاډه یاست چې غواړئ دا شرکت غیر فعال کړئ؟",
+      "confirmActivate": "آیا تاسو ډاډه یاست چې غواړئ دا شرکت فعال کړئ؟"
+    },
+    "filters": {
+      "all": "ټول شرکتونه",
+      "active": "فعال شرکتونه",
+      "inactive": "غیر فعال شرکتونه",
+      "byType": "د ډول له مخې فلتر",
+      "byStatus": "د وضعیت له مخې فلتر",
+      "search": "د شرکتونو لټون...",
+      "searchPlaceholder": "د شرکت نوم، بریښنالیک یا تلیفون شمېرې له مخې لټون..."
+    },
+    "table": {
+      "companyName": "د شرکت نوم",
+      "email": "بریښنالیک",
+      "phone": "تلیفون شمېره",
+      "type": "ډول",
+      "status": "وضعیت",
+      "actions": "عملیات",
+      "createdAt": "د جوړولو نیټه",
+      "updatedAt": "د تازه کولو نیټه"
+    },
+    "sections": {
+      "companyInfo": "د شرکت معلومات",
+      "ownerInfo": "د مالک معلومات",
+      "registrationInfo": "د ثبت معلومات",
+      "contactInfo": "د اړیکو معلومات",
+      "socialMedia": "ټولنیز رسنۍ",
+      "documents": "اسناد",
+      "certificates": "سندونه"
+    }
+  },
+  "nav": {
+    "home": "کور",
+    "services": "خدمتونه",
+    "companies": "شرکتونه",
+    "contact": "اړیکه",
+    "register": "شرکت ثبت کړئ",
+    "subtitle": "د افغانستان د کیفیت معیارونو اداره",
+    "language": "ژبه",
+    "profile": "پروفایل",
+    "dashboard": "ډشبورډ",
+    "logout": "وتل",
+    "certicificationrequest": "د تصدیق غوښتنه"
+  },
+  "certification": {
+    "list": " د تصدیق  پاڼو جدول",
+    "management": "د تصدیق پاڼو مدیریت",
+    "type:": "د تصدیق پاڼو ډول",
+    "number": "د تصدیق پاڼی شمېره",
+    "id": "آی دی",
+    "issuedDate": "د صدور نیټه",
+    "expiryDate": "د ختمیدو نیټه",
+    "type": "ډول",
+    "print": "د تصدیق پاڼه چاپ کړئ",
+    "preview": "د تصدیق پاڼه مخکتنه",
+    "download": "د تصدیق پاڼه ډاونلوډ کړئ",
+    "status": "حالت",
+    "active": "فعال",
+    "inactive": "غیرفعال",
+    "total": "ټول تصدیق پاڼې",
+    "page": {
+      "leftSide": {
+        "title": "خپل تصدیق پیل کړئ",
+        "subtitle": "د خپل سوداګرۍ لپاره د تصدیق سمه لاره غوره کړئ",
+        "steps": {
+          "1": "د غوښتنې ډول وټاکئ",
+          "2": "د تصدیق ډول وټاکئ",
+          "3": "شرکت ثبت کړئ",
+          "4": "اسناد بشپړ کړئ",
+          "5": "تصدیق ترلاسه کړئ"
+        },
+        "progress": "۱ ګام له ۵",
+        "progressLabel": "د غوښتنې او تصدیق انتخاب"
+      },
+      "requestType": {
+        "title": "۱. د غوښتنې ډول وټاکئ",
+        "subtitle": "غوره کړئ چې دا نوی تصدیق دی یا نوي کول",
+        "new": {
+          "title": "نوی تصدیق",
+          "description": "ستاسو د سوداګرۍ لپاره د لومړي ځل تصدیق"
+        },
+        "renewal": {
+          "title": "نوي کول",
+          "description": "خپل موجوده تصدیق نوي کړئ"
+        }
+      },
+      "certificationType": {
+        "title": "۲. د تصدیق ډول وټاکئ",
+        "subtitle": "هغه تصدیق غوره کړئ چې ستاسو د سوداګرۍ اړتیاو سره سمون لري",
+        "domestic": {
+          "title": "کورنی کیفیت",
+          "description": "د کورنیو سوداګریزو عملیاتو لپاره",
+          "benefits": {
+            "1": "په ملي کچه پیژندل شوی",
+            "2": "محلي اطاعت",
+            "3": "د بازار اعتبار"
+          }
+        },
+        "international": {
+          "title": "نړیوال کیفیت",
+          "description": "د نړیوال بازار پراختیا لپاره",
+          "benefits": {
+            "1": "په نړیواله کچه پیژندل شوی",
+            "2": "نړیوال لاسرسی",
+            "3": "ISO سمون"
+          }
+        },
+        "standard": {
+          "title": "معیاري نښه",
+          "description": "د محصول/خدمت معیارونو لپاره",
+          "benefits": {
+            "1": "کیفیت نښه",
+            "2": "د مصرف کونکي باور",
+            "3": "سیالي ګټه"
+          }
+        },
+        "popular": "ډېر مشهور"
+      },
+      "button": {
+        "creating": "جوړول...",
+        "continue": "د انتخاب سره ادامه ورکړئ"
+      },
+      "trust": "⚡ ۱۰۰۰+ شرکتونو په بریالیتوب سره خپل تصدیق بشپړ کړی",
+      "validation": {
+        "requestTypeRequired": "مهرباني وکړئ د غوښتنې یو ډول وټاکئ",
+        "certificationTypeRequired": "مهرباني وکړئ د تصدیق یو ډول وټاکئ"
+      },
+      "messages": {
+        "created": "د تصدیق غوښتنه په بریالیتوب سره جوړه شوه!",
+        "createFailed": "د تصدیق غوښتنه جوړول ناکام شول"
+      }
+    }
+  },
+  "attachment": {
+    "management_title": "د ضمیمو مدیریت",
+    "list": "د ضمیمو لیست",
+    "add": "ضمیمه اضافه کول",
+    "create_menu": "مینو جوړول",
+    "refresh": "تازه کول",
+    "delete": "حذف",
+    "cancel": "لغوه",
+    "delete_header": "ضمیمه حذف کول",
+    "delete_confirmation": "آیا تاسو غواړئ ضمیمه \"{{name}}\" حذف کړئ؟",
+    "attachment_deleted_successfully": "ضمیمه په بریالیتوب سره حذف شوه",
+    "delete_failed": "حذف ناکام شو",
+    "failed_to_load_attachments": "د ضمیمو بارول ناکام شول",
+    "total_records": "مجموع {{count}}",
+    "breadcrumb": "د ضمیمو مدیریت",
+    "success": "بریالیتوب",
+    "error": "تېروتنه",
+    "warning": "خبرداری",
+    "columns": {
+      "id": "شناسه",
+      "attachment_name": "د ضمیمه نوم",
+      "module": "ماډول",
+      "reference_id": "د حوالې شناسه",
+      "file": "فایل",
+      "type": "ډول",
+      "size": "اندازه",
+      "actions": "کړنې"
+    },
+    "COMPANY": "شرکت",
+    "CERTIFICATION": "تصدیق پاڼه",
+    "USER": "کارونکی",
+    "REQUEST": "غوښتنه",
+    "STANDARD": "معیار",
+    "add_attachment": "ضمیمه اضافه کول",
+    "attachment_type": "د ضمیمه ډول",
+    "select_attachment_type": "د ضمیمه ډول وټاکئ",
+    "select_attachment_type_first": "لومړی د ضمیمه ډول وټاکئ",
+    "company": "شرکت",
+    "certification": "تصدیق پاڼه",
+    "user": "کارونکی",
+    "request": "غوښتنه",
+    "select_company": "شرکت وټاکئ",
+    "select_certification": "تصدیق پاڼه وټاکئ",
+    "select_user": "کارونکی وټاکئ",
+    "select_request": "غوښتنه وټاکئ",
+    "attachment_name": "د ضمیمه نوم",
+    "enter_attachment_name": "د ضمیمه نوم دننه کړئ",
+    "select_file": "فایل وټاکئ",
+    "supported_formats": "ملاتړ شوي فارمټونه: انځور، PDF، Word، Excel (حداکثر 5MB)",
+    "upload_attachment": "ضمیمه پورته کول",
+    "please_select_file": "مهرباني وکړئ یو فایل وټاکئ",
+    "please_enter_attachment_name": "مهرباني وکړئ د ضمیمه نوم دننه کړئ",
+    "please_select_attachment_type": "مهرباني وکړئ د ضمیمه ډول وټاکئ",
+    "please_select_company": "مهرباني وکړئ یو شرکت وټاکئ",
+    "please_select_certification": "مهرباني وکړئ یوه تصدیق پاڼه وټاکئ",
+    "please_select_user": "مهرباني وکړئ یو کارونکی وټاکئ",
+    "please_select_request": "مهرباني وکړئ یوه غوښتنه وټاکئ",
+    "attachment_uploaded_successfully": "ضمیمه په بریالیتوب سره اضافه شوه",
+    "failed_to_upload_attachment": "ضمیمه اضافه کول ناکام شول",
+    "failed_to_load_companies": "د شرکتونو بارول ناکام شول",
+    "no_companies_found": "هیڅ شرکت ونه موندل شو. مهرباني وکړئ لومړی یو شرکت اضافه کړئ."
+  },
+  "certificationRequest": {
+    "create": "د تصدیق غوښتنه جوړول",
+    "edit": "د تصدیق غوښتنه سمول",
+    "delete": "د تصدیق غوښتنه ړنګول",
+    "list": "د تصدیق غوښتنو لېست",
+    "refersh": "تازه کول",
+    "created": "د تصدیق غوښتنه په بریالیتوب سره جوړه شوه",
+    "updated": "د تصدیق غوښتنه په بریالیتوب سره سمه شوه",
+    "deleted": "د تصدیق غوښتنه په بریالیتوب سره ړنګه شوه",
+    "loadFailed": "د تصدیق غوښتنې بارول ناکام شول",
+    "deleteFailed": "د تصدیق غوښتنې ړنګول ناکام شول",
+    "deleteConfirm": "آیا تاسو ډاډه یاست چې غواړئ غوښتنه {{serial}} ړنګه کړئ؟",
+    "updateStatus": "د تصدیق غوښتنې حالت تازه کړئ",
+    "status": "د غوښتنې حالت",
+    "labels": {
+      "serialNumber": "سریال شمیره",
+      "trackingNumber": "د تعقیب شمېره  ",
+      "requestType": "د غوښتنې ډول",
+      "requestStatus": "د غوښتنې حالت",
+      "certificationType": "د تصدیق ډول",
+      "createdDate": "د جوړېدو نېټه",
+      "updatedDate": "د تازه کېدو نېټه",
+      "deleted": "ړنګ شوی"
+    },
+    "placeholder": {
+      "requestType": "د غوښتنې ډول وټاکئ",
+      "requestStatus": "حالت وټاکئ",
+      "certificationType": "د تصدیق ډول وټاکئ"
+    },
+    "validation": {
+      "requestType": {
+        "required": "د غوښتنې ډول اړین دی"
+      },
+      "certificationType": {
+        "required": "د تصدیق ډول اړین دی"
+      }
+    },
+    "typeOptions": {
+      "NEW": "نوی",
+      "RENEWAL": "نوي کول",
+      "EXTENSION": "غځول"
+    },
+    "statusOptions": {
+      "DRAFT": "مسوده",
+      "SUBMITTED": "سپارل شوې",
+      "REGISTERED": "ثبت شوې",
+      "STANDARDS_PROVIDED": "معیارونه چمتو شوي",
+      "DEADLINE_ASSIGNED": "نېټه ټاکل شوې",
+      "INSPECTION_IN_PROGRESS": "ارزونه روانه ده",
+      "REPORTED_TO_COMMITTEE": "کمیټې ته راپور شوی",
+      "REPORT_APPROVED": "راپور تصویب شو",
+      "PAYMENT_PENDING": "تادیه په تمه ده",
+      "PAYMENT_COMPLETED": "تادیه بشپړه شوه",
+      "CERTIFICATE_ISSUED": "تصدیق صادر شو",
+      "UNDER_SUPERVISION": "تر څارنې لاندې",
+      "REJECTED": "رد شوې",
+      "CANCELLED": "لغوه شوې",
+      "UNDER_REVIEW": "تر څارنې لاندې"
+    },
+    "certificationTypeOptions": {
+      "DOMESTIC_QUALITY_CERTIFICATION": "د کورني کیفیت تصدیق",
+      "INTERNATIONAL_QUALITY_CERTIFICATION": "د نړیوال کیفیت تصدیق",
+      "STANDARD_MARK_CERTIFICATION": "د معیاري نښې تصدیق"
+    }
+  },
+  "zone": {
+    "create": "زون جوړول",
+    "edit": "زون سمول",
+    "delete": "زون حذف کول",
+    "list": "د زونونو لیست",
+    "refersh": "بیا تازه کول",
+    "created": "زون په بریالیتوب سره جوړ شو",
+    "updated": "ټاکل شوی زون په بریالیتوب سره سم شو",
+    "deleted": "ټاکل شوی زون حذف شو",
+    "servererror": "د زونونو د پورته کولو پر مهال تیروتنه",
+    "deleteFailed": "د زون د حذف کولو پر مهال تیروتنه",
+    "deleteConfirm": "ایا تاسو ډاډه یاست چې زون {{name}} حذف کړئ؟",
+    "notfound": "زون ونه موندل شو",
+    "fetched": "زونونه په بریالیتوب سره پورته شول",
+    "locationrequired": "د موقعیت ټاکل اړین دی",
+    "location": "موقعیت",
+    "name": {
+      "label": "د زون نوم",
+      "required": "د زون نوم اړین دی",
+      "exists": "په همدې نوم زون مخکې موجود دی"
+    }
+  },
+
+  "registration": {
+    "title": "د شرکت ثبت نام",
+    "subtitle": "د څو مرحلو ثبت نام پروسه بشپړه کړئ",
+    "steps": {
+      "companyInfo": "د شرکت معلومات",
+      "contactPerson": "اړیکه کوونکی کس",
+      "documents": "اسناد او رسنۍ",
+      "review": "بیا کتنه او سپارل"
+    },
+    "leftPanel": {
+      "title": "هر مرحله د سند ترلاسه کولو لپاره بشپړه کړئ",
+      "inProgress": "په پرمختګ کې",
+      "selected": "ټاکل شوی"
+    },
+    "review": {
+      "title": "بیا کتنه او سپارل",
+      "selectedCertification": "ټاکل شوی سند",
+      "stepCompleted": "بشپړ شو",
+      "submitButton": "د بیا کتنې لپاره وسپارئ"
+    },
+    "toasts": {
+      "companySuccess": "شرکت په بریالیتوب سره جوړ شو!",
+      "contactSuccess": "اړیکه کوونکی کس په بریالیتوب سره جوړ شو!",
+      "documentsSuccess": "اسناد په بریالیتوب سره پورته شول!",
+      "submitSuccess": "د سند غوښتنه د بیا کتنې لپاره وسپارل شوه!",
+      "submitError": "د سند غوښتنه سپارل ناکام شول!",
+      "noRequestError": "د سند غوښتنه ونه موندل شوه!"
+    },
+    "errors": {
+      "submitFailed": "د سند غوښتنه سپارل ناکام شول!"
+    }
+  },
+  "contactPerson": {
+    "info": "د شرکت استازی معلومات",
+    "firstName": "نوم",
+    "lastName": "تخلص",
+    "position": "موقف/دنده",
+    "email": "برېښلیک",
+    "phoneNumber": "د اړیکې شمېره",
+    "successMessage": "د شرکت استازی په بریالیتوب سره اضافه شو!",
+    "errorMessage": "د شرکت استازی اضافه کول ناکام شول",
+    "errors": {
+      "firstNameRequired": "نوم ضروری دی",
+      "lastNameRequired": "تخلص ضروری دی",
+      "positionRequired": "موقف ضروری دی",
+      "emailRequired": "برېښلیک ضروری دی",
+      "emailInvalid": "مهرباني وکړئ یو معتبر برېښلیک آدرس داخل کړئ",
+      "phoneRequired": "د اړیکې شمېره ضروری ده"
+    },
+    "placeholders": {
+      "firstName": "نوم دلته ولیکئ",
+      "lastName": "تخلص دلته ولیکئ",
+      "position": "د بیلګې په توګه، مدیر، رییس",
+      "email": "example@email.com",
+      "phoneNumber": "+93 123 456 789"
+    },
+    "addresses": {
+      "title": "آدرسونه",
+      "addAddress": "آدرس اضافه کول",
+      "addressLabel": "آدرس",
+      "district": "ولسوالۍ",
+      "selectDistrict": "ولسوالۍ وټاکئ",
+      "addressType": "د آدرس ډول",
+      "details": "تفصیلات",
+      "detailsPlaceholder": "سړک، ودانۍ، او داسې نور",
+      "districtRequired": "ولسوالۍ ضروري ده",
+      "detailsRequired": "د آدرس تفصیلات ضروري دي",
+      "addressTypeRequired": "د آدرس ډول ضروری دی",
+      "addressTypes": {
+        "HEAD_OFFICE": "مرکزي دفتر",
+        "BRANCH_OFFICE": "څانګه دفتر",
+        "FACTORY": "کارخونه",
+        "HOME": "کور",
+
+        "WAREHOUSE": "ګودام",
+        "OTHER": "نور"
+      }
+    }
+  },
+  "commitee": {
+    "list": "د کمیټې لیست",
+    "create": "کمیټه جوړه کړئ",
+    "edit": "کمیټه سم کړئ",
+    "delete": "کمیټه ړنګه کړئ",
+    "name": "د کمیټې نوم",
+    "description": "تشریح",
+    "type": "د کمیټې ډول",
+    "active": "فعال",
+    "updated": "کمیټه په بریالیتوب سره تازه شوه",
+    "deleted": "کمیټه په بریالیتوب سره ړنګه شوه",
+    "deleteConfirm": "آیا تاسو د \"{{name}}\" کمیټې د ړنګولو ډاډه یاست؟",
+    "technical": "تخنیکي کمیټه",
+    "quality": "کیفیت کمیټه",
+    "administrative": "اداري کمیټه",
+    "memberCount":"د غړو شمېره"
+  },
+  "common": {
+    "save": "خوندي کول",
+    "cancel": "لغوه کول",
+    "delete": "ړنګول",
+    "edit": "سمول",
+    "create": "جوړول",
+    "view": "کتل",
+    "refersh": "تازه کول",
+    "total": "ټول",
+    "action": "عمل",
+    "saving": "خوندي کېږي...",
+    "success": "بریالیتوب",
+    "error": "تېروتنه",
+    "updating": "تازه کېږي...",
+    "update": "تازه کول",
+    "select": "انتخاب",
+    "home": "کور",
+    "search": "لټون",
+    "searching": "لټول کېږي...",
+    "status": "حالت",
+    "createdDate": "تاریخ جوړه",
+    "commiteeType": "نوع کمیته",
+    "Active": "فعال",
+    "Inactive": "غیرفعال"
+  },
+  "home": {
+    "badge": "د افغانستان د کیفیت معیارونو اداره",
+    "hero": {
+      "title": "د کیفیت تصدیق کولو ته ستاسو دروازه",
+      "description": "د ASQA سره د خپل تصدیق پروسه منظمه کړئ. وپیژندل شئ، باور جوړ کړئ، او خپل سوداګریز فرصتونه پراخ کړئ.",
+      "cta": {
+        "start": "خپل تصدیق پیل کړئ",
+        "learn": "نور زده کړئ"
+      }
+    },
+    "certificationTypes": {
+      "title": "د تصدیق خپله لاره غوره کړئ",
+      "subtitle": "هغه تصدیق غوره کړئ چې ستاسو د سوداګرۍ اړتیاو سره سمون لري",
+      "domestic": {
+        "title": "کورنی کیفیت",
+        "description": "د کورنیو سوداګریزو عملیاتو لپاره",
+        "features": {
+          "1": "په ملي کچه پیژندل شوی",
+          "2": "محلي اطاعت",
+          "3": "د بازار اعتبار"
+        }
+      },
+
+      "DOMESTIC_QUALITY_CERTIFICATION": "د کورني کیفیت تصدیق",
+      "INTERNATIONAL_QUALITY_CERTIFICATION": "نړیوال کیفیت تصدیق",
+      "STANDARD_MARK_CERTIFICATION": "د معیاري نښې تصدیق",
+
+      "international": {
+        "title": "نړیوال کیفیت",
+        "description": "د نړیوال بازار پراختیا لپاره",
+        "features": {
+          "1": "په نړیواله کچه پیژندل شوی",
+          "2": "نړیوال لاسرسی",
+          "3": "ISO سمون"
+        }
+      },
+      "standard": {
+        "title": "معیاري نښه",
+        "description": "د محصول/خدمت معیارونو لپاره",
+        "features": {
+          "1": "کیفیت نښه",
+          "2": "د مصرف کونکي باور",
+          "3": "سیالي ګټه"
+        }
+      },
+      "learnMore": "نور زده کړئ"
+    },
+    "process": {
+      "badge": "ساده ۴-ګام پروسه",
+      "title": "خپل تصدیق سفر پیل کړئ",
+      "subtitle": "زموږ منظمه پروسه تعقیب کړئ او د مخکې نه په چټکۍ سره تصدیق ترلاسه کړئ",
+      "steps": {
+        "1": {
+          "title": "تصدیق غوره کړئ",
+          "description": "هغه تصدیق غوره کړئ چې ستاسو اړتیاو سره سمون لري"
+        },
+        "2": {
+          "title": "د شرکت ثبت",
+          "description": "د خپل شرکت توضیحات ثبت کړئ"
+        },
+        "3": {
+          "title": "اړیکه نیونکی کس",
+          "description": "د لومړني اړیکې معلومات اضافه کړئ"
+        },
+        "4": {
+          "title": "بیاکتنه او تصدیق",
+          "description": "د تایید وروسته تصدیق ترلاسه کړئ"
+        }
+      }
+    },
+    "features": {
+      "badge": "ولې موږ غوره کوئ",
+      "title": "د کیفیت تصدیق لپاره هرڅه چې تاسو ورته اړتیا لرئ",
+      "subtitle": "موږ ستاسو د سوداګرۍ اړتیاو سره سم د تصدیق هراړخیز حلونه وړاندې کوو",
+      "items": {
+        "1": {
+          "title": "ساده ثبت",
+          "description": "دوه ګامه شرکت او اړیکه نیونکی کس د ثبت پروسه"
+        },
+        "2": {
+          "title": "خوندي تایید",
+          "description": "د اطاعت ډاډ ترلاسه کولو لپاره بشپړه بیاکتنه پروسه"
+        },
+        "3": {
+          "title": "ډیجیټل تصدیق",
+          "description": "د تایید وروسته رسمي ASQA تصدیق تولید کړئ"
+        }
+      }
+    },
+    "cta": {
+      "title": "د تصدیق ترلاسه کولو ته چمتو یاست؟",
+      "subtitle": "د هغو سلګونو شرکتونو سره یوځای شئ چې د ASQA له لارې یې تصدیق ترلاسه کړی او خپل سوداګرۍ بلې کچې ته ورسوئ.",
+      "buttons": {
+        "start": "خپل سفر پیل کړئ",
+        "contact": "موږ سره اړیکه ونیسئ"
+      },
+      "badges": {
+        "iso": "ISO تصدیق شوی",
+        "government": "د حکومت لخوا تایید شوی",
+        "international": "په نړیواله کچه پیژندل شوی",
+        "support": "۲۴/۷ ملاتړ"
+      }
+    }
+  },
+  "forgotPassword": {
+    "title": "خپل پټنوم مو هېر کړی",
+    "description": "اندیښنه مه کوئ! خپل بریښنالیک دننه کړئ او موږ به تاسو ته د خپل پټنوم بیا ترتیبولو لپاره تایید کوډ واستوو.",
+    "secureEncrypted": "خوندي او کوډ شوی",
+    "secureEncryptedDesc": "ستاسو معلومات تل د بانکي درجې امنیت سره خوندي دي",
+    "twoStepVerification": "دوه مرحلې تایید",
+    "twoStepVerificationDesc": "د OTP تایید سره اضافي امنیتي طبقه",
+    "quickRecovery": "چټک بیا رغونه",
+    "quickRecoveryDesc": "خپل پټنوم یوازې په څو دقیقو کې بیا ترتیب کړئ",
+    "rememberPassword": "خپل پټنوم په یاد لرئ؟",
+    "backToLogin": "بیرته ننوتلو ته",
+
+    "stepEmail": "بریښنالیک",
+    "stepVerify": "تایید",
+    "stepReset": "بیا ترتیب",
+    "stepEmailDesc": "خپل بریښنالیک آدرس دننه کړئ",
+    "stepVerifyDesc": "د OTP کوډ دننه کړئ",
+    "stepResetDesc": "نوی پټنوم جوړ کړئ",
+
+    "emailAddress": "بریښنالیک آدرس",
+    "emailPlaceholder": "تاسو@example.com",
+    "emailHint": "موږ به دې بریښنالیک ته د 6 توري تایید کوډ واستوو",
+    "sendCode": "تایید کوډ واستوئ",
+    "sending": "لیږل کیږي...",
+
+    "verificationCode": "تایید کوډ",
+    "otpHint": "د 6 توري کوډ دننه کړئ",
+    "otpCodeSent": "ته لیږل شوی 6 توري کوډ دننه کړئ",
+    "otpAllowedChars": "کوډ کولی شي توري (A-Z) او شمیرې (0-9) ولري",
+    "back": "بیرته",
+    "verifyCode": "کوډ تایید کړئ",
+    "resendCode": "کوډ بیا واستوئ",
+
+    "newPassword": "نوی پټنوم",
+    "newPasswordPlaceholder": "نوی پټنوم دننه کړئ",
+    "confirmPassword": "پټنوم تایید کړئ",
+    "confirmPasswordPlaceholder": "نوی پټنوم تایید کړئ",
+    "passwordHint": "لږ تر لږه 8 توري اوږد وي",
+    "passwordSecurity": "ستاسو پټنوم به کوډ شي او په خوندي ډول زیرمه شي",
+    "resetPassword": "پټنوم بیا ترتیب کړئ",
+    "resettingPassword": "پټنوم بیا ترتیب کیږي...",
+
+    "otpSentSuccess": "OTP په بریالیتوب سره ستاسو بریښنالیک ته ولیږل شو!",
+    "otpVerifiedSuccess": "OTP په بریالیتوب سره تایید شو!",
+    "passwordResetSuccess": "پټنوم په بریالیتوب سره بیا ترتیب شو! ننوتلو ته لیږدول کیږي...",
+    "otpResendSuccess": "نوی OTP په بریالیتوب سره ستاسو بریښنالیک ته ولیږل شو!",
+
+    "otpIncomplete": "مهرباني وکړئ بشپړ 6 عددي/توري OTP دننه کړئ",
+    "passwordsMismatch": "پټنومونه سره سمون نه خوري",
+    "passwordMinLength": "پټنوم باید لږ تر لږه 8 توري وي",
+    "failedInitiate": "د پټنوم بیا ترتیبول پیل کول ناکام شول",
+    "failedSendOtp": "د OTP لیږل ناکام شول",
+    "invalidOtp": "غلط OTP. مهرباني وکړئ بیا هڅه وکړئ.",
+    "failedReset": "د پټنوم بیا ترتیبول ناکام شول",
+    "networkError": "د شبکې تېروتنه. مهرباني وکړئ بیا هڅه وکړئ."
+  }
 }

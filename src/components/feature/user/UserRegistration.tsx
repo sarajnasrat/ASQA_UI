@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Card } from "primereact/card";
 import { InputText } from "primereact/inputtext";
@@ -12,6 +12,9 @@ import { useNavigate } from "react-router-dom";
 import { useAppToast } from "../../../hooks/useToast.js";
 import { Toast } from "primereact/toast";
 import DynamicBreadcrumb from "../../common/DynamicBreadcrumb.js";
+import ZoneService from "../../../services/zone.service.ts";
+import CommiteeService from "../../../services/comitee.service.ts";
+import RoleService from "../../../services/role.service.ts";
 
 type FormValues = {
   firstName: string;
@@ -21,12 +24,16 @@ type FormValues = {
   confirmPassword: string;
   phoneNumber: string;
   role: string;
+  zoneId: number;
 };
 
 export const UserRegistration = () => {
   const navigate = useNavigate();
   const { toast, showToast } = useAppToast();
   const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [zones, setZones] = useState<{ label: string; value: any }[]>([]);
+  const [commitees, setCommitees] = useState<{ label: string; value: any }[]>([]);
+  const [roles, setRoles] = useState<{ label: string; value: any }[]>([]);
 
   const {
     control,
@@ -37,13 +44,63 @@ export const UserRegistration = () => {
   } = useForm<FormValues>();
 
   const passwordValue = watch("password");
-
+const getAllRoles = async () => {
+  try {
+    const response = await RoleService.getAllRoles();
+    const roleOptions = response.data.map((role: any) => ({
+      label: role.name,
+      value: role.name,
+    }));
+    setRoles(roleOptions);
+  } catch (error) {
+    showToast("error", "Error", "Failed to load roles");
+  }
+};
+  useEffect(() => {
+    getAllRoles();
+  }, []);
   const roleOptions = [
     { label: "Admin", value: "ROLE_ADMIN" },
     { label: "User", value: "ROLE_USER" },
     { label: "Company Admin", value: "ROLE_COMPANY" },
     { label: "Monitor", value: "MONITORING" },
   ];
+  useEffect(() => {
+    const fetchZones = async () => {
+      try {
+        const response = await ZoneService.getAllZones();
+        // Assuming response.data is array of Zone objects [{id, name, location}]
+        const zoneOptions = response.data.map((zone: any) => ({
+          label: zone.name,
+          value: zone.id,
+        }));
+        setZones(zoneOptions);
+      } catch (error) {
+        showToast("error", "Error", "Failed to load zones");
+      }
+    };
+
+    fetchZones();
+  }, []);
+  const fetchCommitees = async () => {
+    try {
+      const response = await CommiteeService.getAll();
+      const commiteeOptions = response.data.map((commitee: any) => ({
+        label: commitee.name,
+        value: commitee.id,
+      }));
+      setCommitees(commiteeOptions);
+    } catch (error) {
+      showToast("error", "Error", "Failed to load committees");
+    }
+  };
+
+  useEffect(() => {
+    fetchCommitees();
+  
+  }, []);
+
+
 
   const onSubmit = async (data: FormValues) => {
     try {
@@ -61,6 +118,7 @@ export const UserRegistration = () => {
               active: true,
               phoneNumber: data.phoneNumber,
               roles: [data.role],
+              zone: { id: data.zoneId }, // <-- send zone id as object
             }),
           ],
           { type: "application/json" },
@@ -357,36 +415,58 @@ export const UserRegistration = () => {
                   </div>
                 )}
               />
-               <div>
-   {/* Role */}
-              <Controller
-                name="role"
-                control={control}
-                rules={{ required: "Role is required" }}
-                render={({ field }) => (
-                  <div>
-                    <label className="block text-sm font-medium mb-1">
-                      Role <span className="text-red-500">*</span>
-                    </label>
-                    <Dropdown
-                      {...field}
-                      options={roleOptions}
-                      placeholder="Select role"
-                      className={`w-full ${errors.role ? "p-invalid" : ""}`}
-                    />
-                    {errors.role && (
-                      <small className="text-red-500 block mt-1">
-                        {errors.role.message}
-                      </small>
-                    )}
-                  </div>
-                )}
-              />
+              <div>
+                {/* Role */}
+                <Controller
+                  name="role"
+                  control={control}
+                  rules={{ required: "Role is required" }}
+                  render={({ field }) => (
+                    <div>
+                      <label className="block text-sm font-medium mb-1">
+                        Role <span className="text-red-500">*</span>
+                      </label>
+                      <Dropdown
+                        {...field}
+                        options={roles}
+                        placeholder="Select role"
+                        className={`w-full ${errors.role ? "p-invalid" : ""}`}
+                      />
+                      {errors.role && (
+                        <small className="text-red-500 block mt-1">
+                          {errors.role.message}
+                        </small>
+                      )}
+                    </div>
+                  )}
+                />
+              </div>
 
-               </div>
-           
+                      <Controller
+              name="zoneId"
+              control={control}
+              rules={{ required: "Zone is required" }}
+              render={({ field }) => (
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    Zone <span className="text-red-500">*</span>
+                  </label>
+                  <Dropdown
+                    {...field}
+                    options={zones}
+                    placeholder="Select zone"
+                    className={`w-full ${errors.zoneId ? "p-invalid" : ""}`}
+                  />
+                  {errors.zoneId && (
+                    <small className="text-red-500 block mt-1">
+                      {errors.zoneId.message}
+                    </small>
+                  )}
+                </div>
+              )}
+            />
             </div>
-
+            
             {/* Profile Image - Simple */}
             <div className="mt-2 pt-2 border-top-1 surface-border">
               <div className="mb-2">
@@ -416,7 +496,7 @@ export const UserRegistration = () => {
               <Button
                 label="Register"
                 type="submit"
-                severity="success"
+                severity="info"
                 raised
                 text
                 icon="pi pi-save"

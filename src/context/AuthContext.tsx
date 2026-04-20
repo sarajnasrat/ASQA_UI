@@ -40,6 +40,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     localStorage.setItem("user", JSON.stringify(userData));
     localStorage.setItem("menus", JSON.stringify(data.menus)); // ✅ store menus
+      localStorage.setItem(
+    "committeeIds",
+    JSON.stringify(data.committeeIds || [])
+  );
 
     setUser(userData);
     setMenus(data.menus); // ✅ set menus in state

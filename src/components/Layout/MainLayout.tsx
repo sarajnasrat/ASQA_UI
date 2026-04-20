@@ -22,6 +22,16 @@ import { CompanyCreate } from "../feature/company/CompanyCreate";
 import CompanyUpdate from "../feature/company/CompanyUpdate";
 import { CertificationRequestList } from "../feature/certification-request/CertificationRequestList";
 import { CertificationRequestUpdate } from "../feature/certification-request/CertificationRequestUpdate";
+import { CertificationDetails } from "../feature/certification-request/CertificationDetails";
+import { AttachmentList } from "../feature/attachement/AttachementList";
+import { AttachmentCreate } from "../feature/attachement/AttachmentCreate";
+import { CertificationList } from "../feature/certification/CertificationList";
+import { PrintCertification } from "../feature/certification/PrintCertification";
+import { PrintCertificationPage } from "../feature/certification/PrintCertificationPage";
+import ZoneList from "../feature/zone/ZoneList";
+import { CommiteeList } from "../feature/commitee/CommiteeList";
+import CommiteeMemberList from "../feature/commiteemember/CommiteeMemberList";
+import { CommiteeAssignmentList } from "../feature/commiteeassignment/CommiteeAssignmentList";
 
 export const MainLayout = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -75,9 +85,48 @@ export const MainLayout = () => {
               <Route path="/district" element={<DistrictList />} />
               <Route path="/province" element={<ProvinceList />} />
               <Route path="/category" element={<CategoryList />} />
-                      <Route path="/certification-request" element={<CertificationRequestList />} />
-                           <Route path="/certification-request/edit/:id" element={<CertificationRequestUpdate />} />
+   <Route path="/commitee-assignment-list" element={<CommiteeAssignmentList />} />
+              <Route path="/commitee-list" element={<CommiteeList />} />
+              <Route
+                path="/commitee-members-list"
+                element={<CommiteeMemberList />}
+              />
+
+              <Route
+                path="/certification-request"
+                element={<CertificationRequestList />}
+              />
+              <Route path="/zone" element={<ZoneList />} />
+
+              <Route
+                path="/certifications/print/:id"
+                element={<PrintCertificationPage />}
+              />
+              <Route path="/certifications" element={<CertificationList />} />
+              <Route
+                path="/certification-request/edit/:id"
+                element={
+                  <CertificationRequestUpdate
+                    requestId={null}
+                    currentStatus={""}
+                    visible={false}
+                    onHide={() => {}}
+                    onSuccess={() => {}}
+                  />
+                }
+              />
               <Route path="/company" element={<CompanyList />} />
+              <Route path="/admin-attachments" element={<AttachmentList />} />
+              <Route
+                path="/attachments/create"
+                element={
+                  <AttachmentCreate
+                    referenceId={0}
+                    referenceType="COMPANY"
+                    onSuccess={() => {}}
+                  />
+                }
+              />
               <Route path="/company/create" element={<CompanyCreate />} />
               <Route path="/company/view/:id" element={<CompanyDetails />} />
               <Route path="/company/edit/:id" element={<CompanyUpdate />} />

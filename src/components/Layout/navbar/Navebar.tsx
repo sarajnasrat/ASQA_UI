@@ -49,13 +49,7 @@ export const Navbar = ({ onMenuClick }: { onMenuClick?: () => void }) => {
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* LEFT */}
           <div className="flex items-center gap-4">
-            <button
-              onClick={onMenuClick}
-              className="lg:hidden p-2 rounded-md hover:bg-gray-100"
-            >
-              <i className="pi pi-bars text-gray-600 text-xl"></i>
-            </button>
-
+       
             <span className="text-gray-600 font-medium">
               {t("navbar.welcome")}
             </span>
@@ -121,10 +115,7 @@ export const Navbar = ({ onMenuClick }: { onMenuClick?: () => void }) => {
               {showUserMenu && (
                 <>
                   {/* Backdrop for mobile */}
-                  <div
-                    className="fixed inset-0 bg-black/20 z-40 md:hidden"
-                    onClick={() => setShowUserMenu(false)}
-                  />
+                  
 
                   {/* Menu panel */}
                   <div className="absolute right-0 mt-2 w-64 sm:w-72 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50 animate-fadeIn">

@@ -116,9 +116,9 @@ export const CompanyList: React.FC = () => {
 
   const columns = [
     { field: "id", header: "ID", style: { width: "80px" }, body: (row: any) => <span>{row.id}</span> },
-    { field: "companyNameEN", header: t("company.companyNameEN"), sortable: true, style: { minWidth: "200px" }, body: (row: any) => <span>{row.companyNameEN || "—"}</span> },
-    { field: "email", header: t("company.email"), sortable: true, style: { minWidth: "200px" }, body: (row: any) => <span>{row.email || "—"}</span> },
-    { field: "phoneNumber", header: t("company.phoneNumber"), style: { minWidth: "150px" }, body: (row: any) => <span>{row.phoneNumber || "—"}</span> },
+    { field: "companyNameEN", header: t("company.labels.companyNameEN"), sortable: true, style: { minWidth: "200px" }, body: (row: any) => <span>{row.companyNameEN || "—"}</span> },
+    { field: "email", header: t("company.labels.email"), sortable: true, style: { minWidth: "200px" }, body: (row: any) => <span>{row.email || "—"}</span> },
+    { field: "phoneNumber", header: t("company.labels.phoneNumber"), style: { minWidth: "150px" }, body: (row: any) => <span>{row.phoneNumber || "—"}</span> },
     { header: t("common.action"), body: actionTemplate, style: { width: "140px" } },
   ];
 

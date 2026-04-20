@@ -37,6 +37,7 @@ export const UserList = () => {
         size: rows,
         sort: "id,desc",
       });
+      console.log("User List Response:", res);
       setUsers(res.data.data);
       setTotalRecords(res.data.totalElements);
     } catch (error) {
@@ -77,7 +78,17 @@ export const UserList = () => {
       </div>
     );
   };
+const zoneBodyTemplate = (rowData: any) => {
+  if (!rowData.zone || !rowData.zone.name) {
+    return <span className="text-gray-400">Not Assigned</span>;
+  }
 
+  return (
+    <span className="text-sm text-gray-700 font-mono">
+      {rowData.zone.name}
+    </span>
+  );
+};
   const dateBodyTemplate = (rowData: any) => {
     if (!rowData.createdDate) return <span className="text-gray-400">—</span>;
 
@@ -101,7 +112,7 @@ export const UserList = () => {
   };
 
   const phoneBodyTemplate = (rowData: any) => {
-    if (!rowData.phoneNumber) return <span className="text-gray-400">—</span>;
+    if (!rowData.phoneNumber) return <span className="text-gray-400">Not Provided</span>;
 
     return (
       <span className="text-sm text-gray-700 font-mono">
@@ -159,7 +170,7 @@ const nameBodyTemplate = (rowData: any) => {
             <img
               src={imageUrl}
               alt={fullName || 'User'}
-              className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-md"
+              className="w-10 h-10 rounded-full  border-white shadow-md"
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
                 e.currentTarget.nextElementSibling?.classList.remove('hidden');
@@ -382,6 +393,11 @@ const nameBodyTemplate = (rowData: any) => {
     {
       header: "Roles",
       body: roleBodyTemplate,
+    },
+
+    {
+      header: "Zone",
+      body: zoneBodyTemplate,
     },
     {
       field: "createdDate",

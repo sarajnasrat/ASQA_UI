@@ -30,7 +30,7 @@ export const Sidebar = () => {
   }, []);
 
   const toggleSubmenu = (id: number) => {
-    setExpandedItems(prev => {
+    setExpandedItems((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(id)) {
         newSet.delete(id);
@@ -89,10 +89,10 @@ export const Sidebar = () => {
               className={`absolute inset-0 rounded-lg transition-all duration-300
                 ${
                   childActive
-                    ? "bg-indigo-50/80 shadow-sm"
+                    ? "bg-blue-50/80 shadow-sm"
                     : isChildHovered
-                    ? "bg-slate-50 scale-105 shadow-sm"
-                    : "bg-transparent scale-100"
+                      ? "bg-gray-100 scale-105 shadow-sm"
+                      : "bg-transparent scale-100"
                 }`}
             />
 
@@ -103,15 +103,17 @@ export const Sidebar = () => {
             >
               <div className="flex items-center justify-center transition-all duration-300">
                 {child.icon ? (
-                  <i className={`${child.icon} ${childActive ? "text-indigo-600" : "text-slate-400"}`} />
+                  <i
+                    className={`${child.icon} ${childActive ? "text-blue-600" : "text-gray-400"}`}
+                  />
                 ) : (
                   <div
                     className={`rounded-full transition-all duration-300 ${
                       childActive
-                        ? "bg-indigo-500 scale-150"
+                        ? "bg-blue-500 scale-150"
                         : isChildHovered
-                        ? "bg-indigo-400 scale-125"
-                        : "bg-slate-300 group-hover:bg-slate-400"
+                          ? "bg-blue-400 scale-125"
+                          : "bg-gray-300 group-hover:bg-gray-400"
                     }`}
                   />
                 )}
@@ -121,8 +123,8 @@ export const Sidebar = () => {
                 <span
                   className={`flex-1 text-sm font-medium transition-all duration-200 ${
                     childActive
-                      ? "text-indigo-700"
-                      : "text-slate-600 group-hover:text-slate-900"
+                      ? "text-blue-700"
+                      : "text-gray-600 group-hover:text-gray-900"
                   }`}
                 >
                   {getLabel(child)}
@@ -132,14 +134,14 @@ export const Sidebar = () => {
               {hasGrandChildren && !collapsed && (
                 <i
                   className={`pi pi-chevron-down text-xs transition-all duration-300 ${
-                    isExpanded ? "rotate-180 text-indigo-600" : "text-slate-400"
+                    isExpanded ? "rotate-180 text-blue-600" : "text-gray-400"
                   }`}
                 />
               )}
             </div>
 
             {childActive && !collapsed && (
-              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-indigo-500 rounded-r-full" />
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-blue-500 rounded-r-full" />
             )}
           </Link>
 
@@ -152,7 +154,7 @@ export const Sidebar = () => {
               }`}
             >
               <div className="overflow-hidden">
-                <div className="flex flex-col gap-1 ml-4 pl-4 border-l-2 border-indigo-100">
+                <div className="flex flex-col gap-1 ml-4 pl-4 border-l-2 border-blue-100">
                   {renderChildren(child.children, depth + 1)}
                 </div>
               </div>
@@ -182,10 +184,10 @@ export const Sidebar = () => {
           <div
             className={`absolute inset-0 rounded-xl transition-all duration-300 ${
               active
-                ? "bg-linear-to-r from-indigo-50 to-indigo-50/50 shadow-sm"
+                ? "bg-blue-50/80 shadow-sm"
                 : isHovered
-                ? "bg-slate-50 scale-105 shadow-sm"
-                : "bg-transparent scale-100"
+                  ? "bg-gray-100 scale-105 shadow-sm"
+                  : "bg-transparent scale-100"
             }`}
           />
 
@@ -194,17 +196,19 @@ export const Sidebar = () => {
               collapsed ? "justify-center" : "justify-between"
             }`}
           >
-            <div className={`flex items-center gap-3 ${collapsed ? "justify-center" : ""}`}>
+            <div
+              className={`flex items-center gap-3 ${collapsed ? "justify-center" : ""}`}
+            >
               <i
                 className={`${item.icon} text-xl ${
-                  active ? "text-indigo-600" : "text-slate-400"
+                  active ? "text-blue-600" : "text-gray-400"
                 }`}
               />
 
               {!collapsed && (
                 <span
                   className={`font-medium ${
-                    active ? "text-indigo-700 font-semibold" : "text-slate-600"
+                    active ? "text-blue-700 font-semibold" : "text-gray-600"
                   }`}
                 >
                   {getLabel(item)}
@@ -215,14 +219,14 @@ export const Sidebar = () => {
             {hasChildren && !collapsed && (
               <i
                 className={`pi pi-chevron-down transition-transform ${
-                  isExpanded ? "rotate-180 text-indigo-600" : "text-slate-400"
+                  isExpanded ? "rotate-180 text-blue-600" : "text-gray-400"
                 }`}
               />
             )}
           </div>
 
           {active && !collapsed && (
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-indigo-500 rounded-r-full" />
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-blue-500 rounded-r-full" />
           )}
         </div>
 
@@ -235,7 +239,7 @@ export const Sidebar = () => {
             }`}
           >
             <div className="overflow-hidden">
-              <div className="flex flex-col gap-1 ml-4 pl-4 border-l-2 border-indigo-100">
+              <div className="flex flex-col gap-1 ml-4 pl-4 border-l-2 border-blue-100">
                 {renderChildren(item.children)}
               </div>
             </div>
@@ -244,6 +248,7 @@ export const Sidebar = () => {
       </div>
     );
   };
+
   return (
     <>
       {/* Mobile Toggle Button - Modern Floating Action Button */}
@@ -253,8 +258,8 @@ export const Sidebar = () => {
       >
         <div className="relative">
           {/* Ripple effect background */}
-          <div className="absolute inset-0 bg-indigo-500 rounded-2xl animate-ping opacity-20" />
-          <div className="relative bg-linear-to-br from-indigo-500 to-indigo-600 text-white p-4 rounded-2xl shadow-2xl transition-all duration-300 group-hover:shadow-indigo-500/30 group-hover:scale-110 active:scale-95">
+          <div className="absolute inset-0 rounded-2xl animate-ping opacity-20" />
+          <div className="relative bg-blue-600 text-white p-4 rounded-2xl shadow-2xl transition-all duration-300 group-hover:shadow-blue-500/30 group-hover:scale-110 active:scale-95">
             <i
               className={`pi ${isMobileOpen ? "pi-times" : "pi-bars"} text-2xl transition-transform duration-300 group-hover:rotate-180`}
             />
@@ -266,7 +271,7 @@ export const Sidebar = () => {
       {isMobileOpen && (
         <div
           onClick={() => setIsMobileOpen(false)}
-          className="fixed inset-0 bg-linear-to-br from-black/60 via-black/50 to-transparent backdrop-blur-sm z-40 lg:hidden animate-fade-in"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden animate-fade-in"
         />
       )}
 
@@ -274,77 +279,63 @@ export const Sidebar = () => {
       <aside
         className={`
           fixed lg:static inset-y-0 left-0 z-50 h-screen
-          bg-white/90 backdrop-blur-xl border-r border-white/20
+          bg-white border-r border-gray-200
           flex flex-col transition-all duration-500 ease-out
-          shadow-2xl lg:shadow-xl
-          ${collapsed ? "w-20" : "w-70"}
+          shadow-lg lg:shadow-sm
+          ${collapsed ? "w-20" : "w-80"}
           ${isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
         `}
       >
-        {/* Header with Glass Morphism Effect */}
-   <div className="relative h-20 px-4 flex items-center shrink-0 overflow-hidden border-b border-slate-200/80 shadow-sm">
-  {/* Background Gradient */}
-  <div className="absolute inset-0 bg-linear-to-br from-indigo-50 via-white to-slate-50" />
+        {/* Header */}
+        <div className="relative h-20 px-4 flex items-center shrink-0 overflow-hidden border-b border-gray-200">
+          {/* Content */}
+          <div className="relative flex items-center justify-between w-full z-10">
+            {/* Logo section - Always visible */}
+            <div className="flex items-center gap-4 min-w-0">
+              <div className="relative group shrink-0">
+                <img
+                  src="/aqsa.jpg"
+                  alt="ASQA"
+                  className="relative h-12 w-12 object-contain rounded-lg bg-white p-1.5 shadow-md"
+                />
+              </div>
 
-  {/* Animated Lines */}
-  <div className="absolute inset-0 opacity-30">
-    <div className="absolute top-0 left-0 w-32 h-32 rounded-full mix-blend-multiply filter blur-xl animate-blob" />
-    <div className="absolute top-0 right-0 w-32 h-32 rounded-full mix-blend-multiply filter blur-xl animate-blob animation-delay-2000" />
-  </div>
+              {/* Title - Only shown when not collapsed */}
+              {!collapsed && (
+                <div className="animate-slide-in shrink-0">
+                  <h1 className="text-2xl font-bold text-gray-800 tracking-tight leading-none">
+                    ASQA
+                  </h1>
+                  <p className="text-xs font-medium text-blue-500 uppercase tracking-wider">
+                    Management System
+                  </p>
+                </div>
+              )}
+            </div>
 
-  {/* Decorative bottom border with gradient */}
-  <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-200 to-transparent" />
-
-  {/* Content */}
-  <div className="relative flex items-center justify-between w-full z-10">
-    {/* Logo section - Always visible */}
-    <div className="flex items-center gap-4 min-w-0">
-      <div className="relative group shrink-0">
-        <div className="absolute inset-0 bg-linear-to-br from-indigo-200 to-purple-200 rounded-xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity" />
-        <img
-          src="/aqsa.jpg"
-          alt="ASQA"
-          className="relative h-12 w-12 object-contain rounded-xl bg-white p-1.5 shadow-md ring-1 ring-slate-200/50"
-        />
-      </div>
-
-      {/* Title - Only shown when not collapsed */}
-      {!collapsed && (
-        <div className="animate-slide-in shrink-0">
-          <h1 className="text-2xl font-bold bg-linear-to-br from-slate-800 to-slate-600 bg-clip-text text-transparent tracking-tight leading-none">
-            ASQA
-          </h1>
-          <p className="text-xs font-medium text-indigo-500 uppercase tracking-wider">
-            Management System
-          </p>
+            {/* Collapse Button */}
+            <button
+              onClick={() => setCollapsed(!collapsed)}
+              className="relative group shrink-0"
+              title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            >
+              <div className="relative p-2 rounded-xl hover:bg-gray-100 text-gray-500 hover:text-blue-600 transition-all duration-300">
+                <i
+                  className={`pi ${collapsed ? "pi-angle-right" : "pi-angle-left"} text-xl`}
+                />
+              </div>
+            </button>
+          </div>
         </div>
-      )}
-    </div>
-
-    {/* Collapse Button */}
-    <button
-      onClick={() => setCollapsed(!collapsed)}
-      className="relative group shrink-0"
-      title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-    >
-      <div className="absolute inset-0 bg-slate-200 rounded-xl blur-sm opacity-0 group-hover:opacity-100 transition-opacity" />
-      <div className="relative p-2 rounded-xl hover:bg-white/50 text-slate-500 hover:text-indigo-600 transition-all duration-300 group-hover:scale-110">
-        <i
-          className={`pi ${collapsed ? "pi-angle-right" : "pi-angle-left"} text-xl`}
-        />
-      </div>
-    </button>
-  </div>
-</div>
 
         {/* Menu with Smooth Scrolling */}
-        <nav className="flex-1 overflow-y-auto py-6 px-3 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent hover:scrollbar-thumb-slate-300">
+        <nav className="flex-1 overflow-y-auto py-6 px-3 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent hover:scrollbar-thumb-gray-300">
           {menuItems.length > 0 ? (
             <div className="space-y-1">
               {menuItems.map((item) => renderMenuItem(item))}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center h-full text-center text-slate-400 py-12 px-4">
+            <div className="flex flex-col items-center justify-center h-full text-center text-gray-400 py-12 px-4">
               <i className="pi pi-menu text-4xl mb-3 opacity-30" />
               <p className="text-sm font-medium">No menu items loaded</p>
               <p className="text-xs opacity-50 mt-1">Check back later</p>
@@ -352,14 +343,13 @@ export const Sidebar = () => {
           )}
         </nav>
 
-        {/* Footer with Gradient */}
-        <div className="relative shrink-0">
-          <div className="absolute inset-0 bg-linear-to-t from-indigo-50 via-white to-transparent" />
+        {/* Footer */}
+        <div className="relative shrink-0 border-t border-gray-200">
           <div className="relative p-4 text-center">
             {!collapsed && (
-              <p className="text-xs text-slate-400 font-medium">
+              <p className="text-xs text-gray-400 font-medium">
                 © 2026 ASQA System
-                <span className="block text-[10px] text-indigo-300 mt-0.5">
+                <span className="block text-[10px] text-blue-300 mt-0.5">
                   v2.0.0
                 </span>
               </p>
@@ -370,23 +360,12 @@ export const Sidebar = () => {
 
       {/* Add custom animations */}
       <style>{`
-        @keyframes blob {
-          0%, 100% { transform: translate(0px, 0px) scale(1); }
-          33% { transform: translate(30px, -50px) scale(1.1); }
-          66% { transform: translate(-20px, 20px) scale(0.9); }
-        }
-        .animate-blob {
-          animation: blob 7s infinite;
-        }
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-        .animate-fade-in {
-          animation: fadeIn 0.3s ease-out;
-        }
         @keyframes fadeIn {
           from { opacity: 0; }
           to { opacity: 1; }
+        }
+        .animate-fade-in {
+          animation: fadeIn 0.3s ease-out;
         }
         .animate-slide-in {
           animation: slideIn 0.5s ease-out;
