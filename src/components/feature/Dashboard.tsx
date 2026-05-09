@@ -1,374 +1,567 @@
-import React, { useState, useEffect } from 'react';
-import { Card } from 'primereact/card';
-import { Chart } from 'primereact/chart';
-import { Tag } from 'primereact/tag';
-import { Skeleton } from 'primereact/skeleton';
+import React, { useEffect, useRef } from "react";
+import { useAuth } from "../../context/AuthContext";
+import DashboardService from "../../services/dashboard.service";
+import {
+  Users,
+  Building2,
+  Award,
+  FileCheck,
+  TrendingUp,
+  XCircle,
+  CheckCircle2,
+} from "lucide-react";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip as ChartTooltip,
+  Legend,
+  ArcElement,
+  PointElement,
+  LineElement,
+  Filler,
+} from "chart.js";
+import { Bar, Pie, Line } from "react-chartjs-2";
+import { Skeleton } from "primereact/skeleton";
 
-import { RoleService } from '../../services/role.service';
-import { PermissionService } from '../../services/permission.service';
-import { MenuService } from '../../services/menu.service';
-import UserService from '../../services/user.service.ts';
+// Register ChartJS components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  ChartTooltip,
+  Legend,
+  ArcElement,
+  PointElement,
+  LineElement,
+  Filler,
+);
 
-interface DashboardStats {
+// Types
+interface MonthlyUser {
+  month: string;
+  count: number;
+}
+
+interface DashboardData {
+  totalCertificationRequests: number;
+  totalCertifications: number;
   totalUsers: number;
-  activeUsers: number;
-  inactiveUsers: number;
-  totalRoles: number;
-  totalPermissions: number;
-  totalMenus: number;
-  activeMenus: number;
-  recentActivities: Activity[];
-  userGrowth: number[];
-  roleDistribution: { [key: string]: number };
+  totalCompanies: number;
+  totalActiveUsers: number;
+  totalInActiveUsers: number;
+  totalActiveCompany: number;
+  totalInActiveCompany: number;
+  totalCommitee: number;
+  totalActiveCommitee: number;
+  totalInActiveCommitee: number;
+  totalMenu: number;
+  totalSubmittedRequest: number;
+  totalRejectedRequest: number;
+  inProgressRequest: number;
+  totalCompletedRequest: number;
+  userLastSixMonth: MonthlyUser[];
 }
 
-interface Activity {
-  id: string;
-  type: 'user' | 'role' | 'permission' | 'menu';
-  action: string;
-  target: string;
-  timestamp: string;
-  user: string;
+interface StatCard {
+  title: string;
+  value: number;
+  icon: React.ComponentType<{ className?: string }>;
+  color: string;
+  bgColor: string;
+  borderColor: string;
+  trend?: {
+    value: number;
+    isPositive: boolean;
+  };
 }
 
-export const Dashboard = () => {
-  const [stats, setStats] = useState<DashboardStats | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [selectedPeriod, setSelectedPeriod] = useState('week');
+export const Dashboard: React.FC = () => {
+  const [dashboardData, setDashboardData] =
+    React.useState<DashboardData | null>(null);
+  const [loading, setLoading] = React.useState<boolean>(true);
+  const [error, setError] = React.useState<string | null>(null);
+  const { user } = useAuth();
 
-  useEffect(() => {
-    fetchDashboardData();
-  }, []);
-
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = async (): Promise<void> => {
     setLoading(true);
+    setError(null);
     try {
-      // Fetch all data in parallel
-      const [usersRes, rolesRes, permissionsRes, menusRes] = await Promise.all([
-        UserService.getAllUsers(),
-        RoleService.getAllRoles(),
-        PermissionService.getAllPermissions(),
-        MenuService.getAllMenus(),
-      ]);
-
-      const users = usersRes.data || [];
-      const roles = rolesRes.data || [];
-      const permissions = permissionsRes.data || [];
-      const menus = menusRes.data || [];
-
-      // Calculate statistics
-      const activeUsers = users.filter((u: any) => u.active !== false).length;
-      const activeMenus = menus.filter((m: any) => m.active !== false).length;
-
-      // Mock recent activities (replace with actual API call)
-      const recentActivities: Activity[] = [
-        {
-          id: '1',
-          type: 'user',
-          action: 'created',
-          target: 'John Doe',
-          timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
-          user: 'Admin'
-        },
-        {
-          id: '2',
-          type: 'role',
-          action: 'updated',
-          target: 'Manager Role',
-          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
-          user: 'Admin'
-        },
-        {
-          id: '3',
-          type: 'permission',
-          action: 'assigned',
-          target: 'Edit Users',
-          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),
-          user: 'System'
-        },
-        {
-          id: '4',
-          type: 'menu',
-          action: 'created',
-          target: 'Dashboard',
-          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
-          user: 'Admin'
-        },
-        {
-          id: '5',
-          type: 'user',
-          action: 'deactivated',
-          target: 'Jane Smith',
-          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(),
-          user: 'Admin'
-        }
-      ];
-
-      // Mock user growth data
-      const userGrowth = [65, 72, 80, 85, 92, 98, 105, 112, 118, 125, 132, 140];
-
-      // Mock role distribution
-      const roleDistribution = {
-        'Admin': 3,
-        'Manager': 8,
-        'Editor': 15,
-        'Viewer': 24,
-        'Guest': 12
-      };
-
-      setStats({
-        totalUsers: users.length,
-        activeUsers,
-        inactiveUsers: users.length - activeUsers,
-        totalRoles: roles.length,
-        totalPermissions: permissions.length,
-        totalMenus: menus.length,
-        activeMenus,
-        recentActivities,
-        userGrowth,
-        roleDistribution
-      });
+      const response = await DashboardService.getDashboardData();
+      setDashboardData(response.data.data);
     } catch (error) {
-      console.error('Failed to fetch dashboard data', error);
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Failed to fetch dashboard data";
+      setError(errorMessage);
+      console.error("Failed to fetch dashboard data", error);
     } finally {
       setLoading(false);
     }
   };
 
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
   // Chart configurations
-  const lineChartData = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-    datasets: [
-      {
-        label: 'User Growth',
-        data: stats?.userGrowth || [],
-        fill: false,
-        borderColor: '#4f46e5',
-        tension: 0.4,
-        backgroundColor: 'rgba(79, 70, 229, 0.1)',
-      }
-    ]
+  const getUserGrowthChartData = () => {
+    if (!dashboardData) return { labels: [], datasets: [] };
+
+    return {
+      labels: dashboardData.userLastSixMonth.map((item) => item.month),
+      datasets: [
+        {
+          label: "Users",
+          data: dashboardData.userLastSixMonth.map((item) => item.count),
+          borderColor: "#6366F1",
+          backgroundColor: "rgba(99, 102, 241, 0.1)",
+          fill: true,
+          tension: 0.4,
+          pointBackgroundColor: "#6366F1",
+          pointBorderColor: "#fff",
+          pointBorderWidth: 2,
+          pointRadius: 4,
+          pointHoverRadius: 6,
+        },
+      ],
+    };
   };
 
-  const lineChartOptions = {
+  const getUserStatusChartData = () => {
+    if (!dashboardData) return { labels: [], datasets: [] };
+
+    return {
+      labels: ["Active Users", "Inactive Users"],
+      datasets: [
+        {
+          data: [
+            dashboardData.totalActiveUsers,
+            dashboardData.totalInActiveUsers,
+          ],
+          backgroundColor: ["#10B981", "#6B7280"],
+          borderColor: ["#fff", "#fff"],
+          borderWidth: 2,
+        },
+      ],
+    };
+  };
+
+  const getCompanyStatusChartData = () => {
+    if (!dashboardData) return { labels: [], datasets: [] };
+
+    return {
+      labels: ["Active Companies", "Inactive Companies"],
+      datasets: [
+        {
+          data: [
+            dashboardData.totalActiveCompany,
+            dashboardData.totalInActiveCompany,
+          ],
+          backgroundColor: ["#10B981", "#6B7280"],
+          borderColor: ["#fff", "#fff"],
+          borderWidth: 2,
+        },
+      ],
+    };
+  };
+
+  const getRequestStatusChartData = () => {
+    if (!dashboardData) return { labels: [], datasets: [] };
+
+    return {
+      labels: ["In Progress", "Completed", "Submitted", "Rejected"],
+      datasets: [
+        {
+          label: "Number of Requests",
+          data: [
+            dashboardData.inProgressRequest,
+            dashboardData.totalCompletedRequest,
+            dashboardData.totalSubmittedRequest,
+            dashboardData.totalRejectedRequest,
+          ],
+          backgroundColor: [
+            "rgba(59, 130, 246, 0.8)",
+            "rgba(16, 185, 129, 0.8)",
+            "rgba(139, 92, 246, 0.8)",
+            "rgba(239, 68, 68, 0.8)",
+          ],
+          borderColor: ["#3B82F6", "#10B981", "#8B5CF6", "#EF4444"],
+          borderWidth: 1,
+          borderRadius: 8,
+        },
+      ],
+    };
+  };
+
+  const chartOptions = {
+    responsive: true,
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: false
-      }
+        position: "bottom" as const,
+        labels: {
+          boxWidth: 12,
+          padding: 15,
+          font: {
+            size: 11,
+          },
+        },
+      },
+      tooltip: {
+        backgroundColor: "#fff",
+        titleColor: "#1F2937",
+        bodyColor: "#6B7280",
+        borderColor: "#E5E7EB",
+        borderWidth: 1,
+        padding: 8,
+        callbacks: {
+          label: function (context: any) {
+            let label = context.dataset.label || "";
+            if (label) label += ": ";
+            label += context.parsed.y || context.parsed;
+            return label;
+          },
+        },
+      },
     },
     scales: {
       y: {
         beginAtZero: true,
         grid: {
-          color: '#f3f4f6'
-        }
+          color: "#F3F4F6",
+        },
+        ticks: {
+          font: {
+            size: 11,
+          },
+        },
       },
       x: {
         grid: {
-          display: false
-        }
-      }
-    }
+          display: false,
+        },
+        ticks: {
+          font: {
+            size: 11,
+          },
+        },
+      },
+    },
   };
 
-  const pieChartData = {
-    labels: Object.keys(stats?.roleDistribution || {}),
-    datasets: [
-      {
-        data: Object.values(stats?.roleDistribution || {}),
-        backgroundColor: ['#4f46e5', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981'],
-        borderWidth: 0
-      }
-    ]
+  const lineChartOptions = {
+    ...chartOptions,
+    plugins: {
+      ...chartOptions.plugins,
+      tooltip: {
+        ...chartOptions.plugins.tooltip,
+        callbacks: {
+          label: function (context: any) {
+            return `Users: ${context.parsed.y}`;
+          },
+        },
+      },
+    },
   };
 
   const pieChartOptions = {
+    responsive: true,
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: 'bottom',
+        position: "bottom" as const,
         labels: {
-          usePointStyle: true,
-          boxWidth: 8
-        }
-      }
-    }
+          boxWidth: 12,
+          padding: 15,
+          font: {
+            size: 11,
+          },
+        },
+      },
+      tooltip: {
+        backgroundColor: "#fff",
+        titleColor: "#1F2937",
+        bodyColor: "#6B7280",
+        borderColor: "#E5E7EB",
+        borderWidth: 1,
+        padding: 8,
+        callbacks: {
+          label: function (context: any) {
+            const label = context.label || "";
+            const value = context.parsed;
+            const total = context.dataset.data.reduce(
+              (a: number, b: number) => a + b,
+              0,
+            );
+            const percentage = ((value / total) * 100).toFixed(1);
+            return `${label}: ${value} (${percentage}%)`;
+          },
+        },
+      },
+    },
   };
+const LoadingSkeleton = () => (
+  <div className="min-h-screen bg-gray-50 p-4 md:p-6">
+    <div className="px-3 py-3 md:px-6 md:py-6 max-w-8xl w mx-auto">
+      {/* Header Skeleton */}
+      <div className="mb-6">
+        <Skeleton width="200px" height="32px" />
+      </div>
 
-  const getActivityIcon = (type: string) => {
-    switch (type) {
-      case 'user': return 'pi pi-user';
-      case 'role': return 'pi pi-shield';
-      case 'permission': return 'pi pi-lock';
-      case 'menu': return 'pi pi-bars';
-      default: return 'pi pi-info-circle';
-    }
-  };
+      {/* Stats Cards Skeleton - Matching your card format */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 mb-6">
+        {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
+          <div key={item} className="bg-white rounded-b-md rounded-t-md border border-indigo-100 p-3">
+            <div className="flex items-center justify-between mb-3">
+              <Skeleton width="80px" height="16px" />
+              <Skeleton shape="circle" size="36px" />
+            </div>
+            <div className="mx-auto text-center">
+              <Skeleton width="60px" height="28px" className="mx-auto" />
+            </div>
+          </div>
+        ))}
+      </div>
 
-  const getActivityColor = (type: string) => {
-    switch (type) {
-      case 'user': return 'bg-blue-100 text-blue-600';
-      case 'role': return 'bg-purple-100 text-purple-600';
-      case 'permission': return 'bg-green-100 text-green-600';
-      case 'menu': return 'bg-amber-100 text-amber-600';
-      default: return 'bg-gray-100 text-gray-600';
-    }
-  };
+      {/* Charts Row Skeleton */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
+        {[1, 2].map((item) => (
+          <div key={item} className="bg-white rounded-xl border border-gray-100 p-4">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <Skeleton shape="circle" size="28px" />
+                <Skeleton width="100px" height="20px" />
+              </div>
+              <Skeleton width="80px" height="16px" />
+            </div>
+            <Skeleton height="280px" />
+          </div>
+        ))}
+      </div>
 
-  const formatTimestamp = (timestamp: string) => {
-    const date = new Date(timestamp);
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffMins = Math.floor(diffMs / 60000);
-    const diffHours = Math.floor(diffMs / 3600000);
-    const diffDays = Math.floor(diffMs / 86400000);
+      {/* Status Distribution Skeletons */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {[1, 2].map((item) => (
+          <div key={item} className="bg-white rounded-xl border border-gray-100 p-4">
+            <div className="flex items-center gap-2 mb-4">
+              <Skeleton shape="circle" size="28px" />
+              <Skeleton width="120px" height="20px" />
+            </div>
+            <Skeleton height="280px" />
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+);
+  if (loading) {
+    return <LoadingSkeleton />;
+  }
+  if (error || !dashboardData) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-4 md:p-6 flex items-center justify-center">
+        <div className="bg-white rounded-xl shadow-sm p-6 text-center max-w-sm">
+          <XCircle className="w-12 h-12 text-red-500 mx-auto mb-3" />
+          <h3 className="text-lg font-semibold text-gray-800 mb-1">
+            Failed to Load Data
+          </h3>
+          <p className="text-gray-500 text-sm mb-4">
+            {error || "Unable to fetch dashboard data"}
+          </p>
+          <button
+            onClick={fetchDashboardData}
+            className="px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
-    if (diffMins < 60) {
-      return `${diffMins} minute${diffMins !== 1 ? 's' : ''} ago`;
-    } else if (diffHours < 24) {
-      return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
-    } else {
-      return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
-    }
-  };
+  const statsCards: StatCard[] = [
+    {
+      title: "Total Users",
+      value: dashboardData.totalUsers,
+      icon: Users,
+      color: "text-indigo-600",
+      bgColor: "bg-indigo-50",
+      borderColor: "border-indigo-100",
+    },
+    {
+      title: "Total Active Users",
+      value: dashboardData.totalActiveUsers,
+      icon: Users,
+      color: "text-emerald-600",
+      bgColor: "bg-emerald-50",
+      borderColor: "border-emerald-100",
+    },
+    {
+      title: "Total Inprogress Request",
+      value: dashboardData.inProgressRequest,
+      icon: Users,
+      color: "text-indigo-600",
+      bgColor: "bg-indigo-50",
+      borderColor: "border-indigo-100",
+    },
+    {
+      title: "Total Companies",
+      value: dashboardData.totalCompanies,
+      icon: Building2,
+      color: "text-purple-600",
+      bgColor: "bg-purple-50",
+      borderColor: "border-purple-100",
+    },
+    {
+      title: "Total Certification Requests",
+      value: dashboardData.totalCertificationRequests,
+      icon: Building2,
+      color: "text-purple-600",
+      bgColor: "bg-purple-50",
+      borderColor: "border-purple-100",
+    },
+    {
+      title: "Certifications",
+      value: dashboardData.totalCertifications,
+      icon: Award,
+      color: "text-emerald-600",
+      bgColor: "bg-emerald-50",
+      borderColor: "border-emerald-100",
+    },
+    {
+      title: "Total Commitee",
+      value: dashboardData.totalCommitee,
+      icon: Users,
+      color: "text-amber-600",
+      bgColor: "bg-amber-50",
+      borderColor: "border-amber-100",
+    },
+    {
+      title: "Completed Certification Requests",
+      value: dashboardData.totalCompletedRequest,
+      icon: CheckCircle2,
+      color: "text-emerald-600",
+      bgColor: "bg-emerald-50",
+      borderColor: "border-emerald-100",
+    },
+  ];
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 p-4 md:p-6">
-      {/* Header */}
-      <div className="max-w-8xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-          <div>
-            <h1 className="text-2xl md:text-3xl font-bold bg-linear-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
-              Dashboard
-            </h1>
-            <p className="text-sm text-gray-500 mt-1">
-              Welcome back! Here's what's happening with your application.
-            </p>
+    <div className="min-h-screen bg-gray-50">
+      <div className="px-3 py-3 md:px-6 md:py-6 max-w-8xl w mx-auto">
+        {/* Header Section */}
+     <div className="mb-6">
+  <div className="border-l-4 border-indigo-500 pl-4">
+    <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
+  </div>
+</div>
+
+        {/* Stats Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 mb-6 ">
+          {statsCards.map((stat, index) => (
+            <div
+              key={index}
+              className={`bg-white rounded-b-md rounded-t-md border border-indigo-100 p-3 hover:shadow-md transition-shadow duration-200 `}
+            >
+              <div className="flex items-center justify-between mb-3">
+                {stat.title && (
+                  <div>
+                    <p className="text-xs text-gray-500 mt-0.5">{stat.title}</p>
+                  </div>
+                )}
+                <div className={`p-2 rounded-lg ${stat.bgColor}`}>
+                  <stat.icon className={`w-5 h-5 ${stat.color}`} />
+                </div>
+              </div>
+              <div className="mx-auto text-center">
+                <p className="text-2xl font-bold text-gray-800">
+                  {stat.value.toLocaleString()}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Charts Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
+          {/* User Growth Line Chart */}
+          <div className="bg-white rounded-xl border border-gray-100 p-4">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 bg-indigo-50 rounded-lg">
+                  <TrendingUp className="w-4 h-4 text-indigo-600" />
+                </div>
+                <h3 className="text-sm font-semibold text-gray-700">
+                  User Growth
+                </h3>
+              </div>
+              <span className="text-xs text-gray-400">Last 6 months</span>
+            </div>
+            <div style={{ height: "280px" }}>
+              <Line
+                data={getUserGrowthChartData()}
+                options={lineChartOptions}
+              />
+            </div>
           </div>
-          
-        
+
+          {/* Request Status Bar Chart */}
+          <div className="bg-white rounded-xl border border-gray-100 p-4">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="p-1.5 bg-blue-50 rounded-lg">
+                <FileCheck className="w-4 h-4 text-blue-600" />
+              </div>
+              <h3 className="text-sm font-semibold text-gray-700">
+                Request Status Overview
+              </h3>
+            </div>
+            <div style={{ height: "280px" }}>
+              <Bar data={getRequestStatusChartData()} options={chartOptions} />
+            </div>
+          </div>
         </div>
 
-        {/* Statistics Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6">
-          {/* Users Card */}
-          <Card className="shadow-lg hover:shadow-xl transition-shadow duration-200 border-l-4 border-blue-500 rounded-xl">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-500 mb-1">Total Users</p>
-                {loading ? (
-                  <Skeleton width="80px" height="32px" />
-                ) : (
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-2xl font-bold text-gray-800">{stats?.totalUsers}</span>
-                    <span className="text-xs text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
-                      +{stats?.activeUsers} active
-                    </span>
-                  </div>
-                )}
+        {/* Status Distribution Charts */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {/* User Distribution Pie Chart */}
+          <div className="bg-white rounded-xl border border-gray-100 p-4">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="p-1.5 bg-emerald-50 rounded-lg">
+                <Users className="w-4 h-4 text-emerald-600" />
               </div>
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                <i className="pi pi-users text-blue-600 text-xl"></i>
-              </div>
+              <h3 className="text-sm font-semibold text-gray-700">
+                User Distribution
+              </h3>
             </div>
-    
-          </Card>
+            <div style={{ height: "280px" }}>
+              <Pie data={getUserStatusChartData()} options={pieChartOptions} />
+            </div>
+          </div>
 
-          {/* Roles Card */}
-          <Card className="shadow-lg hover:shadow-xl transition-shadow duration-200 border-l-4 border-purple-500 rounded-xl">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-500 mb-1">Total Roles</p>
-                {loading ? (
-                  <Skeleton width="80px" height="32px" />
-                ) : (
-                  <span className="text-2xl font-bold text-gray-800">{stats?.totalRoles}</span>
-                )}
+          {/* Company Distribution Pie Chart */}
+          <div className="bg-white rounded-xl border border-gray-100 p-4">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="p-1.5 bg-purple-50 rounded-lg">
+                <Building2 className="w-4 h-4 text-purple-600" />
               </div>
-              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                <i className="pi pi-shield text-purple-600 text-xl"></i>
-              </div>
+              <h3 className="text-sm font-semibold text-gray-700">
+                Company Distribution
+              </h3>
             </div>
-     
-          </Card>
-
-          {/* Permissions Card */}
-          <Card className="shadow-lg hover:shadow-xl transition-shadow duration-200 border-l-4 border-green-500 rounded-xl">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-500 mb-1">Total Permissions</p>
-                {loading ? (
-                  <Skeleton width="80px" height="32px" />
-                ) : (
-                  <span className="text-2xl font-bold text-gray-800">{stats?.totalPermissions}</span>
-                )}
-              </div>
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                <i className="pi pi-lock text-green-600 text-xl"></i>
-              </div>
+            <div style={{ height: "280px" }}>
+              <Pie
+                data={getCompanyStatusChartData()}
+                options={pieChartOptions}
+              />
             </div>
-        
-          </Card>
-
-          {/* Menus Card */}
-          <Card className="shadow-lg hover:shadow-xl transition-shadow duration-200 border-l-4 border-amber-500 rounded-xl">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-500 mb-1">Total Menus</p>
-                {loading ? (
-                  <Skeleton width="80px" height="32px" />
-                ) : (
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-2xl font-bold text-gray-800">{stats?.totalMenus}</span>
-                    <span className="text-xs text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
-                      {stats?.activeMenus} active
-                    </span>
-                  </div>
-                )}
-              </div>
-              <div className="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center">
-                <i className="pi pi-bars text-amber-600 text-xl"></i>
-              </div>
-            </div>
-     
-          </Card>
+          </div>
         </div>
-
-        {/* Charts Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-2">
-          {/* User Growth Chart */}
-          <Card className="lg:col-span-2 shadow-lg rounded-xl p-4">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-800">User Growth</h3>
-              <Tag value="+25% vs last year" severity="success" className="text-xs" />
-            </div>
-            <div style={{ height: '250px' }}>
-              {loading ? (
-                <Skeleton height="250px" />
-              ) : (
-                <Chart type="line" data={lineChartData} options={lineChartOptions} />
-              )}
-            </div>
-          </Card>
-
-          {/* Role Distribution */}
-          <Card className="shadow-lg rounded-xl p-4">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Role Distribution</h3>
-            <div style={{ height: '250px' }}>
-              {loading ? (
-                <Skeleton height="250px" />
-              ) : (
-                <Chart type="pie" data={pieChartData} options={pieChartOptions} />
-              )}
-            </div>
-          </Card>
-        </div>
-
-    
       </div>
     </div>
   );
 };
-
-export default Dashboard;

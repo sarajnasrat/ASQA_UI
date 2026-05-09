@@ -91,7 +91,7 @@ export const Sidebar = () => {
                   childActive
                     ? "bg-blue-50/80 shadow-sm"
                     : isChildHovered
-                      ? "bg-gray-100 scale-105 shadow-sm"
+                      ? "bg-gray-50/80 scale-105 shadow-sm"
                       : "bg-transparent scale-100"
                 }`}
             />
@@ -104,11 +104,16 @@ export const Sidebar = () => {
               <div className="flex items-center justify-center transition-all duration-300">
                 {child.icon ? (
                   <i
-                    className={`${child.icon} ${childActive ? "text-blue-600" : "text-gray-400"}`}
+                    className={`${child.icon} transition-colors duration-200`}
+                    style={{
+                      fontSize: "0.9375rem",
+                      fontWeight: 500,
+                      color: childActive ? "#3B82F6" : isChildHovered ? "#6B7280" : "#9CA3AF"
+                    }}
                   />
                 ) : (
                   <div
-                    className={`rounded-full transition-all duration-300 ${
+                    className={`rounded-full transition-all duration-300 w-1.5 h-1.5 ${
                       childActive
                         ? "bg-blue-500 scale-150"
                         : isChildHovered
@@ -121,11 +126,13 @@ export const Sidebar = () => {
 
               {!collapsed && (
                 <span
-                  className={`flex-1 text-sm font-medium transition-all duration-200 ${
-                    childActive
-                      ? "text-blue-700"
-                      : "text-gray-600 group-hover:text-gray-900"
-                  }`}
+                  className={`flex-1 transition-all duration-200`}
+                  style={{
+                    fontSize: "0.8125rem",
+                    fontWeight: childActive ? 600 : 450,
+                    color: childActive ? "#1E40AF" : isChildHovered ? "#374151" : "#6B7280",
+                    letterSpacing: "0.01em"
+                  }}
                 >
                   {getLabel(child)}
                 </span>
@@ -133,15 +140,20 @@ export const Sidebar = () => {
 
               {hasGrandChildren && !collapsed && (
                 <i
-                  className={`pi pi-chevron-down text-xs transition-all duration-300 ${
-                    isExpanded ? "rotate-180 text-blue-600" : "text-gray-400"
+                  className={`pi pi-chevron-down transition-all duration-300 ${
+                    isExpanded ? "rotate-180" : ""
                   }`}
+                  style={{
+                    fontSize: "0.6875rem",
+                    fontWeight: 600,
+                    color: isExpanded ? "#3B82F6" : "#9CA3AF"
+                  }}
                 />
               )}
             </div>
 
             {childActive && !collapsed && (
-              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-blue-500 rounded-r-full" />
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-4 bg-blue-500 rounded-r-full" />
             )}
           </Link>
 
@@ -154,7 +166,7 @@ export const Sidebar = () => {
               }`}
             >
               <div className="overflow-hidden">
-                <div className="flex flex-col gap-1 ml-4 pl-4 border-l-2 border-blue-100">
+                <div className="flex flex-col gap-1 ml-4 pl-3 border-l border-gray-200">
                   {renderChildren(child.children, depth + 1)}
                 </div>
               </div>
@@ -184,15 +196,15 @@ export const Sidebar = () => {
           <div
             className={`absolute inset-0 rounded-xl transition-all duration-300 ${
               active
-                ? "bg-blue-50/80 shadow-sm"
+                ? "bg-blue-50/60 shadow-sm"
                 : isHovered
-                  ? "bg-gray-100 scale-105 shadow-sm"
+                  ? "bg-gray-50/80 scale-[1.02] shadow-sm"
                   : "bg-transparent scale-100"
             }`}
           />
 
           <div
-            className={`relative flex items-center w-full px-4 py-3 ${
+            className={`relative flex items-center w-full px-3 py-3 ${
               collapsed ? "justify-center" : "justify-between"
             }`}
           >
@@ -200,16 +212,23 @@ export const Sidebar = () => {
               className={`flex items-center gap-3 ${collapsed ? "justify-center" : ""}`}
             >
               <i
-                className={`${item.icon} text-xl ${
-                  active ? "text-blue-600" : "text-gray-400"
-                }`}
+                className={`${item.icon} transition-colors duration-200`}
+                style={{
+                  fontSize: "1.125rem",
+                  fontWeight: 500,
+                  color: active ? "#3B82F6" : isHovered ? "#4B5563" : "#9CA3AF"
+                }}
               />
 
               {!collapsed && (
                 <span
-                  className={`font-medium ${
-                    active ? "text-blue-700 font-semibold" : "text-gray-600"
-                  }`}
+                  className={`transition-all duration-200`}
+                  style={{
+                    fontSize: "0.875rem",
+                    fontWeight: active ? 700 : 500,
+                    color: active ? "#1E40AF" : isHovered ? "#111827" : "#4B5563",
+                    letterSpacing: "0.01em"
+                  }}
                 >
                   {getLabel(item)}
                 </span>
@@ -218,15 +237,20 @@ export const Sidebar = () => {
 
             {hasChildren && !collapsed && (
               <i
-                className={`pi pi-chevron-down transition-transform ${
-                  isExpanded ? "rotate-180 text-blue-600" : "text-gray-400"
+                className={`pi pi-chevron-down transition-all duration-300 ${
+                  isExpanded ? "rotate-180" : ""
                 }`}
+                style={{
+                  fontSize: "0.75rem",
+                  fontWeight: 600,
+                  color: isExpanded ? "#3B82F6" : "#9CA3AF"
+                }}
               />
             )}
           </div>
 
           {active && !collapsed && (
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-blue-500 rounded-r-full" />
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-6 bg-blue-500 rounded-r-full" />
           )}
         </div>
 
@@ -234,12 +258,12 @@ export const Sidebar = () => {
           <div
             className={`grid transition-all duration-400 ease-in-out ${
               isExpanded
-                ? "grid-rows-[1fr] opacity-100 mt-2"
+                ? "grid-rows-[1fr] opacity-100 mt-1.5"
                 : "grid-rows-[0fr] opacity-0"
             }`}
           >
             <div className="overflow-hidden">
-              <div className="flex flex-col gap-1 ml-4 pl-4 border-l-2 border-blue-100">
+              <div className="flex flex-col gap-1 ml-5 pl-3 border-l border-gray-200">
                 {renderChildren(item.children)}
               </div>
             </div>
@@ -261,7 +285,12 @@ export const Sidebar = () => {
           <div className="absolute inset-0 rounded-2xl animate-ping opacity-20" />
           <div className="relative bg-blue-600 text-white p-4 rounded-2xl shadow-2xl transition-all duration-300 group-hover:shadow-blue-500/30 group-hover:scale-110 active:scale-95">
             <i
-              className={`pi ${isMobileOpen ? "pi-times" : "pi-bars"} text-2xl transition-transform duration-300 group-hover:rotate-180`}
+              className={`pi ${isMobileOpen ? "pi-times" : "pi-bars"}`}
+              style={{
+                fontSize: "1.25rem",
+                fontWeight: 600,
+                color: "white"
+              }}
             />
           </div>
         </div>
@@ -287,26 +316,40 @@ export const Sidebar = () => {
         `}
       >
         {/* Header */}
-        <div className="relative h-20 px-4 flex items-center shrink-0 overflow-hidden border-b border-gray-200">
+        <div className="relative h-20 px-5 flex items-center shrink-0 overflow-hidden border-b border-gray-200">
           {/* Content */}
           <div className="relative flex items-center justify-between w-full z-10">
             {/* Logo section - Always visible */}
-            <div className="flex items-center gap-4 min-w-0">
+            <div className="flex items-center gap-3 min-w-0">
               <div className="relative group shrink-0">
                 <img
                   src="/aqsa.jpg"
                   alt="ASQA"
-                  className="relative h-12 w-12 object-contain rounded-lg bg-white p-1.5 shadow-md"
+                  className="relative h-10 w-10 object-contain rounded-lg bg-white p-1 shadow-md"
                 />
               </div>
 
               {/* Title - Only shown when not collapsed */}
               {!collapsed && (
                 <div className="animate-slide-in shrink-0">
-                  <h1 className="text-2xl font-bold text-gray-800 tracking-tight leading-none">
+                  <h1 
+                    className="text-gray-800 tracking-tight leading-tight"
+                    style={{
+                      fontSize: "1.25rem",
+                      fontWeight: 700,
+                      letterSpacing: "-0.02em"
+                    }}
+                  >
                     ASQA
                   </h1>
-                  <p className="text-xs font-medium text-blue-500 uppercase tracking-wider">
+                  <p 
+                    className="text-blue-600 uppercase tracking-wider"
+                    style={{
+                      fontSize: "0.625rem",
+                      fontWeight: 600,
+                      letterSpacing: "0.05em"
+                    }}
+                  >
                     Management System
                   </p>
                 </div>
@@ -319,9 +362,14 @@ export const Sidebar = () => {
               className="relative group shrink-0"
               title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
             >
-              <div className="relative p-2 rounded-xl hover:bg-gray-100 text-gray-500 hover:text-blue-600 transition-all duration-300">
+              <div className="relative p-2 rounded-lg hover:bg-gray-100 transition-all duration-300">
                 <i
-                  className={`pi ${collapsed ? "pi-angle-right" : "pi-angle-left"} text-xl`}
+                  className={`pi ${collapsed ? "pi-angle-right" : "pi-angle-left"}`}
+                  style={{
+                    fontSize: "0.875rem",
+                    fontWeight: 600,
+                    color: "#9CA3AF"
+                  }}
                 />
               </div>
             </button>
@@ -329,16 +377,39 @@ export const Sidebar = () => {
         </div>
 
         {/* Menu with Smooth Scrolling */}
-        <nav className="flex-1 overflow-y-auto py-6 px-3 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent hover:scrollbar-thumb-gray-300">
+        <nav className="flex-1 overflow-y-auto py-4 px-2 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent hover:scrollbar-thumb-gray-300">
           {menuItems.length > 0 ? (
-            <div className="space-y-1">
+            <div className="space-y-0.5">
               {menuItems.map((item) => renderMenuItem(item))}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center h-full text-center text-gray-400 py-12 px-4">
-              <i className="pi pi-menu text-4xl mb-3 opacity-30" />
-              <p className="text-sm font-medium">No menu items loaded</p>
-              <p className="text-xs opacity-50 mt-1">Check back later</p>
+            <div className="flex flex-col items-center justify-center h-full text-center py-12 px-4">
+              <i 
+                className="pi pi-menu mb-3 opacity-30"
+                style={{
+                  fontSize: "2rem",
+                  fontWeight: 300,
+                  color: "#9CA3AF"
+                }}
+              />
+              <p 
+                className="text-gray-400"
+                style={{
+                  fontSize: "0.8125rem",
+                  fontWeight: 500
+                }}
+              >
+                No menu items loaded
+              </p>
+              <p 
+                className="text-gray-300 mt-1"
+                style={{
+                  fontSize: "0.6875rem",
+                  fontWeight: 400
+                }}
+              >
+                Check back later
+              </p>
             </div>
           )}
         </nav>
@@ -347,12 +418,27 @@ export const Sidebar = () => {
         <div className="relative shrink-0 border-t border-gray-200">
           <div className="relative p-4 text-center">
             {!collapsed && (
-              <p className="text-xs text-gray-400 font-medium">
-                © 2026 ASQA System
-                <span className="block text-[10px] text-blue-300 mt-0.5">
+              <div>
+                <p 
+                  className="text-gray-400"
+                  style={{
+                    fontSize: "0.6875rem",
+                    fontWeight: 500,
+                    letterSpacing: "0.01em"
+                  }}
+                >
+                  © 2026 ASQA System
+                </p>
+                <p 
+                  className="text-blue-300 mt-0.5"
+                  style={{
+                    fontSize: "0.625rem",
+                    fontWeight: 400
+                  }}
+                >
                   v2.0.0
-                </span>
-              </p>
+                </p>
+              </div>
             )}
           </div>
         </div>
@@ -379,6 +465,21 @@ export const Sidebar = () => {
             opacity: 1;
             transform: translateX(0);
           }
+        }
+        
+        /* Custom scrollbar */
+        .scrollbar-thin::-webkit-scrollbar {
+          width: 4px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+          background: #E5E7EB;
+          border-radius: 20px;
+        }
+        .scrollbar-thin:hover::-webkit-scrollbar-thumb {
+          background: #D1D5DB;
         }
       `}</style>
     </>

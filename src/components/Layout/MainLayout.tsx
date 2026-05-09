@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { Sidebar } from "./sidebar/Sidebar";
 import { Dashboard } from "../feature/Dashboard";
 import { UserList } from "../feature/user/UserList";
@@ -11,7 +11,6 @@ import ViewDetails from "../feature/role/ViewDetails";
 import { RoleList } from "../feature/role/RoleList";
 import { PermissionList } from "../feature/permission/PermissionList";
 import { Navbar } from "./navbar/Navebar";
-import { CountryCreate } from "../feature/location/country/CountryCreate";
 import { CountryList } from "../feature/location/country/CountryList";
 import { DistrictList } from "../feature/location/district/DistrictList";
 import { ProvinceList } from "../feature/location/province/ProvinceList";
@@ -22,20 +21,31 @@ import { CompanyCreate } from "../feature/company/CompanyCreate";
 import CompanyUpdate from "../feature/company/CompanyUpdate";
 import { CertificationRequestList } from "../feature/certification-request/CertificationRequestList";
 import { CertificationRequestUpdate } from "../feature/certification-request/CertificationRequestUpdate";
-import { CertificationDetails } from "../feature/certification-request/CertificationDetails";
 import { AttachmentList } from "../feature/attachement/AttachementList";
 import { AttachmentCreate } from "../feature/attachement/AttachmentCreate";
 import { CertificationList } from "../feature/certification/CertificationList";
-import { PrintCertification } from "../feature/certification/PrintCertification";
+
 import { PrintCertificationPage } from "../feature/certification/PrintCertificationPage";
 import ZoneList from "../feature/zone/ZoneList";
 import { CommiteeList } from "../feature/commitee/CommiteeList";
 import CommiteeMemberList from "../feature/commiteemember/CommiteeMemberList";
 import { CommiteeAssignmentList } from "../feature/commiteeassignment/CommiteeAssignmentList";
+import CertificationRequestView from "../feature/certification-request/CertificationRequestView";
+import { CertificationRequestListDeadLine } from "../feature/setting-deadline/CertificationRequestListDeadLine";
+import { CertificationRequestListStandardManagement } from "../feature/standardmanagement/CertificationRequestListStandardManagement";
+import { ProtectedRoute } from "../../routes/ProtectedRoute";
+import { UnauthorizedDialog } from "../common/UnauthorizedPage";
+import { CertificationRequestPayment } from "../feature/certificationpayment/CertificationRequestPayment";
+
 
 export const MainLayout = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [showUnauthorized, setShowUnauthorized] = useState(false);
+  const [previousPath, setPreviousPath] = useState<string>('/dashboard');
+  
+  const location = useLocation();
+  const navigate = useNavigate();
 
   // Toggle sidebar collapse (desktop)
   const toggleSidebarCollapse = () => {
@@ -50,6 +60,26 @@ export const MainLayout = () => {
   // Close mobile sidebar
   const closeMobileSidebar = () => {
     setMobileSidebarOpen(false);
+  };
+
+  // Track previous path for "Go Back" functionality
+  useEffect(() => {
+    if (location.pathname !== '/unauthorized') {
+      setPreviousPath(location.pathname);
+    }
+  }, [location]);
+
+  // Watch for unauthorized route and show dialog
+  useEffect(() => {
+    if (location.pathname === "/unauthorized") {
+      setShowUnauthorized(true);
+    }
+  }, [location.pathname]);
+
+  const handleCloseUnauthorized = () => {
+    setShowUnauthorized(false);
+    // Navigate back to previous page or dashboard
+    navigate(previousPath, { replace: true });
   };
 
   return (
@@ -80,61 +110,66 @@ export const MainLayout = () => {
               <Route path="users/role/:id" element={<ViewDetails />} />
               <Route path="users/roles" element={<RoleList />} />
               <Route path="users/permissions" element={<PermissionList />} />
-
-              <Route path="/country" element={<CountryList />} />
-              <Route path="/district" element={<DistrictList />} />
-              <Route path="/province" element={<ProvinceList />} />
-              <Route path="/category" element={<CategoryList />} />
-   <Route path="/commitee-assignment-list" element={<CommiteeAssignmentList />} />
-              <Route path="/commitee-list" element={<CommiteeList />} />
+              
+              {/* Protected Routes */}
               <Route
-                path="/commitee-members-list"
-                element={<CommiteeMemberList />}
-              />
-
-              <Route
-                path="/certification-request"
-                element={<CertificationRequestList />}
-              />
-              <Route path="/zone" element={<ZoneList />} />
-
-              <Route
-                path="/certifications/print/:id"
-                element={<PrintCertificationPage />}
-              />
-              <Route path="/certifications" element={<CertificationList />} />
-              <Route
-                path="/certification-request/edit/:id"
+                path="country"
                 element={
-                  <CertificationRequestUpdate
-                    requestId={null}
-                    currentStatus={""}
-                    visible={false}
-                    onHide={() => {}}
-                    onSuccess={() => {}}
-                  />
+                  <ProtectedRoute permission="VIEW_COUNTRY">
+                    <CountryList />
+                  </ProtectedRoute>
                 }
               />
-              <Route path="/company" element={<CompanyList />} />
-              <Route path="/admin-attachments" element={<AttachmentList />} />
+              <Route path="district" element={<DistrictList />} />
+              <Route path="province" element={<ProvinceList />} />
+              <Route path="category" element={<CategoryList />} />
+              <Route path="commitee-assignment-list" element={<CommiteeAssignmentList />} />
+              <Route path="commitee-list" element={<CommiteeList />} />
+              <Route path="commitee-members-list" element={<CommiteeMemberList />} />
+              <Route path="certification-request" element={<CertificationRequestList />} />
+              <Route path="certification-request-deadline" element={<CertificationRequestListDeadLine />} />
+              <Route path="standard-management" element={<CertificationRequestListStandardManagement />} />
+                            <Route path="payment-management" element={<CertificationRequestPayment />} />
+              <Route path="zone" element={<ZoneList />} />
+              <Route path="certifications/print/:id" element={<PrintCertificationPage />} />
+              <Route path="certifications" element={<CertificationList />} />
               <Route
-                path="/attachments/create"
-                element={
-                  <AttachmentCreate
-                    referenceId={0}
-                    referenceType="COMPANY"
-                    onSuccess={() => {}}
-                  />
-                }
+                path="certification-request/edit/:id"
+                element={<CertificationRequestUpdate
+                  requestId={null}
+                  currentStatus={""}
+                  visible={false}
+                  onHide={() => {}}
+                  onSuccess={() => {}}
+                />}
               />
-              <Route path="/company/create" element={<CompanyCreate />} />
-              <Route path="/company/view/:id" element={<CompanyDetails />} />
-              <Route path="/company/edit/:id" element={<CompanyUpdate />} />
+              <Route path="certification-request/view/:id" element={<CertificationRequestView />} />
+              <Route path="company" element={<CompanyList />} />
+              <Route path="admin-attachments" element={<AttachmentList />} />
+              <Route
+                path="attachments/create"
+                element={<AttachmentCreate
+                  referenceId={0}
+                  referenceType="COMPANY"
+                  onSuccess={() => {}}
+                />}
+              />
+              <Route path="company/create" element={<CompanyCreate />} />
+              <Route path="company/view/:id" element={<CompanyDetails />} />
+              <Route path="company/edit/:id" element={<CompanyUpdate />} />
+              
+              {/* Remove the unauthorized route from here */}
               <Route path="*" element={<div>404 Not Found</div>} />
             </Routes>
           </div>
         </main>
       </div>
+
+      {/* Unauthorized Dialog - Rendered outside Routes so it overlays everything */}
+      <UnauthorizedDialog 
+        isOpen={showUnauthorized} 
+        onClose={handleCloseUnauthorized} 
+      />
     </div>
   );
 };

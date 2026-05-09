@@ -137,7 +137,7 @@ export const CommiteeAssingmentUpdate: React.FC<Props> = ({
         )}
 
         {/* ================= ACTIONS ================= */}
-        <div className="flex justify-end gap-2 mt-4">
+        <div className="flex w-3xs justify-end gap-2 mt-4">
           <Button
             label="Cancel"
             className="p-button-outlined border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-md transition-all"

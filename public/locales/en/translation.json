@@ -160,7 +160,25 @@
     "ownerInformation": "Owner Information",
     "changeLogo": "Change Logo",
     "selectLogo": "Select Logo",
+    "visitWebsite": "Visit Website",
+    "businessInformation": "Business Information",
+    "companyStats": "Company Statistics",
+    "quickContact": "Quick Contact",
+    "categoriesCount": "Categories",
+    "documentsCount": "Documents",
+    "socialLinks": "Social Links",
+    "links": "Links",
+    "businessLogo": "Business Logo",
+    "companyLogo": "Company Logo",
+    "companyLogos": "Company Logos",
+    "basicInfo": "Basic Information",
+    "contactInfo": "Contact Information",
+    "registrationInfo": "Registration Information",
+    "additionalInfo": "Additional Information",
+    "companyInfo": "Company Information",
+    "jawazIssueDate": "Jawaz Issue Date",
     "labels": {
+      "companyName": "Company Name",
       "companyNameEN": "Company name (English)",
       "companyNameDR": "نام شرکت به دری",
       "companyNamePS": "نام شرکت به پشتو",
@@ -177,7 +195,7 @@
       "jawazExpiryDate": "Jawaz Expiry Date",
       "jawazIssueDate": "Jawaz Issue Date",
       "tinNumber": "TIN Number",
-      "aboutCompanyEn": "About Company (EN)",
+      "aboutCompanyEn": "About Company",
       "aboutCompanyDr": "About Company (DR)",
       "aboutCompanyPs": "About Company (PS)",
       "websiteUrl": "Website URL",
@@ -192,7 +210,6 @@
       "selectCategories": "Select Categories",
       "selectCategoriesHint": "Select at least one category",
       "aboutCompany": "About Company",
-
       "companyLogo": "Company Logo",
       "bussinessLogo": "Business Logo",
       "ownerNamePs": "Owner Name Pashto",
@@ -204,7 +221,30 @@
       "basicInfo": "Basic Information",
       "contactInfo": "Contact Information",
       "registrationInfo": "Registration Information",
-      "additionalInfo": "Additional Information"
+      "additionalInfo": "Additional Information",
+      "companyInfo": "Company Information",
+      "active": "Active",
+      "inactive": "Inactive",
+      "verifiedCompany": "Verified Company",
+      "verifiedMessage": "This company has been verified by ASQA",
+      "registeredMember": "Registered Member",
+      "businessDetails": "Business Details",
+      "companyAttachments": "Company Attachments",
+      "visitWebsite": "Visit Website",
+      "businessInformation": "Business Information",
+      "companyStats": "Company Statistics",
+      "quickContact": "Quick Contact",
+      "categoriesCount": "Categories",
+      "documentsCount": "Documents",
+      "links": "Links",
+      "businessLogo": "Business Logo",
+      "jawazIssueDate": "Jawaz Issue Date",
+      "ownerInformation": "Owner Information",
+      "jawazInformation": "Jawaz Information",
+      "changeLogo": "Change Logo",
+      "selectLogo": "Select Logo",
+      "companytyperequired": "Company type is required",
+      "selectvalid": "Select a valid company type"
     },
     "placeholder": {
       "companyNameEN": "Enter company name in English",
@@ -487,7 +527,24 @@
     "attachment_uploaded_successfully": "Attachment uploaded successfully",
     "failed_to_upload_attachment": "Failed to upload attachment",
     "failed_to_load_companies": "Failed to load companies",
-    "no_companies_found": "No companies found. Please add a company first."
+    "no_companies_found": "No companies found. Please add a company first.",
+    "required_documents_title": "Required Documents",
+    "combine_documents_message": "Combine all documents into ONE PDF file",
+    "combine_documents_description": "Please merge all required documents into a single PDF file.",
+    "drag_drop_message": "Drag and drop your combined PDF file here, or click to browse",
+    "supported_formats_simple": "Supported format: PDF only Max 10MB",
+    "browse_files": "Browse Files",
+    "selected_file": "Selected File",
+    "saved_file": "Saved File",
+    "saved_attachment": "Saved attachment",
+    "previous_document_loaded": "Previous document loaded",
+    "document_saved_successfully": "Document saved successfully",
+    "update_attachment": "Update Attachment",
+    "complete_registration": "Complete Registration",
+    "validation": {
+      "file_type": "Only PDF files are supported.",
+      "file_size": "File size must be less than 10MB."
+    }
   },
   "nav": {
     "home": "Home",
@@ -546,16 +603,29 @@
         "subtitle": "Choose the right certification path for your business",
         "steps": {
           "1": "Select Request Type",
-          "2": "Select Certification Type",
-          "3": "Register Company",
-          "4": "Complete Documentation",
-          "5": "Get Certified"
+          "2": "Select Request Type",
+          "3": "Select Certification Type",
+          "4": "Register Company",
+          "5": "Complete Documentation",
+          "6": "Get Certified"
         },
         "progress": "Step 1 of 5",
         "progressLabel": "Request & Certification Selection"
       },
+      "mainType": {
+        "title": " Select Certification Type",
+        "subtitle": "Choose the certification that this is for Internal or External",
+        "internal": {
+          "title": "Internal",
+          "description": "this certification for internal use"
+        },
+        "external": {
+          "title": "International",
+          "description": "this certification for external use "
+        }
+      },
       "requestType": {
-        "title": "1. Select Request Type",
+        "title": "Select Request Type",
         "subtitle": "Choose whether this is a new certification or renewal",
         "new": {
           "title": "New Certification",
@@ -567,7 +637,7 @@
         }
       },
       "certificationType": {
-        "title": "2. Select Certification Type",
+        "title": "Select Certification Type",
         "subtitle": "Choose the certification that matches your business needs",
         "domestic": {
           "title": "Domestic Quality",
@@ -639,10 +709,19 @@
     "reportToCommittee": "Report To Committee",
     "reportApproved": "Report Approved",
     "reportRejected": "Report Rejected",
-    "requireStandard":"Add Standards",
-    "deadlineRequired":"Set Deadline",
-    "committeeRequired":"Assign to Committee",
+    "requireStandard": "Add Standards",
+    "deadlineRequired": "Set Deadline",
+    "startReview": "Start Review",
+    "reviewReport": "Review Report",
+    "requestPayment": "Request Payment",
+
+    "committeeRequired": "Assign to Committee",
+    "requestDetails": "Request Details",
+    "requestInfo": "Request Information",
+    "totalDocuments": "Total Documents",
+    "requestAttachments": "Request Attachments",
     "labels": {
+      "duration": "Duration",
       "serialNumber": "Serial Number",
       "trackingNumber": "Tracking Number",
       "requestType": "Request Type",
@@ -650,7 +729,13 @@
       "certificationType": "Certification Type",
       "createdDate": "Created Date",
       "updatedDate": "Updated Date",
-      "deleted": "Deleted"
+      "deleted": "Deleted",
+      "deadline": "Deadline",
+      "attachments": "Attachment",
+      "requestDetails": "Request Details",
+      "requestInfo": "Request Information",
+      "totalDocuments": "Total Documents",
+      "requestAttachments": "Request Attachments"
     },
     "placeholder": {
       "requestType": "Select request type",
@@ -720,11 +805,38 @@
   "registration": {
     "title": "Company Registration",
     "subtitle": "Complete the multi-step registration process",
+    "confirmation": {
+      "title": "Confirm Submission",
+      "message": "Are you sure you want to submit this registration request?",
+      "warning": "Once submitted, you cannot modify the information. Please review all details carefully.",
+      "confirm": "Yes, Submit Registration",
+      "success": {
+      "title": "✅ Request Submitted Successfully!",
+      "message": "Your certification request has been submitted successfully.",
+      "trackingLabel": "📋 Your Tracking Number",
+      "trackingHint": "💡 Save this number to track your request status",
+      "trackRequest": "Track My Request",
+      "viewCompanies": "View Companies",
+      "goHome": "Go Home"
+    },
+    "toasts": {
+      "trackingCopied": "Tracking number copied to clipboard!"
+    }
+    },
     "steps": {
       "companyInfo": "Company Information",
       "contactPerson": "Contact Person",
       "documents": "Documents & Media",
-      "review": "Review & Submit"
+      "reviewSubmit": "Review & Submit",
+      "certificationrequest": "Certification Request",
+      "review": {
+        "completionStatus": "Registration Progress",
+        "ready": "Ready for Submission",
+        "pleaseConfirm": "Please Review Before Submission",
+        "confirmInfo": "All company and contact information is accurate",
+        "confirmDocuments": "All required documents have been uploaded",
+        "confirmAccuracy": "The information provided is true and complete"
+      }
     },
     "leftPanel": {
       "title": "Complete each step to receive your certification",
@@ -805,7 +917,7 @@
     "description": "Description",
     "type": "Committee Type",
     "active": "Active",
-    
+
     "updated": "Committee updated successfully",
     "deleted": "Committee deleted successfully",
     "deleteConfirm": "Are you sure you want to delete committee \"{{name}}\"?",
@@ -825,7 +937,7 @@
       "committee": "Committee",
       "company": "Company",
       "deadline": "Deadline",
-      "remarks": "Remarks",
+      "reason": "Comment/Reason",
       "requestType": "Request Type",
       "member": "Member",
       "role": "Role",
@@ -843,7 +955,12 @@
       },
       "status": {
         "ACTIVE": "Active",
-        "INACTIVE": "Inactive"
+        "INACTIVE": "Inactive",
+        "assinged": "Assinged",
+        "pinding": "Pending",
+        "rejected": "Rejected",
+        "in_progress": "In Progress",
+        "completed": "Compeleted"
       }
     },
     "member": {
@@ -860,6 +977,8 @@
   },
 
   "common": {
+    "continue": "Continue",
+    "copy": "Copy",
     "save": "Save",
     "cancel": "Cancel",
     "delete": "Delete",
@@ -881,6 +1000,20 @@
     "refresh": "Refresh",
     "noData": "No data available",
     "back": "Back",
+    "loading": "Loading...",
+    "notFound": "Not Found",
+    "download": "Download",
+    "previous": "Previous",
+    "completion": "Completion",
+    "quickStats": "Quick Stats",
+    "processingTime": "Processing Time",
+    "weeks": "weeks",
+    "supportPriority": "Support Priority",
+    "high": "High",
+    "notSpecified": "Not specified",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "noDocuments": "No documents attached",
 
     "saveAndContinue": "Save & Continue",
     "status": "Status",

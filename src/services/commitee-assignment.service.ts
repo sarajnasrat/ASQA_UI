@@ -13,6 +13,21 @@ export const CommiteeAssignmentService = {
   getAllPaginated(params?: any) {
     return httpClient.get(`${BASE_URL}`, { params });
   },
+  getAllPaginatedByStatus(
+  status: string,
+  page: number = 0,
+  size: number = 10,
+  sort: string = 'id,desc'
+) {
+  return httpClient.get(`${BASE_URL}/get-all`, {
+    params: {
+      status: status,
+      page: page,
+      size: size,
+      sort: sort,
+    },
+  });
+},
 getByCommitteeIds(committeeIds: number[], params?: any) {
   return httpClient.get(`${BASE_URL}/committee`, {
     params: {

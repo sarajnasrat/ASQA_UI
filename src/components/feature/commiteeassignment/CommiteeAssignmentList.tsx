@@ -17,6 +17,7 @@ import { DynamicTable } from "../../common/DynamicTable";
 
 import CommiteeAssignmentService from "../../../services/commitee-assignment.service";
 import { CommiteeAssingmentUpdate } from "./CommiteeAssingmentUpdate";
+import StatusTabMenu, { type StatusTabItem } from "../../common/StatusTabMenu";
 
 export const CommiteeAssignmentList: React.FC = () => {
   const { t } = useTranslation();
@@ -39,34 +40,62 @@ export const CommiteeAssignmentList: React.FC = () => {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const userRole = user.roles[0]; // Assuming single role, adjust if multiple roles exist
   console.log("Committee IDs from localStorage:", committeeIds);
+
+    const [status, setStatus] = useState<string>("ASSIGNED");
+    const [activeIndex, setActiveIndex] = useState(0);
   // ================= LOAD DATA =================
-const loadData = async () => {
-  setLoading(true);
-  const response = await handleApi(
 
-    () =>
+    const loadData = async () => {
+      try {
+        setLoading(true);
+  
+        const res = await CommiteeAssignmentService.getAllPaginatedByStatus(
+          status,
+          first / rows,
+          rows,
+          "id,desc",
+        );
+  
+        setData(res.data.data);
+        setTotalRecords(res.data.totalElements);
+      } catch (error) {
+        toast.current?.show({
+          severity: "error",
+          summary: t("common.error"),
+          detail: t("certificationRequest.loadFailed"),
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+// const loadData = async () => {
+//   setLoading(true);
+//   const response = await handleApi(
+
+//     () =>
       
-      CommiteeAssignmentService.getByCommitteeIds(committeeIds, {
-        page: first / rows,
-        size: rows,
-        sort: "id,desc",
-      }),
-    () => {},
-    showError,
-    t
-  );
+//       CommiteeAssignmentService.getByCommitteeIds(committeeIds, {
+//         page: first / rows,
+//         size: rows,
+//         sort: "id,desc",
+//       }),
+//     () => {},
+//     showError,
+//     t
+//   );
 
-  if (response?.data) {
-    setData(response.data.data);
-    setTotalRecords(response.data.totalElements);
-  }
+//   if (response?.data) {
+//     setData(response.data.data);
+//     setTotalRecords(response.data.totalElements);
+//   }
 
-  setLoading(false);
-};
+//   setLoading(false);
+// };
 
   useEffect(() => {
     loadData();
-  }, [first, rows]);
+  }, [first, rows,status]);
 
   // ================= DELETE =================
   const handleDelete = async (id: number) => {
@@ -203,7 +232,7 @@ const columns = [
 
   {
     field: "remarks",
-    header: t("commitee.assignment.remarks"),
+    header: t("commitee.assignment.reason"),
   },
 
   // ================= ACTION =================
@@ -230,6 +259,32 @@ const columns = [
       />
     </div>
   );
+  const statusTabs: StatusTabItem[] = [
+    {
+      label: t("commitee.assignment.status.assinged"),
+      value: "ASSIGNED",
+      icon: "pi pi-send",
+    },
+
+       {
+      label: t("commitee.assignment.status.in_progress"),
+      value: "IN_PROGRESS",
+      icon: "pi pi-exclamation-circle",
+    },
+
+    {
+      label: t("commitee.assignment.status.completed"),
+      value: "COMPLETED",
+      icon: "pi pi-exclamation-circle",
+    },
+       {
+      label: t("commitee.assignment.status.rejected"),
+      value: "REJECTED",
+      icon: "pi pi-cancel",
+    }
+
+ 
+  ];
 
   return (
     <>
@@ -240,6 +295,16 @@ const columns = [
         items={[
           { label: t("commitee.assignment.list"), url: "/commitee-assignment" },
         ]}
+      />
+
+            <StatusTabMenu
+        items={statusTabs}
+        activeIndex={activeIndex}
+        onChange={(index, value) => {
+          setActiveIndex(index);
+          setStatus(value);
+          setFirst(0); // reset pagination
+        }}
       />
       <CommiteeAssingmentUpdate
   visible={updateVisible}

@@ -336,7 +336,7 @@ interface FileUploadFieldProps {
 const FileUploadField: React.FC<FileUploadFieldProps> = ({
   label = "",
   name = "file",
-  maxFileSize = 10485760, // 10MB default - increased for documents
+  maxFileSize = 104857600, 
   accept = ".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.gif",
   onFileSelect,
   required = false,
@@ -353,12 +353,12 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
     if (!event.files || event.files.length === 0) return;
 
     const file = event.files[0] as File;
-    
+      console.log(file.size)
     // Validate file size
-    if (file.size > maxFileSize) {
-      alert(`File size exceeds ${formatSize(maxFileSize)}`);
-      return;
-    }
+    // if (file.size > maxFileSize) {
+    //   alert(`File size exceeds ${formatSize(maxFileSize)}`);
+    //   return;
+    // }
 
     // Clean up old preview URL
     if (previewUrl) {
@@ -401,7 +401,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
 
   const formatSize = (bytes: number): string => {
     if (bytes === 0) return '0 B';
-    const k = 1024;
+    const k = 10024;
     const sizes = ['B', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
@@ -687,7 +687,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
           ref={fileUploadRef}
           name={name}
           accept={accept}
-          maxFileSize={maxFileSize}
+          maxFileSize={1024 * 1024* 100}
           multiple={false}
           customUpload
           auto={false}

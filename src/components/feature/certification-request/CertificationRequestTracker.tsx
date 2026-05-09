@@ -287,7 +287,7 @@ const TimelineItem = ({
 export default function CertificationRequestTracker({
   requestId,
 }: {
-  requestId: number;
+  requestId: string;
 }) {
   const [history, setHistory] = useState<StatusHistory[]>([]);
   const [loading, setLoading] = useState(true);
@@ -298,7 +298,7 @@ export default function CertificationRequestTracker({
       try {
         const data =
           await CertificationRequestService.getRequestTracker(requestId);
-        setHistory(data);
+        setHistory(data.data || []);
       } catch {
         setError("Unable to load request history.");
       } finally {
@@ -333,7 +333,7 @@ export default function CertificationRequestTracker({
   /* ===================== UI ===================== */
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-10 pt-24">
+    <div className="max-w-5xl mx-auto px-4 py-10">
       <h2 className="text-2xl font-bold mb-2">
         Certification Request Progress
       </h2>

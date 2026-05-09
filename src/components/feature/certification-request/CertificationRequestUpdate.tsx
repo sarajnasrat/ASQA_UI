@@ -106,7 +106,9 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
 
   const handleSubmit = async () => {
     if (!status || !requestId) return;
-
+console.log("Selected file:", selectedFile);
+console.log("Current status:", currentStatus);
+console.log("New status:", status);
     try {
       setLoading(true);
 
@@ -128,7 +130,7 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
         showError(t("deadline.mustAssign"));
         return;
       }
-
+  
       /* ===== DEADLINE ===== */
       if (status === "DEADLINE_ASSIGNED") {
 
@@ -175,8 +177,25 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
         );
       }
 
+
       /* ===== NORMAL STATUS ===== */
-      else {
+      else if(status === "STANDARDS_PROVIDED") {
+
+        const formData = new FormData();
+        formData.append("status", status);
+        formData.append("companyId", "0");
+
+        if (status === "STANDARDS_PROVIDED" && selectedFile) {
+          formData.append("file", selectedFile);
+        }
+
+        response = await handleApi(
+          () => CertificationRequestService.standardProvided(requestId, formData),
+          showSuccess,
+          showError,
+          t
+        );
+      }   else {
 
         const formData = new FormData();
         formData.append("status", status);

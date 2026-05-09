@@ -52,7 +52,7 @@ const labelTemplate = (rowData: any) => {
 
 useEffect(() => {
     getAllMenus();
-    }, []);
+    }, [rows,first]);
 
   const handleEdit = (role: any) => {
     setEditMenuId(role.id);

@@ -13,8 +13,10 @@ import { DistrictCreate } from "./DistrictCreate";
 import { useTranslation } from "react-i18next";
 import ProvinceService from "../../../../services/province.service";
 import { DistrictUpdate } from "./DistrictUpdate";
+import { useAuth } from "../../../../context/AuthContext";
 
 export const DistrictList = () => {
+      const { hasPermission } = useAuth();
     const [districtList, setDistrictList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showCreateDialog, setShowCreateDialog] = useState(false);
@@ -26,6 +28,7 @@ export const DistrictList = () => {
         null
     );
     const [showEditDialog, setShowEditDialog] = useState(false);
+        const menu = useRef<any>(null);
 
     // Pagination
     const [first, setFirst] = useState(0);
@@ -115,13 +118,13 @@ export const DistrictList = () => {
     };
 
     const actionTemplate = (rowData: any) => {
-        const menu = useRef<any>(null);
 
         const items: MenuItem[] = [
-            { label: t("common.edit"), icon: "pi pi-pencil", command: () => handleEdit(rowData) },
-            { label: t("common.delete"), icon: "pi pi-trash", command: () => confirmDelete(rowData) },
-            { label: t("common.view"), icon: "pi pi-eye", command: () => navigate(`/districts/view/${rowData.id}`) },
-        ];
+
+           hasPermission("UPDATE_DISTRICT") && { label: t("common.edit"), icon: "pi pi-pencil", command: () => handleEdit(rowData) },
+               hasPermission("DELETE_DISRICT") &&  { label: t("common.delete"), icon: "pi pi-trash", command: () => confirmDelete(rowData) },
+               hasPermission("VIEW_DISTRICT") &&  { label: t("common.view"), icon: "pi pi-eye", command: () => navigate(`/districts/view/${rowData.id}`) }
+        ].filter(Boolean) as MenuItem[];
 
         return (
             <div className="flex justify-center">

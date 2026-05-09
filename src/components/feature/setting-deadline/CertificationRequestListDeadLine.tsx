@@ -11,15 +11,16 @@ import CertificationRequestService from "../../../services/CertificationReques.s
 
 import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
 import { DynamicTable } from "../../common/DynamicTable";
-import { CertificationRequestUpdate } from "./CertificationRequestUpdate";
+
 import type { StatusTabItem } from "../../common/StatusTabMenu";
 import type { MenuItem } from "primereact/menuitem";
 import StatusTabMenu from "../../common/StatusTabMenu";
-import { AttachmentList } from "../../common/AttachmentList";
-import i18n from "../../../i18n/i18n";
-import { Download, Eye, EyeOff, File } from "lucide-react";
 
-export const CertificationRequestList = () => {
+import i18n from "../../../i18n/i18n";
+import { Download, Eye, File } from "lucide-react";
+import { CertificationRequestUpdate } from "../certification-request/CertificationRequestUpdate";
+
+export const CertificationRequestListDeadLine = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const toast = useRef<Toast>(null);
@@ -33,22 +34,8 @@ export const CertificationRequestList = () => {
   const [totalRecords, setTotalRecords] = useState(0);
 
   // ================= STATUS STATE =================
-  const [status, setStatus] = useState<string>("SUBMITTED");
+  const [status, setStatus] = useState<string>("DEADLINE_REQUIRED");
   const [activeIndex, setActiveIndex] = useState(0);
-  //    SUBMITTED,
-  //     REGISTERED,
-  //     STANDARDS_PROVIDED,
-  //     DEADLINE_ASSIGNED,
-  //     INSPECTION_IN_PROGRESS,
-  //     REPORTED_TO_COMMITTEE,
-  //     REPORT_APPROVED,
-  //     PAYMENT_PENDING,
-  //     PAYMENT_COMPLETED,
-  //     CERTIFICATE_ISSUED,
-  //     UNDER_SUPERVISION,
-  //     REJECTED,
-  //     CANCELLED,
-  //     DRAFT
   // ================= UPDATE MODAL =================
   const [updateVisible, setUpdateVisible] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -56,38 +43,10 @@ export const CertificationRequestList = () => {
   // ================= TAB ITEMS =================
   const statusTabs: StatusTabItem[] = [
     {
-      label: t("certificationRequest.statusOptions.SUBMITTED"),
-      value: "SUBMITTED",
-      icon: "pi pi-send",
+      label: t("certificationRequest.statusOptions.DEADLINE_REQUIRED"),
+      value: "DEADLINE_REQUIRED",
+      icon: "pi pi-clock",
     },
-
-    {
-      label: t("certificationRequest.statusOptions.UNDER_REVIEW"),
-      value: "UNDER_REVIEW",
-      icon: "pi pi-search",
-    },
-
-    /* ===== STANDARD STEP ===== */
-
-    // {
-    //   label: t("certificationRequest.statusOptions.STANDARDS_REQUIRED"),
-    //   value: "STANDARDS_REQUIRED",
-    //   icon: "pi pi-exclamation-circle",
-    // },
-
-    // {
-    //   label: t("certificationRequest.statusOptions.STANDARDS_PROVIDED"),
-    //   value: "STANDARDS_PROVIDED",
-    //   icon: "pi pi-book",
-    // },
-
-    /* ===== DEADLINE STEP ===== */
-
-    // {
-    //   label: t("certificationRequest.statusOptions.DEADLINE_REQUIRED"),
-    //   value: "DEADLINE_REQUIRED",
-    //   icon: "pi pi-clock",
-    // },
 
     {
       label: t("certificationRequest.statusOptions.DEADLINE_ASSIGNED"),
@@ -95,53 +54,6 @@ export const CertificationRequestList = () => {
       icon: "pi pi-calendar",
     },
 
-    /* ===== INSPECTION ===== */
-
-    // {
-    //   label: t("certificationRequest.statusOptions.INSPECTION_IN_PROGRESS"),
-    //   value: "INSPECTION_IN_PROGRESS",
-    //   icon: "pi pi-cog",
-    // },
-
-    // {
-    //   label: t("certificationRequest.statusOptions.REPORTED_TO_COMMITTEE"),
-    //   value: "REPORTED_TO_COMMITTEE",
-    //   icon: "pi pi-users",
-    // },
-
-    {
-      label: t("certificationRequest.statusOptions.REPORT_APPROVED"),
-      value: "REPORT_APPROVED",
-      icon: "pi pi-check-circle",
-    },
-
-    /* ===== PAYMENT ===== */
-
-    // {
-    //   label: t("certificationRequest.statusOptions.PAYMENT_PENDING"),
-    //   value: "PAYMENT_PENDING",
-    //   icon: "pi pi-credit-card",
-    // },
-
-    // {
-    //   label: t("certificationRequest.statusOptions.PAYMENT_COMPLETED"),
-    //   value: "PAYMENT_COMPLETED",
-    //   icon: "pi pi-wallet",
-    // },
-
-    /* ===== FINAL ===== */
-
-    // {
-    //   label: t("certificationRequest.statusOptions.CERTIFICATE_ISSUED"),
-    //   value: "CERTIFICATE_ISSUED",
-    //   icon: "pi pi-verified",
-    // },
-
-    // {
-    //   label: t("certificationRequest.statusOptions.UNDER_SUPERVISION"),
-    //   value: "UNDER_SUPERVISION",
-    //   icon: "pi pi-eye",
-    // },
   ];
 
   // ================= LOAD DATA =================

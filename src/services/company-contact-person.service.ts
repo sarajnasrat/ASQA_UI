@@ -22,6 +22,9 @@ export const CompanyContactPersonService = {
   create(data: any) {
     return httpClient.post(`${BASE_URL}`, data, {
       headers: { skipAuth: true },
+      params: {
+        companyId: Number(localStorage.getItem("companyId")),
+      }
     });
   },
 

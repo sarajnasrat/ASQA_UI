@@ -4,7 +4,10 @@ import type { IUser } from "./user.interface";
 export interface IAuthContext {
   user: IUser | null;
   isAuthenticated: boolean;
+  authReady: boolean; // ✅ NEW: indicates if auth state is initialized
   menus: IMenu[]; // ✅ add menus here
+    permissions: string[];                 // ✅ NEW
+  hasPermission: (p: string) => boolean; // ✅ NEW
   login: (data: ILoginResponse) => void;
   logout: () => void;
 }

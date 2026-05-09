@@ -7,6 +7,8 @@ import CategoryService from "../../../../services/category.service";
 import CompanyService from "../../../../services/company.service";
 import { handleApi } from "../../../../hooks/handleApi";
 import { useToast } from "../../../../hooks/ToastContext";
+import { data } from "react-router-dom";
+import { MultiSelect } from "primereact/multiselect";
 
 interface Category {
   id: number;
@@ -155,6 +157,68 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
     onDataChange,
     savedData,
   ]);
+  const [company, setCompany] = useState<any>(null);
+  const getCompanyById = async () => {
+    try {
+      const res = await CompanyService.getCompanyById(
+        Number(localStorage.getItem("companyId")),
+      );
+      setCompany(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    getCompanyById();
+  }, []); // ✅ run once
+  useEffect(() => {
+    if (!company) return;
+
+    const c = company?.data;
+
+    if (!c) return;
+
+    setFormData({
+      companyNameEN: c.companyNameEN || "",
+      companyNameDR: c.companyNameDR || "",
+      companyNamePS: c.companyNamePS || "",
+      email: c.email || "",
+      phoneNumber: c.phoneNumber || "",
+
+      address: c.address || "",
+      mainBranchAddress: c.mainBranchAddress || "",
+      activityPlace: c.activityPlace || "",
+      activityType: c.activityType || "",
+
+      jawazNumber: c.jawazNumber || "",
+      jawazExpiryDate: c.jawazExpiryDate || "",
+      jawazIssueDate: c.jawazIssueDate || "",
+
+      tinNumber: c.tinNumber || "",
+      websiteUrl: c.websiteUrl || "",
+
+      establishYear: c.establishYear || "",
+
+      companyOwnerNameEn: c.companyOwnerNameEn || "",
+      companyOwnerNameDr: c.companyOwnerNameDr || "",
+      companyOwnerNamePs: c.companyOwnerNamePs || "",
+
+      companyType: c.companyType || "PRIVATE",
+
+      aboutCompanyEn: c.aboutCompanyEn || "",
+      aboutCompanyDr: c.aboutCompanyDr || "",
+      aboutCompanyPs: c.aboutCompanyPs || "",
+    });
+    // ✅ Categories (VERY IMPORTANT - you were missing this)
+    setSelectedCategories(c.categories?.map((cat: any) => cat.id) || []);
+
+    // ✅ Social links
+    setSocialLinks(c.socialLinks || []);
+
+    // ✅ Logos (for preview)
+    setExistingLogoUrl(c.logoUrl || "");
+    setExistingBusinessLogoUrl(c.bussinessLogoUrl || "");
+  }, [company]);
 
   const loadCategories = async () => {
     try {
@@ -255,8 +319,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
       );
     if (!formData.activityPlace)
       newErrors.activityPlace = t("company.validation.activityPlace.required");
-    if (!formData.activityType)
-      newErrors.activityType = t("company.validation.activityType.required");
+
     if (!formData.jawazNumber)
       newErrors.jawazNumber = t("company.validation.jawazNumber.required");
     if (!formData.jawazIssueDate)
@@ -279,75 +342,146 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
       newErrors.companyOwnerNameDr = t(
         "company.validation.companyOwnerNameDr.required",
       );
-    if (!formData.companyOwnerNamePs)
-      newErrors.companyOwnerNamePs = t(
-        "company.validation.companyOwnerNamePs.required",
-      );
+  
     if (!formData.aboutCompanyEn)
       newErrors.aboutCompanyEn = t(
         "company.validation.aboutCompanyEn.required",
-      );
-    if (!formData.aboutCompanyDr)
-      newErrors.aboutCompanyDr = t(
-        "company.validation.aboutCompanyDr.required",
-      );
-    if (!formData.aboutCompanyPs)
-      newErrors.aboutCompanyPs = t(
-        "company.validation.aboutCompanyPs.required",
       );
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-const { showError, showSuccess } = useToast();
+  const { showError, showSuccess } = useToast();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    if (!validateForm()) {
+      showError(t("common.validation.fillRequiredFields"));
+      return;
+    }
 
-  if (!validateForm()) {
-    showError(t('common.validation.fillRequiredFields'));
-    return;
-  }
+    if (selectedCategories.length === 0) {
+      showError(t("company.validation.categories.required"));
+      return;
+    }
 
-  if (selectedCategories.length === 0) {
-    showError(t('company.validation.categories.required'));
-    return;
-  }
+    setIsSubmitting(true);
 
-  setIsSubmitting(true);
+    const companyData = {
+      ...formData,
+      categories: selectedCategories.map((id) => ({ id })),
+      socialLinks,
+      isActive: true,
+      logoUrl: existingLogoUrl || "",
+      bussinessLogoUrl: existingBusinessLogoUrl || "",
+      websiteUrl: formData.websiteUrl || "",
+    };
 
-  // Prepare form data
-  const formDataToSend = new FormData();
-  const companyData = {
-    ...formData,
-    categories: selectedCategories.map(id => ({ id })),
-    socialLinks: socialLinks,
-    isActive: true,
-    logoUrl: existingLogoUrl || '',
-    bussinessLogoUrl: existingBusinessLogoUrl || '',
-    websiteUrl: formData.websiteUrl || ''
+    const companyIdFromStorage = localStorage.getItem("companyId");
+
+    let response;
+
+    // ✅ UPDATE MODE
+    if (companyIdFromStorage) {
+      response = await handleApi(
+        () =>
+          CompanyService.updateCompany(
+            Number(companyIdFromStorage),
+            companyData,
+            companyLogo,
+            businessLogo,
+          ),
+        showSuccess,
+        showError,
+        t,
+      );
+    }
+    // ✅ CREATE MODE
+    else {
+      const formDataToSend = new FormData();
+      formDataToSend.append("company", JSON.stringify(companyData));
+
+      if (companyLogo) formDataToSend.append("companyLogo", companyLogo);
+      if (businessLogo) formDataToSend.append("bussinessLogo", businessLogo);
+
+      response = await handleApi(
+        () => CompanyService.createCompany(formDataToSend),
+        showSuccess,
+        showError,
+        t,
+      );
+    }
+
+    // ✅ Save companyId after success
+    if (response) {
+      const companyId =
+        response.data?.id ||
+        response.data?.data?.id ||
+        response.data?.companyId;
+
+      if (companyId) {
+        localStorage.setItem("companyId", String(companyId));
+        setTimeout(() => onSuccess(companyId), 500);
+      }
+    }
+
+    setIsSubmitting(false);
   };
-  formDataToSend.append('company', JSON.stringify(companyData));
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
 
-  if (companyLogo) formDataToSend.append('companyLogo', companyLogo);
-  if (businessLogo) formDataToSend.append('bussinessLogo', businessLogo);
+  //   if (!validateForm()) {
+  //     showError(t('common.validation.fillRequiredFields'));
+  //     return;
+  //   }
 
-  // Call backend using handleApi
-  const response = await handleApi(
-    () => CompanyService.createCompany(formDataToSend),
-    showSuccess, // success callback
-    showError,   // error callback
-    t            // translation function
-  );
+  //   if (selectedCategories.length === 0) {
+  //     showError(t('company.validation.categories.required'));
+  //     return;
+  //   }
 
-  if (response) {
-    // Wait a bit then call onSuccess with the company ID
-    const companyId = response.data?.id || response.data?.data?.id || response.data?.companyId;
-    setTimeout(() => onSuccess(companyId), 500);
-  }
+  //   setIsSubmitting(true);
 
-  setIsSubmitting(false);
-};
+  //   // Prepare form data
+  //   const formDataToSend = new FormData();
+  //   const companyData = {
+  //     ...formData,
+  //     categories: selectedCategories.map(id => ({ id })),
+  //     socialLinks: socialLinks,
+  //     isActive: true,
+  //     logoUrl: existingLogoUrl || '',
+  //     bussinessLogoUrl: existingBusinessLogoUrl || '',
+  //     websiteUrl: formData.websiteUrl || ''
+  //   };
+  //   formDataToSend.append('company', JSON.stringify(companyData));
+
+  //   if (companyLogo) formDataToSend.append('companyLogo', companyLogo);
+  //   if (businessLogo) formDataToSend.append('bussinessLogo', businessLogo);
+  //   if(localStorage.getItem('companyId')) {
+  //     await handleApi(
+  //       () => CompanyService.updateCompany(Number(localStorage.getItem('companyId')), companyData, companyLogo, businessLogo),
+  //       showSuccess, // success callback
+  //       showError,   // error callback
+  //       t            // translation function
+  //     );
+  //   }
+  //   // Call backend using handleApi
+  //   const response = await handleApi(
+  //     () => CompanyService.createCompany(formDataToSend),
+  //     showSuccess, // success callback
+  //     showError,   // error callback
+  //     t            // translation function
+  //   );
+
+  //   if (response) {
+  //     // Wait a bit then call onSuccess with the company ID
+  //     const companyId = response.data?.id || response.data?.data?.id || response.data?.companyId;
+  //     localStorage.setItem('companyId', String(companyId));
+  //     setTimeout(() => onSuccess(companyId), 500);
+  //   }
+
+  //   setIsSubmitting(false);
+  // };
   // const handleSubmit = async (e: React.FormEvent) => {
   //   e.preventDefault();
 
@@ -576,7 +710,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               <p className="mt-1 text-sm text-red-500">{errors.phoneNumber}</p>
             )}
           </div>
-  <div>
+          <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               {t("company.labels.establishYear")} *
             </label>
@@ -595,25 +729,6 @@ const handleSubmit = async (e: React.FormEvent) => {
               </p>
             )}
           </div>
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t("company.labels.address")} *
-            </label>
-            <textarea
-              name="address"
-              value={formData.address}
-              onChange={handleInputChange}
-              placeholder={t("company.placeholder.address")}
-              rows={2}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-shadow ${
-                errors.address ? "border-red-500" : "border-gray-300"
-              }`}
-            />
-            {errors.address && (
-              <p className="mt-1 text-sm text-red-500">{errors.address}</p>
-            )}
-          </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               {t("company.labels.websiteUrl")}
@@ -627,79 +742,94 @@ const handleSubmit = async (e: React.FormEvent) => {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-shadow"
             />
           </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              {t("company.labels.address")} *
+            </label>
+            <textarea
+              name="address"
+              value={formData.address}
+              onChange={handleInputChange}
+              placeholder={t("company.placeholder.address")}
+              rows={1}
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-shadow ${
+                errors.address ? "border-red-500" : "border-gray-300"
+              }`}
+            />
+            {errors.address && (
+              <p className="mt-1 text-sm text-red-500">{errors.address}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              {t("company.labels.ownerNameDr")} *
+            </label>
+            <input
+              type="text"
+              name="companyOwnerNameDr"
+              value={formData.companyOwnerNameDr}
+              onChange={handleInputChange}
+              placeholder={t("company.placeholder.companyOwnerNameDr")}
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-shadow ${
+                errors.companyOwnerNameDr ? "border-red-500" : "border-gray-300"
+              }`}
+              dir="rtl"
+            />
+            {errors.companyOwnerNameDr && (
+              <p className="mt-1 text-sm text-red-500">
+                {errors.companyOwnerNameDr}
+              </p>
+            )}
+          </div>
+          <div className="mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              {t("company.labels.ownerNameEn")} *
+            </label>
+            <input
+              type="text"
+              name="companyOwnerNameEn"
+              value={formData.companyOwnerNameEn}
+              onChange={handleInputChange}
+              placeholder={t("company.placeholder.companyOwnerNameEn")}
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-shadow ${
+                errors.companyOwnerNameEn ? "border-red-500" : "border-gray-300"
+              }`}
+            />
+            {errors.companyOwnerNameEn && (
+              <p className="mt-1 text-sm text-red-500">
+                {errors.companyOwnerNameEn}
+              </p>
+            )}
+          </div>
         </div>
+        <div className="col-span-4">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            {t("company.labels.aboutCompanyEn")} *
+          </label>
+          <textarea
+            name="aboutCompanyEn"
+            value={formData.aboutCompanyEn}
+            onChange={handleInputChange}
+            placeholder={t("company.placeholder.aboutCompanyEn")}
+            rows={4}
+            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-shadow ${
+              errors.aboutCompanyEn ? "border-red-500" : "border-gray-300"
+            }`}
+          />
+          {errors.aboutCompanyEn && (
+            <p className="mt-1 text-sm text-red-500">{errors.aboutCompanyEn}</p>
+          )}
+        </div>
+        {/* Owner Information */}
+        {/* <div className="bg-white rounded-xl shadow-lg p-4 col-span-3">
+          <h2 className="text-xl font-semibold text-gray-800 mb-6">
+            {t("company.ownerInformation")}
+          </h2>
+        </div> */}
       </div>
 
       {/* Business Details */}
-      <div className="bg-white rounded-xl shadow-lg p-6">
-        <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center">
-          <Globe className="h-5 w-5 text-blue-600 mr-2" />
-          {t("company.businessDetails")}
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t("company.labels.mainBranchAddress")} *
-            </label>
-            <input
-              type="text"
-              name="mainBranchAddress"
-              value={formData.mainBranchAddress}
-              onChange={handleInputChange}
-              placeholder={t("company.placeholder.mainBranchAddress")}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-shadow ${
-                errors.mainBranchAddress ? "border-red-500" : "border-gray-300"
-              }`}
-            />
-            {errors.mainBranchAddress && (
-              <p className="mt-1 text-sm text-red-500">
-                {errors.mainBranchAddress}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t("company.labels.activityPlace")} *
-            </label>
-            <input
-              type="text"
-              name="activityPlace"
-              value={formData.activityPlace}
-              onChange={handleInputChange}
-              placeholder={t("company.placeholder.activityPlace")}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-shadow ${
-                errors.activityPlace ? "border-red-500" : "border-gray-300"
-              }`}
-            />
-            {errors.activityPlace && (
-              <p className="mt-1 text-sm text-red-500">
-                {errors.activityPlace}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t("company.labels.activityType")} *
-            </label>
-            <input
-              type="text"
-              name="activityType"
-              value={formData.activityType}
-              onChange={handleInputChange}
-              placeholder={t("company.placeholder.activityType")}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-shadow ${
-                errors.activityType ? "border-red-500" : "border-gray-300"
-              }`}
-            />
-            {errors.activityType && (
-              <p className="mt-1 text-sm text-red-500">{errors.activityType}</p>
-            )}
-          </div>
-        </div>
-      </div>
 
       {/* Jawaz Information */}
       <div className="bg-white rounded-xl shadow-lg p-6">
@@ -707,7 +837,7 @@ const handleSubmit = async (e: React.FormEvent) => {
           {t("company.jawazInformation")}
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               {t("company.labels.jawazNumber")} *
@@ -788,111 +918,14 @@ const handleSubmit = async (e: React.FormEvent) => {
         </div>
       </div>
 
-      {/* Owner Information */}
-      <div className="bg-white rounded-xl shadow-lg p-6">
-        <h2 className="text-xl font-semibold text-gray-800 mb-6">
-          {t("company.ownerInformation")}
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t("company.labels.ownerNameEn")} *
-            </label>
-            <input
-              type="text"
-              name="companyOwnerNameEn"
-              value={formData.companyOwnerNameEn}
-              onChange={handleInputChange}
-              placeholder={t("company.placeholder.companyOwnerNameEn")}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-shadow ${
-                errors.companyOwnerNameEn ? "border-red-500" : "border-gray-300"
-              }`}
-            />
-            {errors.companyOwnerNameEn && (
-              <p className="mt-1 text-sm text-red-500">
-                {errors.companyOwnerNameEn}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t("company.labels.ownerNameDr")} *
-            </label>
-            <input
-              type="text"
-              name="companyOwnerNameDr"
-              value={formData.companyOwnerNameDr}
-              onChange={handleInputChange}
-              placeholder={t("company.placeholder.companyOwnerNameDr")}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-shadow ${
-                errors.companyOwnerNameDr ? "border-red-500" : "border-gray-300"
-              }`}
-              dir="rtl"
-            />
-            {errors.companyOwnerNameDr && (
-              <p className="mt-1 text-sm text-red-500">
-                {errors.companyOwnerNameDr}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t("company.labels.ownerNamePs")} *
-            </label>
-            <input
-              type="text"
-              name="companyOwnerNamePs"
-              value={formData.companyOwnerNamePs}
-              onChange={handleInputChange}
-              placeholder={t("company.placeholder.companyOwnerNamePs")}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-shadow ${
-                errors.companyOwnerNamePs ? "border-red-500" : "border-gray-300"
-              }`}
-              dir="rtl"
-            />
-            {errors.companyOwnerNamePs && (
-              <p className="mt-1 text-sm text-red-500">
-                {errors.companyOwnerNamePs}
-              </p>
-            )}
-          </div>
-
-        
-        </div>
-      </div>
-
       {/* About Company */}
-      <div className="bg-white rounded-xl shadow-lg p-6">
+      {/* <div className="bg-white rounded-xl shadow-lg p-6">
         <h2 className="text-xl font-semibold text-gray-800 mb-6">
           {t("company.labels.aboutCompany")}
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t("company.labels.aboutCompanyEn")} *
-            </label>
-            <textarea
-              name="aboutCompanyEn"
-              value={formData.aboutCompanyEn}
-              onChange={handleInputChange}
-              placeholder={t("company.placeholder.aboutCompanyEn")}
-              rows={4}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-shadow ${
-                errors.aboutCompanyEn ? "border-red-500" : "border-gray-300"
-              }`}
-            />
-            {errors.aboutCompanyEn && (
-              <p className="mt-1 text-sm text-red-500">
-                {errors.aboutCompanyEn}
-              </p>
-            )}
-          </div>
-
-          <div>
+          {/* <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               {t("company.labels.aboutCompanyDr")} *
             </label>
@@ -934,12 +967,83 @@ const handleSubmit = async (e: React.FormEvent) => {
                 {errors.aboutCompanyPs}
               </p>
             )}
+          </div> */}
+      {/* </div>
+      </div> */}
+      <div className="bg-white rounded-xl shadow-lg p-6">
+        <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+          <Globe className="h-5 w-5 text-blue-600 mr-2" />
+          {t("company.businessDetails")}
+        </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              {t("company.labels.mainBranchAddress")} *
+            </label>
+            <input
+              type="text"
+              name="mainBranchAddress"
+              value={formData.mainBranchAddress}
+              onChange={handleInputChange}
+              placeholder={t("company.placeholder.mainBranchAddress")}
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-shadow ${
+                errors.mainBranchAddress ? "border-red-500" : "border-gray-300"
+              }`}
+            />
+            {errors.mainBranchAddress && (
+              <p className="mt-1 text-sm text-red-500">
+                {errors.mainBranchAddress}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              {t("company.labels.activityPlace")} *
+            </label>
+            <input
+              type="text"
+              name="activityPlace"
+              value={formData.activityPlace}
+              onChange={handleInputChange}
+              placeholder={t("company.placeholder.activityPlace")}
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-shadow ${
+                errors.activityPlace ? "border-red-500" : "border-gray-300"
+              }`}
+            />
+            {errors.activityPlace && (
+              <p className="mt-1 text-sm text-red-500">
+                {errors.activityPlace}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              {t("company.labels.activityType")}
+            </label>
+
+            {/* <p className="text-sm text-gray-500 mb-3">
+              {t("company.labels.selectCategoriesHint")}
+            </p> */}
+
+            <MultiSelect
+              value={selectedCategories}
+              options={categories}
+              optionLabel="name"
+              optionValue="id"
+              onChange={(e) => setSelectedCategories(e.value)}
+              placeholder={t("company.labels.selectCategories")}
+              display="chip"
+              filter
+              className="w-full"
+            />
           </div>
         </div>
       </div>
-
       {/* Categories */}
-      <div className="bg-white rounded-xl shadow-lg p-6">
+      {/* <div className="bg-white rounded-xl shadow-lg p-6">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">
           {t("company.labels.categories")}
         </h2>
@@ -962,10 +1066,10 @@ const handleSubmit = async (e: React.FormEvent) => {
             </label>
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/* Social Links */}
-      <div className="bg-white rounded-xl shadow-lg p-6">
+      {/* <div className="bg-white rounded-xl shadow-lg p-6">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">
           {t("company.labels.socialLinks")}
         </h2>
@@ -1034,7 +1138,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/* Logos */}
       <div className="bg-white rounded-xl shadow-lg p-6">
@@ -1157,7 +1261,7 @@ const handleSubmit = async (e: React.FormEvent) => {
           className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
           disabled={isSubmitting}
         >
-          {t("common.cancel")}
+          {t("common.back")}
         </button>
         <button
           type="submit"

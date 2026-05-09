@@ -19,6 +19,11 @@ export const DistrictService = {
     return httpClient.get(`${DISTRICT_BASE}/${id}`);
   },
 
+    getDistrictByProvinceId(id: any) {
+    return httpClient.get(`${DISTRICT_BASE}/by-province/${id}`);
+  },
+
+
   getDistrictTranslation(id: any) {
     return httpClient.get(`${DISTRICT_BASE}/translate/${id}`);
   },

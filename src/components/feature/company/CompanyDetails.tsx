@@ -6,17 +6,16 @@ import { TabView, TabPanel } from "primereact/tabview";
 import { Avatar } from "primereact/avatar";
 import { Chip } from "primereact/chip";
 import { Tag } from "primereact/tag";
-import { Divider } from "primereact/divider";
+
 import { ProgressSpinner } from "primereact/progressspinner";
-import { Galleria } from "primereact/galleria";
+
 import { Timeline } from "primereact/timeline";
-import { Accordion, AccordionTab } from "primereact/accordion";
-import { Badge } from "primereact/badge";
-import { Skeleton } from "primereact/skeleton";
+
+
 import { Toast } from "primereact/toast";
 import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
 import { useAppToast } from "../../../hooks/useToast";
-import CompanyService from "../../../services/company.service";
+
 import { useTranslation } from "react-i18next";
 
 interface CompanyDetailsData {

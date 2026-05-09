@@ -177,7 +177,7 @@ const Home = () => {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <button
-                onClick={() => navigate("/certification/select-type")}
+                onClick={() => navigate("/registration")}
                 className="group relative inline-flex items-center bg-linear-to-r from-yellow-400 to-orange-500 text-gray-900 px-6 py-3 rounded-xl font-semibold text-base hover:shadow-xl hover:shadow-orange-500/30 transition-all duration-300 transform hover:scale-105"
               >
                 <span className="flex items-center">

@@ -174,7 +174,7 @@
       "jawazExpiryDate": "د جواز ختمیدو نیټه",
       "jawazIssueDate": "د جواز د صدور نیټه",
       "tinNumber": "مالیاتی پیژندنې شمېره",
-      "aboutCompanyEn": "د شرکت په اړه (انګلیسي)",
+      "aboutCompanyEn": "د شرکت په اړه",
       "aboutCompanyDr": "د شرکت په اړه (دری)",
       "aboutCompanyPs": "د شرکت په اړه (پښتو)",
       "websiteUrl": "ویب پته",
@@ -590,10 +590,10 @@
       "CANCELLED": "لغوه شوې",
       "UNDER_REVIEW": "تر څارنې لاندې"
     },
-    "certificationTypeOptions": {
-      "DOMESTIC_QUALITY_CERTIFICATION": "د کورني کیفیت تصدیق",
-      "INTERNATIONAL_QUALITY_CERTIFICATION": "د نړیوال کیفیت تصدیق",
-      "STANDARD_MARK_CERTIFICATION": "د معیاري نښې تصدیق"
+   "certificationTypeOptions": {
+      "DOMESTIC_QUALITY_CERTIFICATION": "تائید نامه کیفی سیستم مدیریتی یا خدمات، محصول (داخلی)",
+      "INTERNATIONAL_QUALITY_CERTIFICATION": "تائید نامه کیفی سیستم مدیریتی یا خدمات، محصول (بین المللی)",
+      "STANDARD_MARK_CERTIFICATION": "برای اخذ علامت معیار"
     }
   },
   "zone": {
@@ -626,7 +626,8 @@
       "companyInfo": "د شرکت معلومات",
       "contactPerson": "اړیکه کوونکی کس",
       "documents": "اسناد او رسنۍ",
-      "review": "بیا کتنه او سپارل"
+      "review": "بیا کتنه او سپارل",
+      "certificationrequest": "د سند ترلاسه کولو"
     },
     "leftPanel": {
       "title": "هر مرحله د سند ترلاسه کولو لپاره بشپړه کړئ",

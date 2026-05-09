@@ -234,7 +234,7 @@
       "jawazExpiryDate": "تاریخ انقضای جواز",
       "jawazIssueDate": "تاریخ صدور جواز",
       "tinNumber": "شماره شناسایی مالیاتی",
-      "aboutCompanyEn": "درباره شرکت (انگلیسی)",
+      "aboutCompanyEn": "درباره شرکت)",
       "aboutCompanyDr": "درباره شرکت (دری)",
       "aboutCompanyPs": "درباره شرکت (پشتو)",
       "websiteUrl": "آدرس وبسایت",
@@ -477,18 +477,34 @@
     "helpFinding": "نیاز به کمک برای یافتن شماره تعقیب خود دارید؟",
     "helpFindingDesc": "شماره تعقیب شما می‌تواند در درخواست تائید نامه کیفی شما یا ایمیل تأیید شما یافت شود.",
     "page": {
+      "title": "ثبت درخواست تائید نامه کیفی",
+      "subtitle": "ثبت درخواست ",
       "leftSide": {
         "title": "تائید نامه خود را آغاز کنید",
         "subtitle": "مسیر درست تائید نامه را برای کسب و کار خود انتخاب کنید ",
         "steps": {
-          "1": "نوعیت درخواست را انتخاب کنید",
-          "2": "نوع تائید نامه کیفی را انتخاب کنید",
-          "3": "شرکت را ثبت کنید",
-          "4": "اسناد لازم را ضافه کنید",
-          "5": "تائید نامه دریافت کنید"
+          "1": "نوع درخواست را انتخاب کنید",
+          "2": "نوعیت درخواست را انتخاب کنید",
+          "3": "نوع تائید نامه کیفی را انتخاب کنید",
+          "4": "شرکت را ثبت کنید",
+          "5": "اسناد لازم را ضافه کنید",
+          "6": "تائید نامه دریافت کنید"
         },
         "progress": "مرحله ۱ از ۵",
         "progressLabel": "انتخاب درخواست  تائید نامه"
+      },
+      "mainType": {
+        "title": "نوع درخواست را انتخاب کنید",
+        "subtitle": "انتخاب کنید که این درخواست داخلی  است یا بین المللی",
+        "internal":{
+          "title": "داخلی",
+          "description": "تائید نامه برای اولین بار برای کسب و کار شما"
+        },
+          "external":{
+          "title": "بین المللی",
+          "description": "تائید نامه برای اولین بار برای کسب و کار شما"
+        }
+        
       },
       "requestType": {
         "title": "۱. نوع درخواست را انتخاب کنید",
@@ -506,7 +522,7 @@
         "title": "۲. نوع تائید نامه را انتخاب کنید",
         "subtitle": "لطفا یکی از انواع تائید نامه کیفی را انتخاب کنید که با نیازهای کسب و کار شما مطابقت دارد",
         "domestic": {
-          "title": "تائید نامه کیفی سیستم مدیریتی یا خدمات محصول(داخلی)",
+          "title": "تائید نامه کیفی سیستم مدیریتی یا خدمات محصول",
           "description": "برای عملیات تجاری محلی",
           "benefits": {
             "1": "شناخته شده در سطح ملی",
@@ -515,7 +531,7 @@
           }
         },
         "international": {
-          "title": "تائید نامه کیفی سیستم مدیرتی یا خدمات، محصول(بین المللی)",
+          "title": "تائید نامه کیفی سیستم مدیرتی یا خدمات، محصول",
           "description": "برای گسترش بازار جهانی",
           "benefits": {
             "1": "شناخته شده در سطح جهانی",
@@ -524,7 +540,7 @@
           }
         },
         "standard": {
-          "title": "تائید نامه کیفی سیستم مدیریتی بای اخذ علامت معیار",
+          "title": "  اخذ علامت معیار",
           "description": "برای استانداردهای محصول/خدمت",
           "benefits": {
             "1": "نشان کیفیت",
@@ -609,9 +625,9 @@
       "UNDER_REVIEW": "در حال بررسی"
     },
     "certificationTypeOptions": {
-      "DOMESTIC_QUALITY_CERTIFICATION": "تصدیق کیفیت داخلی",
-      "INTERNATIONAL_QUALITY_CERTIFICATION": "تصدیق کیفیت بین‌المللی",
-      "STANDARD_MARK_CERTIFICATION": "تصدیق نشان استاندارد"
+      "DOMESTIC_QUALITY_CERTIFICATION": "تائید نامه کیفی سیستم مدیریتی یا خدمات، محصول (داخلی)",
+      "INTERNATIONAL_QUALITY_CERTIFICATION": "تائید نامه کیفی سیستم مدیریتی یا خدمات، محصول (بین المللی)",
+      "STANDARD_MARK_CERTIFICATION": "برای اخذ علامت معیار"
     }
   },
 
@@ -706,7 +722,8 @@
       "companyInfo": "اطلاعات شرکت",
       "contactPerson": "شخص تماس",
       "documents": "اسناد و رسانه",
-      "review": "بررسی و ارسال"
+      "review": "بررسی و ارسال",
+      "certificationrequest": "درخواست تائید نامه"
     },
     "leftPanel": {
       "title": "هر مرحله را برای دریافت گواهینامه خود تکمیل کنید",
@@ -797,7 +814,42 @@
     "createdDate": "تاریخ ایجاد",
     "commiteeType": "نوع کمیته",
     "Active": "فعال",
-    "Inactive": "غیرفعال"
+    "Inactive": "غیرفعال",
+      "assignment": {
+      "list": "Assigned Certification Requests",
+      "create": "Create Assignment",
+      "edit": "Edit Assignment",
+      "delete": "Delete Assignment",
+      "committee": "Committee",
+      "company": "Company",
+      "deadline": "Deadline",
+      "reason": "Comment/Reason",
+      "requestType": "Request Type",
+      "member": "Member",
+      "role": "Role",
+      "active": "Active",
+      "assignmentBy": "Assigned By",
+      "assignmentAt": "Assigned At",
+      "updated": "Assignment updated successfully",
+      "deleted": "Assignment deleted successfully",
+      "deleteConfirm": "Are you sure you want to delete this assignment?",
+      "certificationType": "Certification Type",
+      "roles": {
+        "CHAIRPERSON": "Chairperson",
+        "MEMBER": "Member",
+        "SECRETARY": "Secretary"
+      },
+      "status": {
+        "ACTIVE": "Active",
+        "INACTIVE": "Inactive",
+        "assinged":"Assinged",
+        "pinding":"Pending",
+        "rejected":"Rejected",
+        "in_progress":"In Progress",
+        "completed":"Compeleted"
+
+      }
+    }
   },
   "common": {
     "save": "ذخیره",
@@ -846,8 +898,8 @@
         },
 
         "DOMESTIC_QUALITY_CERTIFICATION": "د کورني کیفیت تصدیق",
-        "INTERNATIONAL_QUALITY_CERTIFICATION": "نړیوال کیفیت تصدیق",
-        "STANDARD_MARK_CERTIFICATION": "د معیاري نښې تصدیق"
+        "INTERNATIONAL_QUALITY_CERTIFICATION": "تائید نامه کیفی سیستم مدیریتی محصول",
+        "STANDARD_MARK_CERTIFICATION": "اخذ علامت معیار   "
       },
       "international": {
         "title": "تائید نامه کیفی سیستم مدیرتی یا خدمات، محصول(بین المللی)",

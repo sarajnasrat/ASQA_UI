@@ -57,6 +57,7 @@ export const CompanyService = {
    * @param companyCover Optional company cover file
    */
   updateCompany(
+    
     id: number,
     data: Company,
     companyLogo?: File,

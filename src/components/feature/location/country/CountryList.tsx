@@ -12,6 +12,7 @@ import { DynamicTable } from "../../../common/DynamicTable";
 import { CountryCreate } from "./CountryCreate"; // Import the CountryCreate dialog
 import { CountryUpdate } from "./CountryUpdate";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../../../../context/AuthContext";
 export const CountryList = () => {
   const [countryList, setCountryList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,6 +24,8 @@ export const CountryList = () => {
     null,
   );
   const [showEditDialog, setShowEditDialog] = useState(false);
+  const { hasPermission } = useAuth();
+  const menu = useRef<any>(null);
   const handleEdit = (country: any) => {
     setSelectedCountryId(country.id);
     setShowEditDialog(true);
@@ -128,22 +131,24 @@ export const CountryList = () => {
     const menu = useRef<any>(null);
 
     const items: MenuItem[] = [
-      {
+      hasPermission("UPDATE_COUNTRY") && {
         label: t("common.edit"),
         icon: "pi pi-pencil",
         command: () => handleEdit(rowData),
       },
-      {
+
+      hasPermission("DELETE_COUNTRY") && {
         label: t("common.delete"),
         icon: "pi pi-trash",
         command: () => confirmDelete(rowData),
       },
-      {
+
+      hasPermission("VIEW_COUNTRY") && {
         label: t("common.view"),
         icon: "pi pi-eye",
         command: () => navigate(`/countries/view/${rowData.id}`),
       },
-    ];
+    ].filter(Boolean) as MenuItem[];
 
     return (
       <div className="flex justify-center">
@@ -170,7 +175,7 @@ export const CountryList = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-          <Button
+          {hasPermission("ADD_COUNTRY") && ( <Button
             icon="pi pi-plus"
             label={t("country.create")}
             text
@@ -178,7 +183,7 @@ export const CountryList = () => {
             severity="info"
             onClick={() => setShowCreateDialog(true)}
             className="bg-blue-600 hover:bg-blue-700 border-none shadow-md hover:shadow-lg transition-all"
-          />
+          />)}
 
           <Button
             icon="pi pi-sync"
@@ -213,7 +218,7 @@ export const CountryList = () => {
     },
     {
       field: "countryCode",
-      header:  t("country.code"),
+      header: t("country.code"),
       style: { minWidth: "120px" },
       body: (rowData: any) => (
         <span className="font-mono bg-gray-100 px-2 py-1 rounded-md text-sm">

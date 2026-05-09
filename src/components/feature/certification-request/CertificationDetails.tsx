@@ -9,28 +9,32 @@ import { Search, FileText, ChevronLeft, ChevronRight, X, Building2 } from "lucid
 export const CertificationDetails = () => {
   const { t } = useTranslation();
   const [searchValue, setSearchValue] = useState("");
-  const [requestId, setRequestId] = useState<number | null>(null);
+  const [requestId, setRequestId] = useState<string | null>(null);
   const [searched, setSearched] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  
+
+
 
   const handleSearch = async () => {
-    if (!searchValue.trim()) return;
+  const query = searchValue.trim();
 
-    // Extract numeric ID from various formats
-    const numericId = Number(searchValue.replace(/\D/g, ""));
+  if (!query) return;
 
-    if (!numericId) return;
+  setIsLoading(true);
 
-    setIsLoading(true);
-
-    // Simulate API call - remove this in production
+  try {
+    // Simulate API call (remove in production)
     await new Promise((resolve) => setTimeout(resolve, 500));
 
-    setRequestId(numericId);
+    // use whatever user typed
+    setRequestId(query);
     setSearched(true);
-    setIsLoading(false);
-  };
 
+  } finally {
+    setIsLoading(false);
+  }
+};
   const handleClear = () => {
     setSearchValue("");
     setRequestId(null);
@@ -44,9 +48,8 @@ export const CertificationDetails = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 pt-24">
-      {/* Header with curved design - Matching Companies page style */}
-      <div className="relative bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 text-white overflow-hidden">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 pt-24">
+      <div className="relative bg-linear-to-br from-blue-600 via-indigo-600 to-purple-700 text-white overflow-hidden">
         {/* Animated background elements */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full mix-blend-multiply filter blur-3xl animate-blob"></div>
@@ -70,11 +73,11 @@ export const CertificationDetails = () => {
 
             {/* Main heading with gradient text */}
             <h1 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">
-              <span className="bg-gradient-to-r from-blue-200 via-white to-purple-200 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-blue-200 via-white to-purple-200 bg-clip-text text-transparent">
                 {t("certification.trackTitle")}
               </span>
               <br />
-              <span className="bg-gradient-to-r from-yellow-300 via-orange-300 to-pink-300 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-yellow-300 via-orange-300 to-pink-300 bg-clip-text text-transparent">
                 {t("certification.certificationStatus")}
               </span>
             </h1>
@@ -87,7 +90,7 @@ export const CertificationDetails = () => {
             {/* Search bar with enhanced design - CORRECTED VERSION */}
             <div className="relative max-w-2xl mx-auto pb-20">
               {/* Glow effect behind search */}
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-2xl blur opacity-30"></div>
+              <div className="absolute inset-0 bg-linear-to-r from-blue-400 to-purple-400 rounded-2xl blur opacity-30"></div>
               
               {/* Search container */}
               <div className="relative flex items-center bg-white rounded-2xl shadow-2xl">
@@ -109,7 +112,7 @@ export const CertificationDetails = () => {
                 <button
                   onClick={handleSearch}
                   disabled={isLoading}
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 px-6 py-2.5 bg-linear-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isLoading ? (
                     <div className="flex items-center gap-2">
@@ -184,7 +187,7 @@ export const CertificationDetails = () => {
                 {/* Certification Tracker Card */}
                 <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100">
                   {/* Top accent border */}
-                  <div className="h-1 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600"></div>
+                  <div className="h-1 bg-linear-to-r from-blue-600 via-indigo-600 to-purple-600"></div>
 
                   <div className="p-6 md:p-8">
                     {/* Header */}

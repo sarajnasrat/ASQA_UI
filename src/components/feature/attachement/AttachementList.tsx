@@ -301,6 +301,7 @@ const fileTemplate = (rowData: any) => {
       body: fileTemplate, // Using the fileTemplate function here
       sortable: false,
     },
+    
     {
       header: t("attachment.columns.actions"),
       body: actionTemplate,

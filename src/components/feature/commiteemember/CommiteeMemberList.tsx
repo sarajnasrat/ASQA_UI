@@ -161,11 +161,15 @@ export const CommiteeMemberList: React.FC = () => {
 
             <div className="flex gap-3">
                 <Button
+                raised
+                text
                     icon="pi pi-plus"
                     label={t("commitee.member.create")}
                     onClick={() => setShowCreateDialog(true)}
                 />
                 <Button
+                raised
+                text
                     icon="pi pi-refresh"
                     label={t("common.refresh")}
                     onClick={getAllMembers}
