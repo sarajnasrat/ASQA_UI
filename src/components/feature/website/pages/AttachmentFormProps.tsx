@@ -455,7 +455,7 @@ const AttachmentForm: React.FC<AttachmentFormProps> = ({
           ) : attachment ? (
             t("common.saveAndContinue")
           ) : (
-            t("attachment.complete_registration")
+            t("common.saveAndContinue")
           )}
         </button>
       </div>

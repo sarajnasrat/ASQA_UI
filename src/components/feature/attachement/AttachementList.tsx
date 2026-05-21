@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import httpClient from "../../../api/httpClient";
 import httpClientForPic from "../../../api/httpClientForPic";
+import ExcelExport from "../../common/ExcelExport";
 
 export const AttachmentList = () => {
   const [attachments, setAttachments] = useState<any[]>([]);
@@ -271,6 +272,21 @@ const fileTemplate = (rowData: any) => {
           severity="info"
           onClick={loadAttachments}
         />
+              <ExcelExport
+          data={attachments}
+          totalElements={totalRecords}
+          fileName="companies"
+          sheetName="Companies"
+          fetchAllData={async () => {
+            const res = await AttachmentService.getPaginatedAttachments({
+              page: 0,
+              size: totalRecords,
+              sort: "id,desc",
+            });
+
+            return res.data.data;
+          }}
+        />
       </div>
     </div>
   );
@@ -289,7 +305,7 @@ const fileTemplate = (rowData: any) => {
     //   sortable: true,
     // },
     {
-      field: "referenceType",
+      field: "attachmentReferenceType",
       header: t("attachment.columns.module"),
     },
     // {

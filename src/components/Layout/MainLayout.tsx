@@ -24,6 +24,7 @@ import { CertificationRequestUpdate } from "../feature/certification-request/Cer
 import { AttachmentList } from "../feature/attachement/AttachementList";
 import { AttachmentCreate } from "../feature/attachement/AttachmentCreate";
 import { CertificationList } from "../feature/certification/CertificationList";
+import { CertificationDetails } from "../feature/certification/CertificationDetails";
 
 import { PrintCertificationPage } from "../feature/certification/PrintCertificationPage";
 import ZoneList from "../feature/zone/ZoneList";
@@ -36,6 +37,8 @@ import { CertificationRequestListStandardManagement } from "../feature/standardm
 import { ProtectedRoute } from "../../routes/ProtectedRoute";
 import { UnauthorizedDialog } from "../common/UnauthorizedPage";
 import { CertificationRequestPayment } from "../feature/certificationpayment/CertificationRequestPayment";
+import { Report } from "../feature/report/Report";
+import { CertificationRequestReport } from "../feature/report/CertificationRequestReport";
 
 
 export const MainLayout = () => {
@@ -121,6 +124,8 @@ export const MainLayout = () => {
                 }
               />
               <Route path="district" element={<DistrictList />} />
+                            <Route path="reports" element={<CertificationRequestReport />} />
+
               <Route path="province" element={<ProvinceList />} />
               <Route path="category" element={<CategoryList />} />
               <Route path="commitee-assignment-list" element={<CommiteeAssignmentList />} />
@@ -132,6 +137,7 @@ export const MainLayout = () => {
                             <Route path="payment-management" element={<CertificationRequestPayment />} />
               <Route path="zone" element={<ZoneList />} />
               <Route path="certifications/print/:id" element={<PrintCertificationPage />} />
+              <Route path="certification-details/:requestId" element={<CertificationDetails />} />
               <Route path="certifications" element={<CertificationList />} />
               <Route
                 path="certification-request/edit/:id"

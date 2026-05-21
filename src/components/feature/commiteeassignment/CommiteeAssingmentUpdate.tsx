@@ -74,7 +74,6 @@ export const CommiteeAssingmentUpdate: React.FC<Props> = ({
   /* ================= STATUS OPTIONS ================= */
   const statusOptions = [
     { label: "IN_PROGRESS", value: "IN_PROGRESS" },
-    { label: "UNDER_REVIEW", value: "UNDER_REVIEW" },
     { label: "COMPLETED", value: "COMPLETED" },
     { label: "REJECTED", value: "REJECTED" },
   ];

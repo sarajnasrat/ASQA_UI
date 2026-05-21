@@ -193,7 +193,6 @@
       "activityType": "Activity Type",
       "jawazNumber": "Jawaz Number",
       "jawazExpiryDate": "Jawaz Expiry Date",
-      "jawazIssueDate": "Jawaz Issue Date",
       "tinNumber": "TIN Number",
       "aboutCompanyEn": "About Company",
       "aboutCompanyDr": "About Company (DR)",
@@ -203,6 +202,7 @@
       "companyOwnerNameEn": "Company Owner Name (EN)",
       "companyOwnerNameDr": "Company Owner Name (DR)",
       "companyOwnerNamePs": "Company Owner Name (PS)",
+      "companyOwnerName": "Owner Name",
       "companyType": "Company Type",
       "noSocialLinksAdded": "No social links added yet. Click 'Add Link' to add social media links.",
       "categories": "Categories",
@@ -365,6 +365,7 @@
       "OTHER": "Other"
     },
     "status": {
+      "title": "Status",
       "ACTIVE": "Active",
       "INACTIVE": "Inactive",
       "PENDING": "Pending",
@@ -559,7 +560,28 @@
     "logout": "Logout",
     "certicificationrequest": "Certification Request"
   },
+
   "certification": {
+    "serialNumber": "Serial Number",
+    "issueDate": "Issue Date",
+    "documents": "Documents",
+    "uploadscan": "Upload FinalScanned Certificate",
+    "certificationType": "Certification Type",
+    "certificateNumber": "Certification Number",
+    "certificateInformation": "Certification Information",
+    "certificateIssued": "Certificate Issued",
+    "noPayments": "No payment information available",
+    "payments": "Payments",
+    "requestSubmitted": "Certification request submitted",
+    "noCertificateFile": "No certificate file available",
+    "certificateFile": "Certificate File",
+    "certificateSummary": "Certificate Summary",
+    "certificateIssuedTo": "Certificate Issued To",
+    "certificateDetails": "Certification Details",
+    "requestId": "Request ID",
+    "issuedTo": "Issued To",
+    "certificateStatus": "Certificate Status",
+    "certificateId": "Certificate ID",
     "list": "Certification List",
     "management": "Certification Management",
     "type:": "Certification Type",
@@ -595,9 +617,14 @@
     "secureReliable": "Secure & Reliable",
     "secureReliableDesc": "Your certification data is protected and verified",
     "helpFinding": "Need help finding your tracking number?",
+
     "helpFindingDesc": "Your tracking number can be found on your certification application or in the confirmation email.",
+    "welcomeTitle": "Track Your Certification Status",
+    "welcomeDescription": "Enter your unique tracking number to view the current status of your certification application",
 
     "page": {
+      "title": "Certification",
+      "subtitle": "Get Certified with ASQA",
       "leftSide": {
         "title": "Start Your Certification",
         "subtitle": "Choose the right certification path for your business",
@@ -612,16 +639,17 @@
         "progress": "Step 1 of 5",
         "progressLabel": "Request & Certification Selection"
       },
-      "mainType": {
-        "title": " Select Certification Type",
-        "subtitle": "Choose the certification that this is for Internal or External",
+
+      "certificationScope": {
+        "title": "Select Certification Scope",
+        "subtitle": "Choose whether this certification is for internal or external use",
         "internal": {
           "title": "Internal",
-          "description": "this certification for internal use"
+          "description": "This certification is for internal use"
         },
         "external": {
-          "title": "International",
-          "description": "this certification for external use "
+          "title": "External",
+          "description": "This certification is for external use"
         }
       },
       "requestType": {
@@ -640,7 +668,7 @@
         "title": "Select Certification Type",
         "subtitle": "Choose the certification that matches your business needs",
         "domestic": {
-          "title": "Domestic Quality",
+          "title": "Quality certificate of management system or services ",
           "description": "For local business operations",
           "benefits": {
             "1": "Nationally recognized",
@@ -710,10 +738,25 @@
     "reportApproved": "Report Approved",
     "reportRejected": "Report Rejected",
     "requireStandard": "Add Standards",
+    "requireDeadline": "Set Deadline",
+    "requireCommittee": "Assign to Committee",
+    "standardsRequired": "Add Standards",
+    "statusRequired": "Set Status",
+    "confirmPayment": "Confirm Payment",
+    "issueCertificate": "Issue Certificate",
+    "certificateIssued": "Certificate Issued",
+    "requestSubmitted": "Request Submitted",
+    "confirmUnderReview": "Confirm Start Review",
+    "requestWillBeUnderReview": "This will set the request status to 'Under Review' and notify the assigned committee members to start the review process. Are you sure you want to proceed?",
     "deadlineRequired": "Set Deadline",
     "startReview": "Start Review",
+    "reject": "Reject",
+    "rejectReason": "Reject Reason",
+    "enterRejectionReason": "Enter reason for rejection",
     "reviewReport": "Review Report",
     "requestPayment": "Request Payment",
+    "confirmReject": "Confirm Reject",
+    "requestWillBeRejected": "This will reject the certification request and notify the applicant. Are you sure you want to proceed?",
 
     "committeeRequired": "Assign to Committee",
     "requestDetails": "Request Details",
@@ -721,6 +764,7 @@
     "totalDocuments": "Total Documents",
     "requestAttachments": "Request Attachments",
     "labels": {
+      "startReview": "Start Review",
       "duration": "Duration",
       "serialNumber": "Serial Number",
       "trackingNumber": "Tracking Number",
@@ -803,7 +847,7 @@
     }
   },
   "registration": {
-    "title": "Company Registration",
+    "title": "Certification Request Registration",
     "subtitle": "Complete the multi-step registration process",
     "confirmation": {
       "title": "Confirm Submission",
@@ -811,17 +855,17 @@
       "warning": "Once submitted, you cannot modify the information. Please review all details carefully.",
       "confirm": "Yes, Submit Registration",
       "success": {
-      "title": "✅ Request Submitted Successfully!",
-      "message": "Your certification request has been submitted successfully.",
-      "trackingLabel": "📋 Your Tracking Number",
-      "trackingHint": "💡 Save this number to track your request status",
-      "trackRequest": "Track My Request",
-      "viewCompanies": "View Companies",
-      "goHome": "Go Home"
-    },
-    "toasts": {
-      "trackingCopied": "Tracking number copied to clipboard!"
-    }
+        "title": "✅ Request Submitted Successfully!",
+        "message": "Your certification request has been submitted successfully.",
+        "trackingLabel": "📋 Your Tracking Number",
+        "trackingHint": "💡 Save this number to track your request status",
+        "trackRequest": "Track My Request",
+        "viewCompanies": "View Companies",
+        "goHome": "Go Home"
+      },
+      "toasts": {
+        "trackingCopied": "Tracking number copied to clipboard!"
+      }
     },
     "steps": {
       "companyInfo": "Company Information",
@@ -908,6 +952,7 @@
   },
 
   "commitee": {
+    "createMember": "Add Member",
     "selectCommittee": "Select Committee",
     "list": "Committee List",
     "create": "Create Committee",
@@ -957,6 +1002,7 @@
         "ACTIVE": "Active",
         "INACTIVE": "Inactive",
         "assinged": "Assinged",
+        "under_review": "Under Review",
         "pinding": "Pending",
         "rejected": "Rejected",
         "in_progress": "In Progress",
@@ -977,6 +1023,7 @@
   },
 
   "common": {
+    "timeline": "Timeline",
     "continue": "Continue",
     "copy": "Copy",
     "save": "Save",
@@ -987,6 +1034,7 @@
     "view": "View",
     "refersh": "Refresh",
     "total": "common",
+    "active": "Active",
     "action": "Action",
     "saving": "Saving...",
     "success": "Success",
@@ -1017,7 +1065,9 @@
 
     "saveAndContinue": "Save & Continue",
     "status": "Status",
-    "createdDate": "Created Date"
+    "createdDate": "Created Date",
+    "selectScope": "Please first select a scope",
+    "selectRequest": "Please first select a request"
   },
   "home": {
     "badge": "Afghanistan Quality Standards Authority",
@@ -1121,6 +1171,69 @@
         "international": "Internationally Recognized",
         "support": "24/7 Support"
       }
+    }
+  },
+  "report": {
+    "systemReports": "System Reports",
+
+    "dashboardTitle": "System Report Dashboard",
+    "dashboardSubtitle": "Generate and export comprehensive system reports",
+    "exportToExcel": "Export to Excel",
+    "detailedExport": "Detailed Export",
+    "exporting": "Exporting...",
+    "reportType": "Report Type",
+    "yearlyReport": "Yearly Report",
+    "monthlyReport": "Monthly Report",
+    "customRange": "Custom Range",
+    "year": "Year",
+    "month": "Month",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "modules": "Modules",
+    "modulesSelected": "module(s) selected",
+    "selectAll": "Select All",
+    "generateReport": "Generate Report",
+    "generating": "Generating...",
+    "reportResults": "Report Results",
+    "lastUpdated": "Last updated",
+    "noReportGenerated": "No report generated yet. Select filters and click 'Generate Report' to see results.",
+    "summary": "REPORT SUMMARY",
+    "systemReport": "System Report",
+    "allMetrics": "All Metrics",
+    "generatedOn": "Report Generated On",
+    "selectedModules": "Selected Modules",
+
+    "requestStatistics": "Request Statistics",
+    "userStatistics": "User Statistics",
+    "committeeStatistics": "Committee Statistics",
+    "additionalStatistics": "Additional Statistics",
+
+    "totalRequests": "Total Requests",
+    "submitted": "Submitted",
+    "inProgress": "In Progress",
+    "completed": "Completed",
+    "rejected": "Rejected",
+    "totalUsers": "Total Users",
+    "activeUsers": "Active Users",
+    "inactiveUsers": "Inactive Users",
+    "totalCommittee": "Total Committee",
+    "activeCommittee": "Active Committee",
+    "inactiveCommittee": "Inactive Committee",
+    "totalCompanies": "Total Companies",
+    "totalCertifications": "Total Certifications",
+    "totalMenuItems": "Total Menu Items",
+
+    "module": {
+      "USER": "Users",
+      "COMPANY": "Companies",
+      "COMMITTEE": "Committee",
+      "MENU": "Menu Items",
+      "CERTIFICATION": "Certifications",
+      "CERTIFICATION_REQUEST": "Certification Requests",
+      "ROLE": "Roles",
+      "ATTACHMENT": "Attachments",
+      "COMPANY_CONTACT_PERSON": "Company Contacts",
+      "COMMITTEE_MEMBER": "Committee Members"
     }
   }
 }

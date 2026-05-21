@@ -396,6 +396,8 @@
     "active": "فعال",
     "inactive": "غیرفعال",
     "total": "ټول تصدیق پاڼې",
+        "welcomeTitle": "خپل تصدیق وګورئ",
+    "welcomeDescription": "په دې برخه کې، تاسو کولی شئ خپل تصدیق پاڼه وګورئ، چاپ کړئ یا ډاونلوډ کړئ. که تاسو کومه پوښتنه لرئ یا مرستې ته اړتیا لرئ، مهرباني وکړئ زموږ د ملاتړ ټیم سره اړیکه ونیسئ.",
     "page": {
       "leftSide": {
         "title": "خپل تصدیق پیل کړئ",
@@ -590,7 +592,7 @@
       "CANCELLED": "لغوه شوې",
       "UNDER_REVIEW": "تر څارنې لاندې"
     },
-   "certificationTypeOptions": {
+    "certificationTypeOptions": {
       "DOMESTIC_QUALITY_CERTIFICATION": "تائید نامه کیفی سیستم مدیریتی یا خدمات، محصول (داخلی)",
       "INTERNATIONAL_QUALITY_CERTIFICATION": "تائید نامه کیفی سیستم مدیریتی یا خدمات، محصول (بین المللی)",
       "STANDARD_MARK_CERTIFICATION": "برای اخذ علامت معیار"
@@ -714,7 +716,7 @@
     "technical": "تخنیکي کمیټه",
     "quality": "کیفیت کمیټه",
     "administrative": "اداري کمیټه",
-    "memberCount":"د غړو شمېره"
+    "memberCount": "د غړو شمېره"
   },
   "common": {
     "save": "خوندي کول",
@@ -900,5 +902,66 @@
     "invalidOtp": "غلط OTP. مهرباني وکړئ بیا هڅه وکړئ.",
     "failedReset": "د پټنوم بیا ترتیبول ناکام شول",
     "networkError": "د شبکې تېروتنه. مهرباني وکړئ بیا هڅه وکړئ."
+  },
+  "report": {
+    "systemReports": " سیستم راپورونه",
+    "dashboardTitle": "د سیستم راپور ډشبورډ",
+    "dashboardSubtitle": "د سیستم جامع راپورونه تولید او صادر کړئ",
+    "exportToExcel": "ایکسل ته صادرول",
+    "detailedExport": "تفصيلي صادرول",
+    "exporting": "صادرول کیږي...",
+    "reportType": "د راپور ډول",
+    "yearlyReport": "کلنی راپور",
+    "monthlyReport": "میاشتنی راپور",
+    "customRange": "دودیزه موده",
+    "year": "کال",
+    "month": "میاشت",
+    "startDate": "پیل نیټه",
+    "endDate": "پای نیټه",
+    "modules": "ماډلونه",
+    "modulesSelected": "ماډل(ونه) انتخاب شوي",
+    "selectAll": "ټول غوره کړئ",
+    "generateReport": "راپور تولید کړئ",
+    "generating": "تولید کیږي...",
+    "reportResults": "د راپور پایلې",
+    "lastUpdated": "وروستی تازه کول",
+    "noReportGenerated": "تر اوسه راپور ندی تولید شوی. فلټرونه غوره کړئ او د راپور لیدلو لپاره د 'راپور تولید کړئ' تڼۍ کلیک وکړئ.",
+    "summary": "د راپور لنډیز",
+    "systemReport": "د سیستم راپور",
+    "allMetrics": "ټول معیارونه",
+    "generatedOn": "د راپور تولید نیټه",
+    "selectedModules": "انتخاب شوي ماډلونه",
+
+    "requestStatistics": "د غوښتنو احصایې",
+    "userStatistics": "د کاروونکو احصایې",
+    "committeeStatistics": "د کمیټې احصایې",
+    "additionalStatistics": "اضافي احصایې",
+
+    "totalRequests": "ټول غوښتنې",
+    "submitted": "لیږل شوي",
+    "inProgress": "په روانو کې",
+    "completed": "بشپړ شوي",
+    "rejected": "رد شوي",
+    "totalUsers": "ټول کاروونکي",
+    "activeUsers": "فعال کاروونکي",
+    "inactiveUsers": "غیر فعال کاروونکي",
+    "totalCommittee": "ټول کمیټه",
+    "activeCommittee": "فعال کمیټه",
+    "inactiveCommittee": "غیر فعال کمیټه",
+    "totalCompanies": "ټول شرکت‌ونه",
+    "totalCertifications": "ټول تصدیق‌نامې",
+    "totalMenuItems": "ټول د مینو توکي",
+    "module": {
+      "USER": "کاروونکي",
+      "COMPANY": "شرکت‌ونه",
+      "COMMITTEE": "کمیټه",
+      "MENU": "د مینو توکي",
+      "CERTIFICATION": "تصدیق‌نامې",
+      "CERTIFICATION_REQUEST": "د تصدیق‌نامې غوښتنې",
+      "ROLE": "رولونه",
+      "ATTACHMENT": "ضمیمې",
+      "COMPANY_CONTACT_PERSON": "د شرکت اړیکي کسان",
+      "COMMITTEE_MEMBER": "د کمیټې غړي"
+    }
   }
 }

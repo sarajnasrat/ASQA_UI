@@ -194,6 +194,7 @@
   },
   "company": {
        "companytyperequired": "نوع شرکت الزامی است",
+             "companyOwnerName": "نام مالک",
     "selectvalid": "لطفاً نوع شرکت معتبر را انتخاب کنید",
     "invalidformat": "فرمت نامعتبر",
     "invalidjson": "فرمت JSON نامعتبر",
@@ -226,6 +227,7 @@
       "address": "آدرس",
       "logoUrl": "نشان شرکت",
       "bussinessLogoUrl": "نشان تجاری شرکت",
+      "companyName": "نام شرکت",
       "isActive": "فعال است",
       "mainBranchAddress": "آدرس شعبه اصلی",
       "activityPlace": "محل فعالیت",
@@ -380,6 +382,7 @@
       "OTHER": "سایر"
     },
     "status": {
+      "title": "حالت",
       "ACTIVE": "فعال",
       "INACTIVE": "غیرفعال",
       "PENDING": "در انتظار",
@@ -475,7 +478,10 @@
     "secureReliable": "امن & قابل اعتماد",
     "secureReliableDesc": "داده‌های تائید نامه کیفی شما محافظت شده و تأیید شده‌اند",
     "helpFinding": "نیاز به کمک برای یافتن شماره تعقیب خود دارید؟",
+         "confirmPayment": "تائید پرداخت",
     "helpFindingDesc": "شماره تعقیب شما می‌تواند در درخواست تائید نامه کیفی شما یا ایمیل تأیید شما یافت شود.",
+        "welcomeTitle": "وضعیت تائید نامه کیفی خود را تعقیب کنید",
+    "welcomeDescription": "وضعیت تائید نامه کیفی خود را به راحتی با وارد کردن شماره تعقیب درخواست ثبت شده خود در زیر تعقیب کنید.",
     "page": {
       "title": "ثبت درخواست تائید نامه کیفی",
       "subtitle": "ثبت درخواست ",
@@ -854,6 +860,8 @@
   "common": {
     "save": "ذخیره",
     "cancel": "لغو",
+    "active": "فعال",
+    "inactive": "غیرفعال",
     "saveAndContinue":"ذخیره و ادامه به مرحله بعد",
     "delete": "حذف",
     "edit": "اصلاح",
@@ -977,5 +985,67 @@
         "support": "پشتیبانی ۲۴/۷"
       }
     }
+  },
+  "report": {
+    "systemReports":"گزارش‌های سیستم",
+    "dashboardTitle": "داشبورد گزارش سیستم",
+    "dashboardSubtitle": "ایجاد و خروجی گرفتن از گزارش‌های جامع سیستم",
+    "exportToExcel": "خروجی اکسل",
+    "detailedExport": "خروجی دقیق",
+    "exporting": "در حال خروجی گرفتن...",
+    "reportType": "نوع گزارش",
+    "yearlyReport": "گزارش سالانه",
+    "monthlyReport": "گزارش ماهانه",
+    "customRange": "بازه سفارشی",
+    "year": "سال",
+    "month": "ماه",
+    "startDate": "تاریخ شروع",
+    "endDate": "تاریخ پایان",
+    "modules": "ماژول‌ها",
+    "modulesSelected": "ماژول انتخاب شده",
+    "selectAll": "انتخاب همه",
+    "generateReport": "ایجاد گزارش",
+    "generating": "در حال ایجاد...",
+    "reportResults": "نتایج گزارش",
+    "lastUpdated": "آخرین بروزرسانی",
+    "noReportGenerated": "هنوز گزارشی ایجاد نشده است. فیلترها را انتخاب کرده و روی 'ایجاد گزارش' کلیک کنید.",
+    "summary": "خلاصه گزارش",
+    "systemReport": "گزارش سیستم",
+    "allMetrics": "همه معیارها",
+    "generatedOn": "تاریخ ایجاد گزارش",
+    "selectedModules": "ماژول‌های انتخاب شده",
+    
+    "requestStatistics": "آمار درخواست‌ها",
+    "userStatistics": "آمار کاربران",
+    "committeeStatistics": "آمار کمیته",
+    "additionalStatistics": "آمار اضافی",
+    
+    "totalRequests": "مجموع درخواست‌ها",
+    "submitted": "ارسال شده",
+    "inProgress": "در حال انجام",
+    "completed": "تکمیل شده",
+    "rejected": "رد شده",
+    "totalUsers": "مجموع کاربران",
+    "activeUsers": "کاربران فعال",
+    "inactiveUsers": "کاربران غیرفعال",
+    "totalCommittee": "مجموع کمیته",
+    "activeCommittee": "کمیته فعال",
+    "inactiveCommittee": "کمیته غیرفعال",
+    "totalCompanies": "مجموع شرکت‌ها",
+    "totalCertifications": "مجموع گواهینامه‌ها",
+    "totalMenuItems": "مجموع آیتم‌های منو",
+        
+"module": {
+  "USER": "کاربران",
+  "COMPANY": "شرکت‌ها",
+  "COMMITTEE": "کمیته",
+  "MENU": "آیتم‌های منو",
+  "CERTIFICATION": "گواهینامه‌ها",
+  "CERTIFICATION_REQUEST": "درخواست‌های گواهینامه",
+  "ROLE": "نقش‌ها",
+  "ATTACHMENT": "پیوست‌ها",
+  "COMPANY_CONTACT_PERSON": "اشخاص تماس شرکت",
+  "COMMITTEE_MEMBER": "اعضای کمیته"
+}
   }
 }

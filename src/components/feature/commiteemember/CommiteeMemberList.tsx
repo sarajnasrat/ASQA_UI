@@ -16,6 +16,7 @@ import { DynamicTable } from "../../common/DynamicTable";
 import CommiteeMemberCreate from "./CommiteeMemberCreate";
 import CommiteeMemberUpdate from "./CommiteeMemberUpdate";
 import CommiteeMemberService from "../../../services/commiteeMember.service";
+import ExcelExport from "../../common/ExcelExport";
 
 export const CommiteeMemberList: React.FC = () => {
     const [memberList, setMemberList] = useState<any[]>([]);
@@ -174,6 +175,25 @@ export const CommiteeMemberList: React.FC = () => {
                     label={t("common.refresh")}
                     onClick={getAllMembers}
                 />
+                        <ExcelExport
+          data={memberList}
+          totalElements={totalRecords}
+          fileName="committeeMembers"
+          sheetName="committeeMembers"
+          fetchAllData={async () => {
+            const res =
+              await CommiteeMemberService.getAllPaginated(
+              
+                {
+                  page: 0,
+                  size: totalRecords,
+                  sort: "id,desc",
+                },
+              );
+
+            return res.data.data;
+          }}
+        />
             </div>
         </div>
     );

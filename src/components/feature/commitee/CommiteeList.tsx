@@ -19,6 +19,7 @@ import { useToast } from "../../../hooks/ToastContext";
 import { Tag } from "primereact/tag";
 import { useNavigate } from "react-router-dom";
 import CommiteeMemberCreate from "../commiteemember/CommiteeMemberCreate";
+import ExcelExport from "../../common/ExcelExport";
 
 export const CommiteeList: React.FC = () => {
   const [commiteeList, setCommiteeList] = useState<any[]>([]);
@@ -143,7 +144,7 @@ export const CommiteeList: React.FC = () => {
         command: () => confirmDelete(rowData),
       },
       {
-        label: t("common.create"),
+        label: t("commitee.createMember"),
         icon: "pi pi-plus",
         command: () => {
           setSelectedCommitteeForMember(rowData.id);
@@ -183,6 +184,25 @@ export const CommiteeList: React.FC = () => {
           onClick={getAllCommitees}
           text
           raised
+        />
+         <ExcelExport
+          data={commiteeList}
+          totalElements={totalRecords}
+          fileName="committees"
+          sheetName="committees"
+          fetchAllData={async () => {
+            const res =
+              await CommiteeService.getAllPaginated(
+              
+                {
+                  page: 0,
+                  size: totalRecords,
+                  sort: "id,desc",
+                },
+              );
+
+            return res.data.data;
+          }}
         />
       </div>
     </div>

@@ -2,6 +2,7 @@
 import httpClient from "../api/httpClient";
 
 const BASE_URL = "/certificationrequest";
+const PAYMENT_BASE_URL = "/payments";
 
 export const CertificationRequestService = {
   // ✅ Get all without pagination
@@ -67,6 +68,17 @@ export const CertificationRequestService = {
     );
   },
   
+  rejectCertificationRequest(id: number, formData: FormData) {
+    return httpClient.patch(
+      `${BASE_URL}/${id}/rejection-reason`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+  },
   // CertificationRequestService.ts
   submitAndReview(id: number, status: string, companyId?: number) {
     return httpClient.patch(
@@ -116,11 +128,29 @@ export const CertificationRequestService = {
   },
 
   // ================= PAYMENT RELATED METHODS =================
-  
-  // ✅ Confirm payment with bill upload
-  confirmPayment(requestId: number, formData: FormData) {
+
+  getAllPayments() {
+    return httpClient.get(`${PAYMENT_BASE_URL}/all`);
+  },
+
+  getPayments(params?: any) {
+    return httpClient.get(`${PAYMENT_BASE_URL}`, { params });
+  },
+
+  getPaymentById(id: number) {
+    return httpClient.get(`${PAYMENT_BASE_URL}/${id}`);
+  },
+
+  getPaymentsByCertificationRequest(certificationRequestId: number, params?: any) {
+    return httpClient.get(
+      `${PAYMENT_BASE_URL}/certification-request/${certificationRequestId}`,
+      { params }
+    );
+  },
+
+  createPayment(certificationRequestId: number, formData: FormData) {
     return httpClient.post(
-      `${BASE_URL}/${requestId}/confirm-payment`,
+      `${PAYMENT_BASE_URL}/certification-request/${certificationRequestId}`,
       formData,
       {
         headers: {
@@ -130,9 +160,26 @@ export const CertificationRequestService = {
     );
   },
 
+  updatePayment(id: number, formData: FormData) {
+    return httpClient.patch(`${PAYMENT_BASE_URL}/${id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  },
+
+  deletePayment(id: number) {
+    return httpClient.delete(`${PAYMENT_BASE_URL}/${id}`);
+  },
+  
+  // ✅ Confirm payment with bill upload
+  confirmPayment(requestId: number, formData: FormData) {
+    return this.createPayment(requestId, formData);
+  },
+
   // ✅ Get payment details for a request
-  getPaymentDetails(requestId: number) {
-    return httpClient.get(`${BASE_URL}/${requestId}/payment-details`);
+  getPaymentDetails(requestId: number, params?: any) {
+    return this.getPaymentsByCertificationRequest(requestId, params);
   },
 
   // ✅ Print bill (returns blob for PDF)
@@ -167,15 +214,7 @@ export const CertificationRequestService = {
 
   // ✅ Upload payment receipt separately
   uploadPaymentReceipt(requestId: number, formData: FormData) {
-    return httpClient.post(
-      `${BASE_URL}/${requestId}/upload-receipt`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    return this.createPayment(requestId, formData);
   },
 
   // ✅ Get payment receipt (for viewing/downloading)
@@ -192,7 +231,12 @@ export const CertificationRequestService = {
     paymentAmount: number;
     paymentMethod?: string;
   }) {
-    return httpClient.post(`${BASE_URL}/${requestId}/mark-payment-completed`, paymentDetails);
+    const formData = new FormData();
+    formData.append("transactionId", paymentDetails.transactionId);
+    formData.append("paymentDate", paymentDetails.paymentDate);
+    formData.append("paymentAmount", String(paymentDetails.paymentAmount));
+
+    return this.createPayment(requestId, formData);
   },
 };
 

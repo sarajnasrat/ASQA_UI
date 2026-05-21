@@ -134,8 +134,8 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
   ];
 
   const mainTypeOptions = [
-    { value: "INTERNAL", label: t("certification.page.mainType.internal.title") },
-    { value: "EXTERNAL", label: t("certification.page.mainType.external.title") },
+    { value: "INTERNAL", label: t("certification.page.certificationScope.internal.title") },
+    { value: "EXTERNAL", label: t("certification.page.certificationScope.external.title") },
   ];
 
   const getCertificationOptions = () => {
@@ -149,6 +149,7 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
           value: "STANDARD_MARK_CERTIFICATION",
           label: t("certification.page.certificationType.standard.title"),
         },
+        
       ];
     }
 
@@ -157,10 +158,6 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
         {
           value: "DOMESTIC_QUALITY_CERTIFICATION",
           label: t("certification.page.certificationType.domestic.title"),
-        },
-        {
-          value: "INTERNATIONAL_QUALITY_CERTIFICATION",
-          label: t("certification.page.certificationType.international.title"),
         },
         {
           value: "STANDARD_MARK_CERTIFICATION",
@@ -185,12 +182,12 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
     let isValid = true;
 
     if (!formData.requestType) {
-      newErrors.requestType = t("certification.validation.requestTypeRequired");
+      newErrors.requestType = t("certification.validation.certificationScope");
       isValid = false;
     }
 
     if (!formData.mainType) {
-      newErrors.mainType = t("certification.validation.mainTypeRequired");
+      newErrors.mainType = t("certification.validation.certificationScope");
       isValid = false;
     }
 
@@ -268,7 +265,7 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
       localStorage.setItem(STORAGE_KEY, JSON.stringify(draftToSave));
       sessionStorage.setItem("certificationRequestId", String(requestId));
       sessionStorage.setItem("certificationType", formData.certificationType);
-      sessionStorage.setItem("certificationMainType", formData.mainType);
+      sessionStorage.setItem("certificationScope", formData.mainType);
       sessionStorage.setItem("requestType", formData.requestType);
 
       console.log("Saved draft with ID:", draftToSave);
@@ -385,7 +382,7 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
         {/* Main Type */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            {t("certification.page.mainType.title")}{" "}
+            {t("certification.page.certificationScope.title")}{" "}
             <span className="text-red-500">*</span>
           </label>
           <select
@@ -400,10 +397,10 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
           >
             <option value="">
               {!formData.requestType
-                ? t("common.selectRequestTypeFirst")
+                ? t("common.selectRequest")
                 : t("common.select") +
                   " " +
-                  t("certification.page.mainType.title")}
+                  t("certification.page.certificationScope.title")}
             </option>
             {mainTypeOptions.map((option) => (
               <option key={option.value} value={option.value}>
@@ -440,7 +437,7 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
         >
           <option value="">
             {!formData.mainType
-              ? t("common.selectMainTypeFirst")
+              ? t("common.selectScope")
               : t("common.select") +
                 " " +
                 t("certification.page.certificationType.title")}
@@ -483,7 +480,7 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
           {isSubmitting ? (
             <span className="flex items-center justify-center gap-2">
               <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-              {t("common.creating")}
+              {t("common.saving")}
             </span>
           ) : (
             <span className="flex items-center justify-center gap-2">

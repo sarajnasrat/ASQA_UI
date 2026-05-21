@@ -129,3 +129,7 @@
   padding-right: 8px !important;
   padding-left: 8px !important;
 }
+.p-confirm-dialog .p-dialog-content {
+    display: block !important;
+    align-items: center;
+}

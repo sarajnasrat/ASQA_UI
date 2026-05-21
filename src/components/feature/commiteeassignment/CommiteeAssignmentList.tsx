@@ -18,6 +18,7 @@ import { DynamicTable } from "../../common/DynamicTable";
 import CommiteeAssignmentService from "../../../services/commitee-assignment.service";
 import { CommiteeAssingmentUpdate } from "./CommiteeAssingmentUpdate";
 import StatusTabMenu, { type StatusTabItem } from "../../common/StatusTabMenu";
+import ExcelExport from "../../common/ExcelExport";
 
 export const CommiteeAssignmentList: React.FC = () => {
   const { t } = useTranslation();
@@ -36,66 +37,68 @@ export const CommiteeAssignmentList: React.FC = () => {
 
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [updateVisible, setUpdateVisible] = useState(false);
-  const committeeIds = JSON.parse(localStorage.getItem("committeeIds") || "[]") as number[];
+  const committeeIds = JSON.parse(
+    localStorage.getItem("committeeIds") || "[]",
+  ) as number[];
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const userRole = user.roles[0]; // Assuming single role, adjust if multiple roles exist
   console.log("Committee IDs from localStorage:", committeeIds);
 
-    const [status, setStatus] = useState<string>("ASSIGNED");
-    const [activeIndex, setActiveIndex] = useState(0);
+  const [status, setStatus] = useState<string>("ASSIGNED");
+  const [activeIndex, setActiveIndex] = useState(0);
   // ================= LOAD DATA =================
 
-    const loadData = async () => {
-      try {
-        setLoading(true);
-  
-        const res = await CommiteeAssignmentService.getAllPaginatedByStatus(
-          status,
-          first / rows,
-          rows,
-          "id,desc",
-        );
-  
-        setData(res.data.data);
-        setTotalRecords(res.data.totalElements);
-      } catch (error) {
-        toast.current?.show({
-          severity: "error",
-          summary: t("common.error"),
-          detail: t("certificationRequest.loadFailed"),
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-  
-// const loadData = async () => {
-//   setLoading(true);
-//   const response = await handleApi(
+  const loadData = async () => {
+    try {
+      setLoading(true);
 
-//     () =>
-      
-//       CommiteeAssignmentService.getByCommitteeIds(committeeIds, {
-//         page: first / rows,
-//         size: rows,
-//         sort: "id,desc",
-//       }),
-//     () => {},
-//     showError,
-//     t
-//   );
+      const res = await CommiteeAssignmentService.getAllPaginatedByStatus(
+        status,
+        first / rows,
+        rows,
+        "id,desc",
+      );
 
-//   if (response?.data) {
-//     setData(response.data.data);
-//     setTotalRecords(response.data.totalElements);
-//   }
+      setData(res.data.data);
+      setTotalRecords(res.data.totalElements);
+    } catch (error) {
+      toast.current?.show({
+        severity: "error",
+        summary: t("common.error"),
+        detail: t("certificationRequest.loadFailed"),
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
-//   setLoading(false);
-// };
+  // const loadData = async () => {
+  //   setLoading(true);
+  //   const response = await handleApi(
+
+  //     () =>
+
+  //       CommiteeAssignmentService.getByCommitteeIds(committeeIds, {
+  //         page: first / rows,
+  //         size: rows,
+  //         sort: "id,desc",
+  //       }),
+  //     () => {},
+  //     showError,
+  //     t
+  //   );
+
+  //   if (response?.data) {
+  //     setData(response.data.data);
+  //     setTotalRecords(response.data.totalElements);
+  //   }
+
+  //   setLoading(false);
+  // };
 
   useEffect(() => {
     loadData();
-  }, [first, rows,status]);
+  }, [first, rows, status]);
 
   // ================= DELETE =================
   const handleDelete = async (id: number) => {
@@ -103,7 +106,7 @@ export const CommiteeAssignmentList: React.FC = () => {
       () => CommiteeAssignmentService.delete(id),
       () => showSuccess("Success", t("common.deleted")),
       showError,
-      t
+      t,
     );
 
     if (response) loadData();
@@ -141,13 +144,13 @@ export const CommiteeAssignmentList: React.FC = () => {
         command: () => confirmDelete(rowData),
       },
       {
-  label: t("common.edit"),
-  icon: "pi pi-pencil",
-  command: () => {
-    setSelectedId(rowData.id);
-    setUpdateVisible(true);
-  },
-},
+        label: t("common.edit"),
+        icon: "pi pi-pencil",
+        command: () => {
+          setSelectedId(rowData.id);
+          setUpdateVisible(true);
+        },
+      },
     ];
 
     return (
@@ -164,84 +167,83 @@ export const CommiteeAssignmentList: React.FC = () => {
   };
 
   // ================= COLUMNS =================
-const columns = [
-
-  // ================= CERTIFICATION REQUEST =================
-  {
-    field: "certificationRequest",
-    header: t("commitee.assignment.requestType"),
-    body: (row: any) =>
-        t(`certificationRequest.typeOptions.${row.certificationRequest.requestType}`)
-   
-  },
+  const columns = [
+    // ================= CERTIFICATION REQUEST =================
+    {
+      field: "certificationRequest",
+      header: t("commitee.assignment.requestType"),
+      body: (row: any) =>
+        t(
+          `certificationRequest.typeOptions.${row.certificationRequest.requestType}`,
+        ),
+    },
 
     {
-    field: "certificationRequest",
-    header: t("commitee.assignment.certificationType"),
-    body: (row: any) =>
-       t(`certificationRequest.certificationTypeOptions.${row.certificationRequest.certificationType}`)
-       
-  },
+      field: "certificationRequest",
+      header: t("commitee.assignment.certificationType"),
+      body: (row: any) =>
+        t(
+          `certificationRequest.certificationTypeOptions.${row.certificationRequest.certificationType}`,
+        ),
+    },
 
-  // ================= COMMITTEE =================
-  {
-    field: "committee.name",
-    header: t("commitee.name"),
-    body: (row: any) => row.committee?.name,
-  },
+    // ================= COMMITTEE =================
+    {
+      field: "committee.name",
+      header: t("commitee.name"),
+      body: (row: any) => row.committee?.name,
+    },
 
-  // ================= ASSIGNED BY =================
-  {
-    field: "assignedBy",
-    header: t("commitee.assignment.assignmentBy"),
-    body: (row: any) =>
-      row.assignedBy
-        ? `${row.assignedBy.firstName} ${row.assignedBy.lastName}`
-        : "Not Mentioned",
-  },
+    // ================= ASSIGNED BY =================
+    {
+      field: "assignedBy",
+      header: t("commitee.assignment.assignmentBy"),
+      body: (row: any) =>
+        row.assignedBy
+          ? `${row.assignedBy.firstName} ${row.assignedBy.lastName}`
+          : "Not Mentioned",
+    },
 
-  // ================= STATUS =================
-  {
-    field: "assignmentStatus",
-    header: t("common.status"),
-    body: (row: any) => (
-      <Tag
-        value={row.assignmentStatus}
-        severity={
-          row.assignmentStatus === "COMPLETED"
-            ? "success"
-            : row.assignmentStatus === "REJECTED"
-            ? "danger"
-            : row.assignmentStatus === "IN_PROGRESS"
-            ? "warning"
-            : "info"
-        }
-      />
-    ),
-  },
+    // ================= STATUS =================
+    {
+      field: "assignmentStatus",
+      header: t("common.status"),
+      body: (row: any) => (
+        <Tag
+          value={row.assignmentStatus}
+          severity={
+            row.assignmentStatus === "COMPLETED"
+              ? "success"
+              : row.assignmentStatus === "REJECTED"
+                ? "danger"
+                : row.assignmentStatus === "IN_PROGRESS"
+                  ? "warning"
+                  : "info"
+          }
+        />
+      ),
+    },
 
-  // ================= DATES =================
-  {
-    field: "assignedAt",
-    header: t("commitee.assignment.assignmentAt"),
-    body: (row: any) =>
-      row.assignedAt ? new Date(row.assignedAt).toLocaleString() : "",
-  },
+    // ================= DATES =================
+    {
+      field: "assignedAt",
+      header: t("commitee.assignment.assignmentAt"),
+      body: (row: any) =>
+        row.assignedAt ? new Date(row.assignedAt).toLocaleString() : "",
+    },
 
+    {
+      field: "remarks",
+      header: t("commitee.assignment.reason"),
+    },
 
-
-  {
-    field: "remarks",
-    header: t("commitee.assignment.reason"),
-  },
-
-  // ================= ACTION =================
-  {
-    header: t("common.action"),
-    body: actionTemplate,
-    style: { width: "140px" },
-  },
-];
+    // ================= ACTION =================
+    {
+      header: t("common.action"),
+      body: actionTemplate,
+      style: { width: "140px" },
+    },
+  ];
 
   // ================= HEADER =================
   const header = () => (
@@ -257,6 +259,21 @@ const columns = [
         text
         raised
       />
+      <ExcelExport
+        data={data}
+        totalElements={totalRecords}
+        fileName="assignment"
+        sheetName="assignment"
+        fetchAllData={async () => {
+          const res = await CommiteeAssignmentService.getAllPaginated({
+            page: 0,
+            size: totalRecords,
+            sort: "id,desc",
+          });
+
+          return res.data.data;
+        }}
+      />
     </div>
   );
   const statusTabs: StatusTabItem[] = [
@@ -266,7 +283,7 @@ const columns = [
       icon: "pi pi-send",
     },
 
-       {
+    {
       label: t("commitee.assignment.status.in_progress"),
       value: "IN_PROGRESS",
       icon: "pi pi-exclamation-circle",
@@ -277,13 +294,11 @@ const columns = [
       value: "COMPLETED",
       icon: "pi pi-exclamation-circle",
     },
-       {
+    {
       label: t("commitee.assignment.status.rejected"),
       value: "REJECTED",
       icon: "pi pi-cancel",
-    }
-
- 
+    },
   ];
 
   return (
@@ -297,7 +312,7 @@ const columns = [
         ]}
       />
 
-            <StatusTabMenu
+      <StatusTabMenu
         items={statusTabs}
         activeIndex={activeIndex}
         onChange={(index, value) => {
@@ -307,11 +322,11 @@ const columns = [
         }}
       />
       <CommiteeAssingmentUpdate
-  visible={updateVisible}
-  assignmentId={selectedId}
-  onHide={() => setUpdateVisible(false)}
-  onSuccess={() => loadData()}
-/>
+        visible={updateVisible}
+        assignmentId={selectedId}
+        onHide={() => setUpdateVisible(false)}
+        onSuccess={() => loadData()}
+      />
 
       <DynamicTable
         title={t("commitee.assignment.list")}

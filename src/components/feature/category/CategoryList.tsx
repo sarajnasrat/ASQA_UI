@@ -13,6 +13,7 @@ import CategoryService from "../../../services/category.service";
 import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
 import { DynamicTable } from "../../common/DynamicTable";
 import { CategoryUpdate } from "./CategoryUpdate";
+import ExcelExport from "../../common/ExcelExport";
 
 export const CategoryList: React.FC = () => {
 
@@ -166,6 +167,25 @@ export const CategoryList: React.FC = () => {
                     severity="info"
                     onClick={getAllCategories}
                 />
+                        <ExcelExport
+          data={categoryList}
+          totalElements={totalRecords}
+          fileName="companies"
+          sheetName="Companies"
+          fetchAllData={async () => {
+            const res =
+              await CategoryService.getPaginatedCategories(
+              
+                {
+                  page: 0,
+                  size: totalRecords,
+                  sort: "id,desc",
+                },
+              );
+
+            return res.data.data;
+          }}
+        />
             </div>
         </div>
     );

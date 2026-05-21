@@ -18,6 +18,7 @@ import StatusTabMenu from "../../common/StatusTabMenu";
 import { AttachmentList } from "../../common/AttachmentList";
 import i18n from "../../../i18n/i18n";
 import { Download, Eye, EyeOff, File } from "lucide-react";
+import ExcelExport from "../../common/ExcelExport";
 
 export const CertificationRequestList = () => {
   const { t } = useTranslation();
@@ -66,6 +67,11 @@ export const CertificationRequestList = () => {
       value: "UNDER_REVIEW",
       icon: "pi pi-search",
     },
+        {
+      label: t("certificationRequest.statusOptions.REJECTED"),
+      value: "REJECTED",
+      icon: "pi pi-times",
+    },
 
     /* ===== STANDARD STEP ===== */
 
@@ -112,6 +118,11 @@ export const CertificationRequestList = () => {
     {
       label: t("certificationRequest.statusOptions.REPORT_APPROVED"),
       value: "REPORT_APPROVED",
+      icon: "pi pi-check-circle",
+    },
+    {
+      label: t("certificationRequest.statusOptions.CERTIFICATE_ISSUED"),
+      value: "CERTIFICATE_ISSUED",
       icon: "pi pi-check-circle",
     },
 
@@ -630,64 +641,71 @@ export const CertificationRequestList = () => {
     //   },
     // },
     {
-  header: t("certificationRequest.labels.deadline"),
-  body: (row: any) => {
-    const start = row.startDate ? new Date(row.startDate) : null;
-    const end = row.endDate ? new Date(row.endDate) : null;
-    const now = new Date();
+      header: t("certificationRequest.labels.deadline"),
+      body: (row: any) => {
+        const start = row.startDate ? new Date(row.startDate) : null;
+        const end = row.endDate ? new Date(row.endDate) : null;
+        const now = new Date();
 
-    const calculateMonths = () => {
-      if (!start || !end) return null;
-      return (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
-    };
+        const calculateMonths = () => {
+          if (!start || !end) return null;
+          return (
+            (end.getFullYear() - start.getFullYear()) * 12 +
+            (end.getMonth() - start.getMonth())
+          );
+        };
 
-    const getDaysRemaining = () => {
-      if (!end) return null;
-      return Math.ceil((end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-    };
+        const getDaysRemaining = () => {
+          if (!end) return null;
+          return Math.ceil(
+            (end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24),
+          );
+        };
 
-    const daysRemaining = getDaysRemaining();
-    const totalMonths = calculateMonths();
-    const isExpired = now > end!;
+        const daysRemaining = getDaysRemaining();
+        const totalMonths = calculateMonths();
+        const isExpired = now > end!;
 
-    const getStatusText = () => {
-      if (!start || !end) return "No deadline";
-      if (isExpired) return "Expired";
-      if (daysRemaining !== null && daysRemaining <= 20) return `${daysRemaining} days remaining`;
-      // return `${daysRemaining} days left`;
-    };
+        const getStatusText = () => {
+          if (!start || !end) return "No deadline";
+          if (isExpired) return "Expired";
+          if (daysRemaining !== null && daysRemaining <= 20)
+            return `${daysRemaining} days remaining`;
+          // return `${daysRemaining} days left`;
+        };
 
-    const getStatusColor = () => {
-      if (!start || !end) return "text-gray-400";
-      if (isExpired) return "text-red-600";
-      if (daysRemaining !== null && daysRemaining <= 20) return "text-orange-600";
-      return "text-green-600";
-    };
+        const getStatusColor = () => {
+          if (!start || !end) return "text-gray-400";
+          if (isExpired) return "text-red-600";
+          if (daysRemaining !== null && daysRemaining <= 20)
+            return "text-orange-600";
+          return "text-green-600";
+        };
 
-    return (
-      <div className="flex flex-col gap-1">
-        <div className="flex items-center justify-between">
-          <span className="font-medium text-gray-900">
-            {totalMonths !== null ? `${totalMonths} months` : "—"}
-          </span>
-          <span className={`text-sm ${getStatusColor()}`}>
-            {getStatusText()}
-          </span>
-        </div>
-        {start && end && (
-          <div className="text-xs text-gray-400">
-            {start.toLocaleDateString()} → {end.toLocaleDateString()}
+        return (
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center justify-between">
+              <span className="font-medium text-gray-900">
+                {totalMonths !== null ? `${totalMonths} months` : "—"}
+              </span>
+              <span className={`text-sm ${getStatusColor()}`}>
+                {getStatusText()}
+              </span>
+            </div>
+            {start && end && (
+              <div className="text-xs text-gray-400">
+                {start.toLocaleDateString()} → {end.toLocaleDateString()}
+              </div>
+            )}
+            {isExpired && row.batch && (
+              <div className="text-xs text-red-600 font-medium mt-1">
+                Batch: {row.batch}
+              </div>
+            )}
           </div>
-        )}
-        {isExpired && row.batch && (
-          <div className="text-xs text-red-600 font-medium mt-1">
-            Batch: {row.batch}
-          </div>
-        )}
-      </div>
-    );
-  },
-},
+        );
+      },
+    },
     {
       field: "createdDate",
       header: t("certificationRequest.labels.createdDate"),
@@ -698,6 +716,7 @@ export const CertificationRequestList = () => {
       body: actionTemplate,
     },
   ];
+
 
   // ================= HEADER =================
   const header = (
@@ -716,6 +735,23 @@ export const CertificationRequestList = () => {
           onClick={loadData}
           text
           raised
+        />
+        <ExcelExport
+          data={data}
+          totalElements={totalRecords}
+          fileName="companies"
+          sheetName="Companies"
+          fetchAllData={async () => {
+            const res =
+              await CertificationRequestService.getAllPaginatedByStatus(
+                status,
+                first / rows,
+                rows,
+                "id,desc",
+              );
+
+            return res.data.data;
+          }}
         />
       </div>
     </div>

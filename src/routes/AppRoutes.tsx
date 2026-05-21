@@ -1,7 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import { Login } from "../components/feature/Login";
 import { ProtectedRoute } from "./ProtectedRoute";
-import { MainLayout } from "../components/Layout/MainLayout";
 import { ToastProvider } from "../hooks/ToastContext";
 import Home from "../components/feature/website/pages/Home";
 import { About } from "../components/feature/website/pages/About";
@@ -13,6 +12,7 @@ import { WebsiteLayout } from "./WebsiteLayout";
 import CertificationTypeSelection from "../components/feature/website/pages/CertificationTypeSelection";
 import { CertificationDetails } from "../components/feature/certification-request/CertificationDetails";
 import ForgotPassword from "../components/feature/forgotpassword/ForgotPassword";
+import { MainLayout } from "../components/Layout/MainLayout";
 
 export const AppRoutes = () => {
   return (

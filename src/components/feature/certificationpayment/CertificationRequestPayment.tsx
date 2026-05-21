@@ -11,6 +11,7 @@ import { FileUpload } from "primereact/fileupload";
 import { InputText } from "primereact/inputtext";
 
 import CertificationRequestService from "../../../services/CertificationReques.service";
+import { handleApi } from "../../../hooks/handleApi";
 
 import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
 import { DynamicTable } from "../../common/DynamicTable";
@@ -22,6 +23,7 @@ import StatusTabMenu from "../../common/StatusTabMenu";
 import i18n from "../../../i18n/i18n";
 import { Download, Eye, File } from "lucide-react";
 import { CertificationRequestUpdate } from "../certification-request/CertificationRequestUpdate";
+import ExcelExport from "../../common/ExcelExport";
 
 const ActionMenu = ({ items }: { items: MenuItem[] }) => {
   const menu = useRef<any>(null);
@@ -43,6 +45,22 @@ export const CertificationRequestPayment = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const toast = useRef<Toast>(null);
+
+  const showSuccess = (summary: string, detail?: string) => {
+    toast.current?.show({
+      severity: "success",
+      summary,
+      detail,
+    });
+  };
+
+  const showError = (summary: string, detail?: string) => {
+    toast.current?.show({
+      severity: "error",
+      summary,
+      detail,
+    });
+  };
 
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -79,27 +97,27 @@ export const CertificationRequestPayment = () => {
   ];
 
   const loadData = async () => {
-    try {
-      setLoading(true);
+    setLoading(true);
 
-      const res = await CertificationRequestService.getAllPaginatedByStatus(
-        status,
-        first / rows,
-        rows,
-        "id,desc"
-      );
+    const res = await handleApi(
+      () =>
+        CertificationRequestService.getAllPaginatedByStatus(
+          status,
+          first / rows,
+          rows,
+          "id,desc"
+        ),
+      () => {},
+      showError,
+      t
+    );
 
+    if (res) {
       setData(res.data.data);
       setTotalRecords(res.data.totalElements);
-    } catch {
-      toast.current?.show({
-        severity: "error",
-        summary: t("common.error"),
-        detail: t("certificationRequest.loadFailed"),
-      });
-    } finally {
-      setLoading(false);
     }
+
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -334,6 +352,13 @@ export const CertificationRequestPayment = () => {
     setPaymentDialogVisible(true);
   };
 
+  const toPaymentDateTime = (date: string) => {
+    if (!date) return new Date().toISOString();
+    if (date.includes("T")) return date;
+
+    return new Date(`${date}T00:00:00`).toISOString();
+  };
+
   const handlePaymentConfirmation = async () => {
     if (!selectedRequest) return;
 
@@ -355,29 +380,33 @@ export const CertificationRequestPayment = () => {
       return;
     }
 
-    try {
-      setUploading(true);
+    setUploading(true);
 
-      const formData = new FormData();
-      formData.append("file", uploadedBill);
-      formData.append("transactionId", transactionId);
-      formData.append("paymentDate", paymentDate || new Date().toISOString());
-      formData.append(
-        "paymentAmount",
-        paymentAmount || selectedRequest.paymentAmount || ""
-      );
+    const formData = new FormData();
+    formData.append("file", uploadedBill);
+    formData.append("transactionId", transactionId);
+    formData.append("paymentDate", toPaymentDateTime(paymentDate));
+    formData.append(
+      "paymentAmount",
+      paymentAmount || selectedRequest.paymentAmount || ""
+    );
 
-      await CertificationRequestService.confirmPayment(
-        selectedRequest.id,
-        formData
-      );
+    const response = await handleApi(
+      () =>
+        CertificationRequestService.confirmPayment(
+          selectedRequest.id,
+          formData
+        ),
+      () =>
+        showSuccess(
+          t("common.success"),
+          "Scanned bill uploaded successfully."
+        ),
+      showError,
+      t
+    );
 
-      toast.current?.show({
-        severity: "success",
-        summary: t("common.success"),
-        detail: "Scanned bill uploaded successfully.",
-      });
-
+    if (response) {
       setPaymentDialogVisible(false);
       setUploadedBill(null);
       setTransactionId("");
@@ -386,34 +415,25 @@ export const CertificationRequestPayment = () => {
       setSelectedRequest(null);
 
       loadData();
-    } catch {
-      toast.current?.show({
-        severity: "error",
-        summary: t("common.error"),
-        detail: "Failed to upload scanned bill.",
-      });
-    } finally {
-      setUploading(false);
     }
+
+    setUploading(false);
   };
 
   const handleDelete = async (id: number) => {
-    try {
-      await CertificationRequestService.delete(id);
+    const response = await handleApi(
+      () => CertificationRequestService.delete(id),
+      () =>
+        showSuccess(
+          t("common.success"),
+          t("certificationRequest.deleted")
+        ),
+      showError,
+      t
+    );
 
-      toast.current?.show({
-        severity: "success",
-        summary: t("common.success"),
-        detail: t("certificationRequest.deleted"),
-      });
-
+    if (response) {
       loadData();
-    } catch {
-      toast.current?.show({
-        severity: "error",
-        summary: t("common.error"),
-        detail: t("certificationRequest.deleteFailed"),
-      });
     }
   };
 
@@ -655,6 +675,23 @@ export const CertificationRequestPayment = () => {
           onClick={loadData}
           text
           raised
+        />
+         <ExcelExport
+          data={data}
+          totalElements={totalRecords}
+          fileName="payments"
+          sheetName="payments"
+          fetchAllData={async () => {
+            const res =
+              await CertificationRequestService.getAllPaginatedByStatus(
+                status,
+                first / rows,
+                rows,
+                "id,desc",
+              );
+
+            return res.data.data;
+          }}
         />
       </div>
     </div>

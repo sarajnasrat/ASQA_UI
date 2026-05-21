@@ -19,7 +19,7 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
   
   if (!certification) return null;
 
-  const company = certification.company || {};
+  const company = certification.certificationRequest.company || {};
   
   const getCertificationType = (type: string) => {
     if (!type) return "————————";
@@ -240,7 +240,7 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
               <p dir="rtl" style={{ fontSize: '13px', lineHeight: '2', textAlign: 'center', color: '#374151' }}>
                 دغه سند تائیدوي، چې شرکت{" "}
                 <strong style={{ color: '#1e40af', fontWeight: 'bold' }}>
-                  {company.companyNameDR || company.companyNameEN || "————————"}
+                  {company.companyNamePS || company.companyNameEN || "————————"}
                 </strong>{" "}
                 چې په{" "}
                 <strong style={{ color: '#1e40af', fontWeight: 'bold' }}>

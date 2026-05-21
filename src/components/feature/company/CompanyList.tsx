@@ -9,6 +9,9 @@ import { useTranslation } from "react-i18next";
 import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
 import { DynamicTable } from "../../common/DynamicTable";
 import CompanyService from "../../../services/company.service";
+import ExcelExport from "../../common/ExcelExport";
+import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
+import i18n from "../../../i18n/i18n";
 
 export const CompanyList: React.FC = () => {
   const { t } = useTranslation();
@@ -33,7 +36,12 @@ export const CompanyList: React.FC = () => {
       setCompanies(res.data.data);
       setTotalRecords(res.data.totalElements);
     } catch (error) {
-      toast.current?.show({ severity: "error", summary: t("common.error"), detail: t("company.loadFailed"), life: 3000 });
+      toast.current?.show({
+        severity: "error",
+        summary: t("common.error"),
+        detail: t("company.loadFailed"),
+        life: 3000,
+      });
     } finally {
       setLoading(false);
     }
@@ -47,16 +55,28 @@ export const CompanyList: React.FC = () => {
   const handleDelete = async (id: number) => {
     try {
       await CompanyService.deleteCompany(id);
-      toast.current?.show({ severity: "success", summary: t("common.success"), detail: t("company.deleted"), life: 3000 });
+      toast.current?.show({
+        severity: "success",
+        summary: t("common.success"),
+        detail: t("company.deleted"),
+        life: 3000,
+      });
       getCompanies();
     } catch (error) {
-      toast.current?.show({ severity: "error", summary: t("common.error"), detail: t("company.deleteFailed"), life: 4000 });
+      toast.current?.show({
+        severity: "error",
+        summary: t("common.error"),
+        detail: t("company.deleteFailed"),
+        life: 4000,
+      });
     }
   };
 
   const confirmDelete = (company: any) => {
     confirmDialog({
-      message: t("company.deleteConfirm", { name: company.companyNameEN || "—" }),
+      message: t("company.deleteConfirm", {
+        name: company.companyNameEN || "—",
+      }),
       header: t("company.delete"),
       icon: "pi pi-exclamation-triangle",
       acceptLabel: t("common.delete"),
@@ -87,7 +107,11 @@ export const CompanyList: React.FC = () => {
     return (
       <div className="flex justify-center">
         <TieredMenu model={items} popup ref={menu} />
-        <Button icon="pi pi-ellipsis-v" className="p-button-text p-button-sm" onClick={(e) => menu.current.toggle(e)} />
+        <Button
+          icon="pi pi-ellipsis-v"
+          className="p-button-text p-button-sm"
+          onClick={(e) => menu.current.toggle(e)}
+        />
       </div>
     );
   };
@@ -100,7 +124,7 @@ export const CompanyList: React.FC = () => {
           {totalRecords} {t("common.total")}
         </span>
       </div>
-      <div className="flex gap-3">
+      <div className="flex w-full flex-col gap-3 sm:flex-row md:w-auto">
         <Button
           icon="pi pi-plus"
           label={t("company.create")}
@@ -109,26 +133,162 @@ export const CompanyList: React.FC = () => {
           severity="info"
           onClick={() => navigate("/company/create")}
         />
-        <Button icon="pi pi-sync" label={t("common.refersh")} text raised severity="info" onClick={getCompanies} />
+
+        <Button
+          icon="pi pi-sync"
+          label={t("common.refersh")}
+          text
+          raised
+          severity="info"
+          onClick={getCompanies}
+        />
+
+        <ExcelExport
+          data={companies}
+          totalElements={totalRecords}
+          fileName="companies"
+          sheetName="Companies"
+          fetchAllData={async () => {
+            const res = await CompanyService.getPaginatedCompanies({
+              page: 0,
+              size: totalRecords,
+              sort: "id,desc",
+            });
+
+            return res.data.data;
+          }}
+        />
       </div>
     </div>
   );
 
-  const columns = [
-    { field: "id", header: "ID", style: { width: "80px" }, body: (row: any) => <span>{row.id}</span> },
-    { field: "companyNameEN", header: t("company.labels.companyNameEN"), sortable: true, style: { minWidth: "200px" }, body: (row: any) => <span>{row.companyNameEN || "—"}</span> },
-    { field: "email", header: t("company.labels.email"), sortable: true, style: { minWidth: "200px" }, body: (row: any) => <span>{row.email || "—"}</span> },
-    { field: "phoneNumber", header: t("company.labels.phoneNumber"), style: { minWidth: "150px" }, body: (row: any) => <span>{row.phoneNumber || "—"}</span> },
-    { header: t("common.action"), body: actionTemplate, style: { width: "140px" } },
-  ];
+const columns = [
+  {
+    field: "id",
+    header: "ID",
+    style: { width: "80px" },
+    body: (row: any) => <span>{row.id}</span>,
+  },
 
+  {
+    field: "logoUrl",
+    header: t("company.labels.logoUrl") || "Logo",
+    style: { width: "100px" },
+    body: (row: any) =>
+      row.logoUrl ? (
+        <img
+          src={`http://localhost:8080${row.logoUrl}`}
+          alt="logo"
+          className="h-12 w-12 rounded-full border object-cover shadow-sm"
+        />
+      ) : (
+        <span>—</span>
+      ),
+  },
+
+  {
+    field: "companyName",
+    header: t("company.labels.companyName") || "Company Name",
+    style: { minWidth: "240px" },
+    body: (row: any) => {
+      const currentLanguage = i18n.language;
+
+      const companyName =
+        currentLanguage === "dr"
+          ? row.companyNameDR
+          : currentLanguage === "ps"
+          ? row.companyNamePS
+          : row.companyNameEN;
+
+      return <span>{companyName || "—"}</span>;
+    },
+  },
+
+  {
+    field: "email",
+    header: t("company.labels.email"),
+    style: { minWidth: "220px" },
+    body: (row: any) => <span>{row.email || "—"}</span>,
+  },
+
+  {
+    field: "phoneNumber",
+    header: t("company.labels.phoneNumber"),
+    style: { minWidth: "160px" },
+    body: (row: any) => <span>{row.phoneNumber || "—"}</span>,
+  },
+
+  {
+    field: "jawazNumber",
+    header: t("company.labels.jawazNumber") || "Jawaz Number",
+    style: { minWidth: "160px" },
+    body: (row: any) => <span>{row.jawazNumber || "—"}</span>,
+  },
+
+ 
+
+  {
+    field: "companyOwnerName",
+    header:
+      t("company.labels.companyOwnerName") || "Owner Name",
+    style: { minWidth: "220px" },
+    body: (row: any) => {
+      const currentLanguage = i18n.language;
+
+      const ownerName =
+        currentLanguage === "dr"
+          ? row.aboutCompanyDr
+          : currentLanguage === "ps"
+          ? row.aboutCompanyPs
+          : row.companyOwnerNameEn;
+
+      return <span>{ownerName || "—"}</span>;
+    },
+  },
+
+
+  {
+    field: "companyType",
+    header: t("company.labels.companyType") || "Company Type",
+    style: { minWidth: "160px" },
+    body: (row: any) => <span>{row.companyType || "—"}</span>,
+  },
+
+  {
+    field: "active",
+    header: t("company.status.title") || "Status",
+    style: { minWidth: "130px" },
+    body: (row: any) => (
+      <span
+        className={`rounded-full px-3 py-1 text-xs font-medium ${
+          row.active
+            ? "bg-green-100 text-green-700"
+            : "bg-red-100 text-red-700"
+        }`}
+      >
+        {row.active
+          ? t("common.active") || "Active"
+          : t("common.inactive") || "Inactive"}
+      </span>
+    ),
+  },
+
+  {
+    header: t("common.action"),
+    body: actionTemplate,
+    style: { width: "140px" },
+  },
+];
   const breadcrumbItems = [{ label: "Company", url: "" }];
 
   return (
     <>
       <Toast ref={toast} />
       <ConfirmDialog />
-      <DynamicBreadcrumb items={breadcrumbItems} size="pl-5 pr-5 max-w-8xl mx-auto mt-3" />
+      <DynamicBreadcrumb
+        items={breadcrumbItems}
+        size="pl-5 pr-5 max-w-8xl mx-auto mt-3"
+      />
       <DynamicTable
         title={t("company.list")}
         value={companies}
