@@ -56,41 +56,33 @@ export const CertificationRequestService = {
   },
 
   // ✅ PATCH - Update request status
-  updateStatus(id: number, formData: FormData) {
+  updateStatus(id: number, status: string, companyId?: number) {
     return httpClient.patch(
       `${BASE_URL}/${id}/status`,
-      formData,
+      null,
       {
-        headers: {
-          "Content-Type": "multipart/form-data",
+        params: {
+          status,
+          ...(companyId !== undefined && companyId !== null ? { companyId } : {}),
         },
       }
     );
   },
   
-  rejectCertificationRequest(id: number, formData: FormData) {
+  rejectCertificationRequest(id: number, rejectionReason: string) {
     return httpClient.patch(
       `${BASE_URL}/${id}/rejection-reason`,
-      formData,
+      null,
       {
-        headers: {
-          "Content-Type": "multipart/form-data",
+        params: {
+          rejectionReason,
         },
       }
     );
   },
   // CertificationRequestService.ts
   submitAndReview(id: number, status: string, companyId?: number) {
-    return httpClient.patch(
-      `${BASE_URL}/${id}/status`,
-      null,
-      {
-        params: {
-          status: status,
-          ...(companyId && { companyId: companyId })
-        }
-      }
-    );
+    return this.updateStatus(id, status, companyId);
   },
 
   standardProvided(id: number, formData: FormData) {
@@ -197,6 +189,32 @@ export const CertificationRequestService = {
       {
         params: {
           status: status,
+        },
+      }
+    );
+  },
+
+  // ✅ Update print flag
+  updateIsPrint(requestId: number, value: boolean) {
+    return httpClient.patch(
+      `${BASE_URL}/${requestId}/is-print`,
+      null,
+      {
+        params: {
+          value,
+        },
+      }
+    );
+  },
+
+  // ✅ Update scanned flag
+  updateIsScanned(requestId: number, value: boolean) {
+    return httpClient.patch(
+      `${BASE_URL}/${requestId}/is-scanned`,
+      null,
+      {
+        params: {
+          value,
         },
       }
     );

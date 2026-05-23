@@ -30,7 +30,7 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
   /* ================= WORKFLOW ================= */
 
   const transitionMap: Record<string, string[]> = {
-    DRAFT: ["SUBMITTED", "CANCELLED"],
+    DRAFT: ["SUBMITTED"],
 
     SUBMITTED: ["UNDER_REVIEW", "REJECTED"],
 
@@ -51,7 +51,6 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
     REPORT_APPROVED: ["PAYMENT_PENDING"],
     PAYMENT_PENDING: ["PAYMENT_COMPLETED"],
     PAYMENT_COMPLETED: ["CERTIFICATE_ISSUED"],
-    CERTIFICATE_ISSUED: ["UNDER_SUPERVISION"],
   };
 
   const finalStates = ["UNDER_SUPERVISION", "REJECTED", "CANCELLED"];
@@ -179,13 +178,10 @@ console.log("New status:", status);
 
 
       /* ===== NORMAL STATUS ===== */
-      else if(status === "STANDARDS_PROVIDED") {
+      else if (status === "STANDARDS_PROVIDED") {
 
         const formData = new FormData();
-        formData.append("status", status);
-        formData.append("companyId", "0");
-
-        if (status === "STANDARDS_PROVIDED" && selectedFile) {
+        if (selectedFile) {
           formData.append("file", selectedFile);
         }
 
@@ -195,18 +191,9 @@ console.log("New status:", status);
           showError,
           t
         );
-      }   else {
-
-        const formData = new FormData();
-        formData.append("status", status);
-        formData.append("companyId", "0");
-
-        if (status === "STANDARDS_PROVIDED" && selectedFile) {
-          formData.append("file", selectedFile);
-        }
-
+      } else {
         response = await handleApi(
-          () => CertificationRequestService.updateStatus(requestId, formData),
+          () => CertificationRequestService.updateStatus(requestId, status),
           showSuccess,
           showError,
           t

@@ -12,9 +12,9 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import ExcelExport from "../../common/ExcelExport";
 import { CertificationUpdate } from "./CertificationUpdate";
+import StatusTabMenu, { type StatusTabItem } from "../../common/StatusTabMenu";
 
 export const CertificationList = () => {
-  // ================= STATE =================
   const [certifications, setCertifications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -22,21 +22,36 @@ export const CertificationList = () => {
   const [first, setFirst] = useState(0);
   const [rows, setRows] = useState(10);
   const [totalRecords, setTotalRecords] = useState(0);
-  const { t, i18n } = useTranslation();
+
+  const { t } = useTranslation();
   const { toast, showToast } = useAppToast();
+
   const [updateDialogVisible, setUpdateDialogVisible] = useState(false);
   const [selectedCertification, setSelectedCertification] = useState<any>(null);
 
-  // ================= FETCH =================
+  const [activeStatusIndex, setActiveStatusIndex] = useState(0);
+  const [selectedStatus, setSelectedStatus] = useState("DRAFT");
+
+  const statusTabs: StatusTabItem[] = [
+    { label: "Draft", value: "DRAFT" },
+    { label: "Printed", value: "PRINTED" },
+    { label: "Scanned", value: "SCANNED" },
+    { label: "Under Supervision", value: "UNDER_SUPERVISION" },
+  ];
+
   const getCertificates = async () => {
     try {
       setLoading(true);
 
-      const response = await CertificationService.getPaginatedCertifications({
-        page: first / rows,
-        size: rows,
-        sort: "id,desc",
-      });
+      const response =
+        await CertificationService.getPaginatedCertificationsByStatus(
+          selectedStatus,
+          {
+            page: first / rows,
+            size: rows,
+            sort: "id,desc",
+          },
+        );
 
       setCertifications(response.data.data);
       setTotalRecords(response.data.totalElements);
@@ -49,9 +64,8 @@ export const CertificationList = () => {
 
   useEffect(() => {
     getCertificates();
-  }, [first, rows]);
+  }, [first, rows, selectedStatus]);
 
-  // ================= DELETE =================
   const confirmDelete = (row: any) => {
     confirmDialog({
       message: (
@@ -75,7 +89,6 @@ export const CertificationList = () => {
   const handleDelete = async (id: number) => {
     try {
       await CertificationService.deleteCertification(id);
-
       showToast("success", "Success", "Certificate deleted");
       getCertificates();
     } catch {
@@ -83,7 +96,6 @@ export const CertificationList = () => {
     }
   };
 
-  // ================= ACTION MENU =================
   const actionTemplate = (rowData: any) => {
     const menu = useRef<any>(null);
 
@@ -94,7 +106,7 @@ export const CertificationList = () => {
         command: () =>
           navigate(
             `/certification-details/${
-              rowData.requestId || rowData.certificationRequest.id
+              rowData.requestId || rowData.certificationRequest?.id
             }`,
           ),
       },
@@ -130,7 +142,6 @@ export const CertificationList = () => {
     );
   };
 
-  // ================= HEADER =================
   const header = () => (
     <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-4 px-2">
       <div className="flex items-center gap-3">
@@ -142,6 +153,7 @@ export const CertificationList = () => {
           {totalRecords} {t("common.total")}
         </span>
       </div>
+
       <div>
         <Button
           icon="pi pi-sync"
@@ -151,17 +163,22 @@ export const CertificationList = () => {
           raised
           onClick={getCertificates}
         />
+
         <ExcelExport
           data={certifications}
           totalElements={totalRecords}
-          fileName="companies"
-          sheetName="Companies"
+          fileName="certifications"
+          sheetName="Certifications"
           fetchAllData={async () => {
-            const res = await CertificationService.getPaginatedCertifications({
-              page: 0,
-              size: totalRecords,
-              sort: "id,desc",
-            });
+            const res =
+              await CertificationService.getPaginatedCertificationsByStatus(
+                selectedStatus,
+                {
+                  page: 0,
+                  size: totalRecords,
+                  sort: "id,desc",
+                },
+              );
 
             return res.data.data;
           }}
@@ -171,49 +188,53 @@ export const CertificationList = () => {
   );
 
   const issueDateBodyTemplate = (rowData: any) => {
-    if (!rowData.issuedDate) return <span className="text-gray-400">—</span>;
+    if (!rowData.issueDate) return <span className="text-gray-400">—</span>;
 
-    const date = new Date(rowData.issuedDate);
-    const formattedDate = date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-    const formattedTime = date.toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    const date = new Date(rowData.issueDate);
 
     return (
       <div className="flex flex-col">
-        <span className="text-sm text-gray-700">{formattedDate}</span>
-        <span className="text-xs text-gray-400">{formattedTime}</span>
+        <span className="text-sm text-gray-700">
+          {date.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          })}
+        </span>
+        <span className="text-xs text-gray-400">
+          {date.toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </span>
       </div>
     );
   };
+
   const expireDateBodyTemplate = (rowData: any) => {
     if (!rowData.expiryDate) return <span className="text-gray-400">—</span>;
 
     const date = new Date(rowData.expiryDate);
-    const formattedDate = date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-    const formattedTime = date.toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
 
     return (
       <div className="flex flex-col">
-        <span className="text-sm text-gray-700">{formattedDate}</span>
-        <span className="text-xs text-gray-400">{formattedTime}</span>
+        <span className="text-sm text-gray-700">
+          {date.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          })}
+        </span>
+        <span className="text-xs text-gray-400">
+          {date.toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </span>
       </div>
     );
   };
 
-  // ================= TABLE COLUMNS =================
   const columns = [
     {
       field: "id",
@@ -231,8 +252,13 @@ export const CertificationList = () => {
       sortable: true,
     },
     {
-      field: "issuedDate",
-      header: t("certification.issuedDate"),
+      field: "certificationStatus",
+      header: t("certification.status"),
+      sortable: true,
+    },
+    {
+      field: "issueDate",
+      header: t("certification.issueDate"),
       body: issueDateBodyTemplate,
       sortable: true,
     },
@@ -249,12 +275,10 @@ export const CertificationList = () => {
     },
   ];
 
-  // ================= BREADCRUMB =================
   const breadcrumbItems = [
     { label: t("certification.management"), url: "/certifications" },
   ];
 
-  // ================= UI =================
   return (
     <>
       <Toast ref={toast} />
@@ -264,13 +288,25 @@ export const CertificationList = () => {
         items={breadcrumbItems}
         size="pl-5 pr-5 max-w-8xl mx-auto mt-3"
       />
+
       <CertificationUpdate
         showToast={showToast}
         visible={updateDialogVisible}
         certification={selectedCertification}
         onHide={() => setUpdateDialogVisible(false)}
-        onUpdated={getCertificates}
+        onUpdated={() =>undefined}
       />
+
+      <StatusTabMenu
+        items={statusTabs}
+        activeIndex={activeStatusIndex}
+        onChange={(index, value) => {
+          setActiveStatusIndex(index);
+          setSelectedStatus(value);
+          setFirst(0);
+        }}
+      />
+
       <DynamicTable
         title="Certification Management"
         value={certifications}

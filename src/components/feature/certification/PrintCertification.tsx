@@ -5,6 +5,7 @@ import html2canvas from "html2canvas";
 import { QRCodeCanvas } from "qrcode.react";
 import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 import { useTranslation } from "react-i18next";
+import CertificationService from "../../../services/certification.service";
 
 interface Props {
   certification: any;
@@ -24,6 +25,15 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
   const getCertificationType = (type: string) => {
     if (!type) return "————————";
     return t(`home.certificationTypes.${type}`);
+  };
+    const handlePrint = () => {
+    CertificationService.updateCertificationStatus(Number(certification.id), "PRINTED")
+      .then(() => {
+    
+      })
+      .catch((error) => {
+
+      });
   };
   
   const generatePDF = async (forPrint: boolean = false) => {
@@ -101,6 +111,7 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
         if (printWindow) {
           printWindow.addEventListener('load', () => {
             printWindow.print();
+            handlePrint();
           });
         }
         
@@ -110,6 +121,7 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
         
       } else {
         pdf.save(`certificate-${certification.certificateNumber || "asqa"}.pdf`);
+        handlePrint();
       }
 
       setProgress(100);

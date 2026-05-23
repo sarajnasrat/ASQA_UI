@@ -58,6 +58,19 @@ const CertificationService = {
       },
     );
   },
+  // =============================
+  // Get PAGINATED Certifications By Status
+  // =============================
+  getPaginatedCertificationsByStatus(status: string, params: any) {
+    return httpClient.get(`${CERTIFICATION_BASE}/status/${status}`, {
+      params,
+    });
+  },
+  updateCertificationStatus(id: number, status: string) {
+  return httpClient.patch(`${CERTIFICATION_BASE}/${id}/status`, null, {
+    params: { status },
+  });
+},
 };
 
 export default CertificationService;

@@ -4,14 +4,15 @@ import CertificationService from "../../../services/certification.service";
 import { PrintCertification } from "./PrintCertification";
 
 export const PrintCertificationPage = () => {
-
   const { id } = useParams();
   const [certification, setCertification] = useState<any>();
 
   useEffect(() => {
     if (id) {
-      CertificationService.getCertificationById(Number(id))
-        .then(res => setCertification(res.data.data));
+      CertificationService.getCertificationById(Number(id)).then((res) =>
+        setCertification(res.data.data),
+      );
+  
     }
   }, [id]);
 

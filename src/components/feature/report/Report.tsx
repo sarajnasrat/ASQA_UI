@@ -51,7 +51,7 @@ export const Report = () => {
         }}
       />
 
-      <CertificationRequestReport status={status} />
+      <CertificationRequestReport />
     </div>
   );
 };

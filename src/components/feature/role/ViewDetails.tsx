@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
@@ -30,6 +31,7 @@ interface Role {
 }
 
 export const ViewDetails = () => {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
@@ -58,7 +60,7 @@ export const ViewDetails = () => {
       setRole(response.data.data);
     } catch (error) {
       console.error("Failed to fetch role details", error);
-      showToast("error", "Error", "Failed to load role details");
+      showToast("error", t("common.error"), String(t("role.messages.loadDetailsFailed")));
     } finally {
       setLoading(false);
     }
@@ -133,10 +135,10 @@ export const ViewDetails = () => {
   const sortedLetters = Object.keys(groupedPermissions).sort();
 
   const breadcrumbItems = [
-    { label: "Dashboard", icon: "pi pi-home", url: "/" },
-    { label: "Roles", icon: "pi pi-shield", url: "/users/roles" },
+    { label: String(t("nav.dashboard")), icon: "pi pi-home", url: "/" },
+    { label: String(t("role.title")), icon: "pi pi-shield", url: "/users/roles" },
     {
-      label: role?.name || "Role Details",
+      label: role?.name || String(t("role.breadcrumb.roleDetails")),
       icon: "pi pi-info-circle",
       url: `/users/role/${id}`,
     },
@@ -155,17 +157,9 @@ export const ViewDetails = () => {
             <Card className="shadow-lg rounded-xl overflow-hidden">
               <div className="p-6">
                 <div className="flex items-center gap-4 mb-6">
-                  <Skeleton
-                    shape="circle"
-                    size="4rem"
-                    className="mr-2"
-                  ></Skeleton>
+                  <Skeleton shape="circle" size="4rem" className="mr-2"></Skeleton>
                   <div className="flex-1">
-                    <Skeleton
-                      width="200px"
-                      height="2rem"
-                      className="mb-2"
-                    ></Skeleton>
+                    <Skeleton width="200px" height="2rem" className="mb-2"></Skeleton>
                     <Skeleton width="150px" height="1rem"></Skeleton>
                   </div>
                 </div>
@@ -198,13 +192,13 @@ export const ViewDetails = () => {
                   <i className="pi pi-exclamation-triangle text-4xl text-red-500"></i>
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-2">
-                  Role Not Found
+                  {String(t("role.messages.roleNotFound"))}
                 </h3>
                 <p className="text-gray-600 mb-6 text-center">
-                  The role you're looking for doesn't exist or has been removed.
+                  {String(t("role.messages.roleNotFoundDesc"))}
                 </p>
                 <Button
-                  label="Back to Roles"
+                  label={String(t("role.buttons.backToRoles"))}
                   icon="pi pi-arrow-left"
                   className="bg-linear-to-r from-indigo-500 to-purple-600 border-none"
                   onClick={() => navigate("/users/roles")}
@@ -240,7 +234,9 @@ export const ViewDetails = () => {
                       <div className="flex items-center gap-2 mt-1">
                         <Tag
                           value={
-                            role.isActive !== false ? "Active" : "Inactive"
+                            role.isActive !== false
+                              ? String(t("role.status.active"))
+                              : String(t("role.status.inactive"))
                           }
                           severity={
                             role.isActive !== false ? "success" : "danger"
@@ -248,7 +244,8 @@ export const ViewDetails = () => {
                           className="text-xs"
                         />
                         <span className="text-sm opacity-90">
-                          {role.permissions?.length || 0} Permissions
+                          {role.permissions?.length || 0}{" "}
+                          {String(t("role.labels.permissions"))}
                         </span>
                       </div>
                     </div>
@@ -259,7 +256,7 @@ export const ViewDetails = () => {
                   {role.description && (
                     <div>
                       <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                        Description
+                        {String(t("role.fields.description"))}
                       </label>
                       <p className="text-gray-700 mt-1">{role.description}</p>
                     </div>
@@ -270,7 +267,7 @@ export const ViewDetails = () => {
                   <div className="space-y-3">
                     <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <span className="text-sm font-medium text-gray-600">
-                        Role ID
+                        {String(t("role.fields.roleId"))}
                       </span>
                       <span className="text-sm font-semibold text-gray-800 bg-white px-3 py-1 rounded-md shadow-sm">
                         #{role.id}
@@ -280,7 +277,7 @@ export const ViewDetails = () => {
                     {role.createdAt && (
                       <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                         <span className="text-sm font-medium text-gray-600">
-                          Created
+                          {String(t("role.fields.created"))}
                         </span>
                         <span className="text-sm text-gray-700">
                           {new Date(role.createdAt).toLocaleDateString(
@@ -298,7 +295,7 @@ export const ViewDetails = () => {
                     {role.updatedAt && (
                       <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                         <span className="text-sm font-medium text-gray-600">
-                          Last Updated
+                          {String(t("role.fields.lastUpdated"))}
                         </span>
                         <span className="text-sm text-gray-700">
                           {new Date(role.updatedAt).toLocaleDateString(
@@ -316,7 +313,7 @@ export const ViewDetails = () => {
                     {role.createdBy && (
                       <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                         <span className="text-sm font-medium text-gray-600">
-                          Created By
+                          {String(t("role.fields.createdBy"))}
                         </span>
                         <span className="text-sm text-gray-700">
                           {role.createdBy}
@@ -336,12 +333,12 @@ export const ViewDetails = () => {
                     <div className="flex items-center gap-2">
                       <i className="pi pi-lock text-indigo-500"></i>
                       <h3 className="font-semibold text-gray-700">
-                        Assigned Permissions
+                        {String(t("role.fields.assignedPermissions"))}
                       </h3>
                     </div>
                     <Tooltip
                       target=".permission-info"
-                      content="All permissions assigned to this role"
+                      content={String(t("role.tooltips.permissionsInfo"))}
                       position="left"
                     />
                     <i className="pi pi-info-circle permission-info text-gray-400 hover:text-indigo-500 cursor-help"></i>
@@ -357,14 +354,16 @@ export const ViewDetails = () => {
                           <span className="block text-2xl font-bold text-indigo-600">
                             {role.permissions.length}
                           </span>
-                          <span className="text-xs text-gray-600">Total</span>
+                          <span className="text-xs text-gray-600">
+                            {String(t("role.labels.total"))}
+                          </span>
                         </div>
                         <div className="bg-purple-50 rounded-lg p-3 text-center">
                           <span className="block text-2xl font-bold text-purple-600">
                             {Object.keys(groupedPermissions).length}
                           </span>
                           <span className="text-xs text-gray-600">
-                            Categories
+                            {String(t("role.labels.categories"))}
                           </span>
                         </div>
                       </div>
@@ -380,7 +379,7 @@ export const ViewDetails = () => {
                             }`}
                             onClick={() => setActiveTab(0)}
                           >
-                            Grid View
+                            {String(t("role.tabs.gridView"))}
                           </button>
                           <button
                             className={`pb-2 px-1 font-medium text-sm transition-colors relative ${
@@ -390,7 +389,7 @@ export const ViewDetails = () => {
                             }`}
                             onClick={() => setActiveTab(1)}
                           >
-                            Grouped View
+                            {String(t("role.tabs.groupedView"))}
                           </button>
                           <button
                             className={`pb-2 px-1 font-medium text-sm transition-colors relative ${
@@ -400,7 +399,7 @@ export const ViewDetails = () => {
                             }`}
                             onClick={() => setActiveTab(2)}
                           >
-                            List View
+                            {String(t("role.tabs.listView"))}
                           </button>
                         </div>
                       </div>
@@ -426,7 +425,7 @@ export const ViewDetails = () => {
                                 </div>
                                 <div className="flex-1 min-w-0">
                                   <h4 className="text-sm font-semibold text-gray-800 truncate">
-                                    {permission.permissionName}
+                                  {t(`permissions.${permission.permissionName}`)}
                                   </h4>
                                   {permission.description && (
                                     <p className="text-xs text-gray-500 mt-1 line-clamp-2">
@@ -452,9 +451,10 @@ export const ViewDetails = () => {
                                   </span>
                                 </div>
                                 <span className="text-xs font-medium text-gray-500">
-                                  {groupedPermissions[letter].length} permission
+                                  {groupedPermissions[letter].length}{" "}
+                                  {String(t("role.labels.permission"))}
                                   {groupedPermissions[letter].length > 1
-                                    ? "s"
+                                    ? String(t("role.labels.s"))
                                     : ""}
                                 </span>
                               </div>
@@ -473,7 +473,7 @@ export const ViewDetails = () => {
                                           className={`w-2 h-2 rounded-full ${style.bg}`}
                                         ></span>
                                         <span className="text-xs text-gray-700">
-                                          {permission.permissionName}
+                                          {t(`permissions.${permission.permissionName}`)}
                                         </span>
                                       </div>
                                     );
@@ -504,7 +504,7 @@ export const ViewDetails = () => {
                                   className={`w-2 h-2 rounded-full ${style.bg}`}
                                 ></span>
                                 <span className="flex-1 text-sm text-gray-700">
-                                  {permission.permissionName}
+                                 {t(`permissions.${permission.permissionName}`)}
                                 </span>
                                 {permission.description && (
                                   <i
@@ -524,13 +524,13 @@ export const ViewDetails = () => {
                         <i className="pi pi-lock text-3xl text-gray-400"></i>
                       </div>
                       <p className="text-gray-500 font-medium">
-                        No Permissions Assigned
+                        {String(t("role.messages.noPermissionsAssigned"))}
                       </p>
                       <p className="text-sm text-gray-400 mt-1">
-                        This role doesn't have any permissions yet
+                        {String(t("role.messages.noPermissionsDesc"))}
                       </p>
                       <Button
-                        label="Add Permissions"
+                        label={String(t("role.buttons.addPermissions"))}
                         icon="pi pi-plus"
                         className="p-button-text p-button-sm mt-4 text-indigo-600"
                         onClick={() =>

@@ -12,12 +12,12 @@ interface CertificationUpdateProps {
   certification: any;
   onHide: () => void;
   onUpdated: () => void;
-showToast: (
-  severity: "success" | "info" | "warn" | "error",
-  summary: string,
-  detail: string,
-  life?: number
-) => void;
+  showToast: (
+    severity: "success" | "info" | "warn" | "error",
+    summary: string,
+    detail: string,
+    life?: number,
+  ) => void;
 }
 
 export const CertificationUpdate: React.FC<CertificationUpdateProps> = ({
@@ -46,12 +46,23 @@ export const CertificationUpdate: React.FC<CertificationUpdateProps> = ({
       setSerialNumber(
         certification?.certificationRequest?.serialNumber ||
           certification?.serialNumber ||
-          ""
+          "",
       );
       setFile(undefined);
     }
   }, [certification]);
-
+  const handlePrint = async () => {
+    const result = await handleApi(
+      () =>
+        CertificationService.updateCertificationStatus(
+          Number(certification.id),
+          "SCANNED",
+        ),
+      showSuccess,
+      showError,
+      t,
+    );
+  };
   const handleSubmit = async () => {
     if (!certification?.id) {
       showToast("error", t("common.error"), "Certification not selected");
@@ -70,14 +81,15 @@ export const CertificationUpdate: React.FC<CertificationUpdateProps> = ({
         CertificationService.updateSerialNumber(
           certification.id,
           serialNumber.trim(),
-          file
+          file,
         ),
       showSuccess,
       showError,
-      t
+      t,
     );
 
     setLoading(false);
+    handlePrint();
 
     if (result) {
       onUpdated();

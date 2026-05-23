@@ -1,37 +1,18 @@
-// components/feature/certification/CertificationRequestDetail.tsx
+// components/feature/certification/CertificationRequestView.tsx
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+import { Dialog } from "primereact/dialog";
 import { Dropdown } from "primereact/dropdown";
 import {
-  FileText,
-  Award,
-  Building2,
-  Calendar,
-  Clock,
-  User,
-  Mail,
-  Phone,
-  MapPin,
-  Globe,
-  Download,
-  Eye,
-  CheckCircle,
-  XCircle,
   AlertCircle,
-  ArrowLeft,
-  File,
-  Tag,
-  Briefcase,
-  Hash,
-  TrendingUp,
+  Award,
+  Calendar,
+  CheckCircle,
+  Clock,
+  FileText,
   Shield,
-  ChevronDown,
-  ChevronUp,
-  Home,
-  Building,
-  Map,
-  ChevronRight,
+  XCircle,
 } from "lucide-react";
 import { useAppToast } from "../../../hooks/useToast";
 import { handleApi } from "../../../hooks/handleApi";
@@ -40,110 +21,20 @@ import CertificationRequestService from "../../../services/CertificationReques.s
 import CommiteeService from "../../../services/comitee.service";
 import FileUploadField from "../../common/FileUploadField";
 import { SmartDatePicker } from "../../common/datepicker/SmartDatePicker";
-
-interface Attachment {
-  id: number;
-  attachmentName: string;
-  file: string;
-  fileType: string;
-  fileSize: number;
-  attachmentReferenceType: string;
-}
-
-interface Category {
-  id: number;
-  categoryName: string;
-  categoryType: string | null;
-}
-
-interface Address {
-  id: number;
-  details: string;
-  addressType: string;
-  district: {
-    id: number;
-    districtName: string;
-    province: {
-      id: number;
-      provinceName: string;
-      country: {
-        id: number;
-        countryName: string;
-        countryCode: string;
-      };
-    };
-  };
-}
-
-interface ContactPerson {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber: string;
-  position: string;
-  companyId: number | null;
-  companyName: string | null;
-  addresses: Address[];
-}
-
-interface Company {
-  id: number;
-  companyNameEN: string;
-  companyNameDR: string;
-  companyNamePS: string;
-  email: string;
-  phoneNumber: string;
-  address: string;
-  logoUrl: string;
-  activityPlace: string;
-  jawazNumber: string;
-  jawazExpiryDate: string;
-  jawazIssueDate: string;
-  bussinessLogoUrl: string;
-  aboutCompanyEn: string;
-  aboutCompanyDr: string;
-  aboutCompanyPs: string;
-  websiteUrl: string;
-  establishYear: string;
-  companyOwnerNameEn: string;
-  attachments?: Attachment[];
-  categories: Category[];
-  socialLinks: any[];
-  active: boolean;
-  companyType: string;
-  contactPerson?: ContactPerson;
-}
-
-interface Tracker {
-  id: number;
-  status: string;
-  changedBy: string | null;
-  changedAt: string;
-  attachments: string | null;
-}
-
-interface CertificationRequest {
-  id: number;
-  requestType: string;
-  requestStatus: string;
-  certificationType: string;
-  serialNumber: string;
-  trackingNumber: string;
-  createdDate: string;
-  startDate: string;
-  endDate: string;
-  attachments: Attachment[];
-  company: Company;
-  contactPerson?: ContactPerson;
-  deadline?: string;
-  trackers?: Tracker[];
-}
+import CertificationRequestViewHeader from "./certification-process/CertificationRequestViewHeader";
+import CertificationRequestViewTabs from "./certification-process/CertificationRequestViewTabs";
+import CertificationRequestViewDetails from "./certification-process/CertificationRequestViewDetails";
+import CertificationRequestViewCompany from "./certification-process/CertificationRequestViewCompany";
+import CertificationRequestViewDocuments from "./certification-process/CertificationRequestViewDocuments";
+import type {
+  CertificationRequest,
+  Tracker,
+} from "./certification-process/CertificationRequestView.types";
 
 const API_BASE_URL = "http://localhost:8080";
 
 const transitionMap: Record<string, string[]> = {
-  DRAFT: ["SUBMITTED", "CANCELLED"],
+  DRAFT: ["SUBMITTED"],
   SUBMITTED: ["UNDER_REVIEW", "REJECTED"],
   UNDER_REVIEW: ["STANDARDS_REQUIRED"],
   STANDARDS_REQUIRED: ["STANDARDS_PROVIDED"],
@@ -155,7 +46,6 @@ const transitionMap: Record<string, string[]> = {
   REPORT_APPROVED: ["PAYMENT_PENDING"],
   PAYMENT_PENDING: ["PAYMENT_COMPLETED"],
   PAYMENT_COMPLETED: ["CERTIFICATE_ISSUED"],
-  CERTIFICATE_ISSUED: ["UNDER_SUPERVISION"],
 };
 
 const finalStates = ["UNDER_SUPERVISION", "REJECTED", "CANCELLED"];
@@ -181,6 +71,25 @@ const CertificationRequestView: React.FC = () => {
     quickStats: true,
     contactPersonDetails: true,
   });
+
+  // State for dialog inputs
+  const [selectedCommitteeId, setSelectedCommitteeId] = useState<number | null>(
+    null,
+  );
+  const [selectedStandardFile, setSelectedStandardFile] = useState<File | null>(
+    null,
+  );
+  const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(null);
+  const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(null);
+  const [rejectionReason, setRejectionReason] = useState<string>("");
+
+  const [paymentDialogVisible, setPaymentDialogVisible] = useState(false);
+  const [uploadedBill, setUploadedBill] = useState<File | null>(null);
+  const [transactionId, setTransactionId] = useState<string>("");
+  const [paymentDate, setPaymentDate] = useState<string>("");
+  const [paymentAmount, setPaymentAmount] = useState<string>("");
+  const [uploadingPayment, setUploadingPayment] = useState(false);
+  const [requestPrinted, setRequestPrinted] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -222,6 +131,7 @@ const CertificationRequestView: React.FC = () => {
     if (response) {
       setRequest(response.data.data);
       setTracker(response.data.data.trackers || []);
+      setRequestPrinted(false);
     }
     setLoading(false);
   };
@@ -235,26 +145,234 @@ const CertificationRequestView: React.FC = () => {
     return t(`certificationRequest.statusOptions.${status}`) || status;
   };
 
-  const getStatusConfirmationMessage = (status: string) => {
-    const messages: Record<string, string> = {
-      SUBMITTED: t("certificationRequest.confirmSubmit") || "Are you sure you want to submit this request?",
-      CANCELLED: t("certificationRequest.confirmCancel") || "Are you sure you want to cancel this request?",
-      UNDER_REVIEW: t("certificationRequest.requestWillBeUnderReview") || "This request will be moved to under review.",
-      STANDARDS_REQUIRED: t("certificationRequest.standardRequired") || "Standards will be required for this request.",
-      STANDARDS_PROVIDED: t("certificationRequest.standardsProvided") || "Please upload the standard document to continue.",
-      DEADLINE_REQUIRED: t("certificationRequest.deadlineRequired") || "A deadline will be required for this request.",
-      DEADLINE_ASSIGNED: t("certificationRequest.assignDeadline") || "Please assign the start and end deadline dates.",
-      INSPECTION_IN_PROGRESS: t("certificationRequest.inspectionInProgress") || "Please assign a committee to start inspection.",
-      REPORTED_TO_COMMITTEE: t("certificationRequest.reportToCommittee") || "This request will be reported to the committee.",
-      REPORT_APPROVED: t("certificationRequest.reportApproved") || "The committee report will be approved.",
-      PAYMENT_PENDING: t("certificationRequest.paymentPending") || "Payment will be marked as pending.",
-      PAYMENT_COMPLETED: t("certificationRequest.paymentCompleted") || "Payment will be marked as completed.",
-      CERTIFICATE_ISSUED: t("certificationRequest.certificateIssued") || "Certificate will be issued for this request.",
-      UNDER_SUPERVISION: t("certificationRequest.underSupervision") || "This request will be moved under supervision.",
-      REJECTED: t("certificationRequest.confirmReject") || "Please provide a rejection reason.",
+  const printBill = async (request: CertificationRequest) => {
+    if (request.requestStatus !== "PAYMENT_PENDING") {
+      showToast("warn", t("common.warning"), "Bill can be printed only when payment is pending.");
+      return;
+    }
+
+    const printWindow = window.open("", "_blank");
+    if (!printWindow) return;
+
+    const companyName = getCompanyName() || "";
+    const billAmount = (request as any).paymentAmount || "To be determined";
+
+    const billContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Payment Bill - ${request.serialNumber}</title>
+        <style>
+          body { font-family: Arial, sans-serif; padding: 40px; margin: 0; }
+          .bill-container { max-width: 800px; margin: 0 auto; border: 1px solid #ddd; padding: 30px; }
+          .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 20px; }
+          .company-name { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
+          .bill-title { font-size: 28px; font-weight: bold; margin: 20px 0; text-align: center; }
+          .details-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+          .details-table td, .details-table th { padding: 12px; border: 1px solid #ddd; }
+          .details-table th { background-color: #f5f5f5; font-weight: bold; width: 40%; }
+          .amount { font-size: 24px; font-weight: bold; color: #28a745; text-align: right; margin-top: 20px; }
+          .footer { margin-top: 50px; text-align: center; font-size: 12px; color: #666; border-top: 1px solid #ddd; padding-top: 20px; }
+          .payment-instructions { margin-top: 30px; padding: 20px; background-color: #f9f9f9; border-left: 4px solid #007bff; }
+          @media print { body { padding: 0; } .no-print { display: none; } }
+        </style>
+      </head>
+      <body>
+        <div class="bill-container">
+          <div class="header">
+            <div class="company-name">${companyName || "Certification Authority"}</div>
+            <div>Payment Invoice / Bill</div>
+          </div>
+
+          <div class="bill-title">PAYMENT INVOICE</div>
+
+          <table class="details-table">
+            <tr><th>Serial Number</th><td>${request.serialNumber || "-"}</td></tr>
+            <tr><th>Tracking Number</th><td>${request.trackingNumber || "-"}</td></tr>
+            <tr><th>Company Name</th><td>${companyName || "-"}</td></tr>
+            <tr><th>Request Type</th><td>${getCertificationTypeLabel(request.certificationType)}</td></tr>
+            <tr><th>Payment Amount</th><td>${billAmount}</td></tr>
+            <tr><th>Payment Status</th><td>Pending</td></tr>
+          </table>
+
+          <div class="payment-instructions">
+            <strong>Payment Instructions:</strong><br/>
+            Please transfer the amount to the following bank account:<br/>
+            Bank: ABC Bank<br/>
+            Account Name: Certification Authority<br/>
+            Account Number: 1234567890<br/>
+            IBAN: IBAN123456789<br/>
+            SWIFT/BIC: ABCDEF123<br/>
+            Reference: ${request.serialNumber || "-"}
+          </div>
+
+          <div class="amount">Total Amount: ${billAmount}</div>
+
+          <div class="footer">
+            This is a system generated invoice. For any queries, please contact support.<br/>
+            Generated on: ${new Date().toLocaleString()}
+          </div>
+        </div>
+
+        <div class="no-print" style="text-align:center; margin-top:20px;">
+          <button onclick="window.print()" style="padding:10px 20px; font-size:16px;">Print Bill</button>
+          <button onclick="window.close()" style="padding:10px 20px; font-size:16px; margin-left:10px;">Close</button>
+        </div>
+      </body>
+      </html>
+    `;
+
+    printWindow.document.write(billContent);
+    printWindow.document.close();
+    setRequestPrinted(true);
+
+    await handleApi(
+      () => CertificationRequestService.updateIsPrint(request.id, true),
+      () => {},
+      (message: string) => showToast("error", t("common.error"), message),
+      t,
+    );
+  };
+
+  const openPaymentDialog = () => {
+    if (!request) return;
+    setUploadedBill(null);
+    setTransactionId((request as any).transactionId || "");
+    setPaymentDate(
+      (request as any).paymentDate
+        ? (request as any).paymentDate.split("T")[0]
+        : new Date().toISOString().slice(0, 10),
+    );
+    setPaymentAmount(
+      (request as any).paymentAmount ? String((request as any).paymentAmount) : "",
+    );
+    setPaymentDialogVisible(true);
+  };
+
+  const closePaymentDialog = () => {
+    setPaymentDialogVisible(false);
+    setUploadedBill(null);
+    setTransactionId("");
+    setPaymentDate("");
+    setPaymentAmount("");
+    setUploadingPayment(false);
+  };
+
+  const handlePaymentConfirmation = async () => {
+    if (!request) return;
+    if (!uploadedBill) {
+      showToast("warn", t("common.warning"), "Please upload the scanned bill.");
+      return;
+    }
+    if (!transactionId.trim()) {
+      showToast("warn", t("common.warning"), "Please enter transaction ID.");
+      return;
+    }
+    setUploadingPayment(true);
+
+    const formData = new FormData();
+    formData.append("file", uploadedBill);
+    formData.append("transactionId", transactionId);
+    formData.append("paymentDate", paymentDate ? `${paymentDate}T00:00:00` : new Date().toISOString());
+    formData.append("paymentAmount", paymentAmount || "");
+
+    const handlePaymentError = (message: string) => {
+      showToast("error", t("common.error"), message);
     };
 
-    return messages[status] || t("certificationRequest.confirmStatusUpdate") || "Are you sure you want to update this request status?";
+    const response = await handleApi(
+      () => CertificationRequestService.confirmPayment(request.id, formData),
+      () => showToast("success", t("common.success"), "Scanned bill uploaded successfully."),
+      handlePaymentError,
+      t,
+    );
+
+    if (response) {
+      await handleApi(
+        () => CertificationRequestService.updateIsScanned(request.id, true),
+        () => {},
+        (message: string) => showToast("error", t("common.error"), message),
+        t,
+      );
+
+      closePaymentDialog();
+      loadRequestDetail();
+    }
+
+    setUploadingPayment(false);
+  };
+
+  const downloadPaymentReceipt = async () => {
+    if (!request) return;
+
+    const resp = await handleApi(
+      () => CertificationRequestService.getPaymentReceipt(request.id),
+      () => {},
+      (message: string) => showToast("error", t("common.error"), message),
+      t,
+    );
+
+    if (resp?.data) {
+      const blob = resp.data;
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      window.open(url, "_blank");
+    }
+  };
+
+  const getStatusConfirmationMessage = (status: string) => {
+    const messages: Record<string, string> = {
+      SUBMITTED:
+        t("certificationRequest.confirmSubmit") ||
+        "Are you sure you want to submit this request?",
+      CANCELLED:
+        t("certificationRequest.confirmCancel") ||
+        "Are you sure you want to cancel this request?",
+      UNDER_REVIEW:
+        t("certificationRequest.requestWillBeUnderReview") ||
+        "This request will be moved to under review.",
+      STANDARDS_REQUIRED:
+        t("certificationRequest.standardRequired") ||
+        "Standards will be required for this request.",
+      STANDARDS_PROVIDED:
+        t("certificationRequest.standardsProvided") ||
+        "Please upload the standard document to continue.",
+      DEADLINE_REQUIRED:
+        t("certificationRequest.deadlineRequired") ||
+        "A deadline will be required for this request.",
+      DEADLINE_ASSIGNED:
+        t("certificationRequest.assignDeadline") ||
+        "Please assign the start and end deadline dates.",
+      INSPECTION_IN_PROGRESS:
+        t("certificationRequest.inspectionInProgress") ||
+        "Please assign a committee to start inspection.",
+      REPORTED_TO_COMMITTEE:
+        t("certificationRequest.reportToCommittee") ||
+        "This request will be reported to the committee.",
+      REPORT_APPROVED:
+        t("certificationRequest.reportApproved") ||
+        "The committee report will be approved.",
+      PAYMENT_PENDING:
+        t("certificationRequest.paymentPending") ||
+        "Payment will be marked as pending.",
+      PAYMENT_COMPLETED:
+        t("certificationRequest.paymentCompleted") ||
+        "Payment will be marked as completed.",
+      CERTIFICATE_ISSUED:
+        t("certificationRequest.certificateIssued") ||
+        "Certificate will be issued for this request.",
+      UNDER_SUPERVISION:
+        t("certificationRequest.underSupervision") ||
+        "This request will be moved under supervision.",
+      REJECTED:
+        t("certificationRequest.confirmReject") ||
+        "Please provide a rejection reason.",
+    };
+
+    return (
+      messages[status] ||
+      t("certificationRequest.confirmStatusUpdate") ||
+      "Are you sure you want to update this request status?"
+    );
   };
 
   const handleStatusUpdate = async (
@@ -295,16 +413,11 @@ const CertificationRequestView: React.FC = () => {
         return;
       }
 
-      const formData = new FormData();
-      formData.append("status", nextStatus);
-      formData.append("companyId", String(request.company?.id || 0));
-      formData.append("rejectionReason", cleanReason);
-
       response = await handleApi(
         () =>
           CertificationRequestService.rejectCertificationRequest(
             request.id,
-            formData,
+            cleanReason,
           ),
         showSuccess,
         showError,
@@ -321,12 +434,11 @@ const CertificationRequestView: React.FC = () => {
       }
 
       const formData = new FormData();
-      formData.append("status", nextStatus);
-      formData.append("companyId", String(request.company?.id || 0));
       formData.append("file", options.standardFile);
 
       response = await handleApi(
-        () => CertificationRequestService.standardProvided(request.id, formData),
+        () =>
+          CertificationRequestService.standardProvided(request.id, formData),
         showSuccess,
         showError,
         t,
@@ -374,12 +486,13 @@ const CertificationRequestView: React.FC = () => {
         t,
       );
     } else {
-      const formData = new FormData();
-      formData.append("status", nextStatus);
-      formData.append("companyId", String(request.company?.id || 0));
-
       response = await handleApi(
-        () => CertificationRequestService.updateStatus(request.id, formData),
+        () =>
+          CertificationRequestService.updateStatus(
+            request.id,
+            nextStatus,
+            request.company?.id,
+          ),
         showSuccess,
         showError,
         t,
@@ -387,6 +500,12 @@ const CertificationRequestView: React.FC = () => {
     }
 
     if (response?.status === 200) {
+      // Reset dialog states
+      setSelectedCommitteeId(null);
+      setSelectedStandardFile(null);
+      setSelectedStartDate(null);
+      setSelectedEndDate(null);
+      setRejectionReason("");
       loadRequestDetail();
     }
   };
@@ -427,11 +546,12 @@ const CertificationRequestView: React.FC = () => {
     const requestId = request?.serialNumber || request?.trackingNumber || "";
     const companyName = getCompanyName() || "";
 
-    let rejectionReasonValue = "";
-    let selectedStandardFile: File | null = null;
-    let selectedStartDate: Date | null = null;
-    let selectedEndDate: Date | null = null;
-    let selectedCommitteeId: number | null = null;
+    // Reset dialog states
+    setSelectedCommitteeId(null);
+    setSelectedStandardFile(null);
+    setSelectedStartDate(null);
+    setSelectedEndDate(null);
+    setRejectionReason("");
 
     confirmDialog({
       message: (
@@ -465,13 +585,7 @@ const CertificationRequestView: React.FC = () => {
                 </div>
               </div>
 
-              <div
-                className={`mt-3 p-4 rounded-lg text-sm ${
-                  isReject
-                    ? "bg-amber-50 text-amber-800 border border-amber-100"
-                    : "bg-blue-50 text-blue-800 border border-blue-100"
-                }`}
-              >
+              <div className="mt-3 p-4 rounded-lg text-sm bg-amber-50 border border-amber-100">
                 {isReject && (
                   <div className="flex flex-col gap-3">
                     <div className="w-full mt-2">
@@ -481,9 +595,8 @@ const CertificationRequestView: React.FC = () => {
                         <span className="text-red-500 ml-1">*</span>
                       </label>
                       <textarea
-                        onChange={(e) => {
-                          rejectionReasonValue = e.target.value;
-                        }}
+                        value={rejectionReason}
+                        onChange={(e) => setRejectionReason(e.target.value)}
                         placeholder={
                           t("certificationRequest.enterRejectionReason") ||
                           "Please provide a reason for rejection..."
@@ -503,7 +616,7 @@ const CertificationRequestView: React.FC = () => {
                       maxFileSize={5000000}
                       required
                       onFileSelect={(file) => {
-                        selectedStandardFile = file;
+                        setSelectedStandardFile(file);
                       }}
                     />
                   </div>
@@ -522,13 +635,15 @@ const CertificationRequestView: React.FC = () => {
                       onChange={(e) => setCalendarType(e.value)}
                     />
 
-                    <div className="grid grid-cols-2 gap-3 mt-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
                       <SmartDatePicker
                         label={t("deadline.startDate")}
                         value={selectedStartDate ?? undefined}
                         calendarType={calendarType}
                         onChange={(d: any) => {
-                          selectedStartDate = d ? new Date(d?.date || d) : null;
+                          setSelectedStartDate(
+                            d ? new Date(d?.date || d) : null,
+                          );
                         }}
                       />
 
@@ -537,7 +652,7 @@ const CertificationRequestView: React.FC = () => {
                         value={selectedEndDate ?? undefined}
                         calendarType={calendarType}
                         onChange={(d: any) => {
-                          selectedEndDate = d ? new Date(d?.date || d) : null;
+                          setSelectedEndDate(d ? new Date(d?.date || d) : null);
                         }}
                       />
                     </div>
@@ -547,12 +662,13 @@ const CertificationRequestView: React.FC = () => {
                 {isInspectionInProgress && (
                   <Dropdown
                     className="w-full mt-3"
+                    value={selectedCommitteeId}
                     options={committees.map((c) => ({
                       label: c.name,
                       value: c.id,
                     }))}
                     onChange={(e) => {
-                      selectedCommitteeId = e.value;
+                      setSelectedCommitteeId(e.value);
                     }}
                     placeholder={t("commitee.selectCommittee")}
                   />
@@ -562,7 +678,7 @@ const CertificationRequestView: React.FC = () => {
                   !isStandardProvided &&
                   !isDeadlineAssigned &&
                   !isInspectionInProgress && (
-                    <div className="flex flex-col items-center justify-center text-center gap-2">
+                    <div className="flex flex-col items-center justify-center text-center ">
                       <div className="flex items-center gap-2">
                         <AlertCircle className="h-4 w-4 shrink-0" />
                         <strong>{getStatusButtonLabel(nextStatus)}</strong>
@@ -594,7 +710,7 @@ const CertificationRequestView: React.FC = () => {
         </div>
       ),
       accept: () => {
-        if (isReject && !rejectionReasonValue.trim()) {
+        if (isReject && !rejectionReason.trim()) {
           showToast(
             "warn",
             t("common.warning"),
@@ -638,7 +754,7 @@ const CertificationRequestView: React.FC = () => {
         }
 
         handleStatusUpdate(nextStatus, {
-          rejectionReason: isReject ? rejectionReasonValue.trim() : null,
+          rejectionReason: isReject ? rejectionReason : null,
           standardFile: isStandardProvided ? selectedStandardFile : null,
           startDate: isDeadlineAssigned ? selectedStartDate : null,
           endDate: isDeadlineAssigned ? selectedEndDate : null,
@@ -660,14 +776,8 @@ const CertificationRequestView: React.FC = () => {
       draggable: false,
       resizable: false,
       style: { width: "650px", maxWidth: "95vw" },
-      contentStyle: { padding: "1.5rem" },
       breakpoints: { "960px": "95vw", "640px": "95vw" },
       className: "rounded-xl shadow-2xl border border-gray-200",
-      headerClassName:
-        "border-b border-gray-100 px-6 py-4 bg-white rounded-t-xl",
-      contentClassName: "text-gray-700",
-      footerClassName:
-        "border-t border-gray-100 px-6 py-4 bg-gray-50 rounded-b-xl flex justify-end gap-3",
     });
   };
 
@@ -693,12 +803,6 @@ const CertificationRequestView: React.FC = () => {
         bgColor: "bg-yellow-100",
         icon: <AlertCircle className="h-4 w-4" />,
         label: t("certificationRequest.statusOptions.UNDER_REVIEW"),
-      },
-      APPROVED: {
-        color: "text-green-700",
-        bgColor: "bg-green-100",
-        icon: <CheckCircle className="h-4 w-4" />,
-        label: "Approved",
       },
       REJECTED: {
         color: "text-red-700",
@@ -779,6 +883,7 @@ const CertificationRequestView: React.FC = () => {
         label: t("certificationRequest.statusOptions.DEADLINE_REQUIRED"),
       },
     };
+
     return (
       statusMap[status] || {
         color: "text-gray-700",
@@ -881,993 +986,294 @@ const CertificationRequestView: React.FC = () => {
   const contactPerson = getContactPerson();
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-10 pb-10">
+    <div className="min-h-screen bg-gray-50  pb-10">
       <ConfirmDialog />
       <div className="container mx-auto px-4 max-w-7xl">
-        {/* Header */}
-        <div className="mb-6">
-          <button
-            onClick={() => navigate(-1)}
-            className="inline-flex items-center text-gray-600 hover:text-blue-600 transition-colors mb-4"
-          >
-            <ArrowLeft className="h-5 w-5 mr-2" />
-            {t("common.back")}
-          </button>
+        <Dialog
 
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div>
-                <div className="flex items-center gap-3 mb-2 flex-wrap">
-                  <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-                    {getCertificationTypeLabel(request.certificationType)}
-                  </h1>
+          header={
+            request?.requestStatus === "PAYMENT_PENDING" && !request?.isScanned
+              ? t("certificationRequest.uploadScannedBill") || "Upload Scanned Bill"
+              : t("certificationRequest.paymentDetails") || "Payment Details"
+          }
+          visible={paymentDialogVisible}
+          onHide={closePaymentDialog}
+          style={{ width: "750px",borderRadius:"15px" }}
+          draggable={true}
+    
+          resizable={true}
+        >
+          <div className="space-y-5">
+            <div className="rounded-lg border border-gray-200 bg-gray-50 p-2">
+              <h3 className="mb-3 text-base font-semibold text-gray-800">
+                {t("certificationRequest.requestInformation") || "Request Information"}
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <div>
+                  <span className="block text-xs text-gray-500">
+                    {t("certificationRequest.labels.serialNumber")}
+                  </span>
+                  <span className="font-medium text-gray-900">
+                    {request.serialNumber || "-"}
+                  </span>
+                </div>
+                <div>
+                  <span className="block text-xs text-gray-500">
+                    {t("certificationRequest.labels.trackingNumber")}
+                  </span>
+                  <span className="font-medium text-gray-900">
+                    {request.trackingNumber || "-"}
+                  </span>
+                </div>
+                <div>
+                  <span className="block text-xs text-gray-500">
+                    {t("company.labels.companyName")}
+                  </span>
+                  <span className="font-medium text-gray-900">
+                    {getCompanyName() || "-"}
+                  </span>
+                </div>
+                <div>
+                  <span className="block text-xs text-gray-500">
+                    {t("certificationRequest.labels.status") || "Status"}
+                  </span>
                   <span
-                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${statusConfig.bgColor} ${statusConfig.color}`}
+                    className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
+                      request.requestStatus === "PAYMENT_COMPLETED" || request.isScanned
+                        ? "bg-green-100 text-green-700"
+                        : "bg-yellow-100 text-yellow-700"
+                    }`}
                   >
-                    {statusConfig.icon}
-                    {statusConfig.label}
+                    {request.requestStatus === "PAYMENT_COMPLETED" || request.isScanned
+                      ? t("certificationRequest.paymentCompleted") || "Payment Completed"
+                      : t("certificationRequest.paymentPending") || "Payment Pending"}
                   </span>
                 </div>
-                <div className="flex flex-wrap gap-4 text-sm text-gray-500">
-                  <div className="flex items-center gap-1">
-                    <Hash className="h-4 w-4" />
-                    <span>
-                      {t("certificationRequest.labels.serialNumber")}:{" "}
-                      {request.serialNumber}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <FileText className="h-4 w-4" />
-                    <span>
-                      {t("certificationRequest.labels.trackingNumber")}:{" "}
-                      {request.trackingNumber}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Calendar className="h-4 w-4" />
-                    <span>
-                      {t("certificationRequest.labels.createdDate")}:{" "}
-                      {formatDate(request.createdDate)}
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-                {!finalStates.includes(request.requestStatus) &&
-                  getNextStatuses().map((nextStatus) => {
-                    const isReject = nextStatus === "REJECTED";
-
-                    return (
-                      <button
-                        key={nextStatus}
-                        onClick={() => confirmStatusUpdate(nextStatus)}
-                        className={`flex items-center justify-center px-6 py-2.5 border-2 font-medium rounded-lg transition-all duration-200 w-full sm:w-auto ${
-                          isReject
-                            ? "border-red-600 text-red-700 hover:bg-red-50 active:bg-red-100"
-                            : "border-green-600 text-green-700 hover:bg-green-50 active:bg-green-100"
-                        }`}
-                      >
-                        {isReject ? (
-                          <XCircle className="h-4 w-4 mr-2" />
-                        ) : (
-                          <CheckCircle className="h-4 w-4 mr-2" />
-                        )}
-                        {getStatusButtonLabel(nextStatus)}
-                      </button>
-                    );
-                  })}
-
-                <button
-                  className="flex items-center justify-center px-6 py-2.5 border-2 border-gray-400 text-gray-700 hover:bg-gray-50
-                 active:bg-gray-100 font-medium rounded-lg transition-all duration-200  w-full sm:w-auto"
-                >
-                  <Download className="h-4 w-4 mr-2" />
-                  {t("common.download")}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Tabs */}
-        <div className="mb-6 border-b border-gray-200">
-          <div className="flex flex-wrap gap-4 md:gap-6">
-            {[
-              {
-                id: "details",
-                label: t("certificationRequest.labels.requestDetails"),
-                icon: <FileText className="h-4 w-4" />,
-              },
-              {
-                id: "company",
-                label: t("company.labels.companyInfo"),
-                icon: <Building2 className="h-4 w-4" />,
-              },
-              {
-                id: "documents",
-                label: t("certificationRequest.labels.attachments"),
-                icon: <File className="h-4 w-4" />,
-                badge: hasAttachments
-                  ? (request.attachments?.length || 0) +
-                    (request.company?.attachments?.length || 0)
-                  : undefined,
-              },
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-2 pb-3 px-1 border-b-2 transition-colors ${
-                  activeTab === tab.id
-                    ? "border-blue-600 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                {tab.icon}
-                <span className="hidden sm:inline">{tab.label}</span>
-                <span className="sm:hidden">
-                  {tab.id === "details"
-                    ? "Details"
-                    : tab.id === "company"
-                      ? "Company"
-                      : "Docs"}
-                </span>
-                {tab.badge && (
-                  <span className="ml-1 px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded-full">
-                    {tab.badge}
-                  </span>
-                )}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Tab Content - Request Details */}
-        {activeTab === "details" && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Timeline and Info - Left Side */}
-            <div className="lg:col-span-2 space-y-6">
-              {/* Timeline Card */}
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                <button
-                  onClick={() => toggleSection("timeline")}
-                  className="w-full flex items-center justify-between p-6 hover:bg-gray-50 transition-colors"
-                >
-                  <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                    <Clock className="h-5 w-5 text-blue-600" />
-                    Timeline
-                  </h3>
-                  {expandedSections.timeline ? (
-                    <ChevronUp className="h-5 w-5 text-gray-400" />
-                  ) : (
-                    <ChevronDown className="h-5 w-5 text-gray-400" />
-                  )}
-                </button>
-                {expandedSections.timeline && (
-                  <div className="px-6 pb-6">
-                    <div className="space-y-4">
-                      {tracker && tracker.length > 0 ? (
-                        tracker.map((item: Tracker, index: number) => {
-                          const statusConfig = getStatusConfig(item.status);
-                          const isLastItem = index === tracker.length - 1;
-
-                          return (
-                            <div
-                              key={item.id}
-                              className="flex items-start gap-3"
-                            >
-                              <div className="relative">
-                                <div
-                                  className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                                    statusConfig.bgColor || "bg-gray-100"
-                                  }`}
-                                >
-                                  {statusConfig.icon || (
-                                    <Clock className="h-4 w-4" />
-                                  )}
-                                </div>
-                                {!isLastItem && (
-                                  <div className="absolute top-8 left-4 w-0.5 h-12 bg-gray-200"></div>
-                                )}
-                              </div>
-                              <div>
-                                <p className="font-medium text-gray-900">
-                                  {statusConfig.label || item.status}
-                                </p>
-                                <p className="text-sm text-gray-500">
-                                  {formatDate(item.changedAt)}
-                                </p>
-                                {item.changedBy && (
-                                  <p className="text-xs text-gray-400 mt-1">
-                                    By: {item.changedBy}
-                                  </p>
-                                )}
-                              </div>
-                            </div>
-                          );
-                        })
-                      ) : (
-                        <div className="flex items-start gap-3">
-                          <div className="relative">
-                            <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                              <CheckCircle className="h-4 w-4 text-green-600" />
-                            </div>
-                          </div>
-                          <div>
-                            <p className="font-medium text-gray-900">
-                              {t(
-                                "certificationRequest.statusOptions.SUBMITTED",
-                              )}
-                            </p>
-                            <p className="text-sm text-gray-500">
-                              {formatDate(request.createdDate)}
-                            </p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Request Information Card */}
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                <button
-                  onClick={() => toggleSection("requestInfo")}
-                  className="w-full flex items-center justify-between p-6 hover:bg-gray-50 transition-colors"
-                >
-                  <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                    <Tag className="h-5 w-5 text-blue-600" />
-                    {t("certificationRequest.labels.requestInfo")}
-                  </h3>
-                  {expandedSections.requestInfo ? (
-                    <ChevronUp className="h-5 w-5 text-gray-400" />
-                  ) : (
-                    <ChevronDown className="h-5 w-5 text-gray-400" />
-                  )}
-                </button>
-                {expandedSections.requestInfo && (
-                  <div className="px-6 pb-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <p className="text-sm text-gray-500 mb-1">
-                          {t("certificationRequest.labels.requestType")}
-                        </p>
-                        <p className="font-medium text-gray-900">
-                          {getRequestTypeLabel(request.requestType)}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-500 mb-1">
-                          {t("certificationRequest.labels.certificationType")}
-                        </p>
-                        <p className="font-medium text-gray-900">
-                          {getCertificationTypeLabel(request.certificationType)}
-                        </p>
-                      </div>
-                      {request.startDate && (
-                        <div>
-                          <p className="text-sm text-gray-500 mb-1">
-                            {t("common.startDate")}
-                          </p>
-                          <p className="font-medium text-gray-900">
-                            {formatDate(request.startDate)}
-                          </p>
-                        </div>
-                      )}
-                      {request.endDate && (
-                        <div>
-                          <p className="text-sm text-gray-500 mb-1">
-                            {t("common.endDate")}
-                          </p>
-                          <p className="font-medium text-gray-900">
-                            {formatDate(request.endDate)}
-                          </p>
-                        </div>
-                      )}
-                      {request.deadline && (
-                        <div>
-                          <p className="text-sm text-gray-500 mb-1">
-                            {t("certificationRequest.labels.deadline")}
-                          </p>
-                          <p className="font-medium text-gray-900">
-                            {formatDate(request.deadline)}
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
 
-            {/* Summary Card - Right Side */}
-            <div className="space-y-6">
-              <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl shadow-lg p-6 text-white">
-                <Award className="h-12 w-12 mb-4 opacity-80" />
-                <h3 className="text-xl font-bold mb-2">
-                  {t("certificationRequest.progress")}
+            {request.requestStatus === "PAYMENT_PENDING" && !request.isScanned && (
+              <div className="rounded-lg border border-blue-100 bg-white p-2">
+                <h3 className="mb-3 text-base font-semibold text-gray-800">
+                  {t("certificationRequest.scanUploadInformation") || "Scan Upload Information"}
                 </h3>
-                <p className="text-blue-100 mb-4">
-                  {t("certificationRequest.reviewMessage")}
-                </p>
-                <div className="mt-4">
-                  <div className="flex justify-between text-sm mb-2">
-                    <span>{t("common.completion")}</span>
-                    <span>45%</span>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-gray-700">
+                      {t("certificationRequest.transactionId") || "Transaction ID"} *
+                    </label>
+                    <input
+                      type="text"
+                      value={transactionId}
+                      onChange={(e) => setTransactionId(e.target.value)}
+                      placeholder={t("certificationRequest.transactionId") || "Transaction ID"}
+                      className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
                   </div>
-                  <div className="w-full bg-white/20 rounded-full h-2">
-                    <div
-                      className="bg-white h-2 rounded-full"
-                      style={{ width: "45%" }}
-                    ></div>
+                  {/* <div>
+                    <label className="mb-2 block text-sm font-medium text-gray-700">
+                      {t("certificationRequest.paymentDate") || "Payment Date"}
+                    </label>
+                    <input
+                      type="date"
+                      value={paymentDate}
+                      onChange={(e) => setPaymentDate(e.target.value)}
+                      className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div> */}
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-gray-700">
+                      {t("certificationRequest.paymentAmount") || "Payment Amount"}
+                    </label>
+                    <input
+                      type="number"
+                      value={paymentAmount}
+                      onChange={(e) => setPaymentAmount(e.target.value)}
+                      placeholder={t("certificationRequest.paymentAmount") || "Payment Amount"}
+                      className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
                   </div>
+             
+                </div>
+                     <div className="pt-3">
+                    <FileUploadField
+                      label={t("certificationRequest.scannedBill") || "Scanned Bill"}
+                      accept=".pdf,.jpg,.png"
+                      maxFileSize={10000000}
+                      required
+                      onFileSelect={(file) => setUploadedBill(file)}
+                    />
+                  </div>
+
+
+                <div className="flex justify-end gap-2 pt-2">
+                  <button
+                    type="button"
+                    onClick={closePaymentDialog}
+                    className="px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
+                  >
+                    {t("common.cancel")}
+                  </button>
+                  <button
+                    type="button"
+                    disabled={uploadingPayment}
+                    onClick={handlePaymentConfirmation}
+                    className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {uploadingPayment
+                      ? t("common.uploading") || "Uploading..."
+                      : t("certificationRequest.uploadScannedBill") || "Upload Scanned Bill"}
+                  </button>
                 </div>
               </div>
+            )}
 
-              {/* Quick Stats Card */}
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                <button
-                  onClick={() => toggleSection("quickStats")}
-                  className="w-full flex items-center justify-between p-6 hover:bg-gray-50 transition-colors"
-                >
-                  <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                    <TrendingUp className="h-5 w-5 text-blue-600" />
-                    {t("common.quickStats")}
-                  </h3>
-                  {expandedSections.quickStats ? (
-                    <ChevronUp className="h-5 w-5 text-gray-400" />
-                  ) : (
-                    <ChevronDown className="h-5 w-5 text-gray-400" />
-                  )}
-                </button>
-                {expandedSections.quickStats && (
-                  <div className="px-6 pb-6">
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-center">
-                        <span className="text-gray-600">
-                          {t("certificationRequest.labels.totalDocuments")}
-                        </span>
-                        <span className="font-semibold text-gray-900">
-                          {hasAttachments
-                            ? (request.attachments?.length || 0) +
-                              (request.company?.attachments?.length || 0)
-                            : 0}
-                        </span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-gray-600">
-                          {t("common.processingTime")}
-                        </span>
-                        <span className="font-semibold text-gray-900">
-                          {formatDate(request?.startDate)} -{" "}
-                          {formatDate(request?.endDate)}
-                        </span>
-                      </div>
-                    </div>
+            {(request.requestStatus === "PAYMENT_COMPLETED" || request.isScanned) && (
+              <div className="rounded-lg border border-green-100 bg-white p-4 text-sm text-gray-900">
+                <h3 className="mb-3 text-base font-semibold text-gray-800">
+                  {t("certificationRequest.paymentDetails") || "Payment Details"}
+                </h3>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <span className="block text-xs text-gray-500">
+                      {t("certificationRequest.transactionId") || "Transaction ID"}
+                    </span>
+                    <span className="font-medium text-gray-900">
+                      {(request as any).transactionId || "-"}
+                    </span>
                   </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Company Information Tab */}
-        {activeTab === "company" && request.company && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Company Profile - Left Side */}
-            <div className="lg:col-span-2 space-y-6">
-              {/* Main Company Card */}
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                <div className="relative h-32 bg-linear-to-r from-blue-600 to-indigo-600">
-                  <div className="absolute -bottom-12 left-6">
-                    <div className="w-24 h-24 bg-white rounded-2xl shadow-lg flex items-center justify-center overflow-hidden border-4 border-white">
-                      {request.company.logoUrl ? (
-                        <img
-                          src={`${API_BASE_URL}${request.company.logoUrl}`}
-                          alt={request.company.companyNameEN}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <Building2 className="h-12 w-12 text-blue-600" />
-                      )}
-                    </div>
+                  <div>
+                    <span className="block text-xs text-gray-500">
+                      {t("certificationRequest.paymentDate") || "Payment Date"}
+                    </span>
+                    <span className="font-medium text-gray-900">
+                      {(request as any).paymentDate
+                        ? new Date((request as any).paymentDate).toLocaleDateString()
+                        : "-"}
+                    </span>
                   </div>
-                </div>
-
-                <div className="pt-16 px-6 pb-6">
-                  <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
-                    <div>
-                      <h3 className="text-2xl font-bold text-gray-900">
-                        {getCompanyName()}
-                      </h3>
-                      <div className="flex items-center gap-2 mt-2 flex-wrap">
-                        <span className="px-2.5 py-1 bg-gray-100 text-gray-700 rounded-lg text-xs font-medium">
-                          {request.company.companyType?.replace(/_/g, " ")}
-                        </span>
-                        <span
-                          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium ${
-                            request.company.active
-                              ? "bg-green-100 text-green-700"
-                              : "bg-gray-100 text-gray-700"
-                          }`}
-                        >
-                          <div
-                            className={`w-1.5 h-1.5 rounded-full ${request.company.active ? "bg-green-500" : "bg-gray-400"}`}
-                          ></div>
-                          {request.company.active
-                            ? t("company.labels.active")
-                            : t("company.labels.inactive")}
-                        </span>
-                      </div>
-                    </div>
-                    {request.company.websiteUrl && (
+                  <div>
+                    <span className="block text-xs text-gray-500">
+                      {t("certificationRequest.paymentAmount") || "Payment Amount"}
+                    </span>
+                    <span className="font-medium text-gray-900">
+                      {(request as any).paymentAmount || "-"}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="block text-xs text-gray-500">
+                      {t("certificationRequest.scannedBill") || "Scanned Bill"}
+                    </span>
+                    <div className="flex flex-wrap gap-2 mt-1">
+                      <button
+                        type="button"
+                        onClick={downloadPaymentReceipt}
+                        className="px-3 py-1 rounded-md bg-blue-600 text-white text-sm"
+                      >
+                        {t("common.view") || "View"}
+                      </button>
                       <a
-                        href={request.company.websiteUrl}
+                        href={(request as any).paymentReceiptUrl || (request as any).receiptFilePath || "#"}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-xl text-gray-700 transition-colors text-sm"
+                        className={`px-3 py-1 rounded-md text-sm ${
+                          (request as any).paymentReceiptUrl || (request as any).receiptFilePath
+                            ? "bg-gray-100 text-gray-800"
+                            : "text-gray-400"
+                        }`}
                       >
-                        <Globe className="h-4 w-4" />
-                        {t("company.labels.visitWebsite")}
+                        {t("common.download") || "Download"}
                       </a>
-                    )}
+                    </div>
                   </div>
+                </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
-                      <Mail className="h-5 w-5 text-blue-500 mt-0.5" />
-                      <div>
-                        <p className="text-xs text-gray-500 uppercase tracking-wide">
-                          {t("company.labels.email")}
-                        </p>
-                        <p className="font-medium text-gray-900 break-all">
-                          {request.company.email}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
-                      <Phone className="h-5 w-5 text-blue-500 mt-0.5" />
-                      <div>
-                        <p className="text-xs text-gray-500 uppercase tracking-wide">
-                          {t("company.labels.phoneNumber")}
-                        </p>
-                        <p className="font-medium text-gray-900">
-                          {request.company.phoneNumber}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl md:col-span-2">
-                      <MapPin className="h-5 w-5 text-blue-500 mt-0.5" />
-                      <div>
-                        <p className="text-xs text-gray-500 uppercase tracking-wide">
-                          {t("company.labels.address")}
-                        </p>
-                        <p className="font-medium text-gray-900">
-                          {request.company.address}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="border-t border-gray-100 pt-6">
-                    <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                      <Briefcase className="h-5 w-5 text-blue-600" />
-                      {t("company.labels.businessInformation")}
-                    </h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                      <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4">
-                        <p className="text-xs text-blue-600 uppercase tracking-wide mb-1">
-                          {t("company.labels.jawazNumber")}
-                        </p>
-                        <p className="text-lg font-bold text-gray-900">
-                          {request.company.jawazNumber}
-                        </p>
-                      </div>
-                      <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4">
-                        <p className="text-xs text-purple-600 uppercase tracking-wide mb-1">
-                          {t("company.labels.jawazIssueDate")}
-                        </p>
-                        <p className="text-lg font-bold text-gray-900">
-                          {formatDate(request.company.jawazIssueDate)}
-                        </p>
-                      </div>
-                      <div className="bg-gradient-to-br from-orange-50 to-red-50 rounded-xl p-4">
-                        <p className="text-xs text-orange-600 uppercase tracking-wide mb-1">
-                          {t("company.labels.jawazExpiryDate")}
-                        </p>
-                        <p className="text-lg font-bold text-gray-900">
-                          {formatDate(request.company.jawazExpiryDate)}
-                        </p>
-                      </div>
-                      <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4">
-                        <p className="text-xs text-green-600 uppercase tracking-wide mb-1">
-                          {t("company.labels.establishYear")}
-                        </p>
-                        <p className="text-lg font-bold text-gray-900">
-                          {formatDate(request.company.establishYear)}
-                        </p>
-                      </div>
-                      <div className="bg-gradient-to-br from-cyan-50 to-sky-50 rounded-xl p-4">
-                        <p className="text-xs text-cyan-600 uppercase tracking-wide mb-1">
-                          {t("company.labels.activityPlace")}
-                        </p>
-                        <p className="text-lg font-bold text-gray-900">
-                          {request.company.activityPlace}
-                        </p>
-                      </div>
-                      <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-xl p-4">
-                        <p className="text-xs text-amber-600 uppercase tracking-wide mb-1">
-                          {t("company.labels.ownerNameEn")}
-                        </p>
-                        <p className="text-lg font-bold text-gray-900">
-                          {request.company.companyOwnerNameEn}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+                <div className="mt-4 text-sm text-gray-600">
+                  {t("certificationRequest.paymentCompletedNote") ||
+                    "Payment is completed. Use the Edit button to change status to issueCertificate."}
                 </div>
               </div>
-
-              {/* About Company Card */}
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                <div className="px-6 py-4 border-b border-gray-100">
-                  <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                    <FileText className="h-5 w-5 text-blue-600" />
-                    {t("company.labels.aboutCompany")}
-                  </h3>
-                </div>
-                <div className="px-6 py-4">
-                  <div className="prose max-w-none">
-                    <p className="text-gray-700 leading-relaxed">
-                      {getAboutCompany()}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Categories Card */}
-              {request.company.categories &&
-                request.company.categories.length > 0 && (
-                  <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div className="px-6 py-4 border-b border-gray-100">
-                      <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                        <Tag className="h-5 w-5 text-blue-600" />
-                        {t("company.labels.categories")}
-                      </h3>
-                    </div>
-                    <div className="px-6 py-4">
-                      <div className="flex flex-wrap gap-2">
-                        {request.company.categories.map((category) => (
-                          <span
-                            key={category.id}
-                            className="px-4 py-2 bg-linear-to-r from-blue-500 to-indigo-500 text-white rounded-full text-sm font-medium shadow-sm hover:shadow-md transition-shadow cursor-default"
-                          >
-                            {category.categoryName}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-              {/* Business Logo if exists */}
-              {request.company.bussinessLogoUrl && (
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                  <div className="px-6 py-4 border-b border-gray-100">
-                    <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                      <Building2 className="h-5 w-5 text-blue-600" />
-                      {t("company.labels.businessLogo")}
-                    </h3>
-                  </div>
-                  <div className="px-6 py-4">
-                    <div className="flex justify-center p-4 bg-gray-50 rounded-xl">
-                      <img
-                        src={`${API_BASE_URL}${request.company.bussinessLogoUrl}`}
-                        alt="Business Logo"
-                        className="max-h-48 object-contain rounded-lg"
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Company Stats & Info - Right Side */}
-            <div className="space-y-6">
-              {/* Verified Badge Card */}
-              <div className="bg-gradient-to-br from-green-600 to-teal-700 rounded-2xl shadow-lg p-6 text-white relative overflow-hidden">
-                <div className="absolute top-0 right-0 opacity-10">
-                  <Shield className="h-32 w-32" />
-                </div>
-                <Shield className="h-12 w-12 mb-4 relative z-10" />
-                <h3 className="text-xl font-bold mb-2 relative z-10">
-                  {t("company.labels.verifiedCompany")}
-                </h3>
-                <p className="text-green-100 mb-4 relative z-10 text-sm">
-                  {t("company.labels.verifiedMessage")}
-                </p>
-                <div className="flex items-center gap-2 text-sm relative z-10 bg-white/20 rounded-lg px-3 py-2 inline-flex">
-                  <CheckCircle className="h-4 w-4" />
-                  <span>{t("company.labels.registeredMember")}</span>
-                </div>
-              </div>
-
-              {/* Company Statistics Card */}
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                <div className="px-6 py-4 border-b border-gray-100">
-                  <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                    <TrendingUp className="h-5 w-5 text-blue-600" />
-                    {t("company.labels.companyStats")}
-                  </h3>
-                </div>
-                <div className="px-6 py-4 space-y-4">
-                  <div className="flex justify-between items-center py-2 border-b border-gray-50">
-                    <span className="text-gray-600">
-                      {t("company.labels.companyType")}
-                    </span>
-                    <span className="font-semibold text-gray-900 px-2 py-1 bg-blue-50 rounded-lg text-sm">
-                      {request.company.companyType?.replace(/_/g, " ")}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center py-2 border-b border-gray-50">
-                    <span className="text-gray-600">
-                      {t("company.labels.categoriesCount")}
-                    </span>
-                    <span className="font-semibold text-gray-900 px-2 py-1 bg-purple-50 rounded-lg text-sm">
-                      {request.company.categories?.length || 0}{" "}
-                      {t("company.labels.categories")}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center py-2 border-b border-gray-50">
-                    <span className="text-gray-600">
-                      {t("company.labels.documentsCount")}
-                    </span>
-                    <span className="font-semibold text-gray-900 px-2 py-1 bg-green-50 rounded-lg text-sm">
-                      {request.company.attachments?.length || 0}{" "}
-                      {t("company.labels.documents")}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center py-2">
-                    <span className="text-gray-600">
-                      {t("company.labels.socialLinks")}
-                    </span>
-                    <span className="font-semibold text-gray-900 px-2 py-1 bg-amber-50 rounded-lg text-sm">
-                      {request.company.socialLinks?.length || 0}{" "}
-                      {t("company.labels.links")}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Quick Contact Card */}
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                <div className="px-6 py-4 border-b border-gray-100">
-                  <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                    <Phone className="h-5 w-5 text-blue-600" />
-                    {t("company.labels.quickContact")}
-                  </h3>
-                </div>
-                <div className="px-6 py-4 space-y-3">
-                  <button
-                    onClick={() =>
-                      (window.location.href = `mailto:${request.company.email}`)
-                    }
-                    className="w-full flex items-center gap-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors group"
-                  >
-                    <Mail className="h-5 w-5 text-blue-600 group-hover:scale-110 transition-transform" />
-                    <span className="text-sm font-medium text-gray-700 flex-1 text-left">
-                      {request.company.email}
-                    </span>
-                  </button>
-                  <button
-                    onClick={() =>
-                      (window.location.href = `tel:${request.company.phoneNumber}`)
-                    }
-                    className="w-full flex items-center gap-3 p-3 bg-green-50 hover:bg-green-100 rounded-xl transition-colors group"
-                  >
-                    <Phone className="h-5 w-5 text-green-600 group-hover:scale-110 transition-transform" />
-                    <span className="text-sm font-medium text-gray-700 flex-1 text-left">
-                      {request.company.phoneNumber}
-                    </span>
-                  </button>
-                  {request.company.websiteUrl && (
-                    <button
-                      onClick={() =>
-                        window.open(request.company.websiteUrl, "_blank")
-                      }
-                      className="w-full flex items-center gap-3 p-3 bg-purple-50 hover:bg-purple-100 rounded-xl transition-colors group"
-                    >
-                      <Globe className="h-5 w-5 text-purple-600 group-hover:scale-110 transition-transform" />
-                      <span className="text-sm font-medium text-gray-700 flex-1 text-left">
-                        {t("company.labels.visitWebsite")}
-                      </span>
-                    </button>
-                  )}
-                </div>
-              </div>
-
-              {/* Contact Person Card */}
-              {contactPerson && (
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                  <button
-                    onClick={() => toggleSection("contactPersonDetails")}
-                    className="w-full flex items-center justify-between p-6 hover:bg-gray-50 transition-colors"
-                  >
-                    <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                      <User className="h-5 w-5 text-blue-600" />
-                      {t("contactPerson.info")}
-                    </h3>
-                    {expandedSections.contactPersonDetails ? (
-                      <ChevronUp className="h-5 w-5 text-gray-400" />
-                    ) : (
-                      <ChevronDown className="h-5 w-5 text-gray-400" />
-                    )}
-                  </button>
-
-                  {expandedSections.contactPersonDetails && (
-                    <div className="px-6 pb-6">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                        <div className="flex items-start gap-3 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl">
-                          <User className="h-5 w-5 text-blue-600 mt-0.5" />
-                          <div>
-                            <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">
-                              {t("contactPerson.firstName")} &{" "}
-                              {t("contactPerson.lastName")}
-                            </p>
-                            <p className="font-semibold text-gray-900">
-                              {contactPerson.firstName} {contactPerson.lastName}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="flex items-start gap-3 p-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl">
-                          <Briefcase className="h-5 w-5 text-purple-600 mt-0.5" />
-                          <div>
-                            <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">
-                              {t("contactPerson.position")}
-                            </p>
-                            <p className="font-semibold text-gray-900">
-                              {contactPerson.position || "—"}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="space-y-3 mb-6">
-                        <button
-                          onClick={() =>
-                            (window.location.href = `mailto:${contactPerson.email}`)
-                          }
-                          className="w-full flex items-center gap-3 p-3 bg-green-50 hover:bg-green-100 rounded-xl transition-all group"
-                        >
-                          <Mail className="h-5 w-5 text-green-600 group-hover:scale-110 transition-transform" />
-                          <div className="flex-1 text-left">
-                            <p className="text-xs text-gray-500 uppercase tracking-wider">
-                              {t("contactPerson.email")}
-                            </p>
-                            <p className="font-medium text-gray-800 group-hover:text-gray-900">
-                              {contactPerson.email}
-                            </p>
-                          </div>
-                          <ChevronRight className="h-4 w-4 text-green-400 opacity-0 group-hover:opacity-100 transition-opacity" />
-                        </button>
-
-                        <button
-                          onClick={() =>
-                            (window.location.href = `tel:${contactPerson.phoneNumber}`)
-                          }
-                          className="w-full flex items-center gap-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-xl transition-all group"
-                        >
-                          <Phone className="h-5 w-5 text-blue-600 group-hover:scale-110 transition-transform" />
-                          <div className="flex-1 text-left">
-                            <p className="text-xs text-gray-500 uppercase tracking-wider">
-                              {t("contactPerson.phoneNumber")}
-                            </p>
-                            <p className="font-medium text-gray-800 group-hover:text-gray-900">
-                              {contactPerson.phoneNumber}
-                            </p>
-                          </div>
-                          <ChevronRight className="h-4 w-4 text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity" />
-                        </button>
-                      </div>
-
-                      {contactPerson.addresses &&
-                        contactPerson.addresses.length > 0 && (
-                          <div className="border-t border-gray-200 pt-4">
-                            <div className="flex items-center gap-2 mb-3">
-                              <MapPin className="h-4 w-4 text-blue-600" />
-                              <h4 className="font-semibold text-gray-800 text-sm">
-                                {t("contactPerson.addresses.title")}
-                              </h4>
-                            </div>
-                            <div className="space-y-3">
-                              {contactPerson.addresses.map(
-                                (address: Address, index: number) => (
-                                  <div
-                                    key={address.id || index}
-                                    className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-4 hover:shadow-md transition-shadow"
-                                  >
-                                    <div className="flex flex-wrap gap-2 mb-2">
-                                      <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs font-medium">
-                                        {address.addressType === "HOME" && (
-                                          <Home className="h-3 w-3" />
-                                        )}
-                                        {address.addressType ===
-                                          "HEAD_OFFICE" && (
-                                          <Building className="h-3 w-3" />
-                                        )}
-                                        {address.addressType ===
-                                          "BRANCH_OFFICE" && (
-                                          <Building2 className="h-3 w-3" />
-                                        )}
-                                        {address.addressType === "OTHER" && (
-                                          <Map className="h-3 w-3" />
-                                        )}
-                                        {getAddressTypeLabel(
-                                          address.addressType,
-                                        )}
-                                      </span>
-                                    </div>
-                                    <div className="text-sm text-gray-700 space-y-1">
-                                      <p className="flex items-start gap-2">
-                                        <MapPin className="h-3.5 w-3.5 text-gray-400 mt-0.5 flex-shrink-0" />
-                                        <span>
-                                          {address.district?.districtName},{" "}
-                                          {
-                                            address.district?.province
-                                              ?.provinceName
-                                          }
-                                        </span>
-                                      </p>
-                                      <p className="text-gray-600 pl-5">
-                                        {address.details}
-                                      </p>
-                                      <p className="text-xs text-gray-500 pl-5">
-                                        {
-                                          address.district?.province?.country
-                                            ?.countryName
-                                        }
-                                      </p>
-                                    </div>
-                                  </div>
-                                ),
-                              )}
-                            </div>
-                          </div>
-                        )}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
+            )}
           </div>
+        </Dialog>
+
+        <CertificationRequestViewHeader
+          request={request}
+          statusConfig={statusConfig}
+          finalStates={finalStates}
+          getNextStatuses={getNextStatuses}
+          getStatusButtonLabel={getStatusButtonLabel}
+          getCertificationTypeLabel={getCertificationTypeLabel}
+          onBack={() => navigate(-1)}
+          onStatusAction={confirmStatusUpdate}
+          onPrintBill={() => printBill(request)}
+          onOpenPaymentDialog={openPaymentDialog}
+          canUploadScannedBillButton={
+            request.requestStatus === "PAYMENT_PENDING" &&
+            !request.isScanned &&
+            ((request as any).isPrint || (request as any).isPrinted || requestPrinted)
+          }
+          showPaymentDetailsAction={
+            Boolean(request.isScanned || request.requestStatus === "PAYMENT_COMPLETED")
+          }
+          t={t}
+        />
+
+        <CertificationRequestViewTabs
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          hasAttachments={
+            (request.attachments?.length || 0) +
+            (request.company?.attachments?.length || 0)
+          }
+          t={t}
+        />
+
+        {activeTab === "details" && (
+          <CertificationRequestViewDetails
+            request={request}
+            tracker={tracker}
+            expandedSections={{
+              timeline: expandedSections.timeline,
+              requestInfo: expandedSections.requestInfo,
+              quickStats: expandedSections.quickStats,
+            }}
+            toggleSection={toggleSection}
+            getStatusConfig={getStatusConfig}
+            formatDate={formatDate}
+            getRequestTypeLabel={getRequestTypeLabel}
+            getCertificationTypeLabel={getCertificationTypeLabel}
+            hasAttachments={hasAttachments}
+            t={t}
+          />
         )}
 
-        {/* Documents Tab */}
+        {activeTab === "company" && request.company && (
+          <CertificationRequestViewCompany
+            request={request}
+            getCompanyName={getCompanyName}
+            getAboutCompany={getAboutCompany}
+            getAddressTypeLabel={getAddressTypeLabel}
+            formatDate={formatDate}
+            toggleSection={toggleSection}
+            expandedSections={{
+              contactPersonDetails: expandedSections.contactPersonDetails,
+            }}
+            contactPerson={contactPerson}
+            apiBaseUrl={API_BASE_URL}
+            t={t}
+          />
+        )}
+
         {activeTab === "documents" && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Request Attachments */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <FileText className="h-5 w-5 text-blue-600" />
-                {t("certificationRequest.requestAttachments")} (
-                {request.attachments?.length || 0})
-              </h3>
-              {request.attachments && request.attachments.length > 0 ? (
-                <div className="space-y-3">
-                  {request.attachments.map((attachment) => (
-                    <div
-                      key={attachment.id}
-                      className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                    >
-                      <div className="flex items-center gap-3 flex-1">
-                        <File className="h-5 w-5 text-blue-500 shrink-0" />
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <p className="font-medium text-gray-900 truncate">
-                              {attachment.attachmentName}
-                            </p>
-                            {attachment.attachmentReferenceType && (
-                              <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-200 text-gray-700">
-                                {attachment.attachmentReferenceType}
-                              </span>
-                            )}
-                          </div>
-                          <div className="flex items-center gap-3 mt-0.5">
-                            <p className="text-xs text-gray-500">
-                              {formatFileSize(attachment.fileSize)}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex gap-2 flex-shrink-0">
-                        <a
-                          href={`${API_BASE_URL}${attachment.file}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="p-1.5 text-gray-500 hover:text-blue-600 transition-colors"
-                          title={t("common.view")}
-                        >
-                          <Eye className="h-4 w-4" />
-                        </a>
-                        <a
-                          href={`${API_BASE_URL}${attachment.file}`}
-                          download
-                          className="p-1.5 text-gray-500 hover:text-blue-600 transition-colors"
-                          title={t("common.download")}
-                        >
-                          <Download className="h-4 w-4" />
-                        </a>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-8">
-                  <File className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                  <p className="text-gray-500">{t("common.noDocuments")}</p>
-                </div>
-              )}
-            </div>
-
-            {/* Company Attachments */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <Building2 className="h-5 w-5 text-blue-600" />
-                {t("company.labels.companyAttachments")} (
-                {request.company?.attachments?.length || 0})
-              </h3>
-              {request.company &&
-              request.company.attachments &&
-              request.company.attachments.length > 0 ? (
-                <div className="space-y-3">
-                  {request.company.attachments.map((attachment) => (
-                    <div
-                      key={attachment.id}
-                      className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                    >
-                      <div className="flex items-center gap-3">
-                        <File className="h-5 w-5 text-green-500" />
-                        <div>
-                          <p className="font-medium text-gray-900">
-                            {attachment.attachmentName}
-                          </p>
-                          <p className="text-xs text-gray-500">
-                            {formatFileSize(attachment.fileSize)}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex gap-2">
-                        <a
-                          href={`${API_BASE_URL}${attachment.file}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="p-1.5 text-gray-500 hover:text-blue-600 transition-colors"
-                          title={t("common.view")}
-                        >
-                          <Eye className="h-4 w-4" />
-                        </a>
-                        <a
-                          href={`${API_BASE_URL}${attachment.file}`}
-                          download
-                          className="p-1.5 text-gray-500 hover:text-blue-600 transition-colors"
-                          title={t("common.download")}
-                        >
-                          <Download className="h-4 w-4" />
-                        </a>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-8">
-                  <File className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                  <p className="text-gray-500">{t("common.noDocuments")}</p>
-                </div>
-              )}
-            </div>
-          </div>
+          <CertificationRequestViewDocuments
+            request={request}
+            formatFileSize={formatFileSize}
+            apiBaseUrl={API_BASE_URL}
+            t={t}
+          />
         )}
       </div>
     </div>

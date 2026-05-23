@@ -3,16 +3,16 @@ import { Card } from "primereact/card";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
-// @ts-ignore
-import UserService from "../../../services/user.service.ts";
+import UserService from "../../../services/user.service";
+import ZoneService from "../../../services/zone.service";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Toast } from "primereact/toast";
-import { useAppToast } from "../../../hooks/useToast.js";
-import DynamicBreadcrumb from "../../common/DynamicBreadcrumb.js";
-import SkeletonForm from "../../common/SkeletonForm.js";
+import { useAppToast } from "../../../hooks/useToast";
+import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
+import SkeletonForm from "../../common/SkeletonForm";
 import FileUploadField from "../../common/FileUploadField";
-import ZoneService from "../../../services/zone.service.ts";
+import { useTranslation } from "react-i18next";
 
 type FormValues = {
   firstName: string;
@@ -20,83 +20,111 @@ type FormValues = {
   email: string;
   phoneNumber: string;
   role: string;
-  zoneId: number;
+  zoneId: number | null;
+};
+
+type ZoneOption = {
+  label: string;
+  value: number;
 };
 
 export const EditUser = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const { toast, showToast } = useAppToast();
 
   const [loading, setLoading] = useState(false);
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [existingImageUrl, setExistingImageUrl] = useState<string | null>(null);
-  const [zones, setZones] = useState<any[]>([]);
-  useEffect(() => {
-    const fetchZones = async () => {
-      try {
-        const response = await ZoneService.getAllZones();
-        // Assuming response.data is array of Zone objects [{id, name, location}]
-        const zoneOptions = response.data.map((zone: any) => ({
-          label: zone.name,
-          value: zone.id,
-        }));
-        setZones(zoneOptions);
-      } catch (error) {
-        showToast("error", "Error", "Failed to load zones");
-      }
-    };
+  const [zones, setZones] = useState<ZoneOption[]>([]);
 
-    fetchZones();
-  }, []);
   const {
     control,
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<FormValues>();
+  } = useForm<FormValues>({
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phoneNumber: "",
+      role: "ROLE_USER",
+      zoneId: null,
+    },
+  });
+
+  useEffect(() => {
+    const fetchZones = async () => {
+      try {
+        const response = await ZoneService.getAllZones();
+
+        const zoneOptions: ZoneOption[] = response.data.map((zone: any) => ({
+          label: zone.name,
+          value: zone.id,
+        }));
+
+        setZones(zoneOptions);
+      } catch {
+        showToast(
+          "error",
+          t("common.error"),
+          t("user.messages.zoneLoadFailed"),
+        );
+      }
+    };
+
+    fetchZones();
+  }, []);
 
   useEffect(() => {
     const loadUser = async () => {
+      if (!id) return;
+
       try {
         setLoading(true);
-        const res = await UserService.getUser(id);
 
+        const res = await UserService.getUser(Number(id));
         const user = res.data.data;
 
         reset({
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          phoneNumber: user.phoneNumber,
+          firstName: user.firstName || "",
+          lastName: user.lastName || "",
+          email: user.email || "",
+          phoneNumber: user.phoneNumber || "",
           role: user.roles?.[0]?.name || "ROLE_USER",
           zoneId: user.zone?.id || null,
         });
 
-        // Set existing image URL (adjust field name if needed)
         setExistingImageUrl(
           user?.profileImage
             ? `http://localhost:8080${user.profileImage}`
             : null,
         );
-      } catch (error) {
-        console.error("Failed to load user", error);
+      } catch {
+        showToast("error", t("common.error"), t("user.messages.loadFailed"));
       } finally {
         setLoading(false);
       }
     };
 
-    if (id) loadUser();
+    loadUser();
   }, [id, reset]);
 
   const roleOptions = [
-    { label: "Admin", value: "ROLE_ADMIN" },
-    { label: "User", value: "ROLE_USER" },
-    { label: "Company Admin", value: "ROLE_COMPANY" },
-    { label: "Monitor", value: "MONITORING" },
+    { label: t("user.roles.ADMIN"), value: "ROLE_ADMIN" },
+    { label: t("user.roles.USER"), value: "ROLE_USER" },
+    { label: t("user.roles.COMPANY_ADMIN"), value: "ROLE_COMPANY_ADMIN" },
+    { label: t("user.roles.MONITORING"), value: "ROLE_MONITORING" },
+    { label: t("user.roles.SUPER_ADMIN"), value: "ROLE_SUPER_ADMIN" },
+    { label: t("user.roles.COMMITTEE_MEMBER"), value: "ROLE_COMMITTEE_MEMBER" },
+    { label: t("user.roles.INSPECTOR"), value: "ROLE_INSPECTOR" },
   ];
 
   const onSubmit = async (data: FormValues) => {
+    if (!id) return;
+
     try {
       const formData = new FormData();
 
@@ -122,32 +150,35 @@ export const EditUser = () => {
         formData.append("profileImage", profileImage);
       }
 
-      await UserService.updateUser(id, formData);
+      await UserService.updateUser(Number(id), formData);
 
-      showToast("success", "Success", "User Updated Successfully");
+      showToast("success", t("common.success"), t("user.messages.updateSuccess"));
 
       setTimeout(() => {
         navigate("/users");
-      }, 1500);
-    } catch (error) {
-      showToast("error", "Error", "Failed to update user");
+      }, 1000);
+    } catch {
+      showToast("error", t("common.error"), t("user.messages.updateFailed"));
     }
   };
 
   const fields = [
-    { name: "firstName", label: "First Name" },
-    { name: "lastName", label: "Last Name" },
-    { name: "email", label: "Email" },
-    { name: "phoneNumber", label: "Phone Number" },
-    { name: "role", label: "Role" },
+    { name: "firstName", label: t("user.fields.firstName") },
+    { name: "lastName", label: t("user.fields.lastName") },
+    { name: "email", label: t("user.fields.email") },
+    { name: "phoneNumber", label: t("user.fields.phoneNumber") },
+    { name: "role", label: t("user.fields.role") },
+    { name: "zoneId", label: t("user.fields.zone") },
   ];
-  console.log(existingImageUrl);
+
   return (
     <>
+      <Toast ref={toast} />
+
       <DynamicBreadcrumb
         items={[
-          { label: "Users", url: "/users" },
-          { label: "Edit User", url: `/users/edit/${id}` },
+          { label: t("user.title"), url: "/users" },
+          { label: t("user.breadcrumb.editUser"), url: `/users/edit/${id}` },
         ]}
         size="w-full max-w-7xl mx-auto px-0 pt-4"
       />
@@ -156,20 +187,18 @@ export const EditUser = () => {
         <SkeletonForm skeletonType="row" fields={fields} />
       ) : (
         <div className="flex justify-center">
-          <Toast ref={toast} />
-
           <Card className="w-full max-w-7xl mx-auto">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-              {/* 3 COLUMN GRID */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {/* First Name */}
                 <Controller
                   name="firstName"
                   control={control}
-                  rules={{ required: "First name is required" }}
+                  rules={{ required: t("user.validation.firstNameRequired") }}
                   render={({ field }) => (
                     <div>
-                      <label className="font-medium">First Name</label>
+                      <label className="font-medium">
+                        {t("user.fields.firstName")}
+                      </label>
                       <InputText {...field} className="w-full" />
                       {errors.firstName && (
                         <small className="text-red-500">
@@ -180,14 +209,15 @@ export const EditUser = () => {
                   )}
                 />
 
-                {/* Last Name */}
                 <Controller
                   name="lastName"
                   control={control}
-                  rules={{ required: "Last name is required" }}
+                  rules={{ required: t("user.validation.lastNameRequired") }}
                   render={({ field }) => (
                     <div>
-                      <label className="font-medium">Last Name</label>
+                      <label className="font-medium">
+                        {t("user.fields.lastName")}
+                      </label>
                       <InputText {...field} className="w-full" />
                       {errors.lastName && (
                         <small className="text-red-500">
@@ -198,23 +228,24 @@ export const EditUser = () => {
                   )}
                 />
 
-                {/* Phone Number */}
                 <Controller
                   name="phoneNumber"
                   control={control}
                   rules={{
-                    required: "Phone number is required",
+                    required: t("user.validation.phoneRequired"),
                     pattern: {
                       value: /^07\d{8}$/,
-                      message: "Phone must start with 07 and contain 10 digits",
+                      message: t("user.validation.phoneInvalid"),
                     },
                   }}
                   render={({ field }) => (
                     <div>
-                      <label className="font-medium">Phone Number</label>
+                      <label className="font-medium">
+                        {t("user.fields.phoneNumber")}
+                      </label>
                       <InputText
                         {...field}
-                        placeholder="0701234567"
+                        placeholder={t("user.placeholders.phoneNumber")}
                         maxLength={10}
                         className="w-full"
                       />
@@ -227,20 +258,21 @@ export const EditUser = () => {
                   )}
                 />
 
-                {/* Email */}
                 <Controller
                   name="email"
                   control={control}
                   rules={{
-                    required: "Email is required",
+                    required: t("user.validation.emailRequired"),
                     pattern: {
                       value: /^\S+@\S+\.\S+$/,
-                      message: "Invalid email address",
+                      message: t("user.validation.emailInvalid"),
                     },
                   }}
                   render={({ field }) => (
                     <div>
-                      <label className="font-medium">Email</label>
+                      <label className="font-medium">
+                        {t("user.fields.email")}
+                      </label>
                       <InputText {...field} type="email" className="w-full" />
                       {errors.email && (
                         <small className="text-red-500">
@@ -251,17 +283,19 @@ export const EditUser = () => {
                   )}
                 />
 
-                {/* Role */}
                 <Controller
                   name="role"
                   control={control}
-                  rules={{ required: "Role is required" }}
+                  rules={{ required: t("user.validation.roleRequired") }}
                   render={({ field }) => (
                     <div>
-                      <label className="font-medium">Role</label>
+                      <label className="font-medium">
+                        {t("user.fields.role")}
+                      </label>
                       <Dropdown
                         {...field}
                         options={roleOptions}
+                        placeholder={t("user.placeholders.selectRole")}
                         className="w-full"
                       />
                       {errors.role && (
@@ -276,20 +310,21 @@ export const EditUser = () => {
                 <Controller
                   name="zoneId"
                   control={control}
-                  rules={{ required: "Zone is required" }}
+                  rules={{ required: t("user.validation.zoneRequired") }}
                   render={({ field }) => (
                     <div>
-                      <label className="block text-sm font-medium mb-1">
-                        Zone <span className="text-red-500">*</span>
+                      <label className="font-medium">
+                        {t("user.fields.zone")}{" "}
+                        <span className="text-red-500">*</span>
                       </label>
                       <Dropdown
                         {...field}
                         options={zones}
-                        placeholder="Select zone"
+                        placeholder={t("user.placeholders.selectZone")}
                         className={`w-full ${errors.zoneId ? "p-invalid" : ""}`}
                       />
                       {errors.zoneId && (
-                        <small className="text-red-500 block mt-1">
+                        <small className="text-red-500">
                           {errors.zoneId.message}
                         </small>
                       )}
@@ -298,33 +333,30 @@ export const EditUser = () => {
                 />
               </div>
 
-              {/* Existing Image Preview */}
               {existingImageUrl && (
                 <div>
                   <label className="font-medium block mb-2">
-                    Current Profile Image
+                    {t("user.fields.currentProfileImage")}
                   </label>
                   <img
                     src={existingImageUrl}
-                    alt="Profile"
+                    alt={t("user.labels.profileImage")}
                     className="w-32 h-32 object-cover rounded border"
                   />
                 </div>
               )}
 
-              {/* File Upload */}
               <FileUploadField
-                label="Update Profile Image"
+                label={t("user.fields.updateProfileImage")}
                 name="profileImage"
                 accept="image/*"
                 maxFileSize={1048576}
                 onFileSelect={(file) => setProfileImage(file)}
               />
 
-              {/* Buttons */}
               <div className="flex justify-start gap-2 pt-4">
                 <Button
-                  label="Update"
+                  label={t("user.buttons.update")}
                   icon="pi pi-save"
                   text
                   raised
@@ -332,8 +364,9 @@ export const EditUser = () => {
                   type="submit"
                   loading={isSubmitting}
                 />
+
                 <Button
-                  label="Cancel"
+                  label={t("user.buttons.cancel")}
                   type="button"
                   severity="secondary"
                   text

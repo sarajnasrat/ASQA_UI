@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useAppToast } from "../../../hooks/useToast";
 import { RoleService } from "../../../services/role.service";
 import { PermissionService } from "../../../services/permission.service";
@@ -6,7 +7,6 @@ import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { Checkbox } from "primereact/checkbox";
 import { InputText } from "primereact/inputtext";
-import { Divider } from "primereact/divider";
 
 interface EditRoleProps {
   roleId: string;
@@ -21,6 +21,7 @@ export const EditRole: React.FC<EditRoleProps> = ({
   onClose,
   onSuccess,
 }) => {
+  const { t } = useTranslation();
   const { showToast } = useAppToast();
   const [role, setRole] = useState<any>({});
   const [permissions, setPermissions] = useState<any[]>([]);
@@ -60,7 +61,7 @@ export const EditRole: React.FC<EditRoleProps> = ({
         roleData.permissions?.map((p: any) => String(p.id)) || [];
       setSelectedPermissions(selected);
     } catch (error) {
-      showToast("error", "Error", "Failed to load role details");
+      showToast("error", t("common.error"), String(t("role.messages.loadDetailsFailed")));
       console.error(error);
     } finally {
       setLoading(false);
@@ -95,12 +96,12 @@ export const EditRole: React.FC<EditRoleProps> = ({
 
       await RoleService.updateRole(roleId, payload);
 
-      showToast("success", "Success", "Role updated successfully");
+      showToast("success", t("common.success"), String(t("role.messages.updateSuccess")));
       onSuccess();
       onClose();
     } catch (error) {
       console.error(error);
-      showToast("error", "Error", "Failed to update role");
+      showToast("error", t("common.error"), String(t("role.messages.updateFailed")));
     } finally {
       setLoading(false);
     }
@@ -118,10 +119,10 @@ export const EditRole: React.FC<EditRoleProps> = ({
           <i className="pi pi-shield text-2xl text-indigo-500"></i>
           <div>
             <h2 className="text-xl font-bold text-gray-800 m-0">
-              Edit Role: {role?.name || ""}
+              {String(t("role.dialogs.editTitle"))}: {role?.name || ""}
             </h2>
             <p className="text-sm text-gray-500 m-0 mt-1">
-              Modify role details and permissions
+              {String(t("role.dialogs.editSubtitle"))}
             </p>
           </div>
         </div>
@@ -149,21 +150,20 @@ export const EditRole: React.FC<EditRoleProps> = ({
         <div className="space-y-1">
           <label className="flex items-center gap-1 text-sm font-semibold text-gray-700">
             <i className="pi pi-tag text-indigo-500"></i>
-            Role Name
+            {String(t("role.fields.roleName"))}
           </label>
           <div className="relative">
-            {/* <i className="pi pi-pencil absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i> */}
             <InputText
               value={role?.name || ""}
               onChange={(e) => setRole({ ...role, name: e.target.value })}
               className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 transition-all"
-              placeholder="Enter role name (e.g., Admin, Manager, Editor)"
+              placeholder={String(t("role.placeholders.roleName"))}
             />
           </div>
           {!role?.name && (
             <p className="text-xs text-amber-600 mt-1">
               <i className="pi pi-exclamation-triangle mr-1"></i>
-              Role name is required
+              {String(t("role.validation.roleNameRequired"))}
             </p>
           )}
         </div>
@@ -173,22 +173,21 @@ export const EditRole: React.FC<EditRoleProps> = ({
           <div className="flex items-center justify-between">
             <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
               <i className="pi pi-lock text-indigo-500"></i>
-              Assign Permissions
+              {String(t("role.fields.assignPermissions"))}
             </label>
             <span className="text-xs bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full font-medium">
-              {selectedPermissions.length} of {permissions.length} selected
+              {selectedPermissions.length} {String(t("role.labels.of"))} {permissions.length} {String(t("role.labels.selected"))}
             </span>
           </div>
 
           {/* Search and Actions */}
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
-              {/* <i className="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i> */}
               <InputText
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 transition-all"
-                placeholder="Search permissions..."
+                placeholder={String(t("role.placeholders.searchPermissions"))}
               />
             </div>
             <div className="flex gap-2">
@@ -197,17 +196,15 @@ export const EditRole: React.FC<EditRoleProps> = ({
                 onClick={selectAllPermissions}
                 className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors flex items-center gap-2"
                 icon="pi pi-check-square"
-              >
-                <span className="hidden sm:inline">All</span>
-              </Button>
+                label={String(t("role.buttons.all"))}
+              />
               <Button
                 type="button"
                 onClick={deselectAllPermissions}
                 className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors flex items-center gap-2"
                 icon="pi pi-ban"
-              >
-                <span className="hidden sm:inline">None</span>
-              </Button>
+                label={String(t("role.buttons.none"))}
+              />
             </div>
           </div>
 
@@ -222,14 +219,14 @@ export const EditRole: React.FC<EditRoleProps> = ({
                   key={p.id}
                   onClick={() => togglePermission(String(p.id))}
                   className={`
-            flex items-start gap-2 p-3 rounded-lg border-2 cursor-pointer
-            transition-all duration-200 hover:shadow-md
-            ${
-              selectedPermissions.includes(String(p.id))
-                ? "border-indigo-500 bg-indigo-50"
-                : "border-transparent bg-white hover:border-gray-300"
-            }
-          `}
+                    flex items-start gap-2 p-3 rounded-lg border-2 cursor-pointer
+                    transition-all duration-200 hover:shadow-md
+                    ${
+                      selectedPermissions.includes(String(p.id))
+                        ? "border-indigo-500 bg-indigo-50"
+                        : "border-transparent bg-white hover:border-gray-300"
+                    }
+                  `}
                 >
                   <Checkbox
                     inputId={`perm-${p.id}`}
@@ -268,9 +265,9 @@ export const EditRole: React.FC<EditRoleProps> = ({
             ) : (
               <div className="col-span-full text-center py-12">
                 <i className="pi pi-search text-4xl text-gray-300 mb-3"></i>
-                <p className="text-gray-500">No permissions found</p>
+                <p className="text-gray-500">{String(t("role.messages.noPermissionsFound"))}</p>
                 <p className="text-sm text-gray-400">
-                  Try adjusting your search
+                  {String(t("role.messages.adjustSearch"))}
                 </p>
               </div>
             )}
@@ -281,19 +278,20 @@ export const EditRole: React.FC<EditRoleProps> = ({
             <div className="text-xs text-gray-500 flex flex-wrap items-center gap-4">
               <span>
                 <i className="pi pi-filter mr-1"></i>
-                Showing {filteredPermissions.length} of {permissions.length}
+                {String(t("role.labels.showing"))} {filteredPermissions.length} {String(t("role.labels.of"))} {permissions.length}
               </span>
               <span>
                 <i className="pi pi-check-circle mr-1 text-indigo-500"></i>
-                {selectedPermissions.length} selected
+                {selectedPermissions.length} {String(t("role.labels.selected"))}
               </span>
             </div>
           )}
         </div>
+
         {/* Action Buttons */}
         <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 mt-6 pt-4 border-t border-gray-200">
           <Button
-            label="Cancel"
+            label={String(t("common.cancel"))}
             severity="secondary"
             raised
             text
@@ -302,7 +300,7 @@ export const EditRole: React.FC<EditRoleProps> = ({
             icon="pi pi-times"
           />
           <Button
-            label="Save"
+            label={String(t("role.buttons.save"))}
             severity="info"
             text
             raised
@@ -320,7 +318,7 @@ export const EditRole: React.FC<EditRoleProps> = ({
         <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center rounded-xl z-50">
           <div className="text-center">
             <i className="pi pi-spin pi-spinner text-4xl text-indigo-500 mb-3"></i>
-            <p className="text-gray-600 font-medium">Updating role...</p>
+            <p className="text-gray-600 font-medium">{String(t("role.messages.updatingRole"))}</p>
           </div>
         </div>
       )}

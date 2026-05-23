@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -82,6 +82,7 @@ export const CertificationRequestPayment = () => {
   const [paymentDate, setPaymentDate] = useState("");
   const [paymentAmount, setPaymentAmount] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [printedRequests, setPrintedRequests] = useState<number[]>([]);
 
   const statusTabs: StatusTabItem[] = [
     {
@@ -177,7 +178,7 @@ export const CertificationRequestPayment = () => {
     }
   };
 
-  const printBill = (request: any) => {
+  const printBill = async (request: any) => {
     if (request.requestStatus !== "PAYMENT_PENDING") {
       toast.current?.show({
         severity: "warn",
@@ -341,6 +342,18 @@ export const CertificationRequestPayment = () => {
 
     printWindow.document.write(billContent);
     printWindow.document.close();
+    // mark printed locally so upload option appears
+    try {
+      setPrintedRequests((prev) => (prev.includes(request.id) ? prev : [...prev, request.id]));
+    } catch (e) {
+      // ignore
+    }
+
+    try {
+      await CertificationRequestService.updateIsPrint(request.id, true);
+    } catch (error) {
+      // ignore failure for now; local state still allows upload
+    }
   };
 
   const openPaymentDialog = (request: any) => {
@@ -407,6 +420,13 @@ export const CertificationRequestPayment = () => {
     );
 
     if (response) {
+      await handleApi(
+        () => CertificationRequestService.updateIsScanned(selectedRequest.id, true),
+        () => {},
+        showError,
+        t,
+      );
+
       setPaymentDialogVisible(false);
       setUploadedBill(null);
       setTransactionId("");
@@ -418,6 +438,21 @@ export const CertificationRequestPayment = () => {
     }
 
     setUploading(false);
+  };
+
+  const downloadPaymentReceipt = async (requestId: number) => {
+    const resp = await handleApi(
+      () => CertificationRequestService.getPaymentReceipt(requestId),
+      () => {},
+      showError,
+      t
+    );
+
+    if (resp && resp.data) {
+      const blob = resp.data;
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      window.open(url, "_blank");
+    }
   };
 
   const handleDelete = async (id: number) => {
@@ -466,28 +501,40 @@ export const CertificationRequestPayment = () => {
     ];
 
     if (rowData.requestStatus === "PAYMENT_PENDING") {
-      items.push(
-        {
-          label: "Print Bill",
-          icon: "pi pi-print",
-          command: () => printBill(rowData),
-        },
-        {
-          label: "Upload Scanned Bill",
+      // Always allow printing. Show upload only after printed (or if backend flag indicates printed)
+      items.push({
+        label: t("certificationRequest.printBill") || "Print Bill",
+        icon: "pi pi-print",
+        command: () => printBill(rowData),
+      });
+
+      const hasPrintedFlag =
+        rowData.isPrint || rowData.isPrinted || printedRequests.includes(rowData.id);
+
+      if (rowData.isScanned) {
+        items.push({
+          label: t("certificationRequest.paymentCompleted") || "Payment Completed",
+          icon: "pi pi-check-circle",
+          command: () => openPaymentDialog(rowData),
+        });
+      } else if (hasPrintedFlag) {
+        items.push({
+          label: t("certificationRequest.uploadScannedBill") || "Upload Scanned Bill",
           icon: "pi pi-upload",
           command: () => openPaymentDialog(rowData),
-        },
-        {
-          label: t("common.delete"),
-          icon: "pi pi-trash",
-          command: () => confirmDelete(rowData),
-        }
-      );
+        });
+      }
+
+      items.push({
+        label: t("common.delete"),
+        icon: "pi pi-trash",
+        command: () => confirmDelete(rowData),
+      });
     }
 
     if (rowData.requestStatus === "PAYMENT_COMPLETED") {
       items.push({
-        label: "View Payment Details",
+        label: t("certificationRequest.viewPaymentDetails") || "View Payment Details",
         icon: "pi pi-eye",
         command: () => openPaymentDialog(rowData),
       });
@@ -706,7 +753,7 @@ export const CertificationRequestPayment = () => {
         className="p-button-text"
       />
 
-      {selectedRequest?.requestStatus === "PAYMENT_PENDING" && (
+      {selectedRequest?.requestStatus === "PAYMENT_PENDING" && !selectedRequest?.isScanned && (
         <Button
           label={uploading ? "Uploading..." : "Upload Scan"}
           icon="pi pi-upload"
@@ -761,7 +808,7 @@ export const CertificationRequestPayment = () => {
 
       <Dialog
         header={
-          selectedRequest?.requestStatus === "PAYMENT_PENDING"
+          selectedRequest?.requestStatus === "PAYMENT_PENDING" && !selectedRequest?.isScanned
             ? "Upload Scanned Bill"
             : "Payment Details"
         }
@@ -807,12 +854,12 @@ export const CertificationRequestPayment = () => {
                   <span className="block text-xs text-gray-500">Status</span>
                   <span
                     className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
-                      selectedRequest.requestStatus === "PAYMENT_COMPLETED"
+                      selectedRequest.requestStatus === "PAYMENT_COMPLETED" || selectedRequest.isScanned
                         ? "bg-green-100 text-green-700"
                         : "bg-yellow-100 text-yellow-700"
                     }`}
                   >
-                    {selectedRequest.requestStatus === "PAYMENT_COMPLETED"
+                    {selectedRequest.requestStatus === "PAYMENT_COMPLETED" || selectedRequest.isScanned
                       ? "Payment Completed"
                       : "Payment Pending"}
                   </span>
@@ -820,7 +867,7 @@ export const CertificationRequestPayment = () => {
               </div>
             </div>
 
-            {selectedRequest.requestStatus === "PAYMENT_PENDING" && (
+            {selectedRequest.requestStatus === "PAYMENT_PENDING" && !selectedRequest.isScanned && (
               <div className="rounded-lg border border-blue-100 bg-white p-4">
                 <h3 className="mb-3 text-base font-semibold text-gray-800">
                   Scan Upload Information
@@ -900,10 +947,52 @@ export const CertificationRequestPayment = () => {
               </div>
             )}
 
-            {selectedRequest.requestStatus === "PAYMENT_COMPLETED" && (
-              <div className="rounded-lg border border-green-100 bg-green-50 p-4 text-sm text-green-700">
-                Payment is completed. Use the Edit button to change status to
-                issueCertificate.
+            {(selectedRequest.requestStatus === "PAYMENT_COMPLETED" || selectedRequest.isScanned) && (
+              <div className="rounded-lg border border-green-100 bg-white p-4 text-sm text-gray-900">
+                <h3 className="mb-3 text-base font-semibold text-gray-800">{t("certificationRequest.paymentDetails") || "Payment Details"}</h3>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <span className="block text-xs text-gray-500">{t("certificationRequest.transactionId") || "Transaction ID"}</span>
+                    <span className="font-medium text-gray-900">{selectedRequest.transactionId || "-"}</span>
+                  </div>
+
+                  <div>
+                    <span className="block text-xs text-gray-500">{t("certificationRequest.paymentDate") || "Payment Date"}</span>
+                    <span className="font-medium text-gray-900">{selectedRequest.paymentDate ? new Date(selectedRequest.paymentDate).toLocaleDateString() : "-"}</span>
+                  </div>
+
+                  <div>
+                    <span className="block text-xs text-gray-500">{t("certificationRequest.paymentAmount") || "Payment Amount"}</span>
+                    <span className="font-medium text-gray-900">{selectedRequest.paymentAmount || "-"}</span>
+                  </div>
+
+                  <div>
+                    <span className="block text-xs text-gray-500">{t("certificationRequest.scannedBill") || "Scanned Bill"}</span>
+                    <div className="flex gap-2 mt-1">
+                      <button
+                        type="button"
+                        onClick={() => downloadPaymentReceipt(selectedRequest.id)}
+                        className="px-3 py-1 rounded-md bg-blue-600 text-white text-sm"
+                      >
+                        {t("common.view") || "View"}
+                      </button>
+
+                      <a
+                        href={selectedRequest.paymentReceiptUrl || selectedRequest.receiptFilePath || '#'}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`px-3 py-1 rounded-md text-sm ${selectedRequest.paymentReceiptUrl || selectedRequest.receiptFilePath ? 'bg-gray-100 text-gray-800' : 'text-gray-400'}`}
+                      >
+                        {t("common.download") || "Download"}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-4 text-sm text-gray-600">
+                  {t("certificationRequest.paymentCompletedNote") || "Payment is completed. Use the Edit button to change status to issueCertificate."}
+                </div>
               </div>
             )}
           </div>

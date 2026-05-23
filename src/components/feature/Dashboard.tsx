@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../../context/AuthContext";
 import DashboardService from "../../services/dashboard.service";
 import {
@@ -80,6 +81,7 @@ interface StatCard {
 }
 
 export const Dashboard: React.FC = () => {
+  const { t } = useTranslation();
   const [dashboardData, setDashboardData] =
     React.useState<DashboardData | null>(null);
   const [loading, setLoading] = React.useState<boolean>(true);
@@ -96,7 +98,7 @@ export const Dashboard: React.FC = () => {
       const errorMessage =
         error instanceof Error
           ? error.message
-          : "Failed to fetch dashboard data";
+          : t("dashboard.errors.fetchFailed");
       setError(errorMessage);
       console.error("Failed to fetch dashboard data", error);
     } finally {
@@ -116,7 +118,7 @@ export const Dashboard: React.FC = () => {
       labels: dashboardData.userLastSixMonth.map((item) => item.month),
       datasets: [
         {
-          label: "Users",
+          label: t("dashboard.charts.users"),
           data: dashboardData.userLastSixMonth.map((item) => item.count),
           borderColor: "#6366F1",
           backgroundColor: "rgba(99, 102, 241, 0.1)",
@@ -136,7 +138,7 @@ export const Dashboard: React.FC = () => {
     if (!dashboardData) return { labels: [], datasets: [] };
 
     return {
-      labels: ["Active Users", "Inactive Users"],
+      labels: [t("dashboard.status.active"), t("dashboard.status.inactive")],
       datasets: [
         {
           data: [
@@ -155,7 +157,7 @@ export const Dashboard: React.FC = () => {
     if (!dashboardData) return { labels: [], datasets: [] };
 
     return {
-      labels: ["Active Companies", "Inactive Companies"],
+      labels: [t("dashboard.status.active"), t("dashboard.status.inactive")],
       datasets: [
         {
           data: [
@@ -174,10 +176,15 @@ export const Dashboard: React.FC = () => {
     if (!dashboardData) return { labels: [], datasets: [] };
 
     return {
-      labels: ["In Progress", "Completed", "Submitted", "Rejected"],
+      labels: [
+        t("dashboard.status.inProgress"),
+        t("dashboard.status.completed"),
+        t("dashboard.status.submitted"),
+        t("dashboard.status.rejected"),
+      ],
       datasets: [
         {
-          label: "Number of Requests",
+          label: t("dashboard.charts.numberOfRequests"),
           data: [
             dashboardData.inProgressRequest,
             dashboardData.totalCompletedRequest,
@@ -262,7 +269,7 @@ export const Dashboard: React.FC = () => {
         ...chartOptions.plugins.tooltip,
         callbacks: {
           label: function (context: any) {
-            return `Users: ${context.parsed.y}`;
+            return `${t("dashboard.charts.users")}: ${context.parsed.y}`;
           },
         },
       },
@@ -305,79 +312,82 @@ export const Dashboard: React.FC = () => {
       },
     },
   };
-const LoadingSkeleton = () => (
-  <div className="min-h-screen bg-gray-50 p-4 md:p-6">
-    <div className="px-3 py-3 md:px-6 md:py-6 max-w-8xl w mx-auto">
-      {/* Header Skeleton */}
-      <div className="mb-6">
-        <Skeleton width="200px" height="32px" />
-      </div>
 
-      {/* Stats Cards Skeleton - Matching your card format */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 mb-6">
-        {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
-          <div key={item} className="bg-white rounded-b-md rounded-t-md border border-indigo-100 p-3">
-            <div className="flex items-center justify-between mb-3">
-              <Skeleton width="80px" height="16px" />
-              <Skeleton shape="circle" size="36px" />
-            </div>
-            <div className="mx-auto text-center">
-              <Skeleton width="60px" height="28px" className="mx-auto" />
-            </div>
-          </div>
-        ))}
-      </div>
+  const LoadingSkeleton = () => (
+    <div className="min-h-screen bg-gray-50 p-4 md:p-6">
+      <div className="px-3 py-3 md:px-6 md:py-6 max-w-8xl w mx-auto">
+        {/* Header Skeleton */}
+        <div className="mb-6">
+          <Skeleton width="200px" height="32px" />
+        </div>
 
-      {/* Charts Row Skeleton */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
-        {[1, 2].map((item) => (
-          <div key={item} className="bg-white rounded-xl border border-gray-100 p-4">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <Skeleton shape="circle" size="28px" />
-                <Skeleton width="100px" height="20px" />
+        {/* Stats Cards Skeleton */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 mb-6">
+          {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
+            <div key={item} className="bg-white rounded-b-md rounded-t-md border border-indigo-100 p-3">
+              <div className="flex items-center justify-between mb-3">
+                <Skeleton width="80px" height="16px" />
+                <Skeleton shape="circle" size="36px" />
               </div>
-              <Skeleton width="80px" height="16px" />
+              <div className="mx-auto text-center">
+                <Skeleton width="60px" height="28px" className="mx-auto" />
+              </div>
             </div>
-            <Skeleton height="280px" />
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
 
-      {/* Status Distribution Skeletons */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        {[1, 2].map((item) => (
-          <div key={item} className="bg-white rounded-xl border border-gray-100 p-4">
-            <div className="flex items-center gap-2 mb-4">
-              <Skeleton shape="circle" size="28px" />
-              <Skeleton width="120px" height="20px" />
+        {/* Charts Row Skeleton */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
+          {[1, 2].map((item) => (
+            <div key={item} className="bg-white rounded-xl border border-gray-100 p-4">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Skeleton shape="circle" size="28px" />
+                  <Skeleton width="100px" height="20px" />
+                </div>
+                <Skeleton width="80px" height="16px" />
+              </div>
+              <Skeleton height="280px" />
             </div>
-            <Skeleton height="280px" />
-          </div>
-        ))}
+          ))}
+        </div>
+
+        {/* Status Distribution Skeletons */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {[1, 2].map((item) => (
+            <div key={item} className="bg-white rounded-xl border border-gray-100 p-4">
+              <div className="flex items-center gap-2 mb-4">
+                <Skeleton shape="circle" size="28px" />
+                <Skeleton width="120px" height="20px" />
+              </div>
+              <Skeleton height="280px" />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+
   if (loading) {
     return <LoadingSkeleton />;
   }
+
   if (error || !dashboardData) {
     return (
       <div className="min-h-screen bg-gray-50 p-4 md:p-6 flex items-center justify-center">
         <div className="bg-white rounded-xl shadow-sm p-6 text-center max-w-sm">
           <XCircle className="w-12 h-12 text-red-500 mx-auto mb-3" />
           <h3 className="text-lg font-semibold text-gray-800 mb-1">
-            Failed to Load Data
+            {t("dashboard.errors.loadFailed")}
           </h3>
           <p className="text-gray-500 text-sm mb-4">
-            {error || "Unable to fetch dashboard data"}
+            {error || t("dashboard.errors.unableToFetch")}
           </p>
           <button
             onClick={fetchDashboardData}
             className="px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 transition-colors"
           >
-            Try Again
+            {t("dashboard.buttons.tryAgain")}
           </button>
         </div>
       </div>
@@ -386,7 +396,7 @@ const LoadingSkeleton = () => (
 
   const statsCards: StatCard[] = [
     {
-      title: "Total Users",
+      title: t("dashboard.cards.totalUsers"),
       value: dashboardData.totalUsers,
       icon: Users,
       color: "text-indigo-600",
@@ -394,7 +404,7 @@ const LoadingSkeleton = () => (
       borderColor: "border-indigo-100",
     },
     {
-      title: "Total Active Users",
+      title: t("dashboard.cards.activeUsers"),
       value: dashboardData.totalActiveUsers,
       icon: Users,
       color: "text-emerald-600",
@@ -402,15 +412,15 @@ const LoadingSkeleton = () => (
       borderColor: "border-emerald-100",
     },
     {
-      title: "Total Inprogress Request",
+      title: t("dashboard.cards.inProgressRequests"),
       value: dashboardData.inProgressRequest,
-      icon: Users,
-      color: "text-indigo-600",
-      bgColor: "bg-indigo-50",
-      borderColor: "border-indigo-100",
+      icon: FileCheck,
+      color: "text-blue-600",
+      bgColor: "bg-blue-50",
+      borderColor: "border-blue-100",
     },
     {
-      title: "Total Companies",
+      title: t("dashboard.cards.totalCompanies"),
       value: dashboardData.totalCompanies,
       icon: Building2,
       color: "text-purple-600",
@@ -418,15 +428,15 @@ const LoadingSkeleton = () => (
       borderColor: "border-purple-100",
     },
     {
-      title: "Total Certification Requests",
+      title: t("dashboard.cards.certificationRequests"),
       value: dashboardData.totalCertificationRequests,
-      icon: Building2,
-      color: "text-purple-600",
-      bgColor: "bg-purple-50",
-      borderColor: "border-purple-100",
+      icon: FileCheck,
+      color: "text-orange-600",
+      bgColor: "bg-orange-50",
+      borderColor: "border-orange-100",
     },
     {
-      title: "Certifications",
+      title: t("dashboard.cards.certifications"),
       value: dashboardData.totalCertifications,
       icon: Award,
       color: "text-emerald-600",
@@ -434,7 +444,7 @@ const LoadingSkeleton = () => (
       borderColor: "border-emerald-100",
     },
     {
-      title: "Total Commitee",
+      title: t("dashboard.cards.totalCommittee"),
       value: dashboardData.totalCommitee,
       icon: Users,
       color: "text-amber-600",
@@ -442,12 +452,12 @@ const LoadingSkeleton = () => (
       borderColor: "border-amber-100",
     },
     {
-      title: "Completed Certification Requests",
+      title: t("dashboard.cards.completedRequests"),
       value: dashboardData.totalCompletedRequest,
       icon: CheckCircle2,
-      color: "text-emerald-600",
-      bgColor: "bg-emerald-50",
-      borderColor: "border-emerald-100",
+      color: "text-green-600",
+      bgColor: "bg-green-50",
+      borderColor: "border-green-100",
     },
   ];
 
@@ -455,25 +465,28 @@ const LoadingSkeleton = () => (
     <div className="min-h-screen bg-gray-50">
       <div className="px-3 py-3 md:px-6 md:py-6 max-w-8xl w mx-auto">
         {/* Header Section */}
-     <div className="mb-6">
-  <div className="border-l-4 border-indigo-500 pl-4">
-    <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
-  </div>
-</div>
+        <div className="mb-6">
+          <div className="border-l-4 border-indigo-500 pl-4">
+            <h1 className="text-2xl font-bold text-gray-800">
+              {t("dashboard.title")}
+            </h1>
+            <p className="text-sm text-gray-500 mt-1">
+              {t("dashboard.subtitle")}
+            </p>
+          </div>
+        </div>
 
         {/* Stats Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 mb-6 ">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 mb-6">
           {statsCards.map((stat, index) => (
             <div
               key={index}
-              className={`bg-white rounded-b-md rounded-t-md border border-indigo-100 p-3 hover:shadow-md transition-shadow duration-200 `}
+              className={`bg-white rounded-b-md rounded-t-md border ${stat.borderColor} p-3 hover:shadow-md transition-shadow duration-200`}
             >
               <div className="flex items-center justify-between mb-3">
-                {stat.title && (
-                  <div>
-                    <p className="text-xs text-gray-500 mt-0.5">{stat.title}</p>
-                  </div>
-                )}
+                <div>
+                  <p className="text-xs text-gray-500 mt-0.5">{stat.title}</p>
+                </div>
                 <div className={`p-2 rounded-lg ${stat.bgColor}`}>
                   <stat.icon className={`w-5 h-5 ${stat.color}`} />
                 </div>
@@ -497,10 +510,12 @@ const LoadingSkeleton = () => (
                   <TrendingUp className="w-4 h-4 text-indigo-600" />
                 </div>
                 <h3 className="text-sm font-semibold text-gray-700">
-                  User Growth
+                  {t("dashboard.charts.userGrowth")}
                 </h3>
               </div>
-              <span className="text-xs text-gray-400">Last 6 months</span>
+              <span className="text-xs text-gray-400">
+                {t("dashboard.charts.last6Months")}
+              </span>
             </div>
             <div style={{ height: "280px" }}>
               <Line
@@ -517,7 +532,7 @@ const LoadingSkeleton = () => (
                 <FileCheck className="w-4 h-4 text-blue-600" />
               </div>
               <h3 className="text-sm font-semibold text-gray-700">
-                Request Status Overview
+                {t("dashboard.charts.requestStatusOverview")}
               </h3>
             </div>
             <div style={{ height: "280px" }}>
@@ -535,7 +550,7 @@ const LoadingSkeleton = () => (
                 <Users className="w-4 h-4 text-emerald-600" />
               </div>
               <h3 className="text-sm font-semibold text-gray-700">
-                User Distribution
+                {t("dashboard.charts.userDistribution")}
               </h3>
             </div>
             <div style={{ height: "280px" }}>
@@ -550,7 +565,7 @@ const LoadingSkeleton = () => (
                 <Building2 className="w-4 h-4 text-purple-600" />
               </div>
               <h3 className="text-sm font-semibold text-gray-700">
-                Company Distribution
+                {t("dashboard.charts.companyDistribution")}
               </h3>
             </div>
             <div style={{ height: "280px" }}>
@@ -565,3 +580,5 @@ const LoadingSkeleton = () => (
     </div>
   );
 };
+
+export default Dashboard;
