@@ -36,7 +36,7 @@ const AttachmentForm: React.FC<AttachmentFormProps> = ({
   const [dragActive, setDragActive] = useState(false);
   const [attachment, setAttachment] = useState<any>(null);
   const [attachmentId, setAttachmentId] = useState<number | null>(null);
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const storageKey = `company_${companyId}_attachment_id`;
 
   const acceptedFileTypes = ["application/pdf"];

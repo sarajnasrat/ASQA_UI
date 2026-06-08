@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import  { useEffect, useRef, useState } from "react";
 import { useAppToast } from "../../../hooks/useToast";
 import { Button } from "primereact/button";
 import { TieredMenu } from "primereact/tieredmenu";
@@ -10,7 +10,6 @@ import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
 import AttachmentService from "../../../services/attachment.service";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import httpClient from "../../../api/httpClient";
 import httpClientForPic from "../../../api/httpClientForPic";
 import ExcelExport from "../../common/ExcelExport";
 
@@ -104,7 +103,9 @@ export const AttachmentList = () => {
   /* ================= HELPERS ================= */
 
   const formatSize = (size: number) =>
-    size ? (size / 1024).toFixed(2) + " KB" : "-";
+    size
+      ? `${(size / 1024).toFixed(2)} ${t("attachment.sizeUnitKb")}`
+      : t("common.notSpecified");
 
   /* ================= FILE TEMPLATE ================= */
 
@@ -275,8 +276,8 @@ const fileTemplate = (rowData: any) => {
               <ExcelExport
           data={attachments}
           totalElements={totalRecords}
-          fileName="companies"
-          sheetName="Companies"
+          fileName={t("attachment.list")}
+          sheetName={t("attachment.list")}
           fetchAllData={async () => {
             const res = await AttachmentService.getPaginatedAttachments({
               page: 0,

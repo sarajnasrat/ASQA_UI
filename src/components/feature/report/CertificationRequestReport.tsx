@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
 import { useTranslation } from "react-i18next";
 import ReportService from "../../../services/report.service";
@@ -196,7 +196,6 @@ const exportDetailedToExcel = async () => {
   try {
     const workbook = new ExcelJS.Workbook();
     const isRTL = i18n.language === 'dr' || i18n.language === 'ps';
-    console.log("Exporting detailed report with RTL:", i18n.language, "isRTL:", isRTL);
     
     // Set workbook properties
     workbook.properties.date1904 = true;
@@ -404,7 +403,7 @@ const exportDetailedToExcel = async () => {
       { type: t('report.additionalStatistics'), name: t('report.totalMenuItems'), value: reportData.totalMenu || 0 },
     ];
     
-    metricsRows.forEach((rowData, index) => {
+    metricsRows.forEach((rowData) => {
       const row = metricsSheet.addRow(rowData);
       
       // Add borders and styling to all cells
@@ -481,7 +480,7 @@ const exportDetailedToExcel = async () => {
   };
 
   const formatDate = (dateString: string) => {
-    if (!dateString) return "N/A";
+    if (!dateString) return t("common.notSpecified");
     const date = new Date(dateString);
     return date.toLocaleDateString(i18n.language === 'fa' || i18n.language === 'ps' ? 'fa-IR' : 'en-US', {
       year: "numeric",
@@ -491,11 +490,10 @@ const exportDetailedToExcel = async () => {
   };
 
   const getMonthName = (monthNumber: number) => {
-    const months = 
-     
-    ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    
-    return months[monthNumber - 1];
+    return new Intl.DateTimeFormat(
+      i18n.language === "dr" ? "fa-IR" : i18n.language === "ps" ? "ps-AF" : "en-US",
+      { month: "long" },
+    ).format(new Date(2000, monthNumber - 1, 1));
   };
 
   const StatCard = ({ title, value, icon }: any) => (

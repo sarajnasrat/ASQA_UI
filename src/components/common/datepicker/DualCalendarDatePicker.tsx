@@ -1,13 +1,11 @@
 // components/DualCalendarDatePicker.tsx
 import React, { useState, useEffect } from 'react';
-import DatePicker from 'react-multi-date-picker';
-import DateObject from 'react-multi-date-picker';
+import DatePicker, { DateObject } from "react-multi-date-picker";
 import persian from 'react-date-object/calendars/persian';
 import persian_fa from 'react-date-object/locales/persian_fa';
 import gregorian from 'react-date-object/calendars/gregorian';
 import gregorian_en from 'react-date-object/locales/gregorian_en';
-import arabic from 'react-date-object/calendars/arabic';
-import arabic_ar from 'react-date-object/locales/arabic_ar';
+
 
 interface DualCalendarDatePickerProps {
   value?: Date | string | null;
@@ -133,9 +131,9 @@ export const DualCalendarDatePicker: React.FC<DualCalendarDatePickerProps> = ({
         placeholder={config.placeholder}
         className="rmdp-container w-full"
         containerClassName="w-full"
-        inputClassName="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        inputClass="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         calendarPosition="bottom-right"
-        showTodayButton
+        
         showOtherDays
       />
       

@@ -2,8 +2,11 @@
 import { useState } from "react";
 import { Mail, Phone, MapPin, Clock, Send } from "lucide-react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import  { type LatLngExpression } from "leaflet";
+import { type LatLngExpression } from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { useToast } from "../../../../hooks/ToastContext";
+import { handleApi } from "../../../../hooks/handleApi";
+import CommentService from "../../../../services/comment.service";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -20,6 +23,8 @@ const Contact = () => {
     message: "",
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { showSuccess, showError } = useToast();
 
   const handleChange = (e:any) => {
     setFormData({
@@ -46,14 +51,33 @@ const Contact = () => {
     if (!formData.message) newErrors.message = "Message is required";
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return Object.values(newErrors).every((error) => !error);
   };
 
-  const handleSubmit = (e:any) => {
+  const handleSubmit = async (e:any) => {
     e.preventDefault();
-    if (validateForm()) {
-      // Handle form submission
-      console.log("Form submitted:", formData);
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    const payload = {
+      fullName: formData.name,
+      email: formData.email,
+      subject: formData.subject,
+      body: formData.message,
+    };
+
+    const response = await handleApi(
+      () => CommentService.createComment(payload),
+      () => showSuccess("Success", "Your feedback has been sent."),
+      showError,
+    );
+
+    setIsSubmitting(false);
+
+    if (response) {
       setIsSubmitted(true);
       setFormData({
         name: "",
@@ -62,7 +86,6 @@ const Contact = () => {
         message: "",
       });
 
-      // Reset success message after 5 seconds
       setTimeout(() => setIsSubmitted(false), 5000);
     }
   };
@@ -229,10 +252,11 @@ const Contact = () => {
 
                 <button
                   type="submit"
-                  className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2"
+                  disabled={isSubmitting}
+                  className={`w-full bg-blue-600 text-white px-6 py-3 rounded-lg transition-colors flex items-center justify-center space-x-2 ${isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"}`}
                 >
                   <Send className="h-5 w-5" />
-                  <span>Send Message</span>
+                  <span>{isSubmitting ? "Sending..." : "Send Message"}</span>
                 </button>
               </form>
             </div>

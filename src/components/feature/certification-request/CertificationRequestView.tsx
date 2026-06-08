@@ -1,9 +1,9 @@
 // components/feature/certification/CertificationRequestView.tsx
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import { Dialog } from "primereact/dialog";
 import { Dropdown } from "primereact/dropdown";
+import { Toast } from "primereact/toast";
 import {
   AlertCircle,
   Award,
@@ -36,7 +36,7 @@ const API_BASE_URL = "http://localhost:8080";
 const transitionMap: Record<string, string[]> = {
   DRAFT: ["SUBMITTED"],
   SUBMITTED: ["UNDER_REVIEW", "REJECTED"],
-  UNDER_REVIEW: ["STANDARDS_REQUIRED"],
+  UNDER_REVIEW: ["STANDARDS_PROVIDED"],
   STANDARDS_REQUIRED: ["STANDARDS_PROVIDED"],
   STANDARDS_PROVIDED: ["DEADLINE_REQUIRED"],
   DEADLINE_REQUIRED: ["DEADLINE_ASSIGNED"],
@@ -50,11 +50,60 @@ const transitionMap: Record<string, string[]> = {
 
 const finalStates = ["UNDER_SUPERVISION", "REJECTED", "CANCELLED"];
 
+interface CommitteeOption {
+  label: string;
+  value: number;
+}
+
+const CommitteeSelectionField: React.FC<{
+  options: CommitteeOption[];
+  loading: boolean;
+  disabled: boolean;
+  placeholder: string;
+  initialValue?: number | null;
+  onSelect: (value: number | null) => void;
+}> = ({
+  options,
+  loading,
+  disabled,
+  placeholder,
+  initialValue = null,
+  onSelect,
+}) => {
+  const [localValue, setLocalValue] = useState<number | null>(initialValue);
+
+  useEffect(() => {
+    setLocalValue(initialValue ?? null);
+  }, [initialValue]);
+
+  return (
+    <Dropdown
+      className="w-full mt-3"
+      value={localValue}
+      options={options}
+      optionLabel="label"
+      optionValue="value"
+      onChange={(e) => {
+        const selectedValue =
+          e.value === null || e.value === undefined || e.value === ""
+            ? null
+            : Number(e.value);
+        setLocalValue(selectedValue);
+        onSelect(selectedValue);
+      }}
+      loading={loading}
+      disabled={disabled}
+      showClear
+      placeholder={placeholder}
+    />
+  );
+};
+
 const CertificationRequestView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { showToast } = useAppToast();
+  const { toast, showToast } = useAppToast();
   const [tracker, setTracker] = useState<Tracker[]>([]);
   const [request, setRequest] = useState<CertificationRequest | null>(null);
   const [loading, setLoading] = useState(true);
@@ -62,6 +111,7 @@ const CertificationRequestView: React.FC = () => {
     "details" | "company" | "documents"
   >("details");
   const [committees, setCommittees] = useState<any[]>([]);
+  const [loadingCommittees, setLoadingCommittees] = useState(false);
   const [calendarType, setCalendarType] = useState<
     "gregorian" | "persian" | "arabic"
   >("gregorian");
@@ -84,6 +134,9 @@ const CertificationRequestView: React.FC = () => {
   const [rejectionReason, setRejectionReason] = useState<string>("");
 
   const [paymentDialogVisible, setPaymentDialogVisible] = useState(false);
+  const [statusDialogVisible, setStatusDialogVisible] = useState(false);
+  const [pendingStatus, setPendingStatus] = useState<string | null>(null);
+  const [statusSubmitting, setStatusSubmitting] = useState(false);
   const [uploadedBill, setUploadedBill] = useState<File | null>(null);
   const [transactionId, setTransactionId] = useState<string>("");
   const [paymentDate, setPaymentDate] = useState<string>("");
@@ -100,18 +153,22 @@ const CertificationRequestView: React.FC = () => {
   useEffect(() => {
     const loadCommittees = async () => {
       try {
+        setLoadingCommittees(true);
         const response = await CommiteeService.getAll();
         setCommittees(response?.data?.data || response?.data || []);
       } catch {
         showToast(
           "error",
           t("common.error"),
-          t("committee.loadFailed") || "Failed to load committees",
+          t("commitee.loadFailed") || "Failed to load committees",
         );
+      } finally {
+        setLoadingCommittees(false);
       }
     };
-
+   
     loadCommittees();
+     
   }, []);
 
   const loadRequestDetail = async () => {
@@ -147,7 +204,11 @@ const CertificationRequestView: React.FC = () => {
 
   const printBill = async (request: CertificationRequest) => {
     if (request.requestStatus !== "PAYMENT_PENDING") {
-      showToast("warn", t("common.warning"), "Bill can be printed only when payment is pending.");
+      showToast(
+        "warn",
+        t("common.warning"),
+        "Bill can be printed only when payment is pending.",
+      );
       return;
     }
 
@@ -244,7 +305,9 @@ const CertificationRequestView: React.FC = () => {
         : new Date().toISOString().slice(0, 10),
     );
     setPaymentAmount(
-      (request as any).paymentAmount ? String((request as any).paymentAmount) : "",
+      (request as any).paymentAmount
+        ? String((request as any).paymentAmount)
+        : "",
     );
     setPaymentDialogVisible(true);
   };
@@ -273,7 +336,10 @@ const CertificationRequestView: React.FC = () => {
     const formData = new FormData();
     formData.append("file", uploadedBill);
     formData.append("transactionId", transactionId);
-    formData.append("paymentDate", paymentDate ? `${paymentDate}T00:00:00` : new Date().toISOString());
+    formData.append(
+      "paymentDate",
+      paymentDate ? `${paymentDate}T00:00:00` : new Date().toISOString(),
+    );
     formData.append("paymentAmount", paymentAmount || "");
 
     const handlePaymentError = (message: string) => {
@@ -282,7 +348,12 @@ const CertificationRequestView: React.FC = () => {
 
     const response = await handleApi(
       () => CertificationRequestService.confirmPayment(request.id, formData),
-      () => showToast("success", t("common.success"), "Scanned bill uploaded successfully."),
+      () =>
+        showToast(
+          "success",
+          t("common.success"),
+          "Scanned bill uploaded successfully.",
+        ),
       handlePaymentError,
       t,
     );
@@ -330,9 +401,6 @@ const CertificationRequestView: React.FC = () => {
       UNDER_REVIEW:
         t("certificationRequest.requestWillBeUnderReview") ||
         "This request will be moved to under review.",
-      STANDARDS_REQUIRED:
-        t("certificationRequest.standardRequired") ||
-        "Standards will be required for this request.",
       STANDARDS_PROVIDED:
         t("certificationRequest.standardsProvided") ||
         "Please upload the standard document to continue.",
@@ -389,16 +457,20 @@ const CertificationRequestView: React.FC = () => {
 
     const cleanReason = options?.rejectionReason?.trim() || "";
 
-    const showSuccess = () => {
+    const showSuccess = (summary: string, detail?: string) => {
       showToast(
         "success",
-        t("common.success"),
-        getStatusButtonLabel(nextStatus),
+        summary || t("common.success"),
+        detail || getStatusButtonLabel(nextStatus),
       );
     };
 
-    const showError = (message: string) => {
-      showToast("error", t("common.error"), message);
+    const showError = (summary: string, detail?: string) => {
+      showToast(
+        "error",
+        summary || t("common.error"),
+        detail || t("common.somethingWentWrong") || "Something went wrong",
+      );
     };
 
     let response;
@@ -428,7 +500,7 @@ const CertificationRequestView: React.FC = () => {
         showToast(
           "warn",
           t("common.warning"),
-          t("attachment.STANDARD") || "Please upload standard file",
+       "Please upload standard file",
         );
         return;
       }
@@ -508,6 +580,7 @@ const CertificationRequestView: React.FC = () => {
       setRejectionReason("");
       loadRequestDetail();
     }
+    return response;
   };
 
   const getCompanyName = () => {
@@ -534,251 +607,173 @@ const CertificationRequestView: React.FC = () => {
     return types[type] || type;
   };
 
-  const confirmStatusUpdate = (nextStatus: string) => {
-    const isReject = nextStatus === "REJECTED";
-    const isStandardProvided = nextStatus === "STANDARDS_PROVIDED";
-    const isDeadlineAssigned = nextStatus === "DEADLINE_ASSIGNED";
-    const isInspectionInProgress = nextStatus === "INSPECTION_IN_PROGRESS";
-
-    const requestType = getCertificationTypeLabel(
-      request?.certificationType || "",
+  const getCommitteeLabel = (committee: any) => {
+    if (!committee) return "";
+    return (
+      committee.name ||
+      committee.committeeName ||
+      committee.title ||
+      committee.committeeNameEN ||
+      committee.committeeNameDR ||
+      committee.committeeNamePS ||
+      `#${committee.id ?? ""}`
     );
-    const requestId = request?.serialNumber || request?.trackingNumber || "";
-    const companyName = getCompanyName() || "";
+  };
 
-    // Reset dialog states
+  const committeeOptions: CommitteeOption[] = committees
+    .map((committee) => ({
+      label: getCommitteeLabel(committee),
+      value:
+        committee?.id !== null && committee?.id !== undefined
+          ? Number(committee.id)
+          : null,
+    }))
+    .filter(
+      (option): option is CommitteeOption =>
+        option.value !== null && Boolean(option.label),
+    );
+
+  const closeStatusDialog = () => {
+    if (statusSubmitting) return;
+    setStatusDialogVisible(false);
+    setPendingStatus(null);
     setSelectedCommitteeId(null);
     setSelectedStandardFile(null);
     setSelectedStartDate(null);
     setSelectedEndDate(null);
     setRejectionReason("");
+    setCalendarType("gregorian");
+  };
 
-    confirmDialog({
-      message: (
-        <div className="space-y-4">
-          <div className="flex items-start gap-3">
-            <div className="flex-1">
-              <div className="bg-gray-50 rounded-lg p-4 space-y-2 border border-gray-100">
-                <div className="flex justify-between items-center py-1">
-                  <span className="text-sm text-gray-500">
-                    {t("certificationRequest.labels.requestType")}
-                  </span>
-                  <span className="text-sm font-semibold text-gray-800">
-                    {requestType}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center py-1">
-                  <span className="text-sm text-gray-500">
-                    {t("certificationRequest.labels.serialNumber")}
-                  </span>
-                  <span className="text-sm font-mono font-medium text-gray-800">
-                    {requestId}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center py-1">
-                  <span className="text-sm text-gray-500">
-                    {t("company.labels.companyName")}
-                  </span>
-                  <span className="text-sm font-medium text-gray-800">
-                    {companyName}
-                  </span>
-                </div>
-              </div>
+  const confirmStatusUpdate = (nextStatus: string) => {
+    setSelectedCommitteeId(null);
+    setSelectedStandardFile(null);
+    setSelectedStartDate(null);
+    setSelectedEndDate(null);
+    setRejectionReason("");
+    setCalendarType("gregorian");
+    setPendingStatus(nextStatus);
+    setStatusDialogVisible(true);
+  };
 
-              <div className="mt-3 p-4 rounded-lg text-sm bg-amber-50 border border-amber-100">
-                {isReject && (
-                  <div className="flex flex-col gap-3">
-                    <div className="w-full mt-2">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        {t("certificationRequest.rejectReason") ||
-                          "Rejection Reason"}
-                        <span className="text-red-500 ml-1">*</span>
-                      </label>
-                      <textarea
-                        value={rejectionReason}
-                        onChange={(e) => setRejectionReason(e.target.value)}
-                        placeholder={
-                          t("certificationRequest.enterRejectionReason") ||
-                          "Please provide a reason for rejection..."
-                        }
-                        className="w-full min-h-25 rounded-lg border border-gray-300 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-red-400 transition-all duration-200 resize-y"
-                        rows={3}
-                      />
-                    </div>
-                  </div>
-                )}
+  const submitStatusDialog = async () => {
+    if (!pendingStatus || statusSubmitting) return;
 
-                {isStandardProvided && (
-                  <div className="flex flex-col gap-3">
-                    <FileUploadField
-                      label={t("attachment.STANDARD")}
-                      accept=".pdf,.jpg,.png"
-                      maxFileSize={5000000}
-                      required
-                      onFileSelect={(file) => {
-                        setSelectedStandardFile(file);
-                      }}
-                    />
-                  </div>
-                )}
+    const isReject = pendingStatus === "REJECTED";
+    const isStandardProvided = pendingStatus === "STANDARDS_PROVIDED";
+    const isDeadlineAssigned = pendingStatus === "DEADLINE_ASSIGNED";
+    const isInspectionInProgress = pendingStatus === "INSPECTION_IN_PROGRESS";
 
-                {isDeadlineAssigned && (
-                  <>
-                    <Dropdown
-                      className="w-full mt-3"
-                      value={calendarType}
-                      options={[
-                        { label: "Gregorian", value: "gregorian" },
-                        { label: "Hijri", value: "arabic" },
-                        { label: "Shamsi", value: "persian" },
-                      ]}
-                      onChange={(e) => setCalendarType(e.value)}
-                    />
+    if (isReject && !rejectionReason.trim()) {
+      showToast(
+        "warn",
+        t("common.warning"),
+        t("certificationRequest.enterRejectionReason") ||
+          "Please provide a rejection reason",
+      );
+      return;
+    }
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
-                      <SmartDatePicker
-                        label={t("deadline.startDate")}
-                        value={selectedStartDate ?? undefined}
-                        calendarType={calendarType}
-                        onChange={(d: any) => {
-                          setSelectedStartDate(
-                            d ? new Date(d?.date || d) : null,
-                          );
-                        }}
-                      />
+    if (isStandardProvided && !selectedStandardFile) {
+      showToast(
+        "warn",
+        t("common.warning"),
+        t("attachment.STANDARD") || "Please upload standard file",
+      );
+      return;
+    }
 
-                      <SmartDatePicker
-                        label={t("deadline.endDate")}
-                        value={selectedEndDate ?? undefined}
-                        calendarType={calendarType}
-                        onChange={(d: any) => {
-                          setSelectedEndDate(d ? new Date(d?.date || d) : null);
-                        }}
-                      />
-                    </div>
-                  </>
-                )}
+    if (isDeadlineAssigned && (!selectedStartDate || !selectedEndDate)) {
+      showToast("warn", t("common.warning"), t("deadline.required"));
+      return;
+    }
 
-                {isInspectionInProgress && (
-                  <Dropdown
-                    className="w-full mt-3"
-                    value={selectedCommitteeId}
-                    options={committees.map((c) => ({
-                      label: c.name,
-                      value: c.id,
-                    }))}
-                    onChange={(e) => {
-                      setSelectedCommitteeId(e.value);
-                    }}
-                    placeholder={t("commitee.selectCommittee")}
-                  />
-                )}
+    if (
+      isDeadlineAssigned &&
+      selectedStartDate &&
+      selectedEndDate &&
+      selectedEndDate < selectedStartDate
+    ) {
+      showToast(
+        "warn",
+        t("common.warning"),
+        "End date must be after start date",
+      );
+      return;
+    }
 
-                {!isReject &&
-                  !isStandardProvided &&
-                  !isDeadlineAssigned &&
-                  !isInspectionInProgress && (
-                    <div className="flex flex-col items-center justify-center text-center ">
-                      <div className="flex items-center gap-2">
-                        <AlertCircle className="h-4 w-4 shrink-0" />
-                        <strong>{getStatusButtonLabel(nextStatus)}</strong>
-                      </div>
-                      <span>{getStatusConfirmationMessage(nextStatus)}</span>
-                    </div>
-                  )}
-              </div>
-            </div>
-          </div>
-        </div>
-      ),
-      header: (
-        <div className="flex items-center gap-3 border-b border-gray-100 px-6 py-4 bg-white rounded-t-xl">
-          <div
-            className={`w-8 h-8 rounded-full flex items-center justify-center ${
-              isReject ? "bg-red-100" : "bg-green-100"
-            }`}
-          >
-            {isReject ? (
-              <XCircle className="h-4 w-4 text-red-600" />
-            ) : (
-              <CheckCircle className="h-4 w-4 text-green-600" />
-            )}
-          </div>
-          <span className="text-lg font-semibold text-gray-900">
-            {getStatusButtonLabel(nextStatus)}
-          </span>
-        </div>
-      ),
-      accept: () => {
-        if (isReject && !rejectionReason.trim()) {
-          showToast(
-            "warn",
-            t("common.warning"),
-            t("certificationRequest.enterRejectionReason") ||
-              "Please provide a rejection reason",
-          );
-          return;
-        }
+    if (isInspectionInProgress && !selectedCommitteeId) {
+      showToast("warn", t("common.warning"), t("committee.required"));
+      return;
+    }
 
-        if (isStandardProvided && !selectedStandardFile) {
-          showToast(
-            "warn",
-            t("common.warning"),
-            t("attachment.STANDARD") || "Please upload standard file",
-          );
-          return;
-        }
+    try {
+      setStatusSubmitting(true);
+      const response = await handleStatusUpdate(pendingStatus, {
+        rejectionReason: isReject ? rejectionReason : null,
+        standardFile: isStandardProvided ? selectedStandardFile : null,
+        startDate: isDeadlineAssigned ? selectedStartDate : null,
+        endDate: isDeadlineAssigned ? selectedEndDate : null,
+        committeeId: isInspectionInProgress ? selectedCommitteeId : null,
+      });
 
-        if (isDeadlineAssigned && (!selectedStartDate || !selectedEndDate)) {
-          showToast("warn", t("common.warning"), t("deadline.required"));
-          return;
-        }
+      if (response?.status === 200) {
+        closeStatusDialog();
+        navigateAfterStatusUpdate(pendingStatus);
+      }
+    } catch (error) {
+      console.error("Status update failed:", error);
+      showToast(
+        "error",
+        t("common.error"),
+        t("certificationRequest.updateFailed") ||
+          "Failed to update status. Please try again.",
+      );
+    } finally {
+      setStatusSubmitting(false);
+    }
+  };
 
-        if (
-          isDeadlineAssigned &&
-          selectedStartDate &&
-          selectedEndDate &&
-          selectedEndDate < selectedStartDate
-        ) {
-          showToast(
-            "warn",
-            t("common.warning"),
-            "End date must be after start date",
-          );
-          return;
-        }
+  const navigateAfterStatusUpdate = (nextStatus: string) => {
+    switch (nextStatus) {
+      case "UNDER_REVIEW":
+        navigate(`/certification-request`);
+        break;
+      case "REJECTED":
+        navigate("/certification-request");
+        break;
+      case "PAYMENT_PENDING":
+        navigate("/payment-management");
+        break;
+      case "PAYMENT_COMPLETED":
+        navigate("/payment-management");
+        break;
+      case "STANDARDS_PROVIDED":
+        // Refresh current page to show updated data
+        navigate(0);
+        break;
+      case "DEADLINE_REQUIRED":
+        navigate("/certification-request-deadline");
+        break;
 
-        if (isInspectionInProgress && !selectedCommitteeId) {
-          showToast("warn", t("common.warning"), t("committee.required"));
-          return;
-        }
-
-        handleStatusUpdate(nextStatus, {
-          rejectionReason: isReject ? rejectionReason : null,
-          standardFile: isStandardProvided ? selectedStandardFile : null,
-          startDate: isDeadlineAssigned ? selectedStartDate : null,
-          endDate: isDeadlineAssigned ? selectedEndDate : null,
-          committeeId: isInspectionInProgress ? selectedCommitteeId : null,
-        });
-      },
-      acceptLabel: isReject
-        ? `✗ ${getStatusButtonLabel("REJECTED")}`
-        : `✓ ${getStatusButtonLabel(nextStatus)}`,
-      acceptClassName: isReject
-        ? "bg-red-600 hover:bg-red-700 focus:ring-red-500 text-white px-5 py-2.5 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md"
-        : "bg-green-600 hover:bg-green-700 focus:ring-green-500 text-white px-5 py-2.5 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md",
-      rejectLabel: t("common.cancel") || "Cancel",
-      rejectClassName:
-        "bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 px-5 py-2.5 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400",
-      defaultFocus: "reject",
-      closeOnEscape: true,
-      dismissableMask: true,
-      draggable: false,
-      resizable: false,
-      style: { width: "650px", maxWidth: "95vw" },
-      breakpoints: { "960px": "95vw", "640px": "95vw" },
-      className: "rounded-xl shadow-2xl border border-gray-200",
-    });
+      case "DEADLINE_ASSIGNED":
+        // Navigate to the request detail page
+        navigate(`/certification-request-deadline`);
+        break;
+      case "INSPECTION_IN_PROGRESS":
+        navigate("/certification-request-deadline");
+        break;
+      case "REPORT_APPROVED":
+        navigate("/certification-request");
+        break;
+      case "CERTIFICATE_ISSUED":
+        navigate("/certification-request");
+        break;
+      default:
+        // Default: go back to list
+        navigate("/certification-request");
+        break;
+    }
   };
 
   const getStatusConfig = (status: string) => {
@@ -874,7 +869,7 @@ const CertificationRequestView: React.FC = () => {
         color: "text-rose-700",
         bgColor: "bg-rose-100",
         icon: <AlertCircle className="h-4 w-4" />,
-        label: t("certificationRequest.statusOptions.STANDARDS_REQUIRED"),
+        label: t("certificationRequest.statusOptions.STANDARDS_PROVIDED"),
       },
       DEADLINE_REQUIRED: {
         color: "text-amber-700",
@@ -984,29 +979,228 @@ const CertificationRequestView: React.FC = () => {
       (request.company?.attachments?.length || 0) >
     0;
   const contactPerson = getContactPerson();
+  const isRejectDialog = pendingStatus === "REJECTED";
+  const isStandardProvidedDialog = pendingStatus === "STANDARDS_PROVIDED";
+  const isDeadlineAssignedDialog = pendingStatus === "DEADLINE_ASSIGNED";
+  const isInspectionInProgressDialog =
+    pendingStatus === "INSPECTION_IN_PROGRESS";
+  const dialogRequestType = getCertificationTypeLabel(
+    request?.certificationType || "",
+  );
+  const dialogRequestId = request?.serialNumber || request?.trackingNumber || "";
+  const dialogCompanyName = getCompanyName() || "";
 
   return (
     <div className="min-h-screen bg-gray-50  pb-10">
-      <ConfirmDialog />
+      <Toast ref={toast} position="top-right" />
       <div className="container mx-auto px-4 max-w-7xl">
         <Dialog
+          header={
+            <div className="flex items-center gap-3 border-b border-gray-100 px-6 py-4 bg-white rounded-t-xl">
+              <div
+                className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  isRejectDialog ? "bg-red-100" : "bg-green-100"
+                }`}
+              >
+                {isRejectDialog ? (
+                  <XCircle className="h-4 w-4 text-red-600" />
+                ) : (
+                  <CheckCircle className="h-4 w-4 text-green-600" />
+                )}
+              </div>
+              <span className="text-lg font-semibold text-gray-900">
+                {pendingStatus ? getStatusButtonLabel(pendingStatus) : ""}
+              </span>
+            </div>
+          }
+          visible={statusDialogVisible}
+          onHide={closeStatusDialog}
+          draggable={false}
+          resizable={false}
+          dismissableMask
+          closeOnEscape
+          style={{ width: "650px", maxWidth: "95vw" }}
+          breakpoints={{ "960px": "95vw", "640px": "95vw" }}
+          className="rounded-xl shadow-2xl border border-gray-200"
+          footer={
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={closeStatusDialog}
+                disabled={statusSubmitting}
+                className="bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 px-5 py-2.5 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400"
+              >
+                {t("common.cancel") || "Cancel"}
+              </button>
+              <button
+                type="button"
+                onClick={submitStatusDialog}
+                disabled={statusSubmitting}
+                className={
+                  isRejectDialog
+                    ? "bg-red-600 hover:bg-red-700 focus:ring-red-500 text-white px-5 py-2.5 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md"
+                    : "bg-green-600 hover:bg-green-700 focus:ring-green-500 text-white px-5 py-2.5 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md"
+                }
+              >
+                {pendingStatus
+                  ? statusSubmitting
+                    ? t("common.updating")
+                    : isRejectDialog
+                      ? `X ${getStatusButtonLabel("REJECTED")}`
+                      : `${getStatusButtonLabel(pendingStatus)}`
+                  : ""}
+              </button>
+            </div>
+          }
+        >
+          <div className="space-y-4">
+            <div className="bg-gray-50 rounded-lg p-4 space-y-2 border border-gray-100">
+              <div className="flex justify-between items-center py-1">
+                <span className="text-sm text-gray-500">
+                  {t("certificationRequest.labels.requestType")}
+                </span>
+                <span className="text-sm font-semibold text-gray-800">
+                  {dialogRequestType}
+                </span>
+              </div>
+              <div className="flex justify-between items-center py-1">
+                <span className="text-sm text-gray-500">
+                  {t("certificationRequest.labels.serialNumber")}
+                </span>
+                <span className="text-sm font-mono font-medium text-gray-800">
+                  {dialogRequestId}
+                </span>
+              </div>
+              <div className="flex justify-between items-center py-1">
+                <span className="text-sm text-gray-500">
+                  {t("company.labels.companyName")}
+                </span>
+                <span className="text-sm font-medium text-gray-800">
+                  {dialogCompanyName}
+                </span>
+              </div>
+            </div>
 
+            <div className="p-4 rounded-lg text-sm bg-amber-50 border border-amber-100">
+              {isRejectDialog && (
+                <div className="w-full">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {t("certificationRequest.rejectReason") ||
+                      "Rejection Reason"}
+                    <span className="text-red-500 ml-1">*</span>
+                  </label>
+                  <textarea
+                    autoFocus
+                    value={rejectionReason}
+                    onChange={(e) => setRejectionReason(e.target.value)}
+                    placeholder={
+                      t("certificationRequest.enterRejectionReason") ||
+                      "Please provide a reason for rejection..."
+                    }
+                    className="w-full min-h-25 rounded-lg border border-gray-300 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-red-400 transition-all duration-200 resize-y"
+                    rows={4}
+                  />
+                </div>
+              )}
+
+              {isStandardProvidedDialog && (
+                <FileUploadField
+                  key={`status-standard-${statusDialogVisible ? "open" : "closed"}-${pendingStatus ?? "none"}`}
+                  label={t("attachment.STANDARD")}
+                  accept=".pdf,.jpg,.png"
+                  maxFileSize={5000000}
+                  required
+                  onFileSelect={(file) => {
+                    setSelectedStandardFile(file);
+                  }}
+                />
+              )}
+
+              {isDeadlineAssignedDialog && (
+                <>
+                  <Dropdown
+                    key={`status-calendar-${pendingStatus ?? "none"}`}
+                    className="w-full mt-3"
+                    value={calendarType}
+                    options={[
+                      { label: "Gregorian", value: "gregorian" },
+                      { label: "Hijri", value: "arabic" },
+                      { label: "Shamsi", value: "persian" },
+                    ]}
+                    onChange={(e) => setCalendarType(e.value)}
+                  />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
+                    <SmartDatePicker
+                      key={`status-start-${pendingStatus ?? "none"}-${calendarType}`}
+                      label={t("common.startDate")}
+                      value={selectedStartDate ?? undefined}
+                      calendarType={calendarType}
+                      onChange={(d: any) => {
+                        setSelectedStartDate(d ? new Date(d?.date || d) : null);
+                      }}
+                    />
+                    <SmartDatePicker
+                      key={`status-end-${pendingStatus ?? "none"}-${calendarType}`}
+                      label={t("common.endDate")}
+                      value={selectedEndDate ?? undefined}
+                      calendarType={calendarType}
+                      onChange={(d: any) => {
+                        setSelectedEndDate(d ? new Date(d?.date || d) : null);
+                      }}
+                    />
+                  </div>
+                </>
+              )}
+
+              {isInspectionInProgressDialog && (
+                <CommitteeSelectionField
+                  key={`status-committee-${statusDialogVisible ? "open" : "closed"}-${pendingStatus ?? "none"}`}
+                  options={committeeOptions}
+                  loading={loadingCommittees}
+                  disabled={loadingCommittees || committeeOptions.length === 0}
+                  placeholder={t("commitee.selectCommittee")}
+                  initialValue={selectedCommitteeId}
+                  onSelect={(selectedValue) => {
+                    setSelectedCommitteeId(selectedValue);
+                  }}
+                />
+              )}
+
+              {!isRejectDialog &&
+                !isStandardProvidedDialog &&
+                !isDeadlineAssignedDialog &&
+                !isInspectionInProgressDialog &&
+                pendingStatus && (
+                  <div className="flex flex-col items-center justify-center text-center">
+                    <div className="flex items-center gap-2">
+                      <AlertCircle className="h-4 w-4 shrink-0" />
+                      <strong>{getStatusButtonLabel(pendingStatus)}</strong>
+                    </div>
+                    <span>{getStatusConfirmationMessage(pendingStatus)}</span>
+                  </div>
+                )}
+            </div>
+          </div>
+        </Dialog>
+
+        <Dialog
           header={
             request?.requestStatus === "PAYMENT_PENDING" && !request?.isScanned
-              ? t("certificationRequest.uploadScannedBill") || "Upload Scanned Bill"
+              ? t("certificationRequest.uploadScannedBill") ||
+                "Upload Scanned Bill"
               : t("certificationRequest.paymentDetails") || "Payment Details"
           }
           visible={paymentDialogVisible}
           onHide={closePaymentDialog}
-          style={{ width: "750px",borderRadius:"15px" }}
+          style={{ width: "750px", borderRadius: "15px" }}
           draggable={true}
-    
           resizable={true}
         >
           <div className="space-y-5">
             <div className="rounded-lg border border-gray-200 bg-gray-50 p-2">
               <h3 className="mb-3 text-base font-semibold text-gray-800">
-                {t("certificationRequest.requestInformation") || "Request Information"}
+                {t("certificationRequest.requestInformation") ||
+                  "Request Information"}
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <div>
@@ -1033,45 +1227,37 @@ const CertificationRequestView: React.FC = () => {
                     {getCompanyName() || "-"}
                   </span>
                 </div>
-                <div>
-                  <span className="block text-xs text-gray-500">
-                    {t("certificationRequest.labels.status") || "Status"}
-                  </span>
-                  <span
-                    className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
-                      request.requestStatus === "PAYMENT_COMPLETED" || request.isScanned
-                        ? "bg-green-100 text-green-700"
-                        : "bg-yellow-100 text-yellow-700"
-                    }`}
-                  >
-                    {request.requestStatus === "PAYMENT_COMPLETED" || request.isScanned
-                      ? t("certificationRequest.paymentCompleted") || "Payment Completed"
-                      : t("certificationRequest.paymentPending") || "Payment Pending"}
-                  </span>
-                </div>
+        
               </div>
             </div>
 
-            {request.requestStatus === "PAYMENT_PENDING" && !request.isScanned && (
-              <div className="rounded-lg border border-blue-100 bg-white p-2">
-                <h3 className="mb-3 text-base font-semibold text-gray-800">
-                  {t("certificationRequest.scanUploadInformation") || "Scan Upload Information"}
-                </h3>
+            {request.requestStatus === "PAYMENT_PENDING" &&
+              !request.isScanned && (
+                <div className="rounded-lg border border-blue-100 bg-white p-2">
+                  <h3 className="mb-3 text-base font-semibold text-gray-800">
+                    {t("certificationRequest.scanUploadInformation") ||
+                      "Scan Upload Information"}
+                  </h3>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-gray-700">
-                      {t("certificationRequest.transactionId") || "Transaction ID"} *
-                    </label>
-                    <input
-                      type="text"
-                      value={transactionId}
-                      onChange={(e) => setTransactionId(e.target.value)}
-                      placeholder={t("certificationRequest.transactionId") || "Transaction ID"}
-                      className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                  {/* <div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="mb-2 block text-sm font-medium text-gray-700">
+                        {t("certificationRequest.transactionId") ||
+                          "Transaction ID"}{" "}
+                        *
+                      </label>
+                      <input
+                        type="text"
+                        value={transactionId}
+                        onChange={(e) => setTransactionId(e.target.value)}
+                        placeholder={
+                          t("certificationRequest.transactionId") ||
+                          "Transaction ID"
+                        }
+                        className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                    {/* <div>
                     <label className="mb-2 block text-sm font-medium text-gray-700">
                       {t("certificationRequest.paymentDate") || "Payment Date"}
                     </label>
@@ -1082,23 +1268,29 @@ const CertificationRequestView: React.FC = () => {
                       className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div> */}
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-gray-700">
-                      {t("certificationRequest.paymentAmount") || "Payment Amount"}
-                    </label>
-                    <input
-                      type="number"
-                      value={paymentAmount}
-                      onChange={(e) => setPaymentAmount(e.target.value)}
-                      placeholder={t("certificationRequest.paymentAmount") || "Payment Amount"}
-                      className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+                    <div>
+                      <label className="mb-2 block text-sm font-medium text-gray-700">
+                        {t("certificationRequest.paymentAmount") ||
+                          "Payment Amount"}
+                      </label>
+                      <input
+                        type="number"
+                        value={paymentAmount}
+                        onChange={(e) => setPaymentAmount(e.target.value)}
+                        placeholder={
+                          t("certificationRequest.paymentAmount") ||
+                          "Payment Amount"
+                        }
+                        className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
                   </div>
-             
-                </div>
-                     <div className="pt-3">
+                  <div className="pt-3">
                     <FileUploadField
-                      label={t("certificationRequest.scannedBill") || "Scanned Bill"}
+                      key={`payment-upload-${paymentDialogVisible ? "open" : "closed"}-${request.id}`}
+                      label={
+                        t("certificationRequest.scannedBill") || "Scanned Bill"
+                      }
                       accept=".pdf,.jpg,.png"
                       maxFileSize={10000000}
                       required
@@ -1106,39 +1298,42 @@ const CertificationRequestView: React.FC = () => {
                     />
                   </div>
 
-
-                <div className="flex justify-end gap-2 pt-2">
-                  <button
-                    type="button"
-                    onClick={closePaymentDialog}
-                    className="px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
-                  >
-                    {t("common.cancel")}
-                  </button>
-                  <button
-                    type="button"
-                    disabled={uploadingPayment}
-                    onClick={handlePaymentConfirmation}
-                    className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {uploadingPayment
-                      ? t("common.uploading") || "Uploading..."
-                      : t("certificationRequest.uploadScannedBill") || "Upload Scanned Bill"}
-                  </button>
+                  <div className="flex justify-end gap-2 pt-2">
+                    <button
+                      type="button"
+                      onClick={closePaymentDialog}
+                      className="px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
+                    >
+                      {t("common.cancel")}
+                    </button>
+                    <button
+                      type="button"
+                      disabled={uploadingPayment}
+                      onClick={handlePaymentConfirmation}
+                      className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {uploadingPayment
+                        ? t("common.uploading") || "Uploading..."
+                        : t("certificationRequest.uploadScannedBill") ||
+                          "Upload Scanned Bill"}
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {(request.requestStatus === "PAYMENT_COMPLETED" || request.isScanned) && (
+            {(request.requestStatus === "PAYMENT_COMPLETED" ||
+              request.isScanned) && (
               <div className="rounded-lg border border-green-100 bg-white p-4 text-sm text-gray-900">
                 <h3 className="mb-3 text-base font-semibold text-gray-800">
-                  {t("certificationRequest.paymentDetails") || "Payment Details"}
+                  {t("certificationRequest.paymentDetails") ||
+                    "Payment Details"}
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <span className="block text-xs text-gray-500">
-                      {t("certificationRequest.transactionId") || "Transaction ID"}
+                      {t("certificationRequest.transactionId") ||
+                        "Transaction ID"}
                     </span>
                     <span className="font-medium text-gray-900">
                       {(request as any).transactionId || "-"}
@@ -1150,13 +1345,16 @@ const CertificationRequestView: React.FC = () => {
                     </span>
                     <span className="font-medium text-gray-900">
                       {(request as any).paymentDate
-                        ? new Date((request as any).paymentDate).toLocaleDateString()
+                        ? new Date(
+                            (request as any).paymentDate,
+                          ).toLocaleDateString()
                         : "-"}
                     </span>
                   </div>
                   <div>
                     <span className="block text-xs text-gray-500">
-                      {t("certificationRequest.paymentAmount") || "Payment Amount"}
+                      {t("certificationRequest.paymentAmount") ||
+                        "Payment Amount"}
                     </span>
                     <span className="font-medium text-gray-900">
                       {(request as any).paymentAmount || "-"}
@@ -1175,11 +1373,16 @@ const CertificationRequestView: React.FC = () => {
                         {t("common.view") || "View"}
                       </button>
                       <a
-                        href={(request as any).paymentReceiptUrl || (request as any).receiptFilePath || "#"}
+                        href={
+                          (request as any).paymentReceiptUrl ||
+                          (request as any).receiptFilePath ||
+                          "#"
+                        }
                         target="_blank"
                         rel="noopener noreferrer"
                         className={`px-3 py-1 rounded-md text-sm ${
-                          (request as any).paymentReceiptUrl || (request as any).receiptFilePath
+                          (request as any).paymentReceiptUrl ||
+                          (request as any).receiptFilePath
                             ? "bg-gray-100 text-gray-800"
                             : "text-gray-400"
                         }`}
@@ -1213,11 +1416,13 @@ const CertificationRequestView: React.FC = () => {
           canUploadScannedBillButton={
             request.requestStatus === "PAYMENT_PENDING" &&
             !request.isScanned &&
-            ((request as any).isPrint || (request as any).isPrinted || requestPrinted)
+            ((request as any).isPrint ||
+              (request as any).isPrinted ||
+              requestPrinted)
           }
-          showPaymentDetailsAction={
-            Boolean(request.isScanned || request.requestStatus === "PAYMENT_COMPLETED")
-          }
+          showPaymentDetailsAction={Boolean(
+            request.isScanned || request.requestStatus === "PAYMENT_COMPLETED",
+          )}
           t={t}
         />
 

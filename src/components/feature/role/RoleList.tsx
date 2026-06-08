@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import RoleService from "../../../services/role.service";
 import { useAppToast } from "../../../hooks/useToast";
@@ -15,14 +15,15 @@ import { EditRole } from "./EditRole";
 import { Badge } from "primereact/badge";
 import { Tooltip } from "primereact/tooltip";
 import { Tag } from "primereact/tag";
+import { useAuth } from "../../../context/AuthContext";
 
 export const RoleList = () => {
   const { t } = useTranslation();
   const [roles, setRoles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
-  const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
-
+  const [expandedRows] = useState<Record<string, boolean>>({});
+  const { hasPermission, withPermission } = useAuth();
   const navigate = useNavigate();
 
   // Pagination state
@@ -54,7 +55,11 @@ export const RoleList = () => {
       setTotalRecords(response.data.totalElements);
     } catch (error) {
       console.error("Failed to load roles", error);
-      showToast("error", t("common.error"), String(t("role.messages.loadFailed")));
+      showToast(
+        "error",
+        t("common.error"),
+        String(t("role.messages.loadFailed")),
+      );
     } finally {
       setLoading(false);
     }
@@ -68,7 +73,7 @@ export const RoleList = () => {
   const handleViewDetails = (role: any) => {
     navigate(`/users/role/${role.id}`);
   };
-
+  const translatedRole = (role: any) => (role ? t(`role.${role?.name}`) : "");
   const confirmDelete = (role: any) => {
     confirmDialog({
       message: (
@@ -86,7 +91,7 @@ export const RoleList = () => {
             <p className="text-gray-600">
               {t("role.dialogs.deleteConfirm")}{" "}
               <span className="font-semibold text-red-600 bg-red-50 px-2 py-1 rounded-lg">
-                {role.name}
+                {translatedRole(role)}
               </span>
               ?
             </p>
@@ -120,24 +125,62 @@ export const RoleList = () => {
   const handleDelete = async (id: any) => {
     try {
       await RoleService.deleteRole(id);
-      showToast("success", t("common.success"), String(t("role.messages.deleteSuccess")));
+      showToast(
+        "success",
+        t("common.success"),
+        String(t("role.messages.deleteSuccess")),
+      );
       await getRoles();
     } catch (error) {
-      showToast("error", t("common.error"), String(t("role.messages.deleteFailed")));
+      showToast(
+        "error",
+        t("common.error"),
+        String(t("role.messages.deleteFailed")),
+      );
     }
   };
 
   // Get permission badge color based on permission type/category
   const getPermissionBadgeStyle = (permissionName: string) => {
     const colors = [
-      { bg: "bg-blue-100", text: "text-blue-800", border: "border-blue-200", icon: "pi-shield" },
-      { bg: "bg-purple-100", text: "text-purple-800", border: "border-purple-200", icon: "pi-lock" },
-      { bg: "bg-green-100", text: "text-green-800", border: "border-green-200", icon: "pi-check-circle" },
-      { bg: "bg-amber-100", text: "text-amber-800", border: "border-amber-200", icon: "pi-eye" },
-      { bg: "bg-pink-100", text: "text-pink-800", border: "border-pink-200", icon: "pi-users" },
-      { bg: "bg-indigo-100", text: "text-indigo-800", border: "border-indigo-200", icon: "pi-cog" },
+      {
+        bg: "bg-blue-100",
+        text: "text-blue-800",
+        border: "border-blue-200",
+        icon: "pi-shield",
+      },
+      {
+        bg: "bg-purple-100",
+        text: "text-purple-800",
+        border: "border-purple-200",
+        icon: "pi-lock",
+      },
+      {
+        bg: "bg-green-100",
+        text: "text-green-800",
+        border: "border-green-200",
+        icon: "pi-check-circle",
+      },
+      {
+        bg: "bg-amber-100",
+        text: "text-amber-800",
+        border: "border-amber-200",
+        icon: "pi-eye",
+      },
+      {
+        bg: "bg-pink-100",
+        text: "text-pink-800",
+        border: "border-pink-200",
+        icon: "pi-users",
+      },
+      {
+        bg: "bg-indigo-100",
+        text: "text-indigo-800",
+        border: "border-indigo-200",
+        icon: "pi-cog",
+      },
     ];
-    
+
     const index = permissionName.length % colors.length;
     return colors[index];
   };
@@ -147,39 +190,49 @@ export const RoleList = () => {
     const menu = useRef<any>(null);
 
     const items: MenuItem[] = [
-      {
+      ...withPermission("UPDATE_ROLE", {
         label: t("role.actions.edit"),
         icon: "pi pi-pencil",
         command: () => handleEdit(rowData),
         className: "hover:bg-blue-50",
-      },
-      {
+      }),
+
+      ...withPermission("VIEW_ROLE", {
         label: t("role.actions.viewDetails"),
         icon: "pi pi-info-circle",
         command: () => handleViewDetails(rowData),
         className: "hover:bg-purple-50",
-      },
+      }),
       {
         separator: true,
       },
-      {
+      ...withPermission("DELETE_ROLE", {
         label: t("role.actions.delete"),
         icon: "pi pi-trash",
         command: () => confirmDelete(rowData),
         className: "hover:bg-red-50 text-red-600",
-      },
+      }),
     ];
 
     return (
       <div className="flex justify-center">
-        <Tooltip target=".action-button" content={t("role.labels.actions")} position="top" />
-        <TieredMenu model={items} popup ref={menu} className="min-w-[200px] shadow-xl rounded-lg border border-gray-200" />
+        <Tooltip
+          target=".action-button"
+          content={t("role.labels.actions")}
+          position="top"
+        />
+        <TieredMenu
+          model={items}
+          popup
+          ref={menu}
+          className="min-w-50 shadow-xl rounded-lg border border-gray-200"
+        />
         <Button
           icon="pi pi-ellipsis-v"
           className="action-button p-button-text p-button-sm w-10 h-10 rounded-full hover:bg-gray-100 transition-all duration-200"
           onClick={(e) => menu.current.toggle(e)}
           tooltip={t("role.labels.actions")}
-          tooltipOptions={{ position: 'top' }}
+          tooltipOptions={{ position: "top" }}
         />
       </div>
     );
@@ -189,19 +242,25 @@ export const RoleList = () => {
   const permissionsTemplate = (rowData: any) => {
     const permissions = rowData.permissions || [];
     const isExpanded = expandedRows[rowData.id];
-    const displayPermissions = isExpanded ? permissions : permissions.slice(0, 5);
+    const displayPermissions = isExpanded
+      ? permissions
+      : permissions.slice(0, 5);
     const remainingCount = permissions.length - 5;
 
     if (permissions.length === 0) {
       return (
-        <Tag value={String(t("role.labels.noPermissions"))} severity="secondary" className="text-xs" />
+        <Tag
+          value={String(t("role.labels.noPermissions"))}
+          severity="secondary"
+          className="text-xs"
+        />
       );
     }
 
     return (
       <div className="flex flex-col gap-2">
         <div className="flex flex-wrap gap-1.5">
-          {displayPermissions.map((permission: any, index: number) => {
+          {displayPermissions.map((permission: any) => {
             const style = getPermissionBadgeStyle(permission.permissionName);
             return (
               <div
@@ -216,7 +275,7 @@ export const RoleList = () => {
                 title={permission.description || permission.permissionName}
               >
                 <i className={`pi ${style.icon} text-[10px] opacity-70`}></i>
-                <span>  {t(`permissions.${permission.permissionName}`)}</span>
+                <span> {t(`permissions.${permission.permissionName}`)}</span>
                 {permission.description && (
                   <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block z-10">
                     <div className="bg-gray-800 text-white text-xs rounded-lg py-1 px-2 whitespace-nowrap shadow-lg">
@@ -231,11 +290,15 @@ export const RoleList = () => {
             );
           })}
         </div>
-        
+
         {permissions.length > 5 && (
           <Button
-            icon={`pi pi-chevron-${isExpanded ? 'up' : 'down'}`}
-            label={isExpanded ? String(t("role.buttons.showLess")) : `+${remainingCount} ${String(t("role.buttons.more"))}`}
+            icon={`pi pi-chevron-${isExpanded ? "up" : "down"}`}
+            label={
+              isExpanded
+                ? String(t("role.buttons.showLess"))
+                : `+${remainingCount} ${String(t("role.buttons.more"))}`
+            }
             className="p-button-text p-button-sm text-xs text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 self-start transition-all duration-200"
             onClick={() => handleViewDetails(rowData)}
             iconPos="right"
@@ -245,11 +308,11 @@ export const RoleList = () => {
     );
   };
 
-  const handleRowClick = (rowData: any) => {
-    navigate(`/roles/${rowData.id}`, { 
-      state: { role: rowData } 
-    });
-  };
+  // const handleRowClick = (rowData: any) => {
+  //   navigate(`/roles/${rowData.id}`, {
+  //     state: { role: rowData }
+  //   });
+  // };
 
   // Header
   const header = () => {
@@ -264,23 +327,25 @@ export const RoleList = () => {
               {t("role.title")}
             </h2>
           </div>
-          <Badge 
-            value={`${totalRecords} ${String(t("role.total"))}`} 
-            severity="info" 
+          <Badge
+            value={`${totalRecords} ${String(t("role.total"))}`}
+            severity="info"
             className="ml-2 bg-linear-to-r from-blue-500 to-indigo-500 text-white shadow-md"
           />
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-          <Button
-            icon="pi pi-plus"
-            text
-            severity="info"
-            label={t("role.buttons.create")}
-            raised
-            className="bg-linear-to-r from-indigo-500 to-purple-600 border-none shadow-lg hover:shadow-xl transition-all duration-200 text-white px-6 py-2"
-            onClick={() => setShowCreateDialog(true)}
-          />
+          {hasPermission("ADD_ROLE") && (
+            <Button
+              icon="pi pi-plus"
+              text
+              severity="info"
+              label={t("role.buttons.create")}
+              raised
+              className="bg-linear-to-r from-indigo-500 to-purple-600 border-none shadow-lg hover:shadow-xl transition-all duration-200 text-white px-6 py-2"
+              onClick={() => setShowCreateDialog(true)}
+            />
+          )}
           <Button
             icon="pi pi-sync"
             label={t("common.refresh")}
@@ -301,7 +366,7 @@ export const RoleList = () => {
       style: { width: "80px" },
       body: (rowData: any) => (
         <span className="inline-flex items-center justify-center w-8 h-8 bg-linear-to-br from-gray-100 to-gray-200 rounded-lg text-sm font-semibold text-gray-700">
-          #{rowData.id}
+          {rowData.id}
         </span>
       ),
     },
@@ -312,7 +377,7 @@ export const RoleList = () => {
       body: (rowData: any) => (
         <div className="flex items-center gap-3">
           <div>
-            <span className="font-semibold text-gray-800">{rowData.name}</span>
+            <span className="font-semibold text-gray-800">{translatedRole(rowData)}</span>
             <p className="text-xs text-gray-500 mt-0.5">
               {rowData.permissions?.length || 0} {t("role.labels.permissions")}
             </p>
@@ -330,7 +395,7 @@ export const RoleList = () => {
       header: t("role.columns.actions"),
       body: actionTemplate,
       style: { width: "120px" },
-      headerStyle: { textAlign: 'center' },
+      headerStyle: { textAlign: "center" },
     },
   ];
 

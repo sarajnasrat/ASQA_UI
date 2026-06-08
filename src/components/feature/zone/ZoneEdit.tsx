@@ -3,6 +3,7 @@ import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { useForm, Controller } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useAppToast } from "../../../hooks/useToast";
 import ZoneService from "../../../services/zone.service";
 
@@ -20,6 +21,7 @@ export const ZoneEdit: React.FC<Props> = ({
   onClose,
   onSuccess,
 }) => {
+  const { t } = useTranslation();
   const { showToast } = useAppToast();
   const [loading, setLoading] = useState(false);
 
@@ -45,7 +47,7 @@ export const ZoneEdit: React.FC<Props> = ({
         location: zone.location,
       });
     } catch {
-      showToast("error", "Error", "Failed to load zone");
+      showToast("error", t("common.error"), t("zone.loadFailed"));
     } finally {
       setLoading(false);
     }
@@ -66,12 +68,12 @@ export const ZoneEdit: React.FC<Props> = ({
 
       await ZoneService.updateZone(zoneId, data);
 
-      showToast("success", "Success", "Zone updated successfully");
+      showToast("success", t("common.success"), t("zone.updated"));
 
       onSuccess();
       onClose();
     } catch {
-      showToast("error", "Error", "Update failed");
+      showToast("error", t("common.error"), t("zone.updateFailed"));
     } finally {
       setLoading(false);
     }
@@ -79,7 +81,7 @@ export const ZoneEdit: React.FC<Props> = ({
 
   return (
     <Dialog
-      header="Edit Zone"
+      header={t("zone.edit")}
       visible={visible}
       modal
       style={{ width: "450px" }}
@@ -91,15 +93,19 @@ export const ZoneEdit: React.FC<Props> = ({
         {/* Zone Name */}
         <div className="flex flex-col gap-1">
           <label className="font-semibold text-gray-700">
-            Zone Name
+            {t("zone.name.label")}
           </label>
 
           <Controller
             name="name"
             control={control}
-            rules={{ required: "Zone name is required" }}
+            rules={{ required: t("zone.name.required") }}
             render={({ field }) => (
-              <InputText {...field} className="w-full" />
+              <InputText
+                {...field}
+                className="w-full"
+                placeholder={t("zone.name.placeholder")}
+              />
             )}
           />
         </div>
@@ -107,14 +113,18 @@ export const ZoneEdit: React.FC<Props> = ({
         {/* Location */}
         <div className="flex flex-col gap-1">
           <label className="font-semibold text-gray-700">
-            Location
+            {t("zone.location")}
           </label>
 
           <Controller
             name="location"
             control={control}
             render={({ field }) => (
-              <InputText {...field} className="w-full" />
+              <InputText
+                {...field}
+                className="w-full"
+                placeholder={t("zone.locationPlaceholder")}
+              />
             )}
           />
         </div>
@@ -123,7 +133,7 @@ export const ZoneEdit: React.FC<Props> = ({
         <div className="flex justify-end gap-2 pt-4">
           <Button
             type="button"
-            label="Cancel"
+            label={t("common.cancel")}
             severity="secondary"
             outlined
             onClick={onClose}
@@ -131,7 +141,7 @@ export const ZoneEdit: React.FC<Props> = ({
 
           <Button
             type="submit"
-            label="Update"
+            label={t("common.update")}
             loading={loading}
           />
         </div>

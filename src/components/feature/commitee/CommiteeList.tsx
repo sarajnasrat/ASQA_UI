@@ -20,6 +20,7 @@ import { Tag } from "primereact/tag";
 import { useNavigate } from "react-router-dom";
 import CommiteeMemberCreate from "../commiteemember/CommiteeMemberCreate";
 import ExcelExport from "../../common/ExcelExport";
+import { useAuth } from "../../../context/AuthContext";
 
 export const CommiteeList: React.FC = () => {
   const [commiteeList, setCommiteeList] = useState<any[]>([]);
@@ -40,10 +41,10 @@ export const CommiteeList: React.FC = () => {
   const [first, setFirst] = useState(0);
   const [rows, setRows] = useState(10);
   const [totalRecords, setTotalRecords] = useState(0);
-
   const { toast, showToast } = useAppToast();
   const { showError } = useToast();
   const { t } = useTranslation();
+  const { hasPermission, withPermission } = useAuth();
 
   // ================= LOAD DATA =================
   const getAllCommitees = async () => {
@@ -116,7 +117,7 @@ export const CommiteeList: React.FC = () => {
           </div>
           <span className="text-lg font-semibold">{t("commitee.delete")}</span>
           <p className="text-center text-gray-600">
-            {t("commitee.deleteConfirm", { name: row.name || "—" })}
+            {t("commitee.deleteConfirm", { name: row.name || t("common.notSpecified") })}
           </p>
         </div>
       ),
@@ -133,24 +134,29 @@ export const CommiteeList: React.FC = () => {
     const menu = useRef<any>(null);
 
     const items: MenuItem[] = [
-      {
+      ...withPermission("UPDATE_COMMITEE", {
         label: t("common.edit"),
         icon: "pi pi-pencil",
         command: () => handleEdit(rowData),
-      },
-      {
+      }),
+      ...withPermission("DELETE_COMMITEE", {
         label: t("common.delete"),
         icon: "pi pi-trash",
         command: () => confirmDelete(rowData),
-      },
-      {
+      }),
+      ...withPermission("VIEW_COMMITEE", {
+        label: t("common.view"),
+        icon: "pi pi-eye",
+        command: () => navigate(`/commitee/view/${rowData.id}`),
+      }),
+      ...withPermission("ADD_COMMITEEMEMBER", {
         label: t("commitee.createMember"),
         icon: "pi pi-plus",
         command: () => {
           setSelectedCommitteeForMember(rowData.id);
           setShowMemberCreateDialog(true);
         },
-      },
+      }),
     ];
 
     return (
@@ -171,35 +177,33 @@ export const CommiteeList: React.FC = () => {
       <h2 className="text-2xl font-bold text-blue-700">{t("commitee.list")}</h2>
 
       <div className="flex gap-3">
-        <Button
-          text
-          raised
-          icon="pi pi-plus"
-          label={t("commitee.create")}
-          onClick={() => setShowCreateDialog(true)}
-        />
+        {hasPermission("ADD_COMMENT") && (
+          <Button
+            text
+            raised
+            icon="pi pi-plus"
+            label={t("commitee.create")}
+            onClick={() => setShowCreateDialog(true)}
+          />
+        )}
         <Button
           icon="pi pi-sync"
-          label={t("common.refersh")}
+          label={t("common.refresh")}
           onClick={getAllCommitees}
           text
           raised
         />
-         <ExcelExport
+        <ExcelExport
           data={commiteeList}
           totalElements={totalRecords}
           fileName="committees"
           sheetName="committees"
           fetchAllData={async () => {
-            const res =
-              await CommiteeService.getAllPaginated(
-              
-                {
-                  page: 0,
-                  size: totalRecords,
-                  sort: "id,desc",
-                },
-              );
+            const res = await CommiteeService.getAllPaginated({
+              page: 0,
+              size: totalRecords,
+              sort: "id,desc",
+            });
 
             return res.data.data;
           }}
@@ -217,12 +221,15 @@ export const CommiteeList: React.FC = () => {
       field: "description",
       header: t("commitee.description"),
     },
-       {
+    {
+      field: "memberCount",
+      header: t("commitee.memberCount"),
+    },
+    {
       field: "memberCount",
       header: t("commitee.memberCount"),
     },
 
-    
     {
       field: "committeeType",
       header: t("commitee.commiteeType"),
@@ -252,7 +259,7 @@ export const CommiteeList: React.FC = () => {
     },
   ];
 
-  const breadcrumbItems = [{ label: "Committee", url: "/commitee" }];
+  const breadcrumbItems = [{ label: t("commitee.list"), url: "/commitee" }];
 
   return (
     <>

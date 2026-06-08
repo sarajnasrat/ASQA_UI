@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { Translation, useTranslation } from "react-i18next";
 import { useAppToast } from "../../../hooks/useToast";
 import { RoleService } from "../../../services/role.service";
 import { PermissionService } from "../../../services/permission.service";
@@ -7,6 +7,8 @@ import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { Checkbox } from "primereact/checkbox";
 import { InputText } from "primereact/inputtext";
+import { handleApi } from "../../../hooks/handleApi";
+import { useToast } from "../../../hooks/ToastContext";
 
 interface EditRoleProps {
   roleId: string;
@@ -28,7 +30,7 @@ export const EditRole: React.FC<EditRoleProps> = ({
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-
+  const { showError, showSuccess } = useToast();
   // Load data when dialog opens
   useEffect(() => {
     if (visible) {
@@ -61,7 +63,11 @@ export const EditRole: React.FC<EditRoleProps> = ({
         roleData.permissions?.map((p: any) => String(p.id)) || [];
       setSelectedPermissions(selected);
     } catch (error) {
-      showToast("error", t("common.error"), String(t("role.messages.loadDetailsFailed")));
+      showToast(
+        "error",
+        t("common.error"),
+        String(t("role.messages.loadDetailsFailed")),
+      );
       console.error(error);
     } finally {
       setLoading(false);
@@ -94,14 +100,22 @@ export const EditRole: React.FC<EditRoleProps> = ({
           .filter(Boolean),
       };
 
-      await RoleService.updateRole(roleId, payload);
+      await handleApi(
+        () => RoleService.updateRole(roleId, payload),
+        showSuccess,
+        showError,
+        t,
+      );
 
-      showToast("success", t("common.success"), String(t("role.messages.updateSuccess")));
       onSuccess();
       onClose();
     } catch (error) {
       console.error(error);
-      showToast("error", t("common.error"), String(t("role.messages.updateFailed")));
+      showToast(
+        "error",
+        t("common.error"),
+        String(t("role.messages.updateFailed")),
+      );
     } finally {
       setLoading(false);
     }
@@ -111,7 +125,7 @@ export const EditRole: React.FC<EditRoleProps> = ({
   const filteredPermissions = permissions.filter((p) =>
     p.permissionName?.toLowerCase().includes(searchTerm.toLowerCase()),
   );
-
+  const translatedRole = (role: any) => (role ? t(`role.${role?.name}`) : "");
   return (
     <Dialog
       header={
@@ -119,7 +133,8 @@ export const EditRole: React.FC<EditRoleProps> = ({
           <i className="pi pi-shield text-2xl text-indigo-500"></i>
           <div>
             <h2 className="text-xl font-bold text-gray-800 m-0">
-              {String(t("role.dialogs.editTitle"))}: {role?.name || ""}
+              {String(t("role.dialogs.editTitle"))}:{" "}
+              {translatedRole(role) || ""}
             </h2>
             <p className="text-sm text-gray-500 m-0 mt-1">
               {String(t("role.dialogs.editSubtitle"))}
@@ -155,10 +170,21 @@ export const EditRole: React.FC<EditRoleProps> = ({
           <div className="relative">
             <InputText
               value={role?.name || ""}
-              onChange={(e) => setRole({ ...role, name: e.target.value })}
+              onChange={(e) =>
+                setRole({
+                  ...role,
+                  name: e.target.value,
+                })
+              }
               className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 transition-all"
               placeholder={String(t("role.placeholders.roleName"))}
             />
+
+            {role?.name && (
+              <small className="text-gray-500 mt-1 block">
+                {translatedRole(role)}
+              </small>
+            )}
           </div>
           {!role?.name && (
             <p className="text-xs text-amber-600 mt-1">
@@ -176,7 +202,8 @@ export const EditRole: React.FC<EditRoleProps> = ({
               {String(t("role.fields.assignPermissions"))}
             </label>
             <span className="text-xs bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full font-medium">
-              {selectedPermissions.length} {String(t("role.labels.of"))} {permissions.length} {String(t("role.labels.selected"))}
+              {selectedPermissions.length} {String(t("role.labels.of"))}{" "}
+              {permissions.length} {String(t("role.labels.selected"))}
             </span>
           </div>
 
@@ -249,7 +276,9 @@ export const EditRole: React.FC<EditRoleProps> = ({
                       className="block text-xs font-medium text-gray-700 cursor-pointer hover:text-indigo-600 transition-colors truncate"
                       title={p.permissionName}
                     >
-                      {p.permissionName}
+                      {String(
+                        t(`permissions.${p.permissionName}`, p.permissionName),
+                      )}
                     </label>
                     {p.description && (
                       <p
@@ -265,7 +294,9 @@ export const EditRole: React.FC<EditRoleProps> = ({
             ) : (
               <div className="col-span-full text-center py-12">
                 <i className="pi pi-search text-4xl text-gray-300 mb-3"></i>
-                <p className="text-gray-500">{String(t("role.messages.noPermissionsFound"))}</p>
+                <p className="text-gray-500">
+                  {String(t("role.messages.noPermissionsFound"))}
+                </p>
                 <p className="text-sm text-gray-400">
                   {String(t("role.messages.adjustSearch"))}
                 </p>
@@ -278,7 +309,8 @@ export const EditRole: React.FC<EditRoleProps> = ({
             <div className="text-xs text-gray-500 flex flex-wrap items-center gap-4">
               <span>
                 <i className="pi pi-filter mr-1"></i>
-                {String(t("role.labels.showing"))} {filteredPermissions.length} {String(t("role.labels.of"))} {permissions.length}
+                {String(t("role.labels.showing"))} {filteredPermissions.length}{" "}
+                {String(t("role.labels.of"))} {permissions.length}
               </span>
               <span>
                 <i className="pi pi-check-circle mr-1 text-indigo-500"></i>
@@ -318,7 +350,9 @@ export const EditRole: React.FC<EditRoleProps> = ({
         <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center rounded-xl z-50">
           <div className="text-center">
             <i className="pi pi-spin pi-spinner text-4xl text-indigo-500 mb-3"></i>
-            <p className="text-gray-600 font-medium">{String(t("role.messages.updatingRole"))}</p>
+            <p className="text-gray-600 font-medium">
+              {String(t("role.messages.updatingRole"))}
+            </p>
           </div>
         </div>
       )}

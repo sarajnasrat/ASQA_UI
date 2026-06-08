@@ -133,3 +133,7 @@
     display: block !important;
     align-items: center;
 }
+
+.lanuguage-dropdown .p-dropdown {
+  border: none !important;
+}

@@ -11,14 +11,15 @@ import DynamicBreadcrumb from "../../common/DynamicBreadcrumb.js";
 import { TieredMenu } from "primereact/tieredmenu";
 import type { MenuItem } from "primereact/menuitem";
 import { Toast } from "primereact/toast";
+import { useAuth } from "../../../context/AuthContext.tsx";
 
 export const UserList = () => {
   const { t } = useTranslation();
   const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const [globalFilter, setGlobalFilter] = useState("");
+  const [globalFilter] = useState("");
   const { toast, showToast } = useAppToast();
-
+  const { hasPermission, withPermission } = useAuth();
   const navigate = useNavigate();
 
   // pagination state
@@ -39,7 +40,6 @@ export const UserList = () => {
         size: rows,
         sort: "id,desc",
       });
-      console.log("User List Response:", res);
       setUsers(res.data.data);
       setTotalRecords(res.data.totalElements);
     } catch (error) {
@@ -48,7 +48,10 @@ export const UserList = () => {
       setLoading(false);
     }
   };
-
+const translatedRoles = (user: any) =>
+  user?.roles
+    ?.map((r: any) => t(`role.${r?.name}`))
+    .join(", ") || "";
   const roleBodyTemplate = (rowData: any) => {
     if (!rowData.roles || rowData.roles.length === 0) {
       return (
@@ -77,7 +80,7 @@ export const UserList = () => {
               key={role.id}
               className={`px-2 py-1 text-xs font-medium rounded-full border ${colorClass}`}
             >
-              {String(t(`user.roles.${roleName}`, roleName))}{" "}
+              {translatedRoles(rowData)}{" "}
             </span>
           );
         })}
@@ -100,7 +103,7 @@ export const UserList = () => {
   };
 
   const dateBodyTemplate = (rowData: any) => {
-    if (!rowData.createdDate) return <span className="text-gray-400">—</span>;
+    if (!rowData.createdDate) return <span className="text-gray-400">{t("common.notSpecified")}</span>;
 
     const date = new Date(rowData.createdDate);
     const formattedDate = date.toLocaleDateString("en-US", {
@@ -181,7 +184,7 @@ export const UserList = () => {
             <div className="relative">
               <img
                 src={imageUrl}
-                alt={fullName || "User"}
+                alt={fullName || t("common.notSpecified")}
                 className="w-10 h-10 rounded-full border-white shadow-md"
                 onError={(e) => {
                   e.currentTarget.style.display = "none";
@@ -205,7 +208,7 @@ export const UserList = () => {
           )}
         </div>
         <span className="font-medium text-gray-700 text-sm">
-          {fullName || "—"}
+          {fullName || t("common.notSpecified")}
         </span>
       </div>
     );
@@ -214,7 +217,7 @@ export const UserList = () => {
   const emailBodyTemplate = (rowData: any) => {
     return (
       <span className="text-sm text-gray-600 hover:text-blue-600 transition-colors">
-        {rowData.email || "—"}
+        {rowData.email || t("common.notSpecified")}
       </span>
     );
   };
@@ -281,21 +284,23 @@ export const UserList = () => {
     const menu = useRef<any>(null);
 
     const items: MenuItem[] = [
-      {
+      ...withPermission("UPDATE_USER", {
         label: t("user.actions.edit"),
         icon: "pi pi-pencil",
         command: () => handleEdit(rowData),
-      },
-      {
+      }),
+
+      ...withPermission("DELETE_USER", {
         label: t("user.actions.delete"),
         icon: "pi pi-trash",
         command: () => confirmDelete(rowData),
-      },
-      {
+      }),
+
+      ...withPermission("VIEW_USER", {
         label: t("user.actions.viewDetails"),
         icon: "pi pi-eye",
         command: () => navigate(`/users/view/${rowData.id}`),
-      },
+      }),
     ];
 
     return (
@@ -323,14 +328,16 @@ export const UserList = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-          <Button
-            icon="pi pi-plus"
-            label={t("user.buttons.create")}
-            raised
-            severity="info"
-            text
-            onClick={() => navigate("/users/new")}
-          />
+          {hasPermission("ADD_USER") && (
+            <Button
+              icon="pi pi-plus"
+              label={t("user.buttons.create")}
+              raised
+              severity="info"
+              text
+              onClick={() => navigate("/users/new")}
+            />
+          )}
 
           <Button
             icon="pi pi-sync"

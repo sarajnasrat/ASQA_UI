@@ -1,16 +1,15 @@
-import { TabMenu } from "primereact/tabmenu";
 import { useState } from "react";
 import { CertificationRequestReport } from "./CertificationRequestReport";
 import StatusTabMenu, { type StatusTabItem } from "../../common/StatusTabMenu";
-import { t } from "i18next";
-import { set } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 export const Report = () => {
+  const { t } = useTranslation();
   const [activeIndex, setActiveIndex] = useState(0);
 
   // ================= STATUS STATE =================
-  const [status, setStatus] = useState<string>("SUBMITTED");
-  const [first, setFirst] = useState(0);
+  // const [status, setStatus] = useState<string>("SUBMITTED");
+  // const [first, setFirst] = useState(0);
   // ================= TAB ITEMS =================
   const statusTabs: StatusTabItem[] = [
         {
@@ -44,10 +43,9 @@ export const Report = () => {
       <StatusTabMenu
         items={statusTabs}
         activeIndex={activeIndex}
-        onChange={(index, value) => {
+        onChange={(index) => {
           setActiveIndex(index);
-          setStatus(value);
-          setFirst(0); // reset pagination
+ 
         }}
       />
 

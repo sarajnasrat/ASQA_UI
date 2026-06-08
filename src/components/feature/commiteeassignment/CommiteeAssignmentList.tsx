@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
 import { TieredMenu } from "primereact/tieredmenu";
 import type { MenuItem } from "primereact/menuitem";
@@ -7,7 +8,6 @@ import { Toast } from "primereact/toast";
 import { Tag } from "primereact/tag";
 
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
 
 import { handleApi } from "../../../hooks/handleApi";
 import { useToast } from "../../../hooks/ToastContext";
@@ -19,6 +19,7 @@ import CommiteeAssignmentService from "../../../services/commitee-assignment.ser
 import { CommiteeAssingmentUpdate } from "./CommiteeAssingmentUpdate";
 import StatusTabMenu, { type StatusTabItem } from "../../common/StatusTabMenu";
 import ExcelExport from "../../common/ExcelExport";
+import { useAuth } from "../../../context/AuthContext";
 
 export const CommiteeAssignmentList: React.FC = () => {
   const { t } = useTranslation();
@@ -37,12 +38,7 @@ export const CommiteeAssignmentList: React.FC = () => {
 
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [updateVisible, setUpdateVisible] = useState(false);
-  const committeeIds = JSON.parse(
-    localStorage.getItem("committeeIds") || "[]",
-  ) as number[];
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
-  const userRole = user.roles[0]; // Assuming single role, adjust if multiple roles exist
-  console.log("Committee IDs from localStorage:", committeeIds);
+  const { withPermission, user, hasRole } = useAuth();
 
   const [status, setStatus] = useState<string>("ASSIGNED");
   const [activeIndex, setActiveIndex] = useState(0);
@@ -52,12 +48,36 @@ export const CommiteeAssignmentList: React.FC = () => {
     try {
       setLoading(true);
 
-      const res = await CommiteeAssignmentService.getAllPaginatedByStatus(
-        status,
-        first / rows,
-        rows,
-        "id,desc",
-      );
+      let res;
+
+      // ================= ADMIN =================
+      if (hasRole("ROLE_ADMIN")) {
+        res = await CommiteeAssignmentService.getAllPaginatedByStatus(
+          status,
+          first / rows,
+          rows,
+          "id,desc",
+        );
+      }
+
+      // ================= NORMAL USER =================
+      else {
+        if (!user?.id) {
+          setData([]);
+          setTotalRecords(0);
+          return;
+        }
+
+        res = await CommiteeAssignmentService.getMyCommitteeAssignments(
+          user.id,
+          status,
+          {
+            page: first / rows,
+            size: rows,
+            sort: "id,desc",
+          },
+        );
+      }
 
       setData(res.data.data);
       setTotalRecords(res.data.totalElements);
@@ -98,7 +118,7 @@ export const CommiteeAssignmentList: React.FC = () => {
 
   useEffect(() => {
     loadData();
-  }, [first, rows, status]);
+  }, [first, rows, status, user?.id]);
 
   // ================= DELETE =================
   const handleDelete = async (id: number) => {
@@ -138,19 +158,24 @@ export const CommiteeAssignmentList: React.FC = () => {
       //   command: () =>
       //     navigate(`/commitee-assignment/edit/${rowData.id}`),
       // },
-      {
-        label: t("common.delete"),
-        icon: "pi pi-trash",
-        command: () => confirmDelete(rowData),
-      },
-      {
+      ...withPermission("VIEW_COMMITEEASSIGNMENT", {
+        label: t("common.view"),
+        icon: "pi pi-eye",
+        command: () => navigate(`/commitee-assignment/view/${rowData.id}`),
+      }),
+      ...withPermission("UPDATE_COMMITTEEASSIGNMENT", {
         label: t("common.edit"),
         icon: "pi pi-pencil",
         command: () => {
           setSelectedId(rowData.id);
           setUpdateVisible(true);
         },
-      },
+      }),
+      ...withPermission("DELETE_COMMITTEEASSIGNMENT", {
+        label: t("common.delete"),
+        icon: "pi pi-trash",
+        command: () => confirmDelete(rowData),
+      }),
     ];
 
     return (
@@ -201,7 +226,7 @@ export const CommiteeAssignmentList: React.FC = () => {
       body: (row: any) =>
         row.assignedBy
           ? `${row.assignedBy.firstName} ${row.assignedBy.lastName}`
-          : "Not Mentioned",
+          : t("commitee.assignment.notMentioned"),
     },
 
     // ================= STATUS =================
@@ -210,7 +235,9 @@ export const CommiteeAssignmentList: React.FC = () => {
       header: t("common.status"),
       body: (row: any) => (
         <Tag
-          value={row.assignmentStatus}
+          value={t(
+            `commitee.assignment.status.${row.assignmentStatus.toLowerCase()}`,
+          )}
           severity={
             row.assignmentStatus === "COMPLETED"
               ? "success"
@@ -251,29 +278,30 @@ export const CommiteeAssignmentList: React.FC = () => {
       <h2 className="text-2xl font-bold text-blue-700">
         {t("commitee.assignment.list")}
       </h2>
+      <div>
+        <Button
+          icon="pi pi-sync"
+          label={t("common.refresh")}
+          onClick={loadData}
+          text
+          raised
+        />
+        <ExcelExport
+          data={data}
+          totalElements={totalRecords}
+          fileName="assignment"
+          sheetName="assignment"
+          fetchAllData={async () => {
+            const res = await CommiteeAssignmentService.getAllPaginated({
+              page: 0,
+              size: totalRecords,
+              sort: "id,desc",
+            });
 
-      <Button
-        icon="pi pi-sync"
-        label={t("common.refresh")}
-        onClick={loadData}
-        text
-        raised
-      />
-      <ExcelExport
-        data={data}
-        totalElements={totalRecords}
-        fileName="assignment"
-        sheetName="assignment"
-        fetchAllData={async () => {
-          const res = await CommiteeAssignmentService.getAllPaginated({
-            page: 0,
-            size: totalRecords,
-            sort: "id,desc",
-          });
-
-          return res.data.data;
-        }}
-      />
+            return res.data.data;
+          }}
+        />
+      </div>
     </div>
   );
   const statusTabs: StatusTabItem[] = [

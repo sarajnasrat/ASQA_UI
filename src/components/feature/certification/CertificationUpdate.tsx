@@ -52,7 +52,7 @@ export const CertificationUpdate: React.FC<CertificationUpdateProps> = ({
     }
   }, [certification]);
   const handlePrint = async () => {
-    const result = await handleApi(
+   await handleApi(
       () =>
         CertificationService.updateCertificationStatus(
           Number(certification.id),
@@ -65,12 +65,20 @@ export const CertificationUpdate: React.FC<CertificationUpdateProps> = ({
   };
   const handleSubmit = async () => {
     if (!certification?.id) {
-      showToast("error", t("common.error"), "Certification not selected");
+      showToast(
+        "error",
+        t("common.error"),
+        t("certification.messages.notSelected"),
+      );
       return;
     }
 
     if (!serialNumber.trim()) {
-      showToast("warn", t("common.warning"), "Serial number is required");
+      showToast(
+        "warn",
+        t("common.warning"),
+        t("certification.messages.serialNumberRequired"),
+      );
       return;
     }
 
@@ -124,10 +132,10 @@ export const CertificationUpdate: React.FC<CertificationUpdateProps> = ({
 
   return (
     <Dialog
-      header="Update Certification"
+      header={t("certification.dialog.updateTitle")}
       visible={visible}
       modal
-      style={{ width: "500px" }}
+      style={{ width: "800px" }}
       footer={footer}
       onHide={handleClose}
       draggable={false}
@@ -135,14 +143,14 @@ export const CertificationUpdate: React.FC<CertificationUpdateProps> = ({
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <label htmlFor="serialNumber" className="font-medium">
-            Serial Number
+            {t("certification.serialNumber")}
           </label>
 
           <InputText
             id="serialNumber"
             value={serialNumber}
             onChange={(e) => setSerialNumber(e.target.value)}
-            placeholder="Enter serial number"
+            placeholder={t("certification.placeholders.serialNumber")}
             className="w-full"
             disabled={loading}
           />
@@ -150,11 +158,11 @@ export const CertificationUpdate: React.FC<CertificationUpdateProps> = ({
 
         <div className="flex flex-col gap-2">
           <FileUploadField
-            label="Scan of Certification"
+            label={t("certification.dialog.scanOfCertification")}
             name="file"
             accept=".pdf,.jpg,.jpeg,.png"
             maxFileSize={1024 * 1024 * 5}
-            helperText="Upload scanned certificate (PDF or Image)"
+            helperText={t("certification.dialog.scanHelperText")}
             onFileSelect={(selectedFile) => {
               setFile(selectedFile || undefined);
             }}

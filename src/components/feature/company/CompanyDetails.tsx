@@ -10,7 +10,6 @@ import {
   Mail,
   MapPin,
   Phone,
-  UserRound,
   Briefcase,
   ChevronDown,
   ChevronUp,
@@ -19,7 +18,6 @@ import {
   Tag,
   FileText,
   Award,
-  Clock,
   TrendingUp,
   AlertCircle,
   Hash,
@@ -29,15 +27,10 @@ import {
   File,
   Link2,
   Store,
-  Users,
   Calendar,
   Shield,
   IdCard,
   BookOpen,
-  Layers,
-  Star,
-  Activity,
-  Heart,
   ShieldCheck,
   Facebook,
   Twitter,
@@ -48,7 +41,6 @@ import {
 
 import CompanyService from "../../../services/company.service";
 import { handleApi } from "../../../hooks/handleApi";
-import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
 
 export const CompanyDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -77,7 +69,7 @@ export const CompanyDetails: React.FC = () => {
 
   const loadCompanyDetails = async () => {
     if (!numericId) {
-      showError(t("common.error"), "Invalid company id.");
+      showError(t("common.error"), t("company.invalidId"));
       return;
     }
 
@@ -222,10 +214,10 @@ export const CompanyDetails: React.FC = () => {
         <div className="text-center">
           <AlertCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-gray-800 mb-2">
-            {t("company.notFound") || "Company not found"}
+            {t("company.notFound")}
           </h2>
           <p className="text-gray-600 mb-6">
-            {t("company.messages.noData") || "The company you're looking for doesn't exist."}
+            {t("company.messages.noData")}
           </p>
           <button
             onClick={() => navigate("/company")}
@@ -285,7 +277,7 @@ export const CompanyDetails: React.FC = () => {
                     <div className="flex items-center gap-1">
                       <Hash className="h-4 w-4" />
                       <span>
-                        {t("company.labels.companyId") || "Company ID"}: {company.id || "-"}
+                        {t("company.labels.companyId") || "Company ID"}: {company.id || t("common.notSpecified")}
                       </span>
                     </div>
                     <div className="flex items-center gap-1">
@@ -466,7 +458,7 @@ export const CompanyDetails: React.FC = () => {
                                     {t("company.labels.email")}
                                   </p>
                                   <p className="font-medium text-gray-900 break-all">
-                                    {company.email || "-"}
+                                    {company.email || t("common.notSpecified")}
                                   </p>
                                 </div>
                               </div>
@@ -477,7 +469,7 @@ export const CompanyDetails: React.FC = () => {
                                     {t("company.labels.phoneNumber")}
                                   </p>
                                   <p className="font-medium text-gray-900">
-                                    {company.phoneNumber || "-"}
+                                    {company.phoneNumber || t("common.notSpecified")}
                                   </p>
                                 </div>
                               </div>
@@ -488,7 +480,7 @@ export const CompanyDetails: React.FC = () => {
                                     {t("company.labels.address")}
                                   </p>
                                   <p className="font-medium text-gray-900">
-                                    {company.address || company.mainBranchAddress || "-"}
+                                    {company.address || company.mainBranchAddress || t("common.notSpecified")}
                                   </p>
                                 </div>
                               </div>
@@ -499,7 +491,7 @@ export const CompanyDetails: React.FC = () => {
                                     {t("company.labels.activityPlace")}
                                   </p>
                                   <p className="font-medium text-gray-900">
-                                    {company.activityPlace || "-"}
+                                    {company.activityPlace || t("common.notSpecified")}
                                   </p>
                                 </div>
                               </div>
@@ -733,7 +725,7 @@ export const CompanyDetails: React.FC = () => {
                               {t("company.labels.jawazNumber")}
                             </p>
                             <p className="text-lg font-bold text-gray-900">
-                              {company.jawazNumber || "-"}
+                              {company.jawazNumber || t("common.notSpecified")}
                             </p>
                           </div>
                         </div>
@@ -864,9 +856,7 @@ export const CompanyDetails: React.FC = () => {
                                 {doc.name || doc.fileName || t("company.sections.documents")}
                               </p>
                               <p className="text-xs text-gray-500">
-                                {doc.fileSize
-                                  ? `${(doc.fileSize / 1024).toFixed(1)} KB`
-                                  : "Unknown size"}
+                                {doc.fileSize ? `${(doc.fileSize / 1024).toFixed(1)} ${t("attachment.sizeUnitKb")}` : t("company.messages.unknownSize")}
                               </p>
                             </div>
                           </div>
@@ -922,7 +912,7 @@ export const CompanyDetails: React.FC = () => {
                                 {cert.name || cert.certificateName || t("company.sections.certificates")}
                               </p>
                               <p className="text-xs text-gray-500">
-                                {cert.issueDate && `Issued: ${formatDate(cert.issueDate)}`}
+                                {cert.issueDate && `${t("company.labels.issueDate")}: ${formatDate(cert.issueDate)}`}
                               </p>
                             </div>
                           </div>

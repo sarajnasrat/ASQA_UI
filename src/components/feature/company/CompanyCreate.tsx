@@ -33,7 +33,6 @@ export const CompanyCreate: React.FC = () => {
         control,
         handleSubmit,
         formState: { errors },
-        register,
     } = useForm<Company>({
         defaultValues: {
             companyNameEN: "",
@@ -49,11 +48,11 @@ export const CompanyCreate: React.FC = () => {
             activityPlace: "",
             activityType: "",
             jawazNumber: "",
-            jawazIssueDate: "",
-            jawazExpiryDate: "",
+            jawazIssueDate: null,
+            jawazExpiryDate: null,
             tinNumber: "",
             websiteUrl: "",
-            establishYear: "",
+            establishYear: null,
             companyOwnerNameEn: "",
             companyOwnerNameDr: "",
             companyOwnerNamePs: "",
@@ -82,7 +81,7 @@ export const CompanyCreate: React.FC = () => {
                 const res = await CategoryService.getAllCategories();
                 setCategories(res.data || []);
             } catch (error) {
-                showToast("error", "Error", "Failed to load categories");
+                showToast("error", t("common.error"), t("company.categoryLoadFailed"));
             }
         };
         fetchCategories();
@@ -110,8 +109,8 @@ export const CompanyCreate: React.FC = () => {
                 : [];
 
             // Convert Date fields to ISO strings
-            const serializeDate = (d?: Date | string) =>
-                d instanceof Date ? d.toISOString() : d || null;
+          const serializeDate = (d?: Date | string | null) =>
+        d instanceof Date ? d.toISOString() : (d ?? null);
 
             const payload = {
                 ...data,
@@ -137,12 +136,12 @@ export const CompanyCreate: React.FC = () => {
             );
 
             if (response) {
-                showToast("success", "Success", "Company created successfully!");
+                showToast("success", t("common.success"), t("company.createSuccess"));
                 setTimeout(() => navigate("/companies"), 1500);
             }
         } catch (error) {
             console.error(error);
-            showToast("error", "Error", "Failed to create company");
+            showToast("error", t("common.error"), t("company.createFailed"));
         } finally {
             setIsSubmitting(false);
         }
@@ -173,8 +172,8 @@ export const CompanyCreate: React.FC = () => {
         <>
             <DynamicBreadcrumb
                 items={[
-                    { label: "Companies", url: "/companies" },
-                    { label: "Create Company", url: "/companies/new" },
+                    { label: t("company.list"), url: "/companies" },
+                    { label: t("company.create"), url: "/companies/new" },
                 ]}
                 size="pl-5 pr-5 max-w-8xl mx-auto mt-1"
             />
@@ -661,14 +660,14 @@ export const CompanyCreate: React.FC = () => {
                                                 <div key={item.id} className=" border-round p-1">
                                                     <div className="flex justify-content-between align-items-center mb-2">
                                                         <span className="font-medium">
-                                                            {item.socialLinkName || "Platform"}
+                                                            {item.socialLinkName || t("company.labels.platform")}
                                                         </span>
                                                         <Button
                                                             type="button"
                                                             icon="pi pi-trash"
                                                             className="p-button-rounded p-button-danger p-button-text p-button-sm"
                                                             onClick={() => remove(index)}
-                                                            tooltip="Remove"
+                                                            tooltip={t("fileUpload.remove")}
                                                             tooltipOptions={{ position: "top" }}
                                                         />
                                                     </div>
@@ -689,7 +688,7 @@ export const CompanyCreate: React.FC = () => {
                                                                         id={`platform-${index}`}
                                                                         {...field}
                                                                         options={platformOptions}
-                                                                        placeholder="Select platform"
+                                                                        placeholder={t("company.labels.platform")}
                                                                         className="w-full"
                                                                     />
                                                                 )}

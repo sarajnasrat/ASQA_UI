@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Card } from "primereact/card";
 import { InputText } from "primereact/inputtext";
@@ -13,8 +13,8 @@ import { useAppToast } from "../../../hooks/useToast.js";
 import { Toast } from "primereact/toast";
 import DynamicBreadcrumb from "../../common/DynamicBreadcrumb.js";
 import ZoneService from "../../../services/zone.service.ts";
-import CommiteeService from "../../../services/comitee.service.ts";
 import RoleService from "../../../services/role.service.ts";
+import { useTranslation } from "react-i18next";
 
 type FormValues = {
   firstName: string;
@@ -29,10 +29,10 @@ type FormValues = {
 
 export const UserRegistration = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { toast, showToast } = useAppToast();
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [zones, setZones] = useState<{ label: string; value: any }[]>([]);
-  const [commitees, setCommitees] = useState<{ label: string; value: any }[]>([]);
   const [roles, setRoles] = useState<{ label: string; value: any }[]>([]);
 
   const {
@@ -44,63 +44,40 @@ export const UserRegistration = () => {
   } = useForm<FormValues>();
 
   const passwordValue = watch("password");
-const getAllRoles = async () => {
-  try {
-    const response = await RoleService.getAllRoles();
-    const roleOptions = response.data.map((role: any) => ({
-      label: role.name,
-      value: role.name,
-    }));
-    setRoles(roleOptions);
-  } catch (error) {
-    showToast("error", "Error", "Failed to load roles");
-  }
-};
+
+  const getAllRoles = async () => {
+    try {
+      const response = await RoleService.getAllRoles();
+      const roleOptions = response.data.map((role: any) => ({
+        label: t(`user.roles.${role.name}`) || role.name,
+        value: role.name,
+      }));
+      setRoles(roleOptions);
+    } catch (error) {
+      showToast("error", t("common.error"), t("user.messages.roleLoadFailed"));
+    }
+  };
+
   useEffect(() => {
     getAllRoles();
   }, []);
-  const roleOptions = [
-    { label: "Admin", value: "ROLE_ADMIN" },
-    { label: "User", value: "ROLE_USER" },
-    { label: "Company Admin", value: "ROLE_COMPANY" },
-    { label: "Monitor", value: "MONITORING" },
-  ];
+
   useEffect(() => {
     const fetchZones = async () => {
       try {
         const response = await ZoneService.getAllZones();
-        // Assuming response.data is array of Zone objects [{id, name, location}]
         const zoneOptions = response.data.map((zone: any) => ({
           label: zone.name,
           value: zone.id,
         }));
         setZones(zoneOptions);
       } catch (error) {
-        showToast("error", "Error", "Failed to load zones");
+        showToast("error", t("common.error"), t("user.messages.zoneLoadFailed"));
       }
     };
 
     fetchZones();
   }, []);
-  const fetchCommitees = async () => {
-    try {
-      const response = await CommiteeService.getAll();
-      const commiteeOptions = response.data.map((commitee: any) => ({
-        label: commitee.name,
-        value: commitee.id,
-      }));
-      setCommitees(commiteeOptions);
-    } catch (error) {
-      showToast("error", "Error", "Failed to load committees");
-    }
-  };
-
-  useEffect(() => {
-    fetchCommitees();
-  
-  }, []);
-
-
 
   const onSubmit = async (data: FormValues) => {
     try {
@@ -118,11 +95,11 @@ const getAllRoles = async () => {
               active: true,
               phoneNumber: data.phoneNumber,
               roles: [data.role],
-              zone: { id: data.zoneId }, // <-- send zone id as object
+              zone: { id: data.zoneId },
             }),
           ],
-          { type: "application/json" },
-        ),
+          { type: "application/json" }
+        )
       );
 
       if (profileImage) {
@@ -134,14 +111,13 @@ const getAllRoles = async () => {
       reset();
       setProfileImage(null);
 
-      showToast("success", "Success", "User Registered Successfully");
+      showToast("success", t("common.success"), t("user.messages.createSuccess"));
       setTimeout(() => navigate("/users"), 1500);
     } catch (error) {
-      showToast("error", "Error", "Failed to register user");
+      showToast("error", t("common.error"), t("user.messages.createFailed"));
     }
   };
 
-  // Password strength checker
   const getPasswordStrength = (password: string) => {
     if (!password)
       return {
@@ -161,27 +137,27 @@ const getAllRoles = async () => {
     if (score <= 2)
       return {
         score,
-        label: "Weak",
+        label: t("user.passwordStrength.weak"),
         color: "bg-red-500",
         textColor: "text-red-500",
       };
     if (score === 3)
       return {
         score,
-        label: "Fair",
+        label: t("user.passwordStrength.fair"),
         color: "bg-orange-500",
         textColor: "text-orange-500",
       };
     if (score === 4)
       return {
         score,
-        label: "Good",
+        label: t("user.passwordStrength.good"),
         color: "bg-yellow-500",
         textColor: "text-yellow-500",
       };
     return {
       score,
-      label: "Strong",
+      label: t("user.passwordStrength.strong"),
       color: "bg-green-500",
       textColor: "text-green-500",
     };
@@ -193,8 +169,8 @@ const getAllRoles = async () => {
     <>
       <DynamicBreadcrumb
         items={[
-          { label: "Users", url: "/users" },
-          { label: "Register User", url: "/users/new" },
+          { label: t("user.breadcrumb.users"), url: "/users" },
+          { label: t("user.breadcrumb.createUser"), url: "/users/new" },
         ]}
         size="pl-5 pr-5 max-w-8xl mx-auto mt-1"
       />
@@ -202,25 +178,32 @@ const getAllRoles = async () => {
       <div className="flex justify-center pl-5 pr-5 max-w-8xl mx-auto">
         <Toast ref={toast} />
 
-        <Card className="w-full max-w-8xl shadow-2  ">
-          {/* Simple Header */}
+        <Card className="w-full max-w-8xl shadow-2">
+          <div className="mb-6 pb-2 border-b border-gray-200">
+            <h2 className="text-2xl font-bold text-gray-800">
+              {t("user.form.title.create")}
+            </h2>
+            <p className="text-sm text-gray-500 mt-1">
+              {t("user.form.subtitle.create")}
+            </p>
+          </div>
 
           <form onSubmit={handleSubmit(onSubmit)}>
-            {/* 3 COLUMN GRID - Minimal spacing */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4">
               {/* First Name */}
               <Controller
                 name="firstName"
                 control={control}
-                rules={{ required: "First name is required" }}
+                rules={{ required: t("user.validation.firstNameRequired") }}
                 render={({ field }) => (
                   <div>
-                    <label className="block text-sm font-medium mb-1">
-                      First Name <span className="text-red-500">*</span>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      {t("user.fields.firstName")}{" "}
+                      <span className="text-red-500">*</span>
                     </label>
                     <InputText
                       {...field}
-                      placeholder="First name"
+                      placeholder={t("user.placeholders.firstName")}
                       className={`w-full ${errors.firstName ? "p-invalid" : ""}`}
                     />
                     {errors.firstName && (
@@ -236,15 +219,16 @@ const getAllRoles = async () => {
               <Controller
                 name="lastName"
                 control={control}
-                rules={{ required: "Last name is required" }}
+                rules={{ required: t("user.validation.lastNameRequired") }}
                 render={({ field }) => (
                   <div>
-                    <label className="block text-sm font-medium mb-1">
-                      Last Name <span className="text-red-500">*</span>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      {t("user.fields.lastName")}{" "}
+                      <span className="text-red-500">*</span>
                     </label>
                     <InputText
                       {...field}
-                      placeholder="Last name"
+                      placeholder={t("user.placeholders.lastName")}
                       className={`w-full ${errors.lastName ? "p-invalid" : ""}`}
                     />
                     {errors.lastName && (
@@ -261,20 +245,21 @@ const getAllRoles = async () => {
                 name="phoneNumber"
                 control={control}
                 rules={{
-                  required: "Phone number is required",
+                  required: t("user.validation.phoneRequired"),
                   pattern: {
                     value: /^07\d{8}$/,
-                    message: "Must start with 07 and be 10 digits",
+                    message: t("user.validation.phoneInvalid"),
                   },
                 }}
                 render={({ field }) => (
                   <div>
-                    <label className="block text-sm font-medium mb-1">
-                      Phone Number <span className="text-red-500">*</span>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      {t("user.fields.phoneNumber")}{" "}
+                      <span className="text-red-500">*</span>
                     </label>
                     <InputText
                       {...field}
-                      placeholder="0701234567"
+                      placeholder={t("user.placeholders.phoneNumber")}
                       maxLength={10}
                       className={`w-full ${errors.phoneNumber ? "p-invalid" : ""}`}
                     />
@@ -292,21 +277,22 @@ const getAllRoles = async () => {
                 name="email"
                 control={control}
                 rules={{
-                  required: "Email is required",
+                  required: t("user.validation.emailRequired"),
                   pattern: {
                     value: /^\S+@\S+\.\S+$/,
-                    message: "Invalid email address",
+                    message: t("user.validation.emailInvalid"),
                   },
                 }}
                 render={({ field }) => (
                   <div>
-                    <label className="block text-sm font-medium mb-1">
-                      Email <span className="text-red-500">*</span>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      {t("user.fields.email")}{" "}
+                      <span className="text-red-500">*</span>
                     </label>
                     <InputText
                       {...field}
                       type="email"
-                      placeholder="email@example.com"
+                      placeholder={t("user.placeholders.email")}
                       className={`w-full ${errors.email ? "p-invalid" : ""}`}
                     />
                     {errors.email && (
@@ -323,29 +309,32 @@ const getAllRoles = async () => {
                 name="password"
                 control={control}
                 rules={{
-                  required: "Password is required",
-                  minLength: { value: 6, message: "Minimum 6 characters" },
+                  required: t("user.validation.passwordRequired"),
+                  minLength: {
+                    value: 6,
+                    message: t("user.validation.passwordMinLength"),
+                  },
                 }}
                 render={({ field }) => (
                   <div style={{ width: "100%" }}>
-                    <label className="block text-sm font-medium mb-1">
-                      Password <span className="text-red-500">*</span>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      {t("user.fields.password")}{" "}
+                      <span className="text-red-500">*</span>
                     </label>
                     <Password
                       {...field}
                       toggleMask
                       feedback={false}
-                      placeholder="Enter password"
-                      className={`w-105 ${errors.password ? "p-invalid" : ""}`}
-                      inputClassName="w-105"
+                      placeholder={t("user.placeholders.password")}
+                      className={`w-full ${errors.password ? "p-invalid" : ""}`}
+                      inputClassName="w-full"
                     />
-                    {/* Simple Strength Indicator */}
                     {passwordValue && (
                       <div className="mt-2">
-                        <div className="flex align-items-center gap-2 mb-1">
-                          <div className="flex-1 h-1 bg-gray-200 border-round">
+                        <div className="flex items-center gap-2 mb-1">
+                          <div className="flex-1 h-1 bg-gray-200 rounded-full">
                             <div
-                              className={`h-1 border-round ${strength.color}`}
+                              className={`h-1 rounded-full ${strength.color}`}
                               style={{
                                 width: `${(strength.score / 5) * 100}%`,
                               }}
@@ -357,7 +346,6 @@ const getAllRoles = async () => {
                         </div>
                       </div>
                     )}
-
                     {errors.password && (
                       <small className="text-red-500 block mt-1">
                         {errors.password.message}
@@ -372,41 +360,34 @@ const getAllRoles = async () => {
                 name="confirmPassword"
                 control={control}
                 rules={{
-                  required: "Please confirm password",
+                  required: t("user.validation.confirmPasswordRequired"),
                   validate: (value) =>
-                    value === passwordValue || "Passwords do not match",
+                    value === passwordValue || t("user.validation.passwordsNotMatch"),
                 }}
                 render={({ field }) => (
                   <div>
-                    <label className="block text-sm font-medium mb-1">
-                      Confirm Password <span className="text-red-500">*</span>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      {t("user.fields.confirmPassword")}{" "}
+                      <span className="text-red-500">*</span>
                     </label>
                     <Password
                       {...field}
                       toggleMask
                       feedback={false}
-                      placeholder="Confirm password"
-                      className={`w-105 ${errors.password ? "p-invalid" : ""}`}
-                      inputClassName="w-105"
+                      placeholder={t("user.placeholders.confirmPassword")}
+                      className={`w-full ${errors.confirmPassword ? "p-invalid" : ""}`}
+                      inputClassName="w-full"
                     />
-
-                    {/* Simple match indicator */}
-                    {field.value &&
-                      passwordValue &&
-                      field.value !== passwordValue && (
-                        <small className="text-orange-500 block mt-1">
-                          Passwords do not match
-                        </small>
-                      )}
-
-                    {field.value &&
-                      passwordValue &&
-                      field.value === passwordValue && (
-                        <small className="text-green-500 block mt-1">
-                          ✓ Passwords match
-                        </small>
-                      )}
-
+                    {field.value && passwordValue && field.value !== passwordValue && (
+                      <small className="text-orange-500 block mt-1">
+                        {t("user.validation.passwordsDoNotMatch")}
+                      </small>
+                    )}
+                    {field.value && passwordValue && field.value === passwordValue && (
+                      <small className="text-green-500 block mt-1">
+                        ✓ {t("user.validation.passwordsMatch")}
+                      </small>
+                    )}
                     {errors.confirmPassword && (
                       <small className="text-red-500 block mt-1">
                         {errors.confirmPassword.message}
@@ -415,75 +396,80 @@ const getAllRoles = async () => {
                   </div>
                 )}
               />
-              <div>
-                {/* Role */}
-                <Controller
-                  name="role"
-                  control={control}
-                  rules={{ required: "Role is required" }}
-                  render={({ field }) => (
-                    <div>
-                      <label className="block text-sm font-medium mb-1">
-                        Role <span className="text-red-500">*</span>
-                      </label>
-                      <Dropdown
-                        {...field}
-                        options={roles}
-                        placeholder="Select role"
-                        className={`w-full ${errors.role ? "p-invalid" : ""}`}
-                      />
-                      {errors.role && (
-                        <small className="text-red-500 block mt-1">
-                          {errors.role.message}
-                        </small>
-                      )}
-                    </div>
-                  )}
-                />
-              </div>
 
-                      <Controller
-              name="zoneId"
-              control={control}
-              rules={{ required: "Zone is required" }}
-              render={({ field }) => (
-                <div>
-                  <label className="block text-sm font-medium mb-1">
-                    Zone <span className="text-red-500">*</span>
-                  </label>
-                  <Dropdown
-                    {...field}
-                    options={zones}
-                    placeholder="Select zone"
-                    className={`w-full ${errors.zoneId ? "p-invalid" : ""}`}
-                  />
-                  {errors.zoneId && (
-                    <small className="text-red-500 block mt-1">
-                      {errors.zoneId.message}
-                    </small>
-                  )}
-                </div>
-              )}
-            />
+              {/* Role */}
+              <Controller
+                name="role"
+                control={control}
+                rules={{ required: t("user.validation.roleRequired") }}
+                render={({ field }) => (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      {t("user.fields.role")}{" "}
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <Dropdown
+                      {...field}
+                      options={roles}
+                      placeholder={t("user.placeholders.selectRole")}
+                      className={`w-full ${errors.role ? "p-invalid" : ""}`}
+                    />
+                    {errors.role && (
+                      <small className="text-red-500 block mt-1">
+                        {errors.role.message}
+                      </small>
+                    )}
+                  </div>
+                )}
+              />
+
+              {/* Zone */}
+              <Controller
+                name="zoneId"
+                control={control}
+                rules={{ required: t("user.validation.zoneRequired") }}
+                render={({ field }) => (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      {t("user.fields.zone")}{" "}
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <Dropdown
+                      {...field}
+                      options={zones}
+                      placeholder={t("user.placeholders.selectZone")}
+                      className={`w-full ${errors.zoneId ? "p-invalid" : ""}`}
+                    />
+                    {errors.zoneId && (
+                      <small className="text-red-500 block mt-1">
+                        {errors.zoneId.message}
+                      </small>
+                    )}
+                  </div>
+                )}
+              />
             </div>
-            
-            {/* Profile Image - Simple */}
-            <div className="mt-2 pt-2 border-top-1 surface-border">
-              <div className="mb-2">
-                <span className="font-medium">Profile Image</span>
-              </div>
+
+            {/* Profile Image */}
+            <div className="mt-6 pt-4 border-t border-gray-200">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {t("user.labels.profileImage")}
+              </label>
               <FileUploadField
                 name="profileImage"
                 accept="image/*"
                 maxFileSize={1048576}
                 onFileSelect={(file) => setProfileImage(file)}
               />
+              <p className="text-xs text-gray-400 mt-1">
+                {t("user.placeholders.imageHint")}
+              </p>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex justify-content-end gap-2 mt-4 pt-3 border-top-1 surface-border">
+            <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-200">
               <Button
-                label="Cancel"
+                label={t("user.buttons.cancel")}
                 type="button"
                 severity="secondary"
                 raised
@@ -494,7 +480,7 @@ const getAllRoles = async () => {
                 style={{ minWidth: "100px" }}
               />
               <Button
-                label="Register"
+                label={t("user.buttons.save")}
                 type="submit"
                 severity="info"
                 raised

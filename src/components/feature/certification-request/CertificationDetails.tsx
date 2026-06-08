@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import CertificationRequestTracker from "./CertificationRequestTracker";
-import { InputText } from "primereact/inputtext";
-import { Button } from "primereact/button";
-import { Card } from "primereact/card";
-import { Search, FileText, ChevronLeft, ChevronRight, X, Building2, TrendingUp, Shield, Award, Clock } from "lucide-react";
+
+import { Search, FileText, X, Building2, TrendingUp, Shield } from "lucide-react";
 
 export const CertificationDetails = () => {
   const { t } = useTranslation();

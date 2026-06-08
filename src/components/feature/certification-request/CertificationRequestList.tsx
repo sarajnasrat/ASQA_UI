@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -15,10 +15,11 @@ import { CertificationRequestUpdate } from "./CertificationRequestUpdate";
 import type { StatusTabItem } from "../../common/StatusTabMenu";
 import type { MenuItem } from "primereact/menuitem";
 import StatusTabMenu from "../../common/StatusTabMenu";
-import { AttachmentList } from "../../common/AttachmentList";
+
 import i18n from "../../../i18n/i18n";
-import { Download, Eye, EyeOff, File } from "lucide-react";
+import { Download, Eye, File } from "lucide-react";
 import ExcelExport from "../../common/ExcelExport";
+import { useAuth } from "../../../context/AuthContext";
 
 export const CertificationRequestList = () => {
   const { t } = useTranslation();
@@ -36,6 +37,7 @@ export const CertificationRequestList = () => {
   // ================= STATUS STATE =================
   const [status, setStatus] = useState<string>("SUBMITTED");
   const [activeIndex, setActiveIndex] = useState(0);
+  const { hasPermission, withPermission } = useAuth();
   //    SUBMITTED,
   //     REGISTERED,
   //     STANDARDS_PROVIDED,
@@ -62,16 +64,11 @@ export const CertificationRequestList = () => {
       icon: "pi pi-send",
     },
 
-    {
-      label: t("certificationRequest.statusOptions.UNDER_REVIEW"),
-      value: "UNDER_REVIEW",
-      icon: "pi pi-search",
-    },
-        {
-      label: t("certificationRequest.statusOptions.REJECTED"),
-      value: "REJECTED",
-      icon: "pi pi-times",
-    },
+    // {
+    //   label: t("certificationRequest.statusOptions.UNDER_REVIEW"),
+    //   value: "UNDER_REVIEW",
+    //   icon: "pi pi-search",
+    // },
 
     /* ===== STANDARD STEP ===== */
 
@@ -95,11 +92,11 @@ export const CertificationRequestList = () => {
     //   icon: "pi pi-clock",
     // },
 
-    {
-      label: t("certificationRequest.statusOptions.DEADLINE_ASSIGNED"),
-      value: "DEADLINE_ASSIGNED",
-      icon: "pi pi-calendar",
-    },
+    // {
+    //   label: t("certificationRequest.statusOptions.DEADLINE_ASSIGNED"),
+    //   value: "DEADLINE_ASSIGNED",
+    //   icon: "pi pi-calendar",
+    // },
 
     /* ===== INSPECTION ===== */
 
@@ -115,16 +112,21 @@ export const CertificationRequestList = () => {
     //   icon: "pi pi-users",
     // },
 
-    {
-      label: t("certificationRequest.statusOptions.REPORT_APPROVED"),
-      value: "REPORT_APPROVED",
-      icon: "pi pi-check-circle",
-    },
-    {
-      label: t("certificationRequest.statusOptions.CERTIFICATE_ISSUED"),
-      value: "CERTIFICATE_ISSUED",
-      icon: "pi pi-check-circle",
-    },
+    // {
+    //   label: t("certificationRequest.statusOptions.REPORT_APPROVED"),
+    //   value: "REPORT_APPROVED",
+    //   icon: "pi pi-check-circle",
+    // },
+    // {
+    //   label: t("certificationRequest.statusOptions.CERTIFICATE_ISSUED"),
+    //   value: "CERTIFICATE_ISSUED",
+    //   icon: "pi pi-check-circle",
+    // },
+    // {
+    //   label: t("certificationRequest.statusOptions.REJECTED"),
+    //   value: "REJECTED",
+    //   icon: "pi pi-times",
+    // },
 
     /* ===== PAYMENT ===== */
 
@@ -223,10 +225,8 @@ export const CertificationRequestList = () => {
     if (rowData === "SUBMITTED") {
       return t("certificationRequest.startReview");
     } else if (rowData === "UNDER_REVIEW") {
-      return t("certificationRequest.requireStandard");
-    } else if (rowData === "STANDARDS_REQUIRED") {
       return t("certificationRequest.providestandard");
-    } else if (rowData === "STANDARDS_PROVIDED") {
+    }else if (rowData === "STANDARDS_PROVIDED") {
       return t("certificationRequest.requireDeadline");
     } else if (rowData === "DEADLINE_REQUIRED") {
       return t("certificationRequest.setDeadline");
@@ -252,24 +252,24 @@ export const CertificationRequestList = () => {
     const menu = useRef<any>(null);
 
     const items: MenuItem[] = [
-      {
+      ...withPermission("VIEW_CERTIFICATIONREQUEST", {
         label: t("common.view"),
         icon: "pi pi-eye",
         command: () => navigate(`/certification-request/view/${rowData.id}`),
-      },
-      {
-        label: editButtonLabel(rowData.requestStatus),
-        icon: "pi pi-pencil",
-        command: () => {
-          setSelectedId(rowData.id);
-          setUpdateVisible(true);
-        },
-      },
-      {
+      }),
+      // ...withPermission("UPDATE_CERTIFICATIONREQUEST", {
+      //   label: editButtonLabel(rowData.requestStatus),
+      //   icon: "pi pi-pencil",
+      //   command: () => {
+      //     setSelectedId(rowData.id);
+      //     setUpdateVisible(true);
+      //   },
+      // }),
+      ...withPermission("DELETE_CERTIFICATION_REQUEST", {
         label: t("common.delete"),
         icon: "pi pi-trash",
         command: () => confirmDelete(rowData),
-      },
+      }),
     ];
 
     return (
@@ -286,7 +286,6 @@ export const CertificationRequestList = () => {
   };
   const getCompanyNameField = () => {
     const lang = i18n.language; // or your language state
-    console.log("Current language:", lang); // Debug log to check current language
     switch (lang) {
       case "dr":
         return "companyNameDR";
@@ -717,7 +716,6 @@ export const CertificationRequestList = () => {
     },
   ];
 
-
   // ================= HEADER =================
   const header = (
     <div className="flex justify-between">
@@ -731,7 +729,7 @@ export const CertificationRequestList = () => {
         /> */}
         <Button
           icon="pi pi-sync"
-          label={t("refresh")}
+          label={t("common.refresh")}
           onClick={loadData}
           text
           raised

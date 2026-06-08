@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "primereact/button";
 import { TieredMenu } from "primereact/tieredmenu";
 import type { MenuItem } from "primereact/menuitem";
@@ -186,7 +186,7 @@ const ZoneList = () => {
   const columns = [
     {
       field: "id",
-      header: "ID",
+      header: t("common.id"),
       style: { width: "80px" },
     },
     {

@@ -1,5 +1,5 @@
 // pages/Companies.tsx
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import { Search, MapPin, Building2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useAppToast } from '../../../../hooks/useToast';
 import CompanyService from '../../../../services/company.service';
@@ -77,7 +77,6 @@ const Companies = () => {
       setCompanies(companyData);
       setFilteredCompanies(companyData);
     } catch (error) {
-      console.error('Error loading companies:', error);
       showToast('error', 'Error', 'Failed to load companies');
     } finally {
       setLoading(false);
@@ -236,7 +235,7 @@ const Companies = () => {
                         <div className="flex items-start space-x-3 mb-4">
                           {/* Logo - Smaller and cleaner */}
                           <div className="relative shrink-0">
-                            <div className={`w-14 h-14 rounded-lg bg-linear-to-br ${colorGradient} bg-opacity-10 flex items-center justify-center overflow-hidden shadow-sm`}>
+                            <div className={`w-24 h-20 rounded-lg bg-linear-to-br bg-opacity-10 flex items-center justify-center overflow-hidden shadow-sm`}>
                               {company.logoUrl ? (
                                 <img
                                   src={`${API_BASE_URL}${company.logoUrl}`}
@@ -260,12 +259,12 @@ const Companies = () => {
                             </div>
 
                             {/* Status indicator - Simplified */}
-                            <div className={`absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full border-2 border-white ${company.active ? 'bg-green-500' : 'bg-gray-300'
+                            {/* <div className={`absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full border-2 border-white ${company.active ? 'bg-green-500' : 'bg-gray-300'
                               }`}>
                               {company.active && (
                                 <span className="absolute inset-0 rounded-full bg-green-500 animate-ping opacity-30"></span>
                               )}
-                            </div>
+                            </div> */}
                           </div>
 
                           {/* Company Name and Type */}

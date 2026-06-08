@@ -34,7 +34,7 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
 
     SUBMITTED: ["UNDER_REVIEW", "REJECTED"],
 
-    UNDER_REVIEW: ["STANDARDS_REQUIRED"],
+    UNDER_REVIEW: ["STANDARDS_PROVIDED"],
 
     /* STANDARD STEP */
     STANDARDS_REQUIRED: ["STANDARDS_PROVIDED"],
@@ -64,6 +64,7 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const [committees, setCommittees] = useState<any[]>([]);
+  const [loadingCommittees, setLoadingCommittees] = useState(false);
   const [selectedCommitteeId, setSelectedCommitteeId] = useState<number | null>(null);
 
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -91,10 +92,13 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
   useEffect(() => {
     const loadCommittees = async () => {
       try {
+        setLoadingCommittees(true);
         const res = await CommiteeService.getAll();
-        setCommittees(res?.data || res?.data?.data || []);
+        setCommittees(res?.data?.data || res?.data || []);
       } catch {
         showError("Error", "Failed to load committees");
+      } finally {
+        setLoadingCommittees(false);
       }
     };
 
@@ -105,9 +109,6 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
 
   const handleSubmit = async () => {
     if (!status || !requestId) return;
-console.log("Selected file:", selectedFile);
-console.log("Current status:", currentStatus);
-console.log("New status:", status);
     try {
       setLoading(true);
 
@@ -211,6 +212,29 @@ console.log("New status:", status);
 
   if (finalStates.includes(currentStatus)) return null;
 
+  const getCommitteeLabel = (committee: any) => {
+    if (!committee) return "";
+    return (
+      committee.name ||
+      committee.committeeName ||
+      committee.title ||
+      committee.committeeNameEN ||
+      committee.committeeNameDR ||
+      committee.committeeNamePS ||
+      `#${committee.id ?? ""}`
+    );
+  };
+
+  const committeeOptions = committees
+    .map((committee) => ({
+      label: getCommitteeLabel(committee),
+      value:
+        committee?.id !== null && committee?.id !== undefined
+          ? Number(committee.id)
+          : null,
+    }))
+    .filter((option) => option.value !== null && option.label);
+
   /* ================= HEADER ================= */
 
   const header = () => {
@@ -219,9 +243,6 @@ console.log("New status:", status);
         return t("certificationRequest.underReview");
 
       case "UNDER_REVIEW":
-        return t("certificationRequest.standardRequired");
-
-      case "STANDARDS_REQUIRED":
         return t("certificationRequest.standardsProvided");
 
       case "STANDARDS_PROVIDED":
@@ -317,11 +338,11 @@ console.log("New status:", status);
         <Dropdown
           className="w-full mt-3"
           value={selectedCommitteeId}
-          options={committees.map((c) => ({
-            label: c.name,
-            value: c.id,
-          }))}
-          onChange={(e) => setSelectedCommitteeId(e.value)}
+          options={committeeOptions}
+          onChange={(e) => setSelectedCommitteeId(e.value ?? null)}
+          loading={loadingCommittees}
+          disabled={loadingCommittees || committeeOptions.length === 0}
+          showClear
           placeholder={t("commitee.selectCommittee")}
         />
       )}

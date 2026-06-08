@@ -1,4 +1,3 @@
-
 export interface SocialLink {
   socialLinkName: string;
   address: string;
@@ -7,16 +6,21 @@ export interface SocialLink {
 export interface CategoryReference {
   id: number;
   name: string;
-} ;
+}
 
-export type CompanyType = "PRIVATE" | "PUBLIC" | "GOVERNMENT"|"EDUCATIONAL_INSTITUTIONS" | "OTHER"; // Adjust based on your backend
+export type CompanyType =
+  | "PRIVATE"
+  | "PUBLIC"
+  | "GOVERNMENT"
+  | "EDUCATIONAL_INSTITUTIONS"
+  | "OTHER"; // Adjust based on your backend
 
 export interface Company {
   companyNameEN: string;
   companyNameDR: string;
   companyNamePS: string;
-    onSuccess: () => void;
-    onCancel: () => void;
+  onSuccess: () => void;
+  onCancel: () => void;
 
   email: string;
   phoneNumber: string;
@@ -31,13 +35,12 @@ export interface Company {
   activityType: string;
 
   jawazNumber: string;
-  jawazExpiryDate: string; // Use ISO string or Date if you want
-  jawazIssueDate: string;  // Use ISO string or Date if you want
-
+  jawazExpiryDate?: Date | null;
+  jawazIssueDate?: Date | null;
   tinNumber: string;
   websiteUrl?: string;
 
-  establishYear: string; // ISO string (yyyy-mm-dd)
+  establishYear?: Date | null;
   companyOwnerNameEn: string;
   companyOwnerNameDr: string;
   companyOwnerNamePs: string;

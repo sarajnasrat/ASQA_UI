@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useTransition } from "react";
+import  { useEffect, useRef, useState } from "react";
 import { useAppToast } from "../../../../hooks/useToast";
 import { useNavigate } from "react-router-dom";
 import CountryService from "../../../../services/country.service";
@@ -19,13 +19,12 @@ export const CountryList = () => {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const { toast, showToast } = useAppToast();
   const navigate = useNavigate();
-  const { t, i18n } = useTranslation(); //------------- Edit Country---------------------//
+  const { t } = useTranslation(); //------------- Edit Country---------------------//
   const [selectedCountryId, setSelectedCountryId] = useState<number | null>(
     null,
   );
   const [showEditDialog, setShowEditDialog] = useState(false);
-  const { hasPermission } = useAuth();
-  const menu = useRef<any>(null);
+  const { hasPermission,withPermission } = useAuth();
   const handleEdit = (country: any) => {
     setSelectedCountryId(country.id);
     setShowEditDialog(true);
@@ -52,7 +51,7 @@ export const CountryList = () => {
       setTotalRecords(res.data.totalElements);
       setLoading(false);
     } catch (error) {
-      showToast("error", "Error", "Failed to load countries");
+      showToast("error", t("common.error"), t("country.loadFailed"));
       setLoading(false);
     } finally {
       setLoading(false);
@@ -62,30 +61,30 @@ export const CountryList = () => {
   const handleCreateSuccess = () => {
     setShowCreateDialog(false);
     getAllCountries(); // Refresh the list
-    showToast("success", "Success", "Country created successfully");
+    showToast("success", t("common.success"), t("country.created"));
   };
 
-  const dateBodyTemplate = (rowData: any) => {
-    if (!rowData.createdDate) return <span className="text-gray-400">—</span>;
+  // const dateBodyTemplate = (rowData: any) => {
+  //   if (!rowData.createdDate) return <span className="text-gray-400">—</span>;
 
-    const date = new Date(rowData.createdDate);
-    const formattedDate = date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-    const formattedTime = date.toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+  //   const date = new Date(rowData.createdDate);
+  //   const formattedDate = date.toLocaleDateString("en-US", {
+  //     year: "numeric",
+  //     month: "short",
+  //     day: "numeric",
+  //   });
+  //   const formattedTime = date.toLocaleTimeString("en-US", {
+  //     hour: "2-digit",
+  //     minute: "2-digit",
+  //   });
 
-    return (
-      <div className="flex flex-col">
-        <span className="text-sm text-gray-700">{formattedDate}</span>
-        <span className="text-xs text-gray-400">{formattedTime}</span>
-      </div>
-    );
-  };
+  //   return (
+  //     <div className="flex flex-col">
+  //       <span className="text-sm text-gray-700">{formattedDate}</span>
+  //       <span className="text-xs text-gray-400">{formattedTime}</span>
+  //     </div>
+  //   );
+  // };
 
   const confirmDelete = (country: any) => {
     confirmDialog({
@@ -120,10 +119,10 @@ export const CountryList = () => {
   const handleDelete = async (id: any) => {
     try {
       await CountryService.deleteCountry(id);
-      showToast("success", "Success", "Country Deleted Successfully");
+      showToast("success", t("common.success"), t("country.deleted"));
       await getAllCountries();
     } catch (error) {
-      showToast("error", "Error", "Failed to delete country");
+      showToast("error", t("common.error"), t("country.deleteFailed"));
     }
   };
 
@@ -187,7 +186,7 @@ export const CountryList = () => {
 
           <Button
             icon="pi pi-sync"
-            label={t("common.refersh")}
+            label={t("common.refresh")}
             text
             severity="info"
             raised
@@ -201,7 +200,7 @@ export const CountryList = () => {
   const columns = [
     {
       field: "id",
-      header: "ID",
+      header: t("common.id"),
       style: { width: "80px" },
       className: "text-sm font-medium text-gray-600",
     },
@@ -212,7 +211,7 @@ export const CountryList = () => {
       style: { minWidth: "200px" },
       body: (rowData: any) => (
         <span className="font-medium text-gray-800">
-          {rowData.countryName || "—"}
+          {rowData.countryName || t("common.notSpecified")}
         </span>
       ),
     },
@@ -222,7 +221,7 @@ export const CountryList = () => {
       style: { minWidth: "120px" },
       body: (rowData: any) => (
         <span className="font-mono bg-gray-100 px-2 py-1 rounded-md text-sm">
-          {rowData.countryCode || "—"}
+          {rowData.countryCode || t("common.notSpecified")}
         </span>
       ),
     },
@@ -239,7 +238,7 @@ export const CountryList = () => {
     },
   ];
 
-  const breadcrumbItems = [{ label: "Country", url: "" }];
+  const breadcrumbItems = [{ label: t("country.list"), url: "" }];
 
   return (
     <>
@@ -269,7 +268,7 @@ export const CountryList = () => {
       />
 
       <DynamicTable
-        title="Country Management"
+        title={t("country.list")}
         value={countryList}
         columns={columns}
         header={header()}

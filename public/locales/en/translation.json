@@ -1,6 +1,6 @@
 {
   "navbar": {
-    "welcome": "Afganistan Standard Quality and Authority(ASQA)",
+    "welcome": "Afganistan Standard Quality and Authority(ASQA) Certification Management System",
     "notifications": "Notifications",
     "unread": "unread",
     "viewAllNotifications": "View All Notifications",
@@ -50,7 +50,13 @@
       "hint": {
         "translations": "All translations are optional except English"
       }
-    }
+    },
+    "loadFailed": "Failed to load countries",
+    "loadSingleFailed": "Failed to load country",
+    "updateFailed": "Failed to update country",
+    "createFailed": "Failed to create country",
+    "deleted": "Country deleted successfully",
+    "deleteFailed": "Failed to delete country"
   },
   "district": {
     "create": "Create District",
@@ -78,7 +84,15 @@
           "required": "District name in English is required"
         }
       }
-    }
+    },
+    "update": "Update District",
+    "loadFailed": "Failed to load districts",
+    "loadProvincesFailed": "Failed to load provinces",
+    "createFailed": "Failed to create district",
+    "updateFailed": "Failed to update district",
+    "deleted": "District deleted successfully",
+    "deleteFailed": "Failed to delete district",
+    "province": "Province"
   },
   "province": {
     "create": "Create Province",
@@ -107,7 +121,12 @@
           "required": "Province name in English is required"
         }
       }
-    }
+    },
+    "loadFailed": "Failed to load provinces",
+    "loadCountriesFailed": "Failed to load countries",
+    "updated": "Province updated successfully",
+    "deleted": "Province deleted successfully",
+    "deleteFailed": "Failed to delete province"
   },
   "category": {
     "create": "Create Category",
@@ -134,6 +153,32 @@
         "required": "Category type is required"
       }
     }
+  },
+  "login": {
+    "welcomeBack": "Welcome Back",
+    "signInPrompt": "Please sign in to your account",
+    "emailAddress": "Email Address",
+    "emailPlaceholder": "you@example.com",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "forgotPassword": "Forgot password?",
+    "signingIn": "Signing in...",
+    "signIn": "Sign In",
+    "invalidCredentials": "Invalid email or password",
+    "footer": "© 2026 MCIT. All rights reserved."
+  },
+  "fileUpload": {
+    "remove": "Remove",
+    "removeFile": "Remove file",
+    "word": "Word",
+    "excel": "Excel",
+    "images": "Images"
+  },
+  "confirmDialog": {
+    "title": "Confirmation",
+    "confirm": "Yes, proceed",
+    "irreversible": "This action cannot be undone",
+    "pressEsc": "Press ESC to cancel"
   },
   "company": {
     "companytyperequired": "Company type is required",
@@ -244,7 +289,8 @@
       "changeLogo": "Change Logo",
       "selectLogo": "Select Logo",
       "companytyperequired": "Company type is required",
-      "selectvalid": "Select a valid company type"
+      "selectvalid": "Select a valid company type",
+      "issueDate": "Issue Date"
     },
     "placeholder": {
       "companyNameEN": "Enter company name in English",
@@ -378,10 +424,11 @@
       "activateSuccess": "Company has been successfully activated",
       "deactivateSuccess": "Company has been successfully deactivated",
       "loadSuccess": "Companies loaded successfully",
-      "noData": "No companies found",
+      "noData": "The company you are looking for does not exist.",
       "confirmDelete": "Are you sure you want to delete this company?",
       "confirmDeactivate": "Are you sure you want to deactivate this company?",
-      "confirmActivate": "Are you sure you want to activate this company?"
+      "confirmActivate": "Are you sure you want to activate this company?",
+      "unknownSize": "Unknown size"
     },
     "filters": {
       "all": "All Companies",
@@ -410,7 +457,11 @@
       "socialMedia": "Social Media",
       "documents": "Documents",
       "certificates": "Certificates"
-    }
+    },
+    "categoryLoadFailed": "Failed to load categories",
+    "loadSingleFailed": "Failed to load company",
+    "invalidId": "Invalid company id.",
+    "notFound": "Company not found"
   },
   "forgotPassword": {
     "title": "Forgot Password",
@@ -539,7 +590,14 @@
     "validation": {
       "file_type": "Only PDF files are supported.",
       "file_size": "File size must be less than 10MB."
-    }
+    },
+    "download": "Download",
+    "preview": "Preview",
+    "unknown": "Unknown",
+    "unknown_file": "Unknown file",
+    "reference": "Reference",
+    "select_reference": "Select reference",
+    "sizeUnitKb": "KB"
   },
   "nav": {
     "home": "Home",
@@ -586,6 +644,7 @@
     "noCertificateFile": "No certificate file available",
     "certificateFile": "Certificate File",
     "certificate": "Certificate",
+    "attachment": "Attachment",
     "certificateSummary": "Certificate Summary",
     "certificateIssuedTo": "Certificate Issued To",
     "certificateDetails": "Certification Details",
@@ -618,6 +677,43 @@
     "request": "Request",
     "requestDetails": "Certification Request Details",
     "trackProgress": "Track the status and progress of your certification",
+    "dialog": {
+      "updateTitle": "Update Certification",
+      "scanOfCertification": "Scan Of Certification",
+      "scanHelperText": "Upload a PDF, JPG, or PNG file up to 5 MB"
+    },
+    "placeholders": {
+      "serialNumber": "Enter serial number"
+    },
+    "messages": {
+      "notSelected": "Certification not selected",
+      "serialNumberRequired": "Serial number is required",
+      "invalidRequestId": "Invalid certification request id.",
+      "unknownSize": "Unknown size"
+    },
+    "printPage": {
+      "pdfError": "Error generating PDF. Please try again.",
+      "preparing": "Preparing...",
+      "printDocument": "Print Document",
+      "progress": "Preparing {{progress}}%",
+      "downloadPdf": "Download PDF",
+      "collectingInfo": "Collecting information...",
+      "designingDocument": "Designing document...",
+      "savingPdf": "Saving PDF...",
+      "emirate": "Islamic Emirate of Afghanistan",
+      "authority": "Standards and Quality Authority",
+      "title": "Quality Certification Letter",
+      "registrationNumber": "Registration Number",
+      "companyLicenseNumber": "Company License Number",
+      "certificateType": "Certification Type",
+      "signature": "Authorized Signature",
+      "issueDate": "Issue Date",
+      "expiryDate": "Expiry Date",
+      "bodyPrefix": "This certificate confirms that company",
+      "bodyMiddleLocation": "located at",
+      "bodyMiddleCategory": "and operating in",
+      "bodySuffix": "has organized its management system and product in accordance with the applicable standards."
+    },
     "noResults": "No results found",
     "noResultsMessage": "We couldn't find any certification request matching your search.",
     "tryAnotherSearch": "Try another search",
@@ -720,6 +816,11 @@
     }
   },
   "certificationRequest": {
+    "timeline": "Timeline",
+    "progress": "Progress",
+    "reviewMessage": "Request Process",
+    "printable": "Printable",
+    "scanned": "Scanned",
     "create": "Create Certification Request",
     "edit": "Edit Certification Request",
     "delete": "Delete Certification Request",
@@ -740,6 +841,7 @@
     "paymentDate": "Payment Date",
     "paymentAmount": "Payment Amount",
     "paymentDetails": "Payment Details",
+    "standardRequired": "Set the status to 'Standards Required' and provide the required standards to the applicant.",
     "transactionId": "Transaction ID",
     "viewPaymentDetails": "View Payment Details",
     "paymentCompletedNote": "Payment is completed. Use the Edit button to change status to issueCertificate.",
@@ -767,7 +869,7 @@
     "certificateIssued": "Are you sure to issue a certificate above company?",
     "requestSubmitted": "Request Submitted",
     "confirmUnderReview": "Confirm Start Review",
-    "requestWillBeUnderReview": "This will set the request status to 'Under Review' and notify the assigned committee members to start the review process. Are you sure you want to proceed?",
+    "requestWillBeUnderReview": "This will set the request status to 'Under Review' and notify to the applicant. Are you sure you want to proceed?",
     "deadlineRequired": "Set Deadline",
     "startReview": "Start Review",
     "reject": "Reject",
@@ -785,7 +887,7 @@
     "labels": {
       "trackingNumber": "Tracking Number",
       "requestType": "Request Type",
-      "requestStatus": "Request Status",
+      "requestStatus": "Status",
       "startReview": "Start Review",
       "duration": "Duration",
       "serialNumber": "Serial Number",
@@ -798,7 +900,11 @@
       "requestDetails": "Request Details",
       "requestInfo": "Request Information",
       "totalDocuments": "Total Documents",
-      "requestAttachments": "Request Attachments"
+      "requestAttachments": "Request Attachments",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "noAttachments": "No attachments",
+      "moreAttachments": "{{count}} more attachment"
     },
     "placeholder": {
       "requestType": "Select request type",
@@ -841,6 +947,66 @@
       "DOMESTIC_QUALITY_CERTIFICATION": "Domestic Quality Certification",
       "INTERNATIONAL_QUALITY_CERTIFICATION": "International Quality Certification",
       "STANDARD_MARK_CERTIFICATION": "Standard Mark Certification"
+    },
+    "fileSize": {
+      "zero": "0 Bytes",
+      "bytes": "Bytes",
+      "kb": "KB",
+      "mb": "MB",
+      "gb": "GB",
+      "tb": "TB"
+    },
+    "deadline": {
+      "noDeadline": "No deadline",
+      "expired": "Expired",
+      "daysRemaining": "{{count}} days remaining",
+      "months": "{{count}} months",
+      "batch": "Batch: {{batch}}"
+    },
+    "payment": {
+      "title": "Payments",
+      "printPendingOnly": "Bill can be printed only when payment is pending.",
+      "uploadScannedBillRequired": "Please upload the scanned bill.",
+      "enterTransactionId": "Please enter transaction ID.",
+      "scannedBillUploaded": "Scanned bill uploaded successfully.",
+      "uploading": "Uploading...",
+      "uploadScan": "Upload Scan",
+      "uploadScannedBill": "Upload Scanned Bill",
+      "details": "Payment Details",
+      "scanUploadInfo": "Scan Upload Information",
+      "transactionId": "Transaction ID",
+      "paymentDate": "Payment Date",
+      "paymentAmount": "Payment Amount",
+      "scannedBill": "Scanned Bill",
+      "enterTransactionIdPlaceholder": "Enter transaction ID",
+      "enterPaidAmount": "Enter paid amount",
+      "changeFile": "Change File",
+      "chooseFile": "Choose File",
+      "selectedFile": "Selected",
+      "fileTypesHint": "PDF, JPG, PNG. Max size: 5MB.",
+      "uploadNote": "After uploading the scanned bill, payment will be completed. To issue certificate, use the Edit button.",
+      "completedNote": "Payment is completed. Use the Edit button to change status to issueCertificate.",
+      "invoiceTitle": "Invoice",
+      "invoiceNumber": "Invoice no",
+      "authority": "Afghanistan Quality Standards Authority",
+      "billedTo": "Billed To",
+      "invoiceDate": "Invoice Date",
+      "dueDate": "Due Date",
+      "itemNo": "No",
+      "itemDescription": "Item Description",
+      "price": "Price",
+      "quantity": "Qty",
+      "amount": "Amount",
+      "certificationFee": "Certification Fee",
+      "toBeDetermined": "To be determined",
+      "paymentVia": "Please make payment via",
+      "bankName": "Bank Name",
+      "accountNumber": "Account Number",
+      "accountHolder": "Account Holder",
+      "reference": "Reference",
+      "totalAmountDue": "Total Amount Due",
+      "contactSupport": "Contact Support",
+      "printInvoice": "Print Invoice"
     }
   },
   "zone": {
@@ -853,15 +1019,19 @@
     "updated": "Zone updated successfully",
     "deleted": "Zone deleted successfully",
     "servererror": "Failed to load zones",
+    "loadFailed": "Failed to load zone",
     "deleteFailed": "Failed to delete zone",
+    "updateFailed": "Failed to update zone",
     "deleteConfirm": "Are you sure you want to delete zone {{name}}?",
     "notfound": "No zones found",
     "fetched": "Zones fetched successfully",
     "locationrequired": "Location is required",
     "location": "Location",
+    "locationPlaceholder": "Enter location",
     "name": {
       "label": "Zone Name",
       "required": "Zone name is required",
+      "placeholder": "Enter zone name",
       "exists": "Zone with this name already exists"
     }
   },
@@ -965,10 +1135,43 @@
         "BRANCH_OFFICE": "Branch Office",
         "HOME": "Home",
         "OTHER": "Other"
-      }
+      },
+      "country": "Country",
+      "province": "Province",
+      "selectCountry": "Select Country",
+      "selectProvince": "Select Province",
+      "selectCountryFirst": "Select country first",
+      "selectProvinceFirst": "Select province first",
+      "removeAddress": "Remove address",
+      "noCountriesAvailable": "No countries available"
     }
   },
   "commitee": {
+    "details": {
+      "title": "Committee Details",
+      "generalInfo": "General Information",
+      "members": "Members",
+      "assignments": "Assignments",
+      "committeeType": "Committee Type",
+      "status": "Status",
+      "memberCount": "Member Count",
+      "createdDate": "Created Date",
+      "active": "Active",
+      "inactive": "Inactive",
+      "role": "Role",
+      "responsibility": "Responsibility",
+      "email": "Email",
+      "phone": "Phone",
+      "joinedAt": "Joined At",
+      "assignmentId": "Assignment ID",
+      "assignmentStatus": "Assignment Status",
+      "assignedAt": "Assigned At",
+      "completedAt": "Completed At",
+      "remarks": "Remarks",
+      "certificationRequestId": "Certification Request ID",
+      "noMembers": "No members found",
+      "noAssignments": "No assignments found"
+    },
     "createMember": "Add Member",
     "selectCommittee": "Select Committee",
     "list": "Committee List",
@@ -991,9 +1194,27 @@
     "Inactive": "Inactive",
     "memberCount": "Number of Members",
     "assignment": {
+      "details": "Committee Assignment Details",
+      "viewAssignmentDetails": "Review assignment metadata and related request information.",
+      "detailsNotFound": "Assignment not found",
+      "detailsNotFoundMessage": "Unable to load this committee assignment.",
+      "summary": "Summary",
+      "summaryShort": "Summary",
+      "requestInfoTab": "Request",
+      "requestShort": "Request",
+      "committeeTab": "Committee",
+      "committeeShort": "Comm",
+      "requestInfo": "Request Information",
+      "committeeInfo": "Committee Information",
+      "assignedBy": "Assigned By",
+      "requestStatusDetails": "Request Status",
+      "deadlineStart": "Start Date",
+      "deadlineEnd": "End Date",
+      "requestStatus": "Request Status",
       "list": "Assigned Certification Requests",
       "create": "Create Assignment",
       "edit": "Edit Assignment",
+      "startedAt": "Started At",
       "delete": "Delete Assignment",
       "committee": "Committee",
       "company": "Company",
@@ -1005,6 +1226,26 @@
       "active": "Active",
       "assignmentBy": "Assigned By",
       "assignmentAt": "Assigned At",
+      "confirmStartProgress": "Are you sure you want to mark this assignment as in progress?",
+      "confirmComplete": "Are you sure you want to mark this assignment as completed?",
+      "notMentioned": "Not Mentioned",
+      "payments": "Payments",
+      "noPaymentRecords": "No payment records found.",
+      "timelineEvents": "Timeline Events",
+      "schedule": "Schedule",
+      "byLabel": "By:",
+      "tabs": {
+        "detailsShort": "Details",
+        "companyShort": "Company",
+        "documentsShort": "Docs"
+      },
+      "dialog": {
+        "updateTitle": "Update Assignment",
+        "statusLabel": "Status",
+        "statusPlaceholder": "Select Status",
+        "commentsLabel": "Comments",
+        "uploadReportFile": "Upload Report File"
+      },
       "updated": "Assignment updated successfully",
       "deleted": "Assignment deleted successfully",
       "deleteConfirm": "Are you sure you want to delete this assignment?",
@@ -1034,13 +1275,49 @@
       "role": "Role",
       "updated": "Member updated successfully",
       "deleted": "Member deleted successfully",
-      "responsibility": "Responsibilities"
+      "responsibility": "Responsibilities",
+      "createDescription": "Fill in the details to add a new member to the committee",
+      "userRequired": "User is required",
+      "selectUser": "Select a user",
+      "selectRole": "Select a role",
+      "selectCommittee": "Select a committee",
+      "responsibilityPlaceholder": "Describe the member's responsibilities and duties...",
+      "responsibilityHint": "Enter main duties and responsibilities of this committee member",
+      "activeHint": "Inactive members won't appear in active committee lists and reports",
+      "committeeRequired": "Committee is required",
+      "save": "Save Member",
+      "exportFileName": "committeeMembers",
+      "exportSheetName": "committeeMembers",
+      "roles": {
+        "CHAIRPERSON": "Chairperson",
+        "VICE_CHAIRPERSON": "Vice Chairperson",
+        "SECRETARY": "Secretary",
+        "TREASURER": "Treasurer",
+        "MEMBER": "Member",
+        "OBSERVER": "Observer"
+      },
+      "committee": "Committee",
+      "joinedAt": "Joined At",
+      "deleteConfirm": "Are you sure you want to remove this member?",
+      "viewTitle": "Committee Member View"
     }
   },
   "common": {
+    "id":"ID",
+    "current_page": "Current Page",
+    "all": "All",
+    "export": "Export",
+    "exporting": "Exporting...",
+    "choosefile": "Select file",
+    "clearfileselected": "Clear Selected File",
+    "maxfilesize": "Max file size: {{size}}",
+    "required": "This field is required",
+    "...More": "...More",
     "timeline": "Timeline",
     "continue": "Continue",
     "copy": "Copy",
+    "asqa": "ASQA",
+    "asqaDescription": "Afghanistan Quality Standards Authority",
     "save": "Save",
     "cancel": "Cancel",
     "delete": "Delete",
@@ -1081,7 +1358,8 @@
     "status": "Status",
     "createdDate": "Created Date",
     "selectScope": "Please first select a scope",
-    "selectRequest": "Please first select a request"
+    "selectRequest": "Please first select a request",
+    "pleaseWait": "Please wait"
   },
   "home": {
     "badge": "Afghanistan Quality Standards Authority",
@@ -1246,760 +1524,762 @@
     }
   },
   "dashboard": {
-  "title": "Dashboard",
-  "subtitle": "Overview of your certification system",
-  "cards": {
-    "totalUsers": "Total Users",
-    "activeUsers": "Active Users",
-    "inProgressRequests": "In Progress Requests",
-    "totalCompanies": "Total Companies",
-    "certificationRequests": "Certification Requests",
-    "certifications": "Certifications",
-    "totalCommittee": "Total Committee",
-    "completedRequests": "Completed Requests"
-  },
-  "charts": {
-    "userGrowth": "User Growth",
-    "requestStatusOverview": "Request Status Overview",
-    "userDistribution": "User Distribution",
-    "companyDistribution": "Company Distribution",
-    "last6Months": "Last 6 months",
-    "users": "Users",
-    "numberOfRequests": "Number of Requests"
-  },
-  "status": {
-    "active": "Active",
-    "inactive": "Inactive",
-    "inProgress": "In Progress",
-    "completed": "Completed",
-    "submitted": "Submitted",
-    "rejected": "Rejected"
-  },
-  "buttons": {
-    "tryAgain": "Try Again"
-  },
-  "errors": {
-    "fetchFailed": "Failed to fetch dashboard data",
-    "loadFailed": "Failed to Load Data",
-    "unableToFetch": "Unable to fetch dashboard data"
-  }
-  },
-  "user": {
-  "title": "User Management",
-  "total": "Total",
-  "labels": {
-    "noRole": "No Role",
-    "notAssigned": "Not Assigned",
-    "notProvided": "Not Provided",
-    "profileImage": "Profile Image",
-    "loadingUserDetails": "Loading user details...",
-    "profileImageAlt": "User profile image"
-  },
-  "fields": {
-    "firstName": "First Name",
-    "lastName": "Last Name",
-    "email": "Email",
-    "phoneNumber": "Phone Number",
-    "role": "Role",
-    "zone": "Zone",
-    "currentProfileImage": "Current Profile Image",
-    "updateProfileImage": "Update Profile Image",
-    "username": "Username",
-    "createdDate": "Created Date",
-    "updatedDate": "Updated Date",
-    "status": "Status"
-  },
-  "placeholders": {
-    "phoneNumber": "0701234567",
-    "selectRole": "Select a role",
-    "selectZone": "Select a zone",
-    "email": "example@email.com",
-    "firstName": "Enter first name",
-    "lastName": "Enter last name"
-  },
-  "buttons": {
-    "create": "Create User",
-    "refresh": "Refresh",
-    "delete": "Delete",
-    "cancel": "Cancel",
-    "update": "Update",
-    "save": "Save",
-    "tryAgain": "Try Again",
-    "back": "Back"
-  },
-  "actions": {
-    "edit": "Edit User",
-    "delete": "Delete User",
-    "viewDetails": "View Details"
-  },
-  "messages": {
-    "loadFailed": "Failed to load users",
-    "deleteSuccess": "User deleted successfully",
-    "deleteFailed": "Failed to delete user",
-    "updateSuccess": "User updated successfully",
-    "updateFailed": "Failed to update user",
-    "createSuccess": "User created successfully",
-    "createFailed": "Failed to create user",
-    "notFound": "User not found",
-    "zoneLoadFailed": "Failed to load zones",
-    "userNotFound": "User not found",
-    "loadingError": "Error loading user data"
-  },
-  "dialogs": {
-    "deleteTitle": "Delete User",
-    "deleteConfirm": "Are you sure you want to delete"
-  },
-  "details": {
-    "userDetails": "User Details",
-    "viewUser": "View User",
-    "firstName": "First Name",
-    "lastName": "Last Name",
-    "email": "Email",
-    "phoneNumber": "Phone Number",
-    "roles": "Roles",
-    "username": "Username",
-    "zone": "Zone",
-    "createdDate": "Created Date",
-    "updatedDate": "Updated Date",
-    "status": "Status",
-    "profileImage": "Profile Image"
-  },
-  "status": {
-    "active": "Active",
-    "inactive": "Inactive",
-    "enabled": "Enabled",
-    "disabled": "Disabled"
-  },
-  "breadcrumb": {
-    "editUser": "Edit User",
-    "createUser": "Create User",
-    "viewUser": "View User",
-    "users": "Users"
-  },
-  "validation": {
-    "firstNameRequired": "First name is required",
-    "lastNameRequired": "Last name is required",
-    "emailRequired": "Email is required",
-    "emailInvalid": "Invalid email address",
-    "phoneRequired": "Phone number is required",
-    "phoneInvalid": "Phone must start with 07 and contain 10 digits",
-    "roleRequired": "Role is required",
-    "zoneRequired": "Zone is required"
-  },
-  "roles": {
-    "ADMIN": "Admin",
-    "MANAGER": "Manager",
-    "USER": "User",
-    "GUEST": "Guest",
-    "COMPANY_ADMIN": "Company Admin",
-    "MONITORING": "Monitoring",
-    "SUPER_ADMIN": "Super Admin",
-    "COMMITTEE_MEMBER": "Committee Member",
-    "INSPECTOR": "Inspector"
-  },
-  "columns": {
-    "id": "ID",
-    "name": "Name",
-    "email": "Email",
-    "phoneNumber": "Phone Number",
-    "roles": "Roles",
-    "zone": "Zone",
-    "createdDate": "Created Date",
-    "actions": "Actions"
-  },
-  "table": {
-    "noData": "No data found",
-    "loading": "Loading...",
-    "totalRecords": "Total records"
-  },
-  "form": {
-    "title": {
-      "edit": "Edit User",
-      "create": "Create New User",
-      "view": "View User"
+    "title": "Dashboard",
+    "subtitle": "Overview of your certification system",
+    "cards": {
+      "totalUsers": "Total Users",
+      "activeUsers": "Active Users",
+      "inProgressRequests": "In Progress Requests",
+      "totalCompanies": "Total Companies",
+      "certificationRequests": "Certification Requests",
+      "certifications": "Certifications",
+      "totalCommittee": "Total Committee",
+      "completedRequests": "Completed Requests"
     },
-    "subtitle": {
-      "edit": "Edit user information",
-      "create": "Enter new user information",
-      "view": "View user information"
+    "charts": {
+      "userGrowth": "User Growth",
+      "requestStatusOverview": "Request Status Overview",
+      "userDistribution": "User Distribution",
+      "companyDistribution": "Company Distribution",
+      "last6Months": "Last 6 months",
+      "users": "Users",
+      "numberOfRequests": "Number of Requests"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "inProgress": "In Progress",
+      "completed": "Completed",
+      "submitted": "Submitted",
+      "rejected": "Rejected"
+    },
+    "buttons": {
+      "tryAgain": "Try Again"
+    },
+    "errors": {
+      "fetchFailed": "Failed to fetch dashboard data",
+      "loadFailed": "Failed to Load Data",
+      "unableToFetch": "Unable to fetch dashboard data"
     }
   },
-  "errors": {
-    "fetchFailed": "Failed to fetch user data",
-    "updateFailed": "Failed to update user",
-    "createFailed": "Failed to create user",
-    "deleteFailed": "Failed to delete user",
-    "invalidData": "Invalid data",
-    "networkError": "Network error"
-  },
-  "success": {
-    "fetched": "User data fetched successfully",
-    "updated": "User updated successfully",
-    "created": "User created successfully",
-    "deleted": "User deleted successfully"
-  }
-},
-"role": {
-  "title": "Role Management",
-  "total": "Total",
-  "labels": {
-    "actions": "Actions",
-    "noPermissions": "No Permissions",
-    "permissions": "permissions",
-    "of": "of",
-    "selected": "selected",
-    "showing": "Showing",
+  "user": {
+    "title": "User Management",
     "total": "Total",
-    "categories": "Categories",
-    "permission": "permission",
-    "s": "s"
+    "labels": {
+      "noRole": "No Role",
+      "notAssigned": "Not Assigned",
+      "notProvided": "Not Provided",
+      "profileImage": "Profile Image",
+      "loadingUserDetails": "Loading user details...",
+      "profileImageAlt": "User profile image"
+    },
+    "fields": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "phoneNumber": "Phone Number",
+      "role": "Role",
+      "zone": "Zone",
+      "currentProfileImage": "Current Profile Image",
+      "updateProfileImage": "Update Profile Image",
+      "username": "Username",
+      "createdDate": "Created Date",
+      "updatedDate": "Updated Date",
+      "status": "Status",
+      "password": "Password",
+      "confirmPassword": "Confirm Password"
+    },
+    "placeholders": {
+      "phoneNumber": "0701234567",
+      "selectRole": "Select a role",
+      "selectZone": "Select a zone",
+      "email": "example@email.com",
+      "firstName": "Enter first name",
+      "lastName": "Enter last name",
+      "password": "Enter password",
+      "confirmPassword": "Confirm password",
+      "imageHint": "Upload a profile image (Max 1MB, JPG, PNG)"
+    },
+    "buttons": {
+      "create": "Create User",
+      "refresh": "Refresh",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "update": "Update",
+      "save": "Save",
+      "tryAgain": "Try Again",
+      "back": "Back"
+    },
+    "actions": {
+      "edit": "Edit User",
+      "delete": "Delete User",
+      "viewDetails": "View Details"
+    },
+    "messages": {
+      "loadFailed": "Failed to load users",
+      "deleteSuccess": "User deleted successfully",
+      "deleteFailed": "Failed to delete user",
+      "updateSuccess": "User updated successfully",
+      "updateFailed": "Failed to update user",
+      "createSuccess": "User created successfully",
+      "createFailed": "Failed to create user",
+      "notFound": "User not found",
+      "zoneLoadFailed": "Failed to load zones",
+      "userNotFound": "User not found",
+      "loadingError": "Error loading user data",
+      "roleLoadFailed": "Failed to load roles"
+    },
+    "dialogs": {
+      "deleteTitle": "Delete User",
+      "deleteConfirm": "Are you sure you want to delete"
+    },
+    "details": {
+      "userDetails": "User Details",
+      "viewUser": "View User",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "phoneNumber": "Phone Number",
+      "roles": "Roles",
+      "username": "Username",
+      "zone": "Zone",
+      "createdDate": "Created Date",
+      "updatedDate": "Updated Date",
+      "status": "Status",
+      "profileImage": "Profile Image"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "enabled": "Enabled",
+      "disabled": "Disabled"
+    },
+    "breadcrumb": {
+      "editUser": "Edit User",
+      "createUser": "Create User",
+      "viewUser": "View User",
+      "users": "Users"
+    },
+    "validation": {
+      "firstNameRequired": "First name is required",
+      "lastNameRequired": "Last name is required",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Invalid email address",
+      "phoneRequired": "Phone number is required",
+      "phoneInvalid": "Phone must start with 07 and contain 10 digits",
+      "roleRequired": "Role is required",
+      "zoneRequired": "Zone is required",
+      "passwordRequired": "Password is required",
+      "passwordMinLength": "Minimum 6 characters",
+      "confirmPasswordRequired": "Please confirm password",
+      "passwordsNotMatch": "Passwords do not match",
+      "passwordsDoNotMatch": "Passwords do not match",
+      "passwordsMatch": "Passwords match",
+      "roleLoadFailed": "Failed to load roles"
+    },
+    "passwordStrength": {
+      "weak": "Weak",
+      "fair": "Fair",
+      "good": "Good",
+      "strong": "Strong"
+    },
+    "roles": {
+      "ADMIN": "Admin",
+      "MANAGER": "Manager",
+      "USER": "User",
+      "GUEST": "Guest",
+      "COMPANY_ADMIN": "Company Admin",
+      "MONITORING": "Monitoring",
+      "SUPER_ADMIN": "Super Admin",
+      "COMMITTEE_MEMBER": "Committee Member",
+      "INSPECTOR": "Inspector"
+    },
+    "columns": {
+      "id": "ID",
+      "name": "Name",
+      "email": "Email",
+      "phoneNumber": "Phone Number",
+      "roles": "Roles",
+      "zone": "Zone",
+      "createdDate": "Created Date",
+      "actions": "Actions"
+    },
+    "table": {
+      "noData": "No data found",
+      "loading": "Loading...",
+      "totalRecords": "Total records"
+    },
+    "form": {
+      "title": {
+        "edit": "Edit User",
+        "create": "Create New User",
+        "view": "View User"
+      },
+      "subtitle": {
+        "edit": "Edit user information",
+        "create": "Enter new user information",
+        "view": "View user information"
+      }
+    },
+    "errors": {
+      "fetchFailed": "Failed to fetch user data",
+      "updateFailed": "Failed to update user",
+      "createFailed": "Failed to create user",
+      "deleteFailed": "Failed to delete user",
+      "invalidData": "Invalid data",
+      "networkError": "Network error"
+    },
+    "success": {
+      "fetched": "User data fetched successfully",
+      "updated": "User updated successfully",
+      "created": "User created successfully",
+      "deleted": "User deleted successfully"
+    }
   },
-  "fields": {
-    "roleName": "Role Name",
-    "assignPermissions": "Assign Permissions",
-    "description": "Description",
-    "roleId": "Role ID",
-    "created": "Created",
-    "lastUpdated": "Last Updated",
-    "createdBy": "Created By",
-    "assignedPermissions": "Assigned Permissions"
-  },
-  "placeholders": {
-    "roleName": "Enter role name (Admin, Manager, Editor, ...)",
-    "searchPermissions": "Search permissions..."
-  },
-  "columns": {
-    "id": "ID",
-    "roleName": "Role Name",
-    "permissions": "Permissions",
-    "actions": "Actions"
-  },
-  "buttons": {
-    "create": "Create Role",
-    "refresh": "Refresh",
-    "delete": "Delete",
-    "cancel": "Cancel",
-    "edit": "Edit",
-    "showLess": "Show less",
-    "more": "more",
-    "all": "All",
-    "none": "None",
-    "save": "Save",
-    "backToRoles": "Back to Roles",
-    "addPermissions": "Add Permissions"
-  },
-  "actions": {
-    "edit": "Edit Role",
-    "viewDetails": "View Details",
-    "delete": "Delete Role"
-  },
-  "status": {
-    "active": "Active",
-    "inactive": "Inactive"
-  },
-  "tabs": {
-    "gridView": "Grid View",
-    "groupedView": "Grouped View",
-    "listView": "List View"
-  },
-  "tooltips": {
-    "permissionsInfo": "All permissions assigned to this role"
-  },
-  "breadcrumb": {
-    "dashboard": "Dashboard",
-    "roles": "Roles",
-    "roleDetails": "Role Details"
-  },
-  "messages": {
-    "loadFailed": "Failed to load roles",
-    "deleteSuccess": "Role deleted successfully",
-    "deleteFailed": "Failed to delete role",
-    "createSuccess": "Role created successfully",
-    "createFailed": "Failed to create role",
-    "updateSuccess": "Role updated successfully",
-    "updateFailed": "Failed to update role",
-    "loadDetailsFailed": "Failed to load role details",
-    "permissionsLoadFailed": "Failed to load permissions",
-    "noPermissionsFound": "No permissions found",
-    "adjustSearch": "Try adjusting your search",
-    "updatingRole": "Updating role...",
-    "creatingRole": "Creating role...",
-    "pleaseWait": "Please wait",
-    "roleNotFound": "Role Not Found",
-    "roleNotFoundDesc": "The role you're looking for doesn't exist or has been removed.",
-    "noPermissionsAssigned": "No Permissions Assigned",
-    "noPermissionsDesc": "This role doesn't have any permissions yet"
-  },
-  "dialogs": {
-    "deleteTitle": "Delete Role",
-    "deleteConfirm": "Are you sure you want to delete",
-    "deleteWarning": "This action cannot be undone. All permissions associated with this role will be affected.",
-    "editTitle": "Edit Role",
-    "editSubtitle": "Modify role details and permissions",
-    "createTitle": "Create New Role",
-    "createSubtitle": "Define a new role and assign permissions"
-  },
-  "validation": {
-    "roleNameRequired": "Role name is required",
-    "roleNameMinLength": "Role name must be at least 3 characters"
-  }
-},
-"role": {
-  "title": "مدیریت نقش‌ها",
-  "total": "مجموع",
-  "labels": {
-    "actions": "عملیات",
-    "noPermissions": "بدون مجوز",
-    "permissions": "مجوزها",
-    "of": "از",
-    "selected": "انتخاب شده",
-    "showing": "نمایش",
-    "total": "مجموع",
-    "categories": "دسته‌بندی‌ها",
-    "permission": "مجوز",
-    "s": "ها"
-  },
-  "fields": {
-    "roleName": "نام نقش",
-    "assignPermissions": "اختصاص مجوزها",
-    "description": "توضیحات",
-    "roleId": "شناسه نقش",
-    "created": "ایجاد شده",
-    "lastUpdated": "آخرین به‌روزرسانی",
-    "createdBy": "ایجاد شده توسط",
-    "assignedPermissions": "مجوزهای اختصاص یافته"
-  },
-  "placeholders": {
-    "roleName": "نام نقش را وارد کنید (مدیر، مدیر اجرایی، ویرایشگر، ...)",
-    "searchPermissions": "جستجوی مجوزها..."
-  },
-  "columns": {
-    "id": "شناسه",
-    "roleName": "نام نقش",
-    "permissions": "مجوزها",
-    "actions": "عملیات"
-  },
-  "buttons": {
-    "create": "ایجاد نقش",
-    "refresh": "تازه سازی",
-    "delete": "حذف",
-    "cancel": "لغو",
-    "edit": "ویرایش",
-    "showLess": "نمایش کمتر",
-    "more": "بیشتر",
-    "all": "همه",
-    "none": "هیچ",
-    "save": "ذخیره",
-    "backToRoles": "بازگشت به نقش‌ها",
-    "addPermissions": "افزودن مجوزها"
-  },
-  "actions": {
-    "edit": "ویرایش نقش",
-    "viewDetails": "مشاهده جزئیات",
-    "delete": "حذف نقش"
-  },
-  "status": {
-    "active": "فعال",
-    "inactive": "غیرفعال"
-  },
-  "tabs": {
-    "gridView": "نمایش شبکه‌ای",
-    "groupedView": "نمایش گروهی",
-    "listView": "نمایش لیستی"
-  },
-  "tooltips": {
-    "permissionsInfo": "تمام مجوزهای اختصاص داده شده به این نقش"
-  },
-  "breadcrumb": {
-    "dashboard": "داشبورد",
-    "roles": "نقش‌ها",
-    "roleDetails": "جزئیات نقش"
-  },
-  "messages": {
-    "loadFailed": "بارگذاری نقش‌ها ناموفق بود",
-    "deleteSuccess": "نقش با موفقیت حذف شد",
-    "deleteFailed": "حذف نقش ناموفق بود",
-    "createSuccess": "نقش با موفقیت ایجاد شد",
-    "createFailed": "ایجاد نقش ناموفق بود",
-    "updateSuccess": "نقش با موفقیت به‌روزرسانی شد",
-    "updateFailed": "به‌روزرسانی نقش ناموفق بود",
-    "loadDetailsFailed": "بارگذاری جزئیات نقش ناموفق بود",
-    "permissionsLoadFailed": "بارگذاری مجوزها ناموفق بود",
-    "noPermissionsFound": "هیچ مجوزی یافت نشد",
-    "adjustSearch": "سعی کنید جستجوی خود را تنظیم کنید",
-    "updatingRole": "در حال به‌روزرسانی نقش...",
-    "creatingRole": "در حال ایجاد نقش...",
-    "pleaseWait": "لطفاً منتظر بمانید",
-    "roleNotFound": "نقش یافت نشد",
-    "roleNotFoundDesc": "نقشی که به دنبال آن هستید وجود ندارد یا حذف شده است.",
-    "noPermissionsAssigned": "هیچ مجوزی اختصاص داده نشده است",
-    "noPermissionsDesc": "این نقش هنوز هیچ مجوزی ندارد"
-  },
-  "dialogs": {
-    "deleteTitle": "حذف نقش",
-    "deleteConfirm": "آیا مطمئن هستید که می‌خواهید حذف کنید",
-    "deleteWarning": "این عمل قابل بازگشت نیست. تمام مجوزهای مرتبط با این نقش تحت تأثیر قرار خواهند گرفت.",
-    "editTitle": "ویرایش نقش",
-    "editSubtitle": "اصلاح جزئیات نقش و مجوزها",
-    "createTitle": "ایجاد نقش جدید",
-    "createSubtitle": "نقش جدید تعریف کنید و مجوزها را اختصاص دهید"
-  },
-  "validation": {
-    "roleNameRequired": "نام نقش الزامی است",
-    "roleNameMinLength": "نام نقش باید حداقل ۳ کاراکتر باشد"
-  }
-},
-"role": {
-  "title": "Role Management",
-  "total": "Total",
-  "labels": {
-    "actions": "Actions",
-    "noPermissions": "No Permissions",
-    "permissions": "permissions",
-    "of": "of",
-    "selected": "selected",
-    "showing": "Showing",
+  "role": {
+    "title": "Role Management",
     "total": "Total",
-    "categories": "Categories",
-    "permission": "permission",
-    "s": "s"
+    "labels": {
+      "actions": "Actions",
+      "noPermissions": "No Permissions",
+      "permissions": "Permissions",
+      "of": "of",
+      "selected": "selected",
+      "showing": "Showing",
+      "total": "Total",
+      "categories": "Categories",
+      "permission": "Permission",
+      "s": ""
+    },
+    "ROLE_ADMIN": "Administrator",
+    "ROLE_USER": "User",
+    "ROLE_COMMITTEE": "Committee Member",
+    "ROLE_INSPECTOR": "Inspector",
+    "DOCUMENT_CONTROLLER": "Document Controller",
+    "DATABASE_EXPERT": "Database Expert",
+    "COMPANY_ADMIN": "Company Admin",
+    "CUSTOMER_CARE_MANAGER": "Customer Care Manager",
+    "COMITEEMEMBER": "Committee Member",
+    "fields": {
+      "roleName": "Role Name",
+      "assignPermissions": "Assign Permissions",
+      "description": "Description",
+      "roleId": "Role ID",
+      "created": "Created",
+      "lastUpdated": "Last Updated",
+      "createdBy": "Created By",
+      "assignedPermissions": "Assigned Permissions"
+    },
+    "placeholders": {
+      "roleName": "Enter role name (Admin, Manager, Editor, ...)",
+      "searchPermissions": "Search permissions..."
+    },
+    "columns": {
+      "id": "ID",
+      "roleName": "Role Name",
+      "permissions": "Permissions",
+      "actions": "Actions"
+    },
+    "buttons": {
+      "create": "Create Role",
+      "refresh": "Refresh",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "showLess": "Show Less",
+      "more": "More",
+      "all": "All",
+      "none": "None",
+      "save": "Save",
+      "backToRoles": "Back to Roles",
+      "addPermissions": "Add Permissions"
+    },
+    "actions": {
+      "edit": "Edit Role",
+      "viewDetails": "View Details",
+      "delete": "Delete Role"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "tabs": {
+      "gridView": "Grid View",
+      "groupedView": "Grouped View",
+      "listView": "List View"
+    },
+    "tooltips": {
+      "permissionsInfo": "All permissions assigned to this role"
+    },
+    "breadcrumb": {
+      "dashboard": "Dashboard",
+      "roles": "Roles",
+      "roleDetails": "Role Details"
+    },
+    "messages": {
+      "loadFailed": "Failed to load roles",
+      "deleteSuccess": "Role successfully deleted",
+      "deleteFailed": "Failed to delete role",
+      "createSuccess": "Role successfully created",
+      "createFailed": "Failed to create role",
+      "updateSuccess": "Role successfully updated",
+      "updateFailed": "Failed to update role",
+      "loadDetailsFailed": "Failed to load role details",
+      "permissionsLoadFailed": "Failed to load permissions",
+      "noPermissionsFound": "No permissions found",
+      "adjustSearch": "Try adjusting your search",
+      "updatingRole": "Updating role...",
+      "creatingRole": "Creating role...",
+      "pleaseWait": "Please wait",
+      "roleNotFound": "Role not found",
+      "roleNotFoundDesc": "The role you are looking for does not exist or has been deleted.",
+      "noPermissionsAssigned": "No permissions assigned",
+      "noPermissionsDesc": "This role does not have any permissions yet"
+    },
+    "dialogs": {
+      "deleteTitle": "Delete Role",
+      "deleteConfirm": "Are you sure you want to delete",
+      "deleteWarning": "This action cannot be undone. All permissions associated with this role will be affected.",
+      "editTitle": "Edit Role",
+      "editSubtitle": "Modify role details and permissions",
+      "createTitle": "Create New Role",
+      "createSubtitle": "Define a new role and assign permissions"
+    },
+    "validation": {
+      "roleNameRequired": "Role name is required",
+      "roleNameMinLength": "Role name must be at least 3 characters"
+    }
   },
-  "fields": {
-    "roleName": "Role Name",
-    "assignPermissions": "Assign Permissions",
-    "description": "Description",
-    "roleId": "Role ID",
-    "created": "Created",
-    "lastUpdated": "Last Updated",
-    "createdBy": "Created By",
-    "assignedPermissions": "Assigned Permissions"
+  "permissions": {
+    "ADD_USER": "Add User",
+    "UPDATE_USER": "Update User",
+    "DELETE_USER": "Delete User",
+    "VIEW_USER": "View User",
+    "ADD_ROLE": "Add Role",
+    "UPDATE_ROLE": "Update Role",
+    "DELETE_ROLE": "Delete Role",
+    "VIEW_ROLE": "View Role",
+    "ADD_PERMISSION": "Add Permission",
+    "UPDATE_PERMISSION": "Update Permission",
+    "DELETE_PERMISSION": "Delete Permission",
+    "VIEW_PERMISSION": "View Permission",
+    "ADD_COMPANY": "Add Company",
+    "UPDATE_COMPANY": "Update Company",
+    "DELETE_COMPANY": "Delete Company",
+    "VIEW_COMPANY": "View Company",
+    "ADD_COMPANYCONTACTPERSON": "Add Company Contact Person",
+    "UPDATE_COMPANYCONTACTPERSON": "Update Company Contact Person",
+    "DELETE_COMPANYCONTACTPERSON": "Delete Company Contact Person",
+    "VIEW_COMPANYCONTACTPERSON": "View Company Contact Person",
+    "ADD_CERTIFICATION": "Add Certification",
+    "UPDATE_CERTIFICATION": "Update Certification",
+    "DELETE_CERTIFICATION": "Delete Certification",
+    "VIEW_CERTIFICATION": "View Certification",
+    "ADD_CERTIFICATIONREQUEST": "Add Certification Request",
+    "UPDATE_CERTIFICATIONREQUEST": "Update Certification Request",
+    "DELETE_CERTIFICATIONREQUEST": "Delete Certification Request",
+    "VIEW_CERTIFICATIONREQUEST": "View Certification Request",
+    "ADD_PAYMENT": "Add Payment",
+    "UPDATE_PAYMENT": "Update Payment",
+    "DELETE_PAYMENT": "Delete Payment",
+    "VIEW_PAYMENT": "View Payment",
+    "ADD_ATTACHMENT": "Add Attachment",
+    "UPDATE_ATTACHMENT": "Update Attachment",
+    "DELETE_ATTACHMENT": "Delete Attachment",
+    "VIEW_ATTACHMENT": "View Attachment",
+    "ADD_CATEGORY": "Add Category",
+    "UPDATE_CATEGORY": "Update Category",
+    "DELETE_CATEGORY": "Delete Category",
+    "VIEW_CATEGORY": "View Category",
+    "ADD_ADDRESS": "Add Address",
+    "UPDATE_ADDRESS": "Update Address",
+    "DELETE_ADDRESS": "Delete Address",
+    "VIEW_ADDRESS": "View Address",
+    "ADD_COUNTRY": "Add Country",
+    "UPDATE_COUNTRY": "Update Country",
+    "DELETE_COUNTRY": "Delete Country",
+    "VIEW_COUNTRY": "View Country",
+    "ADD_COUNTRYTRANSLATION": "Add Country Translation",
+    "UPDATE_COUNTRYTRANSLATION": "Update Country Translation",
+    "DELETE_COUNTRYTRANSLATION": "Delete Country Translation",
+    "VIEW_COUNTRYTRANSLATION": "View Country Translation",
+    "ADD_PROVINCE": "Add Province",
+    "UPDATE_PROVINCE": "Update Province",
+    "DELETE_PROVINCE": "Delete Province",
+    "VIEW_PROVINCE": "View Province",
+    "ADD_PROVINCETRANSLATION": "Add Province Translation",
+    "UPDATE_PROVINCETRANSLATION": "Update Province Translation",
+    "DELETE_PROVINCETRANSLATION": "Delete Province Translation",
+    "VIEW_PROVINCETRANSLATION": "View Province Translation",
+    "ADD_DISTRICT": "Add District",
+    "UPDATE_DISTRICT": "Update District",
+    "DELETE_DISTRICT": "Delete District",
+    "VIEW_DISTRICT": "View District",
+    "ADD_DISTRICTTRANSLATION": "Add District Translation",
+    "UPDATE_DISTRICTTRANSLATION": "Update District Translation",
+    "DELETE_DISTRICTTRANSLATION": "Delete District Translation",
+    "VIEW_DISTRICTTRANSLATION": "View District Translation",
+    "ADD_LANGUAGE": "Add Language",
+    "UPDATE_LANGUAGE": "Update Language",
+    "DELETE_LANGUAGE": "Delete Language",
+    "VIEW_LANGUAGE": "View Language",
+    "ADD_MULTILANGUAGE": "Add Multi Language",
+    "UPDATE_MULTILANGUAGE": "Update Multi Language",
+    "DELETE_MULTILANGUAGE": "Delete Multi Language",
+    "VIEW_MULTILANGUAGE": "View Multi Language",
+    "ADD_MENU": "Add Menu",
+    "UPDATE_MENU": "Update Menu",
+    "DELETE_MENU": "Delete Menu",
+    "VIEW_MENU": "View Menu",
+    "ADD_EMAILVERIFICATION": "Add Email Verification",
+    "UPDATE_EMAILVERIFICATION": "Update Email Verification",
+    "DELETE_EMAILVERIFICATION": "Delete Email Verification",
+    "VIEW_EMAILVERIFICATION": "View Email Verification",
+    "ADD_FORGOTPASSWORD": "Add Forgot Password",
+    "UPDATE_FORGOTPASSWORD": "Update Forgot Password",
+    "DELETE_FORGOTPASSWORD": "Delete Forgot Password",
+    "VIEW_FORGOTPASSWORD": "View Forgot Password",
+    "ADD_ZONE": "Add Zone",
+    "UPDATE_ZONE": "Update Zone",
+    "DELETE_ZONE": "Delete Zone",
+    "VIEW_ZONE": "View Zone",
+    "ADD_COMMITEE": "Add Committee",
+    "UPDATE_COMMITEE": "Update Committee",
+    "DELETE_COMMITEE": "Delete Committee",
+    "VIEW_COMMITEE": "View Committee",
+    "ADD_COMMITEEASSIGNMENT": "Add Committee Assignment",
+    "UPDATE_COMMITEEASSIGNMENT": "Update Committee Assignment",
+    "DELETE_COMMITEEASSIGNMENT": "Delete Committee Assignment",
+    "VIEW_COMMITEEASSIGNMENT": "View Committee Assignment",
+    "ADD_COMMITEEASSIGNMENTCOMMENT": "Add Committee Assignment Comment",
+    "UPDATE_COMMITEEASSIGNMENTCOMMENT": "Update Committee Assignment Comment",
+    "DELETE_COMMITEEASSIGNMENTCOMMENT": "Delete Committee Assignment Comment",
+    "VIEW_COMMITEEASSIGNMENTCOMMENT": "View Committee Assignment Comment",
+    "ADD_COMMITEEMEMBER": "Add Committee Member",
+    "UPDATE_COMMITEEMEMBER": "Update Committee Member",
+    "DELETE_COMMITEEMEMBER": "Delete Committee Member",
+    "VIEW_COMMITEEMEMBER": "View Committee Member",
+    "ADD_COMMITEEREPORT": "Add Committee Report",
+    "UPDATE_COMMITEEREPORT": "Update Committee Report",
+    "DELETE_COMMITEEREPORT": "Delete Committee Report",
+    "VIEW_COMMITEEREPORT": "View Committee Report",
+    "ADD_WORKFLOW": "Add Workflow",
+    "UPDATE_WORKFLOW": "Update Workflow",
+    "DELETE_WORKFLOW": "Delete Workflow",
+    "VIEW_WORKFLOW": "View Workflow",
+    "ADD_WORKFLOWSTEP": "Add Workflow Step",
+    "UPDATE_WORKFLOWSTEP": "Update Workflow Step",
+    "DELETE_WORKFLOWSTEP": "Delete Workflow Step",
+    "VIEW_WORKFLOWSTEP": "View Workflow Step",
+    "ADD_REQUESTWORKFLOW": "Add Request Workflow",
+    "UPDATE_REQUESTWORKFLOW": "Update Request Workflow",
+    "DELETE_REQUESTWORKFLOW": "Delete Request Workflow",
+    "VIEW_REQUESTWORKFLOW": "View Request Workflow",
+    "ADD_CERTIFICATIONREQUESTSTATUSHISTORY": "Add Certification Request Status History",
+    "UPDATE_CERTIFICATIONREQUESTSTATUSHISTORY": "Update Certification Request Status History",
+    "DELETE_CERTIFICATIONREQUESTSTATUSHISTORY": "Delete Certification Request Status History",
+    "VIEW_CERTIFICATIONREQUESTSTATUSHISTORY": "View Certification Request Status History",
+    "ADD_INSPECTION_REPORT": "Add Inspection Report",
+    "UPDATE_INSPECTION_REPORT": "Update Inspection Report",
+    "DELETE_INSPECTION_REPORT": "Delete Inspection Report",
+    "VIEW_INSPECTION_REPORT": "View Inspection Report",
+    "ADD_COMMENT": "Add Comment",
+    "UPDATE_COMMENT": "Update Comment",
+    "DELETE_COMMENT": "Delete Comment",
+    "VIEW_COMMENT": "View Comment",
+    "VIEW_DASHBOARD": "View Dashboard",
+    "VIEW_REPORT": "View Report",
+    "VIEW_LOCATION": "View Location",
+    "VIEW_STANDARD": "View Standard"
   },
-  "placeholders": {
-    "roleName": "Enter role name (Admin, Manager, Editor, ...)",
-    "searchPermissions": "Search permissions..."
+  "permission": {
+    "title": "Permission Management",
+    "total": "Total",
+    "labels": {
+      "permissions": "permissions",
+      "of": "of",
+      "selected": "selected",
+      "showing": "Showing"
+    },
+    "fields": {
+      "permissionName": "Permission Name",
+      "assignPermissions": "Assign Permissions",
+      "description": "Description"
+    },
+    "placeholders": {
+      "permissionName": "Enter permission name (e.g., ADD_USER, VIEW_ROLE)",
+      "permissionNameHint": "Use uppercase letters and underscores only (e.g., ADD_USER)",
+      "searchPermissions": "Search permissions...",
+      "description": "Enter permission description"
+    },
+    "columns": {
+      "id": "ID",
+      "permissionName": "Permission Name",
+      "actions": "Actions"
+    },
+    "buttons": {
+      "create": "Create Permission",
+      "refresh": "Refresh",
+      "cancel": "Cancel",
+      "save": "Save",
+      "all": "All",
+      "none": "None"
+    },
+    "actions": {
+      "viewDetails": "View Details",
+      "edit": "Edit Permission",
+      "delete": "Delete Permission"
+    },
+    "messages": {
+      "loadFailed": "Failed to load permissions",
+      "createSuccess": "Permission created successfully",
+      "createFailed": "Failed to create permission",
+      "updateSuccess": "Permission updated successfully",
+      "updateFailed": "Failed to update permission",
+      "deleteSuccess": "Permission deleted successfully",
+      "deleteFailed": "Failed to delete permission",
+      "noPermissionsFound": "No permissions found",
+      "adjustSearch": "Try adjusting your search",
+      "creatingPermission": "Creating permission...",
+      "updatingPermission": "Updating permission...",
+      "pleaseWait": "Please wait"
+    },
+    "dialogs": {
+      "createTitle": "Create New Permission",
+      "createSubtitle": "Define a new permission for the system",
+      "editTitle": "Edit Permission",
+      "editSubtitle": "Modify permission details",
+      "deleteTitle": "Delete Permission",
+      "deleteConfirm": "Are you sure you want to delete",
+      "deleteWarning": "This action cannot be undone. All roles using this permission will be affected."
+    },
+    "validation": {
+      "permissionNameRequired": "Permission name is required",
+      "permissionNameMinLength": "Permission name must be at least 3 characters",
+      "permissionNamePattern": "Permission name should contain only uppercase letters and underscores"
+    },
+    "breadcrumb": {
+      "home": "Home",
+      "permissions": "Permissions"
+    }
   },
-  "columns": {
-    "id": "ID",
-    "roleName": "Role Name",
-    "permissions": "Permissions",
-    "actions": "Actions"
+  "comment": {
+    "title": "Comments",
+    "manageDescription": "Manage and view all customer comments",
+    "details": "Comment Details",
+    "editTitle": "Edit Comment",
+    "createTitle": "Create Comment",
+    "commentDetails": "Comment Details",
+    "viewingDetails": "Viewing complete comment information",
+    "personalInfo": "Personal Information",
+    "fullName": "Full Name",
+    "email": "Email Address",
+    "createdAt": "Created At",
+    "updatedAt": "Last Updated",
+    "body": "Comment Content",
+    "notFound": "Comment not found",
+    "backToList": "Back to Comments",
+    "actions": "Actions",
+    "deleteConfirm": "Are you sure you want to delete comment \"{{subject}}\"?",
+    "deleteSuccess": "Comment deleted successfully",
+    "deleteError": "Failed to delete comment",
+    "noComments": "No comments found",
+    "columns": {
+      "id": "ID",
+      "fullName": "Full Name",
+      "email": "Email",
+      "subject": "Subject",
+      "body": "Comment",
+      "createdAt": "Created Date",
+      "updatedAt": "Updated Date"
+    },
+    "validation": {
+      "requiredFields": "Full name, email, subject and body are required.",
+      "invalidEmail": "Please enter a valid email."
+    }
   },
-  "buttons": {
-    "create": "Create Role",
-    "refresh": "Refresh",
-    "delete": "Delete",
-    "cancel": "Cancel",
-    "edit": "Edit",
-    "showLess": "Show less",
-    "more": "more",
-    "all": "All",
-    "none": "None",
-    "save": "Save",
-    "backToRoles": "Back to Roles",
-    "addPermissions": "Add Permissions"
+  "contactUs": {
+    "title": "Contact Us Messages",
+    "manageDescription": "Manage and view all contact form submissions",
+    "details": "Contact Details",
+    "detailsTitle": "Contact Us Details",
+    "contactDetails": "Contact information details",
+    "create": "Create",
+    "editTitle": "Edit Contact Message",
+    "createTitle": "Create Contact Message",
+    "editDescription": "Update existing contact message",
+    "createDescription": "Create a new contact message",
+    "contactInformation": "Contact Information",
+    "directorateInfo": "Directorate Information",
+    "additionalInfo": "Additional Information",
+    "fullName": "Full Name",
+    "name": "First Name",
+    "lastName": "Last Name",
+    "phoneNumber": "Phone Number",
+    "email": "Email Address",
+    "organization": "Organization",
+    "generalDirectorateNumber": "General Directorate Number",
+    "generalDirectorateAddress": "General Directorate Address",
+    "generateEmail": "Generate Email",
+    "satelliteInfo": "Satellite Information",
+    "createdAt": "Created Date",
+    "updatedAt": "Updated Date",
+    "notFound": "Contact message not found",
+    "deleteConfirm": "Are you sure you want to delete contact from \"{{name}}\"?",
+    "deleteSuccess": "Contact message deleted successfully",
+    "createSuccess": "Contact message created successfully",
+    "updateSuccess": "Contact message updated successfully",
+    "columns": {
+      "id": "ID",
+      "name": "First Name",
+      "lastName": "Last Name",
+      "phoneNumber": "Phone",
+      "email": "Email",
+      "organization": "Organization",
+      "createdAt": "Created Date"
+    },
+    "placeholder": {
+      "name": "Enter first name",
+      "lastName": "Enter last name",
+      "phoneNumber": "+93 123 456 789",
+      "email": "name@example.com",
+      "organization": "Enter organization name (optional)"
+    },
+    "validation": {
+      "namePhoneRequired": "Name, last name and phone number are required",
+      "emailRequired": "Email is required",
+      "invalidEmail": "Please enter a valid email address"
+    }
   },
-  "actions": {
-    "edit": "Edit Role",
-    "viewDetails": "View Details",
-    "delete": "Delete Role"
-  },
-  "status": {
+  "aboutUs": {
+    "title": "About Us",
+    "manageDescription": "Manage and view all about us content",
+    "details": "About Us Details",
+    "pageDetails": "About us page content details",
+    "create": "Create",
+    "editTitle": "Edit About Us",
+    "createTitle": "Create About Us",
+    "subject": "Subject",
+    "about": "About Content",
+    "status": "Status",
     "active": "Active",
-    "inactive": "Inactive"
+    "inactive": "Inactive",
+    "activeLabel": "Active",
+    "createdAt": "Created Date",
+    "updatedAt": "Updated Date",
+    "notFound": "About Us content not found",
+    "deleteConfirm": "Are you sure you want to delete About Us \"{{subject}}\"?",
+    "deleteSuccess": "About Us content deleted successfully",
+    "createSuccess": "About Us content created successfully",
+    "updateSuccess": "About Us content updated successfully",
+    "columns": {
+      "id": "ID",
+      "subject": "Subject",
+      "about": "About",
+      "status": "Status"
+    },
+    "validation": {
+      "subjectRequired": "Subject is required"
+    }
   },
-  "tabs": {
-    "gridView": "Grid View",
-    "groupedView": "Grouped View",
-    "listView": "List View"
+  "organizationInfo": {
+    "title": "Organization Information",
+    "manageDescription": "Manage organization information records",
+    "details": "Organization Details",
+    "detailsHeader": "Organization information details",
+    "create": "Create",
+    "editTitle": "Edit Organization Info",
+    "createTitle": "Create Organization Info",
+    "organizationName": "Organization Name",
+    "phoneNumber": "Phone Number",
+    "address": "Address",
+    "satelliteHorizontal": "Satellite Horizontal",
+    "satelliteVertical": "Satellite Vertical",
+    "emailAddress": "Email Address",
+    "createdAt": "Created Date",
+    "updatedAt": "Updated Date",
+    "notFound": "Organization information not found",
+    "deleteConfirm": "Are you sure you want to delete organization \"{{organizationName}}\"?",
+    "deleteSuccess": "Organization information deleted successfully",
+    "createSuccess": "Organization information created successfully",
+    "updateSuccess": "Organization information updated successfully",
+    "editDescription": "Update existing organization information",
+    "createDescription": "Add new organization information to the system",
+    "columns": {
+      "id": "ID",
+      "organizationName": "Organization Name",
+      "address": "Address",
+      "phoneNumber": "Phone Number",
+      "emailAddress": "Email Address",
+      "createdAt": "Created Date"
+    },
+    "validation": {
+      "organizationNameRequired": "Organization name is required",
+      "addressRequired": "Address is required",
+      "phoneNumberRequired": "Phone number is required",
+      "satelliteHorizontalRequired": "Satellite horizontal is required",
+      "satelliteVerticalRequired": "Satellite vertical is required",
+      "emailAddressRequired": "Email address is required",
+      "invalidEmail": "Please enter a valid email address"
+    },
+    "placeholder": {
+      "organizationName": "Enter organization name",
+      "phoneNumber": "+93 123 456 789",
+      "address": "Enter full address",
+      "satelliteHorizontal": "Enter horizontal coordinate",
+      "satelliteVertical": "Enter vertical coordinate",
+      "emailAddress": "info@organization.com"
+    }
   },
-  "tooltips": {
-    "permissionsInfo": "All permissions assigned to this role"
-  },
-  "breadcrumb": {
-    "dashboard": "Dashboard",
-    "roles": "Roles",
-    "roleDetails": "Role Details"
-  },
-  "messages": {
-    "loadFailed": "Failed to load roles",
-    "deleteSuccess": "Role deleted successfully",
-    "deleteFailed": "Failed to delete role",
-    "createSuccess": "Role created successfully",
-    "createFailed": "Failed to create role",
-    "updateSuccess": "Role updated successfully",
-    "updateFailed": "Failed to update role",
-    "loadDetailsFailed": "Failed to load role details",
-    "permissionsLoadFailed": "Failed to load permissions",
-    "noPermissionsFound": "No permissions found",
-    "adjustSearch": "Try adjusting your search",
-    "updatingRole": "Updating role...",
-    "creatingRole": "Creating role...",
-    "pleaseWait": "Please wait",
-    "roleNotFound": "Role Not Found",
-    "roleNotFoundDesc": "The role you're looking for doesn't exist or has been removed.",
-    "noPermissionsAssigned": "No Permissions Assigned",
-    "noPermissionsDesc": "This role doesn't have any permissions yet"
-  },
-  "dialogs": {
-    "deleteTitle": "Delete Role",
+  "menu": {
+    "management": "Menu Management",
+    "total": "Total",
+    "create": "Create Menu",
+    "createTitle": "Create New Menu",
+    "createDescription": "Add a new menu item to the navigation",
+    "editTitle": "Edit Menu",
+    "editDescription": "Update menu item details",
+    "deleteTitle": "Delete Menu",
     "deleteConfirm": "Are you sure you want to delete",
-    "deleteWarning": "This action cannot be undone. All permissions associated with this role will be affected.",
-    "editTitle": "Edit Role",
-    "editSubtitle": "Modify role details and permissions",
-    "createTitle": "Create New Role",
-    "createSubtitle": "Define a new role and assign permissions"
-  },
-  "validation": {
-    "roleNameRequired": "Role name is required",
-    "roleNameMinLength": "Role name must be at least 3 characters"
+    "deleteSuccess": "Menu deleted successfully",
+    "deleteFailed": "Failed to delete menu",
+    "createSuccess": "Menu created successfully",
+    "createFailed": "Failed to create menu",
+    "updateSuccess": "Menu updated successfully",
+    "updateFailed": "Failed to update menu",
+    "loadFailed": "Failed to load menus and permissions",
+    "breadcrumb": "Menu Management",
+    "englishLabel": "English Label",
+    "pashtoLabel": "Pashto Label",
+    "dariLabel": "Dari Label",
+    "menuPath": "Menu Path",
+    "icon": "Icon",
+    "sortOrder": "Sort Order",
+    "activeMenu": "Active Menu",
+    "activeMenuHint": "Inactive menus will be hidden from navigation",
+    "parentMenu": "Parent Menu",
+    "parentMenuHint": "Leave empty to create a top-level menu",
+    "requiredPermission": "Required Permission",
+    "permissionHint": "Users need this permission to see the menu",
+    "iconHint": "Use PrimeIcons class names (e.g., pi pi-home)",
+    "columns": {
+      "id": "ID",
+      "label": "Label",
+      "path": "Path",
+      "icon": "Icon"
+    },
+    "placeholder": {
+      "englishLabel": "e.g., Dashboard",
+      "pashtoLabel": "داشبورد",
+      "dariLabel": "داشبورد",
+      "path": "dashboard",
+      "icon": "pi pi-home",
+      "parentMenu": "Select parent menu",
+      "permission": "Select permission"
+    },
+    "validation": {
+      "englishLabelRequired": "English label is required",
+      "pathRequired": "Menu path is required"
+    }
   }
-},
-
-"permissions": {
-  "ADD_USER": "Add User",
-  "UPDATE_USER": "Update User",
-  "DELETE_USER": "Delete User",
-  "VIEW_USER": "View User",
-
-  "ADD_ROLE": "Add Role",
-  "UPDATE_ROLE": "Update Role",
-  "DELETE_ROLE": "Delete Role",
-  "VIEW_ROLE": "View Role",
-
-  "ADD_PERMISSION": "Add Permission",
-  "UPDATE_PERMISSION": "Update Permission",
-  "DELETE_PERMISSION": "Delete Permission",
-  "VIEW_PERMISSION": "View Permission",
-
-  "ADD_COMPANY": "Add Company",
-  "UPDATE_COMPANY": "Update Company",
-  "DELETE_COMPANY": "Delete Company",
-  "VIEW_COMPANY": "View Company",
-
-  "ADD_COMPANYCONTACTPERSON": "Add Company Contact Person",
-  "UPDATE_COMPANYCONTACTPERSON": "Update Company Contact Person",
-  "DELETE_COMPANYCONTACTPERSON": "Delete Company Contact Person",
-  "VIEW_COMPANYCONTACTPERSON": "View Company Contact Person",
-
-  "ADD_CERTIFICATION": "Add Certification",
-  "UPDATE_CERTIFICATION": "Update Certification",
-  "DELETE_CERTIFICATION": "Delete Certification",
-  "VIEW_CERTIFICATION": "View Certification",
-
-  "ADD_CERTIFICATIONREQUEST": "Add Certification Request",
-  "UPDATE_CERTIFICATIONREQUEST": "Update Certification Request",
-  "DELETE_CERTIFICATIONREQUEST": "Delete Certification Request",
-  "VIEW_CERTIFICATIONREQUEST": "View Certification Request",
-
-  "ADD_PAYMENT": "Add Payment",
-  "UPDATE_PAYMENT": "Update Payment",
-  "DELETE_PAYMENT": "Delete Payment",
-  "VIEW_PAYMENT": "View Payment",
-
-  "ADD_ATTACHMENT": "Add Attachment",
-  "UPDATE_ATTACHMENT": "Update Attachment",
-  "DELETE_ATTACHMENT": "Delete Attachment",
-  "VIEW_ATTACHMENT": "View Attachment",
-
-  "ADD_CATEGORY": "Add Category",
-  "UPDATE_CATEGORY": "Update Category",
-  "DELETE_CATEGORY": "Delete Category",
-  "VIEW_CATEGORY": "View Category",
-
-  "ADD_ADDRESS": "Add Address",
-  "UPDATE_ADDRESS": "Update Address",
-  "DELETE_ADDRESS": "Delete Address",
-  "VIEW_ADDRESS": "View Address",
-
-  "ADD_COUNTRY": "Add Country",
-  "UPDATE_COUNTRY": "Update Country",
-  "DELETE_COUNTRY": "Delete Country",
-  "VIEW_COUNTRY": "View Country",
-
-  "ADD_COUNTRYTRANSLATION": "Add Country Translation",
-  "UPDATE_COUNTRYTRANSLATION": "Update Country Translation",
-  "DELETE_COUNTRYTRANSLATION": "Delete Country Translation",
-  "VIEW_COUNTRYTRANSLATION": "View Country Translation",
-
-  "ADD_PROVINCE": "Add Province",
-  "UPDATE_PROVINCE": "Update Province",
-  "DELETE_PROVINCE": "Delete Province",
-  "VIEW_PROVINCE": "View Province",
-
-  "ADD_PROVINCETRANSLATION": "Add Province Translation",
-  "UPDATE_PROVINCETRANSLATION": "Update Province Translation",
-  "DELETE_PROVINCETRANSLATION": "Delete Province Translation",
-  "VIEW_PROVINCETRANSLATION": "View Province Translation",
-
-  "ADD_DISTRICT": "Add District",
-  "UPDATE_DISTRICT": "Update District",
-  "DELETE_DISTRICT": "Delete District",
-  "VIEW_DISTRICT": "View District",
-
-  "ADD_DISTRICTTRANSLATION": "Add District Translation",
-  "UPDATE_DISTRICTTRANSLATION": "Update District Translation",
-  "DELETE_DISTRICTTRANSLATION": "Delete District Translation",
-  "VIEW_DISTRICTTRANSLATION": "View District Translation",
-
-  "ADD_LANGUAGE": "Add Language",
-  "UPDATE_LANGUAGE": "Update Language",
-  "DELETE_LANGUAGE": "Delete Language",
-  "VIEW_LANGUAGE": "View Language",
-
-  "ADD_MULTILANGUAGE": "Add Multi Language",
-  "UPDATE_MULTILANGUAGE": "Update Multi Language",
-  "DELETE_MULTILANGUAGE": "Delete Multi Language",
-  "VIEW_MULTILANGUAGE": "View Multi Language",
-
-  "ADD_MENU": "Add Menu",
-  "UPDATE_MENU": "Update Menu",
-  "DELETE_MENU": "Delete Menu",
-  "VIEW_MENU": "View Menu",
-
-  "ADD_EMAILVERIFICATION": "Add Email Verification",
-  "UPDATE_EMAILVERIFICATION": "Update Email Verification",
-  "DELETE_EMAILVERIFICATION": "Delete Email Verification",
-  "VIEW_EMAILVERIFICATION": "View Email Verification",
-
-  "ADD_FORGOTPASSWORD": "Add Forgot Password",
-  "UPDATE_FORGOTPASSWORD": "Update Forgot Password",
-  "DELETE_FORGOTPASSWORD": "Delete Forgot Password",
-  "VIEW_FORGOTPASSWORD": "View Forgot Password",
-
-  "ADD_ZONE": "Add Zone",
-  "UPDATE_ZONE": "Update Zone",
-  "DELETE_ZONE": "Delete Zone",
-  "VIEW_ZONE": "View Zone",
-
-  "ADD_COMMITEE": "Add Committee",
-  "UPDATE_COMMITEE": "Update Committee",
-  "DELETE_COMMITEE": "Delete Committee",
-  "VIEW_COMMITEE": "View Committee",
-
-  "ADD_COMMITEEASSIGNMENT": "Add Committee Assignment",
-  "UPDATE_COMMITEEASSIGNMENT": "Update Committee Assignment",
-  "DELETE_COMMITEEASSIGNMENT": "Delete Committee Assignment",
-  "VIEW_COMMITEEASSIGNMENT": "View Committee Assignment",
-
-  "ADD_COMMITEEASSIGNMENTCOMMENT": "Add Committee Assignment Comment",
-  "UPDATE_COMMITEEASSIGNMENTCOMMENT": "Update Committee Assignment Comment",
-  "DELETE_COMMITEEASSIGNMENTCOMMENT": "Delete Committee Assignment Comment",
-  "VIEW_COMMITEEASSIGNMENTCOMMENT": "View Committee Assignment Comment",
-
-  "ADD_COMMITEEMEMBER": "Add Committee Member",
-  "UPDATE_COMMITEEMEMBER": "Update Committee Member",
-  "DELETE_COMMITEEMEMBER": "Delete Committee Member",
-  "VIEW_COMMITEEMEMBER": "View Committee Member",
-
-  "ADD_COMMITEEREPORT": "Add Committee Report",
-  "UPDATE_COMMITEEREPORT": "Update Committee Report",
-  "DELETE_COMMITEEREPORT": "Delete Committee Report",
-  "VIEW_COMMITEEREPORT": "View Committee Report",
-
-  "ADD_WORKFLOW": "Add Workflow",
-  "UPDATE_WORKFLOW": "Update Workflow",
-  "DELETE_WORKFLOW": "Delete Workflow",
-  "VIEW_WORKFLOW": "View Workflow",
-
-  "ADD_WORKFLOWSTEP": "Add Workflow Step",
-  "UPDATE_WORKFLOWSTEP": "Update Workflow Step",
-  "DELETE_WORKFLOWSTEP": "Delete Workflow Step",
-  "VIEW_WORKFLOWSTEP": "View Workflow Step",
-
-  "ADD_REQUESTWORKFLOW": "Add Request Workflow",
-  "UPDATE_REQUESTWORKFLOW": "Update Request Workflow",
-  "DELETE_REQUESTWORKFLOW": "Delete Request Workflow",
-  "VIEW_REQUESTWORKFLOW": "View Request Workflow",
-
-  "ADD_CERTIFICATIONREQUESTSTATUSHISTORY": "Add Certification Request Status History",
-  "UPDATE_CERTIFICATIONREQUESTSTATUSHISTORY": "Update Certification Request Status History",
-  "DELETE_CERTIFICATIONREQUESTSTATUSHISTORY": "Delete Certification Request Status History",
-  "VIEW_CERTIFICATIONREQUESTSTATUSHISTORY": "View Certification Request Status History",
-
-  "ADD_INSPECTION_REPORT": "Add Inspection Report",
-  "UPDATE_INSPECTION_REPORT": "Update Inspection Report",
-  "DELETE_INSPECTION_REPORT": "Delete Inspection Report",
-  "VIEW_INSPECTION_REPORT": "View Inspection Report",
-
-  "ADD_COMMENT": "Add Comment",
-  "UPDATE_COMMENT": "Update Comment",
-  "DELETE_COMMENT": "Delete Comment",
-  "VIEW_COMMENT": "View Comment",
-
-  "VIEW_DASHBOARD": "View Dashboard",
-  "VIEW_REPORT": "View Report",
-  "VIEW_LOCATION": "View Location",
-  "VIEW_STANDARD": "View Standard"
-},
-"permission": {
-  "title": "Permission Management",
-  "total": "Total",
-  "labels": {
-    "permissions": "permissions",
-    "of": "of",
-    "selected": "selected",
-    "showing": "Showing"
-  },
-  "fields": {
-    "permissionName": "Permission Name",
-    "assignPermissions": "Assign Permissions",
-    "description": "Description"
-  },
-  "placeholders": {
-    "permissionName": "Enter permission name (e.g., ADD_USER, VIEW_ROLE)",
-    "permissionNameHint": "Use uppercase letters and underscores only (e.g., ADD_USER)",
-    "searchPermissions": "Search permissions...",
-    "description": "Enter permission description"
-  },
-  "columns": {
-    "id": "ID",
-    "permissionName": "Permission Name",
-    "actions": "Actions"
-  },
-  "buttons": {
-    "create": "Create Permission",
-    "refresh": "Refresh",
-    "cancel": "Cancel",
-    "save": "Save",
-    "all": "All",
-    "none": "None"
-  },
-  "actions": {
-    "viewDetails": "View Details",
-    "edit": "Edit Permission",
-    "delete": "Delete Permission"
-  },
-  "messages": {
-    "loadFailed": "Failed to load permissions",
-    "createSuccess": "Permission created successfully",
-    "createFailed": "Failed to create permission",
-    "updateSuccess": "Permission updated successfully",
-    "updateFailed": "Failed to update permission",
-    "deleteSuccess": "Permission deleted successfully",
-    "deleteFailed": "Failed to delete permission",
-    "noPermissionsFound": "No permissions found",
-    "adjustSearch": "Try adjusting your search",
-    "creatingPermission": "Creating permission...",
-    "updatingPermission": "Updating permission...",
-    "pleaseWait": "Please wait"
-  },
-  "dialogs": {
-    "createTitle": "Create New Permission",
-    "createSubtitle": "Define a new permission for the system",
-    "editTitle": "Edit Permission",
-    "editSubtitle": "Modify permission details",
-    "deleteTitle": "Delete Permission",
-    "deleteConfirm": "Are you sure you want to delete",
-    "deleteWarning": "This action cannot be undone. All roles using this permission will be affected."
-  },
-  "validation": {
-    "permissionNameRequired": "Permission name is required",
-    "permissionNameMinLength": "Permission name must be at least 3 characters",
-    "permissionNamePattern": "Permission name should contain only uppercase letters and underscores"
-  },
-  "breadcrumb": {
-    "home": "Home",
-    "permissions": "Permissions"
-  }
-}
 }

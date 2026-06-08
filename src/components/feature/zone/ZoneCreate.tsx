@@ -3,6 +3,7 @@ import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { useForm, Controller } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import ZoneService from "../../../services/zone.service";
 
 interface Props {
@@ -16,6 +17,7 @@ const ZoneCreate: React.FC<Props> = ({
   onClose,
   onSuccess,
 }) => {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
 
   const {
@@ -50,7 +52,7 @@ const ZoneCreate: React.FC<Props> = ({
 
   return (
     <Dialog
-      header="Create Zone"
+      header={t("zone.create")}
       visible={visible}
       style={{ width: "450px" }}
       modal
@@ -64,18 +66,18 @@ const ZoneCreate: React.FC<Props> = ({
         {/* Zone Name */}
         <div className="flex flex-col gap-1">
           <label className="font-semibold text-gray-700">
-            Zone Name
+            {t("zone.name.label")}
           </label>
 
           <Controller
             name="name"
             control={control}
-            rules={{ required: "Zone name is required" }}
+            rules={{ required: t("zone.name.required") }}
             render={({ field }) => (
               <InputText
                 {...field}
                 className="w-full"
-                placeholder="Enter zone name"
+                placeholder={t("zone.name.placeholder")}
               />
             )}
           />
@@ -90,7 +92,7 @@ const ZoneCreate: React.FC<Props> = ({
         {/* Description */}
         <div className="flex flex-col gap-1">
           <label className="font-semibold text-gray-700">
-            Location
+            {t("zone.location")}
           </label>
 
           <Controller
@@ -100,7 +102,7 @@ const ZoneCreate: React.FC<Props> = ({
               <InputText
                 {...field}
                 className="w-full"
-                placeholder="Enter Location"
+                placeholder={t("zone.locationPlaceholder")}
               />
             )}
           />
@@ -110,7 +112,7 @@ const ZoneCreate: React.FC<Props> = ({
         <div className="flex justify-end gap-2 pt-4">
           <Button
             type="button"
-            label="Cancel"
+            label={t("common.cancel")}
             severity="secondary"
             outlined
             onClick={onClose}
@@ -118,7 +120,7 @@ const ZoneCreate: React.FC<Props> = ({
 
           <Button
             type="submit"
-            label="Save"
+            label={t("common.save")}
             loading={loading}
           />
         </div>

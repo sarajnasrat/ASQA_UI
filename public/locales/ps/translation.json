@@ -1,6 +1,6 @@
 {
   "navbar": {
-    "welcome": "د افغانستان د کیفیت معیارونو ادارې ته ښه راغلاست",
+    "welcome": "د افغانستان د کیفیت معیارونو اداره (ASQA) د تصدیق مدیریت سیسټم",
     "notifications": "خبرتیاوې",
     "unread": "نه لوستل شوې",
     "viewAllNotifications": "ټولې خبرتیاوې وګورئ",
@@ -50,7 +50,13 @@
       "hint": {
         "translations": "ټولې ژباړې اختیاري دي پرته له انګلیسي"
       }
-    }
+    },
+    "loadFailed": "د هېوادونو په بارولو کې ستونزه رامنځته شوه",
+    "loadSingleFailed": "د هېواد په بارولو کې ستونزه رامنځته شوه",
+    "updateFailed": "د هېواد په تازه کولو کې ستونزه رامنځته شوه",
+    "createFailed": "د هېواد په جوړولو کې ستونزه رامنځته شوه",
+    "deleted": "هېواد په بریالیتوب سره حذف شو",
+    "deleteFailed": "د هېواد په حذفولو کې ستونزه رامنځته شوه"
   },
   "district": {
     "create": "ولسوالی جوړه کړئ",
@@ -78,7 +84,15 @@
           "required": "د ولسوالۍ نوم په انګلیسي اړین دی"
         }
       }
-    }
+    },
+    "update": "ولسوالي تازه کړئ",
+    "loadFailed": "د ولسوالیو په بارولو کې ستونزه رامنځته شوه",
+    "loadProvincesFailed": "د ولایتونو په بارولو کې ستونزه رامنځته شوه",
+    "createFailed": "د ولسوالۍ په جوړولو کې ستونزه رامنځته شوه",
+    "updateFailed": "د ولسوالۍ په تازه کولو کې ستونزه رامنځته شوه",
+    "deleted": "ولسوالي په بریالیتوب سره حذف شوه",
+    "deleteFailed": "د ولسوالۍ په حذفولو کې ستونزه رامنځته شوه",
+    "province": "ولایت"
   },
   "province": {
     "create": "ولایت جوړ کړئ",
@@ -107,7 +121,12 @@
           "required": "د ولایت نوم په انګلیسي اړین دی"
         }
       }
-    }
+    },
+    "loadFailed": "د ولایتونو په بارولو کې ستونزه رامنځته شوه",
+    "loadCountriesFailed": "د هېوادونو په بارولو کې ستونزه رامنځته شوه",
+    "updated": "ولایت په بریالیتوب سره تازه شو",
+    "deleted": "ولایت په بریالیتوب سره حذف شو",
+    "deleteFailed": "د ولایت په حذفولو کې ستونزه رامنځته شوه"
   },
   "category": {
     "create": "کټګوري جوړه کړئ",
@@ -185,6 +204,32 @@
     "failedReset": "د پټنوم بیا ترتیبول ناکام شول",
     "networkError": "د شبکې تېروتنه. مهرباني وکړئ بیا هڅه وکړئ."
   },
+  "login": {
+    "welcomeBack": "بیا ښه راغلاست",
+    "signInPrompt": "مهرباني وکړئ خپل حساب ته ننوځئ",
+    "emailAddress": "برېښنالیک پته",
+    "emailPlaceholder": "you@example.com",
+    "password": "پټنوم",
+    "passwordPlaceholder": "خپل پټنوم دننه کړئ",
+    "forgotPassword": "پټنوم مو هېر کړی؟",
+    "signingIn": "ننوتل روان دي...",
+    "signIn": "ننوتل",
+    "invalidCredentials": "برېښنالیک یا پټنوم ناسم دی",
+    "footer": "© 2026 MCIT. ټول حقونه خوندي دي."
+  },
+  "fileUpload": {
+    "remove": "لرې کول",
+    "removeFile": "فایل لرې کړئ",
+    "word": "ورډ",
+    "excel": "اکسل",
+    "images": "انځورونه"
+  },
+  "confirmDialog": {
+    "title": "تایید",
+    "confirm": "هو، دوام ورکړئ",
+    "irreversible": "دا عمل بېرته نه راګرځي",
+    "pressEsc": "د لغوه کولو لپاره ESC کېکاږئ"
+  },
   "company": {
     "companytyperequired": "د شرکت ډول اړین دی",
     "companyOwnerName": "د مالک نوم",
@@ -233,6 +278,8 @@
     "registeredMember": "ثبت شوی غړی",
     "companyAttachments": "د شرکت ضمیمې",
     "labels": {
+      "businessInformation": "سوداګریز معلومات",
+      "companyStats": "د شرکت احصایې",
       "companyNameEN": "د شرکت نوم (انګلیسي)",
       "companyNameDR": "د شرکت نوم (دری)",
       "companyNamePS": "د شرکت نوم (پښتو)",
@@ -280,7 +327,8 @@
       "additionalInfo": "اضافي معلومات",
       "companyInfo": "د شرکت معلومات",
       "active": "فعال",
-      "inactive": "غیر فعال"
+      "inactive": "غیر فعال",
+      "issueDate": "د صدور نېټه"
     },
     "placeholder": {
       "companyNameEN": "د شرکت نوم په انګلیسي کې دننه کړئ",
@@ -413,10 +461,11 @@
       "activateSuccess": "شرکت په بریالیتوب سره فعال شو",
       "deactivateSuccess": "شرکت په بریالیتوب سره غیر فعال شو",
       "loadSuccess": "شرکتونه په بریالیتوب سره بار شول",
-      "noData": "هیچ شرکت ونه موندل شو",
+      "noData": "هغه شرکت چې تاسو یې لټوئ موجود نه دی.",
       "confirmDelete": "آیا تاسو ډاډه یاست چې غواړئ دا شرکت ړنګ کړئ؟",
       "confirmDeactivate": "آیا تاسو ډاډه یاست چې غواړئ دا شرکت غیر فعال کړئ؟",
-      "confirmActivate": "آیا تاسو ډاډه یاست چې غواړئ دا شرکت فعال کړئ؟"
+      "confirmActivate": "آیا تاسو ډاډه یاست چې غواړئ دا شرکت فعال کړئ؟",
+      "unknownSize": "نامعلومه اندازه"
     },
     "filters": {
       "all": "ټول شرکتونه",
@@ -445,7 +494,11 @@
       "socialMedia": "ټولنیز رسنۍ",
       "documents": "اسناد",
       "certificates": "سندونه"
-    }
+    },
+    "categoryLoadFailed": "د کټګوریو په بارولو کې ستونزه رامنځته شوه",
+    "loadSingleFailed": "د شرکت په بارولو کې ستونزه رامنځته شوه",
+    "invalidId": "د شرکت پېژند ناسم دی.",
+    "notFound": "شرکت ونه موندل شو"
   },
   "nav": {
     "home": "کور",
@@ -492,6 +545,7 @@
     "noCertificateFile": "د سند فایل شتون نلري",
     "certificateFile": "د سند فایل",
     "certificate": "سند",
+    "attachment": "ضمیمه",
     "certificateSummary": "د سند لنډیز",
     "certificateIssuedTo": "سند ته صادر شو",
     "certificateDetails": "د تصدیق تفصیلات",
@@ -524,6 +578,43 @@
     "request": "غوښتنه",
     "requestDetails": "د تصدیق غوښتنې تفصیلات",
     "trackProgress": "د خپل تصدیق حالت او پرمختګ تعقیب کړئ",
+    "dialog": {
+      "updateTitle": "تصدیق تازه کړئ",
+      "scanOfCertification": "د تصدیق سکین",
+      "scanHelperText": "تر ۵ MB پورې PDF، JPG یا PNG فایل اپلوډ کړئ"
+    },
+    "placeholders": {
+      "serialNumber": "سریال شمېره دننه کړئ"
+    },
+    "messages": {
+      "notSelected": "تصدیق نه دی ټاکل شوی",
+      "serialNumberRequired": "سریال شمېره اړینه ده",
+      "invalidRequestId": "د تصدیق غوښتنې پېژندنه ناسمه ده.",
+      "unknownSize": "نا معلومه اندازه"
+    },
+    "printPage": {
+      "pdfError": "د PDF په جوړولو کې ستونزه رامنځته شوه. مهرباني وکړئ بیا هڅه وکړئ.",
+      "preparing": "چمتو کېږي...",
+      "printDocument": "سند چاپ کړئ",
+      "progress": "{{progress}}% چمتو کېږي",
+      "downloadPdf": "PDF ډاونلوډ کړئ",
+      "collectingInfo": "معلومات راټولېږي...",
+      "designingDocument": "سند طرحه کېږي...",
+      "savingPdf": "PDF خوندي کېږي...",
+      "emirate": "د افغانستان اسلامي امارت",
+      "authority": "د معیار او کیفیت اداره",
+      "title": "د کیفیت تائید لیک",
+      "registrationNumber": "د ثبت شمېره",
+      "companyLicenseNumber": "د شرکت د جواز شمېره",
+      "certificateType": "د معیار نوم",
+      "signature": "د صلاحیت لرونکي لاسلیک",
+      "issueDate": "د صادرولو نېټه",
+      "expiryDate": "د پای نېټه",
+      "bodyPrefix": "دغه سند تائیدوي، چې شرکت",
+      "bodyMiddleLocation": "چې په",
+      "bodyMiddleCategory": "کې موقعیت لري او په",
+      "bodySuffix": "برخه کې فعالیت کوي؛ خپل (مدیریتي نظام او محصول) د اړوندو معیارونو مطابق تنظیم کړی دی."
+    },
     "noResults": "هیڅ پایله ونه موندل شوه",
     "noResultsMessage": "موږ ستاسو لټون سره سمون خوري هیڅ تصدیق غوښتنه ونه موندله.",
     "tryAnotherSearch": "بل لټون هڅه وکړئ",
@@ -627,6 +718,9 @@
     }
   },
   "certificationRequest": {
+    "timeline": "د درخواست پروسه",
+    "progress": "جریان",
+    "reviewMessage": "پیگیری درخواست",
     "create": "د تصدیق غوښتنه جوړول",
     "edit": "د تصدیق غوښتنه سمول",
     "delete": "د تصدیق غوښتنه ړنګول",
@@ -692,7 +786,7 @@
     "labels": {
       "trackingNumber": "د تعقیب شمېره",
       "requestType": "د غوښتنې ډول",
-      "requestStatus": "د غوښتنې حالت",
+      "requestStatus": "حالت",
       "startReview": "بیا کتنه پیل کړئ",
       "duration": "موده",
       "serialNumber": "سریال شمېره",
@@ -705,7 +799,9 @@
       "requestDetails": "د غوښتنې تفصیلات",
       "requestInfo": "د غوښتنې معلومات",
       "totalDocuments": "ټول اسناد",
-      "requestAttachments": "د غوښتنې ضمیمې"
+      "requestAttachments": "د غوښتنې ضمیمې",
+      "noAttachments": "هیڅ ضمیمه نشته",
+      "moreAttachments": "{{count}} نور ضمیمې"
     },
     "placeholder": {
       "requestType": "د غوښتنې ډول وټاکئ",
@@ -748,6 +844,66 @@
       "DOMESTIC_QUALITY_CERTIFICATION": "د کورني کیفیت تصدیق",
       "INTERNATIONAL_QUALITY_CERTIFICATION": "نړیوال کیفیت تصدیق",
       "STANDARD_MARK_CERTIFICATION": "د معیاري نښې تصدیق"
+    },
+    "fileSize": {
+      "zero": "0 بایټ",
+      "bytes": "بایټ",
+      "kb": "KB",
+      "mb": "MB",
+      "gb": "GB",
+      "tb": "TB"
+    },
+    "deadline": {
+      "noDeadline": "مهلت نشته",
+      "expired": "پای ته رسېدلی",
+      "daysRemaining": "{{count}} ورځې پاتې دي",
+      "months": "{{count}} میاشتې",
+      "batch": "بچ: {{batch}}"
+    },
+    "payment": {
+      "title": "تادیات",
+      "printPendingOnly": "بل یوازې هغه وخت چاپېدی شي چې تادیه لا پاتې وي.",
+      "uploadScannedBillRequired": "مهرباني وکړئ سکین شوی بل پورته کړئ.",
+      "enterTransactionId": "مهرباني وکړئ د راکړې ورکړې شمېره دننه کړئ.",
+      "scannedBillUploaded": "سکین شوی بل په بریالیتوب سره پورته شو.",
+      "uploading": "پورته کیږي...",
+      "uploadScan": "سکن پورته کړئ",
+      "uploadScannedBill": "سکین شوی بل پورته کړئ",
+      "details": "د تادیې جزئیات",
+      "scanUploadInfo": "د سکین پورته کولو معلومات",
+      "transactionId": "د راکړې ورکړې شمېره",
+      "paymentDate": "د تادیې نېټه",
+      "paymentAmount": "د تادیې اندازه",
+      "scannedBill": "سکین شوی بل",
+      "enterTransactionIdPlaceholder": "د راکړې ورکړې شمېره دننه کړئ",
+      "enterPaidAmount": "ورکړل شوې اندازه دننه کړئ",
+      "changeFile": "فایل بدل کړئ",
+      "chooseFile": "فایل وټاکئ",
+      "selectedFile": "ټاکل شوی",
+      "fileTypesHint": "PDF, JPG, PNG. اعظمي اندازه: 5MB.",
+      "uploadNote": "د سکین شوي بل له پورته کولو وروسته، تادیه بشپړېږي. د سند د صادرولو لپاره د سمون تڼۍ وکاروئ.",
+      "completedNote": "تادیه بشپړه شوې ده. د سند د صادرولو لپاره د سمون تڼۍ وکاروئ.",
+      "invoiceTitle": "انوایس",
+      "invoiceNumber": "د انوایس شمېره",
+      "authority": "د افغانستان د کیفیت او ستندردونو اداره",
+      "billedTo": "بل شوی ته",
+      "invoiceDate": "د انوایس نېټه",
+      "dueDate": "د ورکړې وروستۍ نېټه",
+      "itemNo": "شمېره",
+      "itemDescription": "د توکي تشریح",
+      "price": "بیه",
+      "quantity": "تعداد",
+      "amount": "مقدار",
+      "certificationFee": "د تصدیق فیس",
+      "toBeDetermined": "وروسته ټاکل کېږي",
+      "paymentVia": "مهرباني وکړئ تادیه د لاندې له لارې وکړئ",
+      "bankName": "د بانک نوم",
+      "accountNumber": "د حساب شمېره",
+      "accountHolder": "د حساب خاوند",
+      "reference": "مرجع",
+      "totalAmountDue": "ټوله ورکړه",
+      "contactSupport": "له ملاتړ سره اړیکه ونیسئ",
+      "printInvoice": "انوایس چاپ کړئ"
     }
   },
   "attachment": {
@@ -827,7 +983,14 @@
     "validation": {
       "file_type": "یوازې PDF فایلونه ملاتړ کیږي.",
       "file_size": "د فایل اندازه باید له 10MB څخه کمه وي."
-    }
+    },
+    "download": "ډاونلوډ",
+    "preview": "مخکتنه",
+    "unknown": "نامعلوم",
+    "unknown_file": "نامعلوم فایل",
+    "reference": "مرجع",
+    "select_reference": "مرجع وټاکئ",
+    "sizeUnitKb": "KB"
   },
   "zone": {
     "create": "زون جوړول",
@@ -848,8 +1011,12 @@
     "name": {
       "label": "د زون نوم",
       "required": "د زون نوم اړین دی",
-      "exists": "په همدې نوم زون مخکې موجود دی"
-    }
+      "exists": "په همدې نوم زون مخکې موجود دی",
+      "placeholder": "د زون نوم دننه کړئ"
+    },
+    "loadFailed": "د زون په پورته کولو کې ستونزه",
+    "updateFailed": "د زون په تازه کولو کې ستونزه",
+    "locationPlaceholder": "ځای دننه کړئ"
   },
   "registration": {
     "title": "د شرکت ثبت نام",
@@ -953,10 +1120,45 @@
         "HOME": "کور",
         "WAREHOUSE": "ګودام",
         "OTHER": "نور"
-      }
+      },
+      "country": "هېواد",
+      "province": "ولایت",
+      "selectCountry": "هېواد وټاکئ",
+      "selectProvince": "ولایت وټاکئ",
+      "selectCountryFirst": "لومړی هېواد وټاکئ",
+      "selectProvinceFirst": "لومړی ولایت وټاکئ",
+      "removeAddress": "آدرس لرې کول",
+      "noCountriesAvailable": "هېڅ هېوادونه شتون نه لري"
     }
   },
   "commitee": {
+    "details": {
+      "title": "د کمیټې جزئیات",
+      "generalInfo": "عمومی معلومات",
+      "members": "غړي",
+      "assignments": "ټاکل شوي دندې",
+      "committeeType": "د کمیټې ډول",
+      "status": "حالت",
+      "memberCount": "د غړو شمېر",
+      "createdDate": "د جوړېدو نیټه",
+      "active": "فعال",
+      "inactive": "غیر فعال",
+      "role": "رول",
+      "responsibility": "مسؤلیت",
+      "email": "برېښلیک",
+      "phone": "د تلیفون شمېره",
+      "joinedAt": "د غړیتوب نیټه",
+      "assignmentId": "د دندې پېژندنه",
+      "assignmentStatus": "د دندې حالت",
+      "assignedAt": "د ټاکلو نیټه",
+      "completedAt": "د بشپړیدو نیټه",
+      "remarks": "تبصرې",
+      "certificationRequestId": "د تصدیق غوښتنې پېژندنه",
+      "noMembers": "هیڅ غړی ونه موندل شو",
+      "noAssignments": "هیڅ دنده ونه موندل شوه",
+      "loadError": "د کمیټې د جزئیاتو په بارولو کې تېروتنه",
+      "notFound": "کمیټه ونه موندل شوه"
+    },
     "createMember": "غړی اضافه کړئ",
     "selectCommittee": "کمیټه وټاکئ",
     "list": "د کمیټې لیست",
@@ -993,6 +1195,26 @@
       "active": "فعال",
       "assignmentBy": "لخوا ټاکل شوی",
       "assignmentAt": "د ټاکلو وخت",
+      "confirmStartProgress": "ایا تاسو ډاډه یاست چې دا ټاکنه په روانو کې نښه کړئ؟",
+      "confirmComplete": "ایا تاسو ډاډه یاست چې دا ټاکنه بشپړه نښه کړئ؟",
+      "notMentioned": "نه دی یاد شوی",
+      "payments": "تادیات",
+      "noPaymentRecords": "د تادیاتو هېڅ ریکارډ ونه موندل شو.",
+      "timelineEvents": "د مهالوېش پېښې",
+      "schedule": "مهالوېش",
+      "byLabel": "لخوا:",
+      "tabs": {
+        "detailsShort": "تفصیل",
+        "companyShort": "شرکت",
+        "documentsShort": "اسناد"
+      },
+      "dialog": {
+        "updateTitle": "ټاکنه تازه کړئ",
+        "statusLabel": "حالت",
+        "statusPlaceholder": "حالت وټاکئ",
+        "commentsLabel": "تبصرې",
+        "uploadReportFile": "د راپور فایل پورته کړئ"
+      },
       "updated": "ټاکنه په بریالیتوب سره تازه شوه",
       "deleted": "ټاکنه په بریالیتوب سره ړنګه شوه",
       "deleteConfirm": "آیا تاسو ډاډه یاست چې غواړئ دا ټاکنه ړنګه کړئ؟",
@@ -1022,10 +1244,39 @@
       "role": "رول",
       "updated": "غړی په بریالیتوب سره تازه شو",
       "deleted": "غړی په بریالیتوب سره ړنګ شو",
-      "responsibility": "مسؤلیتونه"
+      "responsibility": "مسؤلیتونه",
+      "createDescription": "د کمېټې لپاره د نوي غړي د زياتولو لپاره لاندې معلومات ډک کړئ",
+      "userRequired": "د غړي ټاکل اړين دي",
+      "selectUser": "يو کاروونکی وټاکئ",
+      "selectRole": "رول وټاکئ",
+      "selectCommittee": "کمېټه وټاکئ",
+      "responsibilityPlaceholder": "د غړي مسؤليتونه او دندې وليکئ...",
+      "responsibilityHint": "د دې کمېټې غړي اصلي دندې او مسؤليتونه وليکئ",
+      "activeHint": "غيرفعال غړي به د فعالو کمېټو په لېستونو او راپورونو کې ونه ښودل شي",
+      "committeeRequired": "کمېټه اړينه ده",
+      "save": "غړی خوندي کړئ",
+      "exportFileName": "committeeMembers",
+      "exportSheetName": "committeeMembers",
+      "roles": {
+        "CHAIRPERSON": "رئيس",
+        "VICE_CHAIRPERSON": "مرستيال رئيس",
+        "SECRETARY": "منشي",
+        "TREASURER": "خزانه دار",
+        "MEMBER": "غړی",
+        "OBSERVER": "ناظر"
+      },
+      "committee": "کمېټه",
+      "joinedAt": "د غړيتوب نېټه",
+      "deleteConfirm": "آيا تاسې ډاډه ياست چې دا غړی لرې کول غواړئ؟",
+      "viewTitle": "د کمېټې غړي کتنه"
     }
   },
   "common": {
+    "id": "آی ډي",
+    "current_page": "د جوړه په وخت",
+    "all": "همه",
+    "export": "ړنګول",
+    "exporting": "ړنګول...",
     "timeline": "مهال ویش",
     "continue": "ادامه",
     "copy": "کاپي",
@@ -1069,7 +1320,8 @@
     "status": "حالت",
     "createdDate": "د جوړېدو نیټه",
     "selectScope": "مهرباني وکړئ لومړی یوه ساحه وټاکئ",
-    "selectRequest": "مهرباني وکړئ لومړی یوه غوښتنه وټاکئ"
+    "selectRequest": "مهرباني وکړئ لومړی یوه غوښتنه وټاکئ",
+    "pleaseWait": "مهرباني وکړئ انتظار وکړئ"
   },
   "home": {
     "badge": "د افغانستان د کیفیت معیارونو اداره",
@@ -1370,251 +1622,547 @@
       "INSPECTOR": "تفتیش کوونکی"
     }
   },
-"permissions": {
-  "ADD_USER": "کارن اضافه کول",
-  "UPDATE_USER": "کارن سمول",
-  "DELETE_USER": "کارن حذف کول",
-  "VIEW_USER": "کارن کتل",
-
-  "ADD_ROLE": "رول اضافه کول",
-  "UPDATE_ROLE": "رول سمول",
-  "DELETE_ROLE": "رول حذف کول",
-  "VIEW_ROLE": "رول کتل",
-
-  "ADD_PERMISSION": "صلاحیت اضافه کول",
-  "UPDATE_PERMISSION": "صلاحیت سمول",
-  "DELETE_PERMISSION": "صلاحیت حذف کول",
-  "VIEW_PERMISSION": "صلاحیت کتل",
-
-  "ADD_COMPANY": "شرکت اضافه کول",
-  "UPDATE_COMPANY": "شرکت سمول",
-  "DELETE_COMPANY": "شرکت حذف کول",
-  "VIEW_COMPANY": "شرکت کتل",
-
-  "ADD_COMPANYCONTACTPERSON": "د شرکت اړیکه کوونکی کس اضافه کول",
-  "UPDATE_COMPANYCONTACTPERSON": "د شرکت اړیکه کوونکی کس سمول",
-  "DELETE_COMPANYCONTACTPERSON": "د شرکت اړیکه کوونکی کس حذف کول",
-  "VIEW_COMPANYCONTACTPERSON": "د شرکت اړیکه کوونکی کس کتل",
-
-  "ADD_CERTIFICATION": "تصدیق اضافه کول",
-  "UPDATE_CERTIFICATION": "تصدیق سمول",
-  "DELETE_CERTIFICATION": "تصدیق حذف کول",
-  "VIEW_CERTIFICATION": "تصدیق کتل",
-
-  "ADD_CERTIFICATIONREQUEST": "د تصدیق غوښتنه اضافه کول",
-  "UPDATE_CERTIFICATIONREQUEST": "د تصدیق غوښتنه سمول",
-  "DELETE_CERTIFICATIONREQUEST": "د تصدیق غوښتنه حذف کول",
-  "VIEW_CERTIFICATIONREQUEST": "د تصدیق غوښتنه کتل",
-
-  "ADD_PAYMENT": "تادیه اضافه کول",
-  "UPDATE_PAYMENT": "تادیه سمول",
-  "DELETE_PAYMENT": "تادیه حذف کول",
-  "VIEW_PAYMENT": "تادیه کتل",
-
-  "ADD_ATTACHMENT": "ضمیمه اضافه کول",
-  "UPDATE_ATTACHMENT": "ضمیمه سمول",
-  "DELETE_ATTACHMENT": "ضمیمه حذف کول",
-  "VIEW_ATTACHMENT": "ضمیمه کتل",
-
-  "ADD_CATEGORY": "کټګوري اضافه کول",
-  "UPDATE_CATEGORY": "کټګوري سمول",
-  "DELETE_CATEGORY": "کټګوري حذف کول",
-  "VIEW_CATEGORY": "کټګوري کتل",
-
-  "ADD_ADDRESS": "آدرس اضافه کول",
-  "UPDATE_ADDRESS": "آدرس سمول",
-  "DELETE_ADDRESS": "آدرس حذف کول",
-  "VIEW_ADDRESS": "آدرس کتل",
-
-  "ADD_COUNTRY": "هېواد اضافه کول",
-  "UPDATE_COUNTRY": "هېواد سمول",
-  "DELETE_COUNTRY": "هېواد حذف کول",
-  "VIEW_COUNTRY": "هېواد کتل",
-
-  "ADD_COUNTRYTRANSLATION": "د هېواد ژباړه اضافه کول",
-  "UPDATE_COUNTRYTRANSLATION": "د هېواد ژباړه سمول",
-  "DELETE_COUNTRYTRANSLATION": "د هېواد ژباړه حذف کول",
-  "VIEW_COUNTRYTRANSLATION": "د هېواد ژباړه کتل",
-
-  "ADD_PROVINCE": "ولایت اضافه کول",
-  "UPDATE_PROVINCE": "ولایت سمول",
-  "DELETE_PROVINCE": "ولایت حذف کول",
-  "VIEW_PROVINCE": "ولایت کتل",
-
-  "ADD_PROVINCETRANSLATION": "د ولایت ژباړه اضافه کول",
-  "UPDATE_PROVINCETRANSLATION": "د ولایت ژباړه سمول",
-  "DELETE_PROVINCETRANSLATION": "د ولایت ژباړه حذف کول",
-  "VIEW_PROVINCETRANSLATION": "د ولایت ژباړه کتل",
-
-  "ADD_DISTRICT": "ولسوالۍ اضافه کول",
-  "UPDATE_DISTRICT": "ولسوالۍ سمول",
-  "DELETE_DISTRICT": "ولسوالۍ حذف کول",
-  "VIEW_DISTRICT": "ولسوالۍ کتل",
-
-  "ADD_DISTRICTTRANSLATION": "د ولسوالۍ ژباړه اضافه کول",
-  "UPDATE_DISTRICTTRANSLATION": "د ولسوالۍ ژباړه سمول",
-  "DELETE_DISTRICTTRANSLATION": "د ولسوالۍ ژباړه حذف کول",
-  "VIEW_DISTRICTTRANSLATION": "د ولسوالۍ ژباړه کتل",
-
-  "ADD_LANGUAGE": "ژبه اضافه کول",
-  "UPDATE_LANGUAGE": "ژبه سمول",
-  "DELETE_LANGUAGE": "ژبه حذف کول",
-  "VIEW_LANGUAGE": "ژبه کتل",
-
-  "ADD_MULTILANGUAGE": "څو ژبې اضافه کول",
-  "UPDATE_MULTILANGUAGE": "څو ژبې سمول",
-  "DELETE_MULTILANGUAGE": "څو ژبې حذف کول",
-  "VIEW_MULTILANGUAGE": "څو ژبې کتل",
-
-  "ADD_MENU": "مینو اضافه کول",
-  "UPDATE_MENU": "مینو سمول",
-  "DELETE_MENU": "مینو حذف کول",
-  "VIEW_MENU": "مینو کتل",
-
-  "ADD_EMAILVERIFICATION": "د بریښنالیک تایید اضافه کول",
-  "UPDATE_EMAILVERIFICATION": "د بریښنالیک تایید سمول",
-  "DELETE_EMAILVERIFICATION": "د بریښنالیک تایید حذف کول",
-  "VIEW_EMAILVERIFICATION": "د بریښنالیک تایید کتل",
-
-  "ADD_FORGOTPASSWORD": "د هېر شوي پټنوم اضافه کول",
-  "UPDATE_FORGOTPASSWORD": "د هېر شوي پټنوم سمول",
-  "DELETE_FORGOTPASSWORD": "د هېر شوي پټنوم حذف کول",
-  "VIEW_FORGOTPASSWORD": "د هېر شوي پټنوم کتل",
-
-  "ADD_ZONE": "زون اضافه کول",
-  "UPDATE_ZONE": "زون سمول",
-  "DELETE_ZONE": "زون حذف کول",
-  "VIEW_ZONE": "زون کتل",
-
-  "ADD_COMMITEE": "کمیټه اضافه کول",
-  "UPDATE_COMMITEE": "کمیټه سمول",
-  "DELETE_COMMITEE": "کمیټه حذف کول",
-  "VIEW_COMMITEE": "کمیټه کتل",
-
-  "ADD_COMMITEEASSIGNMENT": "د کمیټې ټاکنه اضافه کول",
-  "UPDATE_COMMITEEASSIGNMENT": "د کمیټې ټاکنه سمول",
-  "DELETE_COMMITEEASSIGNMENT": "د کمیټې ټاکنه حذف کول",
-  "VIEW_COMMITEEASSIGNMENT": "د کمیټې ټاکنه کتل",
-
-  "ADD_COMMITEEASSIGNMENTCOMMENT": "د کمیټې ټاکنې نظر اضافه کول",
-  "UPDATE_COMMITEEASSIGNMENTCOMMENT": "د کمیټې ټاکنې نظر سمول",
-  "DELETE_COMMITEEASSIGNMENTCOMMENT": "د کمیټې ټاکنې نظر حذف کول",
-  "VIEW_COMMITEEASSIGNMENTCOMMENT": "د کمیټې ټاکنې نظر کتل",
-
-  "ADD_COMMITEEMEMBER": "د کمیټې غړی اضافه کول",
-  "UPDATE_COMMITEEMEMBER": "د کمیټې غړی سمول",
-  "DELETE_COMMITEEMEMBER": "د کمیټې غړی حذف کول",
-  "VIEW_COMMITEEMEMBER": "د کمیټې غړی کتل",
-
-  "ADD_COMMITEEREPORT": "د کمیټې راپور اضافه کول",
-  "UPDATE_COMMITEEREPORT": "د کمیټې راپور سمول",
-  "DELETE_COMMITEEREPORT": "د کمیټې راپور حذف کول",
-  "VIEW_COMMITEEREPORT": "د کمیټې راپور کتل",
-
-  "ADD_WORKFLOW": "کاري فلو اضافه کول",
-  "UPDATE_WORKFLOW": "کاري فلو سمول",
-  "DELETE_WORKFLOW": "کاري فلو حذف کول",
-  "VIEW_WORKFLOW": "کاري فلو کتل",
-
-  "ADD_WORKFLOWSTEP": "د کاري فلو مرحله اضافه کول",
-  "UPDATE_WORKFLOWSTEP": "د کاري فلو مرحله سمول",
-  "DELETE_WORKFLOWSTEP": "د کاري فلو مرحله حذف کول",
-  "VIEW_WORKFLOWSTEP": "د کاري فلو مرحله کتل",
-
-  "ADD_REQUESTWORKFLOW": "د غوښتنې کاري فلو اضافه کول",
-  "UPDATE_REQUESTWORKFLOW": "د غوښتنې کاري فلو سمول",
-  "DELETE_REQUESTWORKFLOW": "د غوښتنې کاري فلو حذف کول",
-  "VIEW_REQUESTWORKFLOW": "د غوښتنې کاري فلو کتل",
-
-  "ADD_CERTIFICATIONREQUESTSTATUSHISTORY": "د تصدیق غوښتنې تاریخ اضافه کول",
-  "UPDATE_CERTIFICATIONREQUESTSTATUSHISTORY": "د تصدیق غوښتنې تاریخ سمول",
-  "DELETE_CERTIFICATIONREQUESTSTATUSHISTORY": "د تصدیق غوښتنې تاریخ حذف کول",
-  "VIEW_CERTIFICATIONREQUESTSTATUSHISTORY": "د تصدیق غوښتنې تاریخ کتل",
-
-  "ADD_INSPECTION_REPORT": "د تفتیش راپور اضافه کول",
-  "UPDATE_INSPECTION_REPORT": "د تفتیش راپور سمول",
-  "DELETE_INSPECTION_REPORT": "د تفتیش راپور حذف کول",
-  "VIEW_INSPECTION_REPORT": "د تفتیش راپور کتل",
-
-  "ADD_COMMENT": "نظر اضافه کول",
-  "UPDATE_COMMENT": "نظر سمول",
-  "DELETE_COMMENT": "نظر حذف کول",
-  "VIEW_COMMENT": "نظر کتل",
-
-  "VIEW_DASHBOARD": "ډشبورډ کتل",
-  "VIEW_REPORT": "راپور کتل",
-  "VIEW_LOCATION": "موقعیت کتل",
-  "VIEW_STANDARD": "سټنډرډ کتل"
-},
-"permission": {
-  "title": "د صلاحیتونو مدیریت",
-  "total": "ټول",
-  "labels": {
-    "permissions": "صلاحیتونه",
-    "of": "د",
-    "selected": "ټاکل شوی",
-    "showing": "ښودل کیږي"
+  "permissions": {
+    "ADD_USER": "کارن اضافه کول",
+    "UPDATE_USER": "کارن سمول",
+    "DELETE_USER": "کارن حذف کول",
+    "VIEW_USER": "کارن کتل",
+    "ADD_ROLE": "رول اضافه کول",
+    "UPDATE_ROLE": "رول سمول",
+    "DELETE_ROLE": "رول حذف کول",
+    "VIEW_ROLE": "رول کتل",
+    "ADD_PERMISSION": "صلاحیت اضافه کول",
+    "UPDATE_PERMISSION": "صلاحیت سمول",
+    "DELETE_PERMISSION": "صلاحیت حذف کول",
+    "VIEW_PERMISSION": "صلاحیت کتل",
+    "ADD_COMPANY": "شرکت اضافه کول",
+    "UPDATE_COMPANY": "شرکت سمول",
+    "DELETE_COMPANY": "شرکت حذف کول",
+    "VIEW_COMPANY": "شرکت کتل",
+    "ADD_COMPANYCONTACTPERSON": "د شرکت اړیکه کوونکی کس اضافه کول",
+    "UPDATE_COMPANYCONTACTPERSON": "د شرکت اړیکه کوونکی کس سمول",
+    "DELETE_COMPANYCONTACTPERSON": "د شرکت اړیکه کوونکی کس حذف کول",
+    "VIEW_COMPANYCONTACTPERSON": "د شرکت اړیکه کوونکی کس کتل",
+    "ADD_CERTIFICATION": "تصدیق اضافه کول",
+    "UPDATE_CERTIFICATION": "تصدیق سمول",
+    "DELETE_CERTIFICATION": "تصدیق حذف کول",
+    "VIEW_CERTIFICATION": "تصدیق کتل",
+    "ADD_CERTIFICATIONREQUEST": "د تصدیق غوښتنه اضافه کول",
+    "UPDATE_CERTIFICATIONREQUEST": "د تصدیق غوښتنه سمول",
+    "DELETE_CERTIFICATIONREQUEST": "د تصدیق غوښتنه حذف کول",
+    "VIEW_CERTIFICATIONREQUEST": "د تصدیق غوښتنه کتل",
+    "ADD_PAYMENT": "تادیه اضافه کول",
+    "UPDATE_PAYMENT": "تادیه سمول",
+    "DELETE_PAYMENT": "تادیه حذف کول",
+    "VIEW_PAYMENT": "تادیه کتل",
+    "ADD_ATTACHMENT": "ضمیمه اضافه کول",
+    "UPDATE_ATTACHMENT": "ضمیمه سمول",
+    "DELETE_ATTACHMENT": "ضمیمه حذف کول",
+    "VIEW_ATTACHMENT": "ضمیمه کتل",
+    "ADD_CATEGORY": "کټګوري اضافه کول",
+    "UPDATE_CATEGORY": "کټګوري سمول",
+    "DELETE_CATEGORY": "کټګوري حذف کول",
+    "VIEW_CATEGORY": "کټګوري کتل",
+    "ADD_ADDRESS": "آدرس اضافه کول",
+    "UPDATE_ADDRESS": "آدرس سمول",
+    "DELETE_ADDRESS": "آدرس حذف کول",
+    "VIEW_ADDRESS": "آدرس کتل",
+    "ADD_COUNTRY": "هېواد اضافه کول",
+    "UPDATE_COUNTRY": "هېواد سمول",
+    "DELETE_COUNTRY": "هېواد حذف کول",
+    "VIEW_COUNTRY": "هېواد کتل",
+    "ADD_COUNTRYTRANSLATION": "د هېواد ژباړه اضافه کول",
+    "UPDATE_COUNTRYTRANSLATION": "د هېواد ژباړه سمول",
+    "DELETE_COUNTRYTRANSLATION": "د هېواد ژباړه حذف کول",
+    "VIEW_COUNTRYTRANSLATION": "د هېواد ژباړه کتل",
+    "ADD_PROVINCE": "ولایت اضافه کول",
+    "UPDATE_PROVINCE": "ولایت سمول",
+    "DELETE_PROVINCE": "ولایت حذف کول",
+    "VIEW_PROVINCE": "ولایت کتل",
+    "ADD_PROVINCETRANSLATION": "د ولایت ژباړه اضافه کول",
+    "UPDATE_PROVINCETRANSLATION": "د ولایت ژباړه سمول",
+    "DELETE_PROVINCETRANSLATION": "د ولایت ژباړه حذف کول",
+    "VIEW_PROVINCETRANSLATION": "د ولایت ژباړه کتل",
+    "ADD_DISTRICT": "ولسوالۍ اضافه کول",
+    "UPDATE_DISTRICT": "ولسوالۍ سمول",
+    "DELETE_DISTRICT": "ولسوالۍ حذف کول",
+    "VIEW_DISTRICT": "ولسوالۍ کتل",
+    "ADD_DISTRICTTRANSLATION": "د ولسوالۍ ژباړه اضافه کول",
+    "UPDATE_DISTRICTTRANSLATION": "د ولسوالۍ ژباړه سمول",
+    "DELETE_DISTRICTTRANSLATION": "د ولسوالۍ ژباړه حذف کول",
+    "VIEW_DISTRICTTRANSLATION": "د ولسوالۍ ژباړه کتل",
+    "ADD_LANGUAGE": "ژبه اضافه کول",
+    "UPDATE_LANGUAGE": "ژبه سمول",
+    "DELETE_LANGUAGE": "ژبه حذف کول",
+    "VIEW_LANGUAGE": "ژبه کتل",
+    "ADD_MULTILANGUAGE": "څو ژبې اضافه کول",
+    "UPDATE_MULTILANGUAGE": "څو ژبې سمول",
+    "DELETE_MULTILANGUAGE": "څو ژبې حذف کول",
+    "VIEW_MULTILANGUAGE": "څو ژبې کتل",
+    "ADD_MENU": "مینو اضافه کول",
+    "UPDATE_MENU": "مینو سمول",
+    "DELETE_MENU": "مینو حذف کول",
+    "VIEW_MENU": "مینو کتل",
+    "ADD_EMAILVERIFICATION": "د بریښنالیک تایید اضافه کول",
+    "UPDATE_EMAILVERIFICATION": "د بریښنالیک تایید سمول",
+    "DELETE_EMAILVERIFICATION": "د بریښنالیک تایید حذف کول",
+    "VIEW_EMAILVERIFICATION": "د بریښنالیک تایید کتل",
+    "ADD_FORGOTPASSWORD": "د هېر شوي پټنوم اضافه کول",
+    "UPDATE_FORGOTPASSWORD": "د هېر شوي پټنوم سمول",
+    "DELETE_FORGOTPASSWORD": "د هېر شوي پټنوم حذف کول",
+    "VIEW_FORGOTPASSWORD": "د هېر شوي پټنوم کتل",
+    "ADD_ZONE": "زون اضافه کول",
+    "UPDATE_ZONE": "زون سمول",
+    "DELETE_ZONE": "زون حذف کول",
+    "VIEW_ZONE": "زون کتل",
+    "ADD_COMMITEE": "کمیټه اضافه کول",
+    "UPDATE_COMMITEE": "کمیټه سمول",
+    "DELETE_COMMITEE": "کمیټه حذف کول",
+    "VIEW_COMMITEE": "کمیټه کتل",
+    "ADD_COMMITEEASSIGNMENT": "د کمیټې ټاکنه اضافه کول",
+    "UPDATE_COMMITEEASSIGNMENT": "د کمیټې ټاکنه سمول",
+    "DELETE_COMMITEEASSIGNMENT": "د کمیټې ټاکنه حذف کول",
+    "VIEW_COMMITEEASSIGNMENT": "د کمیټې ټاکنه کتل",
+    "ADD_COMMITEEASSIGNMENTCOMMENT": "د کمیټې ټاکنې نظر اضافه کول",
+    "UPDATE_COMMITEEASSIGNMENTCOMMENT": "د کمیټې ټاکنې نظر سمول",
+    "DELETE_COMMITEEASSIGNMENTCOMMENT": "د کمیټې ټاکنې نظر حذف کول",
+    "VIEW_COMMITEEASSIGNMENTCOMMENT": "د کمیټې ټاکنې نظر کتل",
+    "ADD_COMMITEEMEMBER": "د کمیټې غړی اضافه کول",
+    "UPDATE_COMMITEEMEMBER": "د کمیټې غړی سمول",
+    "DELETE_COMMITEEMEMBER": "د کمیټې غړی حذف کول",
+    "VIEW_COMMITEEMEMBER": "د کمیټې غړی کتل",
+    "ADD_COMMITEEREPORT": "د کمیټې راپور اضافه کول",
+    "UPDATE_COMMITEEREPORT": "د کمیټې راپور سمول",
+    "DELETE_COMMITEEREPORT": "د کمیټې راپور حذف کول",
+    "VIEW_COMMITEEREPORT": "د کمیټې راپور کتل",
+    "ADD_WORKFLOW": "کاري فلو اضافه کول",
+    "UPDATE_WORKFLOW": "کاري فلو سمول",
+    "DELETE_WORKFLOW": "کاري فلو حذف کول",
+    "VIEW_WORKFLOW": "کاري فلو کتل",
+    "ADD_WORKFLOWSTEP": "د کاري فلو مرحله اضافه کول",
+    "UPDATE_WORKFLOWSTEP": "د کاري فلو مرحله سمول",
+    "DELETE_WORKFLOWSTEP": "د کاري فلو مرحله حذف کول",
+    "VIEW_WORKFLOWSTEP": "د کاري فلو مرحله کتل",
+    "ADD_REQUESTWORKFLOW": "د غوښتنې کاري فلو اضافه کول",
+    "UPDATE_REQUESTWORKFLOW": "د غوښتنې کاري فلو سمول",
+    "DELETE_REQUESTWORKFLOW": "د غوښتنې کاري فلو حذف کول",
+    "VIEW_REQUESTWORKFLOW": "د غوښتنې کاري فلو کتل",
+    "ADD_CERTIFICATIONREQUESTSTATUSHISTORY": "د تصدیق غوښتنې تاریخ اضافه کول",
+    "UPDATE_CERTIFICATIONREQUESTSTATUSHISTORY": "د تصدیق غوښتنې تاریخ سمول",
+    "DELETE_CERTIFICATIONREQUESTSTATUSHISTORY": "د تصدیق غوښتنې تاریخ حذف کول",
+    "VIEW_CERTIFICATIONREQUESTSTATUSHISTORY": "د تصدیق غوښتنې تاریخ کتل",
+    "ADD_INSPECTION_REPORT": "د تفتیش راپور اضافه کول",
+    "UPDATE_INSPECTION_REPORT": "د تفتیش راپور سمول",
+    "DELETE_INSPECTION_REPORT": "د تفتیش راپور حذف کول",
+    "VIEW_INSPECTION_REPORT": "د تفتیش راپور کتل",
+    "ADD_COMMENT": "نظر اضافه کول",
+    "UPDATE_COMMENT": "نظر سمول",
+    "DELETE_COMMENT": "نظر حذف کول",
+    "VIEW_COMMENT": "نظر کتل",
+    "VIEW_DASHBOARD": "ډشبورډ کتل",
+    "VIEW_REPORT": "راپور کتل",
+    "VIEW_LOCATION": "موقعیت کتل",
+    "VIEW_STANDARD": "سټنډرډ کتل"
   },
-  "fields": {
-    "permissionName": "د صلاحیت نوم",
-    "assignPermissions": "صلاحیتونه وټاکئ",
-    "description": "تشریح"
+  "permission": {
+    "title": "د صلاحیتونو مدیریت",
+    "total": "ټول",
+    "labels": {
+      "permissions": "صلاحیتونه",
+      "of": "د",
+      "selected": "ټاکل شوی",
+      "showing": "ښودل کیږي"
+    },
+    "fields": {
+      "permissionName": "د صلاحیت نوم",
+      "assignPermissions": "صلاحیتونه وټاکئ",
+      "description": "تشریح"
+    },
+    "placeholders": {
+      "permissionName": "د صلاحیت نوم دننه کړئ (لکه: ADD_USER, VIEW_ROLE)",
+      "permissionNameHint": "یوازې لوی توري او لاندې کرښه وکاروئ (لکه: ADD_USER)",
+      "searchPermissions": "صلاحیتونه وپلټئ...",
+      "description": "د صلاحیت تشریح دننه کړئ"
+    },
+    "columns": {
+      "id": "آی دی",
+      "permissionName": "د صلاحیت نوم",
+      "actions": "کړنې"
+    },
+    "buttons": {
+      "create": "صلاحیت جوړ کړئ",
+      "refresh": "تازه کول",
+      "cancel": "لغوه کول",
+      "save": "خوندي کول",
+      "all": "ټول",
+      "none": "هیڅ"
+    },
+    "actions": {
+      "viewDetails": "تفصیلات کتل",
+      "edit": "صلاحیت سمول",
+      "delete": "صلاحیت ړنګول"
+    },
+    "messages": {
+      "loadFailed": "د صلاحیتونو بارول ناکام شول",
+      "createSuccess": "صلاحیت په بریالیتوب سره جوړ شو",
+      "createFailed": "د صلاحیت جوړول ناکام شول",
+      "updateSuccess": "صلاحیت په بریالیتوب سره تازه شو",
+      "updateFailed": "د صلاحیت تازه کول ناکام شول",
+      "deleteSuccess": "صلاحیت په بریالیتوب سره ړنګ شو",
+      "deleteFailed": "د صلاحیت ړنګول ناکام شول",
+      "noPermissionsFound": "هیڅ صلاحیت ونه موندل شو",
+      "adjustSearch": "مهرباني وکړئ خپل لټون تنظیم کړئ",
+      "creatingPermission": "صلاحیت جوړیږي...",
+      "updatingPermission": "صلاحیت تازه کیږي...",
+      "pleaseWait": "مهرباني وکړئ انتظار وکړئ"
+    },
+    "dialogs": {
+      "createTitle": "نوی صلاحیت جوړ کړئ",
+      "createSubtitle": "د سیسټم لپاره نوی صلاحیت تعریف کړئ",
+      "editTitle": "صلاحیت سمول",
+      "editSubtitle": "د صلاحیت توضیحات سم کړئ",
+      "deleteTitle": "صلاحیت ړنګ کړئ",
+      "deleteConfirm": "آیا تاسو ډاډه یاست چې غواړئ ړنګ کړئ",
+      "deleteWarning": "دا عمل بیرته نه شي ګرځول کیدی. ټول هغه رولونه چې دا صلاحیت کاروي به اغیزمن شي."
+    },
+    "validation": {
+      "permissionNameRequired": "د صلاحیت نوم اړین دی",
+      "permissionNameMinLength": "د صلاحیت نوم باید لږ تر لږه ۳ توري وي",
+      "permissionNamePattern": "د صلاحیت نوم باید یوازې لوی توري او لاندې کرښه ولري"
+    },
+    "breadcrumb": {
+      "home": "کور",
+      "permissions": "صلاحیتونه"
+    }
   },
-  "placeholders": {
-    "permissionName": "د صلاحیت نوم دننه کړئ (لکه: ADD_USER, VIEW_ROLE)",
-    "permissionNameHint": "یوازې لوی توري او لاندې کرښه وکاروئ (لکه: ADD_USER)",
-    "searchPermissions": "صلاحیتونه وپلټئ...",
-    "description": "د صلاحیت تشریح دننه کړئ"
+  "comment": {
+    "title": "تبصرې",
+    "manageDescription": "د ټولو پیرودونکو تبصرو اداره کول او کتل",
+    "details": "د تبصرې جزیات",
+    "commentDetails": "د تبصرې جزیات",
+    "viewingDetails": "د تبصرې بشپړ معلومات کتل",
+    "personalInfo": "شخصي معلومات",
+    "fullName": "بشپړ نوم",
+    "email": "بریښنالیک آدرس",
+    "createdAt": "د جوړیدو نیټه",
+    "updatedAt": "وروستی تازه کول",
+    "body": "د تبصرې متن",
+    "notFound": "تبصره ونه موندل شوه",
+    "backToList": "تبصرې ته راستنیدل",
+    "actions": "عملونه",
+    "deleteConfirm": "آیا تاسو ډاډه یاست چې غواړئ تبصره \"{{subject}}\" حذف کړئ؟",
+    "deleteSuccess": "تبصره په بریالیتوب سره حذف شوه",
+    "deleteError": "د تبصرې حذف کول ناکام شول",
+    "noComments": "کومه تبصره ونه موندل شوه",
+    "columns": {
+      "id": "آی ډي",
+      "fullName": "بشپړ نوم",
+      "email": "بریښنالیک",
+      "subject": "موضوع",
+      "body": "تبصره",
+      "createdAt": "د جوړیدو نیټه",
+      "updatedAt": "د تازه کیدو نیټه"
+    },
+    "editTitle": "تبصره سمول",
+    "createTitle": "تبصره جوړول",
+    "validation": {
+      "requiredFields": "بشپړ نوم، بریښنالیک، موضوع او متن اړین دي.",
+      "invalidEmail": "مهرباني وکړئ یو معتبر بریښنالیک دننه کړئ."
+    }
   },
-  "columns": {
-    "id": "آی دی",
-    "permissionName": "د صلاحیت نوم",
-    "actions": "کړنې"
+  "contactUs": {
+    "title": "زموږ سره د اړیکې پیغامونه",
+    "manageDescription": "د ټولو تماس فورم سپارنو مدیریت او کتل",
+    "details": "د اړیکې جزیات",
+    "contactDetails": "د اړیکو معلومات جزیات",
+    "create": "جوړول",
+    "editTitle": "د اړیکې پیغام سمول",
+    "createTitle": "د اړیکې پیغام جوړول",
+    "contactInformation": "د اړیکو معلومات",
+    "directorateInfo": "د ریاست معلومات",
+    "additionalInfo": "اضافي معلومات",
+    "fullName": "بشپړ نوم",
+    "name": "نوم",
+    "lastName": "تخلص",
+    "phoneNumber": "د تلیفون شمېره",
+    "email": "بریښنالیک آدرس",
+    "organization": "تنظیم",
+    "generalDirectorateNumber": "د عمومي ریاست شمېره",
+    "generalDirectorateAddress": "د عمومي ریاست آدرس",
+    "generateEmail": "تولید شوی بریښنالیک",
+    "satelliteInfo": "د سپوږمکۍ معلومات",
+    "createdAt": "د جوړیدو نیټه",
+    "updatedAt": "د تازه کیدو نیټه",
+    "notFound": "د اړیکې پیغام ونه موندل شو",
+    "deleteConfirm": "آیا تاسو ډاډه یاست چې غواړئ د \"{{name}}\" اړیکه حذف کړئ؟",
+    "deleteSuccess": "د اړیکې پیغام په بریالیتوب سره حذف شو",
+    "createSuccess": "د اړیکې پیغام په بریالیتوب سره جوړ شو",
+    "updateSuccess": "د اړیکې پیغام په بریالیتوب سره تازه شو",
+    "columns": {
+      "id": "آی ډي",
+      "name": "نوم",
+      "lastName": "تخلص",
+      "phoneNumber": "تلیفون",
+      "email": "بریښنالیک",
+      "organization": "تنظیم",
+      "createdAt": "د جوړیدو نیټه"
+    },
+    "validation": {
+      "namePhoneRequired": "نوم، تخلص او د تلیفون شمېره اړین دي",
+      "emailRequired": "بریښنالیک اړین دی",
+      "invalidEmail": "مهرباني وکړئ یو معتبر بریښنالیک آدرس دننه کړئ"
+    },
+    "detailsTitle": "د اړیکې پیغام جزیات",
+    "editDescription": "موجود د اړیکې پیغام تازه کول",
+    "createDescription": "نوی د اړیکې پیغام جوړول"
   },
-  "buttons": {
-    "create": "صلاحیت جوړ کړئ",
-    "refresh": "تازه کول",
-    "cancel": "لغوه کول",
-    "save": "خوندي کول",
-    "all": "ټول",
-    "none": "هیڅ"
+  "aboutUs": {
+    "title": "زموږ په اړه",
+    "manageDescription": "د ټولو زموږ په اړه مینځپانګې اداره کول او کتل",
+    "details": "زموږ په اړه جزیات",
+    "pageDetails": "زموږ په اړه پاڼې مینځپانګې جزیات",
+    "create": "جوړول",
+    "editTitle": "زموږ په اړه سمول",
+    "createTitle": "زموږ په اړه جوړول",
+    "subject": "موضوع",
+    "about": "د مینځپانګې په اړه",
+    "status": "حالت",
+    "active": "فعال",
+    "inactive": "غیر فعال",
+    "activeLabel": "فعال",
+    "createdAt": "د جوړیدو نیټه",
+    "updatedAt": "د تازه کیدو نیټه",
+    "notFound": "زموږ په اړه مینځپانګه ونه موندل شوه",
+    "deleteConfirm": "آیا تاسو ډاډه یاست چې غواړئ زموږ په اړه \"{{subject}}\" حذف کړئ؟",
+    "deleteSuccess": "زموږ په اړه مینځپانګه په بریالیتوب سره حذف شوه",
+    "createSuccess": "زموږ په اړه مینځپانګه په بریالیتوب سره جوړه شوه",
+    "updateSuccess": "زموږ په اړه مینځپانګه په بریالیتوب سره تازه شوه",
+    "columns": {
+      "id": "آی ډي",
+      "subject": "موضوع",
+      "about": "په اړه",
+      "status": "حالت"
+    },
+    "validation": {
+      "subjectRequired": "موضوع اړینه ده"
+    }
   },
-  "actions": {
-    "viewDetails": "تفصیلات کتل",
-    "edit": "صلاحیت سمول",
-    "delete": "صلاحیت ړنګول"
+  "organizationInfo": {
+    "title": "د سازمان معلومات",
+    "manageDescription": "د سازمان معلوماتي ریکارډونو اداره کول",
+    "details": "د سازمان جزیات",
+    "detailsHeader": "د سازمان معلوماتو جزیات",
+    "create": "جوړول",
+    "editTitle": "د سازمان معلومات سمول",
+    "createTitle": "د سازمان معلومات جوړول",
+    "editDescription": "د موجود سازمان معلومات تازه کول",
+    "createDescription": "سيسټم ته د سازمان نوي معلومات اضافه کول",
+    "organizationName": "د سازمان نوم",
+    "phoneNumber": "د تلیفون شمېره",
+    "address": "آدرس",
+    "satelliteHorizontal": "افقي سپوږمکۍ",
+    "satelliteVertical": "عمودي سپوږمکۍ",
+    "emailAddress": "بریښنالیک آدرس",
+    "createdAt": "د جوړیدو نیټه",
+    "updatedAt": "د تازه کیدو نیټه",
+    "notFound": "د سازمان معلومات ونه موندل شو",
+    "deleteConfirm": "آیا تاسو ډاډه یاست چې غواړئ سازمان \"{{organizationName}}\" حذف کړئ؟",
+    "deleteSuccess": "د سازمان معلومات په بریالیتوب سره حذف شو",
+    "createSuccess": "د سازمان معلومات په بریالیتوب سره جوړ شو",
+    "updateSuccess": "د سازمان معلومات په بریالیتوب سره تازه شو",
+    "basicInformation": "لومړني معلومات",
+    "locationInfo": "د موقعیت معلومات",
+    "satelliteInformation": "د سپوږمکۍ معلومات",
+    "contactInformation": "د اړیکو معلومات",
+    "placeholder": {
+      "organizationName": "د سازمان نوم دننه کړئ",
+      "phoneNumber": "+۹۳ ۱۲۳ ۴۵۶ ۷۸۹",
+      "address": "بشپړ آدرس دننه کړئ",
+      "satelliteHorizontal": "افقي کوآرډینټ دننه کړئ",
+      "satelliteVertical": "عمودي کوآرډینټ دننه کړئ",
+      "emailAddress": "info@sazman.com"
+    },
+    "columns": {
+      "id": "آی ډي",
+      "organizationName": "د سازمان نوم",
+      "address": "آدرس",
+      "phoneNumber": "د تلیفون شمېره",
+      "emailAddress": "بریښنالیک آدرس",
+      "createdAt": "د جوړیدو نیټه"
+    },
+    "validation": {
+      "organizationNameRequired": "د سازمان نوم اړین دی",
+      "addressRequired": "آدرس اړین دی",
+      "phoneNumberRequired": "د تلیفون شمېره اړینه ده",
+      "satelliteHorizontalRequired": "افقي سپوږمکۍ اړینه ده",
+      "satelliteVerticalRequired": "عمودي سپوږمکۍ اړینه ده",
+      "emailAddressRequired": "بریښنالیک آدرس اړین دی",
+      "invalidEmail": "مهرباني وکړئ یو معتبر بریښنالیک آدرس دننه کړئ"
+    }
   },
-  "messages": {
-    "loadFailed": "د صلاحیتونو بارول ناکام شول",
-    "createSuccess": "صلاحیت په بریالیتوب سره جوړ شو",
-    "createFailed": "د صلاحیت جوړول ناکام شول",
-    "updateSuccess": "صلاحیت په بریالیتوب سره تازه شو",
-    "updateFailed": "د صلاحیت تازه کول ناکام شول",
-    "deleteSuccess": "صلاحیت په بریالیتوب سره ړنګ شو",
-    "deleteFailed": "د صلاحیت ړنګول ناکام شول",
-    "noPermissionsFound": "هیڅ صلاحیت ونه موندل شو",
-    "adjustSearch": "مهرباني وکړئ خپل لټون تنظیم کړئ",
-    "creatingPermission": "صلاحیت جوړیږي...",
-    "updatingPermission": "صلاحیت تازه کیږي...",
-    "pleaseWait": "مهرباني وکړئ انتظار وکړئ"
+  "role": {
+    "ROLE_ADMIN": "د سیسټم عمومي مدیر",
+    "ROLE_USER": "عادي کاروونکی",
+    "ROLE_COMMITTEE": "د کمېټې غړی",
+    "ROLE_INSPECTOR": "پلټونکی",
+    "DOCUMENT_CONTROLLER": "د اسنادو د کنټرول عمومي مدیر",
+    "DATABASE_EXPERT": "د ډیټابېس متخصص",
+    "COMPANY_ADMIN": "د شرکت مدیر",
+    "CUSTOMER_CARE_MANAGER": "د پیرودونکو خدمتونو عمومي مدیر",
+    "COMITEEMEMBER": "د کمېټې غړی",
+    "title": "د رولونو مدیریت",
+    "total": "ټول",
+    "labels": {
+      "actions": "عملیات",
+      "noPermissions": "هیڅ اجازه نشته",
+      "permissions": "اجازې",
+      "of": "له",
+      "selected": "ټاکل شوي",
+      "showing": "ښودل",
+      "total": "ټول",
+      "categories": "کټګورۍ",
+      "permission": "اجازه",
+      "s": "ګانې"
+    },
+    "fields": {
+      "roleName": "د رول نوم",
+      "assignPermissions": "اجازې ټاکل",
+      "description": "تشریح",
+      "roleId": "د رول پېژند",
+      "created": "جوړ شوی",
+      "lastUpdated": "وروستی تازه کول",
+      "createdBy": "جوړ کړی",
+      "assignedPermissions": "ټاکل شوې اجازې"
+    },
+    "placeholders": {
+      "roleName": "د رول نوم ولیکئ (مدیر، اجرائیه مدیر، اېډیټر...)",
+      "searchPermissions": "اجازې ولټوئ..."
+    },
+    "columns": {
+      "id": "پېژند",
+      "roleName": "د رول نوم",
+      "permissions": "اجازې",
+      "actions": "عملیات"
+    },
+    "buttons": {
+      "create": "رول جوړول",
+      "refresh": "تازه کول",
+      "delete": "ړنګول",
+      "cancel": "لغوه",
+      "edit": "سمون",
+      "showLess": "کم ښودل",
+      "more": "نور",
+      "all": "ټول",
+      "none": "هیڅ",
+      "save": "ساتل",
+      "backToRoles": "بېرته رولونو ته",
+      "addPermissions": "اجازې زیاتول"
+    },
+    "actions": {
+      "edit": "د رول سمون",
+      "viewDetails": "جزئیات کتل",
+      "delete": "د رول ړنګول"
+    },
+    "status": {
+      "active": "فعال",
+      "inactive": "غیرفعال"
+    },
+    "tabs": {
+      "gridView": "شبکيز لید",
+      "groupedView": "ګروپي لید",
+      "listView": "لست لید"
+    },
+    "tooltips": {
+      "permissionsInfo": "دې رول ته ټولې ټاکل شوې اجازې"
+    },
+    "breadcrumb": {
+      "dashboard": "ډشبورډ",
+      "roles": "رولونه",
+      "roleDetails": "د رول جزئیات"
+    },
+    "messages": {
+      "loadFailed": "د رولونو بارول ناکام شول",
+      "deleteSuccess": "رول په بریالیتوب سره ړنګ شو",
+      "deleteFailed": "د رول ړنګول ناکام شول",
+      "createSuccess": "رول په بریالیتوب سره جوړ شو",
+      "createFailed": "د رول جوړول ناکام شول",
+      "updateSuccess": "رول په بریالیتوب سره تازه شو",
+      "updateFailed": "د رول تازه کول ناکام شول",
+      "loadDetailsFailed": "د رول جزئیات بارول ناکام شول",
+      "permissionsLoadFailed": "د اجازو بارول ناکام شول",
+      "noPermissionsFound": "هیڅ اجازه ونه موندل شوه",
+      "adjustSearch": "مهرباني وکړئ خپله لټون تنظیم کړئ",
+      "updatingRole": "رول تازه کېږي...",
+      "creatingRole": "رول جوړېږي...",
+      "pleaseWait": "مهرباني وکړئ انتظار وکړئ",
+      "roleNotFound": "رول ونه موندل شو",
+      "roleNotFoundDesc": "هغه رول چې تاسو یې لټوئ شتون نه لري یا ړنګ شوی دی.",
+      "noPermissionsAssigned": "هیڅ اجازه نه ده ټاکل شوې",
+      "noPermissionsDesc": "دې رول ته لا تر اوسه هېڅ اجازه نه ده ورکړل شوې"
+    },
+    "dialogs": {
+      "deleteTitle": "د رول ړنګول",
+      "deleteConfirm": "ایا تاسو ډاډه یاست چې دا ړنګ کړئ؟",
+      "deleteWarning": "دا عمل بېرته نه راګرځي. د دې رول ټولې اړوند اجازې به اغېزمنې شي.",
+      "editTitle": "د رول سمون",
+      "editSubtitle": "د رول جزئیات او اجازې سمې کړئ",
+      "createTitle": "نوی رول جوړول",
+      "createSubtitle": "نوی رول تعریف کړئ او اجازې ورته ورکړئ"
+    },
+    "validation": {
+      "roleNameRequired": "د رول نوم اړین دی",
+      "roleNameMinLength": "د رول نوم باید لږ تر لږه ۳ توري ولري"
+    }
   },
-  "dialogs": {
-    "createTitle": "نوی صلاحیت جوړ کړئ",
-    "createSubtitle": "د سیسټم لپاره نوی صلاحیت تعریف کړئ",
-    "editTitle": "صلاحیت سمول",
-    "editSubtitle": "د صلاحیت توضیحات سم کړئ",
-    "deleteTitle": "صلاحیت ړنګ کړئ",
+  "menu": {
+    "management": "د مینو مدیریت",
+    "total": "ټول",
+    "create": "مینو جوړول",
+    "createTitle": "نوی مینو جوړول",
+    "createDescription": "نیویګیشن ته د نوي مینو توکی اضافه کول",
+    "editTitle": "مینو سمول",
+    "editDescription": "د مینو توکی جزیات تازه کول",
+    "deleteTitle": "مینو ړنګول",
     "deleteConfirm": "آیا تاسو ډاډه یاست چې غواړئ ړنګ کړئ",
-    "deleteWarning": "دا عمل بیرته نه شي ګرځول کیدی. ټول هغه رولونه چې دا صلاحیت کاروي به اغیزمن شي."
-  },
-  "validation": {
-    "permissionNameRequired": "د صلاحیت نوم اړین دی",
-    "permissionNameMinLength": "د صلاحیت نوم باید لږ تر لږه ۳ توري وي",
-    "permissionNamePattern": "د صلاحیت نوم باید یوازې لوی توري او لاندې کرښه ولري"
-  },
-  "breadcrumb": {
-    "home": "کور",
-    "permissions": "صلاحیتونه"
+    "deleteSuccess": "مینو په بریالیتوب سره ړنګ شو",
+    "deleteFailed": "د مینو ړنګول ناکام شول",
+    "createSuccess": "مینو په بریالیتوب سره جوړ شو",
+    "createFailed": "د مینو جوړول ناکام شول",
+    "updateSuccess": "مینو په بریالیتوب سره تازه شو",
+    "updateFailed": "د مینو تازه کول ناکام شول",
+    "loadFailed": "د مینو او اجازې بارول ناکام شول",
+    "breadcrumb": "د مینو مدیریت",
+    "englishLabel": "انګلیسي لیبل",
+    "pashtoLabel": "پښتو لیبل",
+    "dariLabel": "دری لیبل",
+    "menuPath": "د مینو لاره",
+    "icon": "آیکون",
+    "sortOrder": "ترتیب",
+    "activeMenu": "فعال مینو",
+    "activeMenuHint": "غیر فعال مینو به د نیویګیشن څخه پټ شي",
+    "parentMenu": "اصلي مینو",
+    "parentMenuHint": "د پورتنۍ کچې مینو جوړولو لپاره خالي پریږدئ",
+    "requiredPermission": "اړین اجازه",
+    "permissionHint": "کاروونکو ته د دې مینو لیدلو لپاره دې اجازې ته اړتیا لري",
+    "iconHint": "د PrimeIcons کلاس نومونه وکاروئ (مثال: pi pi-home)",
+    "columns": {
+      "id": "آی ډي",
+      "label": "لیبل",
+      "path": "لاره",
+      "icon": "آیکون"
+    },
+    "placeholder": {
+      "englishLabel": "مثال: ډشبورډ",
+      "pashtoLabel": "ډشبورډ",
+      "dariLabel": "ډشبورډ",
+      "path": "dashboard",
+      "icon": "pi pi-home",
+      "parentMenu": "اصلي مینو غوره کړئ",
+      "permission": "اجازه غوره کړئ"
+    },
+    "validation": {
+      "englishLabelRequired": "انګلیسي لیبل اړین دی",
+      "pathRequired": "د مینو لاره اړینه ده"
+    }
   }
-}
 }

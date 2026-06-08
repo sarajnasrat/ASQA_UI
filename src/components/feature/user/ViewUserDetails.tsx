@@ -15,7 +15,7 @@ export const ViewUserDetails = () => {
   const getUserById = async () => {
     setLoading(true);
     try {
-      const res = await UserService.getUser(id);
+      const res = await UserService.getUser(Number(id));
       setUser(res.data.data);
     } catch (error) {
       console.error("Failed to load user", error);
@@ -30,18 +30,15 @@ export const ViewUserDetails = () => {
     }
   }, [id]);
 
-  const formatRoles = (roles: any[]) => {
-    if (!roles || roles.length === 0) {
-      return String(t("user.labels.noRole"));
-    }
-    return roles
-      .map((role: any) => {
-        const roleName = role.name.replace("ROLE_", "");
-        return String(t(`user.roles.${roleName}`, roleName));
-      })
-      .join(", ");
-  };
+const formatRoles = (roles?: any[]) => {
+  if (!roles || roles.length === 0) {
+    return String(t("user.labels.notProvided"));
+  }
 
+  return roles
+    .map((r: any) => t(`role.${r?.name}`))
+    .join(", ");
+};
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -98,7 +95,10 @@ export const ViewUserDetails = () => {
       <DynamicBreadcrumb
         items={[
           { label: String(t("user.title")), url: "/users" },
-          { label: String(t("user.details.viewUser")), url: `/users/view/${id}` },
+          {
+            label: String(t("user.details.viewUser")),
+            url: `/users/view/${id}`,
+          },
         ]}
         size="max-w-7xl mx-auto pt-4"
       />

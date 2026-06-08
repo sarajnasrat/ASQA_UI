@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppToast } from "../../../hooks/useToast";
 import { Button } from "primereact/button";
 import { TieredMenu } from "primereact/tieredmenu";
@@ -13,6 +13,7 @@ import { useTranslation } from "react-i18next";
 import ExcelExport from "../../common/ExcelExport";
 import { CertificationUpdate } from "./CertificationUpdate";
 import StatusTabMenu, { type StatusTabItem } from "../../common/StatusTabMenu";
+import { useAuth } from "../../../context/AuthContext";
 
 export const CertificationList = () => {
   const [certifications, setCertifications] = useState<any[]>([]);
@@ -31,12 +32,16 @@ export const CertificationList = () => {
 
   const [activeStatusIndex, setActiveStatusIndex] = useState(0);
   const [selectedStatus, setSelectedStatus] = useState("DRAFT");
+  const { hasPermission, withPermission } = useAuth();
 
   const statusTabs: StatusTabItem[] = [
-    { label: "Draft", value: "DRAFT" },
-    { label: "Printed", value: "PRINTED" },
-    { label: "Scanned", value: "SCANNED" },
-    { label: "Under Supervision", value: "UNDER_SUPERVISION" },
+    { label: t("certification.statusOptions.DRAFT"), value: "DRAFT" },
+    { label: t("certification.statusOptions.PRINTED"), value: "PRINTED" },
+    { label: t("certification.statusOptions.SCANNED"), value: "SCANNED" },
+    {
+      label: t("certification.statusOptions.UNDER_SUPERVISION"),
+      value: "UNDER_SUPERVISION",
+    },
   ];
 
   const getCertificates = async () => {
@@ -89,10 +94,10 @@ export const CertificationList = () => {
   const handleDelete = async (id: number) => {
     try {
       await CertificationService.deleteCertification(id);
-      showToast("success", "Success", "Certificate deleted");
+      showToast("success", t("common.success"), t("certification.deleted"));
       getCertificates();
     } catch {
-      showToast("error", "Error", "Delete failed");
+      showToast("error", t("common.error"), t("certification.deleteFailed"));
     }
   };
 
@@ -100,7 +105,7 @@ export const CertificationList = () => {
     const menu = useRef<any>(null);
 
     const items: MenuItem[] = [
-      {
+      ...withPermission("VIEW_CERTIFICATION", {
         label: t("common.view"),
         icon: "pi pi-eye",
         command: () =>
@@ -109,25 +114,25 @@ export const CertificationList = () => {
               rowData.requestId || rowData.certificationRequest?.id
             }`,
           ),
-      },
-      {
-        label: t("common.delete"),
-        icon: "pi pi-trash",
-        command: () => confirmDelete(rowData),
-      },
-      {
-        label: t("certification.uploadscan"),
-        icon: "pi pi-pencil",
-        command: () => {
-          setSelectedCertification(rowData);
-          setUpdateDialogVisible(true);
-        },
-      },
-      {
-        label: t("certification.print"),
-        icon: "pi pi-print",
-        command: () => navigate(`/certifications/print/${rowData.id}`),
-      },
+      }),
+      // ...withPermission("DELETE_CERTIFICATION", {
+      //   label: t("common.delete"),
+      //   icon: "pi pi-trash",
+      //   command: () => confirmDelete(rowData),
+      // }),
+      // ...withPermission("UPDATE_CERTIFICATION", {
+      //   label: t("certification.uploadscan"),
+      //   icon: "pi pi-pencil",
+      //   command: () => {
+      //     setSelectedCertification(rowData);
+      //     setUpdateDialogVisible(true);
+      //   },
+      // }),
+      // {
+      //   label: t("certification.print"),
+      //   icon: "pi pi-print",
+      //   command: () => navigate(`/certifications/print/${rowData.id}`),
+      // },
     ];
 
     return (
@@ -157,7 +162,7 @@ export const CertificationList = () => {
       <div>
         <Button
           icon="pi pi-sync"
-          label="Refresh"
+          label={t("common.refresh")}
           text
           severity="info"
           raised
@@ -168,7 +173,7 @@ export const CertificationList = () => {
           data={certifications}
           totalElements={totalRecords}
           fileName="certifications"
-          sheetName="Certifications"
+          sheetName={t("certification.management")}
           fetchAllData={async () => {
             const res =
               await CertificationService.getPaginatedCertificationsByStatus(
@@ -188,8 +193,9 @@ export const CertificationList = () => {
   );
 
   const issueDateBodyTemplate = (rowData: any) => {
-    if (!rowData.issueDate) return <span className="text-gray-400">—</span>;
-
+    if (!rowData.issueDate) {
+      return <span className="text-gray-400">{t("common.notSpecified")}</span>;
+    }
     const date = new Date(rowData.issueDate);
 
     return (
@@ -212,8 +218,9 @@ export const CertificationList = () => {
   };
 
   const expireDateBodyTemplate = (rowData: any) => {
-    if (!rowData.expiryDate) return <span className="text-gray-400">—</span>;
-
+    if (!rowData.expiryDate) {
+      return <span className="text-gray-400">{t("common.notSpecified")}</span>;
+    }
     const date = new Date(rowData.expiryDate);
 
     return (
@@ -294,7 +301,7 @@ export const CertificationList = () => {
         visible={updateDialogVisible}
         certification={selectedCertification}
         onHide={() => setUpdateDialogVisible(false)}
-        onUpdated={() =>undefined}
+        onUpdated={() => undefined}
       />
 
       <StatusTabMenu
@@ -308,7 +315,7 @@ export const CertificationList = () => {
       />
 
       <DynamicTable
-        title="Certification Management"
+        title={t("certification.management")}
         value={certifications}
         columns={columns}
         header={header()}
@@ -324,3 +331,4 @@ export const CertificationList = () => {
     </>
   );
 };
+

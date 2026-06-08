@@ -1,3 +1,4 @@
+import type { MenuItem } from "primereact/menuitem";
 import type { IUser } from "./user.interface";
 
 // ✅ AuthContext interface
@@ -6,10 +7,13 @@ export interface IAuthContext {
   isAuthenticated: boolean;
   authReady: boolean; // ✅ NEW: indicates if auth state is initialized
   menus: IMenu[]; // ✅ add menus here
-    permissions: string[];                 // ✅ NEW
+  permissions: string[]; // ✅ NEW
   hasPermission: (p: string) => boolean; // ✅ NEW
   login: (data: ILoginResponse) => void;
   logout: () => void;
+  withPermission: (permission: string, item: MenuItem) => MenuItem[];
+  roles: string[];
+  hasRole: (role: string) => boolean;
 }
 
 // ✅ Login API response interface

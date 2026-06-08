@@ -1,5 +1,4 @@
 import httpClient from "../api/httpClient";
-import type ForgotPassword from "../components/feature/forgotpassword/ForgotPassword";
 
 const USER_BASE = "/users";
 

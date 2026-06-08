@@ -1,6 +1,5 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useAuth } from "../../context/AuthContext";
 import DashboardService from "../../services/dashboard.service";
 import {
   Users,
@@ -86,7 +85,6 @@ export const Dashboard: React.FC = () => {
     React.useState<DashboardData | null>(null);
   const [loading, setLoading] = React.useState<boolean>(true);
   const [error, setError] = React.useState<string | null>(null);
-  const { user } = useAuth();
 
   const fetchDashboardData = async (): Promise<void> => {
     setLoading(true);

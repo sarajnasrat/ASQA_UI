@@ -8,7 +8,19 @@ export const CommiteeAssignmentService = {
   getAll() {
     return httpClient.get(`${BASE_URL}/all`);
   },
-
+getMyCommitteeAssignments(
+  userId: number,
+  status: string,
+  params?: any
+) {
+  return httpClient.get(`${BASE_URL}/my-committees`, {
+    params: {
+      userId,
+      status,
+      ...params,
+    },
+  });
+},
   // ================= PAGINATION =================
   getAllPaginated(params?: any) {
     return httpClient.get(`${BASE_URL}`, { params });

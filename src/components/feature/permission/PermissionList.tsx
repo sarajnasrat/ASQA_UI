@@ -1,16 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next';
-import { useAppToast } from '../../../hooks/useToast';
-import { useNavigate } from 'react-router-dom';
-import PermissionService from '../../../services/permission.service';
-import { Button } from 'primereact/button';
-import type { MenuItem } from 'primereact/menuitem';
-import { TieredMenu } from 'primereact/tieredmenu';
-import { Toast } from 'primereact/toast';
-import { ConfirmDialog } from 'primereact/confirmdialog';
-import DynamicBreadcrumb from '../../common/DynamicBreadcrumb';
-import { DynamicTable } from '../../common/DynamicTable';
-import { CreatePermission } from './CreatePermission';
+import React, { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useAppToast } from "../../../hooks/useToast";
+import { useNavigate } from "react-router-dom";
+import PermissionService from "../../../services/permission.service";
+import { Button } from "primereact/button";
+import type { MenuItem } from "primereact/menuitem";
+import { TieredMenu } from "primereact/tieredmenu";
+import { Toast } from "primereact/toast";
+import { ConfirmDialog } from "primereact/confirmdialog";
+import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
+import { DynamicTable } from "../../common/DynamicTable";
+import { CreatePermission } from "./CreatePermission";
+import { useAuth } from "../../../context/AuthContext";
 
 export const PermissionList = () => {
   const { t } = useTranslation();
@@ -22,9 +23,10 @@ export const PermissionList = () => {
   const [first, setFirst] = React.useState(0);
   const [rows, setRows] = React.useState(10);
   const [totalRecords, setTotalRecords] = React.useState(0);
-  const [globalFilter, setGlobalFilter] = React.useState("");
-  const [sortField, setSortField] = React.useState("id");
-  const [sortOrder, setSortOrder] = React.useState(-1);
+  const [globalFilter] = React.useState("");
+  const [sortField] = React.useState("id");
+  const [sortOrder] = React.useState(-1);
+  const { hasPermission, withPermission } = useAuth();
 
   const getAllPermissions = async () => {
     try {
@@ -37,26 +39,30 @@ export const PermissionList = () => {
       setPermissions(res.data.data);
       setTotalRecords(res.data.totalElements);
     } catch (error) {
-      showToast("error", t("common.error"), String(t("permission.messages.loadFailed")));
+      showToast(
+        "error",
+        t("common.error"),
+        String(t("permission.messages.loadFailed")),
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => { 
+  useEffect(() => {
     getAllPermissions();
   }, [first, rows, globalFilter, sortField, sortOrder]);
-  
+
   // Action Menu
   const actionTemplate = (rowData: any) => {
     const menu = useRef<any>(null);
 
     const items: MenuItem[] = [
-      {
+      ...withPermission("VIEW_PERMISSION", {
         label: String(t("permission.actions.viewDetails")),
         icon: "pi pi-eye",
         command: () => navigate(`/permissions/view/${rowData.id}`),
-      },
+      }),
     ];
 
     return (
@@ -85,14 +91,16 @@ export const PermissionList = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-          <Button
-            icon="pi pi-plus"
-            label={String(t("permission.buttons.create"))}
-            raised
-            severity="info"
-            text
-            onClick={() => setShowCreateDialog(true)}
-          />
+          {hasPermission("ADD_PERMISSION") && (
+            <Button
+              icon="pi pi-plus"
+              label={String(t("permission.buttons.create"))}
+              raised
+              severity="info"
+              text
+              onClick={() => setShowCreateDialog(true)}
+            />
+          )}
 
           <Button
             icon="pi pi-sync"
@@ -115,31 +123,33 @@ export const PermissionList = () => {
       style: { width: "80px" },
       className: "text-sm font-medium text-gray-600",
     },
-{
-  header: String(t("permission.columns.permissionName")),
-  sortable: true,
-  field: "permissionName",
-  sortField: "permissionName",
-  body: (rowData: any) => {
-    const translatedName = String(t(`permissions.${rowData.permissionName}`, rowData.permissionName));
-    
-    return (
-      <div className="group relative">
-        <span className="text-sm text-gray-700 cursor-help border-b border-dotted border-gray-400">
-          {translatedName}
-        </span>
-        <div className="absolute bottom-full left-0 mb-2 hidden group-hover:block z-10">
-          <div className="bg-gray-800 text-white text-xs rounded-lg py-1 px-2 whitespace-nowrap shadow-lg">
-            {rowData.permissionName}
-            <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-1">
-              <div className="border-4 border-transparent border-t-gray-800"></div>
+    {
+      header: String(t("permission.columns.permissionName")),
+      sortable: true,
+      field: "permissionName",
+      sortField: "permissionName",
+      body: (rowData: any) => {
+        const translatedName = String(
+          t(`permissions.${rowData.permissionName}`, rowData.permissionName),
+        );
+
+        return (
+          <div className="group relative">
+            <span className="text-sm text-gray-700 cursor-help border-b border-dotted border-gray-400">
+              {translatedName}
+            </span>
+            <div className="absolute bottom-full left-0 mb-2 hidden group-hover:block z-10">
+              <div className="bg-gray-800 text-white text-xs rounded-lg py-1 px-2 whitespace-nowrap shadow-lg">
+                {rowData.permissionName}
+                <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-1">
+                  <div className="border-4 border-transparent border-t-gray-800"></div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-    );
-  },
-},
+        );
+      },
+    },
     {
       header: String(t("permission.columns.actions")),
       body: actionTemplate,

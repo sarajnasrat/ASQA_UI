@@ -9,14 +9,12 @@ import {
   Award,
   Globe,
   Shield,
-  Clock,
-  ArrowRight,
   ChevronLeft,
   AlertTriangle,
-  ChevronRight,
   Send,
   Copy,
   Home,
+  X,
 } from "lucide-react";
 import { useAppToast } from "../../../../hooks/useToast";
 import ContactPersonForm from "./ContactPersonForm";
@@ -35,7 +33,7 @@ interface LocationState {
 }
 
 const Registration = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [step, setStep] = useState<number>(1);
   const [companyId, setCompanyId] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -85,13 +83,7 @@ const Registration = () => {
       setCompanyId(parseInt(storedCompanyId));
     }
 
-    console.log("Registration loaded with:", {
-      state,
-      storedRequestId,
-      storedCertificationType,
-      storedMainType,
-      storedRequestType,
-    });
+
   }, [location.state]);
 
   const steps = [
@@ -116,14 +108,6 @@ const Registration = () => {
     if (type?.includes("DOMESTIC")) return "from-blue-600 to-blue-700";
     if (type?.includes("INTERNATIONAL")) return "from-indigo-600 to-indigo-700";
     return "from-purple-600 to-purple-700";
-  };
-
-  const getCertificationBadgeColor = (type: string) => {
-    if (type?.includes("DOMESTIC"))
-      return "bg-blue-100 text-blue-700 border-blue-200";
-    if (type?.includes("INTERNATIONAL"))
-      return "bg-indigo-100 text-indigo-700 border-indigo-200";
-    return "bg-purple-100 text-purple-700 border-purple-200";
   };
 
   const handleCertificationSuccess = (
@@ -209,7 +193,6 @@ const Registration = () => {
       if (response.data?.success) {
         // Extract tracking number from response
         const trackingNum = response.data?.data?.trackingNumber;
-        console.log("Tracking Number:", trackingNum);
         setTrackingNumber(trackingNum);
         setShowSuccessDialog(true); // Show success dialog instead of toast
         
@@ -382,7 +365,7 @@ const Registration = () => {
 
             {/* Confirmation Modal */}
             {showConfirmationModal && (
-              <div className="fixed inset-0  flex items-center justify-center z-50 p-4">
+              <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
                 <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
                   <div className="flex items-center justify-center mb-4">
                     <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center">
@@ -430,81 +413,128 @@ const Registration = () => {
               </div>
             )}
 
-            {/* Success Dialog */}
+            {/* Beautiful Success Dialog with Flowers */}
             {showSuccessDialog && (
-              <div className="fixed inset-0  flex items-center justify-center z-50 p-4 animate-fadeIn">
-                <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 transform animate-scaleUp">
-                  {/* Success Animation */}
-                  <div className="flex items-center justify-center mb-4">
-                    <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center animate-bounce">
-                      <Check className="h-10 w-10 text-green-600" />
-                    </div>
+              <div className="fixed inset-0 flex items-center justify-center z-50 p-4 success-overlay">
+                <div className="relative max-w-md w-full">
+                  {/* Flower Bouquet - Behind the dialog */}
+                  <div className="flower-bouquet">
+                    <svg className="bouquet-svg" viewBox="0 0 200 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      {/* Stems */}
+                      <path d="M100 130 L85 165 M100 130 L115 165 M100 130 L100 170" stroke="#6c9e6f" strokeWidth="3" strokeLinecap="round"/>
+                      {/* Leaves */}
+                      <path d="M90 145 L72 138 M110 145 L128 138" stroke="#5f8b62" strokeWidth="2.5" strokeLinecap="round"/>
+                      <path d="M95 152 L82 160 M105 152 L118 160" stroke="#5f8b62" strokeWidth="2.5" strokeLinecap="round"/>
+                      {/* Left Pink Flower */}
+                      <circle cx="68" cy="95" r="18" fill="#FFB7C5" opacity="0.95"/>
+                      <circle cx="68" cy="95" r="7" fill="#FFE2AA"/>
+                      {/* Center Peach Flower */}
+                      <circle cx="100" cy="85" r="24" fill="#FFC8A2" opacity="0.95"/>
+                      <circle cx="100" cy="85" r="9" fill="#FCE6B4"/>
+                      {/* Right Lavender Flower */}
+                      <circle cx="133" cy="97" r="17" fill="#D9C2FF" opacity="0.95"/>
+                      <circle cx="133" cy="97" r="6.5" fill="#FEF5D3"/>
+                      {/* Small accent flowers */}
+                      <circle cx="48" cy="115" r="9" fill="#F7C5D6" opacity="0.9"/>
+                      <circle cx="152" cy="112" r="10" fill="#C9E6D0" opacity="0.9"/>
+                      {/* Sparkles */}
+                      <circle cx="40" cy="78" r="2.5" fill="#FFDC9F" opacity="0.8"/>
+                      <circle cx="160" cy="75" r="3" fill="#FAD0A0" opacity="0.8"/>
+                      <circle cx="115" cy="55" r="2" fill="#FFE0B5" opacity="0.8"/>
+                    </svg>
                   </div>
 
-                  <h3 className="text-2xl font-bold text-center mb-2 text-gray-800">
-                    {t("registration.success.title", "✅ Request Submitted Successfully!")}
-                  </h3>
-
-                  <p className="text-gray-600 text-center mb-6">
-                    {t("registration.success.message", "Your certification request has been submitted successfully.")}
-                  </p>
-                  
-                  {/* Tracking Number Section */}
-                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-lg p-5 mb-6">
-                    <p className="text-sm text-blue-800 mb-2 text-center font-medium">
-                      📋 {t("registration.success.trackingLabel", "Your Tracking Number")}
-                    </p>
-                    <div className="flex items-center justify-between gap-3 bg-white rounded-lg p-3 border border-blue-200">
-                      <p className="text-xl font-bold text-blue-900 font-mono tracking-wider">
-                        {trackingNumber}
-                      </p>
-                      <button
-                        onClick={handleCopyTrackingNumber}
-                        className="p-2 hover:bg-blue-100 rounded-lg transition-colors group"
-                        title={t("common.copy", "Copy")}
-                      >
-                        <Copy className="h-5 w-5 text-blue-600 group-hover:scale-110 transition-transform" />
-                      </button>
-                    </div>
-                    <p className="text-xs text-blue-600 mt-3 text-center">
-                      💡 {t("registration.success.trackingHint", "Save this number to track your request status")}
-                    </p>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex flex-col gap-3">
+                  {/* Main Dialog Card */}
+                  <div className="bg-white rounded-2xl shadow-2xl overflow-hidden transform transition-all duration-300 success-dialog">
+                    {/* Close button */}
                     <button
-                      onClick={() => {
-                        setShowSuccessDialog(false);
-                        navigate(`/track-request?tracking=${trackingNumber}`);
-                      }}
-                      className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 flex items-center justify-center gap-2 shadow-md"
+                      onClick={() => setShowSuccessDialog(false)}
+                      className="absolute top-4 right-4 p-1 hover:bg-gray-100 rounded-full transition-colors z-10"
                     >
-                      <Shield className="h-5 w-5" />
-                      {t("registration.success.trackRequest", "Track My Request")}
+                      <X className="h-5 w-5 text-gray-400 hover:text-gray-600" />
                     </button>
-                    
-                    <div className="flex gap-3">
-                      <button
-                        onClick={() => {
-                          setShowSuccessDialog(false);
-                          navigate("/companies");
-                        }}
-                        className="flex-1 px-4 py-2.5 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-all duration-200 flex items-center justify-center gap-2"
-                      >
-                        <Building2 className="h-4 w-4" />
-                        {t("registration.success.viewCompanies", "View Companies")}
-                      </button>
-                      <button
-                        onClick={() => {
-                          setShowSuccessDialog(false);
-                          navigate("/");
-                        }}
-                        className="flex-1 px-4 py-2.5 bg-green-50 text-green-700 rounded-lg font-medium hover:bg-green-100 transition-all duration-200 flex items-center justify-center gap-2"
-                      >
-                        <Home className="h-4 w-4" />
-                        {t("registration.success.goHome", "Go Home")}
-                      </button>
+
+                    <div className="p-8">
+                      {/* Success Icon with Pulse Animation */}
+                      <div className="flex justify-center mb-6">
+                        <div className="relative">
+                          <div className="absolute inset-0 rounded-full bg-green-400 opacity-30 animate-ping"></div>
+                          <div className="relative w-24 h-24 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-lg">
+                            <Check className="h-12 w-12 text-white" strokeWidth={3} />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Congratulations Message */}
+                      <h2 className="text-3xl font-bold text-center text-gray-800 mb-3">
+                        Congratulations! 🎉
+                      </h2>
+                      
+                      <p className="text-gray-600 text-center text-lg mb-2">
+                        Your request has been submitted successfully.
+                      </p>
+
+                      {/* Divider with flowers */}
+                      <div className="flex justify-center items-center gap-2 my-4">
+                        <div className="h-px flex-1 bg-gradient-to-r from-transparent to-pink-200"></div>
+                        <span className="text-2xl">🌸</span>
+                        <div className="h-px flex-1 bg-gradient-to-l from-transparent to-pink-200"></div>
+                      </div>
+
+                      {/* Thank You Message */}
+                      <p className="text-gray-500 text-center mb-6 leading-relaxed">
+                        Thank you for submitting your certification request. Our team will review your information and contact you soon.
+                      </p>
+
+                      {/* Tracking Number Section (if available) */}
+                      {trackingNumber && (
+                        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-4 mb-6">
+                          <p className="text-xs text-blue-800 mb-2 text-center font-medium uppercase tracking-wide">
+                            📋 Reference Number
+                          </p>
+                          <div className="flex items-center justify-between gap-3 bg-white rounded-lg p-3 border border-blue-200">
+                            <code className="text-lg font-bold text-blue-900 font-mono tracking-wider">
+                              {trackingNumber}
+                            </code>
+                            <button
+                              onClick={handleCopyTrackingNumber}
+                              className="p-1.5 hover:bg-blue-100 rounded-lg transition-all group"
+                              title="Copy tracking number"
+                            >
+                              <Copy className="h-4 w-4 text-blue-600 group-hover:scale-110 transition-transform" />
+                            </button>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Action Buttons */}
+                      <div className="flex flex-col gap-3">
+                        <button
+                          onClick={() => {
+                            setShowSuccessDialog(false);
+                            if (trackingNumber) {
+                              navigate(`/track-request?tracking=${trackingNumber}`);
+                            } else {
+                              navigate("/");
+                            }
+                          }}
+                          className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
+                        >
+                          <Shield className="h-5 w-5" />
+                          Track My Request
+                        </button>
+                        
+                        <button
+                          onClick={() => {
+                            setShowSuccessDialog(false);
+                            navigate("/");
+                          }}
+                          className="w-full px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-all duration-200 flex items-center justify-center gap-2"
+                        >
+                          <Home className="h-5 w-5" />
+                          Close
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -585,6 +615,15 @@ const Registration = () => {
             opacity: 1;
           }
         }
+
+        @keyframes float {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-10px);
+          }
+        }
         
         .animate-fadeIn {
           animation: fadeIn 0.3s ease-out;
@@ -592,6 +631,38 @@ const Registration = () => {
         
         .animate-scaleUp {
           animation: scaleUp 0.3s ease-out;
+        }
+
+        /* Success Dialog Styles */
+        .success-overlay {
+          background: rgba(0, 0, 0, 0.4);
+          backdrop-filter: blur(8px);
+          animation: fadeIn 0.3s ease-out;
+        }
+
+        .flower-bouquet {
+          position: absolute;
+          top: -60px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 200px;
+          height: 180px;
+          pointer-events: none;
+          z-index: 10;
+          filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.1));
+          animation: float 3s ease-in-out infinite;
+        }
+
+        .success-dialog {
+          animation: scaleUp 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
+        }
+
+        @media (max-width: 640px) {
+          .flower-bouquet {
+            width: 160px;
+            height: 150px;
+            top: -50px;
+          }
         }
       `}</style>
     </div>

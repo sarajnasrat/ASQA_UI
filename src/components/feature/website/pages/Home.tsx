@@ -1,5 +1,4 @@
 // pages/Home.js
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -7,13 +6,11 @@ import {
   FileText,
   Award,
   Users,
-  Clock,
   Shield,
-  TrendingUp,
+ 
   Globe,
   Building2,
   ArrowRight,
-  Star,
   Sparkles,
   Target,
   HeartHandshake,

@@ -139,9 +139,9 @@ export const CertificationRequestPayment = () => {
   };
 
   const formatFileSize = (bytes: number | null | undefined): string => {
-    if (bytes === null || bytes === undefined || bytes === 0) return "0 Bytes";
+    if (bytes === null || bytes === undefined || bytes === 0) return t("certificationRequest.fileSize.zero");
 
-    const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+    const sizes = [t("certificationRequest.fileSize.bytes"), t("certificationRequest.fileSize.kb"), t("certificationRequest.fileSize.mb"), t("certificationRequest.fileSize.gb"), t("certificationRequest.fileSize.tb")];
     const k = 1024;
     const i = Math.floor(Math.log(bytes) / Math.log(k));
 
@@ -183,163 +183,365 @@ export const CertificationRequestPayment = () => {
       toast.current?.show({
         severity: "warn",
         summary: t("common.warning"),
-        detail: "Bill can be printed only when payment is pending.",
+        detail: t("certificationRequest.payment.printPendingOnly"),
       });
       return;
     }
 
     const printWindow = window.open("", "_blank");
     if (!printWindow) return;
+const billContent = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoice - ${request.serialNumber}</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-    const billContent = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>Payment Bill - ${request.serialNumber}</title>
-        <style>
-          body {
-            font-family: Arial, sans-serif;
-            padding: 40px;
-            margin: 0;
-          }
-          .bill-container {
-            max-width: 800px;
-            margin: 0 auto;
-            border: 1px solid #ddd;
-            padding: 30px;
-          }
-          .header {
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #333;
-            padding-bottom: 20px;
-          }
-          .company-name {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 10px;
-          }
-          .bill-title {
-            font-size: 28px;
-            font-weight: bold;
-            margin: 20px 0;
-            text-align: center;
-          }
-          .details-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-          }
-          .details-table td,
-          .details-table th {
-            padding: 12px;
-            border: 1px solid #ddd;
-          }
-          .details-table th {
-            background-color: #f5f5f5;
-            font-weight: bold;
-            width: 40%;
-          }
-          .amount {
-            font-size: 24px;
-            font-weight: bold;
-            color: #28a745;
-            text-align: right;
-            margin-top: 20px;
-          }
-          .footer {
-            margin-top: 50px;
-            text-align: center;
-            font-size: 12px;
-            color: #666;
-            border-top: 1px solid #ddd;
-            padding-top: 20px;
-          }
-          .payment-instructions {
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-left: 4px solid #007bff;
-          }
-          @media print {
-            body {
-              padding: 0;
-            }
-            .no-print {
-              display: none;
-            }
-          }
-        </style>
-      </head>
-      <body>
-        <div class="bill-container">
-          <div class="header">
-            <div class="company-name">Certification Authority</div>
-            <div>Payment Invoice / Bill</div>
-          </div>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #f0f0f0;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
 
-          <div class="bill-title">PAYMENT INVOICE</div>
+    .invoice {
+      max-width: 800px;
+      width: 100%;
+      background: white;
+      padding: 40px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
 
-          <table class="details-table">
-            <tr>
-              <th>Serial Number</th>
-              <td>${request.serialNumber || "-"}</td>
-            </tr>
-            <tr>
-              <th>Tracking Number</th>
-              <td>${request.trackingNumber || "-"}</td>
-            </tr>
-            <tr>
-              <th>Company Name</th>
-              <td>${request.company?.[getCompanyNameField()] || "-"}</td>
-            </tr>
-            <tr>
-              <th>Request Type</th>
-              <td>${t(`certificationRequest.typeOptions.${request.requestType}`)}</td>
-            </tr>
-            <tr>
-              <th>Payment Amount</th>
-              <td>${request.paymentAmount || "To be determined"}</td>
-            </tr>
-            <tr>
-              <th>Payment Status</th>
-              <td>Pending</td>
-            </tr>
-          </table>
+    /* Header */
+    .invoice-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
 
-          <div class="payment-instructions">
-            <strong>Payment Instructions:</strong><br/>
-            Please transfer the amount to the following bank account:<br/>
-            Bank: ABC Bank<br/>
-            Account Name: Certification Authority<br/>
-            Account Number: 1234567890<br/>
-            IBAN: IBAN123456789<br/>
-            SWIFT/BIC: ABCDEF123<br/>
-            Reference: ${request.serialNumber || "-"}
-          </div>
+    .invoice-title h1 {
+      font-size: 32px;
+      font-weight: 300;
+      color: #333;
+      margin-bottom: 8px;
+    }
 
-          <div class="amount">
-            Total Amount: ${request.paymentAmount || "Contact support"}
-          </div>
+    .invoice-title p {
+      font-size: 14px;
+      color: #666;
+    }
 
-          <div class="footer">
-            This is a system generated invoice. For any queries, please contact support.<br/>
-            Generated on: ${new Date().toLocaleString()}
-          </div>
-        </div>
+    .company-name {
+      text-align: right;
+      font-size: 18px;
+      font-weight: 500;
+      color: #333;
+    }
 
-        <div class="no-print" style="text-align:center; margin-top:20px;">
-          <button onclick="window.print()" style="padding:10px 20px; font-size:16px;">
-            Print Bill
-          </button>
-          <button onclick="window.close()" style="padding:10px 20px; font-size:16px; margin-left:10px;">
-            Close
-          </button>
-        </div>
-      </body>
-      </html>
-    `;
+    /* Info Row */
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 40px;
+    }
 
+    .info-section {
+      flex: 1;
+    }
+
+    .info-section h3 {
+      font-size: 12px;
+      font-weight: 600;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .info-section p {
+      font-size: 15px;
+      color: #333;
+      font-weight: 500;
+    }
+
+    /* Bank Details */
+    .bank-details {
+      margin-bottom: 30px;
+    }
+
+    .bank-details h3 {
+      font-size: 12px;
+      font-weight: 600;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .bank-details p {
+      font-size: 14px;
+      color: #333;
+      margin-bottom: 4px;
+    }
+
+    /* Table */
+    .items-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+
+    .items-table th {
+      text-align: left;
+      padding: 12px 0;
+      border-bottom: 1px solid #e0e0e0;
+      font-size: 12px;
+      font-weight: 600;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .items-table td {
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .items-table td:first-child,
+    .items-table th:first-child {
+      width: 50px;
+    }
+
+    .items-table td:nth-child(3),
+    .items-table th:nth-child(3),
+    .items-table td:nth-child(4),
+    .items-table th:nth-child(4),
+    .items-table td:nth-child(5),
+    .items-table th:nth-child(5) {
+      text-align: right;
+    }
+
+    /* Total Amount */
+    .total-amount {
+      text-align: right;
+      margin-bottom: 30px;
+    }
+
+    .total-amount h3 {
+      font-size: 12px;
+      font-weight: 600;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .total-amount p {
+      font-size: 28px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+    }
+
+    .footer-company {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 12px;
+    }
+
+    .footer-contact {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.8;
+    }
+
+    .footer-contact p {
+      margin: 0;
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+      text-align: center;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
+
+    .btn {
+      padding: 10px 24px;
+      font-size: 14px;
+      font-weight: 500;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 0 6px;
+    }
+
+    .btn-print {
+      background: #333;
+      color: white;
+    }
+
+    .btn-print:hover {
+      background: #555;
+    }
+
+    .btn-close {
+      background: #e0e0e0;
+      color: #333;
+    }
+
+    .btn-close:hover {
+      background: #ccc;
+    }
+
+    /* Print Styles */
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+        margin: 0;
+      }
+      .invoice {
+        padding: 20px;
+        box-shadow: none;
+      }
+      .action-buttons {
+        display: none;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .invoice {
+        padding: 25px;
+      }
+      .invoice-header {
+        flex-direction: column;
+        text-align: center;
+      }
+      .company-name {
+        text-align: center;
+      }
+      .info-row {
+        flex-direction: column;
+        gap: 20px;
+      }
+      .total-amount {
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="invoice">
+    <!-- Header -->
+    <div class="invoice-header">
+      <div class="invoice-title">
+        <h1>Invoice</h1>
+        <p>Invoice no: ${request.serialNumber || "INV-" + Date.now()}</p>
+      </div>
+      <div class="company-name">
+        ASQA<br>
+        Afghanistan Quality Standards Authority
+      </div>
+    </div>
+
+    <!-- Billed To & Dates -->
+    <div class="info-row">
+      <div class="info-section">
+        <h3>Billed To:</h3>
+        <p>${request.company?.[getCompanyNameField()] || "-"}</p>
+      </div>
+      <div class="info-section">
+        <h3>Invoice Date:</h3>
+        <p>${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+      </div>
+      <div class="info-section">
+        <h3>Due Date:</h3>
+        <p>${new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+      </div>
+    </div>
+
+    <!-- Items Table -->
+    <table class="items-table">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Item Description</th>
+          <th>Price</th>
+          <th>Qty</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>${t(`certificationRequest.certificationTypeOptions.${request.certificationType}`) || "Certification Fee"}</td>
+          <td>${request.paymentAmount || "To be determined"}</td>
+          <td>1</td>
+          <td>${request.paymentAmount || "To be determined"}</td>
+        </tr>
+     
+      </tbody>
+    </table>
+
+    <!-- Payment Instructions -->
+    <div class="bank-details">
+      <h3>Please make payment via</h3>
+      <p>Bank Name : Da Afghanistan Bank</p>
+      <p>Account Number : 001-234567-89</p>
+      <p>Account Holder : ASQA Certification Authority</p>
+      <p>Reference : ${request.serialNumber || "-"}</p>
+    </div>
+
+    <!-- Total Amount Due -->
+    <div class="total-amount">
+      <h3>Total Amount Due:</h3>
+      <p>${request.paymentAmount || "Contact Support"}</p>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <div class="footer-company">ASQA</div>
+      <div class="footer-contact">
+        <p>+93 (555) 123-4567</p>
+        <p>support@asqa.af</p>
+        <p>Kabul, Afghanistan</p>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <button class="btn btn-print" onclick="window.print()">🖨️ Print Invoice</button>
+      <button class="btn btn-close" onclick="window.close()">✖ Close</button>
+    </div>
+  </div>
+</body>
+</html>
+`;
     printWindow.document.write(billContent);
     printWindow.document.close();
     // mark printed locally so upload option appears
@@ -379,7 +581,7 @@ export const CertificationRequestPayment = () => {
       toast.current?.show({
         severity: "warn",
         summary: t("common.warning"),
-        detail: "Please upload the scanned bill.",
+        detail: t("certificationRequest.payment.uploadScannedBillRequired"),
       });
       return;
     }
@@ -388,7 +590,7 @@ export const CertificationRequestPayment = () => {
       toast.current?.show({
         severity: "warn",
         summary: t("common.warning"),
-        detail: "Please enter transaction ID.",
+        detail: t("certificationRequest.payment.enterTransactionId"),
       });
       return;
     }
@@ -413,7 +615,7 @@ export const CertificationRequestPayment = () => {
       () =>
         showSuccess(
           t("common.success"),
-          "Scanned bill uploaded successfully."
+          t("certificationRequest.payment.scannedBillUploaded")
         ),
       showError,
       t
@@ -569,7 +771,7 @@ export const CertificationRequestPayment = () => {
         const attachments = row.attachments || [];
 
         if (attachments.length === 0) {
-          return <span className="text-gray-400 text-sm">No attachments</span>;
+          return <span className="text-gray-400 text-sm">{t("certificationRequest.labels.noAttachments")}</span>;
         }
 
         const firstAttachment = attachments[0];
@@ -600,7 +802,7 @@ export const CertificationRequestPayment = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="p-1 text-gray-500 hover:text-blue-600 transition-colors"
-                    title="View"
+                    title={t("common.view")}
                   >
                     <Eye className="h-3 w-3" />
                   </a>
@@ -608,7 +810,7 @@ export const CertificationRequestPayment = () => {
                     href={firstAttachment.filePath || firstAttachment.file}
                     download
                     className="p-1 text-gray-500 hover:text-blue-600 transition-colors"
-                    title="Download"
+                    title={t("common.download")}
                   >
                     <Download className="h-3 w-3" />
                   </a>
@@ -657,10 +859,10 @@ export const CertificationRequestPayment = () => {
         const isExpired = end ? now > end : false;
 
         const getStatusText = () => {
-          if (!start || !end) return "No deadline";
-          if (isExpired) return "Expired";
+          if (!start || !end) return t("certificationRequest.deadline.noDeadline");
+          if (isExpired) return t("certificationRequest.deadline.expired");
           if (daysRemaining !== null && daysRemaining <= 20) {
-            return `${daysRemaining} days remaining`;
+            return t("certificationRequest.deadline.daysRemaining", { count: daysRemaining });
           }
           return "";
         };
@@ -693,7 +895,7 @@ export const CertificationRequestPayment = () => {
 
             {isExpired && row.batch && (
               <div className="text-xs text-red-600 font-medium mt-1">
-                Batch: {row.batch}
+                {t("certificationRequest.deadline.batch", { batch: row.batch })}
               </div>
             )}
           </div>
@@ -718,7 +920,7 @@ export const CertificationRequestPayment = () => {
       <div className="flex gap-2">
         <Button
           icon="pi pi-sync"
-          label={t("refresh")}
+          label={t("common.refresh")}
           onClick={loadData}
           text
           raised
@@ -726,8 +928,8 @@ export const CertificationRequestPayment = () => {
          <ExcelExport
           data={data}
           totalElements={totalRecords}
-          fileName="payments"
-          sheetName="payments"
+          fileName={t("certificationRequest.payment.title")}
+          sheetName={t("certificationRequest.payment.title")}
           fetchAllData={async () => {
             const res =
               await CertificationRequestService.getAllPaginatedByStatus(
@@ -747,7 +949,7 @@ export const CertificationRequestPayment = () => {
   const paymentDialogFooter = (
     <div className="flex justify-end gap-2">
       <Button
-        label="Cancel"
+        label={t("common.cancel")}
         icon="pi pi-times"
         onClick={() => setPaymentDialogVisible(false)}
         className="p-button-text"
@@ -755,7 +957,7 @@ export const CertificationRequestPayment = () => {
 
       {selectedRequest?.requestStatus === "PAYMENT_PENDING" && !selectedRequest?.isScanned && (
         <Button
-          label={uploading ? "Uploading..." : "Upload Scan"}
+          label={uploading ? t("certificationRequest.payment.uploading") : t("certificationRequest.payment.uploadScan")}
           icon="pi pi-upload"
           onClick={handlePaymentConfirmation}
           loading={uploading}
@@ -809,8 +1011,8 @@ export const CertificationRequestPayment = () => {
       <Dialog
         header={
           selectedRequest?.requestStatus === "PAYMENT_PENDING" && !selectedRequest?.isScanned
-            ? "Upload Scanned Bill"
-            : "Payment Details"
+            ? t("certificationRequest.payment.uploadScannedBill")
+            : t("certificationRequest.payment.details")
         }
         visible={paymentDialogVisible}
         style={{ width: "720px" }}
@@ -821,13 +1023,13 @@ export const CertificationRequestPayment = () => {
           <div className="space-y-5">
             <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
               <h3 className="mb-3 text-base font-semibold text-gray-800">
-                Request Information
+                ${t("certificationRequest.requestInfo")}
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <span className="block text-xs text-gray-500">
-                    Serial Number
+                    ${t("certificationRequest.labels.serialNumber")}
                   </span>
                   <span className="font-medium text-gray-900">
                     {selectedRequest.serialNumber || "-"}
@@ -836,7 +1038,7 @@ export const CertificationRequestPayment = () => {
 
                 <div>
                   <span className="block text-xs text-gray-500">
-                    Tracking Number
+                    ${t("certificationRequest.labels.trackingNumber")}
                   </span>
                   <span className="font-medium text-gray-900">
                     {selectedRequest.trackingNumber || "-"}
@@ -844,14 +1046,14 @@ export const CertificationRequestPayment = () => {
                 </div>
 
                 <div>
-                  <span className="block text-xs text-gray-500">Company</span>
+                  <span className="block text-xs text-gray-500">{t("company.labels.companyName")}</span>
                   <span className="font-medium text-gray-900">
                     {selectedRequest.company?.[getCompanyNameField()] || "-"}
                   </span>
                 </div>
 
                 <div>
-                  <span className="block text-xs text-gray-500">Status</span>
+                  <span className="block text-xs text-gray-500">{t("certificationRequest.labels.requestStatus")}</span>
                   <span
                     className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
                       selectedRequest.requestStatus === "PAYMENT_COMPLETED" || selectedRequest.isScanned
@@ -860,8 +1062,8 @@ export const CertificationRequestPayment = () => {
                     }`}
                   >
                     {selectedRequest.requestStatus === "PAYMENT_COMPLETED" || selectedRequest.isScanned
-                      ? "Payment Completed"
-                      : "Payment Pending"}
+                      ? t("certificationRequest.statusOptions.PAYMENT_COMPLETED")
+                      : t("certificationRequest.statusOptions.PAYMENT_PENDING")}
                   </span>
                 </div>
               </div>
@@ -870,25 +1072,25 @@ export const CertificationRequestPayment = () => {
             {selectedRequest.requestStatus === "PAYMENT_PENDING" && !selectedRequest.isScanned && (
               <div className="rounded-lg border border-blue-100 bg-white p-4">
                 <h3 className="mb-3 text-base font-semibold text-gray-800">
-                  Scan Upload Information
+                  ${t("certificationRequest.payment.scanUploadInfo")}
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="mb-2 block text-sm font-medium text-gray-700">
-                      Transaction ID *
+                      {t("certificationRequest.payment.transactionId")} *
                     </label>
                     <InputText
                       value={transactionId}
                       onChange={(e) => setTransactionId(e.target.value)}
-                      placeholder="Enter transaction ID"
+                      placeholder={t("certificationRequest.payment.enterTransactionIdPlaceholder")}
                       className="w-full"
                     />
                   </div>
 
                   <div>
                     <label className="mb-2 block text-sm font-medium text-gray-700">
-                      Payment Date
+                      {t("certificationRequest.payment.paymentDate")}
                     </label>
                     <InputText
                       type="date"
@@ -900,27 +1102,27 @@ export const CertificationRequestPayment = () => {
 
                   <div>
                     <label className="mb-2 block text-sm font-medium text-gray-700">
-                      Payment Amount
+                      {t("certificationRequest.payment.paymentAmount")}
                     </label>
                     <InputText
                       type="number"
                       value={paymentAmount}
                       onChange={(e) => setPaymentAmount(e.target.value)}
-                      placeholder="Enter paid amount"
+                      placeholder={t("certificationRequest.payment.enterPaidAmount")}
                       className="w-full"
                     />
                   </div>
 
                   <div>
                     <label className="mb-2 block text-sm font-medium text-gray-700">
-                      Scanned Bill *
+                      {t("certificationRequest.payment.scannedBill")} *
                     </label>
                     <FileUpload
                       name="bill"
                       mode="basic"
                       accept="image/*,application/pdf"
                       maxFileSize={5000000}
-                      chooseLabel={uploadedBill ? "Change File" : "Choose File"}
+                      chooseLabel={uploadedBill ? t("certificationRequest.payment.changeFile") : t("certificationRequest.payment.chooseFile")}
                       auto={false}
                       customUpload
                       onSelect={(e) => setUploadedBill(e.files[0])}
@@ -930,45 +1132,44 @@ export const CertificationRequestPayment = () => {
 
                     {uploadedBill && (
                       <div className="mt-2 rounded-md bg-green-50 px-3 py-2 text-sm text-green-700">
-                        Selected: {uploadedBill.name}
+                        {t("certificationRequest.payment.selectedFile")}: {uploadedBill.name}
                       </div>
                     )}
 
                     <small className="mt-1 block text-gray-500">
-                      PDF, JPG, PNG. Max size: 5MB.
+                      {t("certificationRequest.payment.fileTypesHint")}
                     </small>
                   </div>
                 </div>
 
                 <div className="mt-4 rounded-md bg-blue-50 p-3 text-sm text-blue-700">
-                  After uploading the scanned bill, payment will be completed.
-                  To issue certificate, use the Edit button.
+                  {t("certificationRequest.payment.uploadNote")}
                 </div>
               </div>
             )}
 
             {(selectedRequest.requestStatus === "PAYMENT_COMPLETED" || selectedRequest.isScanned) && (
               <div className="rounded-lg border border-green-100 bg-white p-4 text-sm text-gray-900">
-                <h3 className="mb-3 text-base font-semibold text-gray-800">{t("certificationRequest.paymentDetails") || "Payment Details"}</h3>
+                <h3 className="mb-3 text-base font-semibold text-gray-800">{t("certificationRequest.payment.details")}</h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <span className="block text-xs text-gray-500">{t("certificationRequest.transactionId") || "Transaction ID"}</span>
+                    <span className="block text-xs text-gray-500">{t("certificationRequest.payment.transactionId")}</span>
                     <span className="font-medium text-gray-900">{selectedRequest.transactionId || "-"}</span>
                   </div>
 
                   <div>
-                    <span className="block text-xs text-gray-500">{t("certificationRequest.paymentDate") || "Payment Date"}</span>
+                    <span className="block text-xs text-gray-500">{t("certificationRequest.payment.paymentDate")}</span>
                     <span className="font-medium text-gray-900">{selectedRequest.paymentDate ? new Date(selectedRequest.paymentDate).toLocaleDateString() : "-"}</span>
                   </div>
 
                   <div>
-                    <span className="block text-xs text-gray-500">{t("certificationRequest.paymentAmount") || "Payment Amount"}</span>
+                    <span className="block text-xs text-gray-500">{t("certificationRequest.payment.paymentAmount")}</span>
                     <span className="font-medium text-gray-900">{selectedRequest.paymentAmount || "-"}</span>
                   </div>
 
                   <div>
-                    <span className="block text-xs text-gray-500">{t("certificationRequest.scannedBill") || "Scanned Bill"}</span>
+                    <span className="block text-xs text-gray-500">{t("certificationRequest.payment.scannedBill")}</span>
                     <div className="flex gap-2 mt-1">
                       <button
                         type="button"
@@ -991,7 +1192,7 @@ export const CertificationRequestPayment = () => {
                 </div>
 
                 <div className="mt-4 text-sm text-gray-600">
-                  {t("certificationRequest.paymentCompletedNote") || "Payment is completed. Use the Edit button to change status to issueCertificate."}
+                  {t("certificationRequest.payment.completedNote")}
                 </div>
               </div>
             )}

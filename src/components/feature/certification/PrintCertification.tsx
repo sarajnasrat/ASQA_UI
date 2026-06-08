@@ -17,25 +17,43 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
   const [isPrinting, setIsPrinting] = useState(false);
   const [progress, setProgress] = useState(0);
   const { t } = useTranslation();
-  
+
   if (!certification) return null;
 
-  const company = certification.certificationRequest.company || {};
-  
+  const company = certification.certificationRequest?.company || {};
+  const notSpecified = t("common.notSpecified");
+  const printPage = {
+    emirate: t("certification.printPage.emirate"),
+    authority: t("certification.printPage.authority"),
+    title: t("certification.printPage.title"),
+    registrationNumber: t("certification.printPage.registrationNumber"),
+    companyLicenseNumber: t("certification.printPage.companyLicenseNumber"),
+    certificateType: t("certification.printPage.certificateType"),
+    signature: t("certification.printPage.signature"),
+    issueDate: t("certification.printPage.issueDate"),
+    expiryDate: t("certification.printPage.expiryDate"),
+    bodyPrefix: t("certification.printPage.bodyPrefix"),
+    bodyMiddleLocation: t("certification.printPage.bodyMiddleLocation"),
+    bodyMiddleCategory: t("certification.printPage.bodyMiddleCategory"),
+    bodySuffix: t("certification.printPage.bodySuffix"),
+  };
+
   const getCertificationType = (type: string) => {
-    if (!type) return "————————";
+    if (!type) return notSpecified;
     return t(`home.certificationTypes.${type}`);
   };
-    const handlePrint = () => {
-    CertificationService.updateCertificationStatus(Number(certification.id), "PRINTED")
-      .then(() => {
-    
-      })
-      .catch((error) => {
 
+  const handlePrint = () => {
+    CertificationService.updateCertificationStatus(
+      Number(certification.id),
+      "PRINTED",
+    )
+      .then(() => {})
+      .catch((error) => {
+        console.error("Error updating certification status:", error);
       });
   };
-  
+
   const generatePDF = async (forPrint: boolean = false) => {
     if (!certificateRef.current) return;
 
@@ -48,18 +66,14 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
 
     try {
       const element = certificateRef.current;
-      
-      // Store original styles
       const originalWidth = element.style.width;
       const originalTransform = element.style.transform;
-      
-      // Ensure proper sizing for capture
-      element.style.width = '200mm';
-      element.style.transform = 'none';
-      
+
+      element.style.width = "200mm";
+      element.style.transform = "none";
+
       setProgress(30);
 
-      // Capture the certificate as canvas with proper scaling
       const canvas = await html2canvas(element, {
         scale: 2,
         useCORS: true,
@@ -73,66 +87,66 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
       setProgress(70);
 
       const imgData = canvas.toDataURL("image/png", 1.0);
-
-      // Create PDF in landscape orientation
       const pdf = new jsPDF({
         orientation: "landscape",
         unit: "mm",
         format: "a4",
       });
 
-      // Calculate dimensions to fit perfectly on A4 landscape
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = pdf.internal.pageSize.getHeight();
-      
-      // Calculate image dimensions to fit within page
       let imgWidth = pdfWidth;
       let imgHeight = (canvas.height * imgWidth) / canvas.width;
-      
-      // If image height exceeds page height, scale down
+
       if (imgHeight > pdfHeight) {
         imgHeight = pdfHeight;
         imgWidth = (canvas.width * imgHeight) / canvas.height;
       }
-      
-      // Center the image on page
+
       const xOffset = (pdfWidth - imgWidth) / 2;
       const yOffset = (pdfHeight - imgHeight) / 2;
 
-      pdf.addImage(imgData, "PNG", xOffset, yOffset, imgWidth, imgHeight, undefined, "FAST");
+      pdf.addImage(
+        imgData,
+        "PNG",
+        xOffset,
+        yOffset,
+        imgWidth,
+        imgHeight,
+        undefined,
+        "FAST",
+      );
 
       setProgress(90);
 
       if (forPrint) {
-        const pdfBlob = pdf.output('blob');
+        const pdfBlob = pdf.output("blob");
         const pdfUrl = URL.createObjectURL(pdfBlob);
-        const printWindow = window.open(pdfUrl, '_blank');
-        
+        const printWindow = window.open(pdfUrl, "_blank");
+
         if (printWindow) {
-          printWindow.addEventListener('load', () => {
+          printWindow.addEventListener("load", () => {
             printWindow.print();
             handlePrint();
           });
         }
-        
+
         setTimeout(() => {
           URL.revokeObjectURL(pdfUrl);
         }, 100);
-        
       } else {
-        pdf.save(`certificate-${certification.certificateNumber || "asqa"}.pdf`);
+        pdf.save(
+          `certificate-${certification.certificateNumber || "asqa"}.pdf`,
+        );
         handlePrint();
       }
 
       setProgress(100);
-      
-      // Restore original styles
       element.style.width = originalWidth;
       element.style.transform = originalTransform;
-      
     } catch (error) {
       console.error("Error generating PDF:", error);
-      alert("خطا در ایجاد PDF. لطفاً دوباره تلاش کنید.");
+      alert(t("certification.printPage.pdfError"));
     } finally {
       if (forPrint) {
         setIsPrinting(false);
@@ -144,11 +158,9 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
   };
 
   const verifyUrl = `https://asqa.gov.af/verify/${certification.certificateNumber}`;
-  
   const dates = IslamicDateFormatter.getDualDate(
-    new Date(certification.issuedDate),
+    new Date(certification.issueDate),
   );
-
   const expiryDates = IslamicDateFormatter.getDualDate(
     new Date(certification.expiryDate),
   );
@@ -156,135 +168,293 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
   return (
     <div className="min-h-screen bg-gray-50 flex justify-center items-center p-8">
       <div className="flex flex-col items-center gap-8">
-        {/* Certificate Card */}
         <div
           id="certificate-content"
           ref={certificateRef}
           className="certificate-container bg-white shadow-2xl relative"
-          style={{ 
-            width: '800px',
-            minHeight: '565px',
-            backgroundColor: '#ffffff',
-            position: 'relative',
+          dir="rtl"
+          style={{
+            width: "800px",
+            minHeight: "565px",
+            backgroundColor: "#ffffff",
+            position: "relative",
             zIndex: 1,
-            margin: '0 auto'
+            margin: "0 auto",
           }}
         >
-      
-          {/* Background Watermark - Properly styled as watermark */}
-          <div style={{ 
-            position: 'absolute', 
-            inset: 0, 
-            pointerEvents: 'none', 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center', 
-            zIndex: 1,
-            opacity: 0.5
-          }}>
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              pointerEvents: "none",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 1,
+              opacity: 0.5,
+            }}
+          >
             <img
               src="/asqanew.png"
-              alt="Watermark"
-              style={{ 
-                width: '300px', 
-                height: 'auto', 
-                filter: 'grayscale(100%) brightness(1.2)',
-                opacity: 0.15
+              alt={t("common.asqa")}
+              style={{
+                width: "300px",
+                height: "auto",
+                filter: "grayscale(100%) brightness(1.2)",
+                opacity: 0.15,
               }}
             />
           </div>
 
-          {/* Main Content */}
-          <div style={{ position: 'relative', zIndex: 10, padding: '30px' }}>
-            {/* Header Section */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
-              {/* Left Logo */}
-              <div style={{ textAlign: 'center', width: '100px' }}>
+          <div style={{ position: "relative", zIndex: 10, padding: "30px" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+                marginBottom: "20px",
+              }}
+            >
+              <div style={{ textAlign: "center", width: "100px" }}>
                 <img
                   src="/asqanew.png"
-                  alt="ASQA Logo"
-                  style={{ width: '70px', height: '70px', objectFit: 'contain', margin: '0 auto' }}
+                  alt={t("common.asqa")}
+                  style={{
+                    width: "70px",
+                    height: "70px",
+                    objectFit: "contain",
+                    margin: "0 auto",
+                  }}
                 />
               </div>
-              
-              {/* Center Title */}
-              <div style={{ textAlign: 'center', flex: 1, padding: '0 20px' }}>
-                <h2 style={{ fontSize: '18px', fontWeight: 'bold', color: '#111827', marginBottom: '5px' }}>
-                  د افغانستان اسلامي امارت
+
+              <div style={{ textAlign: "center", flex: 1, padding: "0 20px" }}>
+                <h2
+                  style={{
+                    fontSize: "18px",
+                    fontWeight: "bold",
+                    color: "#111827",
+                    marginBottom: "5px",
+                  }}
+                >
+                  {printPage.emirate}
                 </h2>
-                <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#1e40af', marginBottom: '5px' }}>
-                  د معیار او کیفیت اداره
+                <h3
+                  style={{
+                    fontSize: "16px",
+                    fontWeight: "600",
+                    color: "#1e40af",
+                    marginBottom: "5px",
+                  }}
+                >
+                  {printPage.authority}
                 </h3>
-                <div style={{ width: '60px', height: '2px', backgroundColor: '#2563eb', margin: '10px auto' }}></div>
-                <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#1f2937', marginTop: '10px' }}>
-                  د کیفیت تائید لیک
+                <div
+                  style={{
+                    width: "60px",
+                    height: "2px",
+                    backgroundColor: "#2563eb",
+                    margin: "10px auto",
+                  }}
+                />
+                <h1
+                  style={{
+                    fontSize: "24px",
+                    fontWeight: "bold",
+                    color: "#1f2937",
+                    marginTop: "10px",
+                  }}
+                >
+                  {printPage.title}
                 </h1>
               </div>
 
-              {/* Right Seal */}
-              <div style={{ textAlign: 'center', width: '100px' }}>
+              <div style={{ textAlign: "center", width: "100px" }}>
                 <img
                   src="/imerate.png"
-                  alt="Official Seal"
-                  style={{ width: '70px', height: '70px', objectFit: 'contain', margin: '0 auto' }}
+                  alt={t("certification.printPage.signature")}
+                  style={{
+                    width: "70px",
+                    height: "70px",
+                    objectFit: "contain",
+                    margin: "0 auto",
+                  }}
                 />
               </div>
             </div>
 
-            {/* Certificate Number Row */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '30px', padding: '0 20px' }}>
-              <div style={{ textAlign: 'center', flex: 1 }}>
-                <p style={{ fontSize: '11px', color: '#6b7280', marginBottom: '5px' }}>د شرکت د جواز شمیره</p>
-                <p style={{ fontWeight: 'bold', fontSize: '14px', color: '#111827' }}>
-                  {company.jawazNumber || "——————————"}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: "30px",
+                padding: "0 20px",
+              }}
+            >
+              <div style={{ textAlign: "center", flex: 1 }}>
+                <p
+                  style={{
+                    fontSize: "11px",
+                    color: "#6b7280",
+                    marginBottom: "5px",
+                  }}
+                >
+                  {printPage.registrationNumber}
+                </p>
+                <p
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "14px",
+                    color: "#1e40af",
+                  }}
+                >
+                  {certification.certificateNumber || notSpecified}
                 </p>
               </div>
-              <div style={{ textAlign: 'center', flex: 1 }}>
-                <p style={{ fontSize: '11px', color: '#6b7280', marginBottom: '5px' }}>د ثبت شمیره</p>
-                <p style={{ fontWeight: 'bold', fontSize: '14px', color: '#1e40af' }}>
-                  {certification.certificateNumber || "——————————"}
+
+              <div style={{ textAlign: "center", flex: 1 }}>
+                <p
+                  style={{
+                    fontSize: "11px",
+                    color: "#6b7280",
+                    marginBottom: "5px",
+                  }}
+                >
+                  {printPage.companyLicenseNumber}
+                </p>
+                <p
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "14px",
+                    color: "#111827",
+                  }}
+                >
+                  {company.jawazNumber || notSpecified}
                 </p>
               </div>
             </div>
 
-            {/* Main Body Text */}
-            <div style={{ marginBottom: '30px', marginTop: '40px' }}>
-              <p dir="rtl" style={{ fontSize: '13px', lineHeight: '2', textAlign: 'center', color: '#374151' }}>
-                دغه سند تائیدوي، چې شرکت{" "}
-                <strong style={{ color: '#1e40af', fontWeight: 'bold' }}>
-                  {company.companyNamePS || company.companyNameEN || "————————"}
+            <div style={{ marginBottom: "30px", marginTop: "40px" }}>
+              <p
+                style={{
+                  fontSize: "13px",
+                  lineHeight: "2",
+                  textAlign: "center",
+                  color: "#374151",
+                }}
+              >
+                {printPage.bodyPrefix}{" "}
+                <strong style={{ color: "#1e40af", fontWeight: "bold" }}>
+                  {company.companyNamePS || company.companyNameEN || notSpecified}
                 </strong>{" "}
-                چې په{" "}
-                <strong style={{ color: '#1e40af', fontWeight: 'bold' }}>
-                  {company.activityPlace || "————————"}
+                {printPage.bodyMiddleLocation}{" "}
+                <strong style={{ color: "#1e40af", fontWeight: "bold" }}>
+                  {company.activityPlace || notSpecified}
                 </strong>{" "}
-                کې موقعیت لري او په{" "}
-                <strong style={{ color: '#1e40af', fontWeight: 'bold' }}>
+                {printPage.bodyMiddleCategory}{" "}
+                <strong style={{ color: "#1e40af", fontWeight: "bold" }}>
                   {company.categories?.length > 0
-                    ? company.categories.map((cat: any) => cat.categoryName).join("، ")
-                    : "————————"}
+                    ? company.categories
+                        .map((cat: any) => cat.categoryName)
+                        .join("، ")
+                    : notSpecified}
                 </strong>{" "}
-                برخه کې فعالیت کوي؛ خپل (مدیریتي نظام او محصول) د اړوند
-                معیارونو مطابق تنظیم کړی دی.
+                {printPage.bodySuffix}
               </p>
             </div>
-            
-            <div style={{ marginBottom: '50px' }}>
-              <p dir="rtl" style={{ fontSize: '13px', lineHeight: '1.6', textAlign: 'right', color: '#374151' }}>
-                د معیار نوم:{" "}
-                <strong style={{ color: '#1e40af', fontWeight: 'bold' }}>
-                  {certification.certificationType 
+
+            <div style={{ marginBottom: "50px" }}>
+              <p
+                style={{
+                  fontSize: "13px",
+                  lineHeight: "1.6",
+                  textAlign: "right",
+                  color: "#374151",
+                }}
+              >
+                {printPage.certificateType}:{" "}
+                <strong style={{ color: "#1e40af", fontWeight: "bold" }}>
+                  {certification.certificationType
                     ? getCertificationType(certification.certificationType)
-                    : "————————"}
+                    : notSpecified}
                 </strong>
               </p>
             </div>
-            
-            {/* Bottom Section with QR and Signature */}
-            <div style={{ marginTop: '50px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '20px' }}>
-              {/* QR Code Area */}
-              <div style={{ textAlign: 'center', flex: 1 }}>
-                <div style={{ width: '80px', height: '80px', margin: '0 auto', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px solid #e5e7eb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+
+            <div
+              style={{
+                marginTop: "50px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-end",
+                gap: "20px",
+              }}
+            >
+              <div style={{ flex: 1 }}>
+                <div style={{ textAlign: "right" }}>
+                  <div style={{ marginBottom: "10px" }}>
+                    <p style={{ fontSize: "11px", fontWeight: "600" }}>
+                      {printPage.issueDate}:
+                    </p>
+                    <p
+                      style={{
+                        fontSize: "12px",
+                        fontWeight: "bold",
+                        color: "#1f2937",
+                        marginRight: "20px",
+                      }}
+                    >
+                      {dates.hijri}
+                    </p>
+                  </div>
+                  <div>
+                    <p style={{ fontSize: "11px", fontWeight: "600" }}>
+                      {printPage.expiryDate}:
+                    </p>
+                    <p
+                      style={{
+                        fontSize: "12px",
+                        fontWeight: "bold",
+                        color: "#1f2937",
+                        marginRight: "20px",
+                      }}
+                    >
+                      {expiryDates?.hijri || notSpecified}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ textAlign: "center", flex: 6 }}>
+                <p style={{ fontWeight: "600", fontSize: "12px" }}>
+                  {printPage.signature}
+                </p>
+                <p
+                  style={{
+                    marginTop: "40px",
+                    color: "#374151",
+                    fontSize: "14px",
+                    letterSpacing: "2px",
+                  }}
+                >
+                  .......................................
+                </p>
+              </div>
+
+              <div style={{ textAlign: "center" }}>
+                <div
+                  style={{
+                    width: "80px",
+                    height: "80px",
+                    margin: "0 auto",
+                    backgroundColor: "#f9fafb",
+                    borderRadius: "8px",
+                    border: "1px solid #e5e7eb",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
                   <QRCodeCanvas
                     value={verifyUrl}
                     size={75}
@@ -295,37 +465,10 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
                   />
                 </div>
               </div>
-
-              {/* Signature Area */}
-              <div style={{ textAlign: 'center', flex: 1 }}>
-                <p style={{ fontWeight: '600', fontSize: '12px' }}>د صلاحیت لرونکی لاسلیک</p>
-                <p style={{ marginTop: '40px', color: '#374151', fontSize: '14px', letterSpacing: '2px' }}>
-                  .......................................
-                </p>
-              </div>
-
-              {/* Date Area */}
-              <div style={{ flex: 1 }}>
-                <div style={{ textAlign: 'right' }}>
-                  <div style={{ marginBottom: '10px' }}>
-                    <p style={{ fontSize: '11px', fontWeight: '600' }}>: د صادرولو نیټه</p>
-                    <p style={{ fontSize: '12px', fontWeight: 'bold', color: '#1f2937', marginRight: '20px' }}>
-                      {dates.hijri}
-                    </p>
-                  </div>
-                  <div>
-                    <p style={{ fontSize: '11px', fontWeight: '600' }}>: د پای نیټه</p>
-                    <p style={{ fontSize: '12px', fontWeight: 'bold', color: '#1f2937', marginRight: '20px' }}>
-                      {expiryDates?.hijri || "————————"}
-                    </p>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
 
-        {/* Action Buttons */}
         <div className="flex gap-4">
           <button
             onClick={() => generatePDF(true)}
@@ -335,16 +478,16 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
             {isPrinting ? (
               <>
                 <i className="pi pi-spin pi-spinner"></i>
-                <span>در حال آماده سازی...</span>
+                <span>{t("certification.printPage.preparing")}</span>
               </>
             ) : (
               <>
                 <i className="pi pi-print"></i>
-                <span>چاپ سند</span>
+                <span>{t("certification.printPage.printDocument")}</span>
               </>
             )}
           </button>
-          
+
           <button
             onClick={() => generatePDF(false)}
             disabled={isGenerating || isPrinting}
@@ -353,19 +496,18 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
             {isGenerating ? (
               <>
                 <i className="pi pi-spin pi-spinner"></i>
-                <span>در حال {progress}%</span>
+                <span>{t("certification.printPage.progress", { progress })}</span>
               </>
             ) : (
               <>
                 <i className="pi pi-download"></i>
-                <span>دانلود PDF</span>
+                <span>{t("certification.printPage.downloadPdf")}</span>
               </>
             )}
           </button>
         </div>
       </div>
 
-      {/* Progress Bar */}
       {(isGenerating || isPrinting) && progress > 0 && progress < 100 && (
         <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50 bg-white rounded-lg shadow-lg p-3 min-w-[280px] border border-gray-200">
           <div className="flex items-center gap-3">
@@ -378,12 +520,18 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
                 ></div>
               </div>
             </div>
-            <span className="text-sm font-medium text-gray-700">{progress}%</span>
+            <span className="text-sm font-medium text-gray-700">
+              {progress}%
+            </span>
           </div>
           <p className="text-xs text-center text-gray-500 mt-2">
-            {progress < 30 && "📄 جمع آوری اطلاعات..."}
-            {progress >= 30 && progress < 70 && "🎨 در حال طراحی سند..."}
-            {progress >= 70 && progress < 100 && "💾 ذخیره سازی PDF..."}
+            {progress < 30 && t("certification.printPage.collectingInfo")}
+            {progress >= 30 &&
+              progress < 70 &&
+              t("certification.printPage.designingDocument")}
+            {progress >= 70 &&
+              progress < 100 &&
+              t("certification.printPage.savingPdf")}
           </p>
         </div>
       )}
@@ -395,20 +543,19 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
             margin: 0;
             padding: 0;
           }
-          
+
           .certificate-container {
             box-shadow: none;
             margin: 0;
             padding: 0;
           }
-          
+
           @page {
             size: landscape;
             margin: 0;
           }
         }
-        
-        /* RTL Support */
+
         [dir="rtl"] {
           direction: rtl;
         }

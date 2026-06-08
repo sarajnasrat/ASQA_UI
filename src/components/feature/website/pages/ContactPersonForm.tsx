@@ -50,7 +50,7 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
   setIsSubmitting,
 }) => {
   const { showToast } = useAppToast();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { showError, showSuccess } = useToast();
 
   const [formData, setFormData] = useState({
@@ -164,14 +164,12 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
         provincesData = [];
       }
 
-      console.log("Loaded provinces:", provincesData); // Debug log
 
       setProvincesPerAddress((prev) => ({
         ...prev,
         [addressIndex]: provincesData,
       }));
     } catch (error) {
-      console.error("Error loading provinces:", error);
       showToast("error", t("common.error"), t("common.provinceLoadFailed"));
       setProvincesPerAddress((prev) => ({ ...prev, [addressIndex]: [] }));
     } finally {
@@ -179,7 +177,6 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
     }
   };
 
-  console.log("Provinces per address:", provincesPerAddress);
 
   // Load districts by province ID for a specific address index
 const loadDistrictsByProvince = async (
@@ -207,14 +204,12 @@ const loadDistrictsByProvince = async (
       districtsData = [];
     }
     
-    console.log("Districts loaded:", districtsData); // Debug log
     
     setDistrictsPerAddress((prev) => ({
       ...prev,
       [addressIndex]: districtsData,
     }));
   } catch (error) {
-    console.error("Error loading districts:", error);
     showToast("error", t("common.error"), t("common.districtLoadFailed"));
     setDistrictsPerAddress((prev) => ({ ...prev, [addressIndex]: [] }));
   } finally {
@@ -256,7 +251,6 @@ const loadDistrictsByProvince = async (
             ],
       );
     } catch (error) {
-      console.error("Error loading contact person:", error);
       showToast(
         "error",
         t("common.error"),
@@ -406,7 +400,6 @@ const loadDistrictsByProvince = async (
         addresses: addressesToSend,
       };
 
-      console.log("Sending contact person data:", contactPersonData);
 
       const contactPersonFromStorage = localStorage.getItem("contactPersonId");
 
@@ -447,7 +440,6 @@ const loadDistrictsByProvince = async (
         }
       }
 
-      console.log("Contact person response:", response);
 
       showToast(
         "success",
@@ -469,7 +461,6 @@ const loadDistrictsByProvince = async (
       setIsSubmitting(false);
     }
   };
-  console.log("addresses", districtsPerAddress);
   return (
     <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-lg p-8">
       <h2 className="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
@@ -608,7 +599,7 @@ const loadDistrictsByProvince = async (
                   type="button"
                   onClick={() => removeAddress(index)}
                   className="absolute top-2 right-2 text-red-500 hover:text-red-700 text-xl font-bold"
-                  aria-label="Remove address"
+                  aria-label={t("contactPerson.addresses.removeAddress")}
                 >
                   ×
                 </button>
@@ -646,11 +637,14 @@ const loadDistrictsByProvince = async (
                     {countries && countries.length > 0 ? (
                       countries.map((country) => (
                         <option key={country.id} value={country.id}>
-                          {country.countryName || `Country ${country.id}`}
+                          {country.countryName ||
+                            `${t("contactPerson.addresses.country")} ${country.id}`}
                         </option>
                       ))
                     ) : (
-                      <option disabled>No countries available</option>
+                      <option disabled>
+                        {t("contactPerson.addresses.noCountriesAvailable")}
+                      </option>
                     )}
                   </select>
                   {addressErrors[index]?.countryId && (
@@ -692,7 +686,8 @@ const loadDistrictsByProvince = async (
                     provincesPerAddress[index].length > 0
                       ? provincesPerAddress[index].map((prov) => (
                           <option key={prov.id} value={prov.id}>
-                            {prov.provinceName || `Province ${prov.id}`}
+                            {prov.provinceName ||
+                              `${t("contactPerson.addresses.province")} ${prov.id}`}
                           </option>
                         ))
                       : null}

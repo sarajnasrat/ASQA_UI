@@ -22,7 +22,7 @@ const CertificationRequestViewTabs: React.FC<Props> = ({
     },
     {
       id: "company",
-      label: t("company.labels.companyInfo"),
+      label: t("company.companyInfo"),
       icon: <Building2 className="h-4 w-4" />,
     },
     {

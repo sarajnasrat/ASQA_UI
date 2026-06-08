@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Mail, Lock, ArrowRight, CheckCircle, Shield, KeyRound, AlertCircle, Loader2, ChevronLeft } from 'lucide-react';
+import { Mail, Lock, ArrowRight, CheckCircle, Shield, KeyRound, AlertCircle, Loader2 } from 'lucide-react';
 import UserService from '../../../services/user.service';
 import { useTranslation } from 'react-i18next';
 
 export const ForgotPassword = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState(['', '', '', '', '', '']);

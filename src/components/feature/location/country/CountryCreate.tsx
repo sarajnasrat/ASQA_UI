@@ -15,7 +15,7 @@ export const CountryCreate: React.FC<CountryCreateProps> = ({
 }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const toast = useRef<Toast>(null);
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
 
     // Handle escape key press
     useEffect(() => {
@@ -44,8 +44,8 @@ export const CountryCreate: React.FC<CountryCreateProps> = ({
         } catch (error: any) {
             toast.current?.show({
                 severity: "error",
-                summary: "Error",
-                detail: error.response?.data?.message || "Failed to create country",
+                summary: t("common.error"),
+                detail: error.response?.data?.message || t("country.createFailed"),
                 life: 5000,
             });
         } finally {

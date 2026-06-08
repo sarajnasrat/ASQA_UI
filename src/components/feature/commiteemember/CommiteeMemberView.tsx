@@ -1,7 +1,9 @@
-import React from 'react'
+
+import { useTranslation } from "react-i18next";
 
 export const CommiteeMemberView = () => {
+  const { t } = useTranslation();
   return (
-    <div>CommiteeMemberView</div>
-  )
-}
+    <div>{t("commitee.member.viewTitle")}</div>
+  );
+};

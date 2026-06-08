@@ -232,7 +232,11 @@ export const CommiteeMemberUpdate: React.FC<Props> = ({
                   name="memberRole"
                   control={control}
                   render={({ field }) => (
-                    <InputText {...field} className="w-full" />
+                    <InputText
+                      {...field}
+                      className="w-full"
+                      placeholder={t("commitee.member.selectRole")}
+                    />
                   )}
                 />
               </div>
@@ -244,7 +248,11 @@ export const CommiteeMemberUpdate: React.FC<Props> = ({
                   name="responsibility"
                   control={control}
                   render={({ field }) => (
-                    <InputText {...field} className="w-full" />
+                    <InputText
+                      {...field}
+                      className="w-full"
+                      placeholder={t("commitee.member.responsibilityPlaceholder")}
+                    />
                   )}
                 />
               </div>

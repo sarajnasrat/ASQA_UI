@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Toast } from "primereact/toast";
@@ -37,7 +37,6 @@ import {
 
 import CertificationService from "../../../services/certification.service";
 import { handleApi } from "../../../hooks/handleApi";
-import { Button } from "primereact/button";
 import { CertificationUpdate } from "./CertificationUpdate";
 import { useAppToast } from "../../../hooks/useToast";
 
@@ -118,7 +117,7 @@ export const CertificationDetails: React.FC = () => {
       showToast(
         "error",
         t("common.error"),
-        "Invalid certification request id.",
+        t("certification.messages.invalidRequestId"),
       );
       setLoading(false);
       return;
@@ -173,7 +172,7 @@ export const CertificationDetails: React.FC = () => {
       : "-";
 
   const formatFileSize = (bytes?: number) => {
-    if (!bytes) return "Unknown size";
+    if (!bytes) return t("certification.messages.unknownSize");
     const sizes = ["Bytes", "KB", "MB", "GB"];
     const index = Math.min(
       Math.floor(Math.log(bytes) / Math.log(1024)),
@@ -200,7 +199,7 @@ export const CertificationDetails: React.FC = () => {
     attachment?.attachmentName ||
     attachment?.fileName ||
     attachment?.name ||
-    "Attachment";
+    t("certification.attachment");
 
   const getStatusConfig = (status: string) => {
     const statusMap: Record<string, any> = {
@@ -208,25 +207,25 @@ export const CertificationDetails: React.FC = () => {
         color: "text-gray-700",
         bgColor: "bg-gray-100",
         icon: <FileText className="h-4 w-4" />,
-        label: t("certification.statusOptions.DRAFT") || "Draft",
+        label: t("certification.statusOptions.DRAFT"),
       },
       PRINTED: {
         color: "text-blue-700",
         bgColor: "bg-blue-100",
         icon: <FileText className="h-4 w-4" />,
-        label: t("certification.statusOptions.PRINTED") || "Printed",
+        label: t("certification.statusOptions.PRINTED"),
       },
       SCANNED: {
         color: "text-green-700",
         bgColor: "bg-green-100",
         icon: <CheckCircle2 className="h-4 w-4" />,
-        label: t("certification.statusOptions.SCANNED") || "Scanned",
+        label: t("certification.statusOptions.SCANNED"),
       },
       UNDER_SUPERVISION: {
         color: "text-purple-700",
         bgColor: "bg-purple-100",
         icon: <ShieldCheck className="h-4 w-4" />,
-        label: t("certification.statusOptions.UNDER_SUPERVISION") || "Under Supervision",
+        label: t("certification.statusOptions.UNDER_SUPERVISION"),
       },
     };
     return (
@@ -274,8 +273,7 @@ export const CertificationDetails: React.FC = () => {
       message: (
         <div className="space-y-4">
           <p className="text-gray-700">
-            {t("certification.confirmStatusUpdate") ||
-              "Are you sure you want to change certificate status to"}{" "}
+            {t("certification.confirmStatusUpdate")}{" "}
             <b>{labelize(normalizedStatus)}</b>?
           </p>
           <div className="rounded-xl bg-gray-50 border border-gray-100 p-4 text-sm space-y-2">
@@ -295,7 +293,7 @@ export const CertificationDetails: React.FC = () => {
         </div>
       ),
       acceptLabel: labelize(normalizedStatus),
-      rejectLabel: t("common.cancel") || "Cancel",
+      rejectLabel: t("common.cancel"),
       acceptClassName: "bg-green-600 border-green-600 text-white",
       accept: () => updateStatus(normalizedStatus),
       style: { width: "520px", maxWidth: "95vw" },
@@ -335,7 +333,7 @@ export const CertificationDetails: React.FC = () => {
         <div className="text-center">
           <AlertCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-gray-800 mb-2">
-            {t("certification.noDetailsFound") || t("common.notFound")}
+            {t("certification.noDetailsFound")}
           </h2>
           <button
             onClick={() => navigate("/certifications")}
@@ -664,7 +662,7 @@ export const CertificationDetails: React.FC = () => {
                 {company.bussinessLogoUrl && (
                   <PlainCard title={t("company.labels.businessLogo")} icon={<Building2 />}>
                     <div className="flex justify-center p-4 bg-gray-50 rounded-xl">
-                      <img src={assetUrl(company.bussinessLogoUrl)} alt="Business Logo" className="max-h-48 object-contain rounded-lg" />
+                      <img src={assetUrl(company.bussinessLogoUrl)} alt={t("company.labels.businessLogo")} className="max-h-48 object-contain rounded-lg" />
                     </div>
                   </PlainCard>
                 )}
@@ -802,6 +800,7 @@ export const CertificationDetails: React.FC = () => {
                 getFileName={getFileName}
                 getFileUrl={getFileUrl}
                 formatFileSize={formatFileSize}
+                emptyMessage={t("common.noDocuments")}
               />
               <AttachmentCard
                 title={t("certification.certificateAttachments")}
@@ -809,6 +808,7 @@ export const CertificationDetails: React.FC = () => {
                 getFileName={getFileName}
                 getFileUrl={getFileUrl}
                 formatFileSize={formatFileSize}
+                emptyMessage={t("common.noDocuments")}
               />
             </div>
           )}
@@ -886,7 +886,7 @@ const CompanyMiniStat = ({ label, value }: { label: string; value?: any }) => (
   </div>
 );
 
-const AttachmentCard = ({ title, attachments, getFileName, getFileUrl, formatFileSize }: { title: string; attachments: Attachment[]; getFileName: (attachment: Attachment) => string; getFileUrl: (attachment: Attachment) => string; formatFileSize: (bytes?: number) => string }) => (
+const AttachmentCard = ({ title, attachments, getFileName, getFileUrl, formatFileSize, emptyMessage }: { title: string; attachments: Attachment[]; getFileName: (attachment: Attachment) => string; getFileUrl: (attachment: Attachment) => string; formatFileSize: (bytes?: number) => string; emptyMessage: string }) => (
   <PlainCard title={`${title} (${attachments.length})`} icon={<File />}>
     {attachments.length > 0 ? (
       <div className="space-y-3">
@@ -903,7 +903,7 @@ const AttachmentCard = ({ title, attachments, getFileName, getFileUrl, formatFil
           </div>
         ))}
       </div>
-    ) : (<p className="text-center text-gray-500 py-6">No attachments</p>)}
+    ) : (<p className="text-center text-gray-500 py-6">{emptyMessage}</p>)}
   </PlainCard>
 );
 

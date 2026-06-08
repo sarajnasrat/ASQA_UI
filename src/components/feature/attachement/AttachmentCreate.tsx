@@ -13,7 +13,8 @@ import FileUploadField from "../../common/FileUploadField";
 import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
 import { Toast } from "primereact/toast";
 import { useNavigate } from "react-router-dom";
-import { set } from "react-hook-form";
+import { handleApi } from "../../../hooks/handleApi";
+import { useToast } from "../../../hooks/ToastContext";
 
 type AttachmentReferenceType = "COMPANY" | "CERTIFICATION" | "USER" | "REQUEST";
 
@@ -31,22 +32,21 @@ interface Props {
 }
 
 const referenceTypeOptions = [
-  { label: "Company", value: "COMPANY" },
-  { label: "Standard", value: "STANDARD" },
-  { label: "Certification", value: "CERTIFICATION" },
+  { label: "attachment.COMPANY", value: "COMPANY" },
+  { label: "attachment.STANDARD", value: "STANDARD" },
+  { label: "attachment.CERTIFICATION", value: "CERTIFICATION" },
 ];
 
 export const AttachmentCreate: React.FC<Props> = ({
   referenceId: initialReferenceId,
-  referenceType: initialReferenceType,
-  onSuccess,
+  referenceType: onSuccess,
 }) => {
   const { t, i18n } = useTranslation();
   const { toast, showToast } = useAppToast();
 
   const [file, setFile] = useState<File | null>(null);
   const [attachmentName, setAttachmentName] = useState("");
-
+  const { showError, showSuccess } = useToast();
   const [selectedReferenceType, setSelectedReferenceType] =
     useState<AttachmentReferenceType | null>("CERTIFICATION");
 
@@ -97,7 +97,7 @@ export const AttachmentCreate: React.FC<Props> = ({
       const res = await CompanyService.getAllCompanies();
       setCompanies(res.data || res);
     } catch {
-      showToast("error", t("error"), t("attachment.failed_to_load_companies"));
+      showToast("error", t("common.error"), t("attachment.failed_to_load_companies"));
     } finally {
       setLoadingCompanies(false);
     }
@@ -136,7 +136,7 @@ export const AttachmentCreate: React.FC<Props> = ({
 
       case "REQUEST":
         return requests.map((r) => ({
-          label: `Request #${r.id}`,
+          label: `${t("attachment.request")} #${r.id}`,
           value: r.id,
         }));
 
@@ -147,14 +147,14 @@ export const AttachmentCreate: React.FC<Props> = ({
 
   const handleSubmit = async () => {
     if (!file) {
-      showToast("warn", t("warning"), t("attachment.please_select_file"));
+      showToast("warn", t("common.warning"), t("attachment.please_select_file"));
       return;
     }
 
     if (!attachmentName.trim()) {
       showToast(
         "warn",
-        t("warning"),
+        t("common.warning"),
         t("attachment.please_enter_attachment_name"),
       );
       return;
@@ -163,7 +163,7 @@ export const AttachmentCreate: React.FC<Props> = ({
     if (!selectedReferenceType) {
       showToast(
         "warn",
-        t("warning"),
+        t("common.warning"),
         t("attachment.please_select_attachment_type"),
       );
       return;
@@ -173,18 +173,24 @@ export const AttachmentCreate: React.FC<Props> = ({
      * ✅ ONLY COMPANY NEEDS referenceId
      */
     if (selectedReferenceType === "COMPANY" && !selectedReferenceId) {
-      showToast("warn", t("warning"), t("attachment.please_select_company"));
+      showToast("warn", t("common.warning"), t("attachment.please_select_company"));
       return;
     }
 
     try {
       setLoading(true);
 
-      await AttachmentService.create(
-        file,
-        attachmentName,
-        selectedReferenceId ?? 0, // optional for other types
-        selectedReferenceType,
+      const response=await handleApi(
+        () =>
+          AttachmentService.create(
+            file,
+            attachmentName,
+            selectedReferenceId ?? 0, // optional for other types
+            selectedReferenceType,
+          ),
+        showSuccess,
+        showError,
+        t,
       );
 
       // reset
@@ -192,26 +198,18 @@ export const AttachmentCreate: React.FC<Props> = ({
       setFile(null);
       setSelectedReferenceType(null);
       setSelectedReferenceId(null);
-
-      onSuccess?.();
-      if (onSuccess) {
-  
-          showToast(
-            "success",
-            t("success"),
-            t("attachment.attachment_uploaded_successfully"),
-          );
- 
-      }
-      setTimeout(() => {
+   if(response?.status==200){
+     setTimeout(() => {
         navigate("/admin-attachments");
       }, 3000);
+   }
+ 
     } catch (error) {
       console.error(error);
 
       showToast(
         "error",
-        t("error"),
+        t("common.error"),
         t("attachment.failed_to_upload_attachment"),
       );
     } finally {
@@ -249,7 +247,7 @@ export const AttachmentCreate: React.FC<Props> = ({
                 value={selectedReferenceType}
                 options={referenceTypeOptions.map((o) => ({
                   ...o,
-                  label: t(`attachment.${o.value}`),
+                  label: t(o.label),
                 }))}
                 onChange={(e) => {
                   setSelectedReferenceType(e.value);
@@ -299,11 +297,17 @@ export const AttachmentCreate: React.FC<Props> = ({
 
             {/* SUBMIT */}
             <div className="flex justify-end gap-2">
-                              <Button label={t("cancel")} raised text icon="pi pi-times" onClick={(()=> navigate("/admin-attachments"))} />
+              <Button
+                label={t("common.cancel")}
+                raised
+                text
+                icon="pi pi-times"
+                onClick={() => navigate("/admin-attachments")}
+              />
 
               <Button
-              raised
-              text
+                raised
+                text
                 label={t("common.save")}
                 icon="pi pi-upload"
                 loading={loading}

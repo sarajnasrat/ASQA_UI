@@ -44,7 +44,7 @@ const CertificationRequestViewDetails: React.FC<Props> = ({
           >
             <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
               <Clock className="h-5 w-5 text-blue-600" />
-              Timeline
+             {t("certificationRequest.timeline")}
             </h3>
             {expandedSections.timeline ? (
               <ChevronUp className="h-5 w-5 text-gray-400" />

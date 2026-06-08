@@ -1,13 +1,13 @@
 // components/feature/registration/CompanyForm.tsx
 import React, { useState, useEffect } from "react";
-import { Building2, Globe, Upload, X, Plus } from "lucide-react";
+import { Building2, Globe, Upload, X } from "lucide-react";
 import { useAppToast } from "../../../../hooks/useToast";
 import { useTranslation } from "react-i18next";
 import CategoryService from "../../../../services/category.service";
 import CompanyService from "../../../../services/company.service";
 import { handleApi } from "../../../../hooks/handleApi";
 import { useToast } from "../../../../hooks/ToastContext";
-import { data } from "react-router-dom";
+
 import { MultiSelect } from "primereact/multiselect";
 
 interface Category {
@@ -65,10 +65,10 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
-  const [newSocialLink, setNewSocialLink] = useState<SocialLink>({
-    socialLinkName: "",
-    address: "",
-  });
+  // const [newSocialLink, setNewSocialLink] = useState<SocialLink>({
+  //   socialLinkName: "",
+  //   address: "",
+  // });
   const [companyLogo, setCompanyLogo] = useState<File | null>(null);
   const [businessLogo, setBusinessLogo] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string>("");
@@ -114,7 +114,6 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
   // Load saved data
   useEffect(() => {
     if (savedData) {
-      console.log("Loading saved company data:", savedData);
       setFormData(savedData.formData);
       setSelectedCategories(savedData.selectedCategories);
       setSocialLinks(savedData.socialLinks);
@@ -277,24 +276,24 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
     }
   };
 
-  const addSocialLink = () => {
-    if (newSocialLink.socialLinkName && newSocialLink.address) {
-      setSocialLinks([...socialLinks, newSocialLink]);
-      setNewSocialLink({ socialLinkName: "", address: "" });
-    }
-  };
+  // const addSocialLink = () => {
+  //   if (newSocialLink.socialLinkName && newSocialLink.address) {
+  //     setSocialLinks([...socialLinks, newSocialLink]);
+  //     setNewSocialLink({ socialLinkName: "", address: "" });
+  //   }
+  // };
 
-  const removeSocialLink = (index: number) => {
-    setSocialLinks(socialLinks.filter((_, i) => i !== index));
-  };
+  // const removeSocialLink = (index: number) => {
+  //   setSocialLinks(socialLinks.filter((_, i) => i !== index));
+  // };
 
-  const handleCategoryToggle = (categoryId: number) => {
-    setSelectedCategories((prev) =>
-      prev.includes(categoryId)
-        ? prev.filter((id) => id !== categoryId)
-        : [...prev, categoryId],
-    );
-  };
+  // const handleCategoryToggle = (categoryId: number) => {
+  //   setSelectedCategories((prev) =>
+  //     prev.includes(categoryId)
+  //       ? prev.filter((id) => id !== categoryId)
+  //       : [...prev, categoryId],
+  //   );
+  // };
 
   const validateForm = (): boolean => {
     const newErrors: Partial<Record<keyof typeof formData, string>> = {};

@@ -36,7 +36,7 @@ export const CommiteeUpdate: React.FC<CommiteeUpdateProps> = ({
     control,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: {  },
   } = useForm<CommiteeFormValues>({
     defaultValues: {
       name: "",
@@ -68,9 +68,6 @@ const response = await handleApi(
 
   if (response?.data?.data) {
     const data = response.data.data;
-
-    console.log("LOADED COMMITTEE:", data);
-
     reset({
       name: data.name || "",
       description: data.description || "",

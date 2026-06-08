@@ -25,9 +25,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
   // permission required but user doesn't have it
   if (permission && !hasPermission(permission)) {
-    console.log("Access denied for permission:", permission);
     // Navigate to current path + /unauthorized to trigger dialog
-    console.log(permission &&!hasPermission(permission) );
     return <Navigate to="/unauthorized" replace state={{ from: location }} />;
   }
 

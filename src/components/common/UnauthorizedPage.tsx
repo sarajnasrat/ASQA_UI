@@ -1,5 +1,5 @@
 // components/UnauthorizedDialog.tsx
-import { ShieldOff, ArrowLeft, Home, HelpCircle, X } from 'lucide-react';
+import { ShieldOff, ArrowLeft, HelpCircle, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface UnauthorizedDialogProps {

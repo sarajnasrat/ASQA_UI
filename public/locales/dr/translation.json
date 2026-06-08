@@ -1,6 +1,6 @@
 {
   "navbar": {
-    "welcome": "ادراه ملی معیار و کیفیت افغانستان",
+    "welcome": "سیستم مدیریتی تائید نامه های کیفی اداره ملی معیار و کیفیت افغانستان",
     "notifications": "اطلاعیه‌ها",
     "unread": "خوانده نشده",
     "viewAllNotifications": "مشاهده همه اطلاعیه‌ها",
@@ -50,7 +50,13 @@
       "hint": {
         "translations": "تمام ترجمه‌ها به جز انگلیسی اختیاری هستند"
       }
-    }
+    },
+    "loadFailed": "بارگذاری کشورها ناموفق بود",
+    "loadSingleFailed": "بارگذاری کشور ناموفق بود",
+    "updateFailed": "به روزرسانی کشور ناموفق بود",
+    "createFailed": "ایجاد کشور ناموفق بود",
+    "deleted": "کشور موفقانه حذف شد",
+    "deleteFailed": "حذف کشور ناموفق بود"
   },
   "district": {
     "create": "ایجاد ولسوالی",
@@ -78,7 +84,15 @@
           "required": "نام ولسوالی به انگلیسی الزامی است"
         }
       }
-    }
+    },
+    "update": "ویرایش ولسوالی",
+    "loadFailed": "بارگذاری ولسوالی ها ناموفق بود",
+    "loadProvincesFailed": "بارگذاری ولایت ها ناموفق بود",
+    "createFailed": "ایجاد ولسوالی ناموفق بود",
+    "updateFailed": "به روزرسانی ولسوالی ناموفق بود",
+    "deleted": "ولسوالی موفقانه حذف شد",
+    "deleteFailed": "حذف ولسوالی ناموفق بود",
+    "province": "ولایت"
   },
   "province": {
     "create": "ایجاد ولایت",
@@ -107,7 +121,12 @@
           "required": "نام ولایت به انگلیسی الزامی است"
         }
       }
-    }
+    },
+    "loadFailed": "بارگذاری ولایت ها ناموفق بود",
+    "loadCountriesFailed": "بارگذاری کشورها ناموفق بود",
+    "updated": "ولایت موفقانه به روز شد",
+    "deleted": "ولایت موفقانه حذف شد",
+    "deleteFailed": "حذف ولایت ناموفق بود"
   },
   "category": {
     "create": "ایجاد دسته",
@@ -185,6 +204,32 @@
     "failedReset": "بازنشانی رمز عبور ناموفق بود",
     "networkError": "خطای شبکه. لطفاً دوباره تلاش کنید."
   },
+  "login": {
+    "welcomeBack": "خوش آمدید",
+    "signInPrompt": "لطفاً به حساب خود وارد شوید",
+    "emailAddress": "آدرس ایمیل",
+    "emailPlaceholder": "you@example.com",
+    "password": "رمز عبور",
+    "passwordPlaceholder": "رمز عبور خود را وارد کنید",
+    "forgotPassword": "رمز عبور را فراموش کرده‌اید؟",
+    "signingIn": "در حال ورود...",
+    "signIn": "ورود",
+    "invalidCredentials": "ایمیل یا رمز عبور نادرست است",
+    "footer": "© 2026 MCIT. تمام حقوق محفوظ است."
+  },
+  "fileUpload": {
+    "remove": "حذف",
+    "removeFile": "فایل را حذف کنید",
+    "word": "ورد",
+    "excel": "اکسل",
+    "images": "تصاویر"
+  },
+  "confirmDialog": {
+    "title": "تأیید",
+    "confirm": "بلی، ادامه دهید",
+    "irreversible": "این عمل قابل بازگشت نیست",
+    "pressEsc": "برای لغو ESC را فشار دهید"
+  },
   "company": {
     "companytyperequired": "نوع شرکت الزامی است",
     "companyOwnerName": "نام مالک",
@@ -231,11 +276,20 @@
     "verifiedCompany": "شرکت تأیید شده",
     "verifiedMessage": "این شرکت توسط ASQA تأیید شده است",
     "registeredMember": "عضو ثبت نام شده",
-    "companyAttachments": "پیوست‌های شرکت",
+    "companyAttachments": "ضمایم شرکت",
     "labels": {
+      "documents": "اسناد",
+      "categoriesCount": "دسته‌بندی‌ ها",
+      "documentsCount": "اسناد",
+      "companyAttachments": "ضمایم شرکت",
+      "businessInformation": "معلومات تجاری",
+      "quickContact": "تماس سریع",
+      "businessLogo": "لوگوی تجاری",
+      "companyStats": "آمار شرکت",
       "companyNameEN": "نام شرکت (انگلیسی)",
       "companyNameDR": "نام شرکت (دری)",
       "companyNamePS": "نام شرکت (پشتو)",
+      "companyInfo": "معلومات شرکت",
       "email": "ایمیل",
       "phoneNumber": "شماره تماس",
       "address": "آدرس",
@@ -279,7 +333,8 @@
       "registrationInfo": "معلومات ثبت نام",
       "additionalInfo": "معلومات اضافی",
       "active": "فعال",
-      "inactive": "غیرفعال"
+      "inactive": "غیرفعال",
+      "issueDate": "تاریخ صدور"
     },
     "placeholder": {
       "companyNameEN": "نام شرکت را به انگلیسی وارد کنید",
@@ -412,10 +467,11 @@
       "activateSuccess": "شرکت با موفقیت فعال شد",
       "deactivateSuccess": "شرکت با موفقیت غیرفعال شد",
       "loadSuccess": "شرکت‌ها با موفقیت بارگذاری شدند",
-      "noData": "هیچ شرکتی یافت نشد",
+      "noData": "شرکتی که به دنبال آن هستید وجود ندارد.",
       "confirmDelete": "آیا مطمئن هستید که می‌خواهید این شرکت را حذف کنید؟",
       "confirmDeactivate": "آیا مطمئن هستید که می‌خواهید این شرکت را غیرفعال کنید؟",
-      "confirmActivate": "آیا مطمئن هستید که می‌خواهید این شرکت را فعال کنید؟"
+      "confirmActivate": "آیا مطمئن هستید که می‌خواهید این شرکت را فعال کنید؟",
+      "unknownSize": "اندازه نامشخص"
     },
     "filters": {
       "all": "همه شرکت‌ها",
@@ -444,7 +500,11 @@
       "socialMedia": "شبکه‌های اجتماعی",
       "documents": "اسناد",
       "certificates": "تائید نامه ها"
-    }
+    },
+    "categoryLoadFailed": "بارگذاری دسته‌بندی‌ها ناموفق بود",
+    "loadSingleFailed": "بارگذاری شرکت ناموفق بود",
+    "invalidId": "شناسه شرکت نامعتبر است.",
+    "notFound": "شرکت یافت نشد"
   },
   "nav": {
     "home": "خانه",
@@ -491,6 +551,7 @@
     "noCertificateFile": "فایل تائید نامه موجود نیست",
     "certificateFile": "فایل تائید نامه",
     "certificate": "تائید نامه",
+    "attachment": "ضمیمه",
     "certificateSummary": "خلاصه تائید نامه",
     "certificateIssuedTo": "تائید نامه صادر شده به",
     "certificateDetails": "جزییات تائید نامه",
@@ -523,6 +584,43 @@
     "request": "درخواست",
     "requestDetails": "جزییات تائید نامه درخواست شده",
     "trackProgress": "تعقیب تائید نامه کیفی درخواست شده",
+    "dialog": {
+      "updateTitle": "به‌روزرسانی تائید نامه",
+      "scanOfCertification": "اسکن تائید نامه",
+      "scanHelperText": "فایل PDF، JPG یا PNG را تا ۵ مگابایت آپلود کنید"
+    },
+    "placeholders": {
+      "serialNumber": "شماره سریال را وارد کنید"
+    },
+    "messages": {
+      "notSelected": "تائید نامه انتخاب نشده است",
+      "serialNumberRequired": "شماره سریال الزامی است",
+      "invalidRequestId": "شناسه درخواست تائید نامه نامعتبر است.",
+      "unknownSize": "اندازه نامشخص"
+    },
+    "printPage": {
+      "pdfError": "در ایجاد PDF خطا رخ داد. لطفاً دوباره تلاش کنید.",
+      "preparing": "در حال آماده‌سازی...",
+      "printDocument": "چاپ سند",
+      "progress": "در حال آماده‌سازی {{progress}}%",
+      "downloadPdf": "دانلود PDF",
+      "collectingInfo": "در حال جمع‌آوری اطلاعات...",
+      "designingDocument": "در حال طراحی سند...",
+      "savingPdf": "در حال ذخیره‌سازی PDF...",
+      "emirate": "امارت اسلامی افغانستان",
+      "authority": "اداره معیار و کیفیت",
+      "title": "مکتوب تائید کیفیت",
+      "registrationNumber": "شماره ثبت",
+      "companyLicenseNumber": "شماره جواز شرکت",
+      "certificateType": "نوع معیار",
+      "signature": "امضای صلاحیت‌دار",
+      "issueDate": "تاریخ صدور",
+      "expiryDate": "تاریخ انقضا",
+      "bodyPrefix": "این سند تائید می‌کند که شرکت",
+      "bodyMiddleLocation": "که در",
+      "bodyMiddleCategory": "موقعیت داشته و در",
+      "bodySuffix": "فعالیت داشته و سیستم مدیریتی و محصول خود را مطابق معیارهای مربوط تنظیم نموده است."
+    },
     "noResults": "نتیجه‌ای یافت نشد",
     "noResultsMessage": "هیچ نتیجه مطابق به شماره درخواست شما در سیستم یاقت نگردید.",
     "tryAnotherSearch": "لطفا شماره تعقیب دیگری را امتحان کنید.",
@@ -638,6 +736,9 @@
     }
   },
   "certificationRequest": {
+    "reviewMessage": "پیگیری درخواست",
+    "progress": "جریان",
+    "timeline": "مراحل ثبت درخواست",
     "create": "ایجاد درخواست تائید نامه",
     "edit": "ویرایش درخواست تائید نامه",
     "delete": "حذف درخواست تائید نامه",
@@ -654,11 +755,11 @@
     "scanUploadInformation": "اطلاعات آپلود اسکن",
     "paymentUploadInstruction": "پس از بارگذاری فاکتور اسکن شده، پرداخت تکمیل می شود. برای صدور گواهی از دکمه ویرایش استفاده کنید.",
     "paymentCompleted": "پرداخت تکمیل شد",
-    "scannedBill": "فاکتور اسکن شده",
+    "scannedBill": "بل اسکن شده",
     "paymentDate": "تاریخ پرداخت",
     "paymentAmount": "مبلغ پرداخت",
     "paymentDetails": "جزئیات پرداخت",
-    "transactionId": "شماره تراکنش",
+    "transactionId": "شماره بل رسید",
     "viewPaymentDetails": "مشاهده جزئیات پرداخت",
     "paymentCompletedNote": "پرداخت انجام شده است. از دکمه ویرایش برای صدور گواهی استفاده کنید.",
     "deleteConfirm": "آیا مطمئن هستید که می‌خواهید درخواست {{serial}} را حذف کنید؟",
@@ -680,12 +781,13 @@
     "standardsRequired": "افزودن استانداردها",
     "statusRequired": "تنظیم وضعیت",
     "confirmPayment": "تأیید پرداخت",
-    "paymentPending": "آیا مطمئن هستید که پرداخت برای این درخواست انجام شده است؟",
+    "standardRequired": "حالت را روی «استانداردهای مورد نیاز» تنظیم کنید و سپس استانداردهای مورد نیاز را در اختیار متقاضی قرار دهید. آیا مطمئن هستید که می‌خواهید ادامه دهید؟",
+    "paymentPending": "آیا مطممین هستید به این درخواست پرداخت انجام گردد؟",
     "issueCertificate": "صدور گواهی",
-    "certificateIssued": "آیا مطمئن هستید که می‌خواهید برای شرکت فوق گواهی صادر کنید؟",
+    "certificateIssued": "آیا مطمئن هستید که می‌خواهید برای شرکت فوق تائید نامه ایجاد کنید؟",
     "requestSubmitted": "درخواست ارسال شد",
     "confirmUnderReview": "تأیید شروع بررسی",
-    "requestWillBeUnderReview": "این کار وضعیت درخواست را به 'در حال بررسی' تغییر می‌دهد و به اعضای کمیته تعیین شده برای شروع فرآیند بررسی اطلاع می‌دهد. آیا مطمئن هستید که می‌خواهید ادامه دهید؟",
+    "requestWillBeUnderReview": "آیا مطمین هستید که درخواست انتخاب شده را به مرحله بررسی تنظیم کنید؟",
     "deadlineRequired": "تعیین مهلت",
     "startReview": "شروع بررسی",
     "reject": "رد",
@@ -699,11 +801,11 @@
     "requestDetails": "جزئیات درخواست",
     "requestInfo": "اطلاعات درخواست",
     "totalDocuments": "مجموع اسناد",
-    "requestAttachments": "پیوست‌های درخواست",
+    "requestAttachments": " ضمایم درخواست ها",
     "labels": {
       "trackingNumber": "شماره پیگیری",
       "requestType": "نوع درخواست",
-      "requestStatus": "وضعیت درخواست",
+      "requestStatus": "وضعیت",
       "startReview": "شروع بررسی",
       "duration": "مدت زمان",
       "serialNumber": "شماره سریال",
@@ -712,11 +814,13 @@
       "updatedDate": "تاریخ به‌روزرسانی",
       "deleted": "حذف شده",
       "deadline": "مهلت",
-      "attachments": "پیوست",
+      "attachments": "ضمایم",
       "requestDetails": "جزئیات درخواست",
       "requestInfo": "اطلاعات درخواست",
       "totalDocuments": "مجموع اسناد",
-      "requestAttachments": "پیوست‌های درخواست"
+      "requestAttachments": " ضمایم درخواست ها",
+      "noAttachments": "هیچ ضمیمه‌ای وجود ندارد",
+      "moreAttachments": "{{count}} ضمیمه بیشتر"
     },
     "placeholder": {
       "requestType": "نوع درخواست را انتخاب کنید",
@@ -740,7 +844,7 @@
       "DRAFT": "پیش‌ نویس",
       "SUBMITTED": "ارسال شده",
       "REGISTERED": "اهدای سند ثبت دیتابیس",
-      "STANDARDS_PROVIDED": "استانداردها ارائه شده",
+      "STANDARDS_PROVIDED": " اضافه نمودن استاندرد",
       "DEADLINE_ASSIGNED": "مهلت تعیین شده",
       "INSPECTION_IN_PROGRESS": "بازرسی در حال انجام",
       "REPORTED_TO_COMMITTEE": "گزارش به کمیته",
@@ -759,6 +863,66 @@
       "DOMESTIC_QUALITY_CERTIFICATION": "تائید نامه کیفی سیستم مدیریتی یا خدمات، محصول (داخلی)",
       "INTERNATIONAL_QUALITY_CERTIFICATION": "تائید نامه کیفی سیستم مدیریتی یا خدمات، محصول (بین المللی)",
       "STANDARD_MARK_CERTIFICATION": "اخذ علامت معیار"
+    },
+    "fileSize": {
+      "zero": "0 بایت",
+      "bytes": "بایت",
+      "kb": "KB",
+      "mb": "MB",
+      "gb": "GB",
+      "tb": "TB"
+    },
+    "deadline": {
+      "noDeadline": "مهلت ندارد",
+      "expired": "منقضی",
+      "daysRemaining": "{{count}} روز باقی مانده",
+      "months": "{{count}} ماه",
+      "batch": "بچ: {{batch}}"
+    },
+    "payment": {
+      "title": "پرداخت‌ها",
+      "printPendingOnly": "بل فقط زمانی چاپ می‌شود که پرداخت در انتظار باشد.",
+      "uploadScannedBillRequired": "لطفاً بل اسکن‌شده را بارگذاری کنید.",
+      "enterTransactionId": "لطفاً شناسه تراکنش را وارد کنید.",
+      "scannedBillUploaded": "بل اسکن‌شده با موفقیت بارگذاری شد.",
+      "uploading": "در حال بارگذاری...",
+      "uploadScan": "بارگذاری اسکن",
+      "uploadScannedBill": "بارگذاری بل اسکن‌شده",
+      "details": "جزئیات پرداخت",
+      "scanUploadInfo": "اطلاعات بارگذاری اسکن",
+      "transactionId": "شناسه تراکنش",
+      "paymentDate": "تاریخ پرداخت",
+      "paymentAmount": "مبلغ پرداخت",
+      "scannedBill": "بل اسکن‌شده",
+      "enterTransactionIdPlaceholder": "شناسه تراکنش را وارد کنید",
+      "enterPaidAmount": "مبلغ پرداخت‌شده را وارد کنید",
+      "changeFile": "تغییر فایل",
+      "chooseFile": "انتخاب فایل",
+      "selectedFile": "انتخاب‌شده",
+      "fileTypesHint": "PDF, JPG, PNG. حداکثر اندازه: 5MB.",
+      "uploadNote": "پس از بارگذاری بل اسکن‌شده، پرداخت تکمیل می‌شود. برای صدور سند از دکمه ویرایش استفاده کنید.",
+      "completedNote": "پرداخت تکمیل شده است. برای تغییر وضعیت به issueCertificate از دکمه ویرایش استفاده کنید.",
+      "invoiceTitle": "فاکتور",
+      "invoiceNumber": "شماره فاکتور",
+      "authority": "اداره ستندرد و کیفیت افغانستان",
+      "billedTo": "بل شده به",
+      "invoiceDate": "تاریخ فاکتور",
+      "dueDate": "تاریخ سررسید",
+      "itemNo": "شماره",
+      "itemDescription": "شرح مورد",
+      "price": "قیمت",
+      "quantity": "تعداد",
+      "amount": "مبلغ",
+      "certificationFee": "فیس تصدیق",
+      "toBeDetermined": "بعداً تعیین می‌شود",
+      "paymentVia": "لطفاً پرداخت را از طریق زیر انجام دهید",
+      "bankName": "نام بانک",
+      "accountNumber": "شماره حساب",
+      "accountHolder": "دارنده حساب",
+      "reference": "مرجع",
+      "totalAmountDue": "مجموع مبلغ قابل پرداخت",
+      "contactSupport": "با پشتیبانی تماس بگیرید",
+      "printInvoice": "چاپ فاکتور"
     }
   },
   "attachment": {
@@ -838,7 +1002,14 @@
     "validation": {
       "file_type": "فقط فایل‌های PDF پشتیبانی می‌شوند.",
       "file_size": "حجم فایل باید کمتر از 10MB باشد."
-    }
+    },
+    "download": "دانلود",
+    "preview": "پیش‌نمایش",
+    "unknown": "نامشخص",
+    "unknown_file": "فایل نامشخص",
+    "reference": "مرجع",
+    "select_reference": "مرجع را انتخاب کنید",
+    "sizeUnitKb": "KB"
   },
   "zone": {
     "create": "ایجاد زون",
@@ -859,17 +1030,21 @@
     "name": {
       "label": "نام زون",
       "required": "نام زون ضروری است",
-      "exists": "زون با این نام موجود است"
-    }
+      "exists": "زون با این نام موجود است",
+      "placeholder": "نام زون را وارد کنید"
+    },
+    "loadFailed": "بارگذاری زون ناموفق بود",
+    "updateFailed": "به‌روزرسانی زون ناموفق بود",
+    "locationPlaceholder": "موقعیت را وارد کنید"
   },
   "registration": {
     "title": "ثبت نام شرکت",
     "subtitle": "فرآیند ثبت نام چند مرحله‌ای را تکمیل کنید",
     "confirmation": {
       "title": "تأیید ارسال",
-      "message": "آیا مطمئن هستید که می‌خواهید این درخواست ثبت نام را ارسال کنید؟",
+      "message": "آیا مطمئن هستید که می‌خواهید این درخواست   خویش ارسال کنید؟",
       "warning": "پس از ارسال، نمی‌توانید اطلاعات را تغییر دهید. لطفاً همه جزئیات را به دقت بررسی کنید.",
-      "confirm": "بله، ثبت نام را ارسال کن",
+      "confirm": "بله، ارسال کن",
       "success": {
         "title": "✅ درخواست با موفقیت ارسال شد!",
         "message": "درخواست تائید نامه شما با موفقیت ارسال شد.",
@@ -947,8 +1122,13 @@
     },
     "addresses": {
       "title": "آدرس‌ها",
+      "country": " کشور",
+      "selectCountry": "کشور را انتخاب کنید",
+      "selectCountryFirst": "کشور خویش را انتخاب کنید اول نام ",
+      "selectProvinceFirst": "اول نام ولایت خویش را انتخاب کنید",
       "addAddress": "اضافه کردن آدرس",
       "addressLabel": "آدرس",
+      "province": "ولایت",
       "district": "ولسوالی",
       "selectDistrict": "ولسوالی را انتخاب کنید",
       "addressType": "نوع آدرس",
@@ -964,10 +1144,121 @@
         "HOME": "خانه",
         "WAREHOUSE": "انبار",
         "OTHER": "سایر"
-      }
+      },
+      "selectProvince": "ولایت را انتخاب کنید",
+      "removeAddress": "حذف آدرس",
+      "noCountriesAvailable": "هیچ کشوری موجود نیست"
     }
   },
+  "comment": {
+    "title": "نظریات",
+    "manageDescription": "مدیریت و مشاهده تمام نظریات مشتریان",
+    "details": "جزئیات نظر",
+    "commentDetails": "جزئیات نظر",
+    "viewingDetails": "مشاهده اطلاعات کامل نظر",
+    "personalInfo": "اطلاعات شخصی",
+    "fullName": "نام کامل",
+    "email": "آدرس ایمیل",
+    "createdAt": "تاریخ ایجاد",
+    "updatedAt": "آخرین به‌روزرسانی",
+    "body": "متن نظر",
+    "notFound": "نظر یافت نشد",
+    "backToList": "بازگشت به لیست نظریات",
+    "actions": "عملیات",
+    "deleteConfirm": "آیا مطمئن هستید که می‌خواهید نظر \"{{subject}}\" را حذف کنید؟",
+    "deleteSuccess": "نظر با موفقیت حذف شد",
+    "deleteError": "حذف نظر ناموفق بود",
+    "noComments": "هیچ نظری یافت نشد",
+    "columns": {
+      "id": "شناسه",
+      "fullName": "نام کامل",
+      "email": "ایمیل",
+      "subject": "موضوع",
+      "body": "نظر",
+      "createdAt": "تاریخ ایجاد",
+      "updatedAt": "تاریخ به‌روزرسانی"
+    },
+    "editTitle": "ویرایش نظر",
+    "createTitle": "ایجاد نظر",
+    "validation": {
+      "requiredFields": "نام کامل، ایمیل، موضوع و متن الزامی است.",
+      "invalidEmail": "لطفاً یک ایمیل معتبر وارد کنید."
+    }
+  },
+  "contactUs": {
+    "title": "پیام‌های تماس با ما",
+    "manageDescription": "مدیریت و مشاهده تمام ارسال‌های فرم تماس",
+    "details": "جزئیات تماس",
+    "contactDetails": "جزئیات اطلاعات تماس",
+    "create": "ایجاد",
+    "editTitle": "ویرایش پیام تماس",
+    "createTitle": "ایجاد پیام تماس",
+    "contactInformation": "اطلاعات تماس",
+    "directorateInfo": "اطلاعات ریاست",
+    "additionalInfo": "اطلاعات اضافی",
+    "fullName": "نام کامل",
+    "name": "نام",
+    "lastName": "نام خانوادگی",
+    "phoneNumber": "شماره تلفن",
+    "email": "آدرس ایمیل",
+    "organization": "سازمان",
+    "generalDirectorateNumber": "شماره ریاست عمومی",
+    "generalDirectorateAddress": "آدرس ریاست عمومی",
+    "generateEmail": "ایمیل تولید شده",
+    "satelliteInfo": "اطلاعات ماهواره‌ای",
+    "createdAt": "تاریخ ایجاد",
+    "updatedAt": "تاریخ به‌روزرسانی",
+    "notFound": "پیام تماس یافت نشد",
+    "deleteConfirm": "آیا مطمئن هستید که می‌خواهید تماس از \"{{name}}\" را حذف کنید؟",
+    "deleteSuccess": "پیام تماس با موفقیت حذف شد",
+    "createSuccess": "پیام تماس با موفقیت ایجاد شد",
+    "updateSuccess": "پیام تماس با موفقیت به‌روزرسانی شد",
+    "columns": {
+      "id": "شناسه",
+      "name": "نام",
+      "lastName": "نام خانوادگی",
+      "phoneNumber": "تلفن",
+      "email": "ایمیل",
+      "organization": "سازمان",
+      "createdAt": "تاریخ ایجاد"
+    },
+    "validation": {
+      "namePhoneRequired": "نام، نام خانوادگی و شماره تلفن الزامی است",
+      "emailRequired": "ایمیل الزامی است",
+      "invalidEmail": "لطفاً یک آدرس ایمیل معتبر وارد کنید"
+    },
+    "detailsTitle": "جزئیات پیام تماس",
+    "editDescription": "به‌روزرسانی پیام تماس موجود",
+    "createDescription": "ایجاد یک پیام تماس جدید"
+  },
   "commitee": {
+    "details": {
+      "title": "جزئیات کمیته",
+      "generalInfo": "اطلاعات عمومی",
+      "members": "اعضا",
+      "assignments": "وظایف محوله",
+      "committeeType": "نوع کمیته",
+      "status": "وضعیت",
+      "memberCount": "تعداد اعضا",
+      "createdDate": "تاریخ ایجاد",
+      "active": "فعال",
+      "inactive": "غیرفعال",
+      "role": "نقش",
+      "responsibility": "مسئولیت",
+      "email": "ایمیل",
+      "phone": "شماره تماس",
+      "joinedAt": "تاریخ عضویت",
+      "assignmentId": "شناسه وظیفه",
+      "assignmentStatus": "وضعیت وظیفه",
+      "assignedAt": "تاریخ تعیین",
+      "completedAt": "تاریخ تکمیل",
+      "remarks": "ملاحظات",
+      "certificationRequestId": "شناسه درخواست گواهینامه",
+      "noMembers": "هیچ عضوی یافت نشد",
+      "noAssignments": "هیچ وظیفه‌ای یافت نشد",
+      "loadError": "خطا در بارگیری جزئیات کمیته",
+      "notFound": "کمیته یافت نشد"
+    },
     "createMember": "افزودن عضو",
     "selectCommittee": "انتخاب کمیته",
     "list": "لیست کمیته",
@@ -990,7 +1281,25 @@
     "Inactive": "غیرفعال",
     "memberCount": "تعداد اعضا",
     "assignment": {
-      "list": "درخواست‌های تائید نامه اختصاص یافته",
+      "details": "جزئیات واگذاری کمیته",
+      "viewAssignmentDetails": "بررسی متادیتای واگذاری و اطلاعات درخواست مرتبط",
+      "detailsNotFound": "واگذاری یافت نشد",
+      "detailsNotFoundMessage": "بارگیری این واگذاری کمیته امکان پذیر نیست",
+      "summary": "خلاصه",
+      "summaryShort": "خلاصه",
+      "requestInfoTab": "درخواست",
+      "requestShort": "درخواست",
+      "committeeTab": "کمیته",
+      "committeeShort": "کمیته",
+      "requestInfo": "اطلاعات درخواست",
+      "committeeInfo": "اطلاعات کمیته",
+      "assignedBy": "واگذار شده توسط",
+      "requestStatusDetails": "وضعیت درخواست",
+      "deadlineStart": "تاریخ شروع",
+      "deadlineEnd": "تاریخ پایان",
+      "startedAt": "تاریخ شروع",
+      "requestStatus": "وضعیت درخواست",
+      "list": "درخواست‌های تائید نامه راجع شده به کمیته ",
       "create": "ایجاد اختصاص",
       "edit": "ویرایش اختصاص",
       "delete": "حذف اختصاص",
@@ -1002,8 +1311,28 @@
       "member": "عضو",
       "role": "نقش",
       "active": "فعال",
-      "assignmentBy": "اختصاص داده شده توسط",
-      "assignmentAt": "زمان اختصاص",
+      "assignmentBy": " راجع داده شده توسط",
+      "assignmentAt": "تاریخ راجع  ",
+      "confirmStartProgress": "آیا مطمئن هستید که می‌خواهید این تخصیص را در حال انجام علامت‌گذاری کنید؟",
+      "confirmComplete": "آیا مطمئن هستید که می‌خواهید این تخصیص را تکمیل‌شده علامت‌گذاری کنید؟",
+      "notMentioned": "ذکر نشده",
+      "payments": "پرداخت‌ها",
+      "noPaymentRecords": "هیچ رکورد پرداختی یافت نشد.",
+      "timelineEvents": "رویدادهای جدول زمانی",
+      "schedule": "زمان‌بندی",
+      "byLabel": "توسط:",
+      "tabs": {
+        "detailsShort": "جزئیات",
+        "companyShort": "شرکت",
+        "documentsShort": "اسناد"
+      },
+      "dialog": {
+        "updateTitle": "به‌روزرسانی تخصیص",
+        "statusLabel": "وضعیت",
+        "statusPlaceholder": "وضعیت را انتخاب کنید",
+        "commentsLabel": "نظرات",
+        "uploadReportFile": "فایل گزارش را بارگذاری کنید"
+      },
       "updated": "اختصاص با موفقیت به‌روزرسانی شد",
       "deleted": "اختصاص با موفقیت حذف شد",
       "deleteConfirm": "آیا مطمئن هستید که می‌خواهید این اختصاص را حذف کنید؟",
@@ -1016,7 +1345,7 @@
       "status": {
         "ACTIVE": "فعال",
         "INACTIVE": "غیرفعال",
-        "assinged": "اختصاص یافته",
+        "assinged": " راجع شده",
         "under_review": "در حال بررسی",
         "pinding": "در انتظار",
         "rejected": "رد شده",
@@ -1033,10 +1362,47 @@
       "role": "نقش",
       "updated": "عضو با موفقیت به‌روزرسانی شد",
       "deleted": "عضو با موفقیت حذف شد",
-      "responsibility": "مسئولیت‌ها"
+      "responsibility": "مسئولیت‌ها",
+      "createDescription": "برای افزودن عضو جدید به کمیته، معلومات زیر را تکمیل کنید",
+      "userRequired": "انتخاب کاربر الزامی است",
+      "selectUser": "یک کاربر را انتخاب کنید",
+      "selectRole": "نقش را انتخاب کنید",
+      "selectCommittee": "کمیته را انتخاب کنید",
+      "responsibilityPlaceholder": "مسئولیت ها و وظایف عضو را بنویسید...",
+      "responsibilityHint": "وظایف و مسئولیت های اصلی این عضو کمیته را وارد کنید",
+      "activeHint": "اعضای غیرفعال در فهرست ها و گزارش های کمیته های فعال نمایش داده نمی شوند",
+      "committeeRequired": "کمیته الزامی است",
+      "save": "ذخیره عضو",
+      "exportFileName": "committeeMembers",
+      "exportSheetName": "committeeMembers",
+      "roles": {
+        "CHAIRPERSON": "رئیس",
+        "VICE_CHAIRPERSON": "معاون رئیس",
+        "SECRETARY": "منشی",
+        "TREASURER": "خزانه دار",
+        "MEMBER": "عضو",
+        "OBSERVER": "ناظر"
+      },
+      "committee": "کمیته",
+      "joinedAt": "تاریخ عضویت",
+      "deleteConfirm": "آیا مطمئن هستید که می خواهید این عضو را حذف کنید؟",
+      "viewTitle": "نمای عضو کمیته"
     }
   },
   "common": {
+    
+    "id":"آی دی",
+    "current_page": "صفحه فعلی",
+    "all": "همه",
+    "exporting": "در حال دانلود ...",
+    "export": "دانلود فایل اکسل",
+    "choosefile": "انتخاب فایل",
+    "clearfileselected": "پاک کردن فایل انتخاب شده",
+    "...More": "...بیشتر",
+    "maxfilesize": "حداکثر حجم فایل: {{size}}",
+    "required": "این فیلد ضروری است",
+    "asqa": "اداره ملی معیار کیفیت افغانستان",
+    "asqaDescription": "اسقا",
     "timeline": "جدول زمانی",
     "continue": "ادامه",
     "copy": "کپی",
@@ -1075,12 +1441,13 @@
     "notSpecified": "مشخص نشده",
     "startDate": "تاریخ شروع",
     "endDate": "تاریخ پایان",
-    "noDocuments": "هیچ سندی پیوست نشده است",
+    "noDocuments": "هیچ ضمیمه مربوط به این درخواست اضافه نشده است",
     "saveAndContinue": "ذخیره و ادامه به مرحله بعد",
     "status": "وضعیت",
     "createdDate": "تاریخ ایجاد",
     "selectScope": "لطفاً ابتدا یک محدوده را انتخاب کنید",
-    "selectRequest": "لطفاً ابتدا یک درخواست را انتخاب کنید"
+    "selectRequest": "لطفاً ابتدا یک درخواست را انتخاب کنید",
+    "pleaseWait": "لطفاً منتظر بمانید"
   },
   "home": {
     "badge": "اداره معیارهای کیفیت افغانستان",
@@ -1218,7 +1585,7 @@
     "committeeStatistics": "آمار کمیته",
     "additionalStatistics": "آمار اضافی",
     "totalRequests": "مجموع درخواست‌ها",
-    "submitted": "ارسال شده",
+    "submitted": "درخواست شده",
     "inProgress": "در حال انجام",
     "completed": "تکمیل شده",
     "rejected": "رد شده",
@@ -1245,553 +1612,675 @@
     }
   },
   "dashboard": {
-  "title": "داشبورد",
-  "subtitle": "خلاصه وضعیت سیستم تصدیق شما",
-  "cards": {
-    "totalUsers": "مجموع کاربران",
-    "activeUsers": "کاربران فعال",
-    "inProgressRequests": "درخواست‌های در حال انجام",
-    "totalCompanies": "مجموع شرکت‌ها",
-    "certificationRequests": "درخواست‌های تصدیق",
-    "certifications": "تصدیق‌ها",
-    "totalCommittee": "مجموع کمیته",
-    "completedRequests": "درخواست‌های تکمیل شده"
-  },
-  "charts": {
-    "userGrowth": "رشد کاربران",
-    "requestStatusOverview": "خلاصه وضعیت درخواست‌ها",
-    "userDistribution": "توزیع کاربران",
-    "companyDistribution": "توزیع شرکت‌ها",
-    "last6Months": "۶ ماه اخیر",
-    "users": "کاربران",
-    "numberOfRequests": "تعداد درخواست‌ها"
-  },
-  "status": {
-    "active": "فعال",
-    "inactive": "غیرفعال",
-    "inProgress": "در حال انجام",
-    "completed": "تکمیل شده",
-    "submitted": "ارسال شده",
-    "rejected": "رد شده"
-  },
-  "buttons": {
-    "tryAgain": "تلاش مجدد"
-  },
-  "errors": {
-    "fetchFailed": "دریافت اطلاعات داشبورد ناموفق بود",
-    "loadFailed": "بارگذاری اطلاعات ناموفق بود",
-    "unableToFetch": "قادر به دریافت اطلاعات داشبورد نیست"
-  }
-},
-"user": {
-  "title": "مدیریت کاربران",
-  "total": "مجموع",
-  "labels": {
-    "noRole": "بدون نقش",
-    "notAssigned": "اختصاص داده نشده",
-    "notProvided": "ارائه نشده",
-    "profileImage": "تصویر پروفایل",
-    "loadingUserDetails": "در حال بارگذاری جزئیات کاربر...",
-    "profileImageAlt": "تصویر پروفایل کاربر"
-  },
-  "fields": {
-    "firstName": "نام",
-    "lastName": "نام خانوادگی",
-    "email": "ایمیل",
-    "phoneNumber": "شماره تماس",
-    "role": "نقش",
-    "zone": "زون",
-    "currentProfileImage": "تصویر پروفایل فعلی",
-    "updateProfileImage": "به‌روزرسانی تصویر پروفایل",
-    "username": "نام کاربری",
-    "createdDate": "تاریخ ایجاد",
-    "updatedDate": "تاریخ به‌روزرسانی",
-    "status": "وضعیت"
-  },
-  "placeholders": {
-    "phoneNumber": "۰۷۰۱۲۳۴۵۶۷",
-    "selectRole": "نقش را انتخاب کنید",
-    "selectZone": "زون را انتخاب کنید",
-    "email": "example@email.com",
-    "firstName": "نام را وارد کنید",
-    "lastName": "نام خانوادگی را وارد کنید"
-  },
-  "buttons": {
-    "create": "ایجاد کاربر",
-    "refresh": "تازه سازی",
-    "delete": "حذف",
-    "cancel": "لغو",
-    "update": "به‌روزرسانی",
-    "save": "ذخیره",
-    "tryAgain": "تلاش مجدد",
-    "back": "بازگشت"
-  },
-  "actions": {
-    "edit": "ویرایش کاربر",
-    "delete": "حذف کاربر",
-    "viewDetails": "مشاهده جزئیات"
-  },
-  "messages": {
-    "loadFailed": "بارگذاری کاربران ناموفق بود",
-    "deleteSuccess": "کاربر با موفقیت حذف شد",
-    "deleteFailed": "حذف کاربر ناموفق بود",
-    "updateSuccess": "کاربر با موفقیت به‌روزرسانی شد",
-    "updateFailed": "به‌روزرسانی کاربر ناموفق بود",
-    "createSuccess": "کاربر با موفقیت ایجاد شد",
-    "createFailed": "ایجاد کاربر ناموفق بود",
-    "notFound": "کاربر یافت نشد",
-    "zoneLoadFailed": "بارگذاری زون‌ها ناموفق بود",
-    "userNotFound": "کاربر یافت نشد",
-    "loadingError": "خطا در بارگذاری اطلاعات کاربر"
-  },
-  "dialogs": {
-    "deleteTitle": "حذف کاربر",
-    "deleteConfirm": "آیا مطمئن هستید که می‌خواهید حذف کنید"
-  },
-  "details": {
-    "userDetails": "جزئیات کاربر",
-    "viewUser": "مشاهده کاربر",
-    "firstName": "نام",
-    "lastName": "نام خانوادگی",
-    "email": "ایمیل",
-    "phoneNumber": "شماره تماس",
-    "roles": "نقش‌ها",
-    "username": "نام کاربری",
-    "zone": "زون",
-    "createdDate": "تاریخ ایجاد",
-    "updatedDate": "تاریخ به‌روزرسانی",
-    "status": "وضعیت",
-    "profileImage": "تصویر پروفایل"
-  },
-  "status": {
-    "active": "فعال",
-    "inactive": "غیرفعال",
-    "enabled": "فعال",
-    "disabled": "غیرفعال"
-  },
-  "breadcrumb": {
-    "editUser": "ویرایش کاربر",
-    "createUser": "ایجاد کاربر",
-    "viewUser": "مشاهده کاربر",
-    "users": "کاربران"
-  },
-  "validation": {
-    "firstNameRequired": "نام الزامی است",
-    "lastNameRequired": "نام خانوادگی الزامی است",
-    "emailRequired": "ایمیل الزامی است",
-    "emailInvalid": "آدرس ایمیل نامعتبر است",
-    "phoneRequired": "شماره تماس الزامی است",
-    "phoneInvalid": "شماره تماس باید با 07 شروع شود و 10 رقم داشته باشد",
-    "roleRequired": "نقش الزامی است",
-    "zoneRequired": "زون الزامی است"
-  },
-  "roles": {
-    "ADMIN": "مدیر",
-    "MANAGER": "مدیر اجرایی",
-    "USER": "کاربر عادی",
-    "GUEST": "مهمان",
-    "COMPANY_ADMIN": "مدیر شرکت",
-    "MONITORING": "نظارت",
-    "SUPER_ADMIN": "مدیر ارشد",
-    "COMMITTEE_MEMBER": "عضو کمیته",
-    "INSPECTOR": "بازرس"
-  },
-  "columns": {
-    "id": "شناسه",
-    "name": "نام",
-    "email": "ایمیل",
-    "phoneNumber": "شماره تماس",
-    "roles": "نقش‌ها",
-    "zone": "زون",
-    "createdDate": "تاریخ ایجاد",
-    "actions": "عملیات"
-  },
-  "table": {
-    "noData": "هیچ داده‌ای یافت نشد",
-    "loading": "در حال بارگذاری...",
-    "totalRecords": "مجموع رکوردها"
-  },
-  "form": {
-    "title": {
-      "edit": "ویرایش کاربر",
-      "create": "ایجاد کاربر جدید",
-      "view": "مشاهده کاربر"
+    "title": "داشبورد",
+    "subtitle": "خلاصه وضعیت سیستم تصدیق شما",
+    "cards": {
+      "totalUsers": "مجموع کاربران",
+      "activeUsers": "کاربران فعال",
+      "inProgressRequests": "درخواست‌های در حال انجام",
+      "totalCompanies": "مجموع شرکت‌ها",
+      "certificationRequests": "درخواست‌های تصدیق",
+      "certifications": "تصدیق‌ها",
+      "totalCommittee": "مجموع کمیته",
+      "completedRequests": "درخواست‌های تکمیل شده"
     },
-    "subtitle": {
-      "edit": "اطلاعات کاربر را ویرایش کنید",
-      "create": "اطلاعات کاربر جدید را وارد کنید",
-      "view": "مشاهده اطلاعات کاربر"
+    "charts": {
+      "userGrowth": "رشد کاربران",
+      "requestStatusOverview": "خلاصه وضعیت درخواست‌ها",
+      "userDistribution": "توزیع کاربران",
+      "companyDistribution": "توزیع شرکت‌ها",
+      "last6Months": "۶ ماه اخیر",
+      "users": "کاربران",
+      "numberOfRequests": "تعداد درخواست‌ها"
+    },
+    "status": {
+      "active": "فعال",
+      "inactive": "غیرفعال",
+      "inProgress": "در حال انجام",
+      "completed": "تکمیل شده",
+      "submitted": "ارسال شده",
+      "rejected": "رد شده"
+    },
+    "buttons": {
+      "tryAgain": "تلاش مجدد"
+    },
+    "errors": {
+      "fetchFailed": "دریافت اطلاعات داشبورد ناموفق بود",
+      "loadFailed": "بارگذاری اطلاعات ناموفق بود",
+      "unableToFetch": "قادر به دریافت اطلاعات داشبورد نیست"
     }
   },
-  "errors": {
-    "fetchFailed": "دریافت اطلاعات کاربر ناموفق بود",
-    "updateFailed": "به‌روزرسانی کاربر ناموفق بود",
-    "createFailed": "ایجاد کاربر ناموفق بود",
-    "deleteFailed": "حذف کاربر ناموفق بود",
-    "invalidData": "داده‌های نامعتبر",
-    "networkError": "خطای شبکه"
-  },
-  "success": {
-    "fetched": "اطلاعات کاربر با موفقیت دریافت شد",
-    "updated": "کاربر با موفقیت به‌روزرسانی شد",
-    "created": "کاربر با موفقیت ایجاد شد",
-    "deleted": "کاربر با موفقیت حذف شد"
-  }
-},
-"role": {
-  "title": "مدیریت نقش‌ها",
-  "total": "مجموع",
-  "labels": {
-    "actions": "عملیات",
-    "noPermissions": "بدون مجوز",
-    "permissions": "مجوزها",
-    "of": "از",
-    "selected": "انتخاب شده",
-    "showing": "نمایش",
+  "user": {
+    "title": "مدیریت کاربران",
     "total": "مجموع",
-    "categories": "دسته‌بندی‌ها",
-    "permission": "مجوز",
-    "s": "ها"
+    "labels": {
+      "noRole": "بدون نقش",
+      "notAssigned": "اختصاص داده نشده",
+      "notProvided": "ارائه نشده",
+      "profileImage": "تصویر پروفایل",
+      "loadingUserDetails": "در حال بارگذاری جزئیات کاربر...",
+      "profileImageAlt": "تصویر پروفایل کاربر"
+    },
+    "fields": {
+      "firstName": "نام",
+      "lastName": "نام خانوادگی",
+      "email": "ایمیل",
+      "phoneNumber": "شماره تماس",
+      "role": "نقش",
+      "zone": "زون",
+      "currentProfileImage": "تصویر پروفایل فعلی",
+      "updateProfileImage": "به‌روزرسانی تصویر پروفایل",
+      "username": "نام کاربری",
+      "createdDate": "تاریخ ایجاد",
+      "updatedDate": "تاریخ به‌روزرسانی",
+      "status": "وضعیت",
+      "password": "رمز عبور",
+      "confirmPassword": "تأیید رمز عبور"
+    },
+    "placeholders": {
+      "phoneNumber": "۰۷۰۱۲۳۴۵۶۷",
+      "selectRole": "نقش را انتخاب کنید",
+      "selectZone": "زون را انتخاب کنید",
+      "email": "example@email.com",
+      "firstName": "نام را وارد کنید",
+      "lastName": "نام خانوادگی را وارد کنید",
+      "password": "رمز عبور را وارد کنید",
+      "confirmPassword": "رمز عبور را تأیید کنید",
+      "imageHint": "تصویر پروفایل را آپلود کنید (حداکثر ۱MB، JPG، PNG)"
+    },
+    "passwordStrength": {
+      "weak": "ضعیف",
+      "fair": "متوسط",
+      "good": "خوب",
+      "strong": "قوی"
+    },
+    "buttons": {
+      "create": "ایجاد کاربر",
+      "refresh": "تازه سازی",
+      "delete": "حذف",
+      "cancel": "لغو",
+      "update": "به‌روزرسانی",
+      "save": "ذخیره",
+      "tryAgain": "تلاش مجدد",
+      "back": "بازگشت"
+    },
+    "actions": {
+      "edit": "ویرایش کاربر",
+      "delete": "حذف کاربر",
+      "viewDetails": "مشاهده جزئیات"
+    },
+    "messages": {
+      "loadFailed": "بارگذاری کاربران ناموفق بود",
+      "deleteSuccess": "کاربر با موفقیت حذف شد",
+      "deleteFailed": "حذف کاربر ناموفق بود",
+      "updateSuccess": "کاربر با موفقیت به‌روزرسانی شد",
+      "updateFailed": "به‌روزرسانی کاربر ناموفق بود",
+      "createSuccess": "کاربر با موفقیت ایجاد شد",
+      "createFailed": "ایجاد کاربر ناموفق بود",
+      "notFound": "کاربر یافت نشد",
+      "zoneLoadFailed": "بارگذاری زون‌ها ناموفق بود",
+      "userNotFound": "کاربر یافت نشد",
+      "loadingError": "خطا در بارگذاری اطلاعات کاربر",
+      "roleLoadFailed": "بارگیری نقش‌ها ناموفق بود"
+    },
+    "dialogs": {
+      "deleteTitle": "حذف کاربر",
+      "deleteConfirm": "آیا مطمئن هستید که می‌خواهید حذف کنید"
+    },
+    "details": {
+      "userDetails": "جزئیات کاربر",
+      "viewUser": "مشاهده کاربر",
+      "firstName": "نام",
+      "lastName": "نام خانوادگی",
+      "email": "ایمیل",
+      "phoneNumber": "شماره تماس",
+      "roles": "نقش‌ها",
+      "username": "نام کاربری",
+      "zone": "زون",
+      "createdDate": "تاریخ ایجاد",
+      "updatedDate": "تاریخ به‌روزرسانی",
+      "status": "وضعیت",
+      "profileImage": "تصویر پروفایل"
+    },
+    "status": {
+      "active": "فعال",
+      "inactive": "غیرفعال",
+      "enabled": "فعال",
+      "disabled": "غیرفعال"
+    },
+    "breadcrumb": {
+      "editUser": "ویرایش کاربر",
+      "createUser": "ایجاد کاربر",
+      "viewUser": "مشاهده کاربر",
+      "users": "کاربران"
+    },
+    "validation": {
+      "firstNameRequired": "نام الزامی است",
+      "lastNameRequired": "نام خانوادگی الزامی است",
+      "emailRequired": "ایمیل الزامی است",
+      "emailInvalid": "آدرس ایمیل نامعتبر است",
+      "phoneRequired": "شماره تماس الزامی است",
+      "phoneInvalid": "شماره تماس باید با 07 شروع شود و 10 رقم داشته باشد",
+      "roleRequired": "نقش الزامی است",
+      "zoneRequired": "زون الزامی است",
+      "passwordsMatch": "رمزهای عبور مطابقت دارند",
+      "roleLoadFailed": "بارگیری نقش‌ها ناموفق بود",
+      "passwordsNotMatch": "رمزهای عبور مطابقت ندارند",
+      "passwordsDoNotMatch": "رمزهای عبور مطابقت ندارند"
+    },
+    "roles": {
+      "ADMIN": "مدیر",
+      "MANAGER": "مدیر اجرایی",
+      "USER": "کاربر عادی",
+      "GUEST": "مهمان",
+      "COMPANY_ADMIN": "مدیر شرکت",
+      "MONITORING": "نظارت",
+      "SUPER_ADMIN": "مدیر ارشد",
+      "COMMITTEE_MEMBER": "عضو کمیته",
+      "INSPECTOR": "بازرس"
+    },
+    "columns": {
+      "id": "شناسه",
+      "name": "نام",
+      "email": "ایمیل",
+      "phoneNumber": "شماره تماس",
+      "roles": "نقش‌ها",
+      "zone": "زون",
+      "createdDate": "تاریخ ایجاد",
+      "actions": "عملیات"
+    },
+    "table": {
+      "noData": "هیچ داده‌ای یافت نشد",
+      "loading": "در حال بارگذاری...",
+      "totalRecords": "مجموع رکوردها"
+    },
+    "form": {
+      "title": {
+        "edit": "ویرایش کاربر",
+        "create": "ایجاد کاربر جدید",
+        "view": "مشاهده کاربر"
+      },
+      "subtitle": {
+        "edit": "اطلاعات کاربر را ویرایش کنید",
+        "create": "اطلاعات کاربر جدید را وارد کنید",
+        "view": "مشاهده اطلاعات کاربر"
+      }
+    },
+    "errors": {
+      "fetchFailed": "دریافت اطلاعات کاربر ناموفق بود",
+      "updateFailed": "به‌روزرسانی کاربر ناموفق بود",
+      "createFailed": "ایجاد کاربر ناموفق بود",
+      "deleteFailed": "حذف کاربر ناموفق بود",
+      "invalidData": "داده‌های نامعتبر",
+      "networkError": "خطای شبکه"
+    },
+    "success": {
+      "fetched": "اطلاعات کاربر با موفقیت دریافت شد",
+      "updated": "کاربر با موفقیت به‌روزرسانی شد",
+      "created": "کاربر با موفقیت ایجاد شد",
+      "deleted": "کاربر با موفقیت حذف شد"
+    }
   },
-  "fields": {
-    "roleName": "نام نقش",
-    "assignPermissions": "اختصاص مجوزها",
-    "description": "توضیحات",
-    "roleId": "شناسه نقش",
-    "created": "ایجاد شده",
-    "lastUpdated": "آخرین به‌روزرسانی",
-    "createdBy": "ایجاد شده توسط",
-    "assignedPermissions": "مجوزهای اختصاص یافته"
+  "role": {
+    "ROLE_ADMIN": "مدیر عمومی سیستم",
+    "ROLE_USER": "کاربر عادی",
+    "ROLE_COMMITTEE": "عضو کمیته",
+    "ROLE_INSPECTOR": "بازرس",
+    "DOCUMENT_CONTROLLER": "مدیر عمومی کنترول اسناد",
+    "DATABASE_EXPERT": " کار شناس دیتابیس ",
+    "COMPANY_ADMIN": "مدیر شرکت",
+    "CUSTOMER_CARE_MANAGER": "مدیر عمومی  خدمات مشتریان",
+    "COMITEEMEMBER": "عضو کمیته",
+    "title": "مدیریت نقش‌ها",
+    "total": "مجموع",
+    "labels": {
+      "actions": "عملیات",
+      "noPermissions": "بدون مجوز",
+      "permissions": "مجوزها",
+      "of": "از",
+      "selected": "انتخاب شده",
+      "showing": "نمایش",
+      "total": "مجموع",
+      "categories": "دسته‌بندی‌ها",
+      "permission": "مجوز",
+      "s": "ها"
+    },
+    "fields": {
+      "roleName": "نام نقش",
+      "assignPermissions": "اختصاص مجوزها",
+      "description": "توضیحات",
+      "roleId": "شناسه نقش",
+      "created": "ایجاد شده",
+      "lastUpdated": "آخرین به‌روزرسانی",
+      "createdBy": "ایجاد شده توسط",
+      "assignedPermissions": "مجوزهای اختصاص یافته"
+    },
+    "placeholders": {
+      "roleName": "نام نقش را وارد کنید (مدیر، مدیر اجرایی، ویرایشگر، ...)",
+      "searchPermissions": "جستجوی مجوزها..."
+    },
+    "columns": {
+      "id": "شناسه",
+      "roleName": "نام نقش",
+      "permissions": "مجوزها",
+      "actions": "عملیات"
+    },
+    "buttons": {
+      "create": "ایجاد نقش",
+      "refresh": "تازه سازی",
+      "delete": "حذف",
+      "cancel": "لغو",
+      "edit": "ویرایش",
+      "showLess": "نمایش کمتر",
+      "more": "بیشتر",
+      "all": "همه",
+      "none": "هیچ",
+      "save": "ذخیره",
+      "backToRoles": "بازگشت به نقش‌ها",
+      "addPermissions": "افزودن مجوزها"
+    },
+    "actions": {
+      "edit": "ویرایش نقش",
+      "viewDetails": "مشاهده جزئیات",
+      "delete": "حذف نقش"
+    },
+    "status": {
+      "active": "فعال",
+      "inactive": "غیرفعال"
+    },
+    "tabs": {
+      "gridView": "نمایش شبکه‌ای",
+      "groupedView": "نمایش گروهی",
+      "listView": "نمایش لیستی"
+    },
+    "tooltips": {
+      "permissionsInfo": "تمام مجوزهای اختصاص داده شده به این نقش"
+    },
+    "breadcrumb": {
+      "dashboard": "داشبورد",
+      "roles": "نقش‌ها",
+      "roleDetails": "جزئیات نقش"
+    },
+    "messages": {
+      "loadFailed": "بارگذاری نقش‌ها ناموفق بود",
+      "deleteSuccess": "نقش با موفقیت حذف شد",
+      "deleteFailed": "حذف نقش ناموفق بود",
+      "createSuccess": "نقش با موفقیت ایجاد شد",
+      "createFailed": "ایجاد نقش ناموفق بود",
+      "updateSuccess": "نقش با موفقیت به‌روزرسانی شد",
+      "updateFailed": "به‌روزرسانی نقش ناموفق بود",
+      "loadDetailsFailed": "بارگذاری جزئیات نقش ناموفق بود",
+      "permissionsLoadFailed": "بارگذاری مجوزها ناموفق بود",
+      "noPermissionsFound": "هیچ مجوزی یافت نشد",
+      "adjustSearch": "سعی کنید جستجوی خود را تنظیم کنید",
+      "updatingRole": "در حال به‌روزرسانی نقش...",
+      "creatingRole": "در حال ایجاد نقش...",
+      "pleaseWait": "لطفاً منتظر بمانید",
+      "roleNotFound": "نقش یافت نشد",
+      "roleNotFoundDesc": "نقشی که به دنبال آن هستید وجود ندارد یا حذف شده است.",
+      "noPermissionsAssigned": "هیچ مجوزی اختصاص داده نشده است",
+      "noPermissionsDesc": "این نقش هنوز هیچ مجوزی ندارد"
+    },
+    "dialogs": {
+      "deleteTitle": "حذف نقش",
+      "deleteConfirm": "آیا مطمئن هستید که می‌خواهید حذف کنید",
+      "deleteWarning": "این عمل قابل بازگشت نیست. تمام مجوزهای مرتبط با این نقش تحت تأثیر قرار خواهند گرفت.",
+      "editTitle": "ویرایش نقش",
+      "editSubtitle": "اصلاح جزئیات نقش و مجوزها",
+      "createTitle": "ایجاد نقش جدید",
+      "createSubtitle": "نقش جدید تعریف کنید و مجوزها را اختصاص دهید"
+    },
+    "validation": {
+      "roleNameRequired": "نام نقش الزامی است",
+      "roleNameMinLength": "نام نقش باید حداقل ۳ کاراکتر باشد"
+    }
   },
-  "placeholders": {
-    "roleName": "نام نقش را وارد کنید (مدیر، مدیر اجرایی، ویرایشگر، ...)",
-    "searchPermissions": "جستجوی مجوزها..."
+  "permissions": {
+    "ADD_USER": "افزودن کاربر",
+    "UPDATE_USER": "ویرایش کاربر",
+    "DELETE_USER": "حذف کاربر",
+    "VIEW_USER": "نمایش کاربر",
+    "ADD_ROLE": "افزودن نقش",
+    "UPDATE_ROLE": "ویرایش نقش",
+    "DELETE_ROLE": "حذف نقش",
+    "VIEW_ROLE": "نمایش نقش",
+    "ADD_PERMISSION": "افزودن صلاحیت",
+    "UPDATE_PERMISSION": "ویرایش صلاحیت",
+    "DELETE_PERMISSION": "حذف صلاحیت",
+    "VIEW_PERMISSION": "نمایش صلاحیت",
+    "ADD_COMPANY": "افزودن شرکت",
+    "UPDATE_COMPANY": "ویرایش شرکت",
+    "DELETE_COMPANY": "حذف شرکت",
+    "VIEW_COMPANY": "نمایش شرکت",
+    "ADD_COMPANYCONTACTPERSON": "افزودن شخص تماس شرکت",
+    "UPDATE_COMPANYCONTACTPERSON": "ویرایش شخص تماس شرکت",
+    "DELETE_COMPANYCONTACTPERSON": "حذف شخص تماس شرکت",
+    "VIEW_COMPANYCONTACTPERSON": "نمایش شخص تماس شرکت",
+    "ADD_CERTIFICATION": "افزودن تصدیق‌نامه",
+    "UPDATE_CERTIFICATION": "ویرایش تصدیق‌نامه",
+    "DELETE_CERTIFICATION": "حذف تصدیق‌نامه",
+    "VIEW_CERTIFICATION": "نمایش تصدیق‌نامه",
+    "ADD_CERTIFICATIONREQUEST": "افزودن درخواست تصدیق",
+    "UPDATE_CERTIFICATIONREQUEST": "ویرایش درخواست تصدیق",
+    "DELETE_CERTIFICATIONREQUEST": "حذف درخواست تصدیق",
+    "VIEW_CERTIFICATIONREQUEST": "نمایش درخواست تصدیق",
+    "ADD_PAYMENT": "افزودن پرداخت",
+    "UPDATE_PAYMENT": "ویرایش پرداخت",
+    "DELETE_PAYMENT": "حذف پرداخت",
+    "VIEW_PAYMENT": "نمایش پرداخت",
+    "ADD_ATTACHMENT": "افزودن ضمیمه",
+    "UPDATE_ATTACHMENT": "ویرایش ضمیمه",
+    "DELETE_ATTACHMENT": "حذف ضمیمه",
+    "VIEW_ATTACHMENT": "نمایش ضمیمه",
+    "ADD_CATEGORY": "افزودن دسته‌بندی",
+    "UPDATE_CATEGORY": "ویرایش دسته‌بندی",
+    "DELETE_CATEGORY": "حذف دسته‌بندی",
+    "VIEW_CATEGORY": "نمایش دسته‌بندی",
+    "ADD_ADDRESS": "افزودن آدرس",
+    "UPDATE_ADDRESS": "ویرایش آدرس",
+    "DELETE_ADDRESS": "حذف آدرس",
+    "VIEW_ADDRESS": "نمایش آدرس",
+    "ADD_COUNTRY": "افزودن کشور",
+    "UPDATE_COUNTRY": "ویرایش کشور",
+    "DELETE_COUNTRY": "حذف کشور",
+    "VIEW_COUNTRY": "نمایش کشور",
+    "ADD_COUNTRYTRANSLATION": "افزودن ترجمه کشور",
+    "UPDATE_COUNTRYTRANSLATION": "ویرایش ترجمه کشور",
+    "DELETE_COUNTRYTRANSLATION": "حذف ترجمه کشور",
+    "VIEW_COUNTRYTRANSLATION": "نمایش ترجمه کشور",
+    "ADD_PROVINCE": "افزودن ولایت",
+    "UPDATE_PROVINCE": "ویرایش ولایت",
+    "DELETE_PROVINCE": "حذف ولایت",
+    "VIEW_PROVINCE": "نمایش ولایت",
+    "ADD_PROVINCETRANSLATION": "افزودن ترجمه ولایت",
+    "UPDATE_PROVINCETRANSLATION": "ویرایش ترجمه ولایت",
+    "DELETE_PROVINCETRANSLATION": "حذف ترجمه ولایت",
+    "VIEW_PROVINCETRANSLATION": "نمایش ترجمه ولایت",
+    "ADD_DISTRICT": "افزودن ولسوالی",
+    "UPDATE_DISTRICT": "ویرایش ولسوالی",
+    "DELETE_DISTRICT": "حذف ولسوالی",
+    "VIEW_DISTRICT": "نمایش ولسوالی",
+    "ADD_DISTRICTTRANSLATION": "افزودن ترجمه ولسوالی",
+    "UPDATE_DISTRICTTRANSLATION": "ویرایش ترجمه ولسوالی",
+    "DELETE_DISTRICTTRANSLATION": "حذف ترجمه ولسوالی",
+    "VIEW_DISTRICTTRANSLATION": "نمایش ترجمه ولسوالی",
+    "ADD_LANGUAGE": "افزودن زبان",
+    "UPDATE_LANGUAGE": "ویرایش زبان",
+    "DELETE_LANGUAGE": "حذف زبان",
+    "VIEW_LANGUAGE": "نمایش زبان",
+    "ADD_MULTILANGUAGE": "افزودن زبان چندگانه",
+    "UPDATE_MULTILANGUAGE": "ویرایش زبان چندگانه",
+    "DELETE_MULTILANGUAGE": "حذف زبان چندگانه",
+    "VIEW_MULTILANGUAGE": "نمایش زبان چندگانه",
+    "ADD_MENU": "افزودن منو",
+    "UPDATE_MENU": "ویرایش منو",
+    "DELETE_MENU": "حذف منو",
+    "VIEW_MENU": "نمایش منو",
+    "ADD_EMAILVERIFICATION": "افزودن تأیید ایمیل",
+    "UPDATE_EMAILVERIFICATION": "ویرایش تأیید ایمیل",
+    "DELETE_EMAILVERIFICATION": "حذف تأیید ایمیل",
+    "VIEW_EMAILVERIFICATION": "نمایش تأیید ایمیل",
+    "ADD_FORGOTPASSWORD": "افزودن فراموشی رمز عبور",
+    "UPDATE_FORGOTPASSWORD": "ویرایش فراموشی رمز عبور",
+    "DELETE_FORGOTPASSWORD": "حذف فراموشی رمز عبور",
+    "VIEW_FORGOTPASSWORD": "نمایش فراموشی رمز عبور",
+    "ADD_ZONE": "افزودن زون",
+    "UPDATE_ZONE": "ویرایش زون",
+    "DELETE_ZONE": "حذف زون",
+    "VIEW_ZONE": "نمایش زون",
+    "ADD_COMMITEE": "افزودن کمیته",
+    "UPDATE_COMMITEE": "ویرایش کمیته",
+    "DELETE_COMMITEE": "حذف کمیته",
+    "VIEW_COMMITEE": "نمایش کمیته",
+    "ADD_COMMITEEASSIGNMENT": "افزودن انتصاب کمیته",
+    "UPDATE_COMMITEEASSIGNMENT": "ویرایش انتصاب کمیته",
+    "DELETE_COMMITEEASSIGNMENT": "حذف انتصاب کمیته",
+    "VIEW_COMMITEEASSIGNMENT": "نمایش انتصاب کمیته",
+    "ADD_COMMITEEASSIGNMENTCOMMENT": "افزودن نظر انتصاب کمیته",
+    "UPDATE_COMMITEEASSIGNMENTCOMMENT": "ویرایش نظر انتصاب کمیته",
+    "DELETE_COMMITEEASSIGNMENTCOMMENT": "حذف نظر انتصاب کمیته",
+    "VIEW_COMMITEEASSIGNMENTCOMMENT": "نمایش نظر انتصاب کمیته",
+    "ADD_COMMITEEMEMBER": "افزودن عضو کمیته",
+    "UPDATE_COMMITEEMEMBER": "ویرایش عضو کمیته",
+    "DELETE_COMMITEEMEMBER": "حذف عضو کمیته",
+    "VIEW_COMMITEEMEMBER": "نمایش عضو کمیته",
+    "ADD_COMMITEEREPORT": "افزودن گزارش کمیته",
+    "UPDATE_COMMITEEREPORT": "ویرایش گزارش کمیته",
+    "DELETE_COMMITEEREPORT": "حذف گزارش کمیته",
+    "VIEW_COMMITEEREPORT": "نمایش گزارش کمیته",
+    "ADD_WORKFLOW": "افزودن جریان کاری",
+    "UPDATE_WORKFLOW": "ویرایش جریان کاری",
+    "DELETE_WORKFLOW": "حذف جریان کاری",
+    "VIEW_WORKFLOW": "نمایش جریان کاری",
+    "ADD_WORKFLOWSTEP": "افزودن مرحله جریان کاری",
+    "UPDATE_WORKFLOWSTEP": "ویرایش مرحله جریان کاری",
+    "DELETE_WORKFLOWSTEP": "حذف مرحله جریان کاری",
+    "VIEW_WORKFLOWSTEP": "نمایش مرحله جریان کاری",
+    "ADD_REQUESTWORKFLOW": "افزودن جریان کاری درخواست",
+    "UPDATE_REQUESTWORKFLOW": "ویرایش جریان کاری درخواست",
+    "DELETE_REQUESTWORKFLOW": "حذف جریان کاری درخواست",
+    "VIEW_REQUESTWORKFLOW": "نمایش جریان کاری درخواست",
+    "ADD_CERTIFICATIONREQUESTSTATUSHISTORY": "افزودن تاریخچه وضعیت درخواست تصدیق",
+    "UPDATE_CERTIFICATIONREQUESTSTATUSHISTORY": "ویرایش تاریخچه وضعیت درخواست تصدیق",
+    "DELETE_CERTIFICATIONREQUESTSTATUSHISTORY": "حذف تاریخچه وضعیت درخواست تصدیق",
+    "VIEW_CERTIFICATIONREQUESTSTATUSHISTORY": "نمایش تاریخچه وضعیت درخواست تصدیق",
+    "ADD_INSPECTION_REPORT": "افزودن گزارش بازرسی",
+    "UPDATE_INSPECTION_REPORT": "ویرایش گزارش بازرسی",
+    "DELETE_INSPECTION_REPORT": "حذف گزارش بازرسی",
+    "VIEW_INSPECTION_REPORT": "نمایش گزارش بازرسی",
+    "ADD_COMMENT": "افزودن نظر",
+    "UPDATE_COMMENT": "ویرایش نظر",
+    "DELETE_COMMENT": "حذف نظر",
+    "VIEW_COMMENT": "نمایش نظر",
+    "VIEW_DASHBOARD": "نمایش داشبورد",
+    "VIEW_REPORT": "نمایش راپور",
+    "VIEW_LOCATION": "نمایش موقعیت",
+    "VIEW_STANDARD": "نمایش استندرد"
   },
-  "columns": {
-    "id": "شناسه",
-    "roleName": "نام نقش",
-    "permissions": "مجوزها",
-    "actions": "عملیات"
+  "permission": {
+    "title": "مدیریت صلاحیت‌ها",
+    "total": "مجموع",
+    "labels": {
+      "permissions": "صلاحیت‌ها",
+      "of": "از",
+      "selected": "انتخاب شده",
+      "showing": "نمایش"
+    },
+    "fields": {
+      "permissionName": "نام صلاحیت",
+      "assignPermissions": "اختصاص صلاحیت‌ها",
+      "description": "توضیحات"
+    },
+    "placeholders": {
+      "permissionName": "نام صلاحیت را وارد کنید (مثال: ADD_USER, VIEW_ROLE)",
+      "permissionNameHint": "فقط از حروف بزرگ و زیرخط استفاده کنید (مثال: ADD_USER)",
+      "searchPermissions": "جستجوی صلاحیت‌ها...",
+      "description": "توضیحات صلاحیت را وارد کنید"
+    },
+    "columns": {
+      "id": "شناسه",
+      "permissionName": "نام صلاحیت",
+      "actions": "عملیات"
+    },
+    "buttons": {
+      "create": "ایجاد صلاحیت",
+      "refresh": "تازه سازی",
+      "cancel": "لغو",
+      "save": "ذخیره",
+      "all": "همه",
+      "none": "هیچ"
+    },
+    "actions": {
+      "viewDetails": "مشاهده جزئیات",
+      "edit": "ویرایش صلاحیت",
+      "delete": "حذف صلاحیت"
+    },
+    "messages": {
+      "loadFailed": "بارگذاری صلاحیت‌ها ناموفق بود",
+      "createSuccess": "صلاحیت با موفقیت ایجاد شد",
+      "createFailed": "ایجاد صلاحیت ناموفق بود",
+      "updateSuccess": "صلاحیت با موفقیت به‌روزرسانی شد",
+      "updateFailed": "به‌روزرسانی صلاحیت ناموفق بود",
+      "deleteSuccess": "صلاحیت با موفقیت حذف شد",
+      "deleteFailed": "حذف صلاحیت ناموفق بود",
+      "noPermissionsFound": "هیچ صلاحیتی یافت نشد",
+      "adjustSearch": "سعی کنید جستجوی خود را تنظیم کنید",
+      "creatingPermission": "در حال ایجاد صلاحیت...",
+      "updatingPermission": "در حال به‌روزرسانی صلاحیت...",
+      "pleaseWait": "لطفاً منتظر بمانید"
+    },
+    "dialogs": {
+      "createTitle": "ایجاد صلاحیت جدید",
+      "createSubtitle": "یک صلاحیت جدید برای سیستم تعریف کنید",
+      "editTitle": "ویرایش صلاحیت",
+      "editSubtitle": "اصلاح جزئیات صلاحیت",
+      "deleteTitle": "حذف صلاحیت",
+      "deleteConfirm": "آیا مطمئن هستید که می‌خواهید حذف کنید",
+      "deleteWarning": "این عمل قابل بازگشت نیست. تمام نقش‌هایی که از این صلاحیت استفاده می‌کنند تحت تأثیر قرار خواهند گرفت."
+    },
+    "validation": {
+      "permissionNameRequired": "نام صلاحیت الزامی است",
+      "permissionNameMinLength": "نام صلاحیت باید حداقل ۳ کاراکتر باشد",
+      "permissionNamePattern": "نام صلاحیت باید فقط شامل حروف بزرگ و زیرخط باشد"
+    },
+    "breadcrumb": {
+      "home": "خانه",
+      "permissions": "صلاحیت‌ها"
+    }
   },
-  "buttons": {
-    "create": "ایجاد نقش",
-    "refresh": "تازه سازی",
-    "delete": "حذف",
-    "cancel": "لغو",
-    "edit": "ویرایش",
-    "showLess": "نمایش کمتر",
-    "more": "بیشتر",
-    "all": "همه",
-    "none": "هیچ",
-    "save": "ذخیره",
-    "backToRoles": "بازگشت به نقش‌ها",
-    "addPermissions": "افزودن مجوزها"
-  },
-  "actions": {
-    "edit": "ویرایش نقش",
-    "viewDetails": "مشاهده جزئیات",
-    "delete": "حذف نقش"
-  },
-  "status": {
+  "aboutUs": {
+    "title": "درباره ما",
+    "manageDescription": "مدیریت و مشاهده تمام محتوای درباره ما",
+    "details": "جزئیات درباره ما",
+    "pageDetails": "جزئیات محتوای صفحه درباره ما",
+    "create": "ایجاد",
+    "editTitle": "ویرایش درباره ما",
+    "createTitle": "ایجاد درباره ما",
+    "subject": "موضوع",
+    "about": "محتوای درباره",
+    "status": "وضعیت",
     "active": "فعال",
-    "inactive": "غیرفعال"
+    "inactive": "غیرفعال",
+    "activeLabel": "فعال",
+    "createdAt": "تاریخ ایجاد",
+    "updatedAt": "تاریخ به‌روزرسانی",
+    "notFound": "محتوای درباره ما یافت نشد",
+    "deleteConfirm": "آیا مطمئن هستید که می‌خواهید درباره ما \"{{subject}}\" را حذف کنید؟",
+    "deleteSuccess": "محتوای درباره ما با موفقیت حذف شد",
+    "createSuccess": "محتوای درباره ما با موفقیت ایجاد شد",
+    "updateSuccess": "محتوای درباره ما با موفقیت به‌روزرسانی شد",
+    "columns": {
+      "id": "شناسه",
+      "subject": "موضوع",
+      "about": "درباره",
+      "status": "وضعیت"
+    },
+    "validation": {
+      "subjectRequired": "موضوع الزامی است"
+    }
   },
-  "tabs": {
-    "gridView": "نمایش شبکه‌ای",
-    "groupedView": "نمایش گروهی",
-    "listView": "نمایش لیستی"
+  "organizationInfo": {
+    "title": "اطلاعات سازمان",
+    "manageDescription": "مدیریت رکوردهای اطلاعات سازمان",
+    "details": "جزئیات سازمان",
+    "detailsHeader": "جزئیات اطلاعات سازمان",
+    "create": "ایجاد",
+    "editTitle": "ویرایش اطلاعات سازمان",
+    "createTitle": "ایجاد اطلاعات سازمان",
+    "editDescription": "ویرایش اطلاعات موجود سازمان",
+    "createDescription": "افزودن اطلاعات جدید سازمان به سیستم",
+    "organizationName": "نام سازمان",
+    "phoneNumber": "شماره تلفن",
+    "address": "آدرس",
+    "satelliteHorizontal": "ماهواره افقی",
+    "satelliteVertical": "ماهواره عمودی",
+    "emailAddress": "آدرس ایمیل",
+    "createdAt": "تاریخ ایجاد",
+    "updatedAt": "تاریخ به‌روزرسانی",
+    "notFound": "اطلاعات سازمان یافت نشد",
+    "deleteConfirm": "آیا مطمئن هستید که می‌خواهید سازمان \"{{organizationName}}\" را حذف کنید؟",
+    "deleteSuccess": "اطلاعات سازمان با موفقیت حذف شد",
+    "createSuccess": "اطلاعات سازمان با موفقیت ایجاد شد",
+    "updateSuccess": "اطلاعات سازمان با موفقیت به‌روزرسانی شد",
+    "basicInformation": "اطلاعات اولیه",
+    "locationInfo": "اطلاعات موقعیت",
+    "satelliteInformation": "اطلاعات ماهواره‌ای",
+    "contactInformation": "اطلاعات تماس",
+    "placeholder": {
+      "organizationName": "نام سازمان را وارد کنید",
+      "phoneNumber": "+۹۳ ۱۲۳ ۴۵۶ ۷۸۹",
+      "address": "آدرس کامل را وارد کنید",
+      "satelliteHorizontal": "مختصات افقی را وارد کنید",
+      "satelliteVertical": "مختصات عمودی را وارد کنید",
+      "emailAddress": "info@sazman.com"
+    },
+    "columns": {
+      "id": "شناسه",
+      "organizationName": "نام سازمان",
+      "address": "آدرس",
+      "phoneNumber": "شماره تلفن",
+      "emailAddress": "آدرس ایمیل",
+      "createdAt": "تاریخ ایجاد"
+    },
+    "validation": {
+      "organizationNameRequired": "نام سازمان الزامی است",
+      "addressRequired": "آدرس الزامی است",
+      "phoneNumberRequired": "شماره تلفن الزامی است",
+      "satelliteHorizontalRequired": "ماهواره افقی الزامی است",
+      "satelliteVerticalRequired": "ماهواره عمودی الزامی است",
+      "emailAddressRequired": "آدرس ایمیل الزامی است",
+      "invalidEmail": "لطفاً یک آدرس ایمیل معتبر وارد کنید"
+    }
   },
-  "tooltips": {
-    "permissionsInfo": "تمام مجوزهای اختصاص داده شده به این نقش"
-  },
-  "breadcrumb": {
-    "dashboard": "داشبورد",
-    "roles": "نقش‌ها",
-    "roleDetails": "جزئیات نقش"
-  },
-  "messages": {
-    "loadFailed": "بارگذاری نقش‌ها ناموفق بود",
-    "deleteSuccess": "نقش با موفقیت حذف شد",
-    "deleteFailed": "حذف نقش ناموفق بود",
-    "createSuccess": "نقش با موفقیت ایجاد شد",
-    "createFailed": "ایجاد نقش ناموفق بود",
-    "updateSuccess": "نقش با موفقیت به‌روزرسانی شد",
-    "updateFailed": "به‌روزرسانی نقش ناموفق بود",
-    "loadDetailsFailed": "بارگذاری جزئیات نقش ناموفق بود",
-    "permissionsLoadFailed": "بارگذاری مجوزها ناموفق بود",
-    "noPermissionsFound": "هیچ مجوزی یافت نشد",
-    "adjustSearch": "سعی کنید جستجوی خود را تنظیم کنید",
-    "updatingRole": "در حال به‌روزرسانی نقش...",
-    "creatingRole": "در حال ایجاد نقش...",
-    "pleaseWait": "لطفاً منتظر بمانید",
-    "roleNotFound": "نقش یافت نشد",
-    "roleNotFoundDesc": "نقشی که به دنبال آن هستید وجود ندارد یا حذف شده است.",
-    "noPermissionsAssigned": "هیچ مجوزی اختصاص داده نشده است",
-    "noPermissionsDesc": "این نقش هنوز هیچ مجوزی ندارد"
-  },
-  "dialogs": {
-    "deleteTitle": "حذف نقش",
+  "menu": {
+    "management": "مدیریت منو",
+    "total": "مجموع",
+    "create": "ایجاد منو",
+    "createTitle": "ایجاد منوی جدید",
+    "createDescription": "افزودن آیتم منوی جدید به ناوبری",
+    "editTitle": "ویرایش منو",
+    "editDescription": "به‌روزرسانی جزئیات آیتم منو",
+    "deleteTitle": "حذف منو",
     "deleteConfirm": "آیا مطمئن هستید که می‌خواهید حذف کنید",
-    "deleteWarning": "این عمل قابل بازگشت نیست. تمام مجوزهای مرتبط با این نقش تحت تأثیر قرار خواهند گرفت.",
-    "editTitle": "ویرایش نقش",
-    "editSubtitle": "اصلاح جزئیات نقش و مجوزها",
-    "createTitle": "ایجاد نقش جدید",
-    "createSubtitle": "نقش جدید تعریف کنید و مجوزها را اختصاص دهید"
-  },
-  "validation": {
-    "roleNameRequired": "نام نقش الزامی است",
-    "roleNameMinLength": "نام نقش باید حداقل ۳ کاراکتر باشد"
+    "deleteSuccess": "منو با موفقیت حذف شد",
+    "deleteFailed": "حذف منو ناموفق بود",
+    "createSuccess": "منو با موفقیت ایجاد شد",
+    "createFailed": "ایجاد منو ناموفق بود",
+    "updateSuccess": "منو با موفقیت به‌روزرسانی شد",
+    "updateFailed": "به‌روزرسانی منو ناموفق بود",
+    "loadFailed": "بارگیری منوها و مجوزها ناموفق بود",
+    "breadcrumb": "مدیریت منو",
+    "englishLabel": "برچسب انگلیسی",
+    "pashtoLabel": "برچسب پشتو",
+    "dariLabel": "برچسب دری",
+    "menuPath": "مسیر منو",
+    "icon": "آیکون",
+    "sortOrder": "ترتیب مرتب‌سازی",
+    "activeMenu": "منوی فعال",
+    "activeMenuHint": "منوهای غیرفعال از ناوبری پنهان خواهند شد",
+    "parentMenu": "منوی والد",
+    "parentMenuHint": "برای ایجاد منوی سطح بالا خالی بگذارید",
+    "requiredPermission": "مجوز مورد نیاز",
+    "permissionHint": "کاربران برای دیدن این منو به این مجوز نیاز دارند",
+    "iconHint": "از نام کلاس‌های PrimeIcons استفاده کنید (مثال: pi pi-home)",
+    "columns": {
+      "id": "شناسه",
+      "label": "برچسب",
+      "path": "مسیر",
+      "icon": "آیکون"
+    },
+    "placeholder": {
+      "englishLabel": "مثال: داشبورد",
+      "pashtoLabel": "داشبورد",
+      "dariLabel": "داشبورد",
+      "path": "dashboard",
+      "icon": "pi pi-home",
+      "parentMenu": "انتخاب منوی والد",
+      "permission": "انتخاب مجوز"
+    },
+    "validation": {
+      "englishLabelRequired": "برچسب انگلیسی الزامی است",
+      "pathRequired": "مسیر منو الزامی است"
+    }
   }
-},
-
-"permissions": {
-  "ADD_USER": "افزودن کاربر",
-  "UPDATE_USER": "ویرایش کاربر",
-  "DELETE_USER": "حذف کاربر",
-  "VIEW_USER": "نمایش کاربر",
-
-  "ADD_ROLE": "افزودن نقش",
-  "UPDATE_ROLE": "ویرایش نقش",
-  "DELETE_ROLE": "حذف نقش",
-  "VIEW_ROLE": "نمایش نقش",
-
-  "ADD_PERMISSION": "افزودن صلاحیت",
-  "UPDATE_PERMISSION": "ویرایش صلاحیت",
-  "DELETE_PERMISSION": "حذف صلاحیت",
-  "VIEW_PERMISSION": "نمایش صلاحیت",
-
-  "ADD_COMPANY": "افزودن شرکت",
-  "UPDATE_COMPANY": "ویرایش شرکت",
-  "DELETE_COMPANY": "حذف شرکت",
-  "VIEW_COMPANY": "نمایش شرکت",
-
-  "ADD_COMPANYCONTACTPERSON": "افزودن شخص تماس شرکت",
-  "UPDATE_COMPANYCONTACTPERSON": "ویرایش شخص تماس شرکت",
-  "DELETE_COMPANYCONTACTPERSON": "حذف شخص تماس شرکت",
-  "VIEW_COMPANYCONTACTPERSON": "نمایش شخص تماس شرکت",
-
-  "ADD_CERTIFICATION": "افزودن تصدیق‌نامه",
-  "UPDATE_CERTIFICATION": "ویرایش تصدیق‌نامه",
-  "DELETE_CERTIFICATION": "حذف تصدیق‌نامه",
-  "VIEW_CERTIFICATION": "نمایش تصدیق‌نامه",
-
-  "ADD_CERTIFICATIONREQUEST": "افزودن درخواست تصدیق",
-  "UPDATE_CERTIFICATIONREQUEST": "ویرایش درخواست تصدیق",
-  "DELETE_CERTIFICATIONREQUEST": "حذف درخواست تصدیق",
-  "VIEW_CERTIFICATIONREQUEST": "نمایش درخواست تصدیق",
-
-  "ADD_PAYMENT": "افزودن پرداخت",
-  "UPDATE_PAYMENT": "ویرایش پرداخت",
-  "DELETE_PAYMENT": "حذف پرداخت",
-  "VIEW_PAYMENT": "نمایش پرداخت",
-
-  "ADD_ATTACHMENT": "افزودن ضمیمه",
-  "UPDATE_ATTACHMENT": "ویرایش ضمیمه",
-  "DELETE_ATTACHMENT": "حذف ضمیمه",
-  "VIEW_ATTACHMENT": "نمایش ضمیمه",
-
-  "ADD_CATEGORY": "افزودن دسته‌بندی",
-  "UPDATE_CATEGORY": "ویرایش دسته‌بندی",
-  "DELETE_CATEGORY": "حذف دسته‌بندی",
-  "VIEW_CATEGORY": "نمایش دسته‌بندی",
-
-  "ADD_ADDRESS": "افزودن آدرس",
-  "UPDATE_ADDRESS": "ویرایش آدرس",
-  "DELETE_ADDRESS": "حذف آدرس",
-  "VIEW_ADDRESS": "نمایش آدرس",
-
-  "ADD_COUNTRY": "افزودن کشور",
-  "UPDATE_COUNTRY": "ویرایش کشور",
-  "DELETE_COUNTRY": "حذف کشور",
-  "VIEW_COUNTRY": "نمایش کشور",
-
-  "ADD_COUNTRYTRANSLATION": "افزودن ترجمه کشور",
-  "UPDATE_COUNTRYTRANSLATION": "ویرایش ترجمه کشور",
-  "DELETE_COUNTRYTRANSLATION": "حذف ترجمه کشور",
-  "VIEW_COUNTRYTRANSLATION": "نمایش ترجمه کشور",
-
-  "ADD_PROVINCE": "افزودن ولایت",
-  "UPDATE_PROVINCE": "ویرایش ولایت",
-  "DELETE_PROVINCE": "حذف ولایت",
-  "VIEW_PROVINCE": "نمایش ولایت",
-
-  "ADD_PROVINCETRANSLATION": "افزودن ترجمه ولایت",
-  "UPDATE_PROVINCETRANSLATION": "ویرایش ترجمه ولایت",
-  "DELETE_PROVINCETRANSLATION": "حذف ترجمه ولایت",
-  "VIEW_PROVINCETRANSLATION": "نمایش ترجمه ولایت",
-
-  "ADD_DISTRICT": "افزودن ولسوالی",
-  "UPDATE_DISTRICT": "ویرایش ولسوالی",
-  "DELETE_DISTRICT": "حذف ولسوالی",
-  "VIEW_DISTRICT": "نمایش ولسوالی",
-
-  "ADD_DISTRICTTRANSLATION": "افزودن ترجمه ولسوالی",
-  "UPDATE_DISTRICTTRANSLATION": "ویرایش ترجمه ولسوالی",
-  "DELETE_DISTRICTTRANSLATION": "حذف ترجمه ولسوالی",
-  "VIEW_DISTRICTTRANSLATION": "نمایش ترجمه ولسوالی",
-
-  "ADD_LANGUAGE": "افزودن زبان",
-  "UPDATE_LANGUAGE": "ویرایش زبان",
-  "DELETE_LANGUAGE": "حذف زبان",
-  "VIEW_LANGUAGE": "نمایش زبان",
-
-  "ADD_MULTILANGUAGE": "افزودن زبان چندگانه",
-  "UPDATE_MULTILANGUAGE": "ویرایش زبان چندگانه",
-  "DELETE_MULTILANGUAGE": "حذف زبان چندگانه",
-  "VIEW_MULTILANGUAGE": "نمایش زبان چندگانه",
-
-  "ADD_MENU": "افزودن منو",
-  "UPDATE_MENU": "ویرایش منو",
-  "DELETE_MENU": "حذف منو",
-  "VIEW_MENU": "نمایش منو",
-
-  "ADD_EMAILVERIFICATION": "افزودن تأیید ایمیل",
-  "UPDATE_EMAILVERIFICATION": "ویرایش تأیید ایمیل",
-  "DELETE_EMAILVERIFICATION": "حذف تأیید ایمیل",
-  "VIEW_EMAILVERIFICATION": "نمایش تأیید ایمیل",
-
-  "ADD_FORGOTPASSWORD": "افزودن فراموشی رمز عبور",
-  "UPDATE_FORGOTPASSWORD": "ویرایش فراموشی رمز عبور",
-  "DELETE_FORGOTPASSWORD": "حذف فراموشی رمز عبور",
-  "VIEW_FORGOTPASSWORD": "نمایش فراموشی رمز عبور",
-
-  "ADD_ZONE": "افزودن زون",
-  "UPDATE_ZONE": "ویرایش زون",
-  "DELETE_ZONE": "حذف زون",
-  "VIEW_ZONE": "نمایش زون",
-
-  "ADD_COMMITEE": "افزودن کمیته",
-  "UPDATE_COMMITEE": "ویرایش کمیته",
-  "DELETE_COMMITEE": "حذف کمیته",
-  "VIEW_COMMITEE": "نمایش کمیته",
-
-  "ADD_COMMITEEASSIGNMENT": "افزودن انتصاب کمیته",
-  "UPDATE_COMMITEEASSIGNMENT": "ویرایش انتصاب کمیته",
-  "DELETE_COMMITEEASSIGNMENT": "حذف انتصاب کمیته",
-  "VIEW_COMMITEEASSIGNMENT": "نمایش انتصاب کمیته",
-
-  "ADD_COMMITEEASSIGNMENTCOMMENT": "افزودن نظر انتصاب کمیته",
-  "UPDATE_COMMITEEASSIGNMENTCOMMENT": "ویرایش نظر انتصاب کمیته",
-  "DELETE_COMMITEEASSIGNMENTCOMMENT": "حذف نظر انتصاب کمیته",
-  "VIEW_COMMITEEASSIGNMENTCOMMENT": "نمایش نظر انتصاب کمیته",
-
-  "ADD_COMMITEEMEMBER": "افزودن عضو کمیته",
-  "UPDATE_COMMITEEMEMBER": "ویرایش عضو کمیته",
-  "DELETE_COMMITEEMEMBER": "حذف عضو کمیته",
-  "VIEW_COMMITEEMEMBER": "نمایش عضو کمیته",
-
-  "ADD_COMMITEEREPORT": "افزودن گزارش کمیته",
-  "UPDATE_COMMITEEREPORT": "ویرایش گزارش کمیته",
-  "DELETE_COMMITEEREPORT": "حذف گزارش کمیته",
-  "VIEW_COMMITEEREPORT": "نمایش گزارش کمیته",
-
-  "ADD_WORKFLOW": "افزودن جریان کاری",
-  "UPDATE_WORKFLOW": "ویرایش جریان کاری",
-  "DELETE_WORKFLOW": "حذف جریان کاری",
-  "VIEW_WORKFLOW": "نمایش جریان کاری",
-
-  "ADD_WORKFLOWSTEP": "افزودن مرحله جریان کاری",
-  "UPDATE_WORKFLOWSTEP": "ویرایش مرحله جریان کاری",
-  "DELETE_WORKFLOWSTEP": "حذف مرحله جریان کاری",
-  "VIEW_WORKFLOWSTEP": "نمایش مرحله جریان کاری",
-
-  "ADD_REQUESTWORKFLOW": "افزودن جریان کاری درخواست",
-  "UPDATE_REQUESTWORKFLOW": "ویرایش جریان کاری درخواست",
-  "DELETE_REQUESTWORKFLOW": "حذف جریان کاری درخواست",
-  "VIEW_REQUESTWORKFLOW": "نمایش جریان کاری درخواست",
-
-  "ADD_CERTIFICATIONREQUESTSTATUSHISTORY": "افزودن تاریخچه وضعیت درخواست تصدیق",
-  "UPDATE_CERTIFICATIONREQUESTSTATUSHISTORY": "ویرایش تاریخچه وضعیت درخواست تصدیق",
-  "DELETE_CERTIFICATIONREQUESTSTATUSHISTORY": "حذف تاریخچه وضعیت درخواست تصدیق",
-  "VIEW_CERTIFICATIONREQUESTSTATUSHISTORY": "نمایش تاریخچه وضعیت درخواست تصدیق",
-
-  "ADD_INSPECTION_REPORT": "افزودن گزارش بازرسی",
-  "UPDATE_INSPECTION_REPORT": "ویرایش گزارش بازرسی",
-  "DELETE_INSPECTION_REPORT": "حذف گزارش بازرسی",
-  "VIEW_INSPECTION_REPORT": "نمایش گزارش بازرسی",
-
-  "ADD_COMMENT": "افزودن نظر",
-  "UPDATE_COMMENT": "ویرایش نظر",
-  "DELETE_COMMENT": "حذف نظر",
-  "VIEW_COMMENT": "نمایش نظر",
-
-  "VIEW_DASHBOARD": "نمایش داشبورد",
-  "VIEW_REPORT": "نمایش راپور",
-  "VIEW_LOCATION": "نمایش موقعیت",
-  "VIEW_STANDARD": "نمایش استندرد"
-},
-"permission": {
-  "title": "مدیریت صلاحیت‌ها",
-  "total": "مجموع",
-  "labels": {
-    "permissions": "صلاحیت‌ها",
-    "of": "از",
-    "selected": "انتخاب شده",
-    "showing": "نمایش"
-  },
-  "fields": {
-    "permissionName": "نام صلاحیت",
-    "assignPermissions": "اختصاص صلاحیت‌ها",
-    "description": "توضیحات"
-  },
-  "placeholders": {
-    "permissionName": "نام صلاحیت را وارد کنید (مثال: ADD_USER, VIEW_ROLE)",
-    "permissionNameHint": "فقط از حروف بزرگ و زیرخط استفاده کنید (مثال: ADD_USER)",
-    "searchPermissions": "جستجوی صلاحیت‌ها...",
-    "description": "توضیحات صلاحیت را وارد کنید"
-  },
-  "columns": {
-    "id": "شناسه",
-    "permissionName": "نام صلاحیت",
-    "actions": "عملیات"
-  },
-  "buttons": {
-    "create": "ایجاد صلاحیت",
-    "refresh": "تازه سازی",
-    "cancel": "لغو",
-    "save": "ذخیره",
-    "all": "همه",
-    "none": "هیچ"
-  },
-  "actions": {
-    "viewDetails": "مشاهده جزئیات",
-    "edit": "ویرایش صلاحیت",
-    "delete": "حذف صلاحیت"
-  },
-  "messages": {
-    "loadFailed": "بارگذاری صلاحیت‌ها ناموفق بود",
-    "createSuccess": "صلاحیت با موفقیت ایجاد شد",
-    "createFailed": "ایجاد صلاحیت ناموفق بود",
-    "updateSuccess": "صلاحیت با موفقیت به‌روزرسانی شد",
-    "updateFailed": "به‌روزرسانی صلاحیت ناموفق بود",
-    "deleteSuccess": "صلاحیت با موفقیت حذف شد",
-    "deleteFailed": "حذف صلاحیت ناموفق بود",
-    "noPermissionsFound": "هیچ صلاحیتی یافت نشد",
-    "adjustSearch": "سعی کنید جستجوی خود را تنظیم کنید",
-    "creatingPermission": "در حال ایجاد صلاحیت...",
-    "updatingPermission": "در حال به‌روزرسانی صلاحیت...",
-    "pleaseWait": "لطفاً منتظر بمانید"
-  },
-  "dialogs": {
-    "createTitle": "ایجاد صلاحیت جدید",
-    "createSubtitle": "یک صلاحیت جدید برای سیستم تعریف کنید",
-    "editTitle": "ویرایش صلاحیت",
-    "editSubtitle": "اصلاح جزئیات صلاحیت",
-    "deleteTitle": "حذف صلاحیت",
-    "deleteConfirm": "آیا مطمئن هستید که می‌خواهید حذف کنید",
-    "deleteWarning": "این عمل قابل بازگشت نیست. تمام نقش‌هایی که از این صلاحیت استفاده می‌کنند تحت تأثیر قرار خواهند گرفت."
-  },
-  "validation": {
-    "permissionNameRequired": "نام صلاحیت الزامی است",
-    "permissionNameMinLength": "نام صلاحیت باید حداقل ۳ کاراکتر باشد",
-    "permissionNamePattern": "نام صلاحیت باید فقط شامل حروف بزرگ و زیرخط باشد"
-  },
-  "breadcrumb": {
-    "home": "خانه",
-    "permissions": "صلاحیت‌ها"
-  }
-}
-
-
-
 }

@@ -52,7 +52,6 @@ export const ProvinceUpdate: React.FC<ProvinceUpdateProps> = ({
 
         // Ensure translations exist and fallback to empty strings
         const translations = data.translations || { en: "", ps: "", fa: "" };
-          console.log("translations:", translations);
         reset({
           translations: {
             en: translations.en || "",
@@ -125,7 +124,9 @@ export const ProvinceUpdate: React.FC<ProvinceUpdateProps> = ({
       ps: t("languages.pashto"),
       fa: t("languages.dari"),
     })[lang];
-
+if(loading){
+  return <div>Loading...</div>
+}
   return (
     <>
       <Toast ref={toast} position="top-right" />
@@ -235,7 +236,7 @@ export const ProvinceUpdate: React.FC<ProvinceUpdateProps> = ({
               disabled={isSubmitting}
               className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed min-w-[100px] justify-center"
             >
-              {isSubmitting ? (
+            {isSubmitting ? (
                 <>
                   <i className="pi pi-spin pi-spinner" />
                   {t("common.saving")}

@@ -19,7 +19,7 @@ export const CountryUpdate: React.FC<CountryUpdateProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [defaultValues, setDefaultValues] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const toast = useRef<Toast>(null);
 
   // ESC key close
@@ -54,8 +54,8 @@ export const CountryUpdate: React.FC<CountryUpdateProps> = ({
       } catch (error) {
         toast.current?.show({
           severity: "error",
-          summary: "Error",
-          detail: "Failed to load country",
+          summary: t("common.error"),
+          detail: t("country.loadSingleFailed"),
           life: 5000,
         });
         setLoading(false);
@@ -83,7 +83,7 @@ export const CountryUpdate: React.FC<CountryUpdateProps> = ({
       toast.current?.show({
         severity: "error",
         summary: "Error",
-        detail: error.response?.data?.message || "Failed to update country",
+        detail: error.response?.data?.message || t("country.updateFailed"),
         life: 5000,
       });
     } finally {

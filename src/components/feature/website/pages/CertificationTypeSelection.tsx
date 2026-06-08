@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Building2, ArrowRight, AlertCircle } from "lucide-react";
-import { useAppToast } from "../../../../hooks/useToast";
 import CertificationRequestService from "../../../../services/CertificationReques.service";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -77,7 +76,6 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
         certificationType: draft.certificationType || "",
       });
       
-      console.log("Loaded from localStorage:", draft);
     } 
     // If no localStorage but has sessionStorage (coming back from next steps)
     else if (sessionRequestId && sessionCertificationType) {
@@ -96,7 +94,6 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
       };
       
       localStorage.setItem(STORAGE_KEY, JSON.stringify(draftToSave));
-      console.log("Loaded from sessionStorage and saved to localStorage:", draftToSave);
     }
   }, []);
 
@@ -122,7 +119,6 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
       }),
     );
     
-    console.log("Auto-saved to localStorage:", formData);
   }, [formData]);
 
   /* =========================================================
@@ -268,7 +264,6 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
       sessionStorage.setItem("certificationScope", formData.mainType);
       sessionStorage.setItem("requestType", formData.requestType);
 
-      console.log("Saved draft with ID:", draftToSave);
 
       if (onSuccess) {
         onSuccess(
@@ -318,15 +313,14 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
   /* =========================================================
      CLEAR DRAFT (for debugging)
   ========================================================= */
-  const clearDraft = () => {
-    localStorage.removeItem(STORAGE_KEY);
-    setFormData({
-      requestType: "",
-      mainType: "",
-      certificationType: "",
-    });
-    console.log("Draft cleared");
-  };
+  // const clearDraft = () => {
+  //   localStorage.removeItem(STORAGE_KEY);
+  //   setFormData({
+  //     requestType: "",
+  //     mainType: "",
+  //     certificationType: "",
+  //   });
+  // };
 
   const renderForm = () => (
     <form
@@ -485,7 +479,7 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
           ) : (
             <span className="flex items-center justify-center gap-2">
               {t("common.saveAndContinue")}
-              <ArrowRight className="h-4 w-4" />
+              {/* <ArrowRight className="h-4 w-4" /> */}
             </span>
           )}
         </button>
@@ -496,11 +490,11 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
   // Standalone mode - Everything inside a beautiful card
   if (isStandalone) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 pt-20">
+      <div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-indigo-50 pt-20">
         <div className="container mx-auto px-4 py-12 max-w-4xl">
           {/* Header with Icon */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl shadow-lg mb-6">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-linear-to-br from-blue-500 to-blue-600 rounded-2xl shadow-lg mb-6">
               <Building2 className="w-10 h-10 text-white" />
             </div>
             <h1 className="text-4xl font-bold text-gray-900 mb-3">
@@ -514,7 +508,7 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
           {/* Card Container */}
           <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
             {/* Card Header */}
-            <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-6">
+            <div className="bg-linear-to-r from-blue-600 to-blue-700 px-8 py-6">
               <h2 className="text-xl font-semibold text-white">
                 {t("certification.page.cardTitle") || "Certification Details"}
               </h2>

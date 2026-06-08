@@ -1,6 +1,5 @@
 // src/services/company.service.ts
 import httpClient from "../api/httpClient";
-import type { Company } from "../components/feature/company/company";
 
 const COMPANY_BASE = "/companies";
 
@@ -59,9 +58,9 @@ export const CompanyService = {
   updateCompany(
     
     id: number,
-    data: Company,
-    companyLogo?: File,
-    companyCover?: File
+    data: any,
+    companyLogo?: File | any,
+    companyCover?: File | any,
   ) {
     const formData = new FormData();
     formData.append("company", JSON.stringify(data));

@@ -28,7 +28,6 @@ interface DynamicTableProps {
 }
 
 export const DynamicTable: React.FC<DynamicTableProps> = ({
-  title,
   value,
   columns,
   header,

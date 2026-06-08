@@ -52,7 +52,6 @@ export const ProvinceCreate: React.FC<ProvinceCreateProps> = ({
   }, [onClose]);
 
 const onSubmit = async (data: ProvinceFormValues) => {
-    console.log(data);
   setIsSubmitting(true);
   try {
     const res = await ProvinceService.createProvince(data);

@@ -13,6 +13,7 @@ import { DynamicTable } from "../../../common/DynamicTable";
 import { ProvinceCreate } from "./ProvinceCreate";
 import { ProvinceUpdate } from "./ProvinceUpdate";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../../../../context/AuthContext";
 
 export const ProvinceList: React.FC = () => {
     const [provinceList, setProvinceList] = useState<any[]>([]);
@@ -29,6 +30,7 @@ export const ProvinceList: React.FC = () => {
     const { toast, showToast } = useAppToast();
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const { hasPermission, withPermission } = useAuth();
 
     // Fetch countries for create/update dropdown
     useEffect(() => {
@@ -88,7 +90,7 @@ export const ProvinceList: React.FC = () => {
                     </div>
                     <span className="text-lg font-semibold text-gray-800">{t("province.delete")}</span>
                     <p className="text-gray-600 text-center">
-                        {t("province.deleteConfirm", { name: province.name || "—" })}
+                        {t("province.deleteConfirm", { name: province.name || t("common.notSpecified") })}
                     </p>
                 </div>
             ),
@@ -115,10 +117,22 @@ export const ProvinceList: React.FC = () => {
         const menu = useRef<any>(null);
 
         const items: MenuItem[] = [
-            { label: t("common.edit"), icon: "pi pi-pencil", command: () => handleEdit(rowData) },
-            { label: t("common.delete"), icon: "pi pi-trash", command: () => confirmDelete(rowData) },
-            { label: t("common.view"), icon: "pi pi-eye", command: () => navigate(`/provinces/view/${rowData.id}`) },
-        ];
+            hasPermission("UPDATE_PROVINCE") && {
+                label: t("common.edit"),
+                icon: "pi pi-pencil",
+                command: () => handleEdit(rowData),
+            },
+            hasPermission("DELETE_PROVINCE") && {
+                label: t("common.delete"),
+                icon: "pi pi-trash",
+                command: () => confirmDelete(rowData),
+            },
+            hasPermission("VIEW_PROVINCE") && {
+                label: t("common.view"),
+                icon: "pi pi-eye",
+                command: () => navigate(`/provinces/view/${rowData.id}`),
+            },
+        ].filter(Boolean) as MenuItem[];
 
         return (
             <div className="flex justify-center">
@@ -139,7 +153,8 @@ export const ProvinceList: React.FC = () => {
                 </span>
             </div>
             <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-                <Button
+            {hasPermission("CREATE_PROVINCE") && (
+                    <Button
                     icon="pi pi-plus"
                     label={t("province.create")}
                     text
@@ -148,9 +163,10 @@ export const ProvinceList: React.FC = () => {
                     onClick={() => setShowCreateDialog(true)}
                     className="bg-blue-600 hover:bg-blue-700 border-none shadow-md hover:shadow-lg transition-all"
                 />
+            )}
                 <Button
                     icon="pi pi-sync"
-                    label={t("common.refersh")}
+                    label={t("common.refresh")}
                     text
                     raised
                     severity="info"
@@ -163,7 +179,7 @@ export const ProvinceList: React.FC = () => {
     const columns = [
         {
             field: "id",
-            header: "ID",
+            header: t("common.id"),
             style: { width: "80px" },
             className: "text-sm font-medium text-gray-600",
             body: (row: any) => <span className="font-medium text-gray-800">{row.id}</span>
@@ -173,14 +189,14 @@ export const ProvinceList: React.FC = () => {
             header: t("province.name"),
             sortable: true,
             style: { minWidth: "200px" },
-            body: (row: any) => <span className="font-medium text-gray-800">{row.provinceName || "—"}</span>
+            body: (row: any) => <span className="font-medium text-gray-800">{row.provinceName || t("common.notSpecified")}</span>
         },
         {
             field: "country.countryName",
             header: t("province.country"),
             sortable: true,
             style: { minWidth: "150px" },
-            body: (row: any) => <span className="text-gray-700">{row.country?.countryName || "—"}</span>
+            body: (row: any) => <span className="text-gray-700">{row.country?.countryName || t("common.notSpecified")}</span>
         },
         {
             header: t("common.action"),
@@ -188,8 +204,7 @@ export const ProvinceList: React.FC = () => {
             style: { width: "140px" }
         },
     ];
-    const breadcrumbItems = [{ label: "Province", url: "" }];
-    console.log(selectedProvinceId);
+    const breadcrumbItems = [{ label: t("province.list"), url: "" }];
     return (
         <>
             <Toast ref={toast} />

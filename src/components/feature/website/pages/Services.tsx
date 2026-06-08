@@ -1,6 +1,6 @@
 // pages/Services.js
-import React from 'react';
-import { CheckCircle, Clock, Shield, Award, FileText, Users } from 'lucide-react';
+
+import {  Clock, Shield, Award, Users } from 'lucide-react';
 
 const Services = () => {
   const steps = [

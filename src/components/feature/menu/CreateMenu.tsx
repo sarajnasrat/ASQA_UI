@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
@@ -40,6 +41,7 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
   onSuccess,
   parentMenuId = null,
 }) => {
+  const { t } = useTranslation();
   const { showToast } = useAppToast();
 
   const [permissions, setPermissions] = useState<Permission[]>([]);
@@ -91,7 +93,7 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
       setPermissions(permissionsRes.data || []);
       setParentMenus(menusRes.data || []);
     } catch {
-      showToast("error", "Error", "Failed to load menus and permissions");
+      showToast("error", t("common.error"), t("menu.loadFailed"));
     } finally {
       setFetchingData(false);
     }
@@ -115,13 +117,13 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
 
       await MenuService.registerMenu(payload);
 
-      showToast("success", "Success", "Menu created successfully");
+      showToast("success", t("common.success"), t("menu.createSuccess"));
 
       reset();
       onSuccess();
       onClose();
     } catch {
-      showToast("error", "Error", "Failed to create menu");
+      showToast("error", t("common.error"), t("menu.createFailed"));
     } finally {
       setLoading(false);
     }
@@ -131,15 +133,12 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
-      {/* Backdrop */}
       <div 
         className="fixed inset-0 bg-black/50 transition-opacity"
         onClick={onClose}
       />
       
-      {/* Dialog Container */}
       <div className="flex min-h-full items-center justify-center p-4">
-        {/* Dialog Panel */}
         <div className="relative bg-white rounded-xl shadow-2xl w-full max-w-4xl transform transition-all">
           
           {/* HEADER */}
@@ -150,10 +149,10 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
               </div>
               <div>
                 <h2 className="text-lg font-semibold text-gray-900">
-                  Create New Menu
+                  {t("menu.createTitle")}
                 </h2>
                 <p className="text-sm text-gray-500">
-                  Add a new menu item to the navigation
+                  {t("menu.createDescription")}
                 </p>
               </div>
             </div>
@@ -172,32 +171,24 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
               <div className="relative">
                 <div className="w-16 h-16 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
               </div>
-              <p className="mt-4 text-sm text-gray-600 font-medium">Loading...</p>
-              <p className="text-xs text-gray-400">Please wait while we fetch the data</p>
+              <p className="mt-4 text-sm text-gray-600 font-medium">{t("common.loading")}</p>
+              <p className="text-xs text-gray-400">{t("common.pleaseWait")}</p>
             </div>
           ) : (
             <div className="px-6 py-5 max-h-[calc(100vh-200px)] overflow-y-auto">
               
-              {/* BASIC INFO */}
               <div className="space-y-4">
-                {/* <div className="flex items-center gap-2 mb-4">
-                  <div className="w-1 h-6 bg-indigo-600 rounded-full"></div>
-                  <h3 className="text-sm font-semibold text-gray-700">
-                    Basic Information
-                  </h3>
-                </div> */}
-
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {/* English */}
                   <div className="space-y-1.5">
                     <label className="block text-sm font-medium text-gray-700">
-                      English Label <span className="text-red-500">*</span>
+                      {t("menu.englishLabel")} <span className="text-red-500">*</span>
                     </label>
 
                     <Controller
                       name="labelEn"
                       control={control}
-                      rules={{ required: "English label is required" }}
+                      rules={{ required: t("menu.validation.englishLabelRequired") }}
                       render={({ field }) => (
                         <InputText
                           {...field}
@@ -208,7 +199,7 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
                               "border-gray-200 focus:border-indigo-500": !errors.labelEn,
                             }
                           )}
-                          placeholder="e.g., Dashboard"
+                          placeholder={t("menu.placeholder.englishLabel")}
                         />
                       )}
                     />
@@ -224,7 +215,7 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
                   {/* Pashto */}
                   <div className="space-y-1.5">
                     <label className="block text-sm font-medium text-gray-700">
-                      Pashto Label
+                      {t("menu.pashtoLabel")}
                     </label>
 
                     <Controller
@@ -234,7 +225,7 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
                         <InputText
                           {...field}
                           className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all"
-                          placeholder="داشبورد"
+                          placeholder={t("menu.placeholder.pashtoLabel")}
                           dir="rtl"
                         />
                       )}
@@ -244,7 +235,7 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
                   {/* Dari */}
                   <div className="space-y-1.5">
                     <label className="block text-sm font-medium text-gray-700">
-                      Dari Label
+                      {t("menu.dariLabel")}
                     </label>
 
                     <Controller
@@ -254,7 +245,7 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
                         <InputText
                           {...field}
                           className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all"
-                          placeholder="داشبورد"
+                          placeholder={t("menu.placeholder.dariLabel")}
                           dir="rtl"
                         />
                       )}
@@ -265,13 +256,13 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
                 {/* PATH */}
                 <div className="space-y-1.5">
                   <label className="block text-sm font-medium text-gray-700">
-                    Menu Path <span className="text-red-500">*</span>
+                    {t("menu.menuPath")} <span className="text-red-500">*</span>
                   </label>
 
                   <Controller
                     name="path"
                     control={control}
-                    rules={{ required: "Menu path is required" }}
+                    rules={{ required: t("menu.validation.pathRequired") }}
                     render={({ field }) => (
                       <div className="relative">
                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">
@@ -286,7 +277,7 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
                               "border-gray-200 focus:border-indigo-500": !errors.path,
                             }
                           )}
-                          placeholder="dashboard"
+                          placeholder={t("menu.placeholder.path")}
                         />
                       </div>
                     )}
@@ -305,17 +296,10 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
 
               {/* APPEARANCE */}
               <div className="space-y-4">
-                {/* <div className="flex items-center gap-2 mb-4">
-                  <div className="w-1 h-6 bg-indigo-600 rounded-full"></div>
-                  <h3 className="text-sm font-semibold text-gray-700">
-                    Appearance
-                  </h3>
-                </div> */}
-
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
                     <label className="block text-sm font-medium text-gray-700">
-                      Icon
+                      {t("menu.icon")}
                     </label>
 
                     <Controller
@@ -326,7 +310,7 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
                           <InputText
                             {...field}
                             className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all"
-                            placeholder="pi pi-home"
+                            placeholder={t("menu.placeholder.icon")}
                           />
                           {field.value && (
                             <div className="absolute right-3 top-1/2 -translate-y-1/2">
@@ -336,12 +320,12 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
                         </div>
                       )}
                     />
-                    <p className="text-xs text-gray-400">Use PrimeIcons class names</p>
+                    <p className="text-xs text-gray-400">{t("menu.iconHint")}</p>
                   </div>
 
                   <div className="space-y-1.5">
                     <label className="block text-sm font-medium text-gray-700">
-                      Sort Order
+                      {t("menu.sortOrder")}
                     </label>
 
                     <Controller
@@ -379,10 +363,10 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
                   />
                   <div>
                     <label className="text-sm font-medium text-gray-700 cursor-pointer">
-                      Active Menu
+                      {t("menu.activeMenu")}
                     </label>
                     <p className="text-xs text-gray-400">
-                      Inactive menus will be hidden from navigation
+                      {t("menu.activeMenuHint")}
                     </p>
                   </div>
                 </div>
@@ -392,17 +376,10 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
 
               {/* HIERARCHY */}
               <div className="space-y-4">
-                {/* <div className="flex items-center gap-2 mb-4">
-                  <div className="w-1 h-6 bg-indigo-600 rounded-full"></div>
-                  <h3 className="text-sm font-semibold text-gray-700">
-                    Hierarchy & Permissions
-                  </h3>
-                </div> */}
-
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
                     <label className="block text-sm font-medium text-gray-700">
-                      Parent Menu
+                      {t("menu.parentMenu")}
                     </label>
 
                     <Dropdown
@@ -411,20 +388,20 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
                       optionLabel="labelEn"
                       optionValue="id"
                       onChange={(e) => setParentId(e.value)}
-                      placeholder="Select parent menu"
+                      placeholder={t("menu.placeholder.parentMenu")}
                       className="w-full"
                       showClear
                       filter
                       panelClassName="shadow-lg border-0"
                     />
                     <p className="text-xs text-gray-400">
-                      Leave empty to create a top-level menu
+                      {t("menu.parentMenuHint")}
                     </p>
                   </div>
 
                   <div className="space-y-1.5">
                     <label className="block text-sm font-medium text-gray-700">
-                      Required Permission
+                      {t("menu.requiredPermission")}
                     </label>
 
                     <Dropdown
@@ -433,14 +410,14 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
                       optionLabel="permissionName"
                       optionValue="id"
                       onChange={(e) => setPermissionId(e.value)}
-                      placeholder="Select permission"
+                      placeholder={t("menu.placeholder.permission")}
                       className="w-full"
                       showClear
                       filter
                       panelClassName="shadow-lg border-0"
                     />
                     <p className="text-xs text-gray-400">
-                      Users need this permission to see the menu
+                      {t("menu.permissionHint")}
                     </p>
                   </div>
                 </div>
@@ -451,14 +428,14 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
           {/* FOOTER */}
           <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 bg-gray-50/50 rounded-b-xl">
             <Button
-              label="Cancel"
+              label={t("common.cancel")}
               icon="pi pi-times"
               className="p-button-text px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
               onClick={onClose}
             />
 
             <Button
-              label="Create Menu"
+              label={t("common.create")}
               icon="pi pi-check"
               loading={loading}
               className="px-6 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"

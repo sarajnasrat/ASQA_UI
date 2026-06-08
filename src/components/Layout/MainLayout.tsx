@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { Sidebar } from "./sidebar/Sidebar";
 import { Dashboard } from "../feature/Dashboard";
 import { UserList } from "../feature/user/UserList";
@@ -31,43 +31,53 @@ import ZoneList from "../feature/zone/ZoneList";
 import { CommiteeList } from "../feature/commitee/CommiteeList";
 import CommiteeMemberList from "../feature/commiteemember/CommiteeMemberList";
 import { CommiteeAssignmentList } from "../feature/commiteeassignment/CommiteeAssignmentList";
+import { CommiteeAssignmentDetails } from "../feature/commiteeassignment/CommiteeAssignmentDetails.tsx";
 import CertificationRequestView from "../feature/certification-request/CertificationRequestView";
 import { CertificationRequestListDeadLine } from "../feature/setting-deadline/CertificationRequestListDeadLine";
 import { CertificationRequestListStandardManagement } from "../feature/standardmanagement/CertificationRequestListStandardManagement";
 import { ProtectedRoute } from "../../routes/ProtectedRoute";
 import { UnauthorizedDialog } from "../common/UnauthorizedPage";
 import { CertificationRequestPayment } from "../feature/certificationpayment/CertificationRequestPayment";
-import { Report } from "../feature/report/Report";
 import { CertificationRequestReport } from "../feature/report/CertificationRequestReport";
-
+import { CommiteeDetails } from "../feature/commitee/CommiteeDetails";
+import AboutUsList from "../feature/aboutus/AboutUsList";
+import AboutUsDetails from "../feature/aboutus/AboutUsDetails";
+import OrganizationInfoList from "../feature/organizationinfo/OrganizationInfoList";
+import OrganizationInfoDetails from "../feature/organizationinfo/OrganizationInfoDetails";
+import ContactUsList from "../feature/contactus/ContactUsList";
+import ContactUsDetails from "../feature/contactus/ContactUsDetails";
+import CommentList from "../feature/comment/CommentList";
+import CommentDetails from "../feature/comment/CommentDetails";
+import { InspectionCommitteApprovedRequest } from "../feature/inspection-committee-approved-request/InspectionCommitteApprovedRequest.tsx";
+import { RejectedRequest } from "../feature/rejected-request/RejectedRequest.tsx";
+import { AcceptedRequest } from "../feature/accepted-request/AcceptedRequest.tsx";
 
 export const MainLayout = () => {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  // const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [showUnauthorized, setShowUnauthorized] = useState(false);
-  const [previousPath, setPreviousPath] = useState<string>('/dashboard');
-  
+  const [previousPath, setPreviousPath] = useState<string>("/dashboard");
+
   const location = useLocation();
   const navigate = useNavigate();
 
   // Toggle sidebar collapse (desktop)
-  const toggleSidebarCollapse = () => {
-    setSidebarCollapsed(!sidebarCollapsed);
-  };
+  // const toggleSidebarCollapse = () => {
+  //   setSidebarCollapsed(!sidebarCollapsed);
+  // };
 
   // Open mobile sidebar
-  const openMobileSidebar = () => {
-    setMobileSidebarOpen(true);
-  };
+  // const openMobileSidebar = () => {
+  //   setMobileSidebarOpen(true);
+  // };
 
   // Close mobile sidebar
-  const closeMobileSidebar = () => {
-    setMobileSidebarOpen(false);
-  };
+  // const closeMobileSidebar = () => {
+  //   setMobileSidebarOpen(false);
+  // };
 
   // Track previous path for "Go Back" functionality
   useEffect(() => {
-    if (location.pathname !== '/unauthorized') {
+    if (location.pathname !== "/unauthorized") {
       setPreviousPath(location.pathname);
     }
   }, [location]);
@@ -89,6 +99,7 @@ export const MainLayout = () => {
     <div className="flex h-screen overflow-hidden bg-gray-50">
       {/* Sidebar with props */}
       <Sidebar
+
       // collapsed={sidebarCollapsed}
       // isMobileOpen={mobileSidebarOpen}
       // onToggleCollapse={toggleSidebarCollapse}
@@ -98,22 +109,37 @@ export const MainLayout = () => {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
         {/* Navbar with menu click handler */}
-        <Navbar onMenuClick={openMobileSidebar} />
+        <Navbar />
 
         {/* Page Content - Scrollable */}
         <main className="flex-1 overflow-y-auto p-1 sm:p-4 lg:p-1 bg-gray-50">
           <div className="max-w-full mx-auto">
             <Routes>
               <Route path="dashboard" element={<Dashboard />} />
-              <Route path="users" element={<UserList />} />
+              <Route
+                path="users"
+                element={
+                  <ProtectedRoute permission="VIEW_USER">
+                    <UserList />
+                  </ProtectedRoute>
+                }
+              />
+                   <Route
+                path="users/new"
+                element={
+                  <ProtectedRoute permission="ADD_USER">
+                    <UserRegistration />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="users/menu" element={<Menu />} />
-              <Route path="users/new" element={<UserRegistration />} />
+              {/* <Route path="users/new" element={<UserRegistration />} /> */}
               <Route path="users/view/:id" element={<ViewUserDetails />} />
               <Route path="users/edit/:id" element={<EditUser />} />
               <Route path="users/role/:id" element={<ViewDetails />} />
               <Route path="users/roles" element={<RoleList />} />
               <Route path="users/permissions" element={<PermissionList />} />
-              
+
               {/* Protected Routes */}
               <Route
                 path="country"
@@ -124,46 +150,126 @@ export const MainLayout = () => {
                 }
               />
               <Route path="district" element={<DistrictList />} />
-                            <Route path="reports" element={<CertificationRequestReport />} />
+              <Route path="reports" element={<CertificationRequestReport />} />
 
               <Route path="province" element={<ProvinceList />} />
               <Route path="category" element={<CategoryList />} />
-              <Route path="commitee-assignment-list" element={<CommiteeAssignmentList />} />
+              <Route
+                path="commitee-assignment-list"
+                element={<CommiteeAssignmentList />}
+              />
+              <Route
+                path="commitee-assignment/view/:id"
+                element={<CommiteeAssignmentDetails />}
+              />
               <Route path="commitee-list" element={<CommiteeList />} />
-              <Route path="commitee-members-list" element={<CommiteeMemberList />} />
-              <Route path="certification-request" element={<CertificationRequestList />} />
-              <Route path="certification-request-deadline" element={<CertificationRequestListDeadLine />} />
-              <Route path="standard-management" element={<CertificationRequestListStandardManagement />} />
-                            <Route path="payment-management" element={<CertificationRequestPayment />} />
+              <Route
+                path="commitee-members-list"
+                element={<CommiteeMemberList />}
+              />
+              <Route
+                path="certification-request"
+                element={<CertificationRequestList />}
+              />
+              <Route
+                path="certification-request-deadline"
+                element={<CertificationRequestListDeadLine />}
+              />
+              <Route
+                path="standard-management"
+                element={<CertificationRequestListStandardManagement />}
+              />
+
+                      <Route
+                path="approved-request"
+                element={<InspectionCommitteApprovedRequest />}
+              />
+
+                          <Route
+                path="rejected-request"
+                element={<RejectedRequest />}
+              />
+
+
+              
+                          <Route
+                path="accepted-request"
+                element={<AcceptedRequest />}
+              />
+              <Route
+                path="payment-management"
+                element={<CertificationRequestPayment />}
+              />
               <Route path="zone" element={<ZoneList />} />
-              <Route path="certifications/print/:id" element={<PrintCertificationPage />} />
-              <Route path="certification-details/:requestId" element={<CertificationDetails />} />
+              <Route
+                path="certifications/print/:id"
+                element={<PrintCertificationPage />}
+              />
+              <Route
+                path="certification-details/:requestId"
+                element={<CertificationDetails />}
+              />
               <Route path="certifications" element={<CertificationList />} />
               <Route
                 path="certification-request/edit/:id"
-                element={<CertificationRequestUpdate
-                  requestId={null}
-                  currentStatus={""}
-                  visible={false}
-                  onHide={() => {}}
-                  onSuccess={() => {}}
-                />}
+                element={
+                  <CertificationRequestUpdate
+                    requestId={null}
+                    currentStatus={""}
+                    visible={false}
+                    onHide={() => {}}
+                    onSuccess={() => {}}
+                  />
+                }
               />
-              <Route path="certification-request/view/:id" element={<CertificationRequestView />} />
+              <Route
+                path="certification-request/view/:id"
+                element={<CertificationRequestView />}
+              />
+
+              <Route path="commitee/view/:id" element={<CommiteeDetails />} />
               <Route path="company" element={<CompanyList />} />
               <Route path="admin-attachments" element={<AttachmentList />} />
               <Route
                 path="attachments/create"
-                element={<AttachmentCreate
-                  referenceId={0}
-                  referenceType="COMPANY"
-                  onSuccess={() => {}}
-                />}
+                element={
+                  <AttachmentCreate
+                    referenceId={0}
+                    referenceType="COMPANY"
+                    onSuccess={() => {}}
+                  />
+                }
               />
               <Route path="company/create" element={<CompanyCreate />} />
               <Route path="company/view/:id" element={<CompanyDetails />} />
               <Route path="company/edit/:id" element={<CompanyUpdate />} />
-              
+              <Route path="about-us" element={<AboutUsList />} />
+              <Route
+                path="about-us/view/:id"
+                element={
+                  <AboutUsDetails
+                    aboutUsId={null}
+                    visible={false}
+                    onHide={() => {}}
+                  />
+                }
+              />
+              <Route
+                path="organization-info"
+                element={<OrganizationInfoList />}
+              />
+              <Route
+                path="organization-info/view/:id"
+                element={<OrganizationInfoDetails />}
+              />
+              <Route path="contact-us" element={<ContactUsList />} />
+              <Route
+                path="contact-us/view/:id"
+                element={<ContactUsDetails />}
+              />
+              <Route path="comment" element={<CommentList />} />
+              <Route path="comment/view/:id" element={<CommentDetails />} />
+
               {/* Remove the unauthorized route from here */}
               <Route path="*" element={<div>404 Not Found</div>} />
             </Routes>
@@ -172,9 +278,9 @@ export const MainLayout = () => {
       </div>
 
       {/* Unauthorized Dialog - Rendered outside Routes so it overlays everything */}
-      <UnauthorizedDialog 
-        isOpen={showUnauthorized} 
-        onClose={handleCloseUnauthorized} 
+      <UnauthorizedDialog
+        isOpen={showUnauthorized}
+        onClose={handleCloseUnauthorized}
       />
     </div>
   );

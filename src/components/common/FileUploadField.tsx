@@ -318,9 +318,9 @@ import React, { useRef, useState } from "react";
 import { FileUpload } from "primereact/fileupload";
 import type { FileUploadSelectEvent, FileUploadHeaderTemplateOptions, ItemTemplateOptions } from "primereact/fileupload";
 import { Button } from "primereact/button";
-import { Tag } from "primereact/tag";
 import { ProgressBar } from "primereact/progressbar";
 import { Tooltip } from "primereact/tooltip";
+import { useTranslation } from "react-i18next";
 
 interface FileUploadFieldProps {
   label?: string;
@@ -348,12 +348,13 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
   const [totalSize, setTotalSize] = useState<number>(0);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
+  const { t } = useTranslation();
+
 
   const handleSelect = (event: FileUploadSelectEvent) => {
     if (!event.files || event.files.length === 0) return;
 
     const file = event.files[0] as File;
-      console.log(file.size)
     // Validate file size
     // if (file.size > maxFileSize) {
     //   alert(`File size exceeds ${formatSize(maxFileSize)}`);
@@ -378,7 +379,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
     onFileSelect?.(file);
   };
 
-  const handleRemove = (file: File, callback: () => void) => {
+  const handleRemove = (callback: () => void) => {
     if (previewUrl) {
       URL.revokeObjectURL(previewUrl);
     }
@@ -467,7 +468,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
   };
 
   const headerTemplate = (options: FileUploadHeaderTemplateOptions) => {
-    const { className, chooseButton, cancelButton } = options;
+    const {  chooseButton, cancelButton } = options;
     const progressValue = (totalSize / maxFileSize) * 100;
 
     return (
@@ -506,8 +507,8 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
     const fileType = actualFile?.type || file.type || '';
     
     // Get file icon based on actual file
-    const fileIcon = getFileIcon(fileName, fileType);
-    const isImage = fileType.startsWith('image/') && previewUrl;
+    // const fileIcon = getFileIcon(fileName, fileType);
+    // const isImage = fileType.startsWith('image/') && previewUrl;
     
     // Get file size from the actual file
     const fileSize = actualFile?.size || 0;
@@ -521,7 +522,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-4 flex-1 min-w-0">
             {/* Preview/Icon */}
-            <div className="flex-shrink-0">
+            {/* <div className="flex-shrink-0">
               {isImage ? (
                 <img
                   alt={fileName}
@@ -533,7 +534,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
                   <i className={`${fileIcon.icon} text-3xl ${fileIcon.color}`}></i>
                 </div>
               )}
-            </div>
+            </div> */}
 
             {/* File Info */}
             <div className="flex-1 min-w-0">
@@ -561,9 +562,9 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
               type="button"
               icon="pi pi-times"
               className="p-button-rounded p-button-text p-button-danger p-button-sm"
-              tooltip="Remove"
+              tooltip={t("fileUpload.remove")}
               tooltipOptions={{ position: 'top' }}
-              onClick={(e) => actualFile && handleRemove(actualFile, () => props.onRemove(e))}
+              onClick={(e) => actualFile && handleRemove( () => props.onRemove(e))}
             />
           </div>
         </div>
@@ -614,17 +615,17 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
         {/* Supported formats */}
         <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
           <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">PDF</span>
-          <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">Word</span>
-          <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">Excel</span>
-          <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">Images</span>
-          <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">More...</span>
+            <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">{t("fileUpload.word")}</span>
+            <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">{t("fileUpload.excel")}</span>
+            <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">{t("fileUpload.images")}</span>
+            <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">{t("common...More")}</span>
         </div>
 
         {/* File requirements */}
         <div className="flex flex-wrap items-center justify-center gap-3 mt-4 text-xs text-gray-400">
           <span className="flex items-center gap-1">
             <i className="pi pi-check-circle text-green-500 text-xs"></i>
-            Max size: {formatSize(maxFileSize)}
+            {t("common.maxfilesize", { size: formatSize(maxFileSize) })}
           </span>
           {/* <span className="flex items-center gap-1">
             <i className="pi pi-lock text-gray-400 text-xs"></i>
@@ -637,7 +638,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
 
   const chooseOptions = {
     icon: "pi pi-fw pi-upload",
-    label: "Browse Files",
+    label: t('common.choosefile'),
     className: "bg-blue-600 hover:bg-blue-700 text-white border-none px-4 py-2 rounded-lg transition-colors duration-200",
     style: { 
       backgroundColor: '#2563eb',
@@ -647,7 +648,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
 
   const cancelOptions = {
     icon: "pi pi-fw pi-trash",
-    label: "Clear All",
+    label: t('common.clearfileselected'),
     className: "bg-gray-200 hover:bg-gray-300 text-gray-700 border-none px-4 py-2 rounded-lg transition-colors duration-200",
     style: { 
       backgroundColor: '#2563eb',
@@ -657,7 +658,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
 
   return (
     <div className={`file-upload-field ${className}`}>
-      <Tooltip target=".p-button-text" content="Remove file" position="top" />
+      <Tooltip target=".p-button-text" content={t("fileUpload.removeFile")} position="top" />
 
       {/* Label Section */}
       {(label || required) && (
@@ -667,7 +668,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
           </label>
           {required && (
             <span className="text-red-500 text-xs bg-red-50 px-2 py-0.5 rounded-full">
-              Required
+              {t('common.required')}
             </span>
           )}
         </div>

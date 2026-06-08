@@ -3,6 +3,7 @@ import * as XLSX from "xlsx";
 import { Button } from "primereact/button";
 import { Menu } from "primereact/menu";
 import type { MenuItem } from "primereact/menuitem";
+import { useTranslation } from "react-i18next";
 
 interface ExcelExportProps<T extends Record<string, any>> {
   data: T[];
@@ -24,6 +25,7 @@ const ExcelExport = <T extends Record<string, any>>({
   const menu = useRef<Menu>(null);
 
   const [loading, setLoading] = useState(false);
+  const {t}=useTranslation();
 
   const capitalizeHeader = (key: string) => {
     return key
@@ -142,12 +144,12 @@ const ExcelExport = <T extends Record<string, any>>({
 
   const items: MenuItem[] = [
     {
-      label: "Current Page",
+      label: t("common.current_page"),
       icon: "pi pi-file-excel",
       command: exportCurrentPage,
     },
     {
-      label: `All Data (${totalElements})`,
+      label: `${t("common.all")} (${totalElements})`,
       icon: "pi pi-database",
       command: exportAllData,
     },
@@ -162,7 +164,7 @@ const ExcelExport = <T extends Record<string, any>>({
         icon="pi pi-download"
         text
         raised
-        label={loading ? "Exporting..." : "Export"}
+        label={loading ? t("common.exporting") : t("common.export")}
         severity="success"
         outlined
         onClick={(e) => menu.current?.toggle(e)}

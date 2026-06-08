@@ -1,14 +1,13 @@
 // components/Navbar.js
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Building2, Globe } from "lucide-react";
+import { Menu, X, ChevronDown, FileText, Building2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Dropdown } from "primereact/dropdown";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [showLanguageMenu, setShowLanguageMenu] = useState(false);
   const location = useLocation();
   const { t, i18n } = useTranslation();
 
@@ -36,303 +35,227 @@ const Navbar = () => {
 
   const changeLanguage = (lang: string) => {
     i18n.changeLanguage(lang);
-    setShowLanguageMenu(false);
+    setIsOpen(false);
   };
-  type LangOption = { label: string; value: "en" | "ps" | "dr"; icon: string };
-  const languageOptions: LangOption[] = [
-    { label: "English", value: "en", icon: "/us.png" },
-    { label: "پښتو", value: "ps", icon: "/af.png" },
-    { label: "دری", value: "dr", icon: "/af.png" },
+
+  const languageOptions = [
+    { label: "English", value: "en", icon: "🇺🇸" },
+    { label: "پښتو", value: "ps", icon: "🇦🇫" },
+    { label: "دری", value: "dr", icon: "🇦🇫" },
   ];
+
   const handleLanguageChange = (e: any) => {
-    const lang = e.value;
-    console.log("Language changed to:", lang);
-    i18n.changeLanguage(lang);
+    i18n.changeLanguage(e.value);
   };
 
   return (
     <nav
-      className={`fixed w-full z-50 transition-all duration-300 ${
+      className={`fixed w-full z-50 transition-all duration-500 ${
         isScrolled
-          ? "bg-white shadow-lg py-2"
-          : "bg-white/95 backdrop-blur-sm py-4"
+          ? "bg-white/98 shadow-xl backdrop-blur-md py-2 border-b border-gray-100"
+          : "bg-linear-to-r from-slate-50 via-white to-slate-50/80 shadow-sm py-4"
       }`}
     >
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
+          {/* Logo Section - Enhanced with gradient and modern styling */}
           <Link
             to="/"
-            className="inline-flex items-center gap-2 sm:gap-3 px-2 py-1.5 rounded-lg hover:bg-gray-50/80 active:bg-gray-100 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+            className="group flex items-center gap-3 px-2 py-1.5 rounded-xl transition-all duration-300 hover:bg-linear-to-r hover:from-blue-50/50 hover:to-indigo-50/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
             aria-label="ASQA - Return to homepage"
           >
-            {/* Simplified logo container */}
-            <div className="flex items-center justify-center w-32 h-14">
-              <img
-                src="/aqsa.jpg"
-                alt=""
-                className="w-full h-full object-cover"
-                aria-hidden="true"
-              />
+            {/* Clean, larger logo container */}
+            <div className="relative flex items-center justify-center">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl overflow-hidden bg-white/80 backdrop-blur-sm shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200/50 hover:border-blue-200/50">
+                <img
+                  src="/asqanew.png"
+                  alt="ASQA Logo"
+                  className="w-full h-full object-contain p-1"
+                />
+              </div>
             </div>
 
-            {/* Clean, simple text */}
-            <div className="flex items-baseline gap-1.5">
-              <span className="text-base sm:text-lg font-semibold text-gray-900 tracking-tight">
-                ASQA
+            {/* Typography with refined spacing */}
+            <div className="flex flex-col sm:flex-row sm:items-baseline gap-0 sm:gap-2">
+              <span className="text-xl sm:text-2xl font-bold bg-linear-to-r from-gray-800 to-gray-900 bg-clip-text text-transparent tracking-tight">
+                {t("common.asqa")}
               </span>
-              <span className="hidden sm:inline-block text-xs font-normal text-gray-500">
-                Afghanistan Quality Standards Authority
+              <span className="text-xs font-medium text-gray-500 tracking-wide hidden sm:block">
+                ( {t("common.asqaDescription")})
               </span>
             </div>
           </Link>
 
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={`text-lg font-bold transition-colors hover:text-blue-600 ${
-                  location.pathname === link.path
-                    ? "text-blue-600 border-b-2 border-blue-600"
-                    : "text-gray-600"
-                }`}
-              >
-                {link.name}
-              </Link>
-            ))}
-       {/* Language Dropdown */}
-            {/* <div className="relative">
-              <button
-                onClick={() => setShowLanguageMenu(!showLanguageMenu)}
-                className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-300 ${
-                  showLanguageMenu
-                    ? "bg-blue-50 text-blue-600"
-                    : "text-gray-600 hover:bg-gray-100 hover:text-blue-600"
-                }`}
-              >
-                <Globe
-                  size={18}
-                  className={`transition-transform duration-300 ${showLanguageMenu ? "rotate-180" : ""}`}
-                />
-                <span className="text-sm font-medium">
-                  {i18n.language === "en"
-                    ? "English"
-                    : i18n.language === "ps"
-                      ? "پښتو"
-                      : "دری"}
-                </span>
-                <svg
-                  className={`w-4 h-4 transition-transform duration-300 ${showLanguageMenu ? "rotate-180" : ""}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-1 lg:gap-2">
+            {/* Navigation Links with modern hover effects */}
+            <div className="flex items-center gap-1 lg:gap-2 mr-2">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className={`relative px-4 py-2.5 text-sm font-semibold rounded-lg transition-all duration-300 ${
+                    location.pathname === link.path
+                      ? "text-blue-700 bg-blue-50/80"
+                      : "text-gray-700 hover:text-blue-600 hover:bg-blue-50/50"
+                  }`}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </button>
+                  {link.name}
+                  {location.pathname === link.path && (
+                    <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-6 h-0.5 bg-blue-600 rounded-full" />
+                  )}
+                </Link>
+              ))}
+            </div>
 
-              {showLanguageMenu && (
-                <div className="absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-xl py-2 border border-gray-100 animate-fadeIn">
-                  <button
-                    onClick={() => changeLanguage("en")}
-                    className={`w-full flex items-center px-4 py-3 text-sm transition-all duration-200 ${
-                      i18n.language === "en"
-                        ? "bg-blue-50 text-blue-600 font-medium"
-                        : "text-gray-700 hover:bg-gray-50 hover:text-blue-600"
-                    }`}
-                  >
-                    <span className="flex-1 text-left"> English</span>
-                    {i18n.language === "en" && (
-                      <svg
-                        className="w-4 h-4 text-blue-600"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                    )}
-                  </button>
-
-                  <button
-                    onClick={() => changeLanguage("ps")}
-                    className={`w-full flex items-center px-4 py-3 text-sm transition-all duration-200 ${
-                      i18n.language === "ps"
-                        ? "bg-blue-50 text-blue-600 font-medium"
-                        : "text-gray-700 hover:bg-gray-50 hover:text-blue-600"
-                    }`}
-                  >
-                    <span className="flex-1 text-left">پښتو</span>
-                    {i18n.language === "ps" && (
-                      <svg
-                        className="w-4 h-4 text-blue-600"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                    )}
-                  </button>
-
-                  <button
-                    onClick={() => changeLanguage("dr")}
-                    className={`w-full flex items-center px-4 py-3 text-sm transition-all duration-200 ${
-                      i18n.language === "dr"
-                        ? "bg-blue-50 text-blue-600 font-medium"
-                        : "text-gray-700 hover:bg-gray-50 hover:text-blue-600"
-                    }`}
-                  >
-                    <span className="flex-1 text-left">دری</span>
-                    {i18n.language === "dr" && (
-                      <svg
-                        className="w-4 h-4 text-blue-600"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                    )}
-                  </button>
-
-                  <div className="h-1 bg-linear-to-r from-blue-500 via-indigo-500 to-purple-500 rounded-b-xl"></div>
-                </div>
-              )}
-            </div> */}
-            <Dropdown
-              value={i18n.language}
-              options={languageOptions}
-              onChange={handleLanguageChange}
-              optionLabel="label"
-              optionValue="value"
-              itemTemplate={(option: LangOption) => (
-                <div className="flex items-center gap-2 px-2 py-1.5">
-                  <img
-                    src={option.icon}
-                    alt={option.label}
-                    className="w-5 h-5 rounded-sm "
-                  />
-                  <span className="text-sm">{option.label}</span>
-                </div>
-              )}
-              valueTemplate={(option: LangOption | null) =>
-                option ? (
-                  <div className="flex items-center gap-2">
-                    <img
-                      src={option.icon}
-                      alt={option.label}
-                      className="w-5 h-5 rounded-sm "
-                    />
-                    <span className="hidden sm:inline text-sm">
+            {/* Language Dropdown - PrimeReact with custom styling */}
+            <div className="mx-1">
+              <Dropdown
+                value={i18n.language}
+                options={languageOptions}
+                onChange={handleLanguageChange}
+                optionLabel="label"
+                optionValue="value"
+                itemTemplate={(option) => (
+                  <div className="flex items-center gap-2 px-3 py-2 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer">
+                    <span className="text-lg">{option.icon}</span>
+                    <span className="text-sm font-medium text-gray-700">
                       {option.label}
                     </span>
                   </div>
-                ) : (
-                  <span className="text-sm text-gray-500">Select language</span>
-                )
-              }
-              className="w-12 sm:w-auto border-none hover:bg-gray-100 rounded-lg transition-colors"
-              panelClassName="min-w-[120px]"
-            />
+                )}
+                valueTemplate={(option) =>
+                  option ? (
+                    <div className="flex items-center gap-2 px-2 py-1.5">
+                      <span className="text-base">{option.icon}</span>
+                      <span className="text-sm font-medium text-gray-700 hidden lg:inline">
+                        {option.label}
+                      </span>
+                      <ChevronDown className="w-3.5 h-3.5 text-gray-500" />
+                    </div>
+                  ) : (
+                    <span className="text-sm text-gray-500">Language</span>
+                  )
+                }
+                className="language-dropdown border-none"
+                panelClassName="min-w-[140px] rounded-xl shadow-lg border border-gray-100 mt-2"
+                appendTo="self"
+              />
+            </div>
 
+            {/* CTA Button - Premium styling */}
             <Link
               to="/registration"
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              className="ml-2 group relative overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-2.5 rounded-xl font-semibold text-sm shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
             >
-              {t("nav.certicificationrequest")}
+              <span className="relative z-10 flex items-center gap-2">
+                <FileText className="w-4 h-4" />
+                {t("nav.certicificationrequest")}
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-indigo-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Button - Refined */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden text-gray-600 hover:text-gray-900"
+            className="md:hidden relative w-10 h-10 flex items-center justify-center rounded-xl bg-gray-50 text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            aria-label="Toggle menu"
           >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
+            {isOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
 
-        {/* Mobile Menu */}
-        {isOpen && (
-          <div className="md:hidden mt-4 pb-4 font-bold">
+        {/* Mobile Menu - Modern slide-down with enhanced styling */}
+        <div
+          className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+            isOpen ? "max-h-[500px] opacity-100 mt-4" : "max-h-0 opacity-0"
+          }`}
+        >
+          <div className="py-2 space-y-1 border-t border-gray-100 pt-4">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
                 onClick={() => setIsOpen(false)}
-                className={`block py-2 text-sm font-medium transition-colors hover:text-blue-600 ${
+                className={`block px-4 py-3 text-base font-semibold rounded-xl transition-all duration-200 ${
                   location.pathname === link.path
-                    ? "text-blue-600"
-                    : "text-gray-600"
+                    ? "bg-blue-50 text-blue-700"
+                    : "text-gray-700 hover:bg-gray-50 hover:text-blue-600"
                 }`}
               >
                 {link.name}
               </Link>
             ))}
 
-            {/* Mobile Language Options */}
-            <div className="py-2 border-t border-gray-200 mt-2 pt-2">
-              <button
-                onClick={() => {
-                  changeLanguage("en");
-                  setIsOpen(false);
-                }}
-                className="block w-full text-left py-2 text-sm font-medium text-gray-600 hover:text-blue-600"
-              >
-                English
-              </button>
-              <button
-                onClick={() => {
-                  changeLanguage("ps");
-                  setIsOpen(false);
-                }}
-                className="block w-full text-left py-2 text-sm font-medium text-gray-600 hover:text-blue-600"
-              >
-                پښتو
-              </button>
-              <button
-                onClick={() => {
-                  changeLanguage("dr");
-                  setIsOpen(false);
-                }}
-                className="block w-full text-left py-2 text-sm font-medium text-gray-600 hover:text-blue-600"
-              >
-                دری
-              </button>
+            {/* Mobile Language Selector - Improved */}
+            <div className="px-1 pt-4 pb-2">
+              <p className="text-xs font-medium text-gray-400 uppercase tracking-wider px-3 mb-2">
+                Language
+              </p>
+              <div className="grid grid-cols-3 gap-2">
+                {languageOptions.map((lang) => (
+                  <button
+                    key={lang.value}
+                    onClick={() => changeLanguage(lang.value)}
+                    className={`flex flex-col items-center gap-1 py-2 rounded-xl transition-all duration-200 ${
+                      i18n.language === lang.value
+                        ? "bg-blue-50 text-blue-700 ring-1 ring-blue-200"
+                        : "bg-gray-50 text-gray-600 hover:bg-gray-100"
+                    }`}
+                  >
+                    <span className="text-xl">{lang.icon}</span>
+                    <span className="text-xs font-medium">{lang.label}</span>
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <Link
-              to="/registration"
-              onClick={() => setIsOpen(false)}
-              className="block mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg text-center hover:bg-blue-700 transition-colors"
-            >
-              Register Company
-            </Link>
+            {/* Mobile CTA Button */}
+            <div className="pt-2 pb-1 px-1">
+              <Link
+                to="/registration"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-3 rounded-xl font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-200"
+              >
+                <FileText className="w-4 h-4" />
+                {t("nav.certicificationrequest")}
+              </Link>
+            </div>
           </div>
-        )}
+        </div>
       </div>
+
+      {/* Custom CSS for PrimeReact Dropdown Overrides */}
+      <style>{`
+        .language-dropdown .p-dropdown {
+          background: transparent;
+          border: none;
+          border-radius: 0.75rem;
+          padding: 0.25rem 0.5rem;
+          transition: all 0.2s;
+        }
+        .language-dropdown .p-dropdown:hover {
+          background: rgba(59, 130, 246, 0.05);
+        }
+        .language-dropdown .p-dropdown:focus {
+          box-shadow: none;
+          border-color: transparent;
+        }
+        .language-dropdown .p-dropdown .p-dropdown-trigger {
+          width: 1.5rem;
+        }
+        .language-dropdown .p-dropdown-panel {
+          margin-top: 0.5rem;
+          border-radius: 1rem;
+          box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+        }
+        @media (max-width: 768px) {
+          .language-dropdown .p-dropdown .p-dropdown-label {
+            padding-left: 0;
+          }
+        }
+      `}</style>
     </nav>
   );
 };

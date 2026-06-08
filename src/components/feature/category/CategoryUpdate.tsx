@@ -158,7 +158,7 @@ export const CategoryUpdate: React.FC<CategoryUpdateProps> = ({
               <Controller
                 name="name"
                 control={control}
-                rules={{ required: t("category.validation.nameRequired") }}
+                rules={{ required: t("category.validation.name.required") }}
                 render={({ field }) => (
                   <InputText
                     {...field}

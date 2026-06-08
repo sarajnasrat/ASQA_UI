@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Card } from "primereact/card";
@@ -43,6 +43,7 @@ export const ViewDetails = () => {
 
   // Get role data from navigation state if available
   const passedRole = location.state?.role;
+  const translatedRole = (role: any) => (role ? t(`role.${role?.name}`) : "");
 
   useEffect(() => {
     if (passedRole) {
@@ -59,8 +60,11 @@ export const ViewDetails = () => {
       const response = await RoleService.getRole(id!);
       setRole(response.data.data);
     } catch (error) {
-      console.error("Failed to fetch role details", error);
-      showToast("error", t("common.error"), String(t("role.messages.loadDetailsFailed")));
+      showToast(
+        "error",
+        t("common.error"),
+        String(t("role.messages.loadDetailsFailed")),
+      );
     } finally {
       setLoading(false);
     }
@@ -136,9 +140,13 @@ export const ViewDetails = () => {
 
   const breadcrumbItems = [
     { label: String(t("nav.dashboard")), icon: "pi pi-home", url: "/" },
-    { label: String(t("role.title")), icon: "pi pi-shield", url: "/users/roles" },
     {
-      label: role?.name || String(t("role.breadcrumb.roleDetails")),
+      label: String(t("role.title")),
+      icon: "pi pi-shield",
+      url: "/users/roles",
+    },
+    {
+      label: translatedRole(role) || String(t("role.breadcrumb.roleDetails")),
       icon: "pi pi-info-circle",
       url: `/users/role/${id}`,
     },
@@ -157,9 +165,17 @@ export const ViewDetails = () => {
             <Card className="shadow-lg rounded-xl overflow-hidden">
               <div className="p-6">
                 <div className="flex items-center gap-4 mb-6">
-                  <Skeleton shape="circle" size="4rem" className="mr-2"></Skeleton>
+                  <Skeleton
+                    shape="circle"
+                    size="4rem"
+                    className="mr-2"
+                  ></Skeleton>
                   <div className="flex-1">
-                    <Skeleton width="200px" height="2rem" className="mb-2"></Skeleton>
+                    <Skeleton
+                      width="200px"
+                      height="2rem"
+                      className="mb-2"
+                    ></Skeleton>
                     <Skeleton width="150px" height="1rem"></Skeleton>
                   </div>
                 </div>
@@ -210,7 +226,6 @@ export const ViewDetails = () => {
       </div>
     );
   }
-
   return (
     <>
       <Toast ref={toast} position="top-right" />
@@ -230,7 +245,9 @@ export const ViewDetails = () => {
                       <i className="pi pi-shield text-3xl"></i>
                     </div>
                     <div>
-                      <h2 className="text-2xl font-bold">{role.name}</h2>
+                      <h2 className="text-2xl font-bold">
+                        {translatedRole(role)}
+                      </h2>
                       <div className="flex items-center gap-2 mt-1">
                         <Tag
                           value={
@@ -270,7 +287,7 @@ export const ViewDetails = () => {
                         {String(t("role.fields.roleId"))}
                       </span>
                       <span className="text-sm font-semibold text-gray-800 bg-white px-3 py-1 rounded-md shadow-sm">
-                        #{role.id}
+                        {role.id}
                       </span>
                     </div>
 
@@ -425,7 +442,9 @@ export const ViewDetails = () => {
                                 </div>
                                 <div className="flex-1 min-w-0">
                                   <h4 className="text-sm font-semibold text-gray-800 truncate">
-                                  {t(`permissions.${permission.permissionName}`)}
+                                    {t(
+                                      `permissions.${permission.permissionName}`,
+                                    )}
                                   </h4>
                                   {permission.description && (
                                     <p className="text-xs text-gray-500 mt-1 line-clamp-2">
@@ -473,7 +492,9 @@ export const ViewDetails = () => {
                                           className={`w-2 h-2 rounded-full ${style.bg}`}
                                         ></span>
                                         <span className="text-xs text-gray-700">
-                                          {t(`permissions.${permission.permissionName}`)}
+                                          {t(
+                                            `permissions.${permission.permissionName}`,
+                                          )}
                                         </span>
                                       </div>
                                     );
@@ -504,7 +525,9 @@ export const ViewDetails = () => {
                                   className={`w-2 h-2 rounded-full ${style.bg}`}
                                 ></span>
                                 <span className="flex-1 text-sm text-gray-700">
-                                 {t(`permissions.${permission.permissionName}`)}
+                                  {t(
+                                    `permissions.${permission.permissionName}`,
+                                  )}
                                 </span>
                                 {permission.description && (
                                   <i

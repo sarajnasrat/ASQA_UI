@@ -105,7 +105,7 @@ const onSubmit = async (data: CategoryFormValues) => {
               <Controller
                 name="name"
                 control={control}
-                rules={{ required: t("category.validation.nameRequired") }}
+                rules={{ required: t("category.validation.name.required") }}
                 render={({ field }) => (
                   <InputText
                     {...field}

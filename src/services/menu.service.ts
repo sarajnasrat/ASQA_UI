@@ -14,10 +14,10 @@ export const MenuService = {
     return httpClient.post(`${USER_BASE}/create`, data);
   },
   getMenu(id:any) {
-    return httpClient.get(`${USER_BASE}/get-menu/${id}`);
+    return httpClient.get(`${USER_BASE}/${id}`);
   },
   updateMenu(id:any, data:any) {
-    return httpClient.put(`${USER_BASE}/update-menu/${id}`, data);
+    return httpClient.put(`${USER_BASE}/${id}`, data);
   },
   deleteMenu(id:any) {
     return httpClient.delete(`${USER_BASE}/delete-menu/${id}`);

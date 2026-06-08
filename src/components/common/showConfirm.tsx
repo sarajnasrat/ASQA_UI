@@ -1,5 +1,6 @@
 import { confirmDialog } from "primereact/confirmdialog";
 import React from "react";
+import i18n from "../../i18n";
 
 type ConfirmOptions = {
   title?: string;
@@ -115,12 +116,12 @@ const animationStyles = {
 };
 
 export const showConfirm = ({
-  title = "Confirmation",
+  title = i18n.t("confirmDialog.title"),
   message,
   onConfirm,
   onCancel,
-  confirmLabel = "Yes, proceed",
-  cancelLabel = "Cancel",
+  confirmLabel = i18n.t("confirmDialog.confirm"),
+  cancelLabel = i18n.t("common.cancel"),
   severity = "danger",
   size = "md",
   icon,
@@ -220,7 +221,7 @@ export const showConfirm = ({
               <p>{message}</p>
               {severity === "danger" && (
                 <p className="text-xs text-gray-500 mt-2">
-                  This action cannot be undone
+                  {i18n.t("confirmDialog.irreversible")}
                 </p>
               )}
             </div>
@@ -287,7 +288,7 @@ export const showConfirm = ({
         {/* Hint text for persistent dialogs */}
         {persistent && (
           <p className="text-xs text-gray-400 mt-2">
-            Press ESC to cancel
+            {i18n.t("confirmDialog.pressEsc")}
           </p>
         )}
       </div>

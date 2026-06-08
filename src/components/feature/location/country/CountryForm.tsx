@@ -34,17 +34,12 @@ export const CountryForm: React.FC<CountryFormProps> = ({
     });
   };
 
-  // Get field label from translations
-  const getFieldLabel = (field: string) => {
-    return t(`country.form.labels.${field}`);
-  };
 
   // Get validation messages from translations
   const getValidationMessage = (field: string, type: string) => {
     return t(`country.form.validation.${field}.${type}`);
   };
 
-  console.log("language", i18n.language);
 
   return (
     <form id="country-form" onSubmit={handleSubmit(onSubmit)} className="space-y-6">

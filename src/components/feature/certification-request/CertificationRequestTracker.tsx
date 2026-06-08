@@ -265,9 +265,9 @@ const TimelineItem = ({
       )}
 
       {/* ATTACHMENTS */}
-      {item.attachments?.length > 0 && (
+      {item.attachments?.length! > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-          {item.attachments.map((a) => (
+          {item.attachments!.map((a) => (
             <AttachmentCard key={a.id} file={a} />
           ))}
         </div>

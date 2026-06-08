@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -187,7 +187,6 @@ export const CertificationRequestListDeadLine = () => {
   };
   const getCompanyNameField = () => {
     const lang = i18n.language; // or your language state
-    console.log("Current language:", lang); // Debug log to check current language
     switch (lang) {
       case "dr":
         return "companyNameDR";
@@ -198,9 +197,9 @@ export const CertificationRequestListDeadLine = () => {
     }
   };
   const formatFileSize = (bytes: number | null | undefined): string => {
-    if (bytes === null || bytes === undefined || bytes === 0) return "0 Bytes";
+    if (bytes === null || bytes === undefined || bytes === 0) return t("certificationRequest.fileSize.zero");
 
-    const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+    const sizes = [t("certificationRequest.fileSize.bytes"), t("certificationRequest.fileSize.kb"), t("certificationRequest.fileSize.mb"), t("certificationRequest.fileSize.gb"), t("certificationRequest.fileSize.tb")];
     const k = 1024;
     const i = Math.floor(Math.log(bytes) / Math.log(k));
 
@@ -233,7 +232,7 @@ export const CertificationRequestListDeadLine = () => {
         const attachments = row.attachments || [];
 
         if (attachments.length === 0) {
-          return <span className="text-gray-400 text-sm">No attachments</span>;
+          return <span className="text-gray-400 text-sm">{t("certificationRequest.labels.noAttachments")}</span>;
         }
 
         const firstAttachment = attachments[0];
@@ -267,7 +266,7 @@ export const CertificationRequestListDeadLine = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="p-1 text-gray-500 hover:text-blue-600 transition-colors"
-                    title="View"
+                    title={t("common.view")}
                   >
                     <Eye className="h-3 w-3" />
                   </a>
@@ -275,7 +274,7 @@ export const CertificationRequestListDeadLine = () => {
                     href={firstAttachment.filePath || firstAttachment.file}
                     download
                     className="p-1 text-gray-500 hover:text-blue-600 transition-colors"
-                    title="Download"
+                    title={t("common.download")}
                   >
                     <Download className="h-3 w-3" />
                   </a>
@@ -286,7 +285,7 @@ export const CertificationRequestListDeadLine = () => {
               {hasMoreAttachments && (
                 <div
                   className="absolute -top-1 -right-1 inline-flex items-center justify-center px-1.5 py-0.5 rounded-full bg-blue-500 text-white text-xs font-medium shadow-sm"
-                  title={`${remainingCount} more attachment${remainingCount > 1 ? "s" : ""}`}
+                  title={t("certificationRequest.labels.moreAttachments", { count: remainingCount })}
                 >
                   +{remainingCount}
                 </div>
@@ -340,7 +339,7 @@ export const CertificationRequestListDeadLine = () => {
     //                     target="_blank"
     //                     rel="noopener noreferrer"
     //                     className="p-1 text-gray-500 hover:text-blue-600 transition-colors"
-    //                     title="View"
+    //                     title={t("common.view")}
     //                   >
     //                     <Eye className="h-3 w-3" />
     //                   </a>
@@ -348,7 +347,7 @@ export const CertificationRequestListDeadLine = () => {
     //                     href={firstAttachment.filePath || firstAttachment.file}
     //                     download
     //                     className="p-1 text-gray-500 hover:text-blue-600 transition-colors"
-    //                     title="Download"
+    //                     title={t("common.download")}
     //                   >
     //                     <Download className="h-3 w-3" />
     //                   </a>
@@ -405,7 +404,7 @@ export const CertificationRequestListDeadLine = () => {
     //                     target="_blank"
     //                     rel="noopener noreferrer"
     //                     className="p-1 text-gray-500 hover:text-blue-600 transition-colors"
-    //                     title="View"
+    //                     title={t("common.view")}
     //                   >
     //                     <Eye className="h-3 w-3" />
     //                   </a>
@@ -413,7 +412,7 @@ export const CertificationRequestListDeadLine = () => {
     //                     href={attachment.filePath || attachment.file}
     //                     download
     //                     className="p-1 text-gray-500 hover:text-blue-600 transition-colors"
-    //                     title="Download"
+    //                     title={t("common.download")}
     //                   >
     //                     <Download className="h-3 w-3" />
     //                   </a>
@@ -532,7 +531,7 @@ export const CertificationRequestListDeadLine = () => {
     //                   📅 {start.toLocaleDateString()} →{" "}
     //                   {end.toLocaleDateString()}
     //                 </div>
-    //                 {row.batch && <div>🏷️ Batch: {row.batch}</div>}
+    //                 {row.batch && <div>🏷️ {t("certificationRequest.deadline.batch", { batch: row.batch })}</div>}
     //               </>
     //             )}
     //           </div>
@@ -568,10 +567,10 @@ export const CertificationRequestListDeadLine = () => {
         const isExpired = now > end!;
 
         const getStatusText = () => {
-          if (!start || !end) return "No deadline";
-          if (isExpired) return "Expired";
+          if (!start || !end) return t("certificationRequest.deadline.noDeadline");
+          if (isExpired) return t("certificationRequest.deadline.expired");
           if (daysRemaining !== null && daysRemaining <= 20)
-            return `${daysRemaining} days remaining`;
+            return t("certificationRequest.deadline.daysRemaining", { count: daysRemaining });
           // return `${daysRemaining} days left`;
         };
 
@@ -600,7 +599,7 @@ export const CertificationRequestListDeadLine = () => {
             )}
             {isExpired && row.batch && (
               <div className="text-xs text-red-600 font-medium mt-1">
-                Batch: {row.batch}
+                {t("certificationRequest.deadline.batch", { batch: row.batch })}
               </div>
             )}
           </div>
@@ -631,7 +630,7 @@ export const CertificationRequestListDeadLine = () => {
         /> */}
         <Button
           icon="pi pi-sync"
-          label={t("refresh")}
+          label={t("common.refresh")}
           onClick={loadData}
           text
           raised
@@ -639,8 +638,8 @@ export const CertificationRequestListDeadLine = () => {
         <ExcelExport
           data={data}
           totalElements={totalRecords}
-          fileName="certification-requests"
-          sheetName="certification-requests"
+          fileName={t("certificationRequest.list")}
+          sheetName={t("certificationRequest.list")}
           fetchAllData={async () => {
             const res =
               await CertificationRequestService.getAllPaginatedByStatus(

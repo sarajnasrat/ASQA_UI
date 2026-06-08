@@ -13,6 +13,8 @@ import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
 import SkeletonForm from "../../common/SkeletonForm";
 import FileUploadField from "../../common/FileUploadField";
 import { useTranslation } from "react-i18next";
+import { useToast } from "../../../hooks/ToastContext";
+import { handleApi } from "../../../hooks/handleApi";
 
 type FormValues = {
   firstName: string;
@@ -33,12 +35,13 @@ export const EditUser = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { toast, showToast } = useAppToast();
-
+  const baseUrl =
+    import.meta.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
   const [loading, setLoading] = useState(false);
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [existingImageUrl, setExistingImageUrl] = useState<string | null>(null);
   const [zones, setZones] = useState<ZoneOption[]>([]);
-
+  const { showError, showSuccess } = useToast();
   const {
     control,
     handleSubmit,
@@ -98,9 +101,7 @@ export const EditUser = () => {
         });
 
         setExistingImageUrl(
-          user?.profileImage
-            ? `http://localhost:8080${user.profileImage}`
-            : null,
+          user?.profileImage ? `${baseUrl}${user.profileImage}` : null,
         );
       } catch {
         showToast("error", t("common.error"), t("user.messages.loadFailed"));
@@ -139,7 +140,7 @@ export const EditUser = () => {
               active: true,
               phoneNumber: data.phoneNumber,
               roles: [data.role],
-              zoneId: data.zoneId,
+              zone: { id: data.zoneId },
             }),
           ],
           { type: "application/json" },
@@ -149,14 +150,18 @@ export const EditUser = () => {
       if (profileImage) {
         formData.append("profileImage", profileImage);
       }
-
-      await UserService.updateUser(Number(id), formData);
-
-      showToast("success", t("common.success"), t("user.messages.updateSuccess"));
-
-      setTimeout(() => {
-        navigate("/users");
-      }, 1000);
+      // ✅ UPDATE MODE
+      const response = await handleApi(
+        () => UserService.updateUser(Number(id), formData),
+        showSuccess,
+        showError,
+        t,
+      );
+      if (response?.status === 200) {
+        setTimeout(() => {
+          navigate("/users");
+        }, 1000);
+      }
     } catch {
       showToast("error", t("common.error"), t("user.messages.updateFailed"));
     }

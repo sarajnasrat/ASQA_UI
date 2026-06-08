@@ -114,7 +114,6 @@ export const DistrictUpdate: React.FC<DistrictUpdateProps> = ({
   const getLanguageName = (lang: keyof Translations) => ({"en": t("languages.english"), "fa": t("languages.persian"), "ps": t("languages.pashto")})[lang];
 
   if (loading) return <div className="p-6 text-center text-gray-500">{t("common.loading")}...</div>;
-console.log("provinces:", provinces);
   return (
     <>
       <Toast ref={toast} position="top-right" />
