@@ -8,6 +8,7 @@ import {
   FileText,
   Download,
 } from "lucide-react";
+import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 
 /* =====================================================
    TYPES
@@ -237,7 +238,7 @@ const TimelineItem = ({
 
       {/* DATE */}
       <time className="text-xs text-gray-500">
-        {new Date(item.changedAt).toLocaleString()}
+        {IslamicDateFormatter.formatQamari(item.changedAt, true)}
       </time>
 
       {/* TITLE */}

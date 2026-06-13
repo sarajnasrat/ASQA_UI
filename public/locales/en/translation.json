@@ -610,7 +610,9 @@
     "profile": "Profile",
     "dashboard": "Dashboard",
     "logout": "Logout",
-    "certicificationrequest": "Certification Request"
+    "certicificationrequest": "Certification Request",
+    "internationalParties": "International Parties",
+    "organizationServices": "Organization Services"
   },
   "certification": {
     "confirmStatusUpdate": "Are you sure you want to change certificate status to",
@@ -1303,7 +1305,7 @@
     }
   },
   "common": {
-    "id":"ID",
+    "id": "ID",
     "current_page": "Current Page",
     "all": "All",
     "export": "Export",
@@ -1317,7 +1319,7 @@
     "continue": "Continue",
     "copy": "Copy",
     "asqa": "ASQA",
-    "asqaDescription": "Afghanistan Quality Standards Authority",
+    "asqaDescription": "Afghanistan Standard Quality Authority",
     "save": "Save",
     "cancel": "Cancel",
     "delete": "Delete",
@@ -2281,5 +2283,302 @@
       "englishLabelRequired": "English label is required",
       "pathRequired": "Menu path is required"
     }
+  },
+  "internationalParty": {
+    "title": "International Parties",
+    "details": "Details",
+    "create": "Create International Party",
+    "createTitle": "Create International Party",
+    "editTitle": "Edit International Party",
+    "manageDescription": "Manage international party records and contact information",
+    "detailsTitle": "International Party Details",
+    "detailsDescription": "View complete information about the selected international party",
+    "notFound": "International party not found",
+    "active": "Active",
+    "inactive": "Inactive",
+    "activeLabel": "Active status",
+    "currentLogo": "Current logo",
+    "createSuccess": "International party created successfully",
+    "updateSuccess": "International party updated successfully",
+    "deleteSuccess": "International party deleted successfully",
+    "failedtofetch": "Failed to load international parties",
+    "deleteConfirm": "Are you sure you want to delete {{name}}?",
+    "fields": {
+      "name": "Name",
+      "shortName": "Short Name",
+      "location": "Location",
+      "organizationType": "Organization Type",
+      "email": "Email",
+      "phoneNumber": "Phone Number",
+      "websiteUrl": "Website URL",
+      "about": "About",
+      "logo": "Logo",
+      "status": "Status"
+    },
+    "placeholders": {
+      "name": "Enter name",
+      "location": "Enter location",
+      "email": "Enter email address",
+      "phoneNumber": "Enter phone number",
+      "websiteUrl": "Enter website URL",
+      "about": "Write a short description"
+    },
+    "validation": {
+      "nameRequired": "Name is required",
+      "locationRequired": "Location is required",
+      "aboutRequired": "About section is required",
+      "emailInvalid": "Enter a valid email address"
+    }
+  },
+  "organizationServices": {
+    "title": "Organization Services",
+    "details": "Details",
+    "create": "Create Organization Service",
+    "createTitle": "Create Organization Service",
+    "editTitle": "Edit Organization Service",
+    "manageDescription": "Manage organization services and descriptions",
+    "detailsTitle": "Organization Service Details",
+    "detailsDescription": "View complete information about the selected organization service",
+    "notFound": "Organization service not found",
+    "active": "Active",
+    "inactive": "Inactive",
+    "activeLabel": "Active status",
+    "createSuccess": "Organization service created successfully",
+    "updateSuccess": "Organization service updated successfully",
+    "deleteSuccess": "Organization service deleted successfully",
+    "deleteConfirm": "Are you sure you want to delete {{name}}?",
+    "fields": {
+      "name": "Name",
+      "service": "Service",
+      "status": "Status"
+    },
+    "placeholders": {
+      "name": "Enter service name",
+      "service": "Enter service details"
+    },
+    "validation": {
+      "nameRequired": "Name is required",
+      "serviceRequired": "Service description is required"
+    }
+  },
+"website": {
+  "companies": {
+    "badge": "ASQA Certified Companies",
+    "title": "Our Certified Companies",
+    "titleAccent": "",
+    "description": "Discover the trusted businesses that have successfully completed their ASQA certification and joined our community of excellence.",
+    "searchPlaceholder": "Search companies by name, location, or industry...",
+    "loading": "Loading amazing companies...",
+    "showing": "Showing {{shown}} of {{total}} companies",
+    "clearSearch": "Clear search",
+    "companyFallback": "Company",
+    "addressNotSpecified": "Address not specified",
+    "emptyTitle": "No companies found",
+    "emptyDescription": "Try adjusting your search criteria"
+  },
+  "internationalParties": {
+    "badge": "International Network",
+    "title": "International Parties",
+    "description": "Explore international organizations and partners connected with ASQA.",
+    "loading": "Loading international parties...",
+    "emptyTitle": "No international parties found",
+    "emptyDescription": "There are no international parties to display right now.",
+    "visitWebsite": "Visit Website"
+  },
+  "organizationServices": {
+    "badge": "Organization Service",
+    "title": "Organization Services",
+    "description": "Learn more about the services and activities provided by the organization.",
+    "loading": "Loading organization services...",
+    "emptyTitle": "No organization service found",
+    "emptyDescription": "There is no organization service information available right now.",
+    "activeService": "Active Service",
+    "footerNote": "These services reflect the current public information published by the organization."
+  },
+  "navbar": {
+    "homeAria": "ASQA - Return to homepage",
+    "toggleMenu": "Toggle menu",
+    "internationalParties": "International Parties",
+    "organizationServices": "Organization Services"
+  },
+  "about": {
+    "title": "About"
+  },
+  "footer": {
+    "description": "Leading certification management system for companies worldwide. Streamlined, secure, and efficient certification process.",
+    "quickLinks": "Quick Links",
+    "ourServices": "Our Services",
+    "contactUs": "Contact Us",
+    "phone": "+93 (555) 123-4567",
+    "email": "info@asqa.com",
+    "copyright": "© {{year}} ASQA Management System. All rights reserved.",
+    "links": {
+      "register": "Register"
+    },
+    "address": {
+      "line1": "123 Certification Ave, Suite 100",
+      "line2": "Kabul, 1001"
+    },
+    "services": {
+      "companyCertification": "Company Certification",
+      "qualityAssurance": "Quality Assurance",
+      "complianceReview": "Compliance Review",
+      "documentVerification": "Document Verification",
+      "certificateGeneration": "Certificate Generation"
+    }
+  },
+  "services": {
+    "header": {
+      "title": "Our Services",
+      "description": "Comprehensive certification services for companies worldwide"
+    },
+    "process": {
+      "title": "Certification Process",
+      "description": "A straightforward path to ASQA certification"
+    },
+    "steps": {
+      "1": {
+        "title": "Initial Consultation",
+        "description": "Discuss your certification needs and requirements with our experts"
+      },
+      "2": {
+        "title": "Company Registration",
+        "description": "Register your company details in our system"
+      },
+      "3": {
+        "title": "Document Submission",
+        "description": "Upload all required documentation for review"
+      },
+      "4": {
+        "title": "Compliance Review",
+        "description": "Our team reviews your submission against ASQA standards"
+      },
+      "5": {
+        "title": "Site Assessment",
+        "description": "Optional on-site or virtual assessment of your facilities"
+      },
+      "6": {
+        "title": "Certification Issuance",
+        "description": "Receive your official ASQA certificate upon approval"
+      }
+    },
+    "benefits": {
+      "title": "Benefits of ASQA Certification",
+      "description": "Why companies choose ASQA for their certification needs",
+      "items": {
+        "1": {
+          "title": "International Recognition",
+          "description": "ASQA certification is recognized globally"
+        },
+        "2": {
+          "title": "Enhanced Credibility",
+          "description": "Build trust with clients and stakeholders"
+        },
+        "3": {
+          "title": "Market Access",
+          "description": "Access new markets and opportunities"
+        },
+        "4": {
+          "title": "Efficient Process",
+          "description": "Streamlined digital certification process"
+        }
+      }
+    },
+    "cta": {
+      "title": "Ready to Get Certified?",
+      "description": "Start your certification journey today with our simple online registration process",
+      "button": "Register Your Company"
+    }
+  },
+  "contact": {
+    "header": {
+      "title": "Contact Us",
+      "description": "Get in touch with our team for any questions or support"
+    },
+    "cards": {
+      "phone": {
+        "title": "Phone",
+        "action": "Call us"
+      },
+      "email": {
+        "title": "Email",
+        "action": "Email us"
+      },
+      "office": {
+        "title": "Office",
+        "action": "Visit us"
+      },
+      "hours": {
+        "title": "Hours",
+        "action": "Working days",
+        "line1": "Saturday - Wednesday: 8am - 1pm",
+        "line2": "Thursday: 8am - 1pm"
+      }
+    },
+    "form": {
+      "title": "Send us a Message",
+      "successMessage": "Thank you for your message! We'll get back to you soon.",
+      "successToast": "Your feedback has been sent.",
+      "sending": "Sending...",
+      "submit": "Send Message",
+      "labels": {
+        "name": "Your Name *",
+        "email": "Email Address *",
+        "subject": "Subject *",
+        "message": "Message *"
+      },
+      "validation": {
+        "nameRequired": "Name is required",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Email is invalid",
+        "subjectRequired": "Subject is required",
+        "messageRequired": "Message is required"
+      }
+    },
+    "map": {
+      "popupTitle": "ASQA Office",
+      "addressLine1": "123 Certification Ave",
+      "addressLine2": "Suite 100, Kabul, 10001",
+      "country": "Afghanistan",
+      "title": "Visit Our Office",
+      "description": "Our team is available for in-person consultations during business hours. Please schedule an appointment in advance.",
+      "directions": "Get Directions →"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "items": {
+        "1": {
+          "question": "How long does the certification process take?",
+          "answer": "The certification process typically takes 2-3 weeks from initial registration to final approval."
+        },
+        "2": {
+          "question": "What documents are required for registration?",
+          "answer": "Required documents include business license, tax registration, and company incorporation documents."
+        },
+        "3": {
+          "question": "Is ASQA certification internationally recognized?",
+          "answer": "Yes, ASQA certification is recognized in over 50 countries worldwide."
+        },
+        "4": {
+          "question": "How can I check my application status?",
+          "answer": "You can track your application status through your company dashboard or contact our support team."
+        }
+      }
+    }
+  },
+  "homeLinks": {
+    "title": "Our Key Resources",
+    "description": "Connect with international partners and service providers that help your business grow and excel.",
+    "internationalParties": {
+      "title": "International Partners",
+      "description": "Collaborate with global organizations that follow ASQA standards.",
+      "button": "View International Partners"
+    },
+    "organizationServices": {
+      "title": "Organization Services",
+      "description": "Access specialized services and solutions offered by our trusted partners.",
+      "button": "View Organization Services"
+    }
   }
+}
 }

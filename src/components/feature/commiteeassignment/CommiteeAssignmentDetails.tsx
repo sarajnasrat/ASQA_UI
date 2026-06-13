@@ -15,6 +15,7 @@ import {
 import { handleApi } from "../../../hooks/handleApi";
 import { useToast } from "../../../hooks/ToastContext";
 import CommiteeAssignmentService from "../../../services/commitee-assignment.service";
+import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 import { CommiteeAssingmentUpdate } from "./CommiteeAssingmentUpdate";
 import CommiteeAssignmentViewHeader from "./assignment-process/CommiteeAssignmentViewHeader";
 import CommiteeAssignmentViewTabs from "./assignment-process/CommiteeAssignmentViewTabs";
@@ -94,7 +95,6 @@ export const CommiteeAssignmentDetails: React.FC = () => {
       showError,
       t,
     );
-
     if (response) {
       loadAssignment();
     }
@@ -138,9 +138,8 @@ export const CommiteeAssignmentDetails: React.FC = () => {
 
   const formatDate = (value?: string | null) => {
     if (!value) return "-";
-    return new Date(value).toLocaleString();
+    return IslamicDateFormatter.formatQamari(value, true);
   };
-
   const formatFileSize = (bytes?: number | null) => {
     if (!bytes) return "0 B";
     if (bytes < 1024) return `${bytes} B`;

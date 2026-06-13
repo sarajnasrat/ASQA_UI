@@ -51,6 +51,10 @@ import CommentDetails from "../feature/comment/CommentDetails";
 import { InspectionCommitteApprovedRequest } from "../feature/inspection-committee-approved-request/InspectionCommitteApprovedRequest.tsx";
 import { RejectedRequest } from "../feature/rejected-request/RejectedRequest.tsx";
 import { AcceptedRequest } from "../feature/accepted-request/AcceptedRequest.tsx";
+import OrganizationServicesList from "../feature/organizationservices/OrganizationServicesList.tsx";
+import InternationalPartyList from "../feature/internationalparty/InternationalPartyList.tsx";
+import OrganizationServicesDetails from "../feature/organizationservices/OrganizationServicesDetails.tsx";
+import InternationalPartyDetails from "../feature/internationalparty/InternationalPartyDetails.tsx";
 
 export const MainLayout = () => {
   // const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -171,6 +175,10 @@ export const MainLayout = () => {
                 path="certification-request"
                 element={<CertificationRequestList />}
               />
+                    <Route
+                path="partner-organization"
+                element={<InternationalPartyList />}
+              />
               <Route
                 path="certification-request-deadline"
                 element={<CertificationRequestListDeadLine />}
@@ -258,6 +266,27 @@ export const MainLayout = () => {
                 path="organization-info"
                 element={<OrganizationInfoList />}
               />
+
+              <Route
+                path="organization-activity"
+                element={<OrganizationServicesList />}
+              />
+              <Route
+                path="organization-services"
+                element={<OrganizationServicesList />}
+              />
+              <Route
+                path="organization-services/view/:id"
+                element={<OrganizationServicesDetails />}
+              />
+              <Route
+                path="international-party"
+                element={<InternationalPartyList />}
+              />
+              <Route
+                path="international-party/view/:id"
+                element={<InternationalPartyDetails />}
+              />
               <Route
                 path="organization-info/view/:id"
                 element={<OrganizationInfoDetails />}
@@ -269,6 +298,7 @@ export const MainLayout = () => {
               />
               <Route path="comment" element={<CommentList />} />
               <Route path="comment/view/:id" element={<CommentDetails />} />
+              
 
               {/* Remove the unauthorized route from here */}
               <Route path="*" element={<div>404 Not Found</div>} />

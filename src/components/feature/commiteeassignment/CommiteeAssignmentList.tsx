@@ -18,6 +18,7 @@ import { DynamicTable } from "../../common/DynamicTable";
 import CommiteeAssignmentService from "../../../services/commitee-assignment.service";
 import { CommiteeAssingmentUpdate } from "./CommiteeAssingmentUpdate";
 import StatusTabMenu, { type StatusTabItem } from "../../common/StatusTabMenu";
+import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 import ExcelExport from "../../common/ExcelExport";
 import { useAuth } from "../../../context/AuthContext";
 
@@ -256,7 +257,9 @@ export const CommiteeAssignmentList: React.FC = () => {
       field: "assignedAt",
       header: t("commitee.assignment.assignmentAt"),
       body: (row: any) =>
-        row.assignedAt ? new Date(row.assignedAt).toLocaleString() : "",
+        row.assignedAt
+          ? IslamicDateFormatter.formatQamari(row.assignedAt, true)
+          : "",
     },
 
     {

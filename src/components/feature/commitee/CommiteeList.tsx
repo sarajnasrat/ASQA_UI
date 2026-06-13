@@ -18,6 +18,7 @@ import CommiteeService from "../../../services/comitee.service";
 import { useToast } from "../../../hooks/ToastContext";
 import { Tag } from "primereact/tag";
 import { useNavigate } from "react-router-dom";
+import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 import CommiteeMemberCreate from "../commiteemember/CommiteeMemberCreate";
 import ExcelExport from "../../common/ExcelExport";
 import { useAuth } from "../../../context/AuthContext";
@@ -249,7 +250,7 @@ export const CommiteeList: React.FC = () => {
       header: t("common.createdDate"),
       body: (rowData: any) =>
         rowData.createdDate
-          ? new Date(rowData.createdDate).toLocaleString()
+          ? IslamicDateFormatter.formatQamari(rowData.createdDate, true)
           : "",
     },
     {

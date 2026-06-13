@@ -511,7 +511,9 @@
     "profile": "پروفایل",
     "dashboard": "ډشبورډ",
     "logout": "وتل",
-    "certicificationrequest": "د تصدیق غوښتنه"
+    "certicificationrequest": "د تصدیق غوښتنه",
+    "internationalParties": "نړیوال بنسټونه",
+    "organizationServices": "د سازمان خدمتونه"
   },
   "certification": {
     "confirmStatusUpdate": "آیا تاسو ډاډه یاست چې غواړئ د سند حالت ته بدل کړئ",
@@ -714,7 +716,12 @@
       "messages": {
         "created": "د تصدیق غوښتنه په بریالیتوب سره جوړه شوه!",
         "createFailed": "د تصدیق غوښتنه جوړول ناکام شول"
-      }
+      },
+      "cardTitle": "? ????? ??????",
+      "cardSubtitle": "? ??? ????? ??? ?? ???? ?????"
+    },
+    "validation": {
+      "certificationScope": "??????? ???? ? ????? ???? ?????"
     }
   },
   "certificationRequest": {
@@ -1071,7 +1078,9 @@
       "documentsSuccess": "اسناد په بریالیتوب سره پورته شول!",
       "submitSuccess": "د تصدیق غوښتنه د بیاکتنې لپاره وسپارل شوه!",
       "submitError": "د تصدیق غوښتنه سپارل ناکام شول!",
-      "noRequestError": "د تصدیق غوښتنه ونه موندل شوه!"
+      "noRequestError": "د تصدیق غوښتنه ونه موندل شوه!",
+      "certificationSuccess": "? ????? ??????? ?? ????????? ??? ??? ???",
+      "trackingCopied": "? ????? ????? ???? ???"
     },
     "errors": {
       "submitFailed": "د تصدیق غوښتنه سپارل ناکام شول!"
@@ -1321,7 +1330,20 @@
     "createdDate": "د جوړېدو نیټه",
     "selectScope": "مهرباني وکړئ لومړی یوه ساحه وټاکئ",
     "selectRequest": "مهرباني وکړئ لومړی یوه غوښتنه وټاکئ",
-    "pleaseWait": "مهرباني وکړئ انتظار وکړئ"
+    "pleaseWait": "مهرباني وکړئ انتظار وکړئ",
+    "asqa": "ASQA",
+    "asqaDescription": "د افغانستان د ستندرد او کیفیت اداره",
+    "contactPersonLoadFailed": "? ???? ??? ???????? ????? ????? ???",
+    "countryLoadFailed": "? ???????? ????? ????? ???",
+    "districtLoadFailed": "? ???????? ????? ????? ???",
+    "fillRequiredFields": "??????? ???? ??? ???? ?????? ?? ???",
+    "provinceLoadFailed": "? ???????? ????? ????? ???",
+    "submitting": "? ????? ?? ??? ??...",
+    "validation": {
+      "fileSize": "? ???? ?????? ?? ????? ????? ??",
+      "fillRequiredFields": "??????? ???? ??? ???? ?????? ?? ???",
+      "imageOnly": "????? ??????? ???? ????? ???"
+    }
   },
   "home": {
     "badge": "د افغانستان د کیفیت معیارونو اداره",
@@ -1389,7 +1411,8 @@
         "4": {
           "title": "بیاکتنه او تصدیق",
           "description": "د تایید وروسته تصدیق ترلاسه کړئ"
-        }
+        },
+        "step": "???"
       }
     },
     "features": {
@@ -2164,5 +2187,106 @@
       "englishLabelRequired": "انګلیسي لیبل اړین دی",
       "pathRequired": "د مینو لاره اړینه ده"
     }
+  },
+  "internationalParty": {
+    "title": "نړیوال بنسټونه",
+    "details": "جزئیات",
+    "create": "نړیوال بنسټ جوړول",
+    "createTitle": "نړیوال بنسټ جوړول",
+    "editTitle": "نړیوال بنسټ سمول",
+    "manageDescription": "د نړیوالو بنسټونو معلومات او د اړیکو جزئیات مدیریت کړئ",
+    "detailsTitle": "د نړیوال بنسټ جزئیات",
+    "detailsDescription": "د ټاکل شوي نړیوال بنسټ بشپړ معلومات وګورئ",
+    "notFound": "نړیوال بنسټ ونه موندل شو",
+    "active": "فعال",
+    "inactive": "غیرفعال",
+    "activeLabel": "فعال حالت",
+    "currentLogo": "اوسنی لوګو",
+    "createSuccess": "نړیوال بنسټ په بریالیتوب سره جوړ شو",
+    "updateSuccess": "نړیوال بنسټ په بریالیتوب سره تازه شو",
+    "deleteSuccess": "نړیوال بنسټ په بریالیتوب سره حذف شو",
+    "failedtofetch": "د نړیوالو بنسټونو بارول ناکام شول",
+    "deleteConfirm": "ایا تاسو ډاډه یاست چې غواړئ {{name}} حذف کړئ؟",
+    "fields": {
+      "name": "نوم",
+      "shortName": "لنډ نوم",
+      "location": "موقعیت",
+      "organizationType": "د بنسټ ډول",
+      "email": "بریښنالیک",
+      "phoneNumber": "د اړیکې شمېره",
+      "websiteUrl": "ویب پاڼه",
+      "about": "په اړه",
+      "logo": "لوګو",
+      "status": "حالت"
+    },
+    "placeholders": {
+      "name": "نوم دننه کړئ",
+      "location": "موقعیت دننه کړئ",
+      "email": "بریښنالیک دننه کړئ",
+      "phoneNumber": "د اړیکې شمېره دننه کړئ",
+      "websiteUrl": "ویب پاڼه دننه کړئ",
+      "about": "لنډ معلومات ولیکئ"
+    },
+    "validation": {
+      "nameRequired": "نوم اړین دی",
+      "locationRequired": "موقعیت اړین دی",
+      "aboutRequired": "د معلوماتو برخه اړینه ده",
+      "emailInvalid": "مهرباني وکړئ معتبر بریښنالیک دننه کړئ"
+    }
+  },
+  "organizationServices": {
+    "title": "د سازمان خدمتونه",
+    "details": "جزئیات",
+    "create": "د سازمان خدمت جوړول",
+    "createTitle": "د سازمان خدمت جوړول",
+    "editTitle": "د سازمان خدمت سمول",
+    "manageDescription": "د سازمان خدمتونه او د هغو تشریحات مدیریت کړئ",
+    "detailsTitle": "د سازمان د خدمت جزئیات",
+    "detailsDescription": "د ټاکل شوي خدمت بشپړ معلومات وګورئ",
+    "notFound": "د سازمان خدمت ونه موندل شو",
+    "active": "فعال",
+    "inactive": "غیرفعال",
+    "activeLabel": "فعال حالت",
+    "createSuccess": "د سازمان خدمت په بریالیتوب سره جوړ شو",
+    "updateSuccess": "د سازمان خدمت په بریالیتوب سره تازه شو",
+    "deleteSuccess": "د سازمان خدمت په بریالیتوب سره حذف شو",
+    "deleteConfirm": "ایا تاسو ډاډه یاست چې غواړئ {{name}} حذف کړئ؟",
+    "fields": {
+      "name": "نوم",
+      "service": "خدمت",
+      "status": "حالت"
+    },
+    "placeholders": {
+      "name": "د خدمت نوم دننه کړئ",
+      "service": "د خدمت جزئیات دننه کړئ"
+    },
+    "validation": {
+      "nameRequired": "نوم اړین دی",
+      "serviceRequired": "د خدمت تشریح اړینه ده"
+    }
+  },
+  "website": {
+    "internationalParties": {
+      "badge": "نړیواله شبکه",
+      "title": "نړیوال بنسټونه",
+      "description": "له ASQA سره تړلي نړیوال بنسټونه او شریکان وګورئ.",
+      "loading": "نړیوال بنسټونه بارېږي...",
+      "emptyTitle": "هیڅ نړیوال بنسټ ونه موندل شو",
+      "emptyDescription": "اوس مهال د ښودلو لپاره کوم نړیوال بنسټ نشته.",
+      "visitWebsite": "ویب پاڼه وګورئ"
+    },
+    "organizationServices": {
+      "badge": "د سازمان خدمت",
+      "title": "د سازمان خدمتونه",
+      "description": "د سازمان د خدمتونو او فعالیتونو په اړه نور معلومات ترلاسه کړئ.",
+      "loading": "د سازمان خدمتونه بارېږي...",
+      "emptyTitle": "هیڅ د سازمان خدمت ونه موندل شو",
+      "emptyDescription": "اوس مهال د سازمان د خدمتونو معلومات شتون نه لري.",
+      "activeService": "فعال خدمت",
+      "footerNote": "دا خدمتونه د سازمان د اوسنيو خپرو شويو معلوماتو له مخې ښودل کېږي."
+    }
+  },
+  "organization": {
+    "failedtofetch": "? ?????? ? ??????? ????? ????? ???"
   }
 }

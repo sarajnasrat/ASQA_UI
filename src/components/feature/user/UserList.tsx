@@ -12,6 +12,7 @@ import { TieredMenu } from "primereact/tieredmenu";
 import type { MenuItem } from "primereact/menuitem";
 import { Toast } from "primereact/toast";
 import { useAuth } from "../../../context/AuthContext.tsx";
+import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 
 export const UserList = () => {
   const { t } = useTranslation();
@@ -105,16 +106,11 @@ const translatedRoles = (user: any) =>
   const dateBodyTemplate = (rowData: any) => {
     if (!rowData.createdDate) return <span className="text-gray-400">{t("common.notSpecified")}</span>;
 
-    const date = new Date(rowData.createdDate);
-    const formattedDate = date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-    const formattedTime = date.toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    const formattedDate = IslamicDateFormatter.formatQamari(
+      rowData.createdDate,
+    );
+    const formattedTime =
+      IslamicDateFormatter.getTime(rowData.createdDate) || "-";
 
     return (
       <div className="flex flex-col">

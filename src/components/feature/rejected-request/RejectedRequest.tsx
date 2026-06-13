@@ -18,6 +18,7 @@ import i18n from "../../../i18n/i18n";
 import { Download, Eye, File } from "lucide-react";
 import { CertificationRequestUpdate } from "../certification-request/CertificationRequestUpdate";
 import ExcelExport from "../../common/ExcelExport";
+import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 
 export const RejectedRequest = () => {
   const { t } = useTranslation();
@@ -218,7 +219,7 @@ export const RejectedRequest = () => {
     },
     {
       header: t("company.labels.companyName"),
-      body: (row: any) => row.company?.[getCompanyNameField()] || "-",
+      body: (row: any) => row.company?.[getCompanyNameField()] || t("common.notSpecified"),
     },
     {
       field: "attachments",
@@ -346,7 +347,7 @@ export const RejectedRequest = () => {
           <div className="flex flex-col gap-1">
             <div className="flex items-center justify-between">
               <span className="font-medium text-gray-900">
-                {totalMonths !== null ? `${totalMonths} months` : "—"}
+                {totalMonths !== null ? t("certificationRequest.deadline.months", { count: totalMonths }) : t("common.notSpecified")}
               </span>
               <span className={`text-sm ${getStatusColor()}`}>
                 {getStatusText()}
@@ -354,7 +355,11 @@ export const RejectedRequest = () => {
             </div>
             {start && end && (
               <div className="text-xs text-gray-400">
-                {start.toLocaleDateString()} → {end.toLocaleDateString()}
+                {IslamicDateFormatter.formatQamariRange(
+                  start,
+                  end,
+                  ` ${t("certificationRequest.deadline.rangeSeparator")} `,
+                )}
               </div>
             )}
             {isExpired && row.batch && (
@@ -369,7 +374,8 @@ export const RejectedRequest = () => {
     {
       field: "createdDate",
       header: t("certificationRequest.labels.createdDate"),
-      body: (row: any) => new Date(row.createdDate).toLocaleString(),
+      body: (row: any) =>
+        IslamicDateFormatter.formatQamari(row.createdDate, true),
     },
     {
       header: t("common.action"),

@@ -14,6 +14,7 @@ import ExcelExport from "../../common/ExcelExport";
 import { CertificationUpdate } from "./CertificationUpdate";
 import StatusTabMenu, { type StatusTabItem } from "../../common/StatusTabMenu";
 import { useAuth } from "../../../context/AuthContext";
+import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 
 export const CertificationList = () => {
   const [certifications, setCertifications] = useState<any[]>([]);
@@ -196,22 +197,14 @@ export const CertificationList = () => {
     if (!rowData.issueDate) {
       return <span className="text-gray-400">{t("common.notSpecified")}</span>;
     }
-    const date = new Date(rowData.issueDate);
 
     return (
       <div className="flex flex-col">
         <span className="text-sm text-gray-700">
-          {date.toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-          })}
+          {IslamicDateFormatter.formatQamari(rowData.issueDate)}
         </span>
         <span className="text-xs text-gray-400">
-          {date.toLocaleTimeString("en-US", {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
+          {IslamicDateFormatter.getTime(rowData.issueDate) || "-"}
         </span>
       </div>
     );
@@ -221,22 +214,14 @@ export const CertificationList = () => {
     if (!rowData.expiryDate) {
       return <span className="text-gray-400">{t("common.notSpecified")}</span>;
     }
-    const date = new Date(rowData.expiryDate);
 
     return (
       <div className="flex flex-col">
         <span className="text-sm text-gray-700">
-          {date.toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-          })}
+          {IslamicDateFormatter.formatQamari(rowData.expiryDate)}
         </span>
         <span className="text-xs text-gray-400">
-          {date.toLocaleTimeString("en-US", {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
+          {IslamicDateFormatter.getTime(rowData.expiryDate) || "-"}
         </span>
       </div>
     );

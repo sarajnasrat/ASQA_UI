@@ -14,6 +14,7 @@ import ContactUsService from "../../../services/contactus.service";
 import ContactUsFormDialog from "./ContactUsFormDialog";
 import ContactUsDetails from "./ContactUsDetails";
 import { useAuth } from "../../../context/AuthContext";
+import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 
 export const ContactUsList: React.FC = () => {
   const { t } = useTranslation();
@@ -127,7 +128,9 @@ export const ContactUsList: React.FC = () => {
       field: "createdAt",
       header: t("contactUs.columns.createdAt"),
       body: (row: any) =>
-        row.createdAt ? new Date(row.createdAt).toLocaleString() : "-",
+        row.createdAt
+          ? IslamicDateFormatter.formatQamari(row.createdAt, true)
+          : "-",
     },
     {
       header: t("common.action"),

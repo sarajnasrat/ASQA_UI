@@ -13,6 +13,7 @@ import type {
   StatusConfig,
 } from "./CertificationRequestView.types";
 import { useAuth } from "../../../../context/AuthContext";
+import { IslamicDateFormatter } from "../../../common/datepicker/IslamicDateFormatter";
 
 interface Props {
   request: CertificationRequest;
@@ -87,11 +88,7 @@ const CertificationRequestViewHeader: React.FC<Props> = ({
                 <Calendar className="h-4 w-4" />
                 <span>
                   {t("certificationRequest.labels.createdDate")}: { " "}
-                  {new Date(request.createdDate).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
+                  {IslamicDateFormatter.formatQamari(request.createdDate)}
                 </span>
               </div>
             </div>
@@ -109,7 +106,7 @@ const CertificationRequestViewHeader: React.FC<Props> = ({
                           <button
                             key={nextStatus}
                             onClick={() => onStatusAction(nextStatus)}
-                            className={`flex items-center justify-center px-6 py-2.5 border-2 font-medium rounded-lg transition-all duration-200 w-full sm:w-auto ${
+                            className={`flex items-center justify-center px-4 py-2.5 border-2 font-medium rounded-lg transition-all duration-200 w-full sm:w-auto ${
                               isReject
                                 ? "border-red-600 text-red-700 hover:bg-red-50 active:bg-red-100"
                                 : "border-green-600 text-green-700 hover:bg-green-50 active:bg-green-100"

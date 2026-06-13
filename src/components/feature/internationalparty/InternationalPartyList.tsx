@@ -4,19 +4,18 @@ import { TieredMenu } from "primereact/tieredmenu";
 import type { MenuItem } from "primereact/menuitem";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import { Toast } from "primereact/toast";
+import { Tag } from "primereact/tag";
 import { useTranslation } from "react-i18next";
 import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
 import { DynamicTable } from "../../common/DynamicTable";
 import { useAppToast } from "../../../hooks/useToast";
 import { handleApi } from "../../../hooks/handleApi";
 import { useToast } from "../../../hooks/ToastContext";
-import OrganizationInfoService from "../../../services/organizationinfo.service";
-import OrganizationInfoFormDialog from "./OrganizationInfoFormDialog";
-import OrganizationInfoDetails from "./OrganizationInfoDetails";
-import { useAuth } from "../../../context/AuthContext";
-import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
+import InternationalPartyService from "../../../services/internationalparty.service";
+import InternationalPartyFormDialog from "./InternationalPartyFormDialog";
+import InternationalPartyDetails from "./InternationalPartyDetails";
 
-export const OrganizationInfoList: React.FC = () => {
+export const InternationalPartyList: React.FC = () => {
   const { t } = useTranslation();
   const { toast, showToast } = useAppToast();
   const { showError } = useToast();
@@ -30,12 +29,12 @@ export const OrganizationInfoList: React.FC = () => {
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [showDetails, setShowDetails] = useState(false);
   const [selectedViewId, setSelectedViewId] = useState<number | null>(null);
-  const { hasPermission, withPermission } = useAuth();
+
   const loadData = async () => {
     setLoading(true);
     const response = await handleApi(
       () =>
-        OrganizationInfoService.getPaginatedOrganizationInfo({
+        InternationalPartyService.getPaginatedInternationalParties({
           page: first / rows,
           size: rows,
           sort: "id,desc",
@@ -58,17 +57,16 @@ export const OrganizationInfoList: React.FC = () => {
 
   const handleDelete = async (id: number) => {
     const response = await handleApi(
-      () => OrganizationInfoService.deleteOrganizationInfo(id),
+      () => InternationalPartyService.deleteInternationalParty(id),
       () =>
         showToast(
           "success",
           t("common.success"),
-          t("organizationInfo.deleteSuccess"),
+          t("internationalParty.deleteSuccess"),
         ),
       showError,
       t,
     );
-
     if (response) {
       loadData();
     }
@@ -76,10 +74,7 @@ export const OrganizationInfoList: React.FC = () => {
 
   const confirmDelete = (row: any) => {
     confirmDialog({
-      message:
-        t("organizationInfo.deleteConfirm", {
-          organizationName: row.organizationName || "-",
-        }),
+      message: t("internationalParty.deleteConfirm", { name: row.name || "-" }),
       header: t("common.delete"),
       icon: "pi pi-exclamation-triangle",
       acceptLabel: t("common.delete"),
@@ -91,27 +86,27 @@ export const OrganizationInfoList: React.FC = () => {
   const actionTemplate = (rowData: any) => {
     const menu = useRef<any>(null);
     const items: MenuItem[] = [
-      ...withPermission("VIEW_ORGANIZATIONINFO", {
+      {
         label: t("common.view"),
         icon: "pi pi-eye",
         command: () => {
           setSelectedViewId(rowData.id);
           setShowDetails(true);
         },
-      }),
-      ...withPermission("UPDATE_ORGANIZATIONINFO", {
+      },
+      {
         label: t("common.edit"),
         icon: "pi pi-pencil",
         command: () => {
           setSelectedId(rowData.id);
           setShowForm(true);
         },
-      }),
-      ...withPermission("DELETE_ORGANIZATIONINFO", {
+      },
+      {
         label: t("common.delete"),
         icon: "pi pi-trash",
         command: () => confirmDelete(rowData),
-      }),
+      },
     ];
 
     return (
@@ -127,31 +122,32 @@ export const OrganizationInfoList: React.FC = () => {
   };
 
   const columns = [
-    { field: "id", header: t("organizationInfo.columns.id") },
+    { field: "id", header: t("common.id") },
+    { field: "name", header: t("internationalParty.fields.name") },
     {
-      field: "organizationName",
-      header: t("organizationInfo.columns.organizationName"),
+      field: "shortName",
+      header: t("internationalParty.fields.shortName"),
+      body: (row: any) => row.shortName || t("common.notSpecified"),
+    },
+    { field: "location", header: t("internationalParty.fields.location") },
+    {
+      field: "organizationType",
+      header: t("internationalParty.fields.organizationType"),
+      body: (row: any) => row.organizationType || t("common.notSpecified"),
     },
     {
-      field: "address",
-      header: t("organizationInfo.columns.address"),
-      body: (row: any) => row.address || "-",
+      field: "email",
+      header: t("internationalParty.fields.email"),
+      body: (row: any) => row.email || t("common.notSpecified"),
     },
     {
-      field: "phoneNumber",
-      header: t("organizationInfo.columns.phoneNumber"),
-    },
-    {
-      field: "emailAddress",
-      header: t("organizationInfo.columns.emailAddress"),
-    },
-    {
-      field: "createdAt",
-      header: t("organizationInfo.columns.createdAt"),
-      body: (row: any) =>
-        row.createdAt
-          ? IslamicDateFormatter.formatQamari(row.createdAt, true)
-          : "-",
+      header: t("internationalParty.fields.status"),
+      body: (row: any) => (
+        <Tag
+          value={row.isActive ? t("internationalParty.active") : t("internationalParty.inactive")}
+          severity={row.isActive ? "success" : "danger"}
+        />
+      ),
     },
     {
       header: t("common.action"),
@@ -164,25 +160,23 @@ export const OrganizationInfoList: React.FC = () => {
     <div className="flex flex-col md:flex-row justify-between gap-3">
       <div>
         <h2 className="text-xl font-semibold text-gray-800">
-          {t("organizationInfo.title")}
+          {t("internationalParty.title")}
         </h2>
         <p className="text-sm text-gray-500 mt-0.5">
-          {t("organizationInfo.manageDescription")}
+          {t("internationalParty.manageDescription")}
         </p>
       </div>
       <div className="flex gap-2 flex-wrap">
-        {hasPermission("ADD_COMMENT") && (
-          <Button
-            icon="pi pi-plus"
-            label={t("organizationInfo.create")}
-            text
-            raised
+        <Button
+          icon="pi pi-plus"
+          label={t("internationalParty.create")}
+          text
+          raised
           onClick={() => {
-              setSelectedId(null);
-              setShowForm(true);
-            }}
-          />
-        )}
+            setSelectedId(null);
+            setShowForm(true);
+          }}
+        />
         <Button
           icon="pi pi-refresh"
           label={t("common.refresh")}
@@ -198,17 +192,10 @@ export const OrganizationInfoList: React.FC = () => {
     <>
       <Toast ref={toast} />
       <ConfirmDialog />
-      <div className="p-0">
-        <DynamicBreadcrumb
-          items={[
-            {
-              label: t("organizationInfo.title"),
-              url: "",
-            },
-          ]}
-        />
+      <div>
+        <DynamicBreadcrumb items={[{ label: t("internationalParty.title"), url: "" }]} />
         <DynamicTable
-          title={t("organizationInfo.title")}
+          title={t("internationalParty.title")}
           value={list}
           columns={columns}
           header={header}
@@ -223,9 +210,9 @@ export const OrganizationInfoList: React.FC = () => {
         />
 
         {showForm && (
-          <OrganizationInfoFormDialog
+          <InternationalPartyFormDialog
             visible={showForm}
-            organizationInfoId={selectedId}
+            internationalPartyId={selectedId}
             onClose={() => setShowForm(false)}
             onSuccess={() => {
               setShowForm(false);
@@ -234,10 +221,10 @@ export const OrganizationInfoList: React.FC = () => {
           />
         )}
 
-        {showDetails && selectedViewId !== null && (
-          <OrganizationInfoDetails
+        {showDetails && (
+          <InternationalPartyDetails
             visible={showDetails}
-            organizationInfoId={selectedViewId}
+            internationalPartyId={selectedViewId}
             onHide={() => setShowDetails(false)}
           />
         )}
@@ -246,4 +233,4 @@ export const OrganizationInfoList: React.FC = () => {
   );
 };
 
-export default OrganizationInfoList;
+export default InternationalPartyList;

@@ -1,5 +1,6 @@
 import React from "react";
 import { Download, Eye, Paperclip } from "lucide-react";
+import { IslamicDateFormatter } from "./datepicker/IslamicDateFormatter";
 
 interface Attachment {
   id: string | number;
@@ -229,7 +230,7 @@ export const AttachmentList: React.FC<AttachmentListProps> = ({
                   <>
                     <span className="text-gray-300">•</span>
                     <span className="text-gray-400 text-xs">
-                      {new Date(file.createdAt).toLocaleDateString()}
+                      {IslamicDateFormatter.formatQamari(file.createdAt)}
                     </span>
                   </>
                 )}

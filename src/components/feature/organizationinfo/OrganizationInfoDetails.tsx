@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { handleApi } from "../../../hooks/handleApi";
 import { useToast } from "../../../hooks/ToastContext";
 import OrganizationInfoService from "../../../services/organizationinfo.service";
+import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 
 const getDisplayValue = (...values: any[]) => {
   const candidate = values.find(
@@ -170,7 +171,7 @@ export const OrganizationInfoDetails: React.FC<Props> = ({
                         {t("organizationInfo.createdAt")}:
                       </span>
                       <span className="font-medium text-gray-900">
-                        {new Date(data.createdAt).toLocaleString()}
+                        {IslamicDateFormatter.formatQamari(data.createdAt, true)}
                       </span>
                     </div>
                   )}
@@ -180,7 +181,7 @@ export const OrganizationInfoDetails: React.FC<Props> = ({
                         {t("organizationInfo.updatedAt")}:
                       </span>
                       <span className="font-medium text-gray-900">
-                        {new Date(data.updatedAt).toLocaleString()}
+                        {IslamicDateFormatter.formatQamari(data.updatedAt, true)}
                       </span>
                     </div>
                   )}

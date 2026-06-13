@@ -5,6 +5,7 @@ import { useToast } from "../../../hooks/ToastContext";
 import { handleApi } from "../../../hooks/handleApi";
 import CommiteeService from "../../../services/comitee.service";
 import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
+import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 
 interface UserType {
   id: number;
@@ -81,15 +82,13 @@ interface CommiteeDetailsType {
 // Helper function to format date
 const formatDate = (dateString: string) => {
   if (!dateString) return "-";
-  const date = new Date(dateString);
-  return date.toLocaleDateString();
+  return IslamicDateFormatter.formatQamari(dateString);
 };
 
 // Helper function to format datetime
 const formatDateTime = (dateString: string) => {
   if (!dateString) return "-";
-  const date = new Date(dateString);
-  return date.toLocaleString();
+  return IslamicDateFormatter.formatQamari(dateString, true);
 };
 
 export const CommiteeDetails = () => {

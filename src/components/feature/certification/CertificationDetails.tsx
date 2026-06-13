@@ -39,6 +39,7 @@ import CertificationService from "../../../services/certification.service";
 import { handleApi } from "../../../hooks/handleApi";
 import { CertificationUpdate } from "./CertificationUpdate";
 import { useAppToast } from "../../../hooks/useToast";
+import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 
 type Attachment = {
   id?: number;
@@ -145,22 +146,12 @@ export const CertificationDetails: React.FC = () => {
 
   const formatDate = (value?: string) => {
     if (!value) return "-";
-    return new Date(value).toLocaleString(undefined, {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    return IslamicDateFormatter.formatQamari(value, true);
   };
 
   const formatShortDate = (value?: string) => {
     if (!value) return "-";
-    return new Date(value).toLocaleDateString(undefined, {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+    return IslamicDateFormatter.formatQamari(value);
   };
 
   const labelize = (value?: string) =>

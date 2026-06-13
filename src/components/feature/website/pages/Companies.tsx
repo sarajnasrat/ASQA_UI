@@ -1,8 +1,9 @@
 // pages/Companies.tsx
-import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, MapPin, Building2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useAppToast } from '../../../../hooks/useToast';
 import CompanyService from '../../../../services/company.service';
+import { useTranslation } from 'react-i18next';
 
 // Define the Company type based on your interface
 interface Company {
@@ -37,6 +38,7 @@ interface Company {
 const API_BASE_URL = 'http://localhost:8080';
 
 const Companies = () => {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
   const [companies, setCompanies] = useState<Company[]>([]);
   const [filteredCompanies, setFilteredCompanies] = useState<Company[]>([]);
@@ -77,7 +79,7 @@ const Companies = () => {
       setCompanies(companyData);
       setFilteredCompanies(companyData);
     } catch (error) {
-      showToast('error', 'Error', 'Failed to load companies');
+      showToast('error', t('common.error'), t('company.loadFailed'));
     } finally {
       setLoading(false);
     }
@@ -140,23 +142,23 @@ const Companies = () => {
             {/* Badge */}
             <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md rounded-full px-4 py-2 mb-6 border border-white/20">
               <Building2 className="h-4 w-4 text-blue-200" />
-              <span className="text-sm font-medium">ASQA Certified Companies</span>
+              <span className="text-sm font-medium">{t('website.companies.badge')}</span>
             </div>
 
             {/* Main heading with gradient text */}
             <h1 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">
               <span className="bg-linear-to-r from-blue-200 via-white to-purple-200 bg-clip-text text-transparent">
-                Our Certified      Companies
+                {t('website.companies.title')}
               </span>
               <br />
               <span className="bg-linear-to-r from-yellow-300 via-orange-300 to-pink-300 bg-clip-text text-transparent">
-           
+                {t('website.companies.titleAccent')}
               </span>
             </h1>
 
             {/* Description */}
             <p className="text-xl text-blue-100 mb-10 leading-relaxed max-w-2xl mx-auto">
-              Discover the trusted businesses that have successfully completed their ASQA certification and joined our community of excellence.
+              {t('website.companies.description')}
             </p>
 
             {/* Search bar with enhanced design */}
@@ -166,13 +168,13 @@ const Companies = () => {
                 <Search className="absolute left-5 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
                 <input
                   type="text"
-                  placeholder="Search companies by name, location, or industry..."
+                  placeholder={t('website.companies.searchPlaceholder')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-14 pr-4 py-5 text-gray-700 bg-white rounded-2xl shadow-2xl focus:ring-4 focus:ring-blue-300 focus:outline-none text-lg"
                 />
-                <button className="absolute right-2 top-1/2  transform -translate-y-1/2 px-6 py-2.5 bg-linear-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg">
-                  Search
+                <button className="absolute right-2 top-1/2 transform -translate-y-1/2 px-6 py-2.5 bg-linear-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg">
+                  {t('common.search')}
                 </button>
               </div>
             </div>
@@ -196,21 +198,24 @@ const Companies = () => {
               <div className="animate-spin rounded-full h-20 w-20 border-4 border-blue-200 border-t-blue-600"></div>
               <Building2 className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-8 w-8 text-blue-600 animate-pulse" />
             </div>
-            <p className="mt-6 text-gray-600 text-lg">Loading amazing companies...</p>
+            <p className="mt-6 text-gray-600 text-lg">{t('website.companies.loading')}</p>
           </div>
         ) : (
           <>
             {/* Results count */}
             <div className="mb-8 flex justify-between items-center">
               <p className="text-gray-600 text-lg">
-                Showing <span className="font-semibold text-blue-600">{currentCompanies.length}</span> of <span className="font-semibold text-blue-600">{filteredCompanies.length}</span> companies
+                {t('website.companies.showing', { 
+                  shown: currentCompanies.length, 
+                  total: filteredCompanies.length 
+                })}
               </p>
               {searchTerm && (
                 <button
                   onClick={() => setSearchTerm('')}
                   className="text-sm text-blue-600 hover:text-blue-800 font-medium"
                 >
-                  Clear search
+                  {t('website.companies.clearSearch')}
                 </button>
               )}
             </div>
@@ -247,7 +252,7 @@ const Companies = () => {
                                     const parent = target.parentElement;
                                     if (parent) {
                                       parent.classList.add('flex', 'items-center', 'justify-center');
-                                      parent.innerHTML = `<span class="text-lg font-semibold text-gray-700">${getInitials(company.companyNameEN)}</span>`;
+                                      parent.innerHTML = `<span className="text-lg font-semibold text-gray-700">${getInitials(company.companyNameEN)}</span>`;
                                     }
                                   }}
                                 />
@@ -257,14 +262,6 @@ const Companies = () => {
                                 </span>
                               )}
                             </div>
-
-                            {/* Status indicator - Simplified */}
-                            {/* <div className={`absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full border-2 border-white ${company.active ? 'bg-green-500' : 'bg-gray-300'
-                              }`}>
-                              {company.active && (
-                                <span className="absolute inset-0 rounded-full bg-green-500 animate-ping opacity-30"></span>
-                              )}
-                            </div> */}
                           </div>
 
                           {/* Company Name and Type */}
@@ -273,7 +270,7 @@ const Companies = () => {
                               {company.companyNameEN}
                             </h3>
                             <p className="text-xs text-gray-500 mt-0.5">
-                              {company.companyType?.replace(/_/g, ' ') || 'Company'}
+                              {company.companyType ? t(`company.typeOptions.${company.companyType}`, company.companyType.replace(/_/g, ' ')) : t('website.companies.companyFallback')}
                             </p>
                           </div>
                         </div>
@@ -283,12 +280,10 @@ const Companies = () => {
                           <div className="flex items-start space-x-2 text-sm text-gray-600">
                             <MapPin className="h-4 w-4 text-gray-400 shrink-0 mt-0.5" />
                             <p className="text-sm line-clamp-2">
-                              {company.mainBranchAddress || company.address || 'Address not specified'}
+                              {company.mainBranchAddress || company.address || t('website.companies.addressNotSpecified')}
                             </p>
                           </div>
                         </div>
-
-
                       </div>
                     </div>
                   );
@@ -300,8 +295,8 @@ const Companies = () => {
                 <div className="inline-block p-8 bg-white rounded-full shadow-xl mb-6">
                   <Building2 className="h-16 w-16 text-gray-400" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-700 mb-2">No companies found</h3>
-                <p className="text-gray-500 text-lg">Try adjusting your search criteria</p>
+                <h3 className="text-2xl font-bold text-gray-700 mb-2">{t('website.companies.emptyTitle')}</h3>
+                <p className="text-gray-500 text-lg">{t('website.companies.emptyDescription')}</p>
               </div>
             )}
 
@@ -363,9 +358,6 @@ const Companies = () => {
           </>
         )}
       </div>
-
-      {/* Footer decoration */}
-      {/* <div className="relative h-2 bg-linear-to-r from-blue-600 via-indigo-600 to-purple-600"></div> */}
     </div>
   );
 };

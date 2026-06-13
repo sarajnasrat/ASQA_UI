@@ -14,6 +14,7 @@ import { useToast } from "../../../hooks/ToastContext";
 import CommentService from "../../../services/comment.service";
 import CommentFormDialog from "./CommentFormDialog";
 import CommentDetails from "./CommentDetails";
+import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 
 export const CommentList: React.FC = () => {
   const { t } = useTranslation();
@@ -141,7 +142,10 @@ export const CommentList: React.FC = () => {
     {
       field: "createdAt",
       header: t("comment.columns.createdAt"),
-      body: (row: any) => (row.createdAt ? new Date(row.createdAt).toLocaleString() : "-"),
+      body: (row: any) =>
+        row.createdAt
+          ? IslamicDateFormatter.formatQamari(row.createdAt, true)
+          : "-",
     },
     {
       header: t("common.action"),

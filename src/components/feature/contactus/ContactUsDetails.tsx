@@ -7,6 +7,7 @@ import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
 import { handleApi } from "../../../hooks/handleApi";
 import { useToast } from "../../../hooks/ToastContext";
 import ContactUsService from "../../../services/contactus.service";
+import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 
 interface Props {
   visible?: boolean;
@@ -148,14 +149,16 @@ export const ContactUsDetails: React.FC<Props> = ({
                   <div className="flex items-center gap-2">
                     <span className="text-gray-500">{t("contactUs.createdAt")}:</span>
                     <span className="font-medium text-gray-900">
-                      {data.createdAt ? new Date(data.createdAt).toLocaleString() : "-"}
+                      {data.createdAt
+                        ? IslamicDateFormatter.formatQamari(data.createdAt, true)
+                        : "-"}
                     </span>
                   </div>
                   {data.updatedAt && (
                     <div className="flex items-center gap-2">
                       <span className="text-gray-500">{t("contactUs.updatedAt")}:</span>
                       <span className="font-medium text-gray-900">
-                        {new Date(data.updatedAt).toLocaleString()}
+                        {IslamicDateFormatter.formatQamari(data.updatedAt, true)}
                       </span>
                     </div>
                   )}

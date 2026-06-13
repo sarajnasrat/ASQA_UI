@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { handleApi } from "../../../hooks/handleApi";
 import { useToast } from "../../../hooks/ToastContext";
 import AboutUsService from "../../../services/aboutus.service";
+import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 
 interface Props {
   visible: boolean;
@@ -141,7 +142,7 @@ export const AboutUsDetails: React.FC<Props> = ({ visible, aboutUsId, onHide }) 
                 <div className="flex items-center gap-2">
                   <span className="text-gray-500">{t("aboutUs.createdAt")}:</span>
                   <span className="font-medium text-gray-900">
-                    {new Date(data.createdAt).toLocaleString()}
+                    {IslamicDateFormatter.formatQamari(data.createdAt, true)}
                   </span>
                 </div>
               )}
@@ -149,7 +150,7 @@ export const AboutUsDetails: React.FC<Props> = ({ visible, aboutUsId, onHide }) 
                 <div className="flex items-center gap-2">
                   <span className="text-gray-500">{t("aboutUs.updatedAt")}:</span>
                   <span className="font-medium text-gray-900">
-                    {new Date(data.updatedAt).toLocaleString()}
+                    {IslamicDateFormatter.formatQamari(data.updatedAt, true)}
                   </span>
                 </div>
               )}

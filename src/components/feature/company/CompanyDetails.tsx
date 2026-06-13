@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Toast } from "primereact/toast";
+import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 import {
   ArrowLeft,
   Building2,
@@ -134,22 +135,12 @@ export const CompanyDetails: React.FC = () => {
 
   const formatDate = (value?: string) => {
     if (!value) return "-";
-    return new Date(value).toLocaleDateString(undefined, {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+    return IslamicDateFormatter.formatQamari(value);
   };
 
   const formatDateTime = (value?: string) => {
     if (!value) return "-";
-    return new Date(value).toLocaleString(undefined, {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    return IslamicDateFormatter.formatQamari(value, true);
   };
 
   const labelize = (value?: string) =>

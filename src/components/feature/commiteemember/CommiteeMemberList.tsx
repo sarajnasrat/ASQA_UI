@@ -17,6 +17,7 @@ import CommiteeMemberUpdate from "./CommiteeMemberUpdate";
 import CommiteeMemberService from "../../../services/commiteeMember.service";
 import ExcelExport from "../../common/ExcelExport";
 import { useAuth } from "../../../context/AuthContext";
+import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 
 export const CommiteeMemberList: React.FC = () => {
   const [memberList, setMemberList] = useState<any[]>([]);
@@ -215,7 +216,7 @@ export const CommiteeMemberList: React.FC = () => {
       header: t("commitee.member.joinedAt"),
       body: (row: any) =>
         row.joinedAt
-          ? new Date(row.joinedAt).toLocaleDateString()
+          ? IslamicDateFormatter.formatQamari(row.joinedAt)
           : t("common.notSpecified"),
     },
     {

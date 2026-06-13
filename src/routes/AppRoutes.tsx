@@ -13,6 +13,8 @@ import CertificationTypeSelection from "../components/feature/website/pages/Cert
 import { CertificationDetails } from "../components/feature/certification-request/CertificationDetails";
 import ForgotPassword from "../components/feature/forgotpassword/ForgotPassword";
 import { MainLayout } from "../components/Layout/MainLayout";
+import InternationalParties from "../components/feature/website/pages/InternationalParties";
+import OrganizationServices from "../components/feature/website/pages/OrganizationServices";
 
 export const AppRoutes = () => {
   return (
@@ -23,6 +25,14 @@ export const AppRoutes = () => {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/services" element={<Services />} />
+          <Route
+            path="/international-parties"
+            element={<InternationalParties />}
+          />
+          <Route
+            path="/organization-services"
+            element={<OrganizationServices />}
+          />
           <Route path="/companies" element={<Companies />} />
           <Route path="/registration" element={<Registration />} />
           <Route

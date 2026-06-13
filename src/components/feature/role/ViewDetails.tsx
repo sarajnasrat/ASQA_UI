@@ -11,6 +11,7 @@ import { Tooltip } from "primereact/tooltip";
 import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
 import RoleService from "../../../services/role.service";
 import { useAppToast } from "../../../hooks/useToast";
+import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 
 interface Permission {
   id: string;
@@ -297,14 +298,7 @@ export const ViewDetails = () => {
                           {String(t("role.fields.created"))}
                         </span>
                         <span className="text-sm text-gray-700">
-                          {new Date(role.createdAt).toLocaleDateString(
-                            "en-US",
-                            {
-                              year: "numeric",
-                              month: "short",
-                              day: "numeric",
-                            },
-                          )}
+                          {IslamicDateFormatter.formatQamari(role.createdAt)}
                         </span>
                       </div>
                     )}
@@ -315,14 +309,7 @@ export const ViewDetails = () => {
                           {String(t("role.fields.lastUpdated"))}
                         </span>
                         <span className="text-sm text-gray-700">
-                          {new Date(role.updatedAt).toLocaleDateString(
-                            "en-US",
-                            {
-                              year: "numeric",
-                              month: "short",
-                              day: "numeric",
-                            },
-                          )}
+                          {IslamicDateFormatter.formatQamari(role.updatedAt)}
                         </span>
                       </div>
                     )}

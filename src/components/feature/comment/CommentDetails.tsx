@@ -6,6 +6,7 @@ import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
 import { handleApi } from "../../../hooks/handleApi";
 import { useToast } from "../../../hooks/ToastContext";
 import CommentService from "../../../services/comment.service";
+import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 
 interface CommentDetailsProps {
   commentId?: number | null;
@@ -121,7 +122,9 @@ const CommentDetails: React.FC<CommentDetailsProps> = ({
                     {t("comment.createdAt")}
                   </p>
                   <p className="text-base font-semibold text-gray-900">
-                    {data.createdAt ? new Date(data.createdAt).toLocaleString() : "-"}
+                    {data.createdAt
+                      ? IslamicDateFormatter.formatQamari(data.createdAt, true)
+                      : "-"}
                   </p>
                 </div>
                 <div className="bg-gray-50 rounded-lg p-4 border border-gray-100">
@@ -129,7 +132,9 @@ const CommentDetails: React.FC<CommentDetailsProps> = ({
                     {t("comment.updatedAt")}
                   </p>
                   <p className="text-base font-semibold text-gray-900">
-                    {data.updatedAt ? new Date(data.updatedAt).toLocaleString() : "-"}
+                    {data.updatedAt
+                      ? IslamicDateFormatter.formatQamari(data.updatedAt, true)
+                      : "-"}
                   </p>
                 </div>
               </div>

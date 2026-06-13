@@ -20,6 +20,7 @@ import i18n from "../../../i18n/i18n";
 import { Download, Eye, File } from "lucide-react";
 import ExcelExport from "../../common/ExcelExport";
 import { useAuth } from "../../../context/AuthContext";
+import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 
 export const CertificationRequestList = () => {
   const { t } = useTranslation();
@@ -693,7 +694,7 @@ export const CertificationRequestList = () => {
             </div>
             {start && end && (
               <div className="text-xs text-gray-400">
-                {start.toLocaleDateString()} → {end.toLocaleDateString()}
+                {IslamicDateFormatter.formatQamariRange(start, end, " → ")}
               </div>
             )}
             {isExpired && row.batch && (
@@ -708,7 +709,8 @@ export const CertificationRequestList = () => {
     {
       field: "createdDate",
       header: t("certificationRequest.labels.createdDate"),
-      body: (row: any) => new Date(row.createdDate).toLocaleString(),
+      body: (row: any) =>
+        IslamicDateFormatter.formatQamari(row.createdDate, true),
     },
     {
       header: t("common.action"),

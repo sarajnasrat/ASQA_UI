@@ -24,6 +24,7 @@ import i18n from "../../../i18n/i18n";
 import { Download, Eye, File } from "lucide-react";
 import { CertificationRequestUpdate } from "../certification-request/CertificationRequestUpdate";
 import ExcelExport from "../../common/ExcelExport";
+import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 
 const ActionMenu = ({ items }: { items: MenuItem[] }) => {
   const menu = useRef<any>(null);
@@ -40,6 +41,9 @@ const ActionMenu = ({ items }: { items: MenuItem[] }) => {
     </div>
   );
 };
+
+const formatQamariDate = (value?: string | Date | null, showTime = false) =>
+  value ? IslamicDateFormatter.formatQamari(value, showTime) : "-";
 
 export const CertificationRequestPayment = () => {
   const { t } = useTranslation();
@@ -477,11 +481,11 @@ const billContent = `
       </div>
       <div class="info-section">
         <h3>Invoice Date:</h3>
-        <p>${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+        <p>${IslamicDateFormatter.formatQamari(new Date())}</p>
       </div>
       <div class="info-section">
         <h3>Due Date:</h3>
-        <p>${new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+        <p>${IslamicDateFormatter.formatQamari(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000))}</p>
       </div>
     </div>
 
@@ -889,7 +893,7 @@ const billContent = `
 
             {start && end && (
               <div className="text-xs text-gray-400">
-                {start.toLocaleDateString()} → {end.toLocaleDateString()}
+                {IslamicDateFormatter.formatQamariRange(start, end, " → ")}
               </div>
             )}
 
@@ -905,7 +909,7 @@ const billContent = `
     {
       field: "createdDate",
       header: t("certificationRequest.labels.createdDate"),
-      body: (row: any) => new Date(row.createdDate).toLocaleString(),
+      body: (row: any) => formatQamariDate(row.createdDate, true),
     },
     {
       header: t("common.action"),
@@ -1160,7 +1164,7 @@ const billContent = `
 
                   <div>
                     <span className="block text-xs text-gray-500">{t("certificationRequest.payment.paymentDate")}</span>
-                    <span className="font-medium text-gray-900">{selectedRequest.paymentDate ? new Date(selectedRequest.paymentDate).toLocaleDateString() : "-"}</span>
+                    <span className="font-medium text-gray-900">{formatQamariDate(selectedRequest.paymentDate)}</span>
                   </div>
 
                   <div>

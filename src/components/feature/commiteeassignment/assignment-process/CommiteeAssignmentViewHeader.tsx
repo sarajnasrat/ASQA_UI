@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import type { Assignment, StatusConfig } from "./CommiteeAssignmentView.types";
 import { useAuth } from "../../../../context/AuthContext";
+import { IslamicDateFormatter } from "../../../common/datepicker/IslamicDateFormatter";
 
 interface Props {
   assignment: Assignment;
@@ -94,14 +95,14 @@ const CommiteeAssignmentViewHeader: React.FC<Props> = ({
                 <span>
                   {t("commitee.assignment.assignmentAt")}:{" "}
                   {assignment.assignedAt
-                    ? new Date(assignment.assignedAt).toLocaleDateString()
+                    ? IslamicDateFormatter.formatQamari(assignment.assignedAt)
                     : "-"}
                 </span>
               </div>
             </div>
           </div>
           {hasPermission("UPDATE_CERTIFICATION") && (
-            <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+            <div className="flex flex-col sm:flex-row gap-3  lg:w-auto">
               {getNextStatuses().map((nextStatus) => {
                 const isReject = nextStatus === "REJECTED";
 
