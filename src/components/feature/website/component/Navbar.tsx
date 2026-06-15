@@ -28,7 +28,7 @@ const Navbar = () => {
 
   const navLinks = [
     { name: t("nav.home"), path: "/" },
-    { name: t("nav.services"), path: "/services" },
+    // { name: t("nav.services"), path: "/services" },
     { name: t("nav.internationalParties"), path: "/international-parties" },
     { name: t("nav.organizationServices"), path: "/organization-services" },
     { name: t("nav.companies"), path: "/companies" },
@@ -41,9 +41,9 @@ const Navbar = () => {
   };
 
   const languageOptions = [
-    { label: "English", value: "en", icon: "🇺🇸" },
-    { label: "پښتو", value: "ps", icon: "🇦🇫" },
-    { label: "دری", value: "dr", icon: "🇦🇫" },
+    { label: "English", value: "en", icon: "" },
+    { label: "پښتو", value: "ps", icon: "" },
+    { label: "دری", value: "dr", icon: "" },
   ];
 
   const handleLanguageChange = (e: any) => {
@@ -52,10 +52,10 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed w-full z-50 transition-all duration-500 ${
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
         isScrolled
-          ? "bg-white/98 shadow-xl backdrop-blur-md py-2 border-b border-gray-100"
-          : "bg-linear-to-r from-slate-50 via-white to-slate-50/80 shadow-sm py-4"
+          ? "bg-white/95 backdrop-blur-md shadow-md py-4"
+          : "bg-linear-to-r from-slate-50 via-white to-slate-50/80 py-4"
       }`}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -63,16 +63,16 @@ const Navbar = () => {
           {/* Logo Section - Enhanced with gradient and modern styling */}
           <Link
             to="/"
-            className="group flex items-center gap-3 px-2 py-1.5 rounded-xl transition-all duration-300 hover:bg-linear-to-r hover:from-blue-50/50 hover:to-indigo-50/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+            className="group flex items-center gap-3 px-2 py-1.5 rounded-xl hover:bg-linear-to-r hover:from-blue-50/50 hover:to-indigo-50/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
             aria-label="ASQA - Return to homepage"
           >
             {/* Clean, larger logo container */}
             <div className="relative flex items-center justify-center">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl overflow-hidden bg-white/80 backdrop-blur-sm shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200/50 hover:border-blue-200/50">
+              <div className="w-16 h-12 overflow-hidden  hover:border-blue-200/50">
                 <img
                   src="/asqanew.png"
                   alt="ASQA Logo"
-                  className="w-full h-full object-contain p-1"
+                  className="w-full h-full object-contain"
                 />
               </div>
             </div>
@@ -80,10 +80,10 @@ const Navbar = () => {
             {/* Typography with refined spacing */}
             <div className="flex flex-col sm:flex-row sm:items-baseline gap-0 sm:gap-2">
               <span className="text-xl sm:text-2xl font-bold bg-linear-to-r from-gray-800 to-gray-900 bg-clip-text text-transparent tracking-tight">
-                {t("common.asqa")}
+                {/* {t("common.asqa")} */}
               </span>
-              <span className="text-xs font-medium text-gray-500 tracking-wide hidden sm:block">
-                ( {t("common.asqaDescription")})
+              <span className="text-1xl font-medium text-gray-500 tracking-wide hidden sm:block">
+                {t("common.asqaDescription")}
               </span>
             </div>
           </Link>
@@ -104,12 +104,12 @@ const Navbar = () => {
                 >
                   {link.name}
                   {location.pathname === link.path && (
-                    <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-6 h-0.5 bg-blue-600 rounded-full" />
+                    <span className="absolute bottom-0 left-2 right-2 h-0.5 bg-blue-600 rounded-full" />
                   )}
                 </Link>
               ))}
             </div>
-
+            <div className="div"></div>
             {/* Language Dropdown - PrimeReact with custom styling */}
             <div className="mx-1">
               <Dropdown
@@ -118,29 +118,16 @@ const Navbar = () => {
                 onChange={handleLanguageChange}
                 optionLabel="label"
                 optionValue="value"
+                className="w-32"
+                panelClassName="w-32"
                 itemTemplate={(option) => (
-                  <div className="flex items-center gap-2 px-3 py-2 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer">
+                  <div className="flex items-center gap-2 px-3 py-2 cursor-pointer">
                     <span className="text-lg">{option.icon}</span>
                     <span className="text-sm font-medium text-gray-700">
                       {option.label}
                     </span>
                   </div>
                 )}
-                valueTemplate={(option) =>
-                  option ? (
-                    <div className="flex items-center gap-2 px-2 py-1.5">
-                      <span className="text-base">{option.icon}</span>
-                      <span className="text-sm font-medium text-gray-700 hidden lg:inline">
-                        {option.label}
-                      </span>
-                      <ChevronDown className="w-3.5 h-3.5 text-gray-500" />
-                    </div>
-                  ) : (
-                    <span className="text-sm text-gray-500">Language</span>
-                  )
-                }
-                className="language-dropdown border-none"
-                panelClassName="min-w-[140px] rounded-xl shadow-lg border border-gray-100 mt-2"
                 appendTo="self"
               />
             </div>

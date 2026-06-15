@@ -1,5 +1,5 @@
 // pages/Contact.tsx
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Mail, Phone, MapPin, Clock, Send } from "lucide-react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { type LatLngExpression } from "leaflet";
@@ -7,7 +7,20 @@ import "leaflet/dist/leaflet.css";
 import { useToast } from "../../../../hooks/ToastContext";
 import { handleApi } from "../../../../hooks/handleApi";
 import CommentService from "../../../../services/comment.service";
+import OrganizationInfoService from "../../../../services/organizationinfo.service";
 import { useTranslation } from "react-i18next";
+
+type OrganizationInfoItem = {
+  id: number;
+  organizationName: string;
+  address: string;
+  phoneNumber: string;
+  satelliteHorizontal: string;
+  satelliteVertical: string;
+  emailAddress: string;
+  createdAt: string;
+  updatedAt: string | null;
+};
 
 const Contact = () => {
   const { t } = useTranslation();
@@ -26,9 +39,38 @@ const Contact = () => {
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [organizationInfo, setOrganizationInfo] =
+    useState<OrganizationInfoItem | null>(null);
   const { showSuccess, showError } = useToast();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  useEffect(() => {
+    const loadOrganizationInfo = async () => {
+      const response = await handleApi(
+        () =>
+          OrganizationInfoService.getPaginatedOrganizationInfo({
+            page: 0,
+            size: 10,
+            sort: "id,desc",
+          }),
+        () => {},
+        showError,
+      );
+
+      if (response) {
+        const records = response.data?.data?.data || response.data?.data || [];
+
+        if (Array.isArray(records) && records.length > 0) {
+          setOrganizationInfo(records[0]);
+        }
+      }
+    };
+
+    loadOrganizationInfo();
+  }, [showError]);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -49,14 +91,17 @@ const Contact = () => {
       message: "",
     };
 
-    if (!formData.name) newErrors.name = t("website.contact.form.validation.nameRequired");
+    if (!formData.name)
+      newErrors.name = t("website.contact.form.validation.nameRequired");
     if (!formData.email) {
       newErrors.email = t("website.contact.form.validation.emailRequired");
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = t("website.contact.form.validation.emailInvalid");
     }
-    if (!formData.subject) newErrors.subject = t("website.contact.form.validation.subjectRequired");
-    if (!formData.message) newErrors.message = t("website.contact.form.validation.messageRequired");
+    if (!formData.subject)
+      newErrors.subject = t("website.contact.form.validation.subjectRequired");
+    if (!formData.message)
+      newErrors.message = t("website.contact.form.validation.messageRequired");
 
     setErrors(newErrors);
     return Object.values(newErrors).every((error) => !error);
@@ -79,7 +124,11 @@ const Contact = () => {
 
     const response = await handleApi(
       () => CommentService.createComment(payload),
-      () => showSuccess(t("common.success"), t("website.contact.form.successToast")),
+      () =>
+        showSuccess(
+          t("common.success"),
+          t("website.contact.form.successToast"),
+        ),
       showError,
     );
 
@@ -98,34 +147,52 @@ const Contact = () => {
     }
   };
 
+  const position = useMemo<LatLngExpression | null>(() => {
+    const horizontal = Number(organizationInfo?.satelliteHorizontal);
+    const vertical = Number(organizationInfo?.satelliteVertical);
+
+    if (Number.isFinite(horizontal) && Number.isFinite(vertical)) {
+      return [horizontal, vertical];
+    }
+
+    return null;
+  }, [
+    organizationInfo?.satelliteHorizontal,
+    organizationInfo?.satelliteVertical,
+  ]);
+
   const contactInfo = [
     {
       icon: <Phone className="h-6 w-6 text-blue-600" />,
       title: t("website.contact.cards.phone.title"),
-      details: ["+93 (555) 123-4567", "+93 (555) 987-6543"],
+      details: [organizationInfo?.phoneNumber || t("common.notSpecified")],
       action: t("website.contact.cards.phone.action"),
     },
     {
       icon: <Mail className="h-6 w-6 text-blue-600" />,
       title: t("website.contact.cards.email.title"),
-      details: ["info@asqa.com", "support@asqa.com"],
+      details: [organizationInfo?.emailAddress || t("common.notSpecified")],
       action: t("website.contact.cards.email.action"),
     },
     {
       icon: <MapPin className="h-6 w-6 text-blue-600" />,
       title: t("website.contact.cards.office.title"),
-      details: [t("website.contact.map.addressLine1"), t("website.contact.map.addressLine2")],
+      details: [
+        organizationInfo?.organizationName || t("common.notSpecified"),
+        organizationInfo?.address || t("common.notSpecified"),
+      ],
       action: t("website.contact.cards.office.action"),
     },
     {
       icon: <Clock className="h-6 w-6 text-blue-600" />,
       title: t("website.contact.cards.hours.title"),
-      details: [t("website.contact.cards.hours.line1"), t("website.contact.cards.hours.line2")],
+      details: [
+        t("website.contact.cards.hours.line1"),
+        t("website.contact.cards.hours.line2"),
+      ],
       action: t("website.contact.cards.hours.action"),
     },
   ];
-
-  const position: LatLngExpression = [34.5553, 69.2075];
 
   const faqItems = [
     {
@@ -252,7 +319,9 @@ const Contact = () => {
                     }`}
                   />
                   {errors.subject && (
-                    <p className="mt-1 text-sm text-red-500">{errors.subject}</p>
+                    <p className="mt-1 text-sm text-red-500">
+                      {errors.subject}
+                    </p>
                   )}
                 </div>
 
@@ -270,7 +339,9 @@ const Contact = () => {
                     }`}
                   />
                   {errors.message && (
-                    <p className="mt-1 text-sm text-red-500">{errors.message}</p>
+                    <p className="mt-1 text-sm text-red-500">
+                      {errors.message}
+                    </p>
                   )}
                 </div>
 
@@ -278,58 +349,82 @@ const Contact = () => {
                   type="submit"
                   disabled={isSubmitting}
                   className={`w-full bg-blue-600 text-white px-6 py-3 rounded-lg transition-colors flex items-center justify-center space-x-2 ${
-                    isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"
+                    isSubmitting
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:bg-blue-700"
                   }`}
                 >
                   <Send className="h-5 w-5" />
-                  <span>{isSubmitting ? t("website.contact.form.sending") : t("website.contact.form.submit")}</span>
+                  <span>
+                    {isSubmitting
+                      ? t("website.contact.form.sending")
+                      : t("website.contact.form.submit")}
+                  </span>
                 </button>
               </form>
             </div>
 
             <div className="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col">
               <div className="h-100 lg:h-125 w-full relative">
-                <MapContainer
-                  center={position}
-                  zoom={13}
-                  scrollWheelZoom={false}
-                  style={{ height: "100%", width: "100%" }}
-                  className="z-0"
-                  attributionControl={false}
-                >
-                  <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  />
-                  <Marker position={position}>
-                    <Popup>
-                      <div className="text-center">
-                        <strong>{t("website.contact.map.popupTitle")}</strong>
-                        <br />
-                        {t("website.contact.map.addressLine1")}
-                        <br />
-                        {t("website.contact.map.addressLine2")}
-                        <br />
-                        <span className="text-sm text-gray-600">
-                          {t("website.contact.map.country")}
-                        </span>
-                      </div>
-                    </Popup>
-                  </Marker>
-                </MapContainer>
+                {position ? (
+                  <MapContainer
+                    center={position}
+                    zoom={13}
+                    scrollWheelZoom={false}
+                    style={{ height: "100%", width: "100%" }}
+                    className="z-0"
+                    attributionControl={false}
+                  >
+                    <TileLayer
+                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    <Marker position={position}>
+                      <Popup>
+                        <div className="text-center">
+                          <strong>
+                            {organizationInfo?.organizationName ||
+                              t("website.contact.map.popupTitle")}
+                          </strong>
+                          <br />
+                          {organizationInfo?.address ||
+                            t("website.contact.map.addressLine1")}
+                          <br />
+                          <span className="text-sm text-gray-600">
+                            {organizationInfo?.emailAddress ||
+                              t("website.contact.map.country")}
+                          </span>
+                        </div>
+                      </Popup>
+                    </Marker>
+                  </MapContainer>
+                ) : (
+                  <div className="flex h-full items-center justify-center bg-gray-100 text-center text-gray-500 px-6">
+                    {t("common.notSpecified")}
+                  </div>
+                )}
               </div>
               <div className="p-6">
                 <h3 className="font-semibold text-gray-800 mb-2">
                   {t("website.contact.map.title")}
                 </h3>
                 <p className="text-gray-600 text-sm mb-4">
-                  {t("website.contact.map.description")}
+                  {organizationInfo?.address ||
+                    t("website.contact.map.description")}
                 </p>
                 <a
-                  href="https://maps.google.com/?q=34.5553,69.2075"
+                  href={
+                    Array.isArray(position)
+                      ? `https://maps.google.com/?q=${position[0]},${position[1]}`
+                      : "#"
+                  }
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 font-medium hover:text-blue-700 inline-flex items-center"
+                  className={`font-medium inline-flex items-center ${
+                    position
+                      ? "text-blue-600 hover:text-blue-700"
+                      : "text-gray-400 pointer-events-none"
+                  }`}
                 >
                   {t("website.contact.map.directions")}
                 </a>

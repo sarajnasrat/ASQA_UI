@@ -7,7 +7,6 @@ import {
   Award,
   Users,
   Shield,
- 
   Globe,
   Building2,
   ArrowRight,
@@ -155,7 +154,7 @@ const Home = () => {
           <div className="max-w-4xl mx-auto text-center">
             {/* Badge */}
             <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md rounded-full px-3 py-1.5 mb-6 border border-white/20">
-              <Sparkles className="h-3.5 w-3.5 text-yellow-300" />
+              {/* <Sparkles className="h-3.5 w-3.5 text-yellow-300" /> */}
               <span className="text-xs font-medium">{t("home.badge")}</span>
             </div>
 
@@ -179,7 +178,7 @@ const Home = () => {
               >
                 <span className="flex items-center">
                   {t("home.hero.cta.start")}
-                  <Rocket className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  {/* <Rocket className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" /> */}
                 </span>
               </button>
 
@@ -188,7 +187,7 @@ const Home = () => {
                 className="inline-flex items-center bg-white/10 backdrop-blur-md text-white px-6 py-3 rounded-xl font-semibold text-base hover:bg-white/20 transition-all duration-300 border border-white/20"
               >
                 {t("home.hero.cta.search")}
-                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                {/* <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" /> */}
               </button>
             </div>
           </div>
@@ -239,15 +238,22 @@ const Home = () => {
                   <div className={type.textColor}>{type.icon}</div>
                 </div>
 
-                <h3 className={`text-xl font-bold mb-3 group-hover:${type.textColor} transition-colors`}>
+                <h3
+                  className={`text-xl font-bold mb-3 group-hover:${type.textColor} transition-colors`}
+                >
                   {type.title}
                 </h3>
                 <p className="text-gray-600 mb-4">{type.description}</p>
 
                 <ul className="space-y-2 mb-6">
                   {type.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-center text-sm text-gray-600">
-                      <CheckCircle className={`h-4 w-4 ${type.textColor} mr-2`} />
+                    <li
+                      key={idx}
+                      className="flex items-center text-sm text-gray-600"
+                    >
+                      <CheckCircle
+                        className={`h-4 w-4 ${type.textColor} mr-2`}
+                      />
                       {feature}
                     </li>
                   ))}
@@ -399,7 +405,6 @@ const Home = () => {
               className="group inline-flex items-center bg-white text-blue-600 px-10 py-5 rounded-2xl font-semibold text-xl hover:bg-blue-50 transition-all duration-300 shadow-2xl hover:shadow-3xl transform hover:scale-105"
             >
               {t("home.cta.buttons.start")}
-              <Rocket className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </button>
 
             <button
@@ -407,7 +412,6 @@ const Home = () => {
               className="inline-flex items-center bg-white/10 backdrop-blur-md text-white px-10 py-5 rounded-2xl font-semibold text-xl hover:bg-white/20 transition-all duration-300 border border-white/30"
             >
               {t("home.cta.buttons.contact")}
-              <HeartHandshake className="ml-2 h-5 w-5" />
             </button>
           </div>
 
@@ -418,7 +422,10 @@ const Home = () => {
               t("home.cta.badges.international"),
               t("home.cta.badges.support"),
             ].map((badge, index) => (
-              <div key={index} className="flex items-center space-x-2 text-white/80">
+              <div
+                key={index}
+                className="flex items-center space-x-2 text-white/80"
+              >
                 <CheckCircle className="h-4 w-4 text-green-300" />
                 <span className="text-sm">{badge}</span>
               </div>

@@ -696,14 +696,14 @@ const billContent = `
         icon: "pi pi-eye",
         command: () => navigate(`/certification-request/view/${rowData.id}`),
       },
-      {
-        label: editButtonLabel(rowData.requestStatus),
-        icon: "pi pi-pencil",
-        command: () => {
-          setSelectedId(rowData.id);
-          setUpdateVisible(true);
-        },
-      },
+      // {
+      //   label: editButtonLabel(rowData.requestStatus),
+      //   icon: "pi pi-pencil",
+      //   command: () => {
+      //     setSelectedId(rowData.id);
+      //     setUpdateVisible(true);
+      //   },
+      // },
     ];
 
     if (rowData.requestStatus === "PAYMENT_PENDING") {

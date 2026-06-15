@@ -1,6 +1,16 @@
 import { useEffect, useState } from "react";
-import { Globe2, MapPin, Mail, Phone, ExternalLink, Building2 } from "lucide-react";
+import {
+  Globe2,
+  MapPin,
+  Mail,
+  Phone,
+  ExternalLink,
+  Building2,
+  Sparkles,
+  Rocket,
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { useAppToast } from "../../../../hooks/useToast";
 import InternationalPartyService from "../../../../services/internationalparty.service";
 
@@ -20,6 +30,7 @@ interface InternationalParty {
 
 const InternationalParties = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { showToast } = useAppToast();
   const [items, setItems] = useState<InternationalParty[]>([]);
   const [loading, setLoading] = useState(true);
@@ -28,14 +39,19 @@ const InternationalParties = () => {
     const loadData = async () => {
       setLoading(true);
       try {
-        const response = await InternationalPartyService.getPaginatedInternationalParties({
-          page: 0,
-          size: 100,
-          sort: "id,desc",
-        });
+        const response =
+          await InternationalPartyService.getPaginatedInternationalParties({
+            page: 0,
+            size: 100,
+            sort: "id,desc",
+          });
         setItems(response.data?.data || []);
       } catch {
-        showToast("error", t("common.error"), t("internationalParty.failedtofetch"));
+        showToast(
+          "error",
+          t("common.error"),
+          t("internationalParty.failedtofetch"),
+        );
       } finally {
         setLoading(false);
       }
@@ -58,31 +74,89 @@ const InternationalParties = () => {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-blue-50 pt-24 pb-20">
-      <section className="relative overflow-hidden bg-linear-to-r from-blue-700 via-indigo-700 to-sky-700 text-white py-16">
+    <div className="overflow-hidden pt-24 pb-20">
+      {/* Hero Section - Matching Home page style */}
+      <section className="relative min-h-125 flex items-center justify-center bg-linear-to-br from-gray-900 via-blue-900 to-indigo-900 text-white overflow-hidden">
+        {/* Animated background pattern */}
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 right-0 w-80 h-80 bg-cyan-300 rounded-full blur-3xl"></div>
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
+              backgroundSize: "40px 40px",
+            }}
+          ></div>
         </div>
-        <div className="relative container mx-auto px-4 text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 mb-6">
-            <Globe2 className="h-4 w-4 text-blue-100" />
-            <span className="text-sm font-medium">{t("website.internationalParties.badge")}</span>
+
+        {/* Floating particles */}
+        <div className="absolute inset-0 overflow-hidden">
+          {[...Array(12)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute rounded-full bg-white/5 animate-float"
+              style={{
+                width: Math.random() * 150 + 30 + "px",
+                height: Math.random() * 150 + 30 + "px",
+                left: Math.random() * 100 + "%",
+                top: Math.random() * 100 + "%",
+                animationDelay: Math.random() * 5 + "s",
+                animationDuration: Math.random() * 10 + 10 + "s",
+              }}
+            />
+          ))}
+        </div>
+
+        <div className="relative container mx-auto px-4 py-16 md:py-20">
+          <div className="max-w-4xl mx-auto text-center">
+            {/* Badge */}
+            <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md rounded-full px-3 py-1.5 mb-6 border border-white/20">
+              <Globe2 className="h-3.5 w-3.5 text-blue-200" />
+              <span className="text-xs font-medium">
+                {t("website.internationalParties.badge") || "Global Network"}
+              </span>
+            </div>
+
+            {/* Main heading */}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
+              <span className="bg-linear-to-r from-blue-200 via-white to-purple-200 bg-clip-text text-transparent">
+                {t("website.internationalParties.title") ||
+                  "International Certification Bodies"}
+              </span>
+            </h1>
+
+            {/* Description */}
+            <p className="text-lg md:text-xl lg:text-2xl text-slate-200/90 max-w-4xl mx-auto leading-9 md:leading-10 font-light tracking-wide">
+              {t("website.internationalParties.description") ||
+                "Connect with leading certification organizations worldwide and find the right partner for your international certification needs."}
+            </p>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            {t("website.internationalParties.title")}
-          </h1>
-          <p className="text-lg text-blue-100 max-w-3xl mx-auto">
-            {t("website.internationalParties.description")}
-          </p>
+        </div>
+
+        {/* Curved bottom */}
+        <div className="absolute bottom-0 left-0 right-0">
+          <svg
+            viewBox="0 0 1440 80"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-full h-auto"
+          >
+            <path
+              d="M0 80L48 72C96 64 192 48 288 40C384 32 480 32 576 40C672 48 768 64 864 72C960 80 1056 80 1152 72C1248 64 1344 48 1392 40L1440 32V80H1392C1344 80 1248 80 1152 80C1056 80 960 80 864 80C768 80 672 80 576 80C480 80 384 80 288 80C192 80 96 80 48 80H0Z"
+              fill="white"
+              fillOpacity="0.9"
+            />
+          </svg>
         </div>
       </section>
 
-      <section className="container mx-auto px-4 py-10">
+      {/* Parties List Section */}
+      <section className="container mx-auto px-4 py-16">
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24">
             <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600"></div>
-            <p className="mt-5 text-gray-600">{t("website.internationalParties.loading")}</p>
+            <p className="mt-5 text-gray-600">
+              {t("website.internationalParties.loading")}
+            </p>
           </div>
         ) : items.length === 0 ? (
           <div className="rounded-3xl border border-dashed border-gray-300 bg-white p-14 text-center shadow-sm">
@@ -90,7 +164,9 @@ const InternationalParties = () => {
             <h2 className="text-2xl font-bold text-gray-700 mb-2">
               {t("website.internationalParties.emptyTitle")}
             </h2>
-            <p className="text-gray-500">{t("website.internationalParties.emptyDescription")}</p>
+            <p className="text-gray-500">
+              {t("website.internationalParties.emptyDescription")}
+            </p>
           </div>
         ) : (
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">

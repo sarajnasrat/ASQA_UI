@@ -95,6 +95,9 @@ export const CommiteeAssignmentDetails: React.FC = () => {
       showError,
       t,
     );
+    if(response?.status==200) {
+      navigate("commitee-assignment-list");
+    }
     if (response) {
       loadAssignment();
     }
@@ -132,6 +135,8 @@ export const CommiteeAssignmentDetails: React.FC = () => {
           : t("commitee.assignment.confirmComplete"),
       header: t("common.confirmation"),
       icon: "pi pi-exclamation-triangle",
+      acceptLabel: t("commitee.assignment.yes"),
+      rejectLabel: t("commitee.assignment.no"),
       accept: () => handleAssignmentStatusChange(nextStatus),
     });
   };
@@ -325,7 +330,8 @@ export const CommiteeAssignmentDetails: React.FC = () => {
 
   const request = assignment.certificationRequest;
   const tracker = request?.trackers || [];
-  const contactPerson = request?.contactPerson || request?.company?.contactPerson;
+  const contactPerson =
+    request?.contactPerson || request?.company?.contactPerson;
   const totalDocuments =
     (request?.attachments?.length || 0) +
     (request?.company?.attachments?.length || 0);

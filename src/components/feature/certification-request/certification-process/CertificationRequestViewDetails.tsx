@@ -1,5 +1,5 @@
 import React from "react";
-import { Award, Clock, Tag, TrendingUp, ChevronUp, ChevronDown, CheckCircle } from "lucide-react";
+import {  Clock, Tag, TrendingUp, ChevronUp, ChevronDown, CheckCircle } from "lucide-react";
 import type { CertificationRequest, Tracker } from "./CertificationRequestView.types";
 
 type DetailsSection = "timeline" | "requestInfo" | "quickStats";
@@ -155,7 +155,7 @@ const CertificationRequestViewDetails: React.FC<Props> = ({
       </div>
 
       <div className="space-y-6">
-        <div className="bg-linear-to-br from-blue-600 to-indigo-700 rounded-2xl shadow-lg p-6 text-white">
+        {/* <div className="bg-linear-to-br from-blue-600 to-indigo-700 rounded-2xl shadow-lg p-6 text-white">
           <Award className="h-12 w-12 mb-4 opacity-80" />
           <h3 className="text-xl font-bold mb-2">{t("certificationRequest.progress")}</h3>
           <p className="text-blue-100 mb-4">{t("certificationRequest.reviewMessage")}</p>
@@ -168,7 +168,7 @@ const CertificationRequestViewDetails: React.FC<Props> = ({
               <div className="bg-white h-2 rounded-full" style={{ width: "45%" }} />
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <button

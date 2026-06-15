@@ -110,11 +110,11 @@ export const CertificationRequestPayment = () => {
           status,
           first / rows,
           rows,
-          "id,desc"
+          "id,desc",
         ),
       () => {},
       showError,
-      t
+      t,
     );
 
     if (res) {
@@ -143,9 +143,16 @@ export const CertificationRequestPayment = () => {
   };
 
   const formatFileSize = (bytes: number | null | undefined): string => {
-    if (bytes === null || bytes === undefined || bytes === 0) return t("certificationRequest.fileSize.zero");
+    if (bytes === null || bytes === undefined || bytes === 0)
+      return t("certificationRequest.fileSize.zero");
 
-    const sizes = [t("certificationRequest.fileSize.bytes"), t("certificationRequest.fileSize.kb"), t("certificationRequest.fileSize.mb"), t("certificationRequest.fileSize.gb"), t("certificationRequest.fileSize.tb")];
+    const sizes = [
+      t("certificationRequest.fileSize.bytes"),
+      t("certificationRequest.fileSize.kb"),
+      t("certificationRequest.fileSize.mb"),
+      t("certificationRequest.fileSize.gb"),
+      t("certificationRequest.fileSize.tb"),
+    ];
     const k = 1024;
     const i = Math.floor(Math.log(bytes) / Math.log(k));
 
@@ -194,7 +201,7 @@ export const CertificationRequestPayment = () => {
 
     const printWindow = window.open("", "_blank");
     if (!printWindow) return;
-const billContent = `
+    const billContent = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -550,7 +557,9 @@ const billContent = `
     printWindow.document.close();
     // mark printed locally so upload option appears
     try {
-      setPrintedRequests((prev) => (prev.includes(request.id) ? prev : [...prev, request.id]));
+      setPrintedRequests((prev) =>
+        prev.includes(request.id) ? prev : [...prev, request.id],
+      );
     } catch (e) {
       // ignore
     }
@@ -607,27 +616,28 @@ const billContent = `
     formData.append("paymentDate", toPaymentDateTime(paymentDate));
     formData.append(
       "paymentAmount",
-      paymentAmount || selectedRequest.paymentAmount || ""
+      paymentAmount || selectedRequest.paymentAmount || "",
     );
 
     const response = await handleApi(
       () =>
         CertificationRequestService.confirmPayment(
           selectedRequest.id,
-          formData
+          formData,
         ),
       () =>
         showSuccess(
           t("common.success"),
-          t("certificationRequest.payment.scannedBillUploaded")
+          t("certificationRequest.payment.scannedBillUploaded"),
         ),
       showError,
-      t
+      t,
     );
 
     if (response) {
       await handleApi(
-        () => CertificationRequestService.updateIsScanned(selectedRequest.id, true),
+        () =>
+          CertificationRequestService.updateIsScanned(selectedRequest.id, true),
         () => {},
         showError,
         t,
@@ -651,7 +661,7 @@ const billContent = `
       () => CertificationRequestService.getPaymentReceipt(requestId),
       () => {},
       showError,
-      t
+      t,
     );
 
     if (resp && resp.data) {
@@ -664,13 +674,9 @@ const billContent = `
   const handleDelete = async (id: number) => {
     const response = await handleApi(
       () => CertificationRequestService.delete(id),
-      () =>
-        showSuccess(
-          t("common.success"),
-          t("certificationRequest.deleted")
-        ),
+      () => showSuccess(t("common.success"), t("certificationRequest.deleted")),
       showError,
-      t
+      t,
     );
 
     if (response) {
@@ -696,55 +702,54 @@ const billContent = `
         icon: "pi pi-eye",
         command: () => navigate(`/certification-request/view/${rowData.id}`),
       },
-      {
-        label: editButtonLabel(rowData.requestStatus),
-        icon: "pi pi-pencil",
-        command: () => {
-          setSelectedId(rowData.id);
-          setUpdateVisible(true);
-        },
-      },
+      // {
+      //   label: editButtonLabel(rowData.requestStatus),
+      //   icon: "pi pi-pencil",
+      //   command: () => {
+      //     setSelectedId(rowData.id);
+      //     setUpdateVisible(true);
+      //   },
+      // },
     ];
 
-    if (rowData.requestStatus === "PAYMENT_PENDING") {
-      // Always allow printing. Show upload only after printed (or if backend flag indicates printed)
-      items.push({
-        label: t("certificationRequest.printBill") || "Print Bill",
-        icon: "pi pi-print",
-        command: () => printBill(rowData),
-      });
+    // if (rowData.requestStatus === "PAYMENT_PENDING") {
+    //   items.push({
+    //     label: t("certificationRequest.printBill") || "Print Bill",
+    //     icon: "pi pi-print",
+    //     command: () => printBill(rowData),
+    //   });
 
-      const hasPrintedFlag =
-        rowData.isPrint || rowData.isPrinted || printedRequests.includes(rowData.id);
+    //   const hasPrintedFlag =
+    //     rowData.isPrint || rowData.isPrinted || printedRequests.includes(rowData.id);
 
-      if (rowData.isScanned) {
-        items.push({
-          label: t("certificationRequest.paymentCompleted") || "Payment Completed",
-          icon: "pi pi-check-circle",
-          command: () => openPaymentDialog(rowData),
-        });
-      } else if (hasPrintedFlag) {
-        items.push({
-          label: t("certificationRequest.uploadScannedBill") || "Upload Scanned Bill",
-          icon: "pi pi-upload",
-          command: () => openPaymentDialog(rowData),
-        });
-      }
+    //   if (rowData.isScanned) {
+    //     items.push({
+    //       label: t("certificationRequest.paymentCompleted") || "Payment Completed",
+    //       icon: "pi pi-check-circle",
+    //       command: () => openPaymentDialog(rowData),
+    //     });
+    //   } else if (hasPrintedFlag) {
+    //     items.push({
+    //       label: t("certificationRequest.uploadScannedBill") || "Upload Scanned Bill",
+    //       icon: "pi pi-upload",
+    //       command: () => openPaymentDialog(rowData),
+    //     });
+    //   }
 
-      items.push({
-        label: t("common.delete"),
-        icon: "pi pi-trash",
-        command: () => confirmDelete(rowData),
-      });
-    }
+    //   items.push({
+    //     label: t("common.delete"),
+    //     icon: "pi pi-trash",
+    //     command: () => confirmDelete(rowData),
+    //   });
+    // }
 
-    if (rowData.requestStatus === "PAYMENT_COMPLETED") {
-      items.push({
-        label: t("certificationRequest.viewPaymentDetails") || "View Payment Details",
-        icon: "pi pi-eye",
-        command: () => openPaymentDialog(rowData),
-      });
-    }
+    // if (rowData.requestStatus === "PAYMENT_COMPLETED") {
+    //   items.push({
+    //     label: t("certificationRequest.viewPaymentDetails") || "View Payment Details",
+    //     icon: "pi pi-eye",
+    //     command: () => openPaymentDialog(rowData),
+    //   });
+    // }
 
     return <ActionMenu items={items} />;
   };
@@ -775,7 +780,11 @@ const billContent = `
         const attachments = row.attachments || [];
 
         if (attachments.length === 0) {
-          return <span className="text-gray-400 text-sm">{t("certificationRequest.labels.noAttachments")}</span>;
+          return (
+            <span className="text-gray-400 text-sm">
+              {t("certificationRequest.labels.noAttachments")}
+            </span>
+          );
         }
 
         const firstAttachment = attachments[0];
@@ -854,7 +863,7 @@ const billContent = `
         const getDaysRemaining = () => {
           if (!end) return null;
           return Math.ceil(
-            (end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+            (end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24),
           );
         };
 
@@ -863,10 +872,13 @@ const billContent = `
         const isExpired = end ? now > end : false;
 
         const getStatusText = () => {
-          if (!start || !end) return t("certificationRequest.deadline.noDeadline");
+          if (!start || !end)
+            return t("certificationRequest.deadline.noDeadline");
           if (isExpired) return t("certificationRequest.deadline.expired");
           if (daysRemaining !== null && daysRemaining <= 20) {
-            return t("certificationRequest.deadline.daysRemaining", { count: daysRemaining });
+            return t("certificationRequest.deadline.daysRemaining", {
+              count: daysRemaining,
+            });
           }
           return "";
         };
@@ -929,7 +941,7 @@ const billContent = `
           text
           raised
         />
-         <ExcelExport
+        <ExcelExport
           data={data}
           totalElements={totalRecords}
           fileName={t("certificationRequest.payment.title")}
@@ -959,14 +971,19 @@ const billContent = `
         className="p-button-text"
       />
 
-      {selectedRequest?.requestStatus === "PAYMENT_PENDING" && !selectedRequest?.isScanned && (
-        <Button
-          label={uploading ? t("certificationRequest.payment.uploading") : t("certificationRequest.payment.uploadScan")}
-          icon="pi pi-upload"
-          onClick={handlePaymentConfirmation}
-          loading={uploading}
-        />
-      )}
+      {selectedRequest?.requestStatus === "PAYMENT_PENDING" &&
+        !selectedRequest?.isScanned && (
+          <Button
+            label={
+              uploading
+                ? t("certificationRequest.payment.uploading")
+                : t("certificationRequest.payment.uploadScan")
+            }
+            icon="pi pi-upload"
+            onClick={handlePaymentConfirmation}
+            loading={uploading}
+          />
+        )}
     </div>
   );
 
@@ -1014,7 +1031,8 @@ const billContent = `
 
       <Dialog
         header={
-          selectedRequest?.requestStatus === "PAYMENT_PENDING" && !selectedRequest?.isScanned
+          selectedRequest?.requestStatus === "PAYMENT_PENDING" &&
+          !selectedRequest?.isScanned
             ? t("certificationRequest.payment.uploadScannedBill")
             : t("certificationRequest.payment.details")
         }
@@ -1050,144 +1068,185 @@ const billContent = `
                 </div>
 
                 <div>
-                  <span className="block text-xs text-gray-500">{t("company.labels.companyName")}</span>
+                  <span className="block text-xs text-gray-500">
+                    {t("company.labels.companyName")}
+                  </span>
                   <span className="font-medium text-gray-900">
                     {selectedRequest.company?.[getCompanyNameField()] || "-"}
                   </span>
                 </div>
 
                 <div>
-                  <span className="block text-xs text-gray-500">{t("certificationRequest.labels.requestStatus")}</span>
+                  <span className="block text-xs text-gray-500">
+                    {t("certificationRequest.labels.requestStatus")}
+                  </span>
                   <span
                     className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
-                      selectedRequest.requestStatus === "PAYMENT_COMPLETED" || selectedRequest.isScanned
+                      selectedRequest.requestStatus === "PAYMENT_COMPLETED" ||
+                      selectedRequest.isScanned
                         ? "bg-green-100 text-green-700"
                         : "bg-yellow-100 text-yellow-700"
                     }`}
                   >
-                    {selectedRequest.requestStatus === "PAYMENT_COMPLETED" || selectedRequest.isScanned
-                      ? t("certificationRequest.statusOptions.PAYMENT_COMPLETED")
+                    {selectedRequest.requestStatus === "PAYMENT_COMPLETED" ||
+                    selectedRequest.isScanned
+                      ? t(
+                          "certificationRequest.statusOptions.PAYMENT_COMPLETED",
+                        )
                       : t("certificationRequest.statusOptions.PAYMENT_PENDING")}
                   </span>
                 </div>
               </div>
             </div>
 
-            {selectedRequest.requestStatus === "PAYMENT_PENDING" && !selectedRequest.isScanned && (
-              <div className="rounded-lg border border-blue-100 bg-white p-4">
+            {selectedRequest.requestStatus === "PAYMENT_PENDING" &&
+              !selectedRequest.isScanned && (
+                <div className="rounded-lg border border-blue-100 bg-white p-4">
+                  <h3 className="mb-3 text-base font-semibold text-gray-800">
+                    ${t("certificationRequest.payment.scanUploadInfo")}
+                  </h3>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="mb-2 block text-sm font-medium text-gray-700">
+                        {t("certificationRequest.payment.transactionId")} *
+                      </label>
+                      <InputText
+                        value={transactionId}
+                        onChange={(e) => setTransactionId(e.target.value)}
+                        placeholder={t(
+                          "certificationRequest.payment.enterTransactionIdPlaceholder",
+                        )}
+                        className="w-full"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="mb-2 block text-sm font-medium text-gray-700">
+                        {t("certificationRequest.payment.paymentDate")}
+                      </label>
+                      <InputText
+                        type="date"
+                        value={paymentDate}
+                        onChange={(e) => setPaymentDate(e.target.value)}
+                        className="w-full"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="mb-2 block text-sm font-medium text-gray-700">
+                        {t("certificationRequest.payment.paymentAmount")}
+                      </label>
+                      <InputText
+                        type="number"
+                        value={paymentAmount}
+                        onChange={(e) => setPaymentAmount(e.target.value)}
+                        placeholder={t(
+                          "certificationRequest.payment.enterPaidAmount",
+                        )}
+                        className="w-full"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="mb-2 block text-sm font-medium text-gray-700">
+                        {t("certificationRequest.payment.scannedBill")} *
+                      </label>
+                      <FileUpload
+                        name="bill"
+                        mode="basic"
+                        accept="image/*,application/pdf"
+                        maxFileSize={5000000}
+                        chooseLabel={
+                          uploadedBill
+                            ? t("certificationRequest.payment.changeFile")
+                            : t("certificationRequest.payment.chooseFile")
+                        }
+                        auto={false}
+                        customUpload
+                        onSelect={(e) => setUploadedBill(e.files[0])}
+                        onClear={() => setUploadedBill(null)}
+                        className="w-full"
+                      />
+
+                      {uploadedBill && (
+                        <div className="mt-2 rounded-md bg-green-50 px-3 py-2 text-sm text-green-700">
+                          {t("certificationRequest.payment.selectedFile")}:{" "}
+                          {uploadedBill.name}
+                        </div>
+                      )}
+
+                      <small className="mt-1 block text-gray-500">
+                        {t("certificationRequest.payment.fileTypesHint")}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 rounded-md bg-blue-50 p-3 text-sm text-blue-700">
+                    {t("certificationRequest.payment.uploadNote")}
+                  </div>
+                </div>
+              )}
+
+            {(selectedRequest.requestStatus === "PAYMENT_COMPLETED" ||
+              selectedRequest.isScanned) && (
+              <div className="rounded-lg border border-green-100 bg-white p-4 text-sm text-gray-900">
                 <h3 className="mb-3 text-base font-semibold text-gray-800">
-                  ${t("certificationRequest.payment.scanUploadInfo")}
+                  {t("certificationRequest.payment.details")}
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-gray-700">
-                      {t("certificationRequest.payment.transactionId")} *
-                    </label>
-                    <InputText
-                      value={transactionId}
-                      onChange={(e) => setTransactionId(e.target.value)}
-                      placeholder={t("certificationRequest.payment.enterTransactionIdPlaceholder")}
-                      className="w-full"
-                    />
+                    <span className="block text-xs text-gray-500">
+                      {t("certificationRequest.payment.transactionId")}
+                    </span>
+                    <span className="font-medium text-gray-900">
+                      {selectedRequest.transactionId || "-"}
+                    </span>
                   </div>
 
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-gray-700">
+                    <span className="block text-xs text-gray-500">
                       {t("certificationRequest.payment.paymentDate")}
-                    </label>
-                    <InputText
-                      type="date"
-                      value={paymentDate}
-                      onChange={(e) => setPaymentDate(e.target.value)}
-                      className="w-full"
-                    />
+                    </span>
+                    <span className="font-medium text-gray-900">
+                      {formatQamariDate(selectedRequest.paymentDate)}
+                    </span>
                   </div>
 
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-gray-700">
+                    <span className="block text-xs text-gray-500">
                       {t("certificationRequest.payment.paymentAmount")}
-                    </label>
-                    <InputText
-                      type="number"
-                      value={paymentAmount}
-                      onChange={(e) => setPaymentAmount(e.target.value)}
-                      placeholder={t("certificationRequest.payment.enterPaidAmount")}
-                      className="w-full"
-                    />
+                    </span>
+                    <span className="font-medium text-gray-900">
+                      {selectedRequest.paymentAmount || "-"}
+                    </span>
                   </div>
 
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-gray-700">
-                      {t("certificationRequest.payment.scannedBill")} *
-                    </label>
-                    <FileUpload
-                      name="bill"
-                      mode="basic"
-                      accept="image/*,application/pdf"
-                      maxFileSize={5000000}
-                      chooseLabel={uploadedBill ? t("certificationRequest.payment.changeFile") : t("certificationRequest.payment.chooseFile")}
-                      auto={false}
-                      customUpload
-                      onSelect={(e) => setUploadedBill(e.files[0])}
-                      onClear={() => setUploadedBill(null)}
-                      className="w-full"
-                    />
-
-                    {uploadedBill && (
-                      <div className="mt-2 rounded-md bg-green-50 px-3 py-2 text-sm text-green-700">
-                        {t("certificationRequest.payment.selectedFile")}: {uploadedBill.name}
-                      </div>
-                    )}
-
-                    <small className="mt-1 block text-gray-500">
-                      {t("certificationRequest.payment.fileTypesHint")}
-                    </small>
-                  </div>
-                </div>
-
-                <div className="mt-4 rounded-md bg-blue-50 p-3 text-sm text-blue-700">
-                  {t("certificationRequest.payment.uploadNote")}
-                </div>
-              </div>
-            )}
-
-            {(selectedRequest.requestStatus === "PAYMENT_COMPLETED" || selectedRequest.isScanned) && (
-              <div className="rounded-lg border border-green-100 bg-white p-4 text-sm text-gray-900">
-                <h3 className="mb-3 text-base font-semibold text-gray-800">{t("certificationRequest.payment.details")}</h3>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <span className="block text-xs text-gray-500">{t("certificationRequest.payment.transactionId")}</span>
-                    <span className="font-medium text-gray-900">{selectedRequest.transactionId || "-"}</span>
-                  </div>
-
-                  <div>
-                    <span className="block text-xs text-gray-500">{t("certificationRequest.payment.paymentDate")}</span>
-                    <span className="font-medium text-gray-900">{formatQamariDate(selectedRequest.paymentDate)}</span>
-                  </div>
-
-                  <div>
-                    <span className="block text-xs text-gray-500">{t("certificationRequest.payment.paymentAmount")}</span>
-                    <span className="font-medium text-gray-900">{selectedRequest.paymentAmount || "-"}</span>
-                  </div>
-
-                  <div>
-                    <span className="block text-xs text-gray-500">{t("certificationRequest.payment.scannedBill")}</span>
+                    <span className="block text-xs text-gray-500">
+                      {t("certificationRequest.payment.scannedBill")}
+                    </span>
                     <div className="flex gap-2 mt-1">
                       <button
                         type="button"
-                        onClick={() => downloadPaymentReceipt(selectedRequest.id)}
+                        onClick={() =>
+                          downloadPaymentReceipt(selectedRequest.id)
+                        }
                         className="px-3 py-1 rounded-md bg-blue-600 text-white text-sm"
                       >
                         {t("common.view") || "View"}
                       </button>
 
                       <a
-                        href={selectedRequest.paymentReceiptUrl || selectedRequest.receiptFilePath || '#'}
+                        href={
+                          selectedRequest.paymentReceiptUrl ||
+                          selectedRequest.receiptFilePath ||
+                          "#"
+                        }
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`px-3 py-1 rounded-md text-sm ${selectedRequest.paymentReceiptUrl || selectedRequest.receiptFilePath ? 'bg-gray-100 text-gray-800' : 'text-gray-400'}`}
+                        className={`px-3 py-1 rounded-md text-sm ${selectedRequest.paymentReceiptUrl || selectedRequest.receiptFilePath ? "bg-gray-100 text-gray-800" : "text-gray-400"}`}
                       >
                         {t("common.download") || "Download"}
                       </a>

@@ -516,6 +516,25 @@
     "organizationServices": "د سازمان خدمتونه"
   },
   "certification": {
+    "latest": "وروستی",
+    "updatedBy": "تازه شوی د",
+    "stepProgress": "ګام {{step}} د {{total}}",
+    "progressTitle": "د تصدیق پرمختګ",
+    "progressDescription": "د خپل تصدیق غوښتنې حالت او پرمختګ تعقیب کړئ",
+    "loadingTimeline": "د مهال ویش بارول...",
+    "errorLoading": "د غوښتنې مهال ویش بارول ناکام شول",
+    "tryAgain": "بیا هڅه وکړئ",
+    "noUpdates": "هیڅ تازه معلومات شتون نلري",
+    "noUpdatesMessage": "تر اوسه د دې غوښتنې لپاره د حالت تازه معلومات نشته.",
+    "fileTypes": {
+      "file": "فایل",
+      "image": "انځور",
+      "pdf": "PDF",
+      "document": "لاسوند",
+      "spreadsheet": "سپریڈ شیٹ",
+      "archive": "آرشیف",
+      "text": "متن"
+    },
     "confirmStatusUpdate": "آیا تاسو ډاډه یاست چې غواړئ د سند حالت ته بدل کړئ",
     "noDetailsFound": "د تصدیق توضیحات ونه موندل شول",
     "steps": {
@@ -931,6 +950,19 @@
     "success": "بریالیتوب",
     "error": "تېروتنه",
     "warning": "خبرداری",
+    "type": {
+      "STANDARD": "معیار",
+      "COMPANY": "شرکت",
+      "CERTIFICATION": "تائید نامه",
+      "USER": "کاربر",
+      "REQUEST": "درخواست",
+      "INSPECTION_COMMITEE_REPORT": "گزارش کمیته تفتیش",
+      "ISSUED_CERTIFICATION": "تائید نامه صادر شده",
+      "PAYMENT_BILL": "سند پرداخت",
+      "AUDIO": "صوتی",
+      "VIDEO": "ویدیو",
+      "IMAGE": "تصویر"
+    },
     "columns": {
       "id": "شناسه",
       "attachment_name": "د ضمیمه نوم",
@@ -1281,6 +1313,11 @@
     }
   },
   "common": {
+    "months": "میاشتې",
+    "selectDateType": "د تاریخ ډول",
+    "gregorian": "میلادی",
+    "arabic": "هجری قمری",
+    "persian": "هجری شمسی",
     "id": "آی ډي",
     "current_page": "د جوړه په وخت",
     "all": "همه",

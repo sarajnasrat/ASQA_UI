@@ -21,6 +21,7 @@ import CertificationRequestService from "../../../services/CertificationReques.s
 import CommiteeService from "../../../services/comitee.service";
 import FileUploadField from "../../common/FileUploadField";
 import { SmartDatePicker } from "../../common/datepicker/SmartDatePicker";
+import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 import CertificationRequestViewHeader from "./certification-process/CertificationRequestViewHeader";
 import CertificationRequestViewTabs from "./certification-process/CertificationRequestViewTabs";
 import CertificationRequestViewDetails from "./certification-process/CertificationRequestViewDetails";
@@ -166,9 +167,8 @@ const CertificationRequestView: React.FC = () => {
         setLoadingCommittees(false);
       }
     };
-   
+
     loadCommittees();
-     
   }, []);
 
   const loadRequestDetail = async () => {
@@ -287,12 +287,17 @@ const CertificationRequestView: React.FC = () => {
     printWindow.document.close();
     setRequestPrinted(true);
 
-    await handleApi(
+   const resp = await handleApi(
       () => CertificationRequestService.updateIsPrint(request.id, true),
       () => {},
       (message: string) => showToast("error", t("common.error"), message),
       t,
     );
+    if(resp?.status === 200){
+     window.location.reload();
+    }
+  
+    
   };
 
   const openPaymentDialog = () => {
@@ -368,6 +373,9 @@ const CertificationRequestView: React.FC = () => {
 
       closePaymentDialog();
       loadRequestDetail();
+    }
+    if(response?.status === 200){
+      window.location.reload();
     }
 
     setUploadingPayment(false);
@@ -497,11 +505,7 @@ const CertificationRequestView: React.FC = () => {
       );
     } else if (nextStatus === "STANDARDS_PROVIDED") {
       if (!options?.standardFile) {
-        showToast(
-          "warn",
-          t("common.warning"),
-       "Please upload standard file",
-        );
+        showToast("warn", t("common.warning"), "Please upload standard file");
         return;
       }
 
@@ -906,11 +910,7 @@ const CertificationRequestView: React.FC = () => {
 
   const formatDate = (dateString: string) => {
     if (!dateString) return t("common.notSpecified");
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+    return IslamicDateFormatter.formatQamari(dateString);
   };
 
   const toggleSection = (section: keyof typeof expandedSections) => {
@@ -987,7 +987,8 @@ const CertificationRequestView: React.FC = () => {
   const dialogRequestType = getCertificationTypeLabel(
     request?.certificationType || "",
   );
-  const dialogRequestId = request?.serialNumber || request?.trackingNumber || "";
+  const dialogRequestId =
+    request?.serialNumber || request?.trackingNumber || "";
   const dialogCompanyName = getCompanyName() || "";
 
   return (
@@ -1118,19 +1119,25 @@ const CertificationRequestView: React.FC = () => {
 
               {isDeadlineAssignedDialog && (
                 <>
-                  <Dropdown
-                    key={`status-calendar-${pendingStatus ?? "none"}`}
-                    className="w-full mt-3"
-                    value={calendarType}
-                    options={[
-                      { label: "Gregorian", value: "gregorian" },
-                      { label: "Hijri", value: "arabic" },
-                      { label: "Shamsi", value: "persian" },
-                    ]}
-                    onChange={(e) => setCalendarType(e.value)}
-                  />
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      {t("common.selectDateType")} *
+                    </label>
+                    <Dropdown
+                      className="w-full mb-3"
+                      value={calendarType}
+                      options={[
+                        { label: t("common.gregorian"), value: "gregorian" },
+                        { label: t("common.arabic"), value: "arabic" },
+                        { label: t("common.persian"), value: "persian" },
+                      ]}
+                      onChange={(e) => setCalendarType(e.value)}
+                    />
+                  </div>
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
                     <SmartDatePicker
+                      widthValue={280}
                       key={`status-start-${pendingStatus ?? "none"}-${calendarType}`}
                       label={t("common.startDate")}
                       value={selectedStartDate ?? undefined}
@@ -1140,6 +1147,7 @@ const CertificationRequestView: React.FC = () => {
                       }}
                     />
                     <SmartDatePicker
+                      widthValue={280}
                       key={`status-end-${pendingStatus ?? "none"}-${calendarType}`}
                       label={t("common.endDate")}
                       value={selectedEndDate ?? undefined}
@@ -1149,6 +1157,7 @@ const CertificationRequestView: React.FC = () => {
                       }}
                     />
                   </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3"></div>
                 </>
               )}
 
@@ -1227,7 +1236,6 @@ const CertificationRequestView: React.FC = () => {
                     {getCompanyName() || "-"}
                   </span>
                 </div>
-        
               </div>
             </div>
 
@@ -1336,7 +1344,7 @@ const CertificationRequestView: React.FC = () => {
                         "Transaction ID"}
                     </span>
                     <span className="font-medium text-gray-900">
-                      {(request as any).transactionId || "-"}
+                      {(request as any).payments.transactionId || "-"}
                     </span>
                   </div>
                   <div>
@@ -1345,9 +1353,9 @@ const CertificationRequestView: React.FC = () => {
                     </span>
                     <span className="font-medium text-gray-900">
                       {(request as any).paymentDate
-                        ? new Date(
+                        ? IslamicDateFormatter.formatQamari(
                             (request as any).paymentDate,
-                          ).toLocaleDateString()
+                          )
                         : "-"}
                     </span>
                   </div>

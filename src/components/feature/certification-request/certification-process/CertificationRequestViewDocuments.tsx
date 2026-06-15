@@ -38,7 +38,7 @@ const CertificationRequestViewDocuments: React.FC<Props> = ({
                       </p>
                       {attachment.attachmentReferenceType && (
                         <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-200 text-gray-700">
-                          {attachment.attachmentReferenceType}
+                          {t(`attachment.type.${attachment.attachmentReferenceType}`)}
                         </span>
                       )}
                     </div>

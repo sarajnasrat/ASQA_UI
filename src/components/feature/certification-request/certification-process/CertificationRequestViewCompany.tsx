@@ -87,7 +87,7 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
                     {translatedCompanyType(request.company)}
                     {/* {request.company.companyType?.replace(/_/g, " ")} */}
                   </span>
-                  <span
+                  {/* <span
                     className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium ${
                       request.company.active
                         ? "bg-green-100 text-green-700"
@@ -102,7 +102,7 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
                     {request.company.active
                       ? t("company.labels.active")
                       : t("company.labels.inactive")}
-                  </span>
+                  </span> */}
                 </div>
               </div>
               {request.company.websiteUrl && (

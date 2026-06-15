@@ -12,12 +12,31 @@ import arabic_ar from "react-date-object/locales/arabic_ar";
 
 type CalendarType = "gregorian" | "persian" | "arabic";
 
+const afghanPersianLocale = {
+  ...persian_fa,
+  months: [
+    ["حمل", "حم"],
+    ["ثور", "ثو"],
+    ["جوزا", "جو"],
+    ["سرطان", "سر"],
+    ["اسد", "اسد"],
+    ["سنبله", "سن"],
+    ["میزان", "میز"],
+    ["عقرب", "عقر"],
+    ["قوس", "قوس"],
+    ["جدی", "جد"],
+    ["دلو", "دل"],
+    ["حوت", "حوت"],
+  ],
+};
+
 interface Props {
   value: any;
   onChange: (value: any) => void;
   calendarType: CalendarType;
   label?: string;
   className?: string;
+  widthValue?: number;
 }
 
 export const SmartDatePicker: React.FC<Props> = ({
@@ -26,6 +45,7 @@ export const SmartDatePicker: React.FC<Props> = ({
   calendarType,
   label,
   className = "",
+  widthValue = 0,
 }) => {
   const [internalValue, setInternalValue] = useState<any>(null);
 
@@ -47,7 +67,7 @@ export const SmartDatePicker: React.FC<Props> = ({
       case "persian":
         return {
           calendar: persian,
-          locale: persian_fa,
+          locale: afghanPersianLocale,
         };
 
       case "arabic":
@@ -87,7 +107,9 @@ export const SmartDatePicker: React.FC<Props> = ({
         locale={config.locale}
         format="YYYY/MM/DD"
         className="max-w-full"
-        style={{width:"370px"}}
+        style={{
+          width: widthValue?`${widthValue}px`:"100%",
+        }}
         inputClass="w-full border border-gray-300 rounded-lg px-3 py-2"
         calendarPosition="bottom-right"
       />

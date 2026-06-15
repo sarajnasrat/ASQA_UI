@@ -1,6 +1,6 @@
 import { confirmDialog } from "primereact/confirmdialog";
 import React from "react";
-import i18n from "../../i18n";
+import i18n from "../../i18n/i18n";
 
 type ConfirmOptions = {
   title?: string;

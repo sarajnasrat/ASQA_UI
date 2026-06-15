@@ -7,8 +7,9 @@ import CategoryService from "../../../../services/category.service";
 import CompanyService from "../../../../services/company.service";
 import { handleApi } from "../../../../hooks/handleApi";
 import { useToast } from "../../../../hooks/ToastContext";
-
+import { Dropdown } from "primereact/dropdown";
 import { MultiSelect } from "primereact/multiselect";
+import { SmartDatePicker } from "../../../common/datepicker/SmartDatePicker";
 
 interface Category {
   id: number;
@@ -40,6 +41,8 @@ interface CompanyFormProps {
   savedData?: CompanyFormData | null;
   onDataChange?: (data: CompanyFormData) => void;
 }
+
+type CalendarType = "gregorian" | "persian" | "arabic";
 
 const COMPANY_TYPES = [
   { value: "PRIVATE", labelKey: "company.typeOptions.PRIVATE" },
@@ -105,6 +108,12 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
   const [errors, setErrors] = useState<
     Partial<Record<keyof typeof formData, string>>
   >({});
+  const [establishYearCalendarType, setEstablishYearCalendarType] =
+    useState<CalendarType>("gregorian");
+  const [jawazIssueCalendarType, setJawazIssueCalendarType] =
+    useState<CalendarType>("gregorian");
+  const [jawazExpiryCalendarType, setJawazExpiryCalendarType] =
+    useState<CalendarType>("gregorian");
 
   // Load categories
   useEffect(() => {
@@ -341,7 +350,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
       newErrors.companyOwnerNameDr = t(
         "company.validation.companyOwnerNameDr.required",
       );
-  
+
     if (!formData.aboutCompanyEn)
       newErrors.aboutCompanyEn = t(
         "company.validation.aboutCompanyEn.required",
@@ -579,6 +588,21 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
     }
   };
 
+  const handleDateChange = (
+    field: "establishYear" | "jawazIssueDate" | "jawazExpiryDate",
+    value: any,
+  ) => {
+    const parsedValue = value
+      ? new Date(value?.date || value).toISOString()
+      : "";
+
+    setFormData((prev) => ({ ...prev, [field]: parsedValue }));
+
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: "" }));
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Basic Information */}
@@ -588,7 +612,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
           {t("company.basicInformation")}
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               {t("company.labels.companyNameEN")} *
@@ -709,18 +733,32 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
               <p className="mt-1 text-sm text-red-500">{errors.phoneNumber}</p>
             )}
           </div>
+          <div className="">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              {t("common.selectDateType")} *
+            </label>
+            <Dropdown
+              className="w-full mb-3"
+              value={establishYearCalendarType}
+              options={[
+                { label: t("common.gregorian"), value: "gregorian" },
+                { label: t("common.arabic"), value: "arabic" },
+                { label: t("common.persian"), value: "persian" },
+              ]}
+              onChange={(e) => setEstablishYearCalendarType(e.value)}
+            />
+          </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               {t("company.labels.establishYear")} *
             </label>
-            <input
-              type="date"
-              name="establishYear"
-              value={formData.establishYear}
-              onChange={handleInputChange}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-shadow ${
-                errors.establishYear ? "border-red-500" : "border-gray-300"
-              }`}
+
+            <SmartDatePicker
+              widthValue={350}
+              key={`establishYear-${establishYearCalendarType}`}
+              value={formData.establishYear || undefined}
+              calendarType={establishYearCalendarType}
+              onChange={(d: any) => handleDateChange("establishYear", d)}
             />
             {errors.establishYear && (
               <p className="mt-1 text-sm text-red-500">
@@ -836,7 +874,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
           {t("company.jawazInformation")}
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               {t("company.labels.jawazNumber")} *
@@ -874,19 +912,31 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
               <p className="mt-1 text-sm text-red-500">{errors.tinNumber}</p>
             )}
           </div>
-
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              {t("common.selectDateType")} *
+            </label>
+            <Dropdown
+              className="w-full mb-3"
+              value={jawazIssueCalendarType}
+              options={[
+                { label: t("common.gregorian"), value: "gregorian" },
+                { label: t("common.arabic"), value: "arabic" },
+                { label: t("common.persian"), value: "persian" },
+              ]}
+              onChange={(e) => setJawazIssueCalendarType(e.value)}
+            />
+          </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               {t("company.labels.jawazIssueDate")} *
             </label>
-            <input
-              type="date"
-              name="jawazIssueDate"
-              value={formData.jawazIssueDate}
-              onChange={handleInputChange}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-shadow ${
-                errors.jawazIssueDate ? "border-red-500" : "border-gray-300"
-              }`}
+            <SmartDatePicker
+              widthValue={250}
+              key={`jawazIssueDate-${jawazIssueCalendarType}`}
+              value={formData.jawazIssueDate || undefined}
+              calendarType={jawazIssueCalendarType}
+              onChange={(d: any) => handleDateChange("jawazIssueDate", d)}
             />
             {errors.jawazIssueDate && (
               <p className="mt-1 text-sm text-red-500">
@@ -894,19 +944,18 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
               </p>
             )}
           </div>
+    
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               {t("company.labels.jawazExpiryDate")} *
             </label>
-            <input
-              type="date"
-              name="jawazExpiryDate"
-              value={formData.jawazExpiryDate}
-              onChange={handleInputChange}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-shadow ${
-                errors.jawazExpiryDate ? "border-red-500" : "border-gray-300"
-              }`}
+            <SmartDatePicker
+              widthValue={250}
+              key={`jawazExpiryDate-${jawazExpiryCalendarType}`}
+              value={formData.jawazExpiryDate || undefined}
+              calendarType={jawazIssueCalendarType}
+              onChange={(d: any) => handleDateChange("jawazExpiryDate", d)}
             />
             {errors.jawazExpiryDate && (
               <p className="mt-1 text-sm text-red-500">

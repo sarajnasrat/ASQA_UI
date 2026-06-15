@@ -60,7 +60,7 @@ const CommiteeAssignmentViewDetails: React.FC<Props> = ({
   const assignedByName = assignment.assignedBy
     ? `${assignment.assignedBy.firstName || ""} ${assignment.assignedBy.lastName || ""}`.trim()
     : "-";
-
+console.log("getAssignmentStatusConfig", getAssignmentStatusConfig)
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div className="lg:col-span-2 space-y-6">
@@ -82,7 +82,7 @@ const CommiteeAssignmentViewDetails: React.FC<Props> = ({
 
           {expandedSections.timeline && (
             <div className="px-6 pb-6 space-y-4">
-              <div className="flex items-start gap-3">
+              {/* <div className="flex items-start gap-3">
                 <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center">
                   <ClipboardList className="h-4 w-4" />
                 </div>
@@ -94,7 +94,7 @@ const CommiteeAssignmentViewDetails: React.FC<Props> = ({
                     {formatDate(assignment.assignedAt)}
                   </p>
                 </div>
-              </div>
+              </div> */}
 
               {tracker.map((item) => {
                 const statusConfig = getRequestStatusConfig(item.status);
@@ -108,7 +108,7 @@ const CommiteeAssignmentViewDetails: React.FC<Props> = ({
                     </div>
                     <div>
                       <p className="font-medium text-gray-900">
-                        {statusConfig.label}
+                         {t(`certificationRequest.statusOptions.${item.status}`)}
                       </p>
                       <p className="text-sm text-gray-500">
                         {formatDate(item.changedAt)}

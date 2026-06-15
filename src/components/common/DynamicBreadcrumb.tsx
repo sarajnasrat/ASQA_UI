@@ -19,6 +19,7 @@ interface DynamicBreadcrumbProps {
     url: string;
   }[];
   size?: string;
+  radius?: string;
 }
 
 /* -----------------------------
@@ -38,6 +39,7 @@ const BreadcrumbItem: React.FC<BreadcrumbItemProps> = ({ label, to }) => (
 const DynamicBreadcrumb: React.FC<DynamicBreadcrumbProps> = ({
   items,
   size,
+  radius,
 }) => {
   const home: MenuItem = {
     icon: "pi pi-home",
@@ -52,10 +54,18 @@ const DynamicBreadcrumb: React.FC<DynamicBreadcrumbProps> = ({
     label: item.label,
     template: () => <BreadcrumbItem label={item.label} to={item.url} />,
   }));
-  const breadCrumClassName = size ? size : "pl-5 pr-5 max-w-8xl mx-auto pt-5";
+
+  const breadCrumClassName = size
+    ? size
+    : "pl-5 pr-5 max-w-8xl mx-auto pt-5";
+
   return (
     <div className={breadCrumClassName}>
-      <BreadCrumb home={home} model={breadcrumbItems} />
+      <BreadCrumb
+        home={home}
+        model={breadcrumbItems}
+        className={radius || ""}
+      />
     </div>
   );
 };

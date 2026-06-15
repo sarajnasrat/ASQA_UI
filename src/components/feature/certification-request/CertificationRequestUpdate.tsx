@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 import CommiteeService from "../../../services/comitee.service";
 import FileUploadField from "../../common/FileUploadField";
 import { SmartDatePicker } from "../../common/datepicker/SmartDatePicker";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   requestId: number | null;
@@ -26,7 +27,6 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
   onHide,
   onSuccess,
 }) => {
-
   /* ================= WORKFLOW ================= */
 
   const transitionMap: Record<string, string[]> = {
@@ -57,6 +57,7 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
 
   const { t } = useTranslation();
   const { showError, showSuccess } = useToast();
+  const navigate = useNavigate();
 
   const [status, setStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -65,13 +66,16 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
 
   const [committees, setCommittees] = useState<any[]>([]);
   const [loadingCommittees, setLoadingCommittees] = useState(false);
-  const [selectedCommitteeId, setSelectedCommitteeId] = useState<number | null>(null);
+  const [selectedCommitteeId, setSelectedCommitteeId] = useState<number | null>(
+    null,
+  );
 
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
-  const [calendarType, setCalendarType] =
-    useState<"gregorian" | "persian" | "arabic">("gregorian");
+  const [calendarType, setCalendarType] = useState<
+    "gregorian" | "persian" | "arabic"
+  >("gregorian");
 
   /* ================= STATUS OPTIONS ================= */
 
@@ -130,10 +134,9 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
         showError(t("deadline.mustAssign"));
         return;
       }
-  
+
       /* ===== DEADLINE ===== */
       if (status === "DEADLINE_ASSIGNED") {
-
         if (!startDate || !endDate) {
           showError(t("deadline.required"));
           return;
@@ -149,17 +152,15 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
             CertificationRequestService.setDeadline(
               requestId,
               startDate.toISOString(),
-              endDate.toISOString()
+              endDate.toISOString(),
             ),
           showSuccess,
           showError,
-          t
+          t,
         );
-      }
+      } else if (status === "INSPECTION_IN_PROGRESS") {
 
       /* ===== COMMITTEE ===== */
-      else if (status === "INSPECTION_IN_PROGRESS") {
-
         if (!selectedCommitteeId) {
           showError(t("committee.required"));
           return;
@@ -169,44 +170,73 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
           () =>
             CertificationRequestService.assignCommittee(
               requestId,
-              selectedCommitteeId
+              selectedCommitteeId,
             ),
           showSuccess,
           showError,
-          t
+          t,
         );
-      }
-
+      } else if (status === "STANDARDS_PROVIDED") {
 
       /* ===== NORMAL STATUS ===== */
-      else if (status === "STANDARDS_PROVIDED") {
-
         const formData = new FormData();
         if (selectedFile) {
           formData.append("file", selectedFile);
         }
 
         response = await handleApi(
-          () => CertificationRequestService.standardProvided(requestId, formData),
+          () =>
+            CertificationRequestService.standardProvided(requestId, formData),
           showSuccess,
           showError,
-          t
+          t,
         );
       } else {
         response = await handleApi(
           () => CertificationRequestService.updateStatus(requestId, status),
           showSuccess,
           showError,
-          t
+          t,
         );
       }
 
       if (response?.status === 200) {
         onSuccess?.();
         onHide();
+        navigateAfterStatusUpdate(status);
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const navigateAfterStatusUpdate = (nextStatus: string) => {
+    switch (nextStatus) {
+      case "UNDER_REVIEW":
+      case "REJECTED":
+      case "REPORT_APPROVED":
+      case "CERTIFICATE_ISSUED":
+        navigate("/certification-request");
+        break;
+      case "PAYMENT_PENDING":
+      case "PAYMENT_COMPLETED":
+        navigate("/payment-management");
+        break;
+      case "STANDARDS_PROVIDED":
+        navigate("/standard-management");
+        break;
+      case "DEADLINE_REQUIRED":
+        navigate("/certification-request-deadline");
+        break;
+      case "DEADLINE_ASSIGNED":
+        navigate("/certification-request-deadline");
+        break;
+      case "INSPECTION_IN_PROGRESS":
+        navigate("/certification-request-deadline");
+        break;
+      default:
+        navigate("/certification-request");
+        break;
     }
   };
 
@@ -275,7 +305,6 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
       modal
       onHide={onHide}
     >
-
       {/* STATUS */}
       <Dropdown
         value={status}
@@ -300,16 +329,21 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
       {/* DEADLINE */}
       {status === "DEADLINE_ASSIGNED" && (
         <>
-          <Dropdown
-            className="w-full mt-3"
-            value={calendarType}
-            options={[
-              { label: "Gregorian", value: "gregorian" },
-              { label: "Hijri", value: "arabic" },
-              { label: "Shamsi", value: "persian" },
-            ]}
-            onChange={(e) => setCalendarType(e.value)}
-          />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              {t("common.selectDateType")} *
+            </label>
+            <Dropdown
+              className="w-full mb-3"
+              value={calendarType}
+              options={[
+                { label: t("common.gregorian"), value: "gregorian" },
+                { label: t("common.arabic"), value: "arabic" },
+                { label: t("common.persian"), value: "persian" },
+              ]}
+              onChange={(e) => setCalendarType(e.value)}
+            />
+          </div>
 
           <div className="grid grid-cols-2 gap-3 mt-3">
             <SmartDatePicker

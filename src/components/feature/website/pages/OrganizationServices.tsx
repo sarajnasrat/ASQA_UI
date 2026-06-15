@@ -42,20 +42,74 @@ const OrganizationServices = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white via-slate-50 to-slate-100 pt-24 pb-20">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 text-white py-16 md:py-20">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 mb-6 backdrop-blur-sm">
-            <Sparkles className="h-4 w-4 text-cyan-300" />
-            <span className="text-sm font-medium">{t("website.organizationServices.badge")}</span>
-          </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 max-w-4xl mx-auto">
-            {t("website.organizationServices.title")}
-          </h1>
-          <p className="mx-auto max-w-3xl text-base sm:text-lg text-blue-100 px-4">
-            {t("website.organizationServices.description")}
-          </p>
-        </div>
-      </section>
+ <section className="relative min-h-[500px] flex items-center justify-center bg-linear-to-br from-gray-900 via-blue-900 to-indigo-900 text-white overflow-hidden">
+  {/* Animated background pattern */}
+  <div className="absolute inset-0 opacity-10">
+    <div
+      className="absolute inset-0"
+      style={{
+        backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
+        backgroundSize: "40px 40px",
+      }}
+    />
+  </div>
+
+  {/* Floating particles */}
+  <div className="absolute inset-0 overflow-hidden">
+    {[...Array(12)].map((_, i) => (
+      <div
+        key={i}
+        className="absolute rounded-full bg-white/5 animate-float"
+        style={{
+          width: Math.random() * 150 + 30 + "px",
+          height: Math.random() * 150 + 30 + "px",
+          left: Math.random() * 100 + "%",
+          top: Math.random() * 100 + "%",
+          animationDelay: Math.random() * 5 + "s",
+          animationDuration: Math.random() * 10 + 10 + "s",
+        }}
+      />
+    ))}
+  </div>
+
+  <div className="relative container mx-auto px-4 py-16 md:py-20">
+    <div className="max-w-4xl mx-auto text-center">
+      {/* Badge */}
+      <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md rounded-full px-3 py-1.5 mb-6 border border-white/20">
+        <Sparkles className="h-3.5 w-3.5 text-cyan-300" />
+        <span className="text-xs font-medium">{t("website.organizationServices.badge")}</span>
+      </div>
+
+      {/* Main heading */}
+      <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
+        <span className="bg-linear-to-r from-blue-200 via-white to-purple-200 bg-clip-text text-transparent">
+          {t("website.organizationServices.title")}
+        </span>
+      </h1>
+
+      {/* Description */}
+      <p className="text-base md:text-lg mb-8 text-gray-300 max-w-2xl mx-auto leading-relaxed">
+        {t("website.organizationServices.description")}
+      </p>
+    </div>
+  </div>
+
+  {/* Curved bottom */}
+  <div className="absolute bottom-0 left-0 right-0">
+    <svg
+      viewBox="0 0 1440 80"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="w-full h-auto"
+    >
+      <path
+        d="M0 80L48 72C96 64 192 48 288 40C384 32 480 32 576 40C672 48 768 64 864 72C960 80 1056 80 1152 72C1248 64 1344 48 1392 40L1440 32V80H1392C1344 80 1248 80 1152 80C1056 80 960 80 864 80C768 80 672 80 576 80C480 80 384 80 288 80C192 80 96 80 48 80H0Z"
+        fill="white"
+        fillOpacity="0.9"
+      />
+    </svg>
+  </div>
+</section>
 
       {/* Content Section */}
       <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
@@ -90,12 +144,12 @@ const OrganizationServices = () => {
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 md:mb-4">
                 {item.name}
               </h2>
-              <div className="flex items-center justify-center gap-2">
+              {/* <div className="flex items-center justify-center gap-2">
                 <CheckCircle className="h-5 w-5 text-green-500" />
                 <span className="text-sm md:text-base text-gray-600">
                   {t("website.organizationServices.activeService")}
                 </span>
-              </div>
+              </div> */}
             </div>
 
             {/* Service Content */}

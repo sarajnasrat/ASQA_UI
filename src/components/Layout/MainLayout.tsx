@@ -157,6 +157,7 @@ export const MainLayout = () => {
               <Route path="reports" element={<CertificationRequestReport />} />
 
               <Route path="province" element={<ProvinceList />} />
+                 <Route path="general-info" element={<OrganizationInfoList />} />
               <Route path="category" element={<CategoryList />} />
               <Route
                 path="commitee-assignment-list"

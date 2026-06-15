@@ -14,7 +14,11 @@ import {
   TrendingUp,
   User,
 } from "lucide-react";
-import type { Address, Assignment, ContactPerson } from "./CommiteeAssignmentView.types";
+import type {
+  Address,
+  Assignment,
+  ContactPerson,
+} from "./CommiteeAssignmentView.types";
 
 type CompanySection = "contactPersonDetails";
 
@@ -84,9 +88,11 @@ const CommiteeAssignmentViewCompany: React.FC<Props> = ({
                 </h3>
                 <div className="flex items-center gap-2 mt-2 flex-wrap">
                   <span className="px-2.5 py-1 bg-gray-100 text-gray-700 rounded-lg text-xs font-medium">
-                    {company.companyType?.replace(/_/g, " ") || "-"}
+                    {t(`company.typeOptions.${company.companyType}`) ||
+                      company.companyType?.replace(/_/g, " ") ||
+                      "-"}
                   </span>
-                  <span
+                  {/* <span
                     className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium ${
                       company.active
                         ? "bg-green-100 text-green-700"
@@ -101,7 +107,7 @@ const CommiteeAssignmentViewCompany: React.FC<Props> = ({
                     {company.active
                       ? t("company.labels.active")
                       : t("company.labels.inactive")}
-                  </span>
+                  </span> */}
                 </div>
               </div>
 
@@ -259,19 +265,27 @@ const CommiteeAssignmentViewCompany: React.FC<Props> = ({
           </div>
           <div className="px-6 py-4 space-y-4">
             <div className="flex justify-between items-center py-2 border-b border-gray-50">
-              <span className="text-gray-600">{t("company.labels.companyType")}</span>
+              <span className="text-gray-600">
+                {t("company.labels.companyType")}
+              </span>
               <span className="font-semibold text-gray-900 px-2 py-1 bg-blue-50 rounded-lg text-sm">
-                {company.companyType?.replace(/_/g, " ") || "-"}
+                {t(`company.typeOptions.${company.companyType}`) ||
+                  company.companyType?.replace(/_/g, " ") ||
+                  "-"}
               </span>
             </div>
             <div className="flex justify-between items-center py-2 border-b border-gray-50">
-              <span className="text-gray-600">{t("company.labels.categoriesCount")}</span>
+              <span className="text-gray-600">
+                {t("company.labels.categoriesCount")}
+              </span>
               <span className="font-semibold text-gray-900 px-2 py-1 bg-purple-50 rounded-lg text-sm">
                 {company.categories?.length || 0}
               </span>
             </div>
             <div className="flex justify-between items-center py-2">
-              <span className="text-gray-600">{t("company.labels.documentsCount")}</span>
+              <span className="text-gray-600">
+                {t("company.labels.documentsCount")}
+              </span>
               <span className="font-semibold text-gray-900 px-2 py-1 bg-green-50 rounded-lg text-sm">
                 {company.attachments?.length || 0}
               </span>
@@ -301,10 +315,12 @@ const CommiteeAssignmentViewCompany: React.FC<Props> = ({
                 <div className="space-y-3 mb-6">
                   <div className="rounded-xl bg-blue-50 p-4">
                     <p className="text-xs text-gray-500 uppercase tracking-wide">
-                      {t("contactPerson.firstName")} & {t("contactPerson.lastName")}
+                      {t("contactPerson.firstName")} &{" "}
+                      {t("contactPerson.lastName")}
                     </p>
                     <p className="font-semibold text-gray-900">
-                      {`${contactPerson.firstName || ""} ${contactPerson.lastName || ""}`.trim() || "-"}
+                      {`${contactPerson.firstName || ""} ${contactPerson.lastName || ""}`.trim() ||
+                        "-"}
                     </p>
                   </div>
                   <div className="rounded-xl bg-purple-50 p-4">
@@ -319,7 +335,9 @@ const CommiteeAssignmentViewCompany: React.FC<Props> = ({
 
                 {contactPerson.email && (
                   <button
-                    onClick={() => (window.location.href = `mailto:${contactPerson.email}`)}
+                    onClick={() =>
+                      (window.location.href = `mailto:${contactPerson.email}`)
+                    }
                     className="w-full flex items-center gap-3 p-3 bg-green-50 hover:bg-green-100 rounded-xl transition-all group mb-3"
                   >
                     <Mail className="h-5 w-5 text-green-600" />
@@ -327,7 +345,9 @@ const CommiteeAssignmentViewCompany: React.FC<Props> = ({
                       <p className="text-xs text-gray-500 uppercase tracking-wide">
                         {t("contactPerson.email")}
                       </p>
-                      <p className="font-medium text-gray-800">{contactPerson.email}</p>
+                      <p className="font-medium text-gray-800">
+                        {contactPerson.email}
+                      </p>
                     </div>
                     <ChevronRight className="h-4 w-4 text-green-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </button>
@@ -335,7 +355,9 @@ const CommiteeAssignmentViewCompany: React.FC<Props> = ({
 
                 {contactPerson.phoneNumber && (
                   <button
-                    onClick={() => (window.location.href = `tel:${contactPerson.phoneNumber}`)}
+                    onClick={() =>
+                      (window.location.href = `tel:${contactPerson.phoneNumber}`)
+                    }
                     className="w-full flex items-center gap-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-xl transition-all group"
                   >
                     <Phone className="h-5 w-5 text-blue-600" />
@@ -343,30 +365,35 @@ const CommiteeAssignmentViewCompany: React.FC<Props> = ({
                       <p className="text-xs text-gray-500 uppercase tracking-wide">
                         {t("contactPerson.phoneNumber")}
                       </p>
-                      <p className="font-medium text-gray-800">{contactPerson.phoneNumber}</p>
+                      <p className="font-medium text-gray-800">
+                        {contactPerson.phoneNumber}
+                      </p>
                     </div>
                     <ChevronRight className="h-4 w-4 text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </button>
                 )}
 
-                {contactPerson.addresses && contactPerson.addresses.length > 0 && (
-                  <div className="border-t border-gray-200 pt-4 mt-4 space-y-3">
-                    {contactPerson.addresses.map((address) => (
-                      <div
-                        key={address.id}
-                        className="rounded-xl bg-gray-50 border border-gray-100 p-4"
-                      >
-                        <p className="text-sm font-medium text-gray-900">
-                          {address.addressType || "-"}
-                        </p>
-                        <p className="text-sm text-gray-600 mt-1">
-                          {getAddressLine(address) || "-"}
-                        </p>
-                        <p className="text-sm text-gray-600">{address.details || "-"}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                {contactPerson.addresses &&
+                  contactPerson.addresses.length > 0 && (
+                    <div className="border-t border-gray-200 pt-4 mt-4 space-y-3">
+                      {contactPerson.addresses.map((address) => (
+                        <div
+                          key={address.id}
+                          className="rounded-xl bg-gray-50 border border-gray-100 p-4"
+                        >
+                          <p className="text-sm font-medium text-gray-900">
+                            {address.addressType || "-"}
+                          </p>
+                          <p className="text-sm text-gray-600 mt-1">
+                            {getAddressLine(address) || "-"}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            {address.details || "-"}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
               </div>
             )}
           </div>

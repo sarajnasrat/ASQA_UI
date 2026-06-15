@@ -137,3 +137,7 @@
 .lanuguage-dropdown .p-dropdown {
   border: none !important;
 }
+html[dir="rtl"] .p-dropdown-clear-icon {
+  left: 3rem;
+  right: auto;
+}

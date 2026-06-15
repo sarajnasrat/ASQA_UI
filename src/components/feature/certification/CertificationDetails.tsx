@@ -7,6 +7,7 @@ import {
   AlertCircle,
   ArrowLeft,
   Award,
+  Banknote,
   Briefcase,
   Building,
   Building2,
@@ -24,10 +25,13 @@ import {
   Globe,
   Hash,
   Home,
+  Image,
   Mail,
   Map,
   MapPin,
+  Paperclip,
   Phone,
+  Receipt,
   Shield,
   ShieldCheck,
   Tag,
@@ -40,7 +44,10 @@ import { handleApi } from "../../../hooks/handleApi";
 import { CertificationUpdate } from "./CertificationUpdate";
 import { useAppToast } from "../../../hooks/useToast";
 import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
+import type { TFunction } from "i18next";
+import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
 
+// Type Definitions
 type Attachment = {
   id?: number;
   attachmentName?: string;
@@ -48,7 +55,134 @@ type Attachment = {
   fileName?: string;
   filePath?: string;
   file?: string;
+  fileType?: string;
   fileSize?: number;
+  attachmentReferenceType?: string;
+  paymentId?: number | null;
+};
+
+type Payment = {
+  id: number;
+  transactionId: string;
+  paymentDate: string;
+  paymentAmount: number;
+  createdDate: string;
+  certificationRequestId: number;
+  requestTrackingNumber: string;
+  requestStatus: string;
+  attachments: Attachment[];
+};
+
+type Address = {
+  id: number;
+  details: string;
+  addressType: string;
+  district: {
+    id: number;
+    districtName?: string;
+    province: {
+      id: number;
+      provinceName?: string;
+      country: {
+        id: number;
+        countryName: string;
+        countryCode: string;
+      };
+    };
+  };
+};
+
+type ContactPerson = {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  position: string;
+  companyId: number | null;
+  companyName: string | null;
+  addresses: Address[];
+};
+
+type Category = {
+  id: number;
+  categoryName: string;
+  categoryType: string | null;
+  jobCount: string | null;
+};
+
+type SocialLink = {
+  id?: number;
+  platform?: string;
+  url?: string;
+};
+
+type Company = {
+  id: number;
+  companyNameEN: string;
+  companyNameDR: string;
+  companyNamePS: string;
+  email: string;
+  phoneNumber: string;
+  address: string;
+  logoUrl: string;
+  mainBranchAddress: string;
+  activityPlace: string;
+  activityType: string;
+  jawazNumber: string;
+  jawazExpiryDate: string;
+  jawazIssueDate: string;
+  tinNumber: string;
+  bussinessLogoUrl: string;
+  aboutCompanyEn: string;
+  aboutCompanyDr: string;
+  aboutCompanyPs: string;
+  websiteUrl: string;
+  establishYear: string;
+  companyOwnerNameEn: string;
+  companyOwnerNameDr: string;
+  companyOwnerNamePs: string;
+  attachments: Attachment[];
+  categories: Category[];
+  socialLinks: SocialLink[];
+  active: boolean;
+  companyType: string;
+};
+
+type CertificationRequest = {
+  id: number;
+  requestType: string;
+  requestStatus: string;
+  certificationType: string;
+  serialNumber: string;
+  trackingNumber: string;
+  createdDate: string;
+  attachments: Attachment[];
+  payments: Payment[];
+  trackers: any | null;
+  startDate: string;
+  endDate: string;
+  company: Company;
+  contactPerson: ContactPerson;
+  isPrint: boolean | null;
+  isScanned: boolean | null;
+  certificationScope: string | null;
+};
+
+type CertificationDetails = {
+  id: number;
+  certificateNumber: string;
+  certificationType: string;
+  issueDate: string;
+  expiryDate: string;
+  certificateUrl: string | null;
+  createdDate: string;
+  updatedDate: string;
+  certificationRequestId: number;
+  certificationRequest: CertificationRequest;
+  attachments?: Attachment[];
+  certificateAttachment: Attachment | null;
+  certificationStatus: string;
 };
 
 const statusTransitions: Record<string, string[]> = {
@@ -65,25 +199,31 @@ export const CertificationDetails: React.FC = () => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
 
-  const [details, setDetails] = useState<any>(null);
+  const [details, setDetails] = useState<CertificationDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<
-    "details" | "company" | "documents"
+    "details" | "company" | "documents" | "payments"
   >("details");
-
   const [expandedSections, setExpandedSections] = useState({
     timeline: true,
     certificateInfo: true,
     requestInfo: true,
-    contactPersonDetails: true,
+    contactPersonDetails: false,
     payments: true,
+    companyAttachments: true,
+    companyAbout: false,
+    companyJawaz: true,
+    companyOwner: false,
+    companyCategories: true,
+    companySocialLinks: false,
+    contactAddresses: false,
   });
 
   const numericRequestId = Number(requestId);
 
-  const request = details?.certificationRequest || {};
-  const company = details?.company || request?.company || {};
-  const contactPerson = request?.contactPerson || company?.contactPerson || {};
+  const request = details?.certificationRequest || ({} as CertificationRequest);
+  const company = request?.company || ({} as Company);
+  const contactPerson = request?.contactPerson || ({} as ContactPerson);
   const payments = request?.payments || [];
   const currentStatus = details?.certificationStatus || "DRAFT";
 
@@ -92,6 +232,12 @@ export const CertificationDetails: React.FC = () => {
     ...(details?.certificateAttachment ? [details.certificateAttachment] : []),
     ...(details?.attachments || []),
   ];
+  const companyAttachments: Attachment[] = company?.attachments || [];
+
+  // Get all payment attachments
+  const paymentAttachments: Attachment[] = payments.flatMap(
+    (payment) => payment.attachments || [],
+  );
 
   const companyNameField = useMemo(() => {
     if (i18n.language === "dr") return "companyNameDR";
@@ -105,12 +251,19 @@ export const CertificationDetails: React.FC = () => {
     return "aboutCompanyEn";
   }, [i18n.language]);
 
+  const companyOwnerField = useMemo(() => {
+    if (i18n.language === "dr") return "companyOwnerNameDr";
+    if (i18n.language === "ps") return "companyOwnerNamePs";
+    return "companyOwnerNameEn";
+  }, [i18n.language]);
+
   const companyName =
     company?.[companyNameField] ||
     company?.companyNameEN ||
     company?.companyNameDR ||
     company?.companyNamePS ||
     "-";
+
   const { toast, showToast } = useAppToast();
 
   const loadDetails = async () => {
@@ -152,6 +305,14 @@ export const CertificationDetails: React.FC = () => {
   const formatShortDate = (value?: string) => {
     if (!value) return "-";
     return IslamicDateFormatter.formatQamari(value);
+  };
+
+  const formatCurrency = (value?: number) => {
+    if (value === undefined || value === null) return "-";
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "AFN",
+    }).format(value);
   };
 
   const labelize = (value?: string) =>
@@ -234,7 +395,8 @@ export const CertificationDetails: React.FC = () => {
   const updateStatus = async (nextStatus: string) => {
     if (!details?.id) return;
     const response = await handleApi(
-      () => CertificationService.updateCertificationStatus(details.id, nextStatus),
+      () =>
+        CertificationService.updateCertificationStatus(details.id, nextStatus),
       () => showToast("success", t("common.success"), labelize(nextStatus)),
       (message: string) => showToast("error", t("common.error"), message),
       t,
@@ -255,17 +417,19 @@ export const CertificationDetails: React.FC = () => {
       return;
     }
     if (normalizedStatus === "PRINTED") {
-      navigate(`/certifications/print/${details.id}`);
+      navigate(`/certifications/print/${details?.id}`);
       return;
     }
 
     confirmDialog({
-      header: labelize(normalizedStatus),
+      header: t(
+        `certification.statusOptions.${normalizedStatus}` || normalizedStatus,
+      ),
       message: (
         <div className="space-y-4">
           <p className="text-gray-700">
             {t("certification.confirmStatusUpdate")}{" "}
-            <b>{labelize(normalizedStatus)}</b>?
+            {/* <b>{t(`certification.statusOptions.${normalizedStatus}` || normalizedStatus)}</b>? */}
           </p>
           <div className="rounded-xl bg-gray-50 border border-gray-100 p-4 text-sm space-y-2">
             <div className="flex justify-between gap-4">
@@ -283,7 +447,9 @@ export const CertificationDetails: React.FC = () => {
           </div>
         </div>
       ),
-      acceptLabel: labelize(normalizedStatus),
+      acceptLabel: t(
+        `certification.statusOptions.${normalizedStatus}` || normalizedStatus,
+      ),
       rejectLabel: t("common.cancel"),
       acceptClassName: "bg-green-600 border-green-600 text-white",
       accept: () => updateStatus(normalizedStatus),
@@ -299,13 +465,25 @@ export const CertificationDetails: React.FC = () => {
   const getAddressIcon = (addressType?: string) => {
     if (addressType === "HOME") return <Home className="h-3 w-3" />;
     if (addressType === "HEAD_OFFICE") return <Building className="h-3 w-3" />;
-    if (addressType === "BRANCH_OFFICE") return <Building2 className="h-3 w-3" />;
+    if (addressType === "BRANCH_OFFICE")
+      return <Building2 className="h-3 w-3" />;
     return <Map className="h-3 w-3" />;
   };
 
+  const getFileTypeIcon = (fileType?: string) => {
+    if (!fileType) return <File className="h-5 w-5 text-blue-500" />;
+    if (fileType.includes("pdf"))
+      return <FileText className="h-5 w-5 text-red-500" />;
+    if (fileType.includes("image"))
+      return <Image className="h-5 w-5 text-green-500" />;
+    return <File className="h-5 w-5 text-blue-500" />;
+  };
+
   const statusConfig = getStatusConfig(currentStatus);
-  const hasAttachments =
-    requestAttachments.length > 0 || certificateAttachments.length > 0;
+  const totalPaymentAmount = payments.reduce(
+    (sum: number, p: Payment) => sum + (p.paymentAmount || 0),
+    0,
+  );
 
   if (loading) {
     return (
@@ -336,7 +514,16 @@ export const CertificationDetails: React.FC = () => {
       </div>
     );
   }
-
+  const breadcrumbItems = [
+    {
+      label: "Certifications",
+      url: "/certifications",
+    },
+    {
+      label: details.certificateNumber,
+      url: `/certifications/${details.id}`,
+    },
+  ];
   return (
     <>
       <Toast ref={toast} />
@@ -344,14 +531,9 @@ export const CertificationDetails: React.FC = () => {
 
       <div className="min-h-screen bg-gray-50 pt-6 pb-20">
         <div className="container mx-auto px-3 sm:px-4 max-w-7xl">
+          {/* Header */}
           <div className="mb-6">
-            <button
-              onClick={() => navigate(-1)}
-              className="inline-flex items-center text-gray-600 hover:text-blue-600 mb-4"
-            >
-              <ArrowLeft className="h-5 w-5 mr-2" />
-              {t("common.back")}
-            </button>
+            <DynamicBreadcrumb items={breadcrumbItems} size="max-w-8xl" radius="rounded" />
 
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
@@ -378,7 +560,8 @@ export const CertificationDetails: React.FC = () => {
                     </div>
                     <div className="flex items-center gap-1">
                       <CalendarDays className="h-4 w-4" />
-                      {t("common.createdDate")}: {formatDate(details?.createdDate)}
+                      {t("common.createdDate")}:{" "}
+                      {formatDate(details?.createdDate)}
                     </div>
                   </div>
                 </div>
@@ -422,15 +605,23 @@ export const CertificationDetails: React.FC = () => {
                   id: "documents",
                   label: t("certification.documents"),
                   icon: <File className="h-4 w-4" />,
-                  badge: hasAttachments
-                    ? requestAttachments.length + certificateAttachments.length
-                    : undefined,
+                  badge:
+                    requestAttachments.length +
+                    certificateAttachments.length +
+                    companyAttachments.length +
+                    paymentAttachments.length,
+                },
+                {
+                  id: "payments",
+                  label: t("certification.payments"),
+                  icon: <CreditCard className="h-4 w-4" />,
+                  badge: payments.length,
                 },
               ].map((tab: any) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 pb-3 px-1 border-b-2 text-sm sm:text-base ${
+                  className={`flex items-center gap-2 pb-3 px-1 border-b-2 text-sm sm:text-base transition-colors ${
                     activeTab === tab.id
                       ? "border-blue-600 text-blue-600"
                       : "border-transparent text-gray-500 hover:text-gray-700"
@@ -438,8 +629,8 @@ export const CertificationDetails: React.FC = () => {
                 >
                   {tab.icon}
                   {tab.label}
-                  {tab.badge && (
-                    <span className="ml-1 px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded-full">
+                  {tab.badge !== undefined && tab.badge > 0 && (
+                    <span className="ml-1 px-2 py-0.5 text-xs bg-blue-100 text-blue-600 rounded-full font-medium">
                       {tab.badge}
                     </span>
                   )}
@@ -471,6 +662,16 @@ export const CertificationDetails: React.FC = () => {
                       title={t("certification.requestSubmitted")}
                       date={formatDate(request.createdDate)}
                     />
+                    {payments.length > 0 && (
+                      <TimelineItem
+                        icon={
+                          <CreditCard className="h-4 w-4 text-purple-600" />
+                        }
+                        bg="bg-purple-100"
+                        title={t("certificationRequest.paymentCompleted")}
+                        date={formatDate(payments[0]?.paymentDate)}
+                      />
+                    )}
                   </div>
                 </SectionCard>
 
@@ -482,27 +683,88 @@ export const CertificationDetails: React.FC = () => {
                 >
                   <InfoGrid
                     items={[
-                      { icon: <Hash />, label: t("certification.certificateNumber"), value: details.certificateNumber },
-                      { icon: <Tag />, label: t("certification.certificationType"), value: labelize(details.certificationType) },
-                      { icon: <ShieldCheck />, label: t("certification.status"), value: labelize(currentStatus) },
-                      { icon: <CalendarDays />, label: t("certification.issueDate"), value: formatDate(details.issueDate) },
-                      { icon: <CalendarDays />, label: t("certification.expiryDate"), value: formatDate(details.expiryDate) },
+                      {
+                        icon: <Hash />,
+                        label: t("certification.certificateNumber"),
+                        value: details.certificateNumber,
+                      },
+                      {
+                        icon: <Tag />,
+                        label: t("certificationRequest.certificationScope"),
+                        value: t(
+                          `certificationRequest.scoreOptions.${details.certificationRequest.certificationScope}`,
+                        ), // TODO: use labelize(  details.certificationType),
+                      },
+                      {
+                        icon: <Tag />,
+                        label: t("certification.certificationType"),
+                        value: t(
+                          `certificationRequest.certificationTypeOptions.${details.certificationType}`,
+                        ), // TODO: use labelize(  details.certificationType),
+                      },
+                      {
+                        icon: <ShieldCheck />,
+                        label: t("certification.status"),
+                        value: t(
+                          `certification.statusOptions.${currentStatus}`,
+                        ), // TODO: use labelize(currentStatus),
+                      },
+                      {
+                        icon: <CalendarDays />,
+                        label: t("certification.issueDate"),
+                        value: formatDate(details.issueDate),
+                      },
+                      {
+                        icon: <CalendarDays />,
+                        label: t("certification.expiryDate"),
+                        value: formatDate(details.expiryDate),
+                      },
                     ]}
                   />
                 </SectionCard>
 
                 <SectionCard
-                  title={t("certification.requestDetails")}
+                  title={t("certificationRequest.requestDetails")}
                   icon={<FileText />}
                   expanded={expandedSections.requestInfo}
                   onToggle={() => toggleSection("requestInfo")}
                 >
                   <InfoGrid
                     items={[
-                      { icon: <Hash />, label: t("certification.serialNumber"), value: request.serialNumber },
-                      { icon: <FileText />, label: t("certificationRequest.labels.trackingNumber"), value: request.trackingNumber },
-                      { icon: <Tag />, label: t("certificationRequest.labels.requestType"), value: labelize(request.requestType) },
-                      { icon: <Clock />, label: t("certificationRequest.labels.requestStatus"), value: labelize(request.requestStatus) },
+                      {
+                        icon: <FileText />,
+                        label: t("certification.serialNumber"),
+                        value: request.serialNumber,
+                      },
+                      {
+                        icon: <FileText />,
+                        label: t("certificationRequest.labels.trackingNumber"),
+                        value: request.trackingNumber,
+                      },
+                      {
+                        icon: <Tag />,
+                        label: t("certificationRequest.labels.requestType"),
+                        value: t(
+                          `certificationRequest.typeOptions.${request.requestType}`,
+                        ), // TODO: use labelize(request.requestType),
+                      },
+                      {
+                        icon: <Clock />,
+                        label: t("certificationRequest.labels.requestStatus"),
+                        value: t(
+                          `certificationRequest.statusOptions.${request.requestStatus}`,
+                        ), // TODO: use labelize(request.requestStatus`),
+                      },
+                      {
+                        icon: <CalendarDays />,
+                        label: t("certificationRequest.labels.startDate"),
+                        value: formatShortDate(request.startDate),
+                      },
+                      {
+                        icon: <CalendarDays />,
+                        label: t("certificationRequest.labels.endDate"),
+                        value: formatShortDate(request.endDate),
+                      },
                     ]}
                   />
                 </SectionCard>
@@ -511,35 +773,69 @@ export const CertificationDetails: React.FC = () => {
               <div className="space-y-6">
                 <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl shadow-lg p-6 text-white">
                   <Award className="h-12 w-12 mb-4 opacity-80" />
-                  <h3 className="text-xl font-bold mb-2">{t("certification.certificateSummary")}</h3>
+                  <h3 className="text-xl font-bold mb-2">
+                    {t("certification.certificateSummary")}
+                  </h3>
                   <p className="text-blue-100 mb-4">
                     {t("certification.certificateIssuedTo")} {companyName}
                   </p>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center gap-2">
+                      <Receipt className="h-4 w-4 opacity-70" />
+                      <span>
+                        {t("certificationRequest.labels.trackingNumber")}:{" "}
+                        {request.trackingNumber || "-"}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CreditCard className="h-4 w-4 opacity-70" />
+                      <span>
+                        {t("certification.payments")}: {payments.length}
+                      </span>
+                    </div>
+                  </div>
                 </div>
 
-                <PlainCard title={t("certification.certificateFile")} icon={<File />}>
+                <PlainCard
+                  title={t("certification.certificateFile")}
+                  icon={<File />}
+                >
                   {details.certificateAttachment ? (
                     <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg gap-3">
                       <div className="flex items-center gap-3 min-w-0">
-                        <File className="h-5 w-5 text-blue-500 shrink-0" />
+                        {getFileTypeIcon(
+                          details.certificateAttachment.fileType,
+                        )}
                         <span className="font-medium text-gray-900 truncate">
                           {t("certification.certificate")}
                         </span>
                       </div>
                       <div className="flex gap-2 shrink-0">
-                        <a href={assetUrl(details?.certificateAttachment?.file)} target="_blank" rel="noreferrer" className="p-1.5 text-gray-500 hover:text-blue-600">
+                        <a
+                          href={assetUrl(details?.certificateAttachment?.file)}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="p-1.5 text-gray-500 hover:text-blue-600"
+                        >
                           <Eye className="h-4 w-4" />
                         </a>
-                        <a href={assetUrl(details.certificateUrl)} download className="p-1.5 text-gray-500 hover:text-blue-600">
+                        <a
+                          href={assetUrl(details.certificateUrl ?? undefined)}
+                          download
+                          className="p-1.5 text-gray-500 hover:text-blue-600"
+                        >
                           <Download className="h-4 w-4" />
                         </a>
                       </div>
                     </div>
                   ) : (
-                    <p className="text-center text-gray-500 py-8">{t("certification.noCertificateFile")}</p>
+                    <p className="text-center text-gray-500 py-8">
+                      {t("certification.noCertificateFile")}
+                    </p>
                   )}
                 </PlainCard>
 
+                {/* Payments Summary Card */}
                 <SectionCard
                   title={`${t("certification.payments")} (${payments.length})`}
                   icon={<CreditCard />}
@@ -548,25 +844,246 @@ export const CertificationDetails: React.FC = () => {
                 >
                   {payments.length > 0 ? (
                     <div className="space-y-3">
-                      {payments.map((payment: any, index: number) => (
-                        <div key={payment.id || index} className="p-4 bg-linear-to-r from-gray-50 to-white rounded-xl border border-gray-100">
+                      {payments.map((payment: Payment, index: number) => (
+                        <div
+                          key={payment.id || index}
+                          className="p-4 bg-gradient-to-r from-gray-50 to-white rounded-xl border border-gray-100 hover:shadow-md transition-shadow"
+                        >
                           <div className="flex justify-between items-start gap-3 mb-2">
-                            <p className="font-semibold text-gray-900 break-all">
-                              {payment.transactionId || `${t("certification.payment")} ${index + 1}`}
-                            </p>
-                            <span className="px-2 py-1 bg-green-100 text-green-700 rounded-lg text-xs font-semibold">
-                              {payment.paymentAmount || "-"}
+                            <div>
+                              <p className="font-semibold text-gray-900 break-all">
+                                {payment.transactionId ||
+                                  `${t("certification.payment")} ${index + 1}`}
+                              </p>
+                              <p className="text-xs text-gray-500 mt-1">
+                                {formatDate(payment.paymentDate)}
+                              </p>
+                            </div>
+                            <span className="px-3 py-1.5 bg-green-100 text-green-700 rounded-lg text-sm font-bold whitespace-nowrap">
+                              {formatCurrency(payment.paymentAmount)}
                             </span>
                           </div>
-                          <p className="text-sm text-gray-500">{formatDate(payment.paymentDate)}</p>
+                          {payment.attachments?.length > 0 && (
+                            <div className="mt-2 pt-2 border-t border-gray-100">
+                              <div className="flex items-center gap-1 text-xs text-gray-500 mb-1">
+                                <Paperclip className="h-3 w-3" />
+                                {payment.attachments.length}{" "}
+                                {t("certification.attachment")}
+                              </div>
+                              {payment.attachments.map(
+                                (att: Attachment, idx: number) => (
+                                  <div
+                                    key={att.id || idx}
+                                    className="flex items-center justify-between p-2 bg-white rounded-lg mt-1"
+                                  >
+                                    <span className="text-xs text-gray-700 truncate">
+                                      {getFileName(att)}
+                                    </span>
+                                    <div className="flex gap-1 shrink-0">
+                                      <a
+                                        href={getFileUrl(att)}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="p-1 text-blue-500 hover:text-blue-700"
+                                      >
+                                        <Eye className="h-3 w-3" />
+                                      </a>
+                                      <a
+                                        href={getFileUrl(att)}
+                                        download
+                                        className="p-1 text-blue-500 hover:text-blue-700"
+                                      >
+                                        <Download className="h-3 w-3" />
+                                      </a>
+                                    </div>
+                                  </div>
+                                ),
+                              )}
+                            </div>
+                          )}
                         </div>
                       ))}
+                      {payments.length > 1 && (
+                        <div className="p-3 bg-blue-50 rounded-xl flex justify-between items-center">
+                          <span className="font-semibold text-blue-900">
+                            {t("certificationRequest.payment.totalAmountDue")}
+                          </span>
+                          <span className="font-bold text-blue-900">
+                            {formatCurrency(totalPaymentAmount)}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   ) : (
-                    <p className="text-center text-gray-500 py-8">{t("certification.noPayments")}</p>
+                    <p className="text-center text-gray-500 py-8">
+                      {t("certification.noPayments")}
+                    </p>
                   )}
                 </SectionCard>
               </div>
+            </div>
+          )}
+
+          {/* Payments Tab */}
+          {activeTab === "payments" && (
+            <div className="space-y-6">
+              {/* Payments Summary Banner */}
+              {/* {payments.length > 0 && (
+                <div className="bg-gradient-to-r from-green-600 to-teal-600 rounded-2xl shadow-lg p-6 text-white">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-lg font-bold mb-1">
+                        {t("certificationRequest.payment.paymentDetails")}
+                      </h3>
+                      <p className="text-green-100 text-sm">
+                        {payments.length}{" "}
+                        {t("certificationRequest.payment.title")}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm text-green-100">
+                        {t("certificationRequest.payment.totalAmountDue")}
+                      </p>
+                      <p className="text-2xl font-bold">
+                        {formatCurrency(totalPaymentAmount)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )} */}
+
+              {payments.length > 0 ? (
+                <div className="grid grid-cols-1 gap-6">
+                  {payments.map((payment: Payment, index: number) => (
+                    <div
+                      key={payment.id || index}
+                      className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
+                    >
+                      {/* Payment Header */}
+                      <div className="p-6 border-b border-gray-100 bg-linear-to-r from-gray-50 to-white">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                          <div>
+                            <div className="flex items-center gap-2 mb-2">
+                              <Banknote className="h-5 w-5 text-green-600" />
+                              <h3 className="text-xl font-bold text-gray-900">
+                                {t("certificationRequest.payment.title")}{" "}
+                                {index + 1}
+                              </h3>
+                            </div>
+                            <div className="flex flex-wrap gap-4 text-sm">
+                              <span className="inline-flex items-center gap-1 text-gray-600">
+                                {/* <Hash className="h-4 w-4 text-gray-400" /> */}
+                                <span className="font-medium">
+                                  {t(
+                                    "certificationRequest.payment.transactionId",
+                                  )}
+                                  :
+                                </span>{" "}
+                                {payment.transactionId || "-"}
+                              </span>
+                              <span className="inline-flex items-center gap-1 text-gray-600">
+                                <CalendarDays className="h-4 w-4 text-gray-400" />
+                                <span className="font-medium">
+                                  {t(
+                                    "certificationRequest.payment.paymentDate",
+                                  )}
+                                  :
+                                </span>{" "}
+                                {formatShortDate(payment.paymentDate)}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-sm text-gray-500 mb-1">
+                              {t("certificationRequest.payment.paymentAmount")}
+                            </p>
+                            <p className="text-2xl font-bold text-green-600">
+                              {formatCurrency(payment.paymentAmount)}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Payment Attachments */}
+                      <div className="p-6">
+                        <h4 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                          <Paperclip className="h-5 w-5 text-blue-600" />
+                          {t("certificationRequest.labels.attachments")} (
+                          {payment.attachments?.length || 0})
+                        </h4>
+                        {payment.attachments &&
+                        payment.attachments.length > 0 ? (
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {payment.attachments.map(
+                              (att: Attachment, idx: number) => (
+                                <div
+                                  key={att.id || idx}
+                                  className="p-4 bg-gray-50 rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-md transition-all group"
+                                >
+                                  <div className="flex items-center gap-3 mb-3">
+                                    {getFileTypeIcon(att.fileType)}
+                                    <div className="min-w-0 flex-1">
+                                      <p className="text-sm font-medium text-gray-900 truncate">
+                                        {getFileName(att)}
+                                      </p>
+                                      <p className="text-xs text-gray-500">
+                                        {formatFileSize(att.fileSize)}
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <div className="flex gap-2 justify-end">
+                                    <a
+                                      href={getFileUrl(att)}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                      className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
+                                    >
+                                      <Eye className="h-3.5 w-3.5" />
+                                      {t("common.view")}
+                                    </a>
+                                    <a
+                                      href={getFileUrl(att)}
+                                      download
+                                      className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                                    >
+                                      <Download className="h-3.5 w-3.5" />
+                                      {t("common.download")}
+                                    </a>
+                                  </div>
+                                </div>
+                              ),
+                            )}
+                          </div>
+                        ) : (
+                          <div className="text-center py-8 text-gray-500">
+                            <Paperclip className="h-12 w-12 mx-auto mb-3 text-gray-300" />
+                            <p className="font-medium">
+                              {t("common.noDocuments")}
+                            </p>
+                            <p className="text-sm mt-1">
+                              {t(
+                                "certificationRequest.payment.uploadScannedBillRequired",
+                              )}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
+                  <CreditCard className="h-16 w-16 mx-auto mb-4 text-gray-300" />
+                  <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                    {t("certification.noPayments")}
+                  </h3>
+                  <p className="text-gray-500">
+                    {t(
+                      "certificationRequest.payment.uploadScannedBillRequired",
+                    )}
+                  </p>
+                </div>
+              )}
             </div>
           )}
 
@@ -580,7 +1097,11 @@ export const CertificationDetails: React.FC = () => {
                     <div className="absolute -bottom-12 left-6">
                       <div className="w-24 h-24 bg-white rounded-2xl shadow-lg flex items-center justify-center overflow-hidden border-4 border-white">
                         {company.logoUrl ? (
-                          <img src={assetUrl(company.logoUrl)} alt={companyName} className="w-full h-full object-cover" />
+                          <img
+                            src={assetUrl(company.logoUrl)}
+                            alt={companyName}
+                            className="w-full h-full object-cover"
+                          />
                         ) : (
                           <Building2 className="h-12 w-12 text-blue-600" />
                         )}
@@ -590,19 +1111,38 @@ export const CertificationDetails: React.FC = () => {
                   <div className="pt-16 px-4 sm:px-6 pb-6">
                     <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
                       <div>
-                        <h3 className="text-2xl font-bold text-gray-900">{companyName}</h3>
+                        <h3 className="text-2xl font-bold text-gray-900">
+                          {companyName}
+                        </h3>
                         <div className="flex items-center gap-2 mt-2 flex-wrap">
                           <span className="px-2.5 py-1 bg-gray-100 text-gray-700 rounded-lg text-xs font-medium">
-                            {labelize(company.companyType)}
+                            {t(`company.typeOptions.${company.companyType}`)}
                           </span>
-                          <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium ${company.active ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-700"}`}>
-                            <div className={`w-1.5 h-1.5 rounded-full ${company.active ? "bg-green-500" : "bg-gray-400"}`} />
-                            {company.active ? t("company.labels.active") : t("company.labels.inactive")}
-                          </span>
+                          {/* <span
+                            className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium ${
+                              company.active
+                                ? "bg-green-100 text-green-700"
+                                : "bg-gray-100 text-gray-700"
+                            }`}
+                          >
+                            <div
+                              className={`w-1.5 h-1.5 rounded-full ${
+                                company.active ? "bg-green-500" : "bg-gray-400"
+                              }`}
+                            />
+                            {company.active
+                              ? t("company.labels.active")
+                              : t("company.labels.inactive")}
+                          </span> */}
                         </div>
                       </div>
                       {company.websiteUrl && (
-                        <a href={company.websiteUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-xl text-gray-700 transition-colors text-sm">
+                        <a
+                          href={company.websiteUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-xl text-gray-700 transition-colors text-sm"
+                        >
                           <Globe className="h-4 w-4" />
                           {t("company.labels.visitWebsite")}
                         </a>
@@ -610,170 +1150,354 @@ export const CertificationDetails: React.FC = () => {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                      <InfoBox icon={<Mail />} label={t("company.labels.email")} value={company.email} />
-                      <InfoBox icon={<Phone />} label={t("company.labels.phoneNumber")} value={company.phoneNumber} />
+                      <InfoBox
+                        icon={<Mail />}
+                        label={t("company.labels.email")}
+                        value={company.email}
+                      />
+                      <InfoBox
+                        icon={<Phone />}
+                        label={t("company.labels.phoneNumber")}
+                        value={company.phoneNumber}
+                      />
                       <div className="md:col-span-2">
-                        <InfoBox icon={<MapPin />} label={t("company.labels.address")} value={company.address} />
+                        <InfoBox
+                          icon={<MapPin />}
+                          label={t("company.labels.address")}
+                          value={company.address}
+                        />
                       </div>
                     </div>
 
+                    {/* Jawaz Information */}
+                    <SectionCard
+                      title={t("company.jawazInformation")}
+                      icon={<Shield />}
+                      expanded={expandedSections.companyJawaz}
+                      onToggle={() => toggleSection("companyJawaz")}
+                    >
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <CompanyStatBox
+                          color="blue"
+                          label={t("company.labels.jawazNumber")}
+                          value={company.jawazNumber}
+                        />
+                        <CompanyStatBox
+                          color="purple"
+                          label={t("company.labels.jawazIssueDate")}
+                          value={formatShortDate(company.jawazIssueDate)}
+                        />
+                        <CompanyStatBox
+                          color="orange"
+                          label={t("company.labels.jawazExpiryDate")}
+                          value={formatShortDate(company.jawazExpiryDate)}
+                        />
+                        <CompanyStatBox
+                          color="green"
+                          label={t("company.labels.establishYear")}
+                          value={formatShortDate(company.establishYear)}
+                        />
+                        <CompanyStatBox
+                          color="cyan"
+                          label={t("company.labels.activityPlace")}
+                          value={company.activityPlace}
+                        />
+                        <CompanyStatBox
+                          color="amber"
+                          label={t("company.labels.tinNumber")}
+                          value={company.tinNumber}
+                        />
+                      </div>
+                    </SectionCard>
+
+                    {/* Business Information */}
                     <div className="border-t border-gray-100 pt-6">
                       <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
                         <Briefcase className="h-5 w-5 text-blue-600" />
                         {t("company.labels.businessInformation")}
                       </h4>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <CompanyStatBox color="blue" label={t("company.labels.jawazNumber")} value={company.jawazNumber} />
-                        <CompanyStatBox color="purple" label={t("company.labels.jawazIssueDate")} value={formatShortDate(company.jawazIssueDate)} />
-                        <CompanyStatBox color="orange" label={t("company.labels.jawazExpiryDate")} value={formatShortDate(company.jawazExpiryDate)} />
-                        <CompanyStatBox color="green" label={t("company.labels.establishYear")} value={formatShortDate(company.establishYear)} />
-                        <CompanyStatBox color="cyan" label={t("company.labels.activityPlace")} value={company.activityPlace} />
-                        <CompanyStatBox color="amber" label={t("company.labels.ownerNameEn")} value={company.companyOwnerNameEn} />
+                        <CompanyStatBox
+                          color="amber"
+                          label={t("company.labels.ownerNameEn")}
+                          value={company[companyOwnerField]}
+                        />
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <PlainCard title={t("company.labels.aboutCompany")} icon={<FileText />}>
-                  <p className="text-gray-700 leading-relaxed whitespace-pre-line">{company?.[aboutCompanyField] || "-"}</p>
-                </PlainCard>
+                {/* About Company */}
+                <SectionCard
+                  title={t("company.labels.aboutCompany")}
+                  icon={<FileText />}
+                  expanded={expandedSections.certificateInfo}
+                  onToggle={() => toggleSection("companyAbout")}
+                >
+                  <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                    {company?.[aboutCompanyField] || "-"}
+                  </p>
+                </SectionCard>
 
+                {/* Company Categories */}
                 {company.categories?.length > 0 && (
-                  <PlainCard title={t("company.labels.categories")} icon={<Tag />}>
+                  <SectionCard
+                    title={`${t("company.labels.categories")} (${company.categories.length})`}
+                    icon={<Tag />}
+                    expanded={expandedSections.companyCategories}
+                    onToggle={() => toggleSection("companyCategories")}
+                  >
                     <div className="flex flex-wrap gap-2">
-                      {company.categories.map((category: any) => (
-                        <span key={category.id} className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full text-sm font-medium shadow-sm hover:shadow-md">
+                      {company.categories.map((category: Category) => (
+                        <span
+                          key={category.id}
+                          className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full text-sm font-medium shadow-sm hover:shadow-md transition-shadow"
+                        >
                           {category.categoryName}
                         </span>
                       ))}
                     </div>
-                  </PlainCard>
+                  </SectionCard>
                 )}
 
                 {company.bussinessLogoUrl && (
-                  <PlainCard title={t("company.labels.businessLogo")} icon={<Building2 />}>
+                  <PlainCard
+                    title={t("company.labels.businessLogo")}
+                    icon={<Building2 />}
+                  >
                     <div className="flex justify-center p-4 bg-gray-50 rounded-xl">
-                      <img src={assetUrl(company.bussinessLogoUrl)} alt={t("company.labels.businessLogo")} className="max-h-48 object-contain rounded-lg" />
+                      <img
+                        src={assetUrl(company.bussinessLogoUrl)}
+                        alt={t("company.labels.businessLogo")}
+                        className="max-h-48 object-contain rounded-lg"
+                      />
                     </div>
                   </PlainCard>
                 )}
               </div>
 
               <div className="space-y-6">
-                <div className="bg-gradient-to-br from-green-600 to-teal-700 rounded-2xl shadow-lg p-6 text-white relative overflow-hidden">
-                  <div className="absolute top-0 right-0 opacity-10"><Shield className="h-32 w-32" /></div>
+                {/* <div className="bg-gradient-to-br from-green-600 to-teal-700 rounded-2xl shadow-lg p-6 text-white relative overflow-hidden">
+                  <div className="absolute top-0 right-0 opacity-10">
+                    <Shield className="h-32 w-32" />
+                  </div>
                   <Shield className="h-12 w-12 mb-4 relative z-10" />
-                  <h3 className="text-xl font-bold mb-2 relative z-10">{t("company.labels.verifiedCompany")}</h3>
-                  <p className="text-green-100 mb-4 relative z-10 text-sm">{t("company.labels.verifiedMessage")}</p>
+                  <h3 className="text-xl font-bold mb-2 relative z-10">
+                    {t("company.labels.verifiedCompany")}
+                  </h3>
+                  <p className="text-green-100 mb-4 relative z-10 text-sm">
+                    {t("company.labels.verifiedMessage")}
+                  </p>
                   <div className="inline-flex items-center gap-2 text-sm relative z-10 bg-white/20 rounded-lg px-3 py-2">
                     <CheckCircle2 className="h-4 w-4" />
                     <span>{t("company.labels.registeredMember")}</span>
                   </div>
-                </div>
+                </div> */}
 
-                <PlainCard title={t("company.labels.companyStats")} icon={<TrendingUp />}>
+                <PlainCard
+                  title={t("company.labels.companyStats")}
+                  icon={<TrendingUp />}
+                >
                   <div className="space-y-1">
-                    <CompanyMiniStat label={t("company.labels.companyType")} value={labelize(company.companyType)} />
-                    <CompanyMiniStat label={t("company.labels.categoriesCount")} value={`${company.categories?.length || 0} ${t("company.labels.categories")}`} />
-                    <CompanyMiniStat label={t("company.labels.documentsCount")} value={`${company.attachments?.length || 0} ${t("company.labels.documents")}`} />
-                    <CompanyMiniStat label={t("company.labels.socialLinks")} value={`${company.socialLinks?.length || 0} ${t("company.labels.links")}`} />
+                    <CompanyMiniStat
+                      label={t("company.labels.companyType")}
+                      value={t(`company.typeOptions.${company.companyType}`)}
+                    />
+                    <CompanyMiniStat
+                      label={t("company.labels.categoriesCount")}
+                      value={`${company.categories?.length || 0}`}
+                    />
+                    <CompanyMiniStat
+                      label={t("company.labels.documentsCount")}
+                      value={`${companyAttachments.length} `}
+                    />
+                    <CompanyMiniStat
+                      label={t("company.labels.socialLinks")}
+                      value={`${company.socialLinks?.length || 0} `}
+                    />
                   </div>
                 </PlainCard>
 
-                <PlainCard title={t("company.labels.quickContact")} icon={<Phone />}>
+                <PlainCard
+                  title={t("company.labels.quickContact")}
+                  icon={<Phone />}
+                >
                   <div className="space-y-3">
                     {company.email && (
-                      <button onClick={() => window.location.href = `mailto:${company.email}`} className="w-full flex items-center gap-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors group">
+                      <button
+                        onClick={() =>
+                          (window.location.href = `mailto:${company.email}`)
+                        }
+                        className="w-full flex items-center gap-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors group"
+                      >
                         <Mail className="h-5 w-5 text-blue-600 group-hover:scale-110 transition-transform" />
-                        <span className="text-sm font-medium text-gray-700 flex-1 text-left break-all">{company.email}</span>
+                        <span className="text-sm font-medium text-gray-700 flex-1 text-left break-all">
+                          {company.email}
+                        </span>
                         <ChevronRight className="h-4 w-4 text-blue-400 opacity-0 group-hover:opacity-100" />
                       </button>
                     )}
                     {company.phoneNumber && (
-                      <button onClick={() => window.location.href = `tel:${company.phoneNumber}`} className="w-full flex items-center gap-3 p-3 bg-green-50 hover:bg-green-100 rounded-xl transition-colors group">
+                      <button
+                        onClick={() =>
+                          (window.location.href = `tel:${company.phoneNumber}`)
+                        }
+                        className="w-full flex items-center gap-3 p-3 bg-green-50 hover:bg-green-100 rounded-xl transition-colors group"
+                      >
                         <Phone className="h-5 w-5 text-green-600 group-hover:scale-110 transition-transform" />
-                        <span className="text-sm font-medium text-gray-700 flex-1 text-left">{company.phoneNumber}</span>
+                        <span className="text-sm font-medium text-gray-700 flex-1 text-left">
+                          {company.phoneNumber}
+                        </span>
                         <ChevronRight className="h-4 w-4 text-green-400 opacity-0 group-hover:opacity-100" />
                       </button>
                     )}
                     {company.websiteUrl && (
-                      <button onClick={() => window.open(company.websiteUrl, "_blank")} className="w-full flex items-center gap-3 p-3 bg-purple-50 hover:bg-purple-100 rounded-xl transition-colors group">
+                      <button
+                        onClick={() =>
+                          window.open(company.websiteUrl, "_blank")
+                        }
+                        className="w-full flex items-center gap-3 p-3 bg-purple-50 hover:bg-purple-100 rounded-xl transition-colors group"
+                      >
                         <Globe className="h-5 w-5 text-purple-600 group-hover:scale-110 transition-transform" />
-                        <span className="text-sm font-medium text-gray-700 flex-1 text-left">{t("company.labels.visitWebsite")}</span>
+                        <span className="text-sm font-medium text-gray-700 flex-1 text-left">
+                          {t("company.labels.visitWebsite")}
+                        </span>
                         <ChevronRight className="h-4 w-4 text-purple-400 opacity-0 group-hover:opacity-100" />
                       </button>
                     )}
                   </div>
                 </PlainCard>
 
+                {/* Contact Person Card */}
                 {contactPerson && Object.keys(contactPerson).length > 0 && (
-                  <SectionCard title={t("contactPerson.info")} icon={<UserRound />} expanded={expandedSections.contactPersonDetails} onToggle={() => toggleSection("contactPersonDetails")}>
+                  <SectionCard
+                    title={t("contactPerson.info")}
+                    icon={<UserRound />}
+                    expanded={expandedSections.contactPersonDetails}
+                    onToggle={() => toggleSection("contactPersonDetails")}
+                  >
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                       <div className="flex items-start gap-3 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl">
                         <UserRound className="h-5 w-5 text-blue-600 mt-0.5" />
                         <div>
-                          <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">{t("contactPerson.firstName")} & {t("contactPerson.lastName")}</p>
-                          <p className="font-semibold text-gray-900">{contactPerson.firstName || "-"} {contactPerson.lastName || ""}</p>
+                          <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">
+                            {t("contactPerson.firstName")} &{" "}
+                            {t("contactPerson.lastName")}
+                          </p>
+                          <p className="font-semibold text-gray-900">
+                            {contactPerson.firstName || "-"}{" "}
+                            {contactPerson.lastName || ""}
+                          </p>
                         </div>
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl">
                         <Briefcase className="h-5 w-5 text-purple-600 mt-0.5" />
                         <div>
-                          <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">{t("contactPerson.position")}</p>
-                          <p className="font-semibold text-gray-900">{contactPerson.position || "—"}</p>
+                          <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">
+                            {t("contactPerson.position")}
+                          </p>
+                          <p className="font-semibold text-gray-900">
+                            {contactPerson.position || "—"}
+                          </p>
                         </div>
                       </div>
                     </div>
 
                     <div className="space-y-3 mb-6">
                       {contactPerson.email && (
-                        <button onClick={() => window.location.href = `mailto:${contactPerson.email}`} className="w-full flex items-center gap-3 p-3 bg-green-50 hover:bg-green-100 rounded-xl transition-all group">
+                        <button
+                          onClick={() =>
+                            (window.location.href = `mailto:${contactPerson.email}`)
+                          }
+                          className="w-full flex items-center gap-3 p-3 bg-green-50 hover:bg-green-100 rounded-xl transition-all group"
+                        >
                           <Mail className="h-5 w-5 text-green-600 group-hover:scale-110 transition-transform" />
                           <div className="flex-1 text-left min-w-0">
-                            <p className="text-xs text-gray-500 uppercase tracking-wider">{t("contactPerson.email")}</p>
-                            <p className="font-medium text-gray-800 break-all">{contactPerson.email}</p>
+                            <p className="text-xs text-gray-500 uppercase tracking-wider">
+                              {t("contactPerson.email")}
+                            </p>
+                            <p className="font-medium text-gray-800 break-all">
+                              {contactPerson.email}
+                            </p>
                           </div>
                           <ChevronRight className="h-4 w-4 text-green-400 opacity-0 group-hover:opacity-100" />
                         </button>
                       )}
                       {contactPerson.phoneNumber && (
-                        <button onClick={() => window.location.href = `tel:${contactPerson.phoneNumber}`} className="w-full flex items-center gap-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-xl transition-all group">
+                        <button
+                          onClick={() =>
+                            (window.location.href = `tel:${contactPerson.phoneNumber}`)
+                          }
+                          className="w-full flex items-center gap-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-xl transition-all group"
+                        >
                           <Phone className="h-5 w-5 text-blue-600 group-hover:scale-110 transition-transform" />
                           <div className="flex-1 text-left min-w-0">
-                            <p className="text-xs text-gray-500 uppercase tracking-wider">{t("contactPerson.phoneNumber")}</p>
-                            <p className="font-medium text-gray-800">{contactPerson.phoneNumber}</p>
+                            <p className="text-xs text-gray-500 uppercase tracking-wider">
+                              {t("contactPerson.phoneNumber")}
+                            </p>
+                            <p className="font-medium text-gray-800">
+                              {contactPerson.phoneNumber}
+                            </p>
                           </div>
                           <ChevronRight className="h-4 w-4 text-blue-400 opacity-0 group-hover:opacity-100" />
                         </button>
                       )}
                     </div>
 
+                    {/* Contact Addresses */}
                     {contactPerson.addresses?.length > 0 && (
                       <div className="border-t border-gray-200 pt-4">
-                        <div className="flex items-center gap-2 mb-3">
-                          <MapPin className="h-4 w-4 text-blue-600" />
-                          <h4 className="font-semibold text-gray-800 text-sm">{t("contactPerson.addresses.title")}</h4>
-                        </div>
-                        <div className="space-y-3">
-                          {contactPerson.addresses.map((address: any) => (
-                            <div key={address.id} className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-4 hover:shadow-md transition-shadow">
-                              <div className="flex flex-wrap gap-2 mb-2">
-                                <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs font-medium">
-                                  {getAddressIcon(address.addressType)}
-                                  {labelize(address.addressType)}
-                                </span>
+                        <button
+                          onClick={() => toggleSection("contactAddresses")}
+                          className="w-full flex items-center justify-between mb-3 hover:bg-gray-50 p-2 rounded-lg"
+                        >
+                          <div className="flex items-center gap-2">
+                            <MapPin className="h-4 w-4 text-blue-600" />
+                            <h4 className="font-semibold text-gray-800 text-sm">
+                              {t("contactPerson.addresses.title")} (
+                              {contactPerson.addresses.length})
+                            </h4>
+                          </div>
+                          {expandedSections.contactAddresses ? (
+                            <ChevronUp className="h-4 w-4 text-gray-400" />
+                          ) : (
+                            <ChevronDown className="h-4 w-4 text-gray-400" />
+                          )}
+                        </button>
+                        {expandedSections.contactAddresses && (
+                          <div className="space-y-3">
+                            {contactPerson.addresses.map((address: Address) => (
+                              <div
+                                key={address.id}
+                                className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-4 hover:shadow-md transition-shadow"
+                              >
+                                <div className="flex flex-wrap gap-2 mb-2">
+                                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs font-medium">
+                                    {getAddressIcon(address.addressType)}
+                                    {labelize(address.addressType)}
+                                  </span>
+                                </div>
+                                <div className="text-sm text-gray-700 space-y-1">
+                                  <p className="flex items-start gap-2">
+                                    <MapPin className="h-3.5 w-3.5 text-gray-400 mt-0.5 shrink-0" />
+                                    <span>
+                                      {address.district?.districtName || "-"},{" "}
+                                      {address.district?.province
+                                        ?.provinceName || "-"}
+                                    </span>
+                                  </p>
+                                  <p className="text-gray-600 pl-5">
+                                    {address.details || "-"}
+                                  </p>
+                                  <p className="text-xs text-gray-500 pl-5">
+                                    {address.district?.province?.country
+                                      ?.countryName || "-"}
+                                  </p>
+                                </div>
                               </div>
-                              <div className="text-sm text-gray-700 space-y-1">
-                                <p className="flex items-start gap-2">
-                                  <MapPin className="h-3.5 w-3.5 text-gray-400 mt-0.5 shrink-0" />
-                                  <span>{address.district?.districtName || "-"}, {address.district?.province?.provinceName || "-"}</span>
-                                </p>
-                                <p className="text-gray-600 pl-5">{address.details || "-"}</p>
-                                <p className="text-xs text-gray-500 pl-5">{address.district?.province?.country?.countryName || "-"}</p>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     )}
                   </SectionCard>
@@ -792,6 +1516,8 @@ export const CertificationDetails: React.FC = () => {
                 getFileUrl={getFileUrl}
                 formatFileSize={formatFileSize}
                 emptyMessage={t("common.noDocuments")}
+                getFileTypeIcon={getFileTypeIcon}
+                t={t}
               />
               <AttachmentCard
                 title={t("certification.certificateAttachments")}
@@ -800,7 +1526,28 @@ export const CertificationDetails: React.FC = () => {
                 getFileUrl={getFileUrl}
                 formatFileSize={formatFileSize}
                 emptyMessage={t("common.noDocuments")}
+                getFileTypeIcon={getFileTypeIcon}
+                t={t}
               />
+              <AttachmentCard
+                title={t("company.labels.companyAttachments")}
+                attachments={companyAttachments}
+                getFileName={getFileName}
+                getFileUrl={getFileUrl}
+                formatFileSize={formatFileSize}
+                emptyMessage={t("common.noDocuments")}
+                getFileTypeIcon={getFileTypeIcon}
+                t={t}
+              />
+              {/* <AttachmentCard
+                title={t("certificationRequest.payment.scannedBill")}
+                attachments={paymentAttachments}
+                getFileName={getFileName}
+                getFileUrl={getFileUrl}
+                formatFileSize={formatFileSize}
+                emptyMessage={t("common.noDocuments")}
+                getFileTypeIcon={getFileTypeIcon}
+              /> */}
             </div>
           )}
         </div>
@@ -814,7 +1561,11 @@ export const CertificationDetails: React.FC = () => {
             await updateStatus("PRINTED");
             await loadDetails();
             setUpdateDialogVisible(false);
-            showToast("success", t("common.success"), t("certification.statusOptions.PRINTED"));
+            showToast(
+              "success",
+              t("common.success"),
+              t("certification.statusOptions.PRINTED"),
+            );
           }}
         />
       </div>
@@ -823,42 +1574,128 @@ export const CertificationDetails: React.FC = () => {
 };
 
 // Helper Components
-const TimelineItem = ({ icon, bg, title, date }: { icon: React.ReactNode; bg: string; title: string; date: string }) => (
+const TimelineItem = ({
+  icon,
+  bg,
+  title,
+  date,
+}: {
+  icon: React.ReactNode;
+  bg: string;
+  title: string;
+  date: string;
+}) => (
   <div className="flex items-start gap-3">
-    <div className={`w-8 h-8 ${bg} rounded-full flex items-center justify-center`}>{icon}</div>
-    <div><p className="font-medium text-gray-900">{title}</p><p className="text-sm text-gray-500">{date}</p></div>
+    <div
+      className={`w-8 h-8 ${bg} rounded-full flex items-center justify-center shrink-0`}
+    >
+      {icon}
+    </div>
+    <div>
+      <p className="font-medium text-gray-900">{title}</p>
+      <p className="text-sm text-gray-500">{date}</p>
+    </div>
   </div>
 );
 
-const SectionCard = ({ title, icon, expanded, onToggle, children }: { title: string; icon: React.ReactNode; expanded: boolean; onToggle: () => void; children: React.ReactNode }) => (
+const SectionCard = ({
+  title,
+  icon,
+  expanded,
+  onToggle,
+  children,
+}: {
+  title: string;
+  icon: React.ReactNode;
+  expanded: boolean;
+  onToggle: () => void;
+  children: React.ReactNode;
+}) => (
   <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-    <button onClick={onToggle} className="w-full flex items-center justify-between p-4 sm:p-6 hover:bg-gray-50">
-      <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2"><span className="text-blue-600 [&>svg]:h-5 [&>svg]:w-5">{icon}</span>{title}</h3>
-      {expanded ? <ChevronUp className="h-5 w-5 text-gray-400" /> : <ChevronDown className="h-5 w-5 text-gray-400" />}
+    <button
+      onClick={onToggle}
+      className="w-full flex items-center justify-between p-4 sm:p-6 hover:bg-gray-50 transition-colors"
+    >
+      <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+        <span className="text-blue-600 [&>svg]:h-5 [&>svg]:w-5">{icon}</span>
+        {title}
+      </h3>
+      {expanded ? (
+        <ChevronUp className="h-5 w-5 text-gray-400" />
+      ) : (
+        <ChevronDown className="h-5 w-5 text-gray-400" />
+      )}
     </button>
     {expanded && <div className="px-4 sm:px-6 pb-6">{children}</div>}
   </div>
 );
 
-const PlainCard = ({ title, icon, children }: { title: string; icon: React.ReactNode; children: React.ReactNode }) => (
+const PlainCard = ({
+  title,
+  icon,
+  children,
+}: {
+  title: string;
+  icon: React.ReactNode;
+  children: React.ReactNode;
+}) => (
   <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-    <div className="px-4 sm:px-6 py-4 border-b border-gray-100"><h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2"><span className="text-blue-600 [&>svg]:h-5 [&>svg]:w-5">{icon}</span>{title}</h3></div>
+    <div className="px-4 sm:px-6 py-4 border-b border-gray-100">
+      <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+        <span className="text-blue-600 [&>svg]:h-5 [&>svg]:w-5">{icon}</span>
+        {title}
+      </h3>
+    </div>
     <div className="p-4 sm:p-6">{children}</div>
   </div>
 );
 
-const InfoGrid = ({ items }: { items: { icon: React.ReactNode; label: string; value?: any }[] }) => (
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">{items.map((item, index) => <InfoBox key={index} icon={item.icon} label={item.label} value={item.value} />)}</div>
-);
-
-const InfoBox = ({ icon, label, value }: { icon: React.ReactNode; label: string; value?: any }) => (
-  <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl min-w-0">
-    <span className="text-blue-500 shrink-0 [&>svg]:h-5 [&>svg]:w-5">{icon}</span>
-    <div className="min-w-0"><p className="text-xs text-gray-500 uppercase tracking-wide">{label}</p><p className="font-medium text-gray-900 break-words">{value || "-"}</p></div>
+const InfoGrid = ({
+  items,
+}: {
+  items: { icon: React.ReactNode; label: string; value?: any }[];
+}) => (
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    {items.map((item, index) => (
+      <InfoBox
+        key={index}
+        icon={item.icon}
+        label={item.label}
+        value={item.value}
+      />
+    ))}
   </div>
 );
 
-const CompanyStatBox = ({ label, value, color = "blue" }: { label: string; value?: any; color?: "blue" | "purple" | "orange" | "green" | "cyan" | "amber" }) => {
+const InfoBox = ({
+  icon,
+  label,
+  value,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value?: any;
+}) => (
+  <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl min-w-0">
+    <span className="text-blue-500 shrink-0 [&>svg]:h-5 [&>svg]:w-5">
+      {icon}
+    </span>
+    <div className="min-w-0">
+      <p className="text-xs text-gray-500 uppercase tracking-wide">{label}</p>
+      <p className="font-medium text-gray-900 break-words">{value || "-"}</p>
+    </div>
+  </div>
+);
+
+const CompanyStatBox = ({
+  label,
+  value,
+  color = "blue",
+}: {
+  label: string;
+  value?: any;
+  color?: "blue" | "purple" | "orange" | "green" | "cyan" | "amber";
+}) => {
   const styles: Record<string, string> = {
     blue: "from-blue-50 to-indigo-50 text-blue-600",
     purple: "from-purple-50 to-pink-50 text-purple-600",
@@ -867,34 +1704,116 @@ const CompanyStatBox = ({ label, value, color = "blue" }: { label: string; value
     cyan: "from-cyan-50 to-sky-50 text-cyan-600",
     amber: "from-amber-50 to-yellow-50 text-amber-600",
   };
-  return (<div className={`bg-linear-to-br ${styles[color]} rounded-xl p-4`}><p className="text-xs uppercase tracking-wide mb-1">{label}</p><p className="text-lg font-bold text-gray-900 wrap-break-word">{value || "-"}</p></div>);
+  return (
+    <div className={`bg-gradient-to-br ${styles[color]} rounded-xl p-4`}>
+      <p className="text-xs uppercase tracking-wide mb-1">{label}</p>
+      <p className="text-lg font-bold text-gray-900 break-words">
+        {value || "-"}
+      </p>
+    </div>
+  );
 };
 
 const CompanyMiniStat = ({ label, value }: { label: string; value?: any }) => (
   <div className="flex justify-between items-center py-2 border-b border-gray-50 last:border-b-0 gap-3">
     <span className="text-gray-600">{label}</span>
-    <span className="font-semibold text-gray-900 px-2 py-1 bg-blue-50 rounded-lg text-sm text-right">{value || "-"}</span>
+    <span className="font-semibold text-gray-900 px-2 py-1 bg-blue-50 rounded-lg text-sm text-right">
+      {value || "-"}
+    </span>
   </div>
 );
 
-const AttachmentCard = ({ title, attachments, getFileName, getFileUrl, formatFileSize, emptyMessage }: { title: string; attachments: Attachment[]; getFileName: (attachment: Attachment) => string; getFileUrl: (attachment: Attachment) => string; formatFileSize: (bytes?: number) => string; emptyMessage: string }) => (
+const AttachmentCard = ({
+  title,
+  attachments,
+  getFileName,
+  getFileUrl,
+  formatFileSize,
+  emptyMessage,
+  getFileTypeIcon,
+  t,
+}: {
+  title: string;
+  attachments: Attachment[];
+  getFileName: (attachment: Attachment) => string;
+  getFileUrl: (attachment: Attachment) => string;
+  formatFileSize: (bytes?: number) => string;
+  emptyMessage: string;
+
+  getFileTypeIcon: (fileType?: string) => React.ReactNode;
+  t: TFunction;
+}) => (
   <PlainCard title={`${title} (${attachments.length})`} icon={<File />}>
     {attachments.length > 0 ? (
       <div className="space-y-3">
         {attachments.map((attachment, index) => (
-          <div key={attachment.id || index} className="flex items-center justify-between gap-3 p-3 bg-gray-50 rounded-xl">
-            <div className="flex items-center gap-3 min-w-0">
+          <div
+            key={attachment.id || index}
+            className="flex items-center justify-between gap-3 p-3 bg-gray-50 rounded-xl hover:shadow-md transition-shadow group"
+          >
+            {/* <div className="flex items-center gap-3 min-w-0">
+              {getFileTypeIcon(attachment.fileType)}
+              <div className="min-w-0">
+                <p className="font-medium text-gray-900 truncate">
+                  {getFileName(attachment)}
+                </p>
+                     {attachment.attachmentReferenceType && (
+                    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-200 text-gray-700">
+                      {t(
+                        `attachment.type.${attachment.attachmentReferenceType}`,
+                      )}
+                    </span>
+                  )}
+                <p className="text-xs text-gray-500">
+                  {formatFileSize(attachment.fileSize)}
+                </p>
+              </div>
+            </div> */}
+            <div className="flex items-center gap-3 flex-1">
               <File className="h-5 w-5 text-blue-500 shrink-0" />
-              <div className="min-w-0"><p className="font-medium text-gray-900 truncate">{getFileName(attachment)}</p><p className="text-xs text-gray-500">{formatFileSize(attachment.fileSize)}</p></div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <p className="font-medium text-gray-900 truncate">
+                    {attachment.attachmentName}
+                  </p>
+                  {attachment.attachmentReferenceType && (
+                    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-200 text-gray-700">
+                      {t(
+                        `attachment.type.${attachment.attachmentReferenceType}`,
+                      )}
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-center gap-3 mt-0.5">
+                  <p className="text-xs text-gray-500">
+                    {formatFileSize(attachment.fileSize)}
+                  </p>
+                </div>
+              </div>
             </div>
             <div className="flex gap-2 shrink-0">
-              <a href={getFileUrl(attachment)} target="_blank" rel="noreferrer" className="text-blue-600"><Eye className="h-5 w-5" /></a>
-              <a href={getFileUrl(attachment)} download className="text-blue-600"><Download className="h-5 w-5" /></a>
+              <a
+                href={getFileUrl(attachment)}
+                target="_blank"
+                rel="noreferrer"
+                className="p-1.5 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors"
+              >
+                <Eye className="h-4 w-4" />
+              </a>
+              <a
+                href={getFileUrl(attachment)}
+                download
+                className="p-1.5 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors"
+              >
+                <Download className="h-4 w-4" />
+              </a>
             </div>
           </div>
         ))}
       </div>
-    ) : (<p className="text-center text-gray-500 py-6">{emptyMessage}</p>)}
+    ) : (
+      <p className="text-center text-gray-500 py-6">{emptyMessage}</p>
+    )}
   </PlainCard>
 );
 

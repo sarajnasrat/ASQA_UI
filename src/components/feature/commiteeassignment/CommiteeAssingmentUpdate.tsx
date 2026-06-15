@@ -7,7 +7,10 @@ import { useForm, Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import CommiteeAssignmentService from "../../../services/commitee-assignment.service";
+import { handleApi } from "../../../hooks/handleApi";
+import { useToast } from "../../../hooks/ToastContext";
 import FileUploadField from "../../common/FileUploadField";
+import { Navigate, useNavigate } from "react-router-dom";
 
 interface Props {
   visible: boolean;
@@ -34,13 +37,14 @@ export const CommiteeAssingmentUpdate: React.FC<Props> = ({
   onSuccess,
 }) => {
   const { t } = useTranslation();
+  const { showSuccess, showError } = useToast();
   const { control, handleSubmit, reset, watch } = useForm({
     defaultValues: {
       assignmentStatus: "",
       remarks: "",
     },
   });
-
+  const navigate = useNavigate();
   const watchedStatus = watch("assignmentStatus");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
@@ -71,7 +75,8 @@ export const CommiteeAssingmentUpdate: React.FC<Props> = ({
       CommiteeAssignmentService.getById(assignmentId).then((res: any) => {
         const data = res.data.data;
         const nextStatus =
-          lockedStatus && statusOptions.some((option) => option.value === lockedStatus)
+          lockedStatus &&
+          statusOptions.some((option) => option.value === lockedStatus)
             ? lockedStatus
             : data.assignmentStatus;
 
@@ -89,11 +94,20 @@ export const CommiteeAssingmentUpdate: React.FC<Props> = ({
 
     try {
       setLoading(true);
-      await CommiteeAssignmentService.patchUpdate(
-        assignmentId,
-        data,
-        selectedFile || undefined,
+      const response = await handleApi(
+        () =>
+          CommiteeAssignmentService.patchUpdate(
+            assignmentId,
+            data,
+            selectedFile || undefined,
+          ),
+        showSuccess,
+        showError,
+        t,
       );
+      if (response?.status == 200) {
+        navigate("/commitee-assignment-list");
+      }
       onSuccess();
       onHide();
     } finally {
@@ -128,7 +142,9 @@ export const CommiteeAssingmentUpdate: React.FC<Props> = ({
                 <Dropdown
                   {...field}
                   options={statusOptions}
-                  placeholder={t("commitee.assignment.dialog.statusPlaceholder")}
+                  placeholder={t(
+                    "commitee.assignment.dialog.statusPlaceholder",
+                  )}
                   className="w-full"
                   disabled={statusOptions.length === 0}
                 />
@@ -167,21 +183,26 @@ export const CommiteeAssingmentUpdate: React.FC<Props> = ({
           </>
         )}
 
-        <div className="flex w-3xs justify-end gap-2 mt-4 ">
-          <Button
-            label={t("common.cancel")}
-            className="p-button-outlined border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-md transition-all"
-            onClick={onHide}
-            type="button"
-          />
-
-          <Button
-            label={t("common.update")}
-            loading={loading}
-            type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white px-12 py-2 rounded-md transition-all shadow-sm"
-            disabled={statusOptions.length === 0}
-          />
+        <div className="flex w-full  justify-end gap-2 mt-4 ">
+          <div className="w-24">
+            <Button
+              label={t("common.cancel")}
+              className="p-button-outlined border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-md transition-all"
+              onClick={onHide}
+              type="button"
+              icon="pi pi-times"
+            />
+          </div>
+          <div className="w-36">
+            <Button
+              label={t("common.update")}
+              loading={loading}
+              type="submit"
+              icon="pi pi-save"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-12 py-2 rounded-md transition-all shadow-sm"
+              disabled={statusOptions.length === 0}
+            />
+          </div>
         </div>
       </form>
     </Dialog>

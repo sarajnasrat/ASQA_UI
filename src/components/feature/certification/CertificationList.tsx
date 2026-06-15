@@ -242,11 +242,17 @@ export const CertificationList = () => {
       field: "certificationType",
       header: t("certification.type"),
       sortable: true,
+      body: (rowData: any) =>
+        t(
+          `certificationRequest.certificationTypeOptions.${rowData.certificationType}`,
+        ),
     },
     {
       field: "certificationStatus",
       header: t("certification.status"),
       sortable: true,
+      body: (rowData: any) =>
+        t(`certification.statusOptions.${rowData.certificationStatus}`),
     },
     {
       field: "issueDate",
@@ -316,4 +322,3 @@ export const CertificationList = () => {
     </>
   );
 };
-

@@ -15,6 +15,7 @@ import {
   Edit3,
   PlusCircle,
   Globe,
+  Info,
 } from "lucide-react";
 
 interface OrganizationInfoForm {
@@ -24,6 +25,7 @@ interface OrganizationInfoForm {
   satelliteHorizontal: string;
   satelliteVertical: string;
   emailAddress: string;
+  organizationDetail: string;
 }
 
 interface Props {
@@ -65,6 +67,7 @@ const createEmptyForm = (): OrganizationInfoForm => ({
   satelliteHorizontal: "",
   satelliteVertical: "",
   emailAddress: "",
+  organizationDetail: "",
 });
 
 const OrganizationInfoFormDialog: React.FC<Props> = ({
@@ -110,6 +113,7 @@ const OrganizationInfoFormDialog: React.FC<Props> = ({
           satelliteHorizontal: data.satelliteHorizontal || "",
           satelliteVertical: data.satelliteVertical || "",
           emailAddress: data.emailAddress || "",
+          organizationDetail: data.organizationDetail || "",
         });
       }
 
@@ -124,6 +128,14 @@ const OrganizationInfoFormDialog: React.FC<Props> = ({
       showError(
         t("common.error"),
         t("organizationInfo.validation.organizationNameRequired")
+      );
+      return false;
+    }
+
+    if (!form.organizationDetail.trim()) {
+      showError(
+        t("common.error"),
+        t("organizationInfo.validation.organizationDetailRequired")
       );
       return false;
     }
@@ -193,6 +205,8 @@ const OrganizationInfoFormDialog: React.FC<Props> = ({
       satelliteHorizontal: form.satelliteHorizontal.trim(),
       satelliteVertical: form.satelliteVertical.trim(),
       emailAddress: form.emailAddress.trim(),
+      organizationDetail: form.organizationDetail.trim(),
+
     };
 
     const response = await handleApi(
@@ -320,24 +334,6 @@ const OrganizationInfoFormDialog: React.FC<Props> = ({
             </FormField>
           </div>
 
-          <FormField
-            icon={MapPin}
-            label={t("organizationInfo.address")}
-            required
-          >
-            <InputTextarea
-              value={form.address}
-              onChange={(e) =>
-                setForm((prev) => ({
-                  ...prev,
-                  address: e.target.value,
-                }))
-              }
-              rows={3}
-              className="w-full"
-              placeholder={t("organizationInfo.placeholder.address")}
-            />
-          </FormField>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
@@ -395,9 +391,55 @@ const OrganizationInfoFormDialog: React.FC<Props> = ({
               placeholder={t("organizationInfo.placeholder.emailAddress")}
             />
           </FormField>
+       
+
+          <FormField
+            icon={MapPin}
+            label={t("organizationInfo.address")}
+            required
+          >
+            <InputTextarea
+              value={form.address}
+              onChange={(e) =>
+                setForm((prev) => ({
+                  ...prev,
+                  address: e.target.value,
+                }))
+              }
+              rows={3}
+              className="w-full"
+              placeholder={t("organizationInfo.placeholder.address")}
+            />
+          </FormField>
+             
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
+
+
+             <FormField
+            icon={Info}
+            label={t("organizationInfo.organizationDetail")}
+            required
+          >
+            <InputTextarea
+              value={form.organizationDetail} 
+              onChange={(e) =>
+                setForm((prev) => ({
+                  ...prev,
+                  organizationDetail: e.target.value,
+                }))
+              }
+              rows={3}
+              className="w-full"
+              placeholder={t("organizationInfo.placeholder.organizationDetail")}
+            />
+          </FormField>
+          </div>
 
           {renderFooter()}
+
+          
         </div>
+        
       )}
     </Dialog>
   );

@@ -136,7 +136,7 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
         }, 100);
       } else {
         pdf.save(
-          `certificate-${certification.certificateNumber || "asqa"}.pdf`,
+          `final-certificate-${certification.certificateNumber || "asqa"}.pdf`,
         );
         handlePrint();
       }

@@ -147,19 +147,19 @@ export const RejectedRequest = () => {
         icon: "pi pi-eye",
         command: () => navigate(`/certification-request/view/${rowData.id}`),
       },
-      {
-        label: editButtonLabel(rowData.requestStatus),
-        icon: "pi pi-pencil",
-        command: () => {
-          setSelectedId(rowData.id);
-          setUpdateVisible(true);
-        },
-      },
-      {
-        label: t("common.delete"),
-        icon: "pi pi-trash",
-        command: () => confirmDelete(rowData),
-      },
+      // {
+      //   label: editButtonLabel(rowData.requestStatus),
+      //   icon: "pi pi-pencil",
+      //   command: () => {
+      //     setSelectedId(rowData.id);
+      //     setUpdateVisible(true);
+      //   },
+      // },
+      // {
+      //   label: t("common.delete"),
+      //   icon: "pi pi-trash",
+      //   command: () => confirmDelete(rowData),
+      // },
     ];
 
     return (
