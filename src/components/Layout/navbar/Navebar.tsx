@@ -4,6 +4,7 @@ import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
 import { useTranslation } from "react-i18next";
 import "primeicons/primeicons.css";
+import { Badge } from "primereact/badge";
 
 type LangOption = {
   label: string;
@@ -87,13 +88,27 @@ export const Navbar = ({}: { onMenuClick?: () => void }) => {
     <nav className="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14 sm:h-16">
-          <div className="flex items-center gap-4">
-            <span className="text-gray-600 font-medium">
-              {t("navbar.welcome")}
-            </span>
-          </div>
-
           <div className="flex items-center gap-2 sm:gap-3">
+            <img
+              src="/asqanew.png"
+              alt="ASQA"
+              className="h-10 w-14 object-contain"
+            />
+            <div className="flex items-center gap-4">
+              <span className="text-gray-600 font-medium">
+                {t("navbar.welcome")}
+              </span>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="card flex flex-wrap justify-content-center gap-4">
+              <i
+                className="pi pi-bell p-overlay-badge"
+                style={{ fontSize: "1.5rem" }}
+              >
+                <Badge className="w-5 h-4" value="2"></Badge>
+              </i>
+            </div>
             <div className="relative" ref={userMenuRef}>
               <button
                 type="button"

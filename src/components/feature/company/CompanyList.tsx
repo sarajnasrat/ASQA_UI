@@ -226,23 +226,23 @@ export const CompanyList: React.FC = () => {
       body: (row: any) => <span>{row.jawazNumber || t("common.notSpecified")}</span>,
     },
 
-    {
-      field: "companyOwnerName",
-      header: t("company.labels.companyOwnerName") || "Owner Name",
-      style: { minWidth: "220px" },
-      body: (row: any) => {
-        const currentLanguage = i18n.language;
+    // {
+    //   field: "companyOwnerName",
+    //   header: t("company.labels.companyOwnerName") || "Owner Name",
+    //   style: { minWidth: "220px" },
+    //   body: (row: any) => {
+    //     const currentLanguage = i18n.language;
 
-        const ownerName =
-          currentLanguage === "dr"
-            ? row.aboutCompanyDr
-            : currentLanguage === "ps"
-              ? row.aboutCompanyPs
-              : row.companyOwnerNameEn;
+    //     const ownerName =
+    //       currentLanguage === "dr"
+    //         ? row.aboutCompanyDr
+    //         : currentLanguage === "ps"
+    //           ? row.aboutCompanyPs
+    //           : row.companyOwnerNameEn;
 
-        return <span>{ownerName || t("common.notSpecified")}</span>;
-      },
-    },
+    //     return <span>{ownerName || t("common.notSpecified")}</span>;
+    //   },
+    // },
 
     {
       field: "companyType",

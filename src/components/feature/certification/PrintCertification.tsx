@@ -75,7 +75,7 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
       setProgress(30);
 
       const canvas = await html2canvas(element, {
-        scale: 2,
+        scale: 3,
         useCORS: true,
         logging: false,
         backgroundColor: "#ffffff",
@@ -166,7 +166,7 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 flex justify-center items-center p-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex justify-center items-center p-8">
       <div className="flex flex-col items-center gap-8">
         <div
           id="certificate-content"
@@ -174,14 +174,211 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
           className="certificate-container bg-white shadow-2xl relative"
           dir="rtl"
           style={{
-            width: "800px",
+            width: "1000px",
             minHeight: "565px",
             backgroundColor: "#ffffff",
             position: "relative",
             zIndex: 1,
             margin: "0 auto",
+            borderRadius: "12px",
+            overflow: "hidden",
           }}
         >
+          {/* Decorative Border Frame - Outer */}
+          <div
+            style={{
+              position: "absolute",
+              inset: "15px",
+              border: "3px solid #d4af37",
+              borderRadius: "8px",
+              pointerEvents: "none",
+              zIndex: 2,
+            }}
+          />
+
+          {/* Decorative Border Frame - Inner */}
+          <div
+            style={{
+              position: "absolute",
+              inset: "22px",
+              border: "1px solid #d4af37",
+              borderRadius: "6px",
+              pointerEvents: "none",
+              zIndex: 2,
+            }}
+          />
+
+          {/* Corner Decorations - Top Left */}
+          <div
+            style={{
+              position: "absolute",
+              top: "12px",
+              left: "12px",
+              width: "40px",
+              height: "40px",
+              border: "3px solid #d4af37",
+              borderRight: "none",
+              borderBottom: "none",
+              borderRadius: "6px 0 0 0",
+              zIndex: 3,
+              pointerEvents: "none",
+            }}
+          />
+
+          {/* Corner Decorations - Top Right */}
+          <div
+            style={{
+              position: "absolute",
+              top: "12px",
+              right: "12px",
+              width: "40px",
+              height: "40px",
+              border: "3px solid #d4af37",
+              borderLeft: "none",
+              borderBottom: "none",
+              borderRadius: "0 6px 0 0",
+              zIndex: 3,
+              pointerEvents: "none",
+            }}
+          />
+
+          {/* Corner Decorations - Bottom Left */}
+          <div
+            style={{
+              position: "absolute",
+              bottom: "12px",
+              left: "12px",
+              width: "40px",
+              height: "40px",
+              border: "3px solid #d4af37",
+              borderRight: "none",
+              borderTop: "none",
+              borderRadius: "0 0 0 6px",
+              zIndex: 3,
+              pointerEvents: "none",
+            }}
+          />
+
+          {/* Corner Decorations - Bottom Right */}
+          <div
+            style={{
+              position: "absolute",
+              bottom: "12px",
+              right: "12px",
+              width: "40px",
+              height: "40px",
+              border: "3px solid #d4af37",
+              borderLeft: "none",
+              borderTop: "none",
+              borderRadius: "0 0 6px 0",
+              zIndex: 3,
+              pointerEvents: "none",
+            }}
+          />
+
+          {/* Corner Accent Diamonds - Top Left */}
+          <div
+            style={{
+              position: "absolute",
+              top: "25px",
+              left: "25px",
+              width: "10px",
+              height: "10px",
+              backgroundColor: "#d4af37",
+              transform: "rotate(45deg)",
+              zIndex: 3,
+              pointerEvents: "none",
+            }}
+          />
+
+          {/* Corner Accent Diamonds - Top Right */}
+          <div
+            style={{
+              position: "absolute",
+              top: "25px",
+              right: "25px",
+              width: "10px",
+              height: "10px",
+              backgroundColor: "#d4af37",
+              transform: "rotate(45deg)",
+              zIndex: 3,
+              pointerEvents: "none",
+            }}
+          />
+
+          {/* Corner Accent Diamonds - Bottom Left */}
+          <div
+            style={{
+              position: "absolute",
+              bottom: "25px",
+              left: "25px",
+              width: "10px",
+              height: "10px",
+              backgroundColor: "#d4af37",
+              transform: "rotate(45deg)",
+              zIndex: 3,
+              pointerEvents: "none",
+            }}
+          />
+
+          {/* Corner Accent Diamonds - Bottom Right */}
+          <div
+            style={{
+              position: "absolute",
+              bottom: "25px",
+              right: "25px",
+              width: "10px",
+              height: "10px",
+              backgroundColor: "#d4af37",
+              transform: "rotate(45deg)",
+              zIndex: 3,
+              pointerEvents: "none",
+            }}
+          />
+
+          {/* Decorative Pattern - Top Bar */}
+          <div
+            style={{
+              position: "absolute",
+              top: "55px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              display: "flex",
+              gap: "8px",
+              zIndex: 2,
+              pointerEvents: "none",
+            }}
+          >
+            {[...Array(7)].map((_, i) => (
+              <div
+                key={`top-${i}`}
+                style={{
+                  width: "4px",
+                  height: "4px",
+                  backgroundColor: "#d4af37",
+                  borderRadius: "50%",
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Background Pattern - Subtle Texture */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              pointerEvents: "none",
+              zIndex: 0,
+              opacity: 0.03,
+              backgroundImage: `
+                radial-gradient(circle at 20% 50%, #d4af37 1px, transparent 1px),
+                radial-gradient(circle at 80% 50%, #d4af37 1px, transparent 1px)
+              `,
+              backgroundSize: "40px 40px",
+            }}
+          />
+
+          {/* Watermark */}
           <div
             style={{
               position: "absolute",
@@ -201,11 +398,12 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
                 width: "300px",
                 height: "auto",
                 filter: "grayscale(100%) brightness(1.2)",
-                opacity: 0.15,
+                opacity: 0.08,
               }}
             />
           </div>
 
+          {/* Main Content */}
           <div style={{ position: "relative", zIndex: 10, padding: "30px" }}>
             <div
               style={{
@@ -217,8 +415,8 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
             >
               <div style={{ textAlign: "center", width: "100px" }}>
                 <img
-                  src="/asqanew.png"
-                  alt={t("common.asqa")}
+                  src="/imerate.png"
+                  alt={t("certification.printPage.signature")}
                   style={{
                     width: "70px",
                     height: "70px",
@@ -243,20 +441,12 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
                   style={{
                     fontSize: "16px",
                     fontWeight: "600",
-                    color: "#1e40af",
                     marginBottom: "5px",
                   }}
                 >
                   {printPage.authority}
                 </h3>
-                <div
-                  style={{
-                    width: "60px",
-                    height: "2px",
-                    backgroundColor: "#2563eb",
-                    margin: "10px auto",
-                  }}
-                />
+                <div />
                 <h1
                   style={{
                     fontSize: "24px",
@@ -268,11 +458,10 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
                   {printPage.title}
                 </h1>
               </div>
-
               <div style={{ textAlign: "center", width: "100px" }}>
                 <img
-                  src="/imerate.png"
-                  alt={t("certification.printPage.signature")}
+                  src="/asqanew.png"
+                  alt={t("common.asqa")}
                   style={{
                     width: "70px",
                     height: "70px",
@@ -308,7 +497,7 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
                     color: "#1e40af",
                   }}
                 >
-                  {certification.certificateNumber || notSpecified}
+                  {certification.certificateNumber}
                 </p>
               </div>
 
@@ -337,7 +526,7 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
             <div style={{ marginBottom: "30px", marginTop: "40px" }}>
               <p
                 style={{
-                  fontSize: "13px",
+                  fontSize: "20px",
                   lineHeight: "2",
                   textAlign: "center",
                   color: "#374151",
@@ -345,7 +534,9 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
               >
                 {printPage.bodyPrefix}{" "}
                 <strong style={{ color: "#1e40af", fontWeight: "bold" }}>
-                  {company.companyNamePS || company.companyNameEN || notSpecified}
+                  {company.companyNamePS ||
+                    company.companyNameEN ||
+                    notSpecified}
                 </strong>{" "}
                 {printPage.bodyMiddleLocation}{" "}
                 <strong style={{ color: "#1e40af", fontWeight: "bold" }}>
@@ -459,7 +650,7 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
                     value={verifyUrl}
                     size={75}
                     bgColor="#ffffff"
-                    fgColor="#1e40af"
+                    fgColor="#000000"
                     level="H"
                     includeMargin={false}
                   />
@@ -496,7 +687,9 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
             {isGenerating ? (
               <>
                 <i className="pi pi-spin pi-spinner"></i>
-                <span>{t("certification.printPage.progress", { progress })}</span>
+                <span>
+                  {t("certification.printPage.progress", { progress })}
+                </span>
               </>
             ) : (
               <>
@@ -548,6 +741,7 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
             box-shadow: none;
             margin: 0;
             padding: 0;
+            border-radius: 0 !important;
           }
 
           @page {
@@ -558,6 +752,14 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
 
         [dir="rtl"] {
           direction: rtl;
+        }
+
+        .certificate-container {
+          transition: all 0.3s ease;
+        }
+
+        .certificate-container:hover {
+          box-shadow: 0 30px 80px rgba(0,0,0,0.15) !important;
         }
       `}</style>
     </div>

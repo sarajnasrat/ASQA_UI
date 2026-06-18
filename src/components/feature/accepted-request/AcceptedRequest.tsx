@@ -176,8 +176,7 @@ export const AcceptedRequest = () => {
       return t("common.edit");
     }
   };
-
-  const printBill = async (request: any) => {
+const printBill = async (request: any) => {
     if (request.requestStatus !== "PAYMENT_PENDING") {
       toast.current?.show({
         severity: "warn",
@@ -189,7 +188,8 @@ export const AcceptedRequest = () => {
 
     const printWindow = window.open("", "_blank");
     if (!printWindow) return;
-const billContent = `
+
+    const billContent = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -204,9 +204,9 @@ const billContent = `
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-      background: #f0f0f0;
-      padding: 40px 20px;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: #ffffff;
+      padding: 40px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -217,8 +217,8 @@ const billContent = `
       max-width: 800px;
       width: 100%;
       background: white;
-      padding: 40px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 50px 60px;
+      border: 1px solid #e8e8e8;
     }
 
     /* Header */
@@ -226,28 +226,39 @@ const billContent = `
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 30px;
-      flex-wrap: wrap;
-      gap: 20px;
+      margin-bottom: 35px;
+      border-bottom: 2px solid #f0f0f0;
+      padding-bottom: 25px;
     }
 
     .invoice-title h1 {
-      font-size: 32px;
+      font-size: 36px;
       font-weight: 300;
-      color: #333;
-      margin-bottom: 8px;
+      color: #1a1a1a;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
     }
 
     .invoice-title p {
-      font-size: 14px;
-      color: #666;
+      font-size: 13px;
+      color: #888;
+      font-weight: 400;
     }
 
     .company-name {
       text-align: right;
-      font-size: 18px;
+      font-size: 22px;
       font-weight: 500;
-      color: #333;
+      color: #1a1a1a;
+      letter-spacing: 1px;
+    }
+
+    .company-name small {
+      display: block;
+      font-size: 11px;
+      font-weight: 400;
+      color: #999;
+      margin-top: 4px;
     }
 
     /* Info Row */
@@ -256,46 +267,56 @@ const billContent = `
       justify-content: space-between;
       margin-bottom: 30px;
       flex-wrap: wrap;
-      gap: 40px;
+      gap: 20px;
     }
 
     .info-section {
       flex: 1;
+      min-width: 120px;
     }
 
     .info-section h3 {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
-      color: #999;
+      color: #aaa;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
+      letter-spacing: 0.8px;
+      margin-bottom: 6px;
     }
 
     .info-section p {
       font-size: 15px;
-      color: #333;
+      color: #1a1a1a;
       font-weight: 500;
     }
 
     /* Bank Details */
     .bank-details {
       margin-bottom: 30px;
+      padding: 18px 20px;
+      background: #f9f9f9;
+      border-left: 3px solid #1a1a1a;
     }
 
     .bank-details h3 {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
-      color: #999;
+      color: #aaa;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
+      letter-spacing: 0.8px;
+      margin-bottom: 10px;
     }
 
     .bank-details p {
       font-size: 14px;
-      color: #333;
+      color: #1a1a1a;
       margin-bottom: 4px;
+      line-height: 1.6;
+    }
+
+    .bank-details p strong {
+      font-weight: 600;
+      color: #000;
     }
 
     /* Table */
@@ -307,20 +328,20 @@ const billContent = `
 
     .items-table th {
       text-align: left;
-      padding: 12px 0;
-      border-bottom: 1px solid #e0e0e0;
-      font-size: 12px;
+      padding: 14px 0 10px 0;
+      border-bottom: 2px solid #1a1a1a;
+      font-size: 11px;
       font-weight: 600;
-      color: #999;
+      color: #888;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.8px;
     }
 
     .items-table td {
-      padding: 10px 0;
-      border-bottom: 1px solid #eee;
+      padding: 12px 0 10px 0;
+      border-bottom: 1px solid #f0f0f0;
       font-size: 14px;
-      color: #333;
+      color: #1a1a1a;
     }
 
     .items-table td:first-child,
@@ -337,43 +358,52 @@ const billContent = `
       text-align: right;
     }
 
+    .items-table tr:last-child td {
+      border-bottom: none;
+    }
+
     /* Total Amount */
     .total-amount {
       text-align: right;
       margin-bottom: 30px;
+      padding-top: 15px;
+      border-top: 2px solid #1a1a1a;
     }
 
     .total-amount h3 {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
-      color: #999;
+      color: #888;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
+      letter-spacing: 0.8px;
+      margin-bottom: 6px;
     }
 
     .total-amount p {
-      font-size: 28px;
+      font-size: 32px;
       font-weight: 600;
-      color: #333;
+      color: #1a1a1a;
+      letter-spacing: 1px;
     }
 
     /* Footer */
     .footer {
-      margin-top: 40px;
-      padding-top: 20px;
+      margin-top: 35px;
+      padding-top: 25px;
+      border-top: 2px solid #f0f0f0;
     }
 
     .footer-company {
-      font-size: 16px;
-      font-weight: 600;
-      color: #333;
-      margin-bottom: 12px;
+      font-size: 18px;
+      font-weight: 500;
+      color: #1a1a1a;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
     }
 
     .footer-contact {
       font-size: 13px;
-      color: #666;
+      color: #888;
       line-height: 1.8;
     }
 
@@ -384,37 +414,38 @@ const billContent = `
     /* Action Buttons */
     .action-buttons {
       text-align: center;
-      margin-top: 30px;
-      padding-top: 20px;
+      margin-top: 35px;
+      padding-top: 25px;
       border-top: 1px solid #eee;
     }
 
     .btn {
-      padding: 10px 24px;
+      padding: 12px 28px;
       font-size: 14px;
       font-weight: 500;
       border: none;
       border-radius: 4px;
       cursor: pointer;
       margin: 0 6px;
+      transition: all 0.2s ease;
     }
 
     .btn-print {
-      background: #333;
+      background: #1a1a1a;
       color: white;
     }
 
     .btn-print:hover {
-      background: #555;
+      background: #333;
     }
 
     .btn-close {
-      background: #e0e0e0;
+      background: #f0f0f0;
       color: #333;
     }
 
     .btn-close:hover {
-      background: #ccc;
+      background: #e0e0e0;
     }
 
     /* Print Styles */
@@ -425,31 +456,52 @@ const billContent = `
         margin: 0;
       }
       .invoice {
-        padding: 20px;
-        box-shadow: none;
+        padding: 40px 50px;
+        border: none;
+        max-width: 100%;
       }
       .action-buttons {
         display: none;
       }
+      .bank-details {
+        background: #f9f9f9 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
     }
 
     @media (max-width: 600px) {
+      body {
+        padding: 20px;
+      }
       .invoice {
-        padding: 25px;
+        padding: 25px 20px;
       }
       .invoice-header {
         flex-direction: column;
         text-align: center;
+        gap: 15px;
       }
       .company-name {
         text-align: center;
       }
       .info-row {
         flex-direction: column;
-        gap: 20px;
+        gap: 15px;
+        text-align: center;
       }
       .total-amount {
         text-align: center;
+      }
+      .bank-details {
+        padding: 15px;
+      }
+      .items-table {
+        font-size: 12px;
+      }
+      .items-table td,
+      .items-table th {
+        padding: 8px 0;
       }
     }
   </style>
@@ -463,8 +515,8 @@ const billContent = `
         <p>Invoice no: ${request.serialNumber || "INV-" + Date.now()}</p>
       </div>
       <div class="company-name">
-        ASQA<br>
-        Afghanistan Quality Standards Authority
+        ASQA
+        <small>Afghanistan Quality Standards Authority</small>
       </div>
     </div>
 
@@ -503,17 +555,16 @@ const billContent = `
           <td>1</td>
           <td>${request.paymentAmount || "To be determined"}</td>
         </tr>
-     
       </tbody>
     </table>
 
     <!-- Payment Instructions -->
     <div class="bank-details">
       <h3>Please make payment via</h3>
-      <p>Bank Name : Da Afghanistan Bank</p>
-      <p>Account Number : 001-234567-89</p>
-      <p>Account Holder : ASQA Certification Authority</p>
-      <p>Reference : ${request.serialNumber || "-"}</p>
+      <p><strong>Bank Name:</strong> Da Afghanistan Bank</p>
+      <p><strong>Account Number:</strong> 001-234567-89</p>
+      <p><strong>Account Holder:</strong> ASQA Certification Authority</p>
+      <p><strong>Reference:</strong> ${request.serialNumber || "-"}</p>
     </div>
 
     <!-- Total Amount Due -->
@@ -556,6 +607,385 @@ const billContent = `
       // ignore failure for now; local state still allows upload
     }
   };
+//   const printBill = async (request: any) => {
+//     if (request.requestStatus !== "PAYMENT_PENDING") {
+//       toast.current?.show({
+//         severity: "warn",
+//         summary: t("common.warning"),
+//         detail: t("certificationRequest.payment.printPendingOnly"),
+//       });
+//       return;
+//     }
+
+//     const printWindow = window.open("", "_blank");
+//     if (!printWindow) return;
+// const billContent = `
+// <!DOCTYPE html>
+// <html lang="en">
+// <head>
+//   <meta charset="UTF-8">
+//   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+//   <title>Invoice - ${request.serialNumber}</title>
+//   <style>
+//     * {
+//       margin: 0;
+//       padding: 0;
+//       box-sizing: border-box;
+//     }
+
+//     body {
+//       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+//       background: #f0f0f0;
+//       padding: 40px 20px;
+//       display: flex;
+//       justify-content: center;
+//       align-items: center;
+//       min-height: 100vh;
+//     }
+
+//     .invoice {
+//       max-width: 800px;
+//       width: 100%;
+//       background: white;
+//       padding: 40px;
+//       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+//     }
+
+//     /* Header */
+//     .invoice-header {
+//       display: flex;
+//       justify-content: space-between;
+//       align-items: flex-start;
+//       margin-bottom: 30px;
+//       flex-wrap: wrap;
+//       gap: 20px;
+//     }
+
+//     .invoice-title h1 {
+//       font-size: 32px;
+//       font-weight: 300;
+//       color: #333;
+//       margin-bottom: 8px;
+//     }
+
+//     .invoice-title p {
+//       font-size: 14px;
+//       color: #666;
+//     }
+
+//     .company-name {
+//       text-align: right;
+//       font-size: 18px;
+//       font-weight: 500;
+//       color: #333;
+//     }
+
+//     /* Info Row */
+//     .info-row {
+//       display: flex;
+//       justify-content: space-between;
+//       margin-bottom: 30px;
+//       flex-wrap: wrap;
+//       gap: 40px;
+//     }
+
+//     .info-section {
+//       flex: 1;
+//     }
+
+//     .info-section h3 {
+//       font-size: 12px;
+//       font-weight: 600;
+//       color: #999;
+//       text-transform: uppercase;
+//       letter-spacing: 0.5px;
+//       margin-bottom: 8px;
+//     }
+
+//     .info-section p {
+//       font-size: 15px;
+//       color: #333;
+//       font-weight: 500;
+//     }
+
+//     /* Bank Details */
+//     .bank-details {
+//       margin-bottom: 30px;
+//     }
+
+//     .bank-details h3 {
+//       font-size: 12px;
+//       font-weight: 600;
+//       color: #999;
+//       text-transform: uppercase;
+//       letter-spacing: 0.5px;
+//       margin-bottom: 8px;
+//     }
+
+//     .bank-details p {
+//       font-size: 14px;
+//       color: #333;
+//       margin-bottom: 4px;
+//     }
+
+//     /* Table */
+//     .items-table {
+//       width: 100%;
+//       border-collapse: collapse;
+//       margin-bottom: 30px;
+//     }
+
+//     .items-table th {
+//       text-align: left;
+//       padding: 12px 0;
+//       border-bottom: 1px solid #e0e0e0;
+//       font-size: 12px;
+//       font-weight: 600;
+//       color: #999;
+//       text-transform: uppercase;
+//       letter-spacing: 0.5px;
+//     }
+
+//     .items-table td {
+//       padding: 10px 0;
+//       border-bottom: 1px solid #eee;
+//       font-size: 14px;
+//       color: #333;
+//     }
+
+//     .items-table td:first-child,
+//     .items-table th:first-child {
+//       width: 50px;
+//     }
+
+//     .items-table td:nth-child(3),
+//     .items-table th:nth-child(3),
+//     .items-table td:nth-child(4),
+//     .items-table th:nth-child(4),
+//     .items-table td:nth-child(5),
+//     .items-table th:nth-child(5) {
+//       text-align: right;
+//     }
+
+//     /* Total Amount */
+//     .total-amount {
+//       text-align: right;
+//       margin-bottom: 30px;
+//     }
+
+//     .total-amount h3 {
+//       font-size: 12px;
+//       font-weight: 600;
+//       color: #999;
+//       text-transform: uppercase;
+//       letter-spacing: 0.5px;
+//       margin-bottom: 8px;
+//     }
+
+//     .total-amount p {
+//       font-size: 28px;
+//       font-weight: 600;
+//       color: #333;
+//     }
+
+//     /* Footer */
+//     .footer {
+//       margin-top: 40px;
+//       padding-top: 20px;
+//     }
+
+//     .footer-company {
+//       font-size: 16px;
+//       font-weight: 600;
+//       color: #333;
+//       margin-bottom: 12px;
+//     }
+
+//     .footer-contact {
+//       font-size: 13px;
+//       color: #666;
+//       line-height: 1.8;
+//     }
+
+//     .footer-contact p {
+//       margin: 0;
+//     }
+
+//     /* Action Buttons */
+//     .action-buttons {
+//       text-align: center;
+//       margin-top: 30px;
+//       padding-top: 20px;
+//       border-top: 1px solid #eee;
+//     }
+
+//     .btn {
+//       padding: 10px 24px;
+//       font-size: 14px;
+//       font-weight: 500;
+//       border: none;
+//       border-radius: 4px;
+//       cursor: pointer;
+//       margin: 0 6px;
+//     }
+
+//     .btn-print {
+//       background: #333;
+//       color: white;
+//     }
+
+//     .btn-print:hover {
+//       background: #555;
+//     }
+
+//     .btn-close {
+//       background: #e0e0e0;
+//       color: #333;
+//     }
+
+//     .btn-close:hover {
+//       background: #ccc;
+//     }
+
+//     /* Print Styles */
+//     @media print {
+//       body {
+//         background: white;
+//         padding: 0;
+//         margin: 0;
+//       }
+//       .invoice {
+//         padding: 20px;
+//         box-shadow: none;
+//       }
+//       .action-buttons {
+//         display: none;
+//       }
+//     }
+
+//     @media (max-width: 600px) {
+//       .invoice {
+//         padding: 25px;
+//       }
+//       .invoice-header {
+//         flex-direction: column;
+//         text-align: center;
+//       }
+//       .company-name {
+//         text-align: center;
+//       }
+//       .info-row {
+//         flex-direction: column;
+//         gap: 20px;
+//       }
+//       .total-amount {
+//         text-align: center;
+//       }
+//     }
+//   </style>
+// </head>
+// <body>
+//   <div class="invoice">
+//     <!-- Header -->
+//     <div class="invoice-header">
+//       <div class="invoice-title">
+//         <h1>Invoice</h1>
+//         <p>Invoice no: ${request.serialNumber || "INV-" + Date.now()}</p>
+//       </div>
+//       <div class="company-name">
+//         ASQA<br>
+//         Afghanistan Quality Standards Authority
+//       </div>
+//     </div>
+
+//     <!-- Billed To & Dates -->
+//     <div class="info-row">
+//       <div class="info-section">
+//         <h3>Billed To:</h3>
+//         <p>${request.company?.[getCompanyNameField()] || "-"}</p>
+//       </div>
+//       <div class="info-section">
+//         <h3>Invoice Date:</h3>
+//         <p>${IslamicDateFormatter.formatQamari(new Date())}</p>
+//       </div>
+//       <div class="info-section">
+//         <h3>Due Date:</h3>
+//         <p>${IslamicDateFormatter.formatQamari(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000))}</p>
+//       </div>
+//     </div>
+
+//     <!-- Items Table -->
+//     <table class="items-table">
+//       <thead>
+//         <tr>
+//           <th>No</th>
+//           <th>Item Description</th>
+//           <th>Price</th>
+//           <th>Qty</th>
+//           <th>Amount</th>
+//         </tr>
+//       </thead>
+//       <tbody>
+//         <tr>
+//           <td>1</td>
+//           <td>${t(`certificationRequest.certificationTypeOptions.${request.certificationType}`) || "Certification Fee"}</td>
+//           <td>${request.paymentAmount || "To be determined"}</td>
+//           <td>1</td>
+//           <td>${request.paymentAmount || "To be determined"}</td>
+//         </tr>
+     
+//       </tbody>
+//     </table>
+
+//     <!-- Payment Instructions -->
+//     <div class="bank-details">
+//       <h3>Please make payment via</h3>
+//       <p>Bank Name : Da Afghanistan Bank</p>
+//       <p>Account Number : 001-234567-89</p>
+//       <p>Account Holder : ASQA Certification Authority</p>
+//       <p>Reference : ${request.serialNumber || "-"}</p>
+//     </div>
+
+//     <!-- Total Amount Due -->
+//     <div class="total-amount">
+//       <h3>Total Amount Due:</h3>
+//       <p>${request.paymentAmount || "Contact Support"}</p>
+//     </div>
+
+//     <!-- Footer -->
+//     <div class="footer">
+//       <div class="footer-company">ASQA</div>
+//       <div class="footer-contact">
+//         <p>+93 (555) 123-4567</p>
+//         <p>support@asqa.af</p>
+//         <p>Kabul, Afghanistan</p>
+//       </div>
+//     </div>
+
+//     <!-- Action Buttons -->
+//     <div class="action-buttons">
+//       <button class="btn btn-print" onclick="window.print()">🖨️ Print Invoice</button>
+//       <button class="btn btn-close" onclick="window.close()">✖ Close</button>
+//     </div>
+//   </div>
+// </body>
+// </html>
+// `;
+//     printWindow.document.write(billContent);
+//     printWindow.document.close();
+//     // mark printed locally so upload option appears
+//     try {
+//       setPrintedRequests((prev) => (prev.includes(request.id) ? prev : [...prev, request.id]));
+//     } catch (e) {
+//       // ignore
+//     }
+
+//     try {
+//       await CertificationRequestService.updateIsPrint(request.id, true);
+//     } catch (error) {
+//       // ignore failure for now; local state still allows upload
+//     }
+//   };
 
   const openPaymentDialog = (request: any) => {
     setSelectedRequest(request);

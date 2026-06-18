@@ -141,3 +141,13 @@ html[dir="rtl"] .p-dropdown-clear-icon {
   left: 3rem;
   right: auto;
 }
+
+.p-badge {
+    background: #e71818;
+    color: #ffffff;
+    font-size: 0.55rem;
+    font-weight: 700;
+    min-width: 1rem;
+    height: 1rem;
+    line-height: 1rem;
+}

@@ -489,8 +489,8 @@ export const Dashboard: React.FC = () => {
                   <stat.icon className={`w-5 h-5 ${stat.color}`} />
                 </div>
               </div>
-              <div className="mx-auto text-center">
-                <p className="text-2xl font-bold text-gray-800">
+              <div className="mx-auto text-start">
+                <p className="text-1xl font-bold ">
                   {stat.value.toLocaleString()}
                 </p>
               </div>

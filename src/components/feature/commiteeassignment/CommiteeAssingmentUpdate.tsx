@@ -108,7 +108,7 @@ export const CommiteeAssingmentUpdate: React.FC<Props> = ({
       if (response?.status == 200) {
         navigate("/commitee-assignment-list");
       }
-      onSuccess();
+      // onSuccess();
       onHide();
     } finally {
       setLoading(false);

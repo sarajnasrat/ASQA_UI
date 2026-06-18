@@ -1,4 +1,4 @@
-import{ useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import "primeicons/primeicons.css";
@@ -142,7 +142,7 @@ type ThemeKey = keyof typeof themes;
 export const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   // State management
   const [collapsed, setCollapsed] = useState(false);
@@ -200,9 +200,12 @@ export const Sidebar = () => {
   const getLabel = (item: any) => {
     const lang = i18n.language;
     switch (lang) {
-      case "ps": return item.labelPs || item.labelEn;
-      case "dr": return item.labelDr || item.labelEn;
-      default: return item.labelEn;
+      case "ps":
+        return item.labelPs || item.labelEn;
+      case "dr":
+        return item.labelDr || item.labelEn;
+      default:
+        return item.labelEn;
     }
   };
 
@@ -230,11 +233,12 @@ export const Sidebar = () => {
           >
             <div
               className={`absolute inset-x-0 rounded-lg transition-all duration-200
-                ${childActive
-                  ? `${theme.itemActive} shadow-sm`
-                  : isChildHovered
-                    ? `${theme.itemHover} scale-[1.02]`
-                    : "bg-transparent"
+                ${
+                  childActive
+                    ? `${theme.itemActive} shadow-sm`
+                    : isChildHovered
+                      ? `${theme.itemHover} scale-[1.02]`
+                      : "bg-transparent"
                 }`}
               style={{ height: "calc(100% - 2px)", top: "1px" }}
             />
@@ -243,7 +247,11 @@ export const Sidebar = () => {
               className={`relative flex items-center gap-3 px-3 py-2 transition-all duration-200 ${
                 collapsed ? "justify-center" : ""
               }`}
-              style={{ [isRTL ? "paddingRight" : "paddingLeft"]: collapsed ? "0" : undefined }}
+              style={{
+                [isRTL ? "paddingRight" : "paddingLeft"]: collapsed
+                  ? "0"
+                  : undefined,
+              }}
             >
               <div className="flex items-center justify-center shrink-0">
                 {child.icon ? (
@@ -274,7 +282,11 @@ export const Sidebar = () => {
               {!collapsed && (
                 <span
                   className={`flex-1 text-[0.8125rem] font-medium transition-all duration-200 ${
-                    childActive ? theme.textActive : isChildHovered ? theme.textHover : theme.textDefault
+                    childActive
+                      ? theme.textActive
+                      : isChildHovered
+                        ? theme.textHover
+                        : theme.textDefault
                   }`}
                 >
                   {getLabel(child)}
@@ -286,9 +298,11 @@ export const Sidebar = () => {
                   className={`pi pi-chevron-down transition-all duration-300 text-[0.6875rem] shrink-0 ${
                     isExpanded ? "rotate-180" : ""
                   }`}
-                  style={{ 
-                    color: isExpanded ? theme.accent.split(" ")[1] : theme.iconDefault.split(" ")[1],
-                    [isRTL ? "marginLeft" : "marginRight"]: "0"
+                  style={{
+                    color: isExpanded
+                      ? theme.accent.split(" ")[1]
+                      : theme.iconDefault.split(" ")[1],
+                    [isRTL ? "marginLeft" : "marginRight"]: "0",
                   }}
                 />
               )}
@@ -297,9 +311,9 @@ export const Sidebar = () => {
             {childActive && !collapsed && (
               <div
                 className={`absolute top-1/2 -translate-y-1/2 w-0.5 h-4 rounded-full`}
-                style={{ 
+                style={{
                   backgroundColor: theme.accent.split(" ")[1],
-                  [isRTL ? "right" : "left"]: 0
+                  [isRTL ? "right" : "left"]: 0,
                 }}
               />
             )}
@@ -308,11 +322,13 @@ export const Sidebar = () => {
           {hasGrandChildren && (
             <div
               className={`grid transition-all duration-300 ease-in-out ${
-                isExpanded ? "grid-rows-[1fr] opacity-100 mt-1" : "grid-rows-[0fr] opacity-0"
+                isExpanded
+                  ? "grid-rows-[1fr] opacity-100 mt-1"
+                  : "grid-rows-[0fr] opacity-0"
               }`}
             >
               <div className="overflow-hidden">
-                <div 
+                <div
                   className={`flex flex-col gap-0.5 ${
                     isRTL ? "mr-4 pr-3 border-r" : "ml-4 pl-3 border-l"
                   }`}
@@ -355,11 +371,12 @@ export const Sidebar = () => {
         >
           <div
             className={`absolute inset-0 rounded-xl transition-all duration-200
-              ${active
-                ? `${theme.itemActive}`
-                : isHovered
-                  ? `${theme.itemHover} scale-[1.02]`
-                  : "bg-transparent"
+              ${
+                active
+                  ? `${theme.itemActive}`
+                  : isHovered
+                    ? `${theme.itemHover} scale-[1.02]`
+                    : "bg-transparent"
               }`}
           />
 
@@ -368,7 +385,9 @@ export const Sidebar = () => {
               collapsed ? "justify-center" : "justify-between"
             }`}
           >
-            <div className={`flex items-center gap-3 ${collapsed ? "justify-center" : ""}`}>
+            <div
+              className={`flex items-center gap-3 ${collapsed ? "justify-center" : ""}`}
+            >
               <i
                 className={`${item.icon} transition-all duration-200 text-base shrink-0`}
                 style={{
@@ -383,7 +402,11 @@ export const Sidebar = () => {
               {!collapsed && (
                 <span
                   className={`text-[0.875rem] font-semibold transition-all duration-200 ${
-                    active ? theme.textActive : isHovered ? theme.textHover : theme.textDefault
+                    active
+                      ? theme.textActive
+                      : isHovered
+                        ? theme.textHover
+                        : theme.textDefault
                   }`}
                 >
                   {getLabel(item)}
@@ -396,7 +419,11 @@ export const Sidebar = () => {
                 className={`pi pi-chevron-down transition-all duration-300 text-[0.75rem] shrink-0 ${
                   isExpanded ? "rotate-180" : ""
                 }`}
-                style={{ color: isExpanded ? theme.accent.split(" ")[1] : theme.iconDefault.split(" ")[1] }}
+                style={{
+                  color: isExpanded
+                    ? theme.accent.split(" ")[1]
+                    : theme.iconDefault.split(" ")[1],
+                }}
               />
             )}
           </div>
@@ -404,9 +431,9 @@ export const Sidebar = () => {
           {active && !collapsed && (
             <div
               className={`absolute top-1/2 -translate-y-1/2 w-1 h-6 rounded-full`}
-              style={{ 
+              style={{
                 backgroundColor: theme.accent.split(" ")[1],
-                [isRTL ? "right" : "left"]: 0
+                [isRTL ? "right" : "left"]: 0,
               }}
             />
           )}
@@ -415,11 +442,13 @@ export const Sidebar = () => {
         {hasChildren && (
           <div
             className={`grid transition-all duration-300 ease-in-out ${
-              isExpanded ? "grid-rows-[1fr] opacity-100 mt-1" : "grid-rows-[0fr] opacity-0"
+              isExpanded
+                ? "grid-rows-[1fr] opacity-100 mt-1"
+                : "grid-rows-[0fr] opacity-0"
             }`}
           >
             <div className="overflow-hidden">
-              <div 
+              <div
                 className={`flex flex-col gap-0.5 ${
                   isRTL ? "mr-5 pr-3 border-r" : "ml-5 pl-3 border-l"
                 }`}
@@ -449,7 +478,10 @@ export const Sidebar = () => {
             className={`relative text-white p-4 rounded-2xl shadow-2xl transition-all duration-300 group-hover:scale-110 active:scale-95`}
             style={{ backgroundColor: theme.accent.split(" ")[1] }}
           >
-            <i className={`pi ${isMobileOpen ? "pi-times" : "pi-bars"}`} style={{ fontSize: "1.25rem" }} />
+            <i
+              className={`pi ${isMobileOpen ? "pi-times" : "pi-bars"}`}
+              style={{ fontSize: "1.25rem" }}
+            />
           </div>
         </div>
       </button>
@@ -477,62 +509,76 @@ export const Sidebar = () => {
         dir={isRTL ? "rtl" : "ltr"}
       >
         {/* Header with Gradient */}
-        <div className={`relative shrink-0 overflow-hidden bg-gradient-to-r ${theme.headerBg}`}>
+        <div
+          className={`relative shrink-0 overflow-hidden bg-gradient-to-r ${theme.headerBg}`}
+        >
           <div className="absolute inset-0 bg-black/5" />
-          <div className="relative px-5 py-5">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="relative group shrink-0">
-                  <img
-                    src="/aqsa.jpg"
-                    alt="ASQA"
-                    className="relative h-10 w-10 object-contain rounded-xl bg-white/10 p-1.5 shadow-lg backdrop-blur-sm"
-                  />
-                </div>
+       <div className="relative px-5 py-5">
+  {/* Logo on top */}
+  {/* <div className="flex justify-center mb-3">
+    <img
+      src="/asqanew.png"
+      alt="ASQA"
+      className="h-10 w-14 object-contain"
+    />
+  </div> */}
 
-                {!collapsed && (
-                  <div className="animate-slide-in">
-                    <h1 className={`${theme.headerText} text-xl font-bold tracking-tight`}>ASQA</h1>
-                    <p className={`${theme.headerSubtext} text-[0.625rem] font-semibold uppercase tracking-wider`}>
-                      Management System
-                    </p>
-                  </div>
-                )}
-              </div>
+  {/* System name and button in one row */}
+  <div className="flex items-center justify-between">
+    {!collapsed ? (
+      <>
+        <div className="animate-slide-in">
+          <h1
+            className={`${theme.headerText} text-xl font-bold tracking-tight`}
+          >
+            {t("common.systme")}
+          </h1>
+          <h1
+            className={`${theme.headerSubtext} text-[0.8725rem] font-semibold uppercase tracking-wider`}
+          >
+            {t("common.name")}
+          </h1>
+        </div>
 
-              {!collapsed && (
-                <button
-                  onClick={() => setCollapsed(true)}
-                  className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 transition-all duration-200"
-                  aria-label="Collapse sidebar"
-                >
-                  <i className={`pi ${isRTL ? "pi-angle-right" : "pi-angle-left"} text-white/80 text-sm`} />
-                </button>
-              )}
-            </div>
-
-            {collapsed && (
-              <div className="flex justify-center mt-3">
-                <button
-                  onClick={() => setCollapsed(false)}
-                  className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 transition-all duration-200"
-                  aria-label="Expand sidebar"
-                >
-                  <i className={`pi ${isRTL ? "pi-angle-left" : "pi-angle-right"} text-white/80 text-sm`} />
-                </button>
-              </div>
-            )}
-          </div>
+        <button
+          onClick={() => setCollapsed(true)}
+          className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 transition-all duration-200"
+          aria-label="Collapse sidebar"
+        >
+          <i
+            className={`pi ${
+              isRTL ? "pi-angle-right" : "pi-angle-left"
+            } text-white/80 text-sm`}
+          />
+        </button>
+      </>
+    ) : (
+      <div className="w-full flex justify-center">
+        <button
+          onClick={() => setCollapsed(false)}
+          className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 transition-all duration-200"
+          aria-label="Expand sidebar"
+        >
+          <i
+            className={`pi ${
+              isRTL ? "pi-angle-left" : "pi-angle-right"
+            } text-white/80 text-sm`}
+          />
+        </button>
+      </div>
+    )}
+  </div>
+</div>
         </div>
 
         {/* Menu Navigation with RTL-aware scrollbar */}
-        <nav 
+        <nav
           className="flex-1 py-4 scrollbar-thin"
           style={{
             overflowY: "auto",
             direction: isRTL ? "rtl" : "ltr",
           }}
-          role="navigation" 
+          role="navigation"
           aria-label="Main navigation"
         >
           {/* Inner wrapper to keep content direction consistent */}
@@ -544,7 +590,9 @@ export const Sidebar = () => {
             ) : (
               <div className="flex flex-col items-center justify-center h-full text-center py-12 px-4">
                 <i className="pi pi-menu mb-3 text-3xl text-gray-300" />
-                <p className={`${theme.textDefault} text-sm font-medium`}>No menu items loaded</p>
+                <p className={`${theme.textDefault} text-sm font-medium`}>
+                  No menu items loaded
+                </p>
                 <p className="text-gray-300 text-xs mt-1">Check back later</p>
               </div>
             )}
@@ -562,14 +610,22 @@ export const Sidebar = () => {
                   aria-label="Change theme"
                 >
                   <div className="flex items-center gap-2">
-                    <i className={`pi pi-palette ${theme.iconDefault} text-sm`} />
-                    <span className={`text-sm font-medium ${theme.textDefault}`}>{theme.name}</span>
+                    <i
+                      className={`pi pi-palette ${theme.iconDefault} text-sm`}
+                    />
+                    <span
+                      className={`text-sm font-medium ${theme.textDefault}`}
+                    >
+                      {theme.name}
+                    </span>
                   </div>
-                  <i className={`pi pi-chevron-down ${theme.iconDefault} text-xs transition-transform duration-200 ${showThemeSelector ? "rotate-180" : ""}`} />
+                  <i
+                    className={`pi pi-chevron-down ${theme.iconDefault} text-xs transition-transform duration-200 ${showThemeSelector ? "rotate-180" : ""}`}
+                  />
                 </button>
 
                 {showThemeSelector && (
-                  <div 
+                  <div
                     className={`absolute bottom-full ${isRTL ? "right-0" : "left-0"} right-0 mb-2 bg-white rounded-xl shadow-xl border ${theme.border} p-2 z-50 min-w-[160px]`}
                   >
                     {(Object.keys(themes) as ThemeKey[]).map((key) => (
@@ -580,15 +636,21 @@ export const Sidebar = () => {
                           setShowThemeSelector(false);
                         }}
                         className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
-                          currentTheme === key ? "bg-gray-100 font-semibold" : "hover:bg-gray-50"
+                          currentTheme === key
+                            ? "bg-gray-100 font-semibold"
+                            : "hover:bg-gray-50"
                         }`}
                       >
                         <div className="flex items-center gap-2">
                           <div
                             className="w-3 h-3 rounded-full"
-                            style={{ backgroundColor: themes[key].accent.split(" ")[1] }}
+                            style={{
+                              backgroundColor: themes[key].accent.split(" ")[1],
+                            }}
                           />
-                          <span className="text-gray-700">{themes[key].name}</span>
+                          <span className="text-gray-700">
+                            {themes[key].name}
+                          </span>
                         </div>
                       </button>
                     ))}
@@ -597,7 +659,9 @@ export const Sidebar = () => {
               </div>
 
               <div className="text-center pt-2">
-                <p className="text-gray-400 text-[0.6875rem] font-medium">© 2026 ASQA System</p>
+                <p className="text-gray-400 text-[0.6875rem] font-medium">
+                  © 2026 ASQA System
+                </p>
                 <p className="text-gray-300 text-[0.625rem] mt-0.5">v2.0.0</p>
               </div>
             </div>

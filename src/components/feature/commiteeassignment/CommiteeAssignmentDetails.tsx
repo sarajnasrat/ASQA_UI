@@ -96,7 +96,7 @@ export const CommiteeAssignmentDetails: React.FC = () => {
       t,
     );
     if(response?.status==200) {
-      navigate("commitee-assignment-list");
+      navigate("/commitee-assignment-list");
     }
     if (response) {
       loadAssignment();

@@ -1358,6 +1358,8 @@
     "copy": "Copy",
     "asqa": "ASQA",
     "asqaDescription": "Afghanistan Standard Quality Authority",
+     "systme": "Standard Quality",
+    "name":"Mangement System",
     "save": "Save",
     "cancel": "Cancel",
     "delete": "Delete",
