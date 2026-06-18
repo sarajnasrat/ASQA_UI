@@ -9,9 +9,32 @@
     "logout": "وتل"
   },
   "notification": {
+     "filterByType": "نوعیت اعلانات را انتخاب کنید",
+    "filterByPriority": "اولویت را انتخاب کنید",
     "newUser": "یو نوی کارونکی شامل شو",
     "systemUpdate": "د سیسټم تازه معلومات موجود دي",
-    "reportReady": "ستاسو راپور چمتو دی"
+    "reportReady": "ستاسو راپور چمتو دی",
+    "title": "خبرتیاوې",
+    "manageDescription": "خپلې خبرتیاوې وګورئ، اړوند موضوعات پرانیزئ او دغه لېست منظم وساتئ.",
+    "markAsRead": "د لوستل شوي په توګه ونیسئ",
+    "markAllAsRead": "ټولې د لوستل شوي کړئ",
+    "markAsReadSuccess": "خبرتیا په بریالیتوب سره لوستل شوه.",
+    "markAllAsReadSuccess": "ټولې خبرتیاوې په بریالیتوب سره لوستل شوې.",
+    "open": "پرانیزئ",
+    "unreadSummary": "{{count}} نه لوستل شوې خبرتیاوې",
+    "relatedPageUnavailable": "دغې خبرتیا ته اوس مهال اړونده پاڼه نشته.",
+    "columns": {
+      "title": "سرلیک",
+      "message": "پیغام",
+      "priority": "اولویت",
+      "status": "حالت",
+      "createdDate": "د جوړېدو نېټه",
+      "trackingNumber": "د تعقیب شمېره"
+    },
+    "status": {
+      "read": "لوستل شوی",
+      "unread": "نه لوستل شوی"
+    }
   },
   "languages": {
     "english": "انګلیسي",

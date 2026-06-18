@@ -9,9 +9,32 @@
     "logout": "Logout"
   },
   "notification": {
+     "filterByType": "Select notification Type",
+    "filterByPriority": "Select Priority",
     "newUser": "A new user has joined",
     "systemUpdate": "System update available",
-    "reportReady": "Your report is ready"
+    "reportReady": "Your report is ready",
+    "title": "Notifications",
+    "manageDescription": "Track recent alerts, open related records, and keep your inbox organized.",
+    "markAsRead": "Mark as read",
+    "markAllAsRead": "Mark all as read",
+    "markAsReadSuccess": "Notification marked as read successfully.",
+    "markAllAsReadSuccess": "All notifications marked as read successfully.",
+    "open": "Open",
+    "unreadSummary": "{{count}} unread notifications",
+    "relatedPageUnavailable": "This notification does not have a related page yet.",
+    "columns": {
+      "title": "Title",
+      "message": "Message",
+      "priority": "Priority",
+      "status": "Status",
+      "createdDate": "Created date",
+      "trackingNumber": "Tracking No"
+    },
+    "status": {
+      "read": "Read",
+      "unread": "Unread"
+    }
   },
   "languages": {
     "english": "English",

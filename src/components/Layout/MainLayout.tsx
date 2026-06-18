@@ -55,6 +55,7 @@ import OrganizationServicesList from "../feature/organizationservices/Organizati
 import InternationalPartyList from "../feature/internationalparty/InternationalPartyList.tsx";
 import OrganizationServicesDetails from "../feature/organizationservices/OrganizationServicesDetails.tsx";
 import InternationalPartyDetails from "../feature/internationalparty/InternationalPartyDetails.tsx";
+import NotificationList from "../feature/notification/NotificationList.tsx";
 
 export const MainLayout = () => {
   // const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -299,6 +300,7 @@ export const MainLayout = () => {
               />
               <Route path="comment" element={<CommentList />} />
               <Route path="comment/view/:id" element={<CommentDetails />} />
+              <Route path="notification" element={<NotificationList />} />
               
 
               {/* Remove the unauthorized route from here */}

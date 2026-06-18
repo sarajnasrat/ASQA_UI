@@ -5,6 +5,9 @@ import { Dropdown } from "primereact/dropdown";
 import { useTranslation } from "react-i18next";
 import "primeicons/primeicons.css";
 import { Badge } from "primereact/badge";
+import NotificationService from "../../../services/notification.service";
+
+const NOTIFICATION_EVENT = "notifications-updated";
 
 type LangOption = {
   label: string;
@@ -20,6 +23,7 @@ export const Navbar = ({}: { onMenuClick?: () => void }) => {
 
   const [user, setUser] = useState<any>(null);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   const languageOptions: LangOption[] = useMemo(
     () => [
@@ -42,6 +46,24 @@ export const Navbar = ({}: { onMenuClick?: () => void }) => {
     } catch {
       setUser(null);
     }
+  }, []);
+
+  useEffect(() => {
+    const loadUnreadCount = async () => {
+      try {
+        const response = await NotificationService.getUnreadCount();
+        setUnreadCount(response.data?.data?.unreadCount || 0);
+      } catch {
+        setUnreadCount(0);
+      }
+    };
+
+    loadUnreadCount();
+
+    window.addEventListener(NOTIFICATION_EVENT, loadUnreadCount);
+    return () => {
+      window.removeEventListener(NOTIFICATION_EVENT, loadUnreadCount);
+    };
   }, []);
 
   useEffect(() => {
@@ -101,14 +123,25 @@ export const Navbar = ({}: { onMenuClick?: () => void }) => {
             </div>
           </div>
           <div className="flex items-center gap-2 sm:gap-3">
-            <div className="card flex flex-wrap justify-content-center gap-4">
+            <button
+              type="button"
+              onClick={() => navigate("/notification")}
+              className="relative flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 transition-colors"
+              aria-label={t("navbar.notifications")}
+              title={t("navbar.notifications")}
+            >
               <i
-                className="pi pi-bell p-overlay-badge"
-                style={{ fontSize: "1.5rem" }}
-              >
-                <Badge className="w-5 h-4" value="2"></Badge>
-              </i>
-            </div>
+                className="pi pi-bell text-gray-700"
+                style={{ fontSize: "1.25rem" }}
+              />
+              {unreadCount > 0 ? (
+                <Badge
+                  value={unreadCount > 99 ? "99+" : unreadCount}
+                  severity="danger"
+                  className="absolute -top-1 -right-1 min-w-[1.25rem] h-[1.1rem] text-[10px] flex items-center justify-center"
+                />
+              ) : null}
+            </button>
             <div className="relative" ref={userMenuRef}>
               <button
                 type="button"

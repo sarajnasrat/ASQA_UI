@@ -9,9 +9,32 @@
     "logout": "خروج"
   },
   "notification": {
+    "filterByType": "نوعیت اعلانات را انتخاب کنید",
+    "filterByPriority": "اولویت را انتخاب کنید",
     "newUser": "کاربر جدید ثبت شد",
     "systemUpdate": "به‌روزرسانی سیستم موجود است",
-    "reportReady": "گزارش آماده است"
+    "reportReady": "گزارش آماده است",
+    "title": "اطلاعیه‌ها",
+    "manageDescription": "اطلاعیه‌های اخیر را مدیریت کنید، رکوردهای مرتبط را باز کنید و وضعیت آن‌ها را منظم نگه دارید.",
+    "markAsRead": "علامت‌گذاری به عنوان خوانده شده",
+    "markAllAsRead": "همه را خوانده شده علامت بزن",
+    "markAsReadSuccess": "اطلاعیه با موفقیت به عنوان خوانده شده علامت گذاری شد.",
+    "markAllAsReadSuccess": "همه اطلاعیه‌ها با موفقیت خوانده شده علامت گذاری شدند.",
+    "open": "باز کردن",
+    "unreadSummary": "{{count}} اطلاعیه خوانده نشده",
+    "relatedPageUnavailable": "برای این اطلاعیه در حال حاضر صفحه مرتبطی وجود ندارد.",
+    "columns": {
+      "title": "عنوان",
+      "message": "پیام",
+      "priority": "اولویت",
+      "status": "وضعیت",
+      "createdDate": "تاریخ ایجاد",
+      "trackingNumber": "شماره تعقیب"
+    },
+    "status": {
+      "read": "خوانده شده",
+      "unread": "خوانده نشده"
+    }
   },
   "languages": {
     "english": "انگلیسی",
