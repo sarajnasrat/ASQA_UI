@@ -7,6 +7,10 @@ export const NotificationService = {
     return httpClient.get(`${NOTIFICATION_BASE}`, { params });
   },
 
+  getMyNotificationsList() {
+    return httpClient.get(`${NOTIFICATION_BASE}/list`);
+  },
+
   filterNotifications(params?: any) {
     return httpClient.get(`${NOTIFICATION_BASE}/filter`, { params });
   },

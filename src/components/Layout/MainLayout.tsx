@@ -16,7 +16,7 @@ import { DistrictList } from "../feature/location/district/DistrictList";
 import { ProvinceList } from "../feature/location/province/ProvinceList";
 import { CategoryList } from "../feature/category/CategoryList";
 import CompanyList from "../feature/company/CompanyList";
-import { CompanyDetails } from "../feature/company/CompanyDetails";
+import CompanyStatusList from "../feature/company/CompanyStatusList";
 import { CompanyCreate } from "../feature/company/CompanyCreate";
 import CompanyUpdate from "../feature/company/CompanyUpdate";
 import { CertificationRequestList } from "../feature/certification-request/CertificationRequestList";
@@ -56,29 +56,16 @@ import InternationalPartyList from "../feature/internationalparty/InternationalP
 import OrganizationServicesDetails from "../feature/organizationservices/OrganizationServicesDetails.tsx";
 import InternationalPartyDetails from "../feature/internationalparty/InternationalPartyDetails.tsx";
 import NotificationList from "../feature/notification/NotificationList.tsx";
+import CompanyDetails from "../feature/company/CompanyDetails.tsx";
+import { CertificationVerification } from "../feature/certification/CertificationVerification.tsx";
 
 export const MainLayout = () => {
-  // const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [showUnauthorized, setShowUnauthorized] = useState(false);
   const [previousPath, setPreviousPath] = useState<string>("/dashboard");
 
   const location = useLocation();
   const navigate = useNavigate();
-
-  // Toggle sidebar collapse (desktop)
-  // const toggleSidebarCollapse = () => {
-  //   setSidebarCollapsed(!sidebarCollapsed);
-  // };
-
-  // Open mobile sidebar
-  // const openMobileSidebar = () => {
-  //   setMobileSidebarOpen(true);
-  // };
-
-  // Close mobile sidebar
-  // const closeMobileSidebar = () => {
-  //   setMobileSidebarOpen(false);
-  // };
 
   // Track previous path for "Go Back" functionality
   useEffect(() => {
@@ -104,17 +91,14 @@ export const MainLayout = () => {
     <div className="flex h-screen overflow-hidden bg-gray-50">
       {/* Sidebar with props */}
       <Sidebar
-
-      // collapsed={sidebarCollapsed}
-      // isMobileOpen={mobileSidebarOpen}
-      // onToggleCollapse={toggleSidebarCollapse}
-      // onCloseMobile={closeMobileSidebar}
+        collapsed={sidebarCollapsed}
+        onCollapsedChange={setSidebarCollapsed}
       />
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
         {/* Navbar with menu click handler */}
-        <Navbar />
+        <Navbar collapsed={sidebarCollapsed} />
 
         {/* Page Content - Scrollable */}
         <main className="flex-1 overflow-y-auto p-1 sm:p-4 lg:p-1 bg-gray-50">
@@ -176,6 +160,11 @@ export const MainLayout = () => {
               <Route
                 path="certification-request"
                 element={<CertificationRequestList />}
+              />
+
+                  <Route
+                path="certification-verification"
+                element={<CertificationVerification />}
               />
                     <Route
                 path="partner-organization"
@@ -239,6 +228,28 @@ export const MainLayout = () => {
 
               <Route path="commitee/view/:id" element={<CommiteeDetails />} />
               <Route path="company" element={<CompanyList />} />
+              <Route
+                path="company/certificate-issued"
+                element={<CompanyStatusList status="CERTIFICATE_ISSUED" />}
+              />
+              <Route
+                path="company/rejected"
+                element={<CompanyStatusList status="REJECTED" />}
+              />
+              <Route
+                path="company/under-review"
+                element={<CompanyStatusList status="UNDER_REVIEW" />}
+              />
+              <Route
+                path="company/inspection-in-progress"
+                element={
+                  <CompanyStatusList status="INSPECTION_IN_PROGRESS" />
+                }
+              />
+              <Route
+                path="company/payment-pending"
+                element={<CompanyStatusList status="PAYMENT_PENDING" />}
+              />
               <Route path="admin-attachments" element={<AttachmentList />} />
               <Route
                 path="attachments/create"

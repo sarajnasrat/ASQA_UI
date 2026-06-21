@@ -151,3 +151,69 @@ html[dir="rtl"] .p-dropdown-clear-icon {
     height: 1rem;
     line-height: 1rem;
 }
+
+
+@keyframes appLoaderFloat {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, -14px, 0) scale(1.04);
+  }
+}
+
+@keyframes appLoaderBeat {
+  0% {
+    transform: scale(0.75);
+    opacity: 0.45;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.75);
+    opacity: 0.45;
+  }
+}
+
+.app-loader-orb {
+  position: absolute;
+  width: 18rem;
+  height: 18rem;
+  border-radius: 9999px;
+  filter: blur(56px);
+  opacity: 0.28;
+  animation: appLoaderFloat 8s ease-in-out infinite;
+}
+
+.app-loader-orb-left {
+  left: -4rem;
+  top: 10%;
+  background: #60a5fa;
+}
+
+.app-loader-orb-right {
+  right: -4rem;
+  bottom: 8%;
+  background: #818cf8;
+  animation-delay: 1.8s;
+}
+
+.app-loader-dot {
+  display: inline-block;
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.08);
+  animation: appLoaderBeat 0.9s ease-in-out infinite;
+}
+
+.app-loader-dot-2 {
+  animation-delay: 0.14s;
+}
+
+.app-loader-dot-3 {
+  animation-delay: 0.28s;
+}

@@ -9,8 +9,12 @@
     "logout": "Logout"
   },
   "notification": {
-     "filterByType": "Select notification Type",
+    "filterByType": "Select notification Type",
     "filterByPriority": "Select Priority",
+    "filters": {
+      "allTypes": "All Types",
+      "allPriorities": "All Priorities"
+    },
     "newUser": "A new user has joined",
     "systemUpdate": "System update available",
     "reportReady": "Your report is ready",
@@ -34,6 +38,67 @@
     "status": {
       "read": "Read",
       "unread": "Unread"
+    },
+    "priorities": {
+      "INFO": "Info",
+      "WARNING": "Warning",
+      "URGENT": "Urgent"
+    },
+    "types": {
+      "REQUEST_SUBMITTED": "Request Submitted",
+      "REQUEST_STATUS_CHANGED": "Request Status Changed",
+      "CERTIFICATE_ISSUED": "Certificate Issued",
+      "CERTIFICATE_EXPIRING_SOON": "Certificate Expiring Soon",
+      "CERTIFICATE_EXPIRED": "Certificate Expired",
+      "INSPECTION_DEADLINE_REACHED": "Inspection Deadline Reached",
+      "INSPECTION_OVERDUE": "Inspection Overdue"
+    },
+    "requestStatuses": {
+      "SUBMITTED": "Submitted",
+      "UNDER_REVIEW": "Under Review",
+      "STANDARDS_PROVIDED": "Standards Provided",
+      "DEADLINE_REQUIRED": "Deadline Required",
+      "DEADLINE_ASSIGNED": "Deadline Assigned",
+      "INSPECTION_IN_PROGRESS": "Inspection In Progress",
+      "REPORTED_TO_COMMITTEE": "Reported To Committee",
+      "REPORT_APPROVED": "Report Approved",
+      "PAYMENT_PENDING": "Payment Pending",
+      "PAYMENT_COMPLETED": "Payment Completed",
+      "CERTIFICATE_ISSUED": "Certificate Issued",
+      "REJECTED": "Rejected",
+      "CANCELLED": "Cancelled"
+    },
+    "templates": {
+      "requestSubmitted": {
+        "title": "New certification request submitted",
+        "message": "A new certification request with tracking number {{trackingNumber}} has been submitted and is waiting for review."
+      },
+      "requestStatusChanged": {
+        "title": "Request status updated",
+        "message": "Request {{trackingNumber}} status changed from {{oldStatus}} to {{newStatus}}. Deadline ends on {{endDate}}. Reason: {{rejectionReason}}"
+      },
+      "requestRejectedForAdmin": {
+        "title": "Certification request rejected",
+        "message": "Request {{trackingNumber}} has been rejected."
+      },
+      "certificateIssued": {
+        "title": "Certificate issued",
+        "message": "Your certificate {{certificateName}} has been issued for request {{trackingNumber}}."
+      },
+      "certificateExpiringSoon": {
+        "title": "Certificate expiring soon",
+        "companyMessage": "Certificate {{certificateName}} will expire on {{expiryDate}}.",
+        "adminMessage": "Certificate {{certificateName}} for company {{companyName}} will expire on {{expiryDate}}."
+      },
+      "certificateExpired": {
+        "title": "Certificate expired",
+        "companyMessage": "Certificate {{certificateName}} expired on {{expiryDate}}.",
+        "adminMessage": "Certificate {{certificateName}} for company {{companyName}} has expired."
+      },
+      "inspectionOverdue": {
+        "title": "Inspection deadline completed",
+        "message": "The inspection deadline for request {{trackingNumber}} has completed and the request should be inspected."
+      }
     }
   },
   "languages": {
@@ -1251,6 +1316,36 @@
     "Active": "Active",
     "Inactive": "Inactive",
     "memberCount": "Number of Members",
+    "types": {
+      "technical": "Technical Committee",
+      "quality": "Quality Committee",
+      "administrative": "Administrative Committee"
+    },
+    "validation": {
+      "nameRequired": "Committee name is required",
+      "typeRequired": "Please select a committee type"
+    },
+    "form": {
+      "createDescription": "Fill in the details below to create a new committee.",
+      "editDescription": "Update the committee information and attachment details.",
+      "requiredHint": "(Required)",
+      "optionalHint": "(Optional)",
+      "attachmentLabel": "Committee Attachment",
+      "attachmentHelper": "Upload one attachment for this committee",
+      "attachmentUpdateHelper": "Upload a new attachment for this committee",
+      "activeLabel": "Active Status",
+      "activeDescription": "Committee is visible and operational",
+      "inactiveDescription": "Committee is temporarily disabled",
+      "creating": "Creating...",
+      "createButton": "Create Committee",
+      "updating": "Updating...",
+      "updateButton": "Update Committee",
+      "placeholders": {
+        "name": "e.g., Innovation Committee",
+        "type": "Select committee type",
+        "description": "Describe the committee's purpose and responsibilities..."
+      }
+    },
     "assignment": {
       "details": "Committee Assignment Details",
       "viewAssignmentDetails": "Review assignment metadata and related request information.",

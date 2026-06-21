@@ -139,13 +139,20 @@ type ThemeKey = keyof typeof themes;
 // ============================================
 // MAIN SIDEBAR COMPONENT
 // ============================================
-export const Sidebar = () => {
+type SidebarProps = {
+  collapsed: boolean;
+  onCollapsedChange: (collapsed: boolean) => void;
+};
+
+export const Sidebar = ({
+  collapsed,
+  onCollapsedChange,
+}: SidebarProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
 
   // State management
-  const [collapsed, setCollapsed] = useState(false);
   const [expandedItems, setExpandedItems] = useState<Set<number>>(new Set());
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [menuItems, setMenuItems] = useState<any[]>([]);
@@ -541,7 +548,7 @@ export const Sidebar = () => {
         </div>
 
         <button
-          onClick={() => setCollapsed(true)}
+          onClick={() => onCollapsedChange(true)}
           className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 transition-all duration-200"
           aria-label="Collapse sidebar"
         >
@@ -555,7 +562,7 @@ export const Sidebar = () => {
     ) : (
       <div className="w-full flex justify-center">
         <button
-          onClick={() => setCollapsed(false)}
+          onClick={() => onCollapsedChange(false)}
           className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 transition-all duration-200"
           aria-label="Expand sidebar"
         >

@@ -1,6 +1,7 @@
 import React from "react";
 import { BreadCrumb } from "primereact/breadcrumb";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import "primeicons/primeicons.css";
 import type { MenuItem } from "primereact/menuitem";
 
@@ -41,6 +42,9 @@ const DynamicBreadcrumb: React.FC<DynamicBreadcrumbProps> = ({
   size,
   radius,
 }) => {
+  const { i18n } = useTranslation();
+  const isRTL = i18n.language === "ps" || i18n.language === "dr";
+
   const home: MenuItem = {
     icon: "pi pi-home",
     template: (item) => (
@@ -64,6 +68,7 @@ const DynamicBreadcrumb: React.FC<DynamicBreadcrumbProps> = ({
       <BreadCrumb
         home={home}
         model={breadcrumbItems}
+        separatorIcon={isRTL ? "pi pi-angle-left" : "pi pi-angle-right"}
         className={radius || ""}
       />
     </div>

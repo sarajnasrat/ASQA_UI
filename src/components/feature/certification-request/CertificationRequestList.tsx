@@ -60,7 +60,7 @@ export const CertificationRequestList = () => {
   // ================= TAB ITEMS =================
   const statusTabs: StatusTabItem[] = [
     {
-      label: t("certificationRequest.statusOptions.SUBMITTED"),
+      label: t("certificationRequest.tabOptions.SUBMITTED"),
       value: "SUBMITTED",
       icon: "pi pi-send",
     },

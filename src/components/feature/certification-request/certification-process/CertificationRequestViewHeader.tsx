@@ -14,6 +14,7 @@ import type {
 } from "./CertificationRequestView.types";
 import { useAuth } from "../../../../context/AuthContext";
 import { IslamicDateFormatter } from "../../../common/datepicker/IslamicDateFormatter";
+import DynamicBreadcrumb from "../../../common/DynamicBreadcrumb";
 
 interface Props {
   request: CertificationRequest;
@@ -46,15 +47,41 @@ const CertificationRequestViewHeader: React.FC<Props> = ({
   t,
 }) => {
   const { hasPermission } = useAuth();
+  const getBreadcrumbListUrl = (status: string) => {
+    switch (status) {
+      case "PAYMENT_PENDING":
+      case "PAYMENT_COMPLETED":
+        return "/payment-management";
+      case "DEADLINE_REQUIRED":
+      case "DEADLINE_ASSIGNED":
+      case "INSPECTION_IN_PROGRESS":
+        return "/certification-request-deadline";
+      case "UNDER_REVIEW":
+      case "REJECTED":
+      case "REPORT_APPROVED":
+      case "CERTIFICATE_ISSUED":
+      default:
+        return "/certification-request";
+    }
+  };
+
+  const breadcrumbItems = [
+    {
+      label: t("certificationRequest.list"),
+      url: getBreadcrumbListUrl(request.requestStatus),
+    },
+    {
+      label: request.serialNumber,
+      url: "",
+    },
+  ];
   return (
     <div className="mb-6">
-      <button
-        onClick={onBack}
-        className="inline-flex items-center text-gray-600 hover:text-blue-600 transition-colors mb-4"
-      >
-        <ArrowLeft className="h-5 w-5 mr-2" />
-        {t("common.back")}
-      </button>
+      <DynamicBreadcrumb
+        items={breadcrumbItems}
+        size="max-w-8xl"
+        radius="rounded-2xl"
+      />
 
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -73,21 +100,21 @@ const CertificationRequestViewHeader: React.FC<Props> = ({
             <div className="flex flex-wrap gap-4 text-sm text-gray-500">
               <div className="flex items-center gap-1">
                 <span>
-                  {t("certificationRequest.labels.serialNumber")}: {" "}
+                  {t("certificationRequest.labels.serialNumber")}:{" "}
                   {request.serialNumber}
                 </span>
               </div>
               <div className="flex items-center gap-1">
                 <FileText className="h-4 w-4" />
                 <span>
-                  {t("certificationRequest.labels.trackingNumber")}: {" "}
+                  {t("certificationRequest.labels.trackingNumber")}:{" "}
                   {request.trackingNumber}
                 </span>
               </div>
               <div className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
                 <span>
-                  {t("certificationRequest.labels.createdDate")}: { " "}
+                  {t("certificationRequest.labels.createdDate")}:{" "}
                   {IslamicDateFormatter.formatQamari(request.createdDate)}
                 </span>
               </div>

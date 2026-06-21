@@ -9,11 +9,15 @@
     "logout": "وتل"
   },
   "notification": {
-     "filterByType": "نوعیت اعلانات را انتخاب کنید",
-    "filterByPriority": "اولویت را انتخاب کنید",
-    "newUser": "یو نوی کارونکی شامل شو",
-    "systemUpdate": "د سیسټم تازه معلومات موجود دي",
-    "reportReady": "ستاسو راپور چمتو دی",
+  "filterByType": "نوعیت اعلانات را انتخاب کنید",
+  "filterByPriority": "اولویت را انتخاب کنید",
+  "filters": {
+    "allTypes": "ټول ډولونه",
+    "allPriorities": "ټول لومړيتوبونه"
+  },
+  "newUser": "یو نوی کارونکی شامل شو",
+  "systemUpdate": "د سیسټم تازه معلومات موجود دي",
+  "reportReady": "ستاسو راپور چمتو دی",
     "title": "خبرتیاوې",
     "manageDescription": "خپلې خبرتیاوې وګورئ، اړوند موضوعات پرانیزئ او دغه لېست منظم وساتئ.",
     "markAsRead": "د لوستل شوي په توګه ونیسئ",
@@ -31,11 +35,72 @@
       "createdDate": "د جوړېدو نېټه",
       "trackingNumber": "د تعقیب شمېره"
     },
-    "status": {
-      "read": "لوستل شوی",
-      "unread": "نه لوستل شوی"
-    }
+  "status": {
+    "read": "لوستل شوی",
+    "unread": "نه لوستل شوی"
   },
+  "priorities": {
+    "INFO": "عادي",
+    "WARNING": "خبرداری",
+    "URGENT": "بیړنی"
+  },
+  "types": {
+    "REQUEST_SUBMITTED": "د غوښتنې ثبت",
+    "REQUEST_STATUS_CHANGED": "د غوښتنې د حالت بدلون",
+    "CERTIFICATE_ISSUED": "سند صادر شو",
+    "CERTIFICATE_EXPIRING_SOON": "سند ژر ختمېږي",
+    "CERTIFICATE_EXPIRED": "سند ختم شوی",
+    "INSPECTION_DEADLINE_REACHED": "د تفتیش مهلت ورسېد",
+    "INSPECTION_OVERDUE": "تفتیش ځنډېدلی"
+  },
+  "requestStatuses": {
+    "SUBMITTED": "ثبت شوی",
+    "UNDER_REVIEW": "تر ارزونې لاندې",
+    "STANDARDS_PROVIDED": "معیارونه ورکړل شول",
+    "DEADLINE_REQUIRED": "مهلت ته اړتیا ده",
+    "DEADLINE_ASSIGNED": "مهلت وټاکل شو",
+    "INSPECTION_IN_PROGRESS": "تفتیش روان دی",
+    "REPORTED_TO_COMMITTEE": "کمیټې ته راپور شو",
+    "REPORT_APPROVED": "راپور تایید شو",
+    "PAYMENT_PENDING": "د تادیې په انتظار",
+    "PAYMENT_COMPLETED": "تادیه بشپړه شوه",
+    "CERTIFICATE_ISSUED": "سند صادر شو",
+    "REJECTED": "رد شو",
+    "CANCELLED": "لغوه شو"
+  },
+  "templates": {
+    "requestSubmitted": {
+      "title": "د تصدیق نوې غوښتنه ثبت شوه",
+      "message": "د {{trackingNumber}} تعقیبي شمېرې سره د تصدیق نوې غوښتنه ثبت شوې او د ارزونې په انتظار کې ده."
+    },
+    "requestStatusChanged": {
+      "title": "د غوښتنې حالت تازه شو",
+      "message": "د {{trackingNumber}} غوښتنې حالت له {{oldStatus}} څخه {{newStatus}} ته بدل شو. مهلت په {{endDate}} پای ته رسېږي. دلیل: {{rejectionReason}}"
+    },
+    "requestRejectedForAdmin": {
+      "title": "د تصدیق غوښتنه رد شوه",
+      "message": "د {{trackingNumber}} غوښتنه رد شوې ده."
+    },
+    "certificateIssued": {
+      "title": "سند صادر شو",
+      "message": "ستاسو {{certificateName}} سند د {{trackingNumber}} غوښتنې لپاره صادر شو."
+    },
+    "certificateExpiringSoon": {
+      "title": "سند ژر ختمېږي",
+      "companyMessage": "{{certificateName}} سند به په {{expiryDate}} نېټه ختم شي.",
+      "adminMessage": "د {{companyName}} شرکت {{certificateName}} سند به په {{expiryDate}} نېټه ختم شي."
+    },
+    "certificateExpired": {
+      "title": "سند ختم شوی",
+      "companyMessage": "{{certificateName}} سند په {{expiryDate}} نېټه ختم شوی دی.",
+      "adminMessage": "د {{companyName}} شرکت {{certificateName}} سند ختم شوی دی."
+    },
+    "inspectionOverdue": {
+      "title": "د تفتیش مهلت بشپړ شو",
+      "message": "د {{trackingNumber}} غوښتنې د تفتیش مهلت بشپړ شوی او غوښتنه باید وکتل شي."
+    }
+  }
+},
   "languages": {
     "english": "انګلیسي",
     "persian": "فارسي (دری)",
@@ -1244,6 +1309,36 @@
     "Active": "فعال",
     "Inactive": "غیر فعال",
     "memberCount": "د غړو شمېره",
+    "types": {
+      "technical": "تخنیکي کمېټه",
+      "quality": "د کیفیت کمېټه",
+      "administrative": "اداري کمېټه"
+    },
+    "validation": {
+      "nameRequired": "د کمېټې نوم اړین دی",
+      "typeRequired": "مهرباني وکړئ د کمېټې ډول وټاکئ"
+    },
+    "form": {
+      "createDescription": "د نوې کمېټې جوړولو لپاره لاندې معلومات ډک کړئ.",
+      "editDescription": "د کمېټې معلومات او د ضمیمې جزییات نوي کړئ.",
+      "requiredHint": "(اړین)",
+      "optionalHint": "(اختیاري)",
+      "attachmentLabel": "د کمېټې ضمیمه",
+      "attachmentHelper": "د دې کمېټې لپاره یوه ضمیمه پورته کړئ",
+      "attachmentUpdateHelper": "د دې کمېټې لپاره نوې ضمیمه پورته کړئ",
+      "activeLabel": "فعال حالت",
+      "activeDescription": "کمېټه ښکاره ده او فعاله ده",
+      "inactiveDescription": "کمېټه لنډمهاله غیر فعاله ده",
+      "creating": "د جوړېدو په حال کې...",
+      "createButton": "کمېټه جوړه کړئ",
+      "updating": "د نوي کولو په حال کې...",
+      "updateButton": "کمېټه تازه کړئ",
+      "placeholders": {
+        "name": "لکه: د نوښت کمېټه",
+        "type": "د کمېټې ډول وټاکئ",
+        "description": "د کمېټې موخه او مسؤلیتونه ولیکئ..."
+      }
+    },
     "assignment": {
       "list": "ټاکل شوي تصدیق غوښتنې",
       "create": "ټاکنه جوړه کړئ",

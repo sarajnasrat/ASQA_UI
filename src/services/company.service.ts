@@ -13,6 +13,27 @@ export const CompanyService = {
   },
 
   /**
+   * Get paginated companies by certification request status
+   * @param status Request status value
+   * @param params Query params: page, size, sort, etc.
+   */
+  getPaginatedCompaniesByRequestStatus(status: string, params: any) {
+    return httpClient.get(`${COMPANY_BASE}/by-request-status`, {
+      params: { status, ...params },
+    });
+  },
+
+  /**
+   * Get all companies by certification request status
+   * @param status Request status value
+   */
+  getAllCompaniesByRequestStatus(status: string) {
+    return httpClient.get(`${COMPANY_BASE}/by-request-status/all`, {
+      params: { status },
+    });
+  },
+
+  /**
    * Get all companies without pagination
    */
   getAllCompanies() {

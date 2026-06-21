@@ -22,9 +22,10 @@ import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatt
 import CommiteeMemberCreate from "../commiteemember/CommiteeMemberCreate";
 import ExcelExport from "../../common/ExcelExport";
 import { useAuth } from "../../../context/AuthContext";
+import type { CommitteeResponse } from "../../../services/comitee.service";
 
 export const CommiteeList: React.FC = () => {
-  const [commiteeList, setCommiteeList] = useState<any[]>([]);
+  const [commiteeList, setCommiteeList] = useState<CommitteeResponse[]>([]);
   const [loading, setLoading] = useState(false);
   const [showMemberCreateDialog, setShowMemberCreateDialog] = useState(false);
   const [selectedCommitteeForMember, setSelectedCommitteeForMember] = useState<
@@ -227,8 +228,8 @@ export const CommiteeList: React.FC = () => {
       header: t("commitee.memberCount"),
     },
     {
-      field: "memberCount",
-      header: t("commitee.memberCount"),
+      header: t("attachment.list"),
+      body: (rowData: CommitteeResponse) => rowData.attachments?.length || 0,
     },
 
     {

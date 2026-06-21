@@ -15,6 +15,7 @@ import ForgotPassword from "../components/feature/forgotpassword/ForgotPassword"
 import { MainLayout } from "../components/Layout/MainLayout";
 import InternationalParties from "../components/feature/website/pages/InternationalParties";
 import OrganizationServices from "../components/feature/website/pages/OrganizationServices";
+import { CertificationVerification } from "../components/feature/certification/CertificationVerification";
 
 export const AppRoutes = () => {
   return (
@@ -39,7 +40,10 @@ export const AppRoutes = () => {
             path="/certification-detals"
             element={<CertificationDetails />}
           />
-
+                      <Route
+                           path="certification-verification"
+                           element={<CertificationVerification />}
+                         />
           <Route path="/contact" element={<Contact />} />
           <Route
             path="/certification/select-type"

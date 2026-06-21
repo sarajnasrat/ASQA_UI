@@ -66,11 +66,18 @@ const CertificationService = {
       params,
     });
   },
+  verfyCertification(param: any) {
+    return httpClient.get(`${CERTIFICATION_BASE}/search-by-certificate-number`, {
+      params: { param },
+    });
+  },
   updateCertificationStatus(id: number, status: string) {
   return httpClient.patch(`${CERTIFICATION_BASE}/${id}/status`, null, {
     params: { status },
   });
+  
 },
+
 };
 
 export default CertificationService;
