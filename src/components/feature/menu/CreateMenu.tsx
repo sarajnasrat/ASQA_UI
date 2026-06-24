@@ -23,6 +23,15 @@ interface CreateMenuProps {
 interface Permission {
   id: string;
   permissionName: string;
+  displayLabel?: string;
+}
+
+interface ParentMenuOption {
+  id: string | number;
+  labelEn?: string;
+  labelPs?: string;
+  labelDr?: string;
+  displayLabel?: string;
 }
 
 interface MenuForm {
@@ -41,11 +50,12 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
   onSuccess,
   parentMenuId = null,
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { showToast } = useAppToast();
+  const isRtl = i18n.language === "ps" || i18n.language === "dr";
 
   const [permissions, setPermissions] = useState<Permission[]>([]);
-  const [parentMenus, setParentMenus] = useState<any[]>([]);
+  const [parentMenus, setParentMenus] = useState<ParentMenuOption[]>([]);
   const [parentId, setParentId] = useState<string | null>(parentMenuId);
   const [permissionId, setPermissionId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -90,8 +100,26 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
         MenuService.getAllMenus(),
       ]);
 
-      setPermissions(permissionsRes.data || []);
-      setParentMenus(menusRes.data || []);
+      setPermissions(
+        (permissionsRes.data || []).map((permission: Permission) => ({
+          ...permission,
+          displayLabel: t(
+            `permissions.${permission.permissionName}`,
+            permission.permissionName,
+          ),
+        })),
+      );
+      setParentMenus(
+        (menusRes.data || []).map((menu: ParentMenuOption) => ({
+          ...menu,
+          displayLabel:
+            i18n.language === "ps"
+              ? menu.labelPs || menu.labelDr || menu.labelEn
+              : i18n.language === "dr"
+                ? menu.labelDr || menu.labelPs || menu.labelEn
+                : menu.labelEn || menu.labelDr || menu.labelPs,
+        })),
+      );
     } catch {
       showToast("error", t("common.error"), t("menu.loadFailed"));
     } finally {
@@ -309,11 +337,26 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
                         <div className="relative">
                           <InputText
                             {...field}
-                            className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all"
+                            dir="ltr"
+                            className={classNames(
+                              "w-full py-2.5 text-sm border border-gray-200 rounded-lg focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all",
+                              {
+                                "pl-10 pr-4": !isRtl,
+                                "pl-4 pr-10": isRtl,
+                              },
+                            )}
                             placeholder={t("menu.placeholder.icon")}
                           />
                           {field.value && (
-                            <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                            <div
+                              className={classNames(
+                                "absolute top-1/2 -translate-y-1/2",
+                                {
+                                  "left-3": !isRtl,
+                                  "right-3": isRtl,
+                                },
+                              )}
+                            >
                               <i className={classNames(field.value, "text-indigo-600")}></i>
                             </div>
                           )}
@@ -385,7 +428,7 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
                     <Dropdown
                       value={parentId}
                       options={parentMenus}
-                      optionLabel="labelEn"
+                      optionLabel="displayLabel"
                       optionValue="id"
                       onChange={(e) => setParentId(e.value)}
                       placeholder={t("menu.placeholder.parentMenu")}
@@ -407,7 +450,7 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
                     <Dropdown
                       value={permissionId}
                       options={permissions}
-                      optionLabel="permissionName"
+                      optionLabel="displayLabel"
                       optionValue="id"
                       onChange={(e) => setPermissionId(e.value)}
                       placeholder={t("menu.placeholder.permission")}

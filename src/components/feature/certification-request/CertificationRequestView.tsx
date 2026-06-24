@@ -44,7 +44,7 @@ const transitionMap: Record<string, string[]> = {
   DEADLINE_ASSIGNED: ["INSPECTION_IN_PROGRESS"],
   INSPECTION_IN_PROGRESS: ["REPORTED_TO_COMMITTEE"],
   REPORTED_TO_COMMITTEE: ["REPORT_APPROVED", "REJECTED"],
-  REPORT_APPROVED: ["PAYMENT_PENDING"],
+  COMMITTEE_APPROVED: ["PAYMENT_PENDING"],
   PAYMENT_PENDING: ["PAYMENT_COMPLETED"],
   PAYMENT_COMPLETED: ["CERTIFICATE_ISSUED"],
 };
@@ -155,7 +155,8 @@ const CertificationRequestView: React.FC = () => {
     const loadCommittees = async () => {
       try {
         setLoadingCommittees(true);
-        const response = await CommiteeService.getAll();
+        const response = await CommiteeService.getAllByCommitteeType(
+          "INSPECTION",);
         setCommittees(response?.data?.data || response?.data || []);
       } catch {
         showToast(
@@ -754,7 +755,7 @@ const CertificationRequestView: React.FC = () => {
         break;
       case "STANDARDS_PROVIDED":
         // Refresh current page to show updated data
-        navigate(0);
+        navigate("/standard-management");
         break;
       case "DEADLINE_REQUIRED":
         navigate("/certification-request-deadline");
@@ -1020,9 +1021,9 @@ const CertificationRequestView: React.FC = () => {
           resizable={false}
           dismissableMask
           closeOnEscape
-          style={{ width: "650px", maxWidth: "95vw" }}
+          style={{ width: "700px", maxWidth: "95vw" }}
           breakpoints={{ "960px": "95vw", "640px": "95vw" }}
-          className="rounded-xl shadow-2xl border border-gray-200"
+          className="rounded-2xl shadow-2xl border border-gray-200"
           footer={
             <div className="flex justify-end gap-2">
               <button

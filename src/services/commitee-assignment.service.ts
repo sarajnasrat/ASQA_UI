@@ -40,6 +40,22 @@ getMyCommitteeAssignments(
     },
   });
 },
+getByAssignmentType(
+  assignmentType: string,
+  status?: string,
+  page: number = 0,
+  size: number = 10,
+  sort: string = "id,desc"
+) {
+  return httpClient.get(`${BASE_URL}/type/${assignmentType}`, {
+    params: {
+      ...(status && { status }),
+      page,
+      size,
+      sort,
+    },
+  });
+},
 getByCommitteeIds(committeeIds: number[], params?: any) {
   return httpClient.get(`${BASE_URL}/committee`, {
     params: {

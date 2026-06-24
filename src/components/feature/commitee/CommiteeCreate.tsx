@@ -11,6 +11,7 @@ import CommiteeService from "../../../services/comitee.service";
 import FileUploadField from "../../common/FileUploadField";
 
 interface CommiteeCreateProps {
+  commiteeType?: string | null;
   onClose: () => void;
   onSuccess: () => void;
 }
@@ -23,26 +24,38 @@ interface CommiteeFormValues {
 }
 
 export const CommiteeCreate: React.FC<CommiteeCreateProps> = ({
+  commiteeType = null,
   onClose,
   onSuccess,
 }) => {
   const { t } = useTranslation();
   const { showSuccess, showError } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [selectedAttachmentFile, setSelectedAttachmentFile] = useState<File | null>(null);
+  const [selectedAttachmentFile, setSelectedAttachmentFile] =
+    useState<File | null>(null);
 
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<CommiteeFormValues>({
     defaultValues: {
       name: "",
       description: "",
-      committeeType: null,
+      committeeType: commiteeType,
       active: true,
     },
   });
+
+  useEffect(() => {
+    reset({
+      name: "",
+      description: "",
+      committeeType: commiteeType,
+      active: true,
+    });
+  }, [commiteeType, reset]);
 
   // ================= ESC CLOSE =================
   useEffect(() => {
@@ -73,9 +86,8 @@ export const CommiteeCreate: React.FC<CommiteeCreateProps> = ({
 
   // ================= ENUM OPTIONS =================
   const committeeTypeOptions = [
-    { label: t("commitee.types.technical"), value: "TECHNICAL" },
-    { label: t("commitee.types.quality"), value: "QUALITY" },
-    { label: t("commitee.types.administrative"), value: "ADMIN" },
+    { label: t("commitee.types.inspection"), value: "INSPECTION" },
+    { label: t("commitee.types.approval"), value: "APPROVAL" },
   ];
 
   return (
@@ -178,6 +190,7 @@ export const CommiteeCreate: React.FC<CommiteeCreateProps> = ({
                         options={committeeTypeOptions}
                         placeholder={t("commitee.form.placeholders.type")}
                         className="w-full"
+                        disabled={isSubmitting || !!commiteeType}
                         panelClassName="rounded-xl shadow-lg"
                         pt={{
                           root: {
@@ -194,7 +207,6 @@ export const CommiteeCreate: React.FC<CommiteeCreateProps> = ({
                             className: "rounded-r-xl",
                           },
                         }}
-                        disabled={isSubmitting}
                       />
                     )}
                   />
@@ -224,9 +236,10 @@ export const CommiteeCreate: React.FC<CommiteeCreateProps> = ({
                           {...field}
                           rows={13}
                           autoResize
-                            className="w-full"
-
-                          placeholder={t("commitee.form.placeholders.description")}
+                          className="w-full"
+                          placeholder={t(
+                            "commitee.form.placeholders.description",
+                          )}
                           disabled={isSubmitting}
                         />
                       </div>

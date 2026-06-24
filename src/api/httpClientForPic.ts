@@ -23,6 +23,10 @@ const httpClientForPic = axios.create({
   withCredentials: true,
 });
 
+const forceLogout = () => {
+  window.dispatchEvent(new Event("auth:force-logout"));
+};
+
 
 
 // 🔹 Request Interceptor
@@ -102,12 +106,20 @@ httpClientForPic.interceptors.response.use(
         return httpClientForPic(originalRequest);
       } catch (err) {
         processQueue(err, null);
-        localStorage.removeItem("accessToken");
-        window.location.href = "/login";
+        forceLogout();
         return Promise.reject(err);
       } finally {
         isRefreshing = false;
       }
+    }
+
+    if (
+      localStorage.getItem("accessToken") &&
+      !error.response &&
+      originalRequest.url !== "/users/login" &&
+      originalRequest.url !== "/users/refresh-token"
+    ) {
+      forceLogout();
     }
 
     return Promise.reject(error);

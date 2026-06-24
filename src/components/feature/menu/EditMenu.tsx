@@ -22,9 +22,13 @@ interface EditMenuProps {
   onSuccess: () => void;
 }
 
-interface Permission {
-  id: string;
-  permissionName: string;
+interface DropdownOption {
+  id: string | number;
+  labelEn?: string;
+  labelPs?: string;
+  labelDr?: string;
+  permissionName?: string;
+  displayLabel?: string;
 }
 
 interface MenuForm {
@@ -43,13 +47,14 @@ export const EditMenu: React.FC<EditMenuProps> = ({
   onClose,
   onSuccess,
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { showToast } = useAppToast();
+  const isRtl = i18n.language === "ps" || i18n.language === "dr";
 
-  const [permissions, setPermissions] = useState<Permission[]>([]);
-  const [parentMenus, setParentMenus] = useState<any[]>([]);
-  const [parentId, setParentId] = useState<string | null>(null);
-  const [permissionId, setPermissionId] = useState<string | null>(null);
+  const [permissions, setPermissions] = useState<DropdownOption[]>([]);
+  const [parentMenus, setParentMenus] = useState<DropdownOption[]>([]);
+  const [parentId, setParentId] = useState<string | number | null>(null);
+  const [permissionId, setPermissionId] = useState<string | number | null>(null);
   const [loading, setLoading] = useState(false);
   const [fetchingData, setFetchingData] = useState(false);
   const { showError, showSuccess } = useToast();
@@ -74,7 +79,76 @@ export const EditMenu: React.FC<EditMenuProps> = ({
     if (visible && menuId) {
       fetchData();
     }
-  }, [visible, menuId]);
+    if (!visible) {
+      reset();
+      setParentId(null);
+      setPermissionId(null);
+    }
+  }, [visible, menuId, reset]);
+
+  const normalizeId = (value: unknown): string | number | null => {
+    if (value === undefined || value === null || value === "") {
+      return null;
+    }
+
+    return typeof value === "number" ? value : String(value);
+  };
+
+  const getCurrentParentId = (menu: any): string | number | null =>
+    normalizeId(
+      menu?.parent?.id ??
+        menu?.parentMenu?.id ??
+        menu?.parentId ??
+        menu?.parentMenuId,
+    );
+
+  const getCurrentPermissionId = (menu: any): string | number | null =>
+    normalizeId(
+      menu?.permission?.id ??
+        menu?.permissions?.id ??
+        menu?.permissionId,
+    );
+
+  const normalizeMenuOptions = (
+    menus: any[],
+    currentParentId: string | number | null,
+  ): DropdownOption[] =>
+    (menus || [])
+      .filter((m: any) => String(m.id) !== String(menuId))
+      .map((m: any) => ({
+        ...m,
+        id: normalizeId(m.id) ?? m.id,
+        displayLabel:
+          i18n.language === "ps"
+            ? m.labelPs || m.labelDr || m.labelEn
+            : i18n.language === "dr"
+              ? m.labelDr || m.labelPs || m.labelEn
+              : m.labelEn || m.labelDr || m.labelPs,
+      }))
+      .sort((a: any, b: any) => {
+        if (String(a.id) === String(currentParentId)) return -1;
+        if (String(b.id) === String(currentParentId)) return 1;
+        return 0;
+      });
+
+  const normalizePermissionOptions = (
+    items: any[],
+    currentPermissionId: string | number | null,
+  ): DropdownOption[] =>
+    (items || [])
+      .map((item: any) => ({
+        ...item,
+        id: normalizeId(item.id) ?? item.id,
+        displayLabel: t(
+          `permissions.${item.permissionName}`,
+          item.permissionName,
+        ),
+      }))
+      .sort((a: any, b: any) => {
+        if (String(a.id) === String(currentPermissionId)) return -1;
+        if (String(b.id) === String(currentPermissionId)) return 1;
+        return 0;
+      });
 
   const fetchData = async () => {
     setFetchingData(true);
@@ -87,6 +161,8 @@ export const EditMenu: React.FC<EditMenuProps> = ({
       ]);
 
       const menu = menuRes.data?.data || menuRes.data;
+      const currentParentId = getCurrentParentId(menu);
+      const currentPermissionId = getCurrentPermissionId(menu);
 
       reset({
         labelEn: menu?.labelEn || "",
@@ -98,12 +174,14 @@ export const EditMenu: React.FC<EditMenuProps> = ({
         active: menu?.active ?? true,
       });
 
-      setParentId(menu?.parent?.id || menu?.parentId || null);
-      setPermissionId(menu?.permission?.id || menu?.permissionId || null);
+      setParentId(currentParentId);
+      setPermissionId(currentPermissionId);
 
-      setPermissions(permissionsRes.data || []);
+      setPermissions(
+        normalizePermissionOptions(permissionsRes.data || [], currentPermissionId),
+      );
       setParentMenus(
-        (menusRes.data || []).filter((m: any) => String(m.id) !== String(menuId))
+        normalizeMenuOptions(menusRes.data || [], currentParentId),
       );
     } catch (error) {
       showToast("error", t("common.error"), t("menu.loadFailed"));
@@ -311,18 +389,33 @@ const onSubmit = async (data: MenuForm) => {
                     {t("menu.icon")}
                   </label>
 
-                  <Controller
-                    name="icon"
-                    control={control}
-                    render={({ field }) => (
-                      <div className="relative">
-                        <InputText
-                          {...field}
-                          className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all"
-                          placeholder={t("menu.placeholder.icon")}
-                        />
-                        {field.value && (
-                          <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                    <Controller
+                      name="icon"
+                      control={control}
+                      render={({ field }) => (
+                        <div className="relative">
+                          <InputText
+                            {...field}
+                            dir="ltr"
+                            className={classNames(
+                              "w-full py-2.5 text-sm border border-gray-200 rounded-lg focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all",
+                              {
+                                "pl-10 pr-4": !isRtl,
+                                "pl-4 pr-10": isRtl,
+                              },
+                            )}
+                            placeholder={t("menu.placeholder.icon")}
+                          />
+                          {field.value && (
+                          <div
+                            className={classNames(
+                              "absolute top-1/2 -translate-y-1/2",
+                              {
+                                "left-3": !isRtl,
+                                "right-3": isRtl,
+                              },
+                            )}
+                          >
                             <i
                               className={classNames(
                                 field.value,
@@ -391,13 +484,13 @@ const onSubmit = async (data: MenuForm) => {
                     {t("menu.parentMenu")}
                   </label>
 
-                  <Dropdown
-                    value={parentId}
-                    options={parentMenus}
-                    optionLabel="labelEn"
-                    optionValue="id"
-                    onChange={(e) => setParentId(e.value)}
-                    placeholder={t("menu.placeholder.parentMenu")}
+                    <Dropdown
+                      value={parentId}
+                      options={parentMenus}
+                      optionLabel="displayLabel"
+                      optionValue="id"
+                      onChange={(e) => setParentId(e.value)}
+                      placeholder={t("menu.placeholder.parentMenu")}
                     className="w-full"
                     showClear
                     filter
@@ -409,13 +502,13 @@ const onSubmit = async (data: MenuForm) => {
                     {t("menu.requiredPermission")}
                   </label>
 
-                  <Dropdown
-                    value={permissionId}
-                    options={permissions}
-                    optionLabel="permissionName"
-                    optionValue="id"
-                    onChange={(e) => setPermissionId(e.value)}
-                    placeholder={t("menu.placeholder.permission")}
+                    <Dropdown
+                      value={permissionId}
+                      options={permissions}
+                      optionLabel="displayLabel"
+                      optionValue="id"
+                      onChange={(e) => setPermissionId(e.value)}
+                      placeholder={t("menu.placeholder.permission")}
                     className="w-full"
                     showClear
                     filter

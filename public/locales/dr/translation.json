@@ -9,15 +9,15 @@
     "logout": "خروج"
   },
   "notification": {
-  "filterByType": "نوعیت اعلانات را انتخاب کنید",
-  "filterByPriority": "اولویت را انتخاب کنید",
-  "filters": {
-    "allTypes": "همه نوعیت‌ها",
-    "allPriorities": "همه اولویت‌ها"
-  },
-  "newUser": "کاربر جدید ثبت شد",
-  "systemUpdate": "به‌روزرسانی سیستم موجود است",
-  "reportReady": "گزارش آماده است",
+    "filterByType": "نوعیت اعلانات را انتخاب کنید",
+    "filterByPriority": "اولویت را انتخاب کنید",
+    "filters": {
+      "allTypes": "همه نوعیت‌ها",
+      "allPriorities": "همه اولویت‌ها"
+    },
+    "newUser": "کاربر جدید ثبت شد",
+    "systemUpdate": "به‌روزرسانی سیستم موجود است",
+    "reportReady": "گزارش آماده است",
     "title": "اطلاعیه‌ها",
     "manageDescription": "اطلاعیه‌های اخیر را مدیریت کنید، رکوردهای مرتبط را باز کنید و وضعیت آن‌ها را منظم نگه دارید.",
     "markAsRead": "علامت‌گذاری به عنوان خوانده شده",
@@ -35,72 +35,73 @@
       "createdDate": "تاریخ ایجاد",
       "trackingNumber": "شماره تعقیب"
     },
-  "status": {
-    "read": "خوانده شده",
-    "unread": "خوانده نشده"
-  },
-  "priorities": {
-    "INFO": "عادی",
-    "WARNING": "هشدار",
-    "URGENT": "فوری"
-  },
-  "types": {
-    "REQUEST_SUBMITTED": "ثبت درخواست",
-    "REQUEST_STATUS_CHANGED": "تغییر وضعیت درخواست",
-    "CERTIFICATE_ISSUED": "صدور تصدیق‌نامه",
-    "CERTIFICATE_EXPIRING_SOON": "نزدیک شدن ختم اعتبار تصدیق‌نامه",
-    "CERTIFICATE_EXPIRED": "ختم اعتبار تصدیق‌نامه",
-    "INSPECTION_DEADLINE_REACHED": "رسیدن مهلت بررسی",
-    "INSPECTION_OVERDUE": "تاخیر در بررسی"
-  },
-  "requestStatuses": {
-    "SUBMITTED": "ثبت شده",
-    "UNDER_REVIEW": "تحت بررسی",
-    "STANDARDS_PROVIDED": "استندردها ارائه شد",
-    "DEADLINE_REQUIRED": "نیازمند تعیین مهلت",
-    "DEADLINE_ASSIGNED": "مهلت تعیین شد",
-    "INSPECTION_IN_PROGRESS": "بررسی جریان دارد",
-    "REPORTED_TO_COMMITTEE": "به کمیته گزارش شد",
-    "REPORT_APPROVED": "گزارش تایید شد",
-    "PAYMENT_PENDING": "در انتظار پرداخت",
-    "PAYMENT_COMPLETED": "پرداخت تکمیل شد",
-    "CERTIFICATE_ISSUED": "تصدیق‌نامه صادر شد",
-    "REJECTED": "رد شد",
-    "CANCELLED": "لغو شد"
-  },
-  "templates": {
-    "requestSubmitted": {
-      "title": "درخواست جدید تصدیق‌نامه ثبت شد",
-      "message": "درخواست جدید تصدیق‌نامه با شماره تعقیب {{trackingNumber}} ثبت شده و منتظر بررسی است."
+    "status": {
+      "read": "خوانده شده",
+      "unread": "خوانده نشده"
     },
-    "requestStatusChanged": {
-      "title": "وضعیت درخواست به‌روزرسانی شد",
-      "message": "وضعیت درخواست {{trackingNumber}} از {{oldStatus}} به {{newStatus}} تغییر کرد. مهلت در {{endDate}} ختم می‌شود. دلیل: {{rejectionReason}}"
+    "priorities": {
+      "INFO": "عادی",
+      "WARNING": "هشدار",
+      "URGENT": "فوری"
     },
-    "requestRejectedForAdmin": {
-      "title": "درخواست تصدیق‌نامه رد شد",
-      "message": "درخواست {{trackingNumber}} رد شده است."
+    "types": {
+      "REQUEST_SUBMITTED": "ثبت درخواست",
+      "REQUEST_STATUS_CHANGED": "تغییر وضعیت درخواست",
+      "CERTIFICATE_ISSUED": "صدور تصدیق‌نامه",
+      "CERTIFICATE_EXPIRING_SOON": "نزدیک شدن ختم اعتبار تصدیق‌نامه",
+      "CERTIFICATE_EXPIRED": "ختم اعتبار تصدیق‌نامه",
+      "INSPECTION_DEADLINE_REACHED": "رسیدن مهلت بررسی",
+      "INSPECTION_OVERDUE": "تاخیر در بررسی"
     },
-    "certificateIssued": {
-      "title": "تصدیق‌نامه صادر شد",
-      "message": "تصدیق‌نامه شما {{certificateName}} برای درخواست {{trackingNumber}} صادر شد."
+    "requestStatuses": {
+      "COMMITTEE_APPROVED": "تائید هئیت تائید دهی",
+      "SUBMITTED": "ثبت شده",
+      "UNDER_REVIEW": "تحت بررسی",
+      "STANDARDS_PROVIDED": "استندردها ارائه شد",
+      "DEADLINE_REQUIRED": "نیازمند تعیین مهلت",
+      "DEADLINE_ASSIGNED": "مهلت تعیین شد",
+      "INSPECTION_IN_PROGRESS": "بررسی جریان دارد",
+      "REPORTED_TO_COMMITTEE": "به کمیته گزارش شد",
+      "REPORT_APPROVED": "گزارش تایید شد",
+      "PAYMENT_PENDING": "در انتظار پرداخت",
+      "PAYMENT_COMPLETED": "پرداخت تکمیل شد",
+      "CERTIFICATE_ISSUED": "تصدیق‌نامه صادر شد",
+      "REJECTED": "رد شد",
+      "CANCELLED": "لغو شد"
     },
-    "certificateExpiringSoon": {
-      "title": "تصدیق‌نامه به زودی منقضی می‌شود",
-      "companyMessage": "تصدیق‌نامه {{certificateName}} در تاریخ {{expiryDate}} منقضی می‌شود.",
-      "adminMessage": "تصدیق‌نامه {{certificateName}} مربوط شرکت {{companyName}} در تاریخ {{expiryDate}} منقضی می‌شود."
-    },
-    "certificateExpired": {
-      "title": "تصدیق‌نامه منقضی شد",
-      "companyMessage": "تصدیق‌نامه {{certificateName}} در تاریخ {{expiryDate}} منقضی شده است.",
-      "adminMessage": "تصدیق‌نامه {{certificateName}} مربوط شرکت {{companyName}} منقضی شده است."
-    },
-    "inspectionOverdue": {
-      "title": "مهلت بررسی تکمیل شد",
-      "message": "مهلت بررسی برای درخواست {{trackingNumber}} تکمیل شده و درخواست باید بررسی شود."
+    "templates": {
+      "requestSubmitted": {
+        "title": "درخواست جدید تصدیق‌نامه ثبت شد",
+        "message": "درخواست جدید تصدیق‌نامه با شماره تعقیب {{trackingNumber}} ثبت شده و منتظر بررسی است."
+      },
+      "requestStatusChanged": {
+        "title": "وضعیت درخواست به‌روزرسانی شد",
+        "message": "وضعیت درخواست {{trackingNumber}} از {{oldStatus}} به {{newStatus}} تغییر کرد. مهلت در {{endDate}} ختم می‌شود. دلیل: {{rejectionReason}}"
+      },
+      "requestRejectedForAdmin": {
+        "title": "درخواست تصدیق‌نامه رد شد",
+        "message": "درخواست {{trackingNumber}} رد شده است."
+      },
+      "certificateIssued": {
+        "title": "تصدیق‌نامه صادر شد",
+        "message": "تصدیق‌نامه شما {{certificateName}} برای درخواست {{trackingNumber}} صادر شد."
+      },
+      "certificateExpiringSoon": {
+        "title": "تصدیق‌نامه به زودی منقضی می‌شود",
+        "companyMessage": "تصدیق‌نامه {{certificateName}} در تاریخ {{expiryDate}} منقضی می‌شود.",
+        "adminMessage": "تصدیق‌نامه {{certificateName}} مربوط شرکت {{companyName}} در تاریخ {{expiryDate}} منقضی می‌شود."
+      },
+      "certificateExpired": {
+        "title": "تصدیق‌نامه منقضی شد",
+        "companyMessage": "تصدیق‌نامه {{certificateName}} در تاریخ {{expiryDate}} منقضی شده است.",
+        "adminMessage": "تصدیق‌نامه {{certificateName}} مربوط شرکت {{companyName}} منقضی شده است."
+      },
+      "inspectionOverdue": {
+        "title": "مهلت بررسی تکمیل شد",
+        "message": "مهلت بررسی برای درخواست {{trackingNumber}} تکمیل شده و درخواست باید بررسی شود."
+      }
     }
-  }
-},
+  },
   "languages": {
     "english": "انگلیسی",
     "persian": "فارسی",
@@ -854,6 +855,8 @@
     }
   },
   "certificationRequest": {
+    "printable": "چاپ شده",
+    "scanned": "سکن شده",
     "reviewMessage": "پیگیری درخواست",
     "progress": "جریان",
     "timeline": "مراحل ثبت درخواست",
@@ -966,6 +969,8 @@
       "EXTENSION": "تمدید مهلت"
     },
     "statusOptions": {
+            "COMMITTEE_APPROVED": "تائید هئیت تائید دهی",
+
       "DRAFT": "پیش‌ نویس",
       "SUBMITTED": "ارسال شده",
       "REGISTERED": "اهدای سند ثبت دیتابیس",
@@ -1425,9 +1430,8 @@
     "Inactive": "غیرفعال",
     "memberCount": "تعداد اعضا",
     "types": {
-      "technical": "کمیته تخنیکی",
-      "quality": "کمیته کیفیت",
-      "administrative": "کمیته اداری"
+      "approval": "هئیت تائید دهی",
+      "inspection": "هئیت تفتیش"
     },
     "validation": {
       "nameRequired": "نام کمیته الزامی است",
@@ -1540,6 +1544,7 @@
       "updated": "عضو با موفقیت به‌روزرسانی شد",
       "deleted": "عضو با موفقیت حذف شد",
       "responsibility": "مسئولیت‌ها",
+      "updateDescription": "برای اصلاح این عضو هئیت معلومات زیر را تکمیل کنید",
       "createDescription": "برای افزودن عضو جدید به کمیته، معلومات زیر را تکمیل کنید",
       "userRequired": "انتخاب کاربر الزامی است",
       "selectUser": "یک کاربر را انتخاب کنید",

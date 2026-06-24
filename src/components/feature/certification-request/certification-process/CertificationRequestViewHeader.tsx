@@ -58,7 +58,7 @@ const CertificationRequestViewHeader: React.FC<Props> = ({
         return "/certification-request-deadline";
       case "UNDER_REVIEW":
       case "REJECTED":
-      case "REPORT_APPROVED":
+      case "COMMITTEE_APPROVED":
       case "CERTIFICATE_ISSUED":
       default:
         return "/certification-request";

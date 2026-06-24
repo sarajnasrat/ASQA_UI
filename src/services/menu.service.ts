@@ -20,7 +20,7 @@ export const MenuService = {
     return httpClient.put(`${USER_BASE}/${id}`, data);
   },
   deleteMenu(id:any) {
-    return httpClient.delete(`${USER_BASE}/delete-menu/${id}`);
+    return httpClient.delete(`${USER_BASE}/${id}`);
   },
 };
 

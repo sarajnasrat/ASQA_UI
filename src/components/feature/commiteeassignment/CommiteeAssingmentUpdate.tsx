@@ -19,6 +19,7 @@ interface Props {
   currentStatus?: string | null;
   preferredStatus?: string | null;
   onSuccess: () => void;
+  commiteeType?: string | null;
 }
 
 const transitionMap: Record<string, string[]> = {
@@ -35,6 +36,7 @@ export const CommiteeAssingmentUpdate: React.FC<Props> = ({
   currentStatus,
   preferredStatus,
   onSuccess,
+  commiteeType,
 }) => {
   const { t } = useTranslation();
   const { showSuccess, showError } = useToast();
@@ -106,7 +108,12 @@ export const CommiteeAssingmentUpdate: React.FC<Props> = ({
         t,
       );
       if (response?.status == 200) {
-        navigate("/commitee-assignment-list");
+        if(commiteeType="ISPECTION"){
+          navigate("/commitee-assignment-list");
+        }
+        if(commiteeType="APPROVAL"){
+          navigate("/approval-commitee-assignment");
+        }
       }
       // onSuccess();
       onHide();

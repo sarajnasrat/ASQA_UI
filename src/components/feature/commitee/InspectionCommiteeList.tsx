@@ -24,7 +24,7 @@ import ExcelExport from "../../common/ExcelExport";
 import { useAuth } from "../../../context/AuthContext";
 import type { CommitteeResponse } from "../../../services/comitee.service";
 
-export const CommiteeList: React.FC = () => {
+export const InspectionCommiteeList: React.FC = () => {
   const [commiteeList, setCommiteeList] = useState<CommitteeResponse[]>([]);
   const [loading, setLoading] = useState(false);
   const [showMemberCreateDialog, setShowMemberCreateDialog] = useState(false);
@@ -52,17 +52,17 @@ export const CommiteeList: React.FC = () => {
   const getAllCommitees = async () => {
     setLoading(true);
 
-    const response = await handleApi(
-      () =>
-        CommiteeService.getAllPaginated({
-          page: first / rows,
-          size: rows,
-          sort: "id,desc",
-        }),
-      () => {},
-      showError,
-      t,
-    );
+ const response = await handleApi(
+  () =>
+    CommiteeService.getByCommitteeType("INSPECTION", {
+      page: first / rows,
+      size: rows,
+      sort: "id,desc",
+    }),
+  () => {},
+  showError,
+  t,
+);
 
     if (response) {
       setCommiteeList(response.data.data);
@@ -237,7 +237,8 @@ export const CommiteeList: React.FC = () => {
     {
       field: "committeeType",
       header: t("commitee.commiteeType"),
-      body: (rowData: any) => t(`commitee.types.${rowData.committeeType.toLowerCase()}`),
+      body: (rowData: any) =>
+        t(`commitee.types.${rowData.committeeType.toLowerCase()}`),
     },
     {
       field: "active",
@@ -270,8 +271,9 @@ export const CommiteeList: React.FC = () => {
     <>
       <Toast ref={toast} />
       <ConfirmDialog />
-      {/* {showMemberCreateDialog && (
+      {showMemberCreateDialog && (
         <CommiteeMemberCreate
+        commiteeType={"INSPECTION"}
           committeeId={selectedCommitteeForMember}
           onClose={() => setShowMemberCreateDialog(false)}
           onSuccess={() => {
@@ -282,10 +284,11 @@ export const CommiteeList: React.FC = () => {
       )}
       {showCreateDialog && (
         <CommiteeCreate
+          commiteeType="INSPECTION"
           onClose={() => setShowCreateDialog(false)}
           onSuccess={handleCreateSuccess}
         />
-      )} */}
+      )}
 
       {showEditDialog && selectedCommiteeId && (
         <CommiteeUpdate

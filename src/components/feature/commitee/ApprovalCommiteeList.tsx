@@ -24,7 +24,7 @@ import ExcelExport from "../../common/ExcelExport";
 import { useAuth } from "../../../context/AuthContext";
 import type { CommitteeResponse } from "../../../services/comitee.service";
 
-export const CommiteeList: React.FC = () => {
+export const ApprovalCommiteeList: React.FC = () => {
   const [commiteeList, setCommiteeList] = useState<CommitteeResponse[]>([]);
   const [loading, setLoading] = useState(false);
   const [showMemberCreateDialog, setShowMemberCreateDialog] = useState(false);
@@ -51,10 +51,9 @@ export const CommiteeList: React.FC = () => {
   // ================= LOAD DATA =================
   const getAllCommitees = async () => {
     setLoading(true);
-
     const response = await handleApi(
       () =>
-        CommiteeService.getAllPaginated({
+        CommiteeService.getByCommitteeType("APPROVAL", {
           page: first / rows,
           size: rows,
           sort: "id,desc",
@@ -237,7 +236,8 @@ export const CommiteeList: React.FC = () => {
     {
       field: "committeeType",
       header: t("commitee.commiteeType"),
-      body: (rowData: any) => t(`commitee.types.${rowData.committeeType.toLowerCase()}`),
+      body: (rowData: any) =>
+        t(`commitee.types.${rowData.committeeType.toLowerCase()}`),
     },
     {
       field: "active",
@@ -270,8 +270,9 @@ export const CommiteeList: React.FC = () => {
     <>
       <Toast ref={toast} />
       <ConfirmDialog />
-      {/* {showMemberCreateDialog && (
+      {showMemberCreateDialog && (
         <CommiteeMemberCreate
+          commiteeType={"APPROVAL"}
           committeeId={selectedCommitteeForMember}
           onClose={() => setShowMemberCreateDialog(false)}
           onSuccess={() => {
@@ -282,10 +283,11 @@ export const CommiteeList: React.FC = () => {
       )}
       {showCreateDialog && (
         <CommiteeCreate
+          commiteeType="APPROVAL"
           onClose={() => setShowCreateDialog(false)}
           onSuccess={handleCreateSuccess}
         />
-      )} */}
+      )}
 
       {showEditDialog && selectedCommiteeId && (
         <CommiteeUpdate

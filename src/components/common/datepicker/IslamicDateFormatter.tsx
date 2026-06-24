@@ -8,7 +8,6 @@ type DualDateResult = {
 };
 
 export class IslamicDateFormatter {
-  private static readonly HIJRI_LOCALE = "ar-SA-u-ca-islamic-umalqura";
   private static readonly SHAMSI_LOCALE = "fa-AF-u-ca-persian";
   private static readonly GREGORIAN_LOCALE = "en-US";
   private static readonly DEFAULT_TIME_ZONE = "UTC";
@@ -27,7 +26,8 @@ export class IslamicDateFormatter {
   }
 
   private static parseOriginalDate(date: DateInput): Date {
-    const parsed = date instanceof Date ? new Date(date.getTime()) : new Date(date);
+    const parsed =
+      date instanceof Date ? new Date(date.getTime()) : new Date(date);
 
     if (Number.isNaN(parsed.getTime())) {
       throw new Error(`Invalid date value: ${date}`);
@@ -100,48 +100,31 @@ export class IslamicDateFormatter {
   }
 
   /**
-   * Convert Gregorian → Hijri Qamari.
-   * Uses Intl + islamic-umalqura because the previous converter was lagging
-   * behind by one day for dates like 2026-10-22.
-   *
-   * Example:
-   * Current old output: 10 جمادى الاولى 1448
-   * Corrected output:   11 جمادى الأولى 1448
+   * Main view formatter.
+   * Kept on the existing API so current view usages render Afghanistan-style
+   * Hijri Shamsi dates without requiring broader refactors.
    */
   static format(date: DateInput): string {
-    return this.formatWithLocale(date, this.HIJRI_LOCALE, {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
+    return this.getShamsiDate(date);
   }
 
   /**
-   * Full Hijri date with weekday.
+   * Backward-compatible full date formatter for existing view code.
    */
   static getFullIslamicDate(date: DateInput): string {
-    return this.formatWithLocale(date, this.HIJRI_LOCALE, {
-      weekday: "long",
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
+    return this.getFullShamsiDate(date);
   }
 
   /**
-   * Short Hijri date.
+   * Backward-compatible short date formatter for existing view code.
    */
   static getShortIslamicDate(date: DateInput): string {
-    return this.formatWithLocale(date, this.HIJRI_LOCALE, {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    });
+    return this.getShortShamsiDate(date);
   }
 
   /**
    * Afghanistan Shamsi date.
-   * Example: ۳۰ میزان ۱۴۰۵
+   * Example: ۳۱ جوزا ۱۴۰۵
    */
   static getShamsiDate(date: DateInput): string {
     return this.formatWithLocale(date, this.SHAMSI_LOCALE, {
@@ -189,15 +172,15 @@ export class IslamicDateFormatter {
   }
 
   static formatQamari(date: DateInput, showTime: boolean = false): string {
-    const hijri = this.format(date);
+    const shamsi = this.getShamsiDate(date);
     const time = showTime ? this.getTime(date) : null;
-    return time ? `${hijri} - ${time}` : hijri;
+    return time ? `${shamsi} - ${time}` : shamsi;
   }
 
   static formatFullQamari(date: DateInput, showTime: boolean = false): string {
-    const hijri = this.getFullIslamicDate(date);
+    const shamsi = this.getFullShamsiDate(date);
     const time = showTime ? this.getTime(date) : null;
-    return time ? `${hijri} - ${time}` : hijri;
+    return time ? `${shamsi} - ${time}` : shamsi;
   }
 
   static formatQamariRange(
@@ -214,14 +197,16 @@ export class IslamicDateFormatter {
   }
 
   /**
-   * Gregorian + Hijri + Shamsi together.
+   * Gregorian + Shamsi together.
+   * `hijri` is kept as a backward-compatible field name for current views.
    */
   static getDualDate(date: DateInput): DualDateResult {
     const normalizedDate = this.normalizeDate(date);
+    const shamsi = this.getShamsiDate(normalizedDate);
 
     return {
-      hijri: this.format(normalizedDate),
-      shamsi: this.getShamsiDate(normalizedDate),
+      hijri: shamsi,
+      shamsi,
       gregorian: this.buildFormatter(this.GREGORIAN_LOCALE, {
         year: "numeric",
         month: "long",

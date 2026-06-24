@@ -206,6 +206,10 @@ export const CommiteeMemberList: React.FC = () => {
     {
       field: "memberRole",
       header: t("commitee.member.role"),
+      body: (row: any) =>
+        row.memberRole
+          ? t(`commitee.member.roles.${row.memberRole}`)
+          : t("common.notSpecified"),
     },
     {
       field: "responsibility",

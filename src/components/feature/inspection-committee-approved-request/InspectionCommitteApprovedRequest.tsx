@@ -73,7 +73,7 @@ export const InspectionCommitteApprovedRequest = () => {
   const [rows, setRows] = useState(10);
   const [totalRecords, setTotalRecords] = useState(0);
 
-  const [status, setStatus] = useState<string>("REPORT_APPROVED");
+  const [status, setStatus] = useState<string>("COMMITTEE_APPROVED");
   const [activeIndex, setActiveIndex] = useState(0);
 
   const [updateVisible, setUpdateVisible] = useState(false);

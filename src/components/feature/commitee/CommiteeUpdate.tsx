@@ -107,11 +107,9 @@ export const CommiteeUpdate: React.FC<CommiteeUpdateProps> = ({
 
   // ================= ENUM OPTIONS =================
   const committeeTypeOptions = [
-    { label: t("commitee.types.technical"), value: "TECHNICAL" },
-    { label: t("commitee.types.quality"), value: "QUALITY" },
-    { label: t("commitee.types.administrative"), value: "ADMIN" },
+    { label: t("commitee.types.inspection"), value: "INSPECTION" },
+    { label: t("commitee.types.approval"), value: "APPROVAL" },
   ];
-
   return (
     <>
       {/* BACKDROP */}

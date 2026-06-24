@@ -56,12 +56,16 @@ export const CommiteeService = {
   getAll() {
     return httpClient.get(`${BASE_URL}/all`);
   },
-
+  getAllByCommitteeType(committeeType: string) {
+    return httpClient.get(`${BASE_URL}/all/type/${committeeType}`);
+  },
   // ================= PAGINATION =================
   getAllPaginated(params?: any) {
     return httpClient.get(`${BASE_URL}`, { params });
   },
-
+  getByCommitteeType(committeeType: string, params?: any) {
+    return httpClient.get(`${BASE_URL}/type/${committeeType}`, { params });
+  },
   // ================= GET BY ID =================
   getById(id: number) {
     return httpClient.get(`${BASE_URL}/${id}`);
@@ -76,15 +80,19 @@ export const CommiteeService = {
 
   // ================= UPDATE =================
   update(id: number, data: any, file?: File | null) {
-    return httpClient.put(`${BASE_URL}/${id}`, buildCommitteeFormData(data, file), {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    return httpClient.put(
+      `${BASE_URL}/${id}`,
+      buildCommitteeFormData(data, file),
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      },
+    );
   },
 
   // ================= DELETE =================
   delete(id: number) {
     return httpClient.delete(`${BASE_URL}/${id}`);
-  }
+  },
 };
 
 export default CommiteeService;

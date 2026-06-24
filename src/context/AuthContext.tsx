@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
@@ -12,6 +18,17 @@ import type { MenuItem } from "primereact/menuitem";
 
 const AuthContext = createContext<IAuthContext | undefined>(undefined);
 
+const getPermissionsFromToken = (token: string) => {
+  const decoded: any = jwtDecode(token);
+
+  return (
+    decoded.roles
+      ?.split(",")
+      .map((permission: string) => permission.trim().toUpperCase())
+      .filter(Boolean) ?? []
+  );
+};
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
@@ -20,16 +37,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [user, setUser] = useState<IUser | null>(null);
   const [menus, setMenus] = useState<IMenu[]>([]);
   const [roles, setRoles] = useState<string[]>([]);
+  const [permissions, setPermissions] = useState<string[]>([]);
+  const [authReady, setAuthReady] = useState(false);
 
-  const [permissions, setPermissions] = useState<string[]>([]); // ✅ NEW
-  const [authReady, setAuthReady] = useState(false); // ✅ to track if auth state is initialized
+  const logout = useCallback(() => {
+    localStorage.clear();
 
-  // ===============================
-  // Load from localStorage
-  // ===============================
+    setUser(null);
+    setMenus([]);
+    setRoles([]);
+    setPermissions([]);
+
+    navigate("/login", { replace: true });
+  }, [navigate]);
+
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     const storedMenus = localStorage.getItem("menus");
+    const storedRoles = localStorage.getItem("roles");
     const token = localStorage.getItem("accessToken");
 
     if (storedUser) {
@@ -39,43 +64,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     if (storedMenus) {
       setMenus(JSON.parse(storedMenus));
     }
-    if (token) {
-      const decoded: any = jwtDecode(token);
-
-      // ✅ permissions from JWT
-      const tokenPermissions =
-        decoded.roles
-          ?.split(",")
-          .map((p: string) => p.trim().toUpperCase())
-          .filter(Boolean) ?? [];
-
-      setPermissions(tokenPermissions);
-    }
-
-    // ✅ roles from localStorage
-    const storedRoles = localStorage.getItem("roles");
 
     if (storedRoles) {
       setRoles(JSON.parse(storedRoles));
     }
-    // ✅ extract permissions from JWT
+
     if (token) {
-      const decoded: any = jwtDecode(token);
-
-      const perms =
-        decoded.roles
-          ?.split(",")
-          .map((p: string) => p.trim().toUpperCase())
-          .filter(Boolean) ?? [];
-
-      setPermissions(perms);
+      setPermissions(getPermissionsFromToken(token));
     }
-    setAuthReady(true); // ✅ mark auth as ready after loading
+
+    setAuthReady(true);
   }, []);
 
-  // ===============================
-  // LOGIN
-  // ===============================
+  useEffect(() => {
+    const handleForceLogout = () => {
+      logout();
+    };
+
+    window.addEventListener("auth:force-logout", handleForceLogout);
+
+    return () => {
+      window.removeEventListener("auth:force-logout", handleForceLogout);
+    };
+  }, [logout]);
+
   const login = (data: ILoginResponse) => {
     localStorage.setItem("accessToken", data.accessToken);
     localStorage.setItem("refreshToken", data.refreshToken);
@@ -97,64 +109,39 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       JSON.stringify(data.committeeIds || []),
     );
 
-    // ✅ decode permissions immediately
-    const decoded: any = jwtDecode(data.accessToken);
-
-    const perms = decoded.roles?.split(",") ?? [];
-
-    setPermissions(perms);
-
-    setUser(userData);
-    setMenus(data.menus);
     const roleNames =
-      data.roles?.map((r: any) => r.name.trim().toUpperCase()) ?? [];
+      data.roles?.map((role: any) => role.name.trim().toUpperCase()) ?? [];
 
     localStorage.setItem("roles", JSON.stringify(roleNames));
 
+    setUser(userData);
+    setMenus(data.menus);
     setRoles(roleNames);
+    setPermissions(getPermissionsFromToken(data.accessToken));
   };
 
-  // ===============================
-  // LOGOUT
-  // ===============================
-  const logout = () => {
-    localStorage.clear();
-
-    setUser(null);
-    setMenus([]);
-    setRoles([]); // ✅ ADD
-    setPermissions([]);
-
-    navigate("/login");
-  };
-
-  // ===============================
-  // Permission Checker
-  // ===============================
   const hasPermission = (permission: string) => {
     return permissions.includes(permission);
   };
+
   const withPermission = (permission: string, item: MenuItem): MenuItem[] => {
     return hasPermission(permission) ? [item] : [];
   };
-  const hasRole = (role: string) => {
 
+  const hasRole = (role: string) => {
     return roles.includes(role.trim().toUpperCase());
   };
+
   return (
     <AuthContext.Provider
       value={{
         roles,
-
         user,
         menus,
         permissions,
-
-        hasRole, // ✅ ADD THIS
+        hasRole,
         hasPermission,
-
         withPermission,
-
         isAuthenticated: !!user,
         login,
         logout,
@@ -166,9 +153,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-// ===============================
-// Hook
-// ===============================
 export const useAuth = (): IAuthContext => {
   const context = useContext(AuthContext);
 

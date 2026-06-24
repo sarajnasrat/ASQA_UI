@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { InputText } from "primereact/inputtext";
-import { Calendar } from "primereact/calendar";
 import { Dropdown } from "primereact/dropdown";
+import { InputTextarea } from "primereact/inputtextarea";
 
 import { handleApi } from "../../../hooks/handleApi";
 import { useToast } from "../../../hooks/ToastContext";
@@ -23,7 +22,6 @@ interface FormValues {
   committeeId: number | null;
   memberRole: string;
   responsibility: string;
-  joinedAt: Date | null;
   active: boolean;
 }
 
@@ -37,54 +35,60 @@ export const CommiteeMemberUpdate: React.FC<Props> = ({
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
-
   const [users, setUsers] = useState<any[]>([]);
   const [committees, setCommittees] = useState<any[]>([]);
 
-  const {
-    control,
-    handleSubmit,
-    reset,
-  } = useForm<FormValues>({
+  const { control, handleSubmit, reset } = useForm<FormValues>({
     defaultValues: {
       userId: null,
       committeeId: null,
       memberRole: "",
       responsibility: "",
-      joinedAt: null,
       active: true,
     },
   });
 
-  // ================= LOAD USERS =================
+  const roleOptions = useMemo(
+    () => [
+      { label: t("commitee.member.roles.CHAIRPERSON"), value: "CHAIRPERSON" },
+      {
+        label: t("commitee.member.roles.VICE_CHAIRPERSON"),
+        value: "VICE_CHAIRPERSON",
+      },
+      { label: t("commitee.member.roles.SECRETARY"), value: "SECRETARY" },
+      { label: t("commitee.member.roles.TREASURER"), value: "TREASURER" },
+      { label: t("commitee.member.roles.MEMBER"), value: "MEMBER" },
+      { label: t("commitee.member.roles.OBSERVER"), value: "OBSERVER" },
+    ],
+    [t],
+  );
+
   const loadUsers = async () => {
     const res = await handleApi(
       () => UserService.getAllUsers(),
       () => {},
       showError,
-      t
+      t,
     );
 
     if (res?.data) {
-      setUsers(res.data.data || res.data);
+      setUsers(res.data.data || res.data || []);
     }
   };
 
-  // ================= LOAD COMMITTEES =================
   const loadCommittees = async () => {
     const res = await handleApi(
       () => CommiteeService.getAll(),
       () => {},
       showError,
-      t
+      t,
     );
 
     if (res?.data) {
-      setCommittees(res.data.data || res.data);
+      setCommittees(res.data.data || res.data || []);
     }
   };
 
-  // ================= LOAD MEMBER =================
   const loadMember = async () => {
     setLoading(true);
 
@@ -92,19 +96,18 @@ export const CommiteeMemberUpdate: React.FC<Props> = ({
       () => CommiteeMemberService.getById(commiteeMemberId),
       () => {},
       showError,
-      t
+      t,
     );
 
     if (res?.data) {
-      const data = res.data || res.data;
+      const data = res.data.data || res.data;
 
       reset({
-        userId: data.user?.id || null,
-        committeeId: data.committee?.id || null,
-        memberRole: data.memberRole,
-        responsibility: data.responsibility,
-        joinedAt: data.joinedAt ? new Date(data.joinedAt) : null,
-        active: data.active,
+        userId: data?.user?.id ?? null,
+        committeeId: data?.committee?.id ?? null,
+        memberRole: data?.memberRole ?? "",
+        responsibility: data?.responsibility ?? "",
+        active: data?.active ?? true,
       });
     }
 
@@ -117,20 +120,22 @@ export const CommiteeMemberUpdate: React.FC<Props> = ({
   }, []);
 
   useEffect(() => {
-    if (commiteeMemberId) loadMember();
+    if (commiteeMemberId) {
+      loadMember();
+    }
   }, [commiteeMemberId]);
 
-  // ================= ESC CLOSE =================
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        onClose();
+      }
     };
 
     window.addEventListener("keydown", handleEscape);
     return () => window.removeEventListener("keydown", handleEscape);
   }, [onClose]);
 
-  // ================= SUBMIT =================
   const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true);
 
@@ -139,163 +144,202 @@ export const CommiteeMemberUpdate: React.FC<Props> = ({
       committee: { id: data.committeeId },
       memberRole: data.memberRole,
       responsibility: data.responsibility,
-      joinedAt: data.joinedAt,
       active: data.active,
     };
 
     const res = await handleApi(
       () => CommiteeMemberService.update(commiteeMemberId, payload),
-      showSuccess,
+      () => showSuccess(t("common.success"), t("commitee.member.updated")),
       showError,
-      t
+      t,
     );
 
-    if (res) setTimeout(() => onSuccess(), 500);
+    if (res) {
+      setTimeout(() => onSuccess(), 500);
+    }
 
     setIsSubmitting(false);
   };
 
+  const userOptions = users.map((user) => ({
+    label: `${user.firstName || ""} ${user.lastName || ""}${
+      user.email ? ` (${user.email})` : ""
+    }`.trim(),
+    value: user.id,
+  }));
+
+  const committeeOptions = committees.map((committee) => ({
+    label: committee.name,
+    value: committee.id,
+  }));
+
   return (
     <>
-      {/* BACKDROP */}
-      <div className="fixed inset-0 bg-black/50 z-50" onClick={onClose} />
+      <div className="fixed inset-0 z-50 bg-black/50" onClick={onClose} />
 
-      {/* MODAL */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div
-          className="bg-white rounded-xl shadow-2xl w-full max-w-lg overflow-hidden"
+          className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white shadow-2xl"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* HEADER */}
-          <div className="flex justify-between px-6 py-4 border-b">
-            <h2 className="text-lg font-semibold">
-              {t("commitee.member.edit")}
-            </h2>
-            <button onClick={onClose}>
+          <div className="sticky top-0 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-4">
+            <div>
+              <h2 className="text-xl font-semibold text-gray-900">
+                {t("commitee.member.edit")}
+              </h2>
+              <p className="mt-1 text-sm text-gray-500">
+                {t("commitee.member.updateDescription")}
+              </p>
+            </div>
+            <button
+              onClick={onClose}
+              disabled={isSubmitting}
+              className="rounded-lg p-2 text-gray-400 transition-colors duration-200 hover:bg-gray-100 hover:text-gray-600"
+            >
               <i className="pi pi-times" />
             </button>
           </div>
 
-          {/* LOADING */}
           {loading ? (
             <div className="p-6 text-center">
               <i className="pi pi-spin pi-spinner text-2xl" />
-              <p>{t("common.loading")}</p>
+              <p className="mt-2">{t("common.loading")}</p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-5">
-
-              {/* USER */}
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-6">
               <div>
-                <label>{t("commitee.member.user")}</label>
+                <label className="mb-2 block text-sm font-semibold text-gray-700">
+                  {t("commitee.member.user")}
+                </label>
                 <Controller
                   name="userId"
                   control={control}
-                  render={({ field }) => (
-                    <Dropdown
-                      value={field.value}
-                      options={users}
-                      optionLabel="username"
-                      optionValue="id"
-                      placeholder={t("commitee.member.selectUser")}
-                      className="w-full"
-                      onChange={(e) => field.onChange(e.value)}
-                    />
+                  rules={{ required: t("commitee.member.userRequired") }}
+                  render={({ field, fieldState }) => (
+                    <div>
+                      <Dropdown
+                        value={field.value}
+                        options={userOptions}
+                        optionLabel="label"
+                        optionValue="value"
+                        placeholder={t("commitee.member.selectUser")}
+                        className={`w-full ${fieldState.error ? "border-red-500" : ""}`}
+                        onChange={(e) => field.onChange(e.value)}
+                        filter
+                        showClear
+                      />
+                      {fieldState.error && (
+                        <p className="mt-1 text-sm text-red-600">
+                          {fieldState.error.message}
+                        </p>
+                      )}
+                    </div>
                   )}
                 />
               </div>
 
-              {/* COMMITTEE */}
               <div>
-                <label>{t("commitee.member.committee")}</label>
+                <label className="mb-2 block text-sm font-semibold text-gray-700">
+                  {t("commitee.member.committee")}
+                </label>
                 <Controller
                   name="committeeId"
                   control={control}
-                  render={({ field }) => (
-                    <Dropdown
-                      value={field.value}
-                      options={committees}
-                      optionLabel="name"
-                      optionValue="id"
-                      placeholder={t("commitee.member.selectCommittee")}
-                      className="w-full"
-                      onChange={(e) => field.onChange(e.value)}
-                    />
+                  rules={{ required: t("commitee.member.committeeRequired") }}
+                  render={({ field, fieldState }) => (
+                    <div>
+                      <Dropdown
+                        value={field.value}
+                        options={committeeOptions}
+                        optionLabel="label"
+                        optionValue="value"
+                        placeholder={t("commitee.member.selectCommittee")}
+                        className={`w-full ${fieldState.error ? "border-red-500" : ""}`}
+                        onChange={(e) => field.onChange(e.value)}
+                        filter
+                        showClear
+                      />
+                      {fieldState.error && (
+                        <p className="mt-1 text-sm text-red-600">
+                          {fieldState.error.message}
+                        </p>
+                      )}
+                    </div>
                   )}
                 />
               </div>
 
-              {/* ROLE */}
               <div>
-                <label>{t("commitee.member.role")}</label>
+                <label className="mb-2 block text-sm font-semibold text-gray-700">
+                  {t("commitee.member.role")}
+                </label>
                 <Controller
                   name="memberRole"
                   control={control}
                   render={({ field }) => (
-                    <InputText
-                      {...field}
-                      className="w-full"
+                    <Dropdown
+                      value={field.value}
+                      options={roleOptions}
+                      optionLabel="label"
+                      optionValue="value"
                       placeholder={t("commitee.member.selectRole")}
+                      className="w-full"
+                      onChange={(e) => field.onChange(e.value)}
+                      showClear
                     />
                   )}
                 />
               </div>
 
-              {/* RESPONSIBILITY */}
               <div>
-                <label>{t("commitee.member.responsibility")}</label>
+                <label className="mb-2 block text-sm font-semibold text-gray-700">
+                  {t("commitee.member.responsibility")}
+                </label>
                 <Controller
                   name="responsibility"
                   control={control}
                   render={({ field }) => (
-                    <InputText
+                    <InputTextarea
                       {...field}
-                      className="w-full"
+                      rows={3}
                       placeholder={t("commitee.member.responsibilityPlaceholder")}
+                      className="w-full resize-y"
                     />
                   )}
                 />
               </div>
 
-              {/* DATE */}
-              <div>
-                <label>{t("commitee.member.joinedAt")}</label>
-                <Controller
-                  name="joinedAt"
-                  control={control}
-                  render={({ field }) => (
-                    <Calendar
-                      value={field.value}
-                      onChange={(e) => field.onChange(e.value)}
-                      className="w-full"
-                      showIcon
-                    />
-                  )}
-                />
-              </div>
-
-              {/* ACTIVE */}
-              <div className="flex items-center gap-2">
+              <div className="rounded-lg bg-gray-50 p-4">
                 <Controller
                   name="active"
                   control={control}
                   render={({ field }) => (
-                    <input
-                      type="checkbox"
-                      checked={field.value}
-                      onChange={(e) => field.onChange(e.target.checked)}
-                    />
+                    <label className="flex cursor-pointer items-start gap-3">
+                      <input
+                        type="checkbox"
+                        checked={field.value}
+                        onChange={(e) => field.onChange(e.target.checked)}
+                        className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600"
+                      />
+                      <div className="flex-1">
+                        <span className="block text-sm font-semibold text-gray-900">
+                          {t("common.active") || t("common.active")}
+                        </span>
+                        <span className="mt-1 block text-xs text-gray-500">
+                          {t("commitee.member.activeHint")}
+                        </span>
+                      </div>
+                    </label>
                   )}
                 />
-                <label>{t("common.active")}</label>
               </div>
 
-              {/* FOOTER */}
-              <div className="flex justify-end gap-3 pt-4 border-t">
+              <div className="flex justify-end gap-3 border-t border-gray-200 pt-4">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-4 py-2 border rounded-lg"
+                  disabled={isSubmitting}
+                  className="rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 transition-all duration-200 hover:bg-gray-50"
                 >
                   {t("common.cancel")}
                 </button>
@@ -303,11 +347,9 @@ export const CommiteeMemberUpdate: React.FC<Props> = ({
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-5 py-2 bg-green-600 text-white rounded-lg"
+                  className="flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-blue-700 disabled:opacity-50"
                 >
-                  {isSubmitting
-                    ? t("common.updating")
-                    : t("common.update")}
+                  {isSubmitting ? t("common.updating") : t("common.update")}
                 </button>
               </div>
             </form>
