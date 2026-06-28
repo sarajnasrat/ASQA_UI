@@ -1119,7 +1119,13 @@ const printBill = async (request: any) => {
       {
         label: t("common.view"),
         icon: "pi pi-eye",
-        command: () => navigate(`/certification-request/view/${rowData.id}`),
+        command: () =>
+          navigate(`/certification-request/view/${rowData.id}`, {
+            state: {
+              originPath: "/accepted-request",
+              activeSidebarPath: "/accepted-request",
+            },
+          }),
       },
       // {
       //   label: editButtonLabel(rowData.requestStatus),

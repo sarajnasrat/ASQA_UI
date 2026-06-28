@@ -14,15 +14,54 @@ import i18n from "../../../i18n/i18n";
 import { useAuth } from "../../../context/AuthContext";
 
 interface CompanyStatusListProps {
-  status:
-    | "CERTIFICATE_ISSUED"
-    | "REJECTED"
+  status?:
+    | "DRAFT"
+    | "SUBMITTED"
     | "UNDER_REVIEW"
+    | "STANDARDS_PROVIDED"
+    | "DEADLINE_REQUIRED"
+    | "DEADLINE_ASSIGNED"
     | "INSPECTION_IN_PROGRESS"
-    | "PAYMENT_PENDING";
+    | "REPORTED_TO_COMMITTEE"
+    | "REPORT_APPROVED"
+    | "PAYMENT_PENDING"
+    | "PAYMENT_COMPLETED"
+    | "CERTIFICATE_ISSUED"
+    | "UNDER_SUPERVISION"
+    | "REJECTED"
+    | "CANCELLED"
+    | "COMMITTEE_APPROVED"
+    | "APPROVAL_IN_PROGRESS";
+  statuses?: Array<
+    | "DRAFT"
+    | "SUBMITTED"
+    | "UNDER_REVIEW"
+    | "STANDARDS_PROVIDED"
+    | "DEADLINE_REQUIRED"
+    | "DEADLINE_ASSIGNED"
+    | "INSPECTION_IN_PROGRESS"
+    | "REPORTED_TO_COMMITTEE"
+    | "REPORT_APPROVED"
+    | "PAYMENT_PENDING"
+    | "PAYMENT_COMPLETED"
+    | "CERTIFICATE_ISSUED"
+    | "UNDER_SUPERVISION"
+    | "REJECTED"
+    | "CANCELLED"
+    | "COMMITTEE_APPROVED"
+    | "APPROVAL_IN_PROGRESS"
+  >;
+  title?: string;
 }
 
-const STATUS_LABELS: Record<CompanyStatusListProps["status"], string> = {
+type CompanyRequestStatus =
+  | "CERTIFICATE_ISSUED"
+  | "REJECTED"
+  | "UNDER_REVIEW"
+  | "INSPECTION_IN_PROGRESS"
+  | "PAYMENT_PENDING";
+
+const STATUS_LABELS: Record<CompanyRequestStatus, string> = {
   CERTIFICATE_ISSUED: "Certificate Issued",
   REJECTED: "Rejected",
   UNDER_REVIEW: "Under Review",
@@ -30,8 +69,26 @@ const STATUS_LABELS: Record<CompanyStatusListProps["status"], string> = {
   PAYMENT_PENDING: "Payment Pending",
 };
 
+const STATUS_ROUTES: Record<CompanyRequestStatus, string> = {
+  CERTIFICATE_ISSUED: "/company/certificate-issued",
+  REJECTED: "/company/rejected",
+  UNDER_REVIEW: "/company/under-review",
+  INSPECTION_IN_PROGRESS: "/company/inspection-in-progress",
+  PAYMENT_PENDING: "/company/payment-pending",
+};
+
+const isMappedStatus = (
+  value?: CompanyStatusListProps["status"],
+): value is CompanyRequestStatus =>
+  Boolean(
+    value &&
+      Object.prototype.hasOwnProperty.call(STATUS_LABELS, value),
+  );
+
 export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
   status,
+  statuses,
+  title,
 }) => {
   const { t } = useTranslation();
   const toast = useRef<Toast>(null);
@@ -43,19 +100,38 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
   const [rows, setRows] = useState(10);
   const [totalRecords, setTotalRecords] = useState(0);
 
-  const pageTitle = `${t("company.list")} - ${STATUS_LABELS[status]}`;
+  const activeStatuses = statuses?.length
+    ? statuses
+    : status
+      ? [status]
+      : [];
+  const primaryStatus = activeStatuses[0];
+  const mappedStatuses = activeStatuses.filter(isMappedStatus);
+  const activeSidebarPath = mappedStatuses[0]
+    ? STATUS_ROUTES[mappedStatuses[0]]
+    : "/company";
+  const pageTitle =
+    title ||
+    `${t("company.list")}`;
 
   const getCompanies = async () => {
     setLoading(true);
     try {
-      const res = await CompanyService.getPaginatedCompaniesByRequestStatus(
-        status,
-        {
-          page: first / rows,
-          size: rows,
-          sort: "id,desc",
-        },
-      );
+      const requestParams = {
+        page: first / rows,
+        size: rows,
+        sort: "id,desc",
+      };
+      const res =
+        activeStatuses.length > 1
+          ? await CompanyService.getPaginatedCompaniesByRequestStatuses(
+              activeStatuses,
+              requestParams,
+            )
+          : await CompanyService.getPaginatedCompaniesByRequestStatus(
+              primaryStatus!,
+              requestParams,
+            );
       setCompanies(res.data.data);
       setTotalRecords(res.data.totalElements);
     } catch (error) {
@@ -71,8 +147,9 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
   };
 
   useEffect(() => {
+    if (!activeStatuses.length) return;
     getCompanies();
-  }, [first, rows, status]);
+  }, [first, rows, activeStatuses.join(",")]);
 
   const handleDelete = async (id: number) => {
     try {
@@ -123,7 +200,13 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
       ...withPermission("VIEW_COMPANY", {
         label: t("common.view"),
         icon: "pi pi-eye",
-        command: () => navigate(`/company/view/${rowData.id}`),
+        command: () =>
+          navigate(`/company/view/${rowData.id}`, {
+            state: {
+              originPath: activeSidebarPath,
+              activeSidebarPath,
+            },
+          }),
       }),
     ];
     return (
@@ -168,13 +251,23 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
         <ExcelExport
           data={companies}
           totalElements={totalRecords}
-          fileName={`companies-${status.toLowerCase()}`}
-          sheetName={STATUS_LABELS[status]}
+          fileName={`companies-${activeStatuses.join("-").toLowerCase()}`}
+          sheetName={
+            title ||
+            (mappedStatuses.length
+              ? mappedStatuses.map((item) => STATUS_LABELS[item]).join(", ")
+              : t("company.list"))
+          }
           fetchAllData={async () => {
-            const res = await CompanyService.getAllCompaniesByRequestStatus(
-              status,
-            );
-            return res.data;
+            const res =
+              activeStatuses.length > 1
+                ? await CompanyService.getAllCompaniesByRequestStatuses(
+                    activeStatuses,
+                  )
+                : await CompanyService.getAllCompaniesByRequestStatus(
+                    primaryStatus!,
+                  );
+            return activeStatuses.length > 1 ? res.data.data : res.data;
           }}
         />
       </div>

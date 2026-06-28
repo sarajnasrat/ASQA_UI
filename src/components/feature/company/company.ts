@@ -5,7 +5,10 @@ export interface SocialLink {
 
 export interface CategoryReference {
   id: number;
-  name: string;
+  name?: string;
+  categoryName?: string;
+  categoryType?: string | null;
+  jobCount?: number | null;
 }
 
 export type CompanyType =

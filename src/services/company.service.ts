@@ -23,6 +23,15 @@ export const CompanyService = {
     });
   },
 
+  getPaginatedCompaniesByRequestStatuses(statuses: string[], params: any) {
+    return httpClient.get(`${COMPANY_BASE}/by-request-statuses`, {
+      params: {
+        ...params,
+        status: statuses,
+      },
+    });
+  },
+
   /**
    * Get all companies by certification request status
    * @param status Request status value
@@ -30,6 +39,14 @@ export const CompanyService = {
   getAllCompaniesByRequestStatus(status: string) {
     return httpClient.get(`${COMPANY_BASE}/by-request-status/all`, {
       params: { status },
+    });
+  },
+
+  getAllCompaniesByRequestStatuses(statuses: string[]) {
+    return httpClient.get(`${COMPANY_BASE}/by-request-statuses`, {
+      params: {
+        status: statuses,
+      },
     });
   },
 

@@ -18,6 +18,7 @@ import DynamicBreadcrumb from "../../../common/DynamicBreadcrumb";
 
 interface Props {
   request: CertificationRequest;
+  listUrl: string;
   statusConfig: StatusConfig;
   finalStates: string[];
   getNextStatuses: () => string[];
@@ -34,6 +35,7 @@ interface Props {
 
 const CertificationRequestViewHeader: React.FC<Props> = ({
   request,
+  listUrl,
   statusConfig,
   finalStates,
   getNextStatuses,
@@ -47,28 +49,10 @@ const CertificationRequestViewHeader: React.FC<Props> = ({
   t,
 }) => {
   const { hasPermission } = useAuth();
-  const getBreadcrumbListUrl = (status: string) => {
-    switch (status) {
-      case "PAYMENT_PENDING":
-      case "PAYMENT_COMPLETED":
-        return "/payment-management";
-      case "DEADLINE_REQUIRED":
-      case "DEADLINE_ASSIGNED":
-      case "INSPECTION_IN_PROGRESS":
-        return "/certification-request-deadline";
-      case "UNDER_REVIEW":
-      case "REJECTED":
-      case "COMMITTEE_APPROVED":
-      case "CERTIFICATE_ISSUED":
-      default:
-        return "/certification-request";
-    }
-  };
-
   const breadcrumbItems = [
     {
       label: t("certificationRequest.list"),
-      url: getBreadcrumbListUrl(request.requestStatus),
+      url: listUrl,
     },
     {
       label: request.serialNumber,

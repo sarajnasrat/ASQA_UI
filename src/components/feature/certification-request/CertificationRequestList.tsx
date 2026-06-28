@@ -64,98 +64,6 @@ export const CertificationRequestList = () => {
       value: "SUBMITTED",
       icon: "pi pi-send",
     },
-
-    // {
-    //   label: t("certificationRequest.statusOptions.UNDER_REVIEW"),
-    //   value: "UNDER_REVIEW",
-    //   icon: "pi pi-search",
-    // },
-
-    /* ===== STANDARD STEP ===== */
-
-    // {
-    //   label: t("certificationRequest.statusOptions.STANDARDS_REQUIRED"),
-    //   value: "STANDARDS_REQUIRED",
-    //   icon: "pi pi-exclamation-circle",
-    // },
-
-    // {
-    //   label: t("certificationRequest.statusOptions.STANDARDS_PROVIDED"),
-    //   value: "STANDARDS_PROVIDED",
-    //   icon: "pi pi-book",
-    // },
-
-    /* ===== DEADLINE STEP ===== */
-
-    // {
-    //   label: t("certificationRequest.statusOptions.DEADLINE_REQUIRED"),
-    //   value: "DEADLINE_REQUIRED",
-    //   icon: "pi pi-clock",
-    // },
-
-    // {
-    //   label: t("certificationRequest.statusOptions.DEADLINE_ASSIGNED"),
-    //   value: "DEADLINE_ASSIGNED",
-    //   icon: "pi pi-calendar",
-    // },
-
-    /* ===== INSPECTION ===== */
-
-    // {
-    //   label: t("certificationRequest.statusOptions.INSPECTION_IN_PROGRESS"),
-    //   value: "INSPECTION_IN_PROGRESS",
-    //   icon: "pi pi-cog",
-    // },
-
-    // {
-    //   label: t("certificationRequest.statusOptions.REPORTED_TO_COMMITTEE"),
-    //   value: "REPORTED_TO_COMMITTEE",
-    //   icon: "pi pi-users",
-    // },
-
-    // {
-    //   label: t("certificationRequest.statusOptions.REPORT_APPROVED"),
-    //   value: "REPORT_APPROVED",
-    //   icon: "pi pi-check-circle",
-    // },
-    // {
-    //   label: t("certificationRequest.statusOptions.CERTIFICATE_ISSUED"),
-    //   value: "CERTIFICATE_ISSUED",
-    //   icon: "pi pi-check-circle",
-    // },
-    // {
-    //   label: t("certificationRequest.statusOptions.REJECTED"),
-    //   value: "REJECTED",
-    //   icon: "pi pi-times",
-    // },
-
-    /* ===== PAYMENT ===== */
-
-    // {
-    //   label: t("certificationRequest.statusOptions.PAYMENT_PENDING"),
-    //   value: "PAYMENT_PENDING",
-    //   icon: "pi pi-credit-card",
-    // },
-
-    // {
-    //   label: t("certificationRequest.statusOptions.PAYMENT_COMPLETED"),
-    //   value: "PAYMENT_COMPLETED",
-    //   icon: "pi pi-wallet",
-    // },
-
-    /* ===== FINAL ===== */
-
-    // {
-    //   label: t("certificationRequest.statusOptions.CERTIFICATE_ISSUED"),
-    //   value: "CERTIFICATE_ISSUED",
-    //   icon: "pi pi-verified",
-    // },
-
-    // {
-    //   label: t("certificationRequest.statusOptions.UNDER_SUPERVISION"),
-    //   value: "UNDER_SUPERVISION",
-    //   icon: "pi pi-eye",
-    // },
   ];
 
   // ================= LOAD DATA =================
@@ -222,33 +130,6 @@ export const CertificationRequestList = () => {
 
   // ================= ACTION MENU =================
 
-  const editButtonLabel = (rowData: any) => {
-    if (rowData === "SUBMITTED") {
-      return t("certificationRequest.startReview");
-    } else if (rowData === "UNDER_REVIEW") {
-      return t("certificationRequest.providestandard");
-    }else if (rowData === "STANDARDS_PROVIDED") {
-      return t("certificationRequest.requireDeadline");
-    } else if (rowData === "DEADLINE_REQUIRED") {
-      return t("certificationRequest.setDeadline");
-    } else if (rowData === "DEADLINE_ASSIGNED") {
-      return t("certificationRequest.assigneToCommittee");
-    } else if (rowData === "INSPECTION_IN_PROGRESS") {
-      return t("certificationRequest.continueInspection");
-    } else if (rowData === "REPORTED_TO_COMMITTEE") {
-      return t("certificationRequest.reviewReport");
-    } else if (rowData === "REPORT_APPROVED") {
-      return t("certificationRequest.requestPayment");
-    } else if (rowData === "PAYMENT_PENDING") {
-      return t("certificationRequest.confirmPayment");
-    } else if (rowData === "PAYMENT_COMPLETED") {
-      return t("certificationRequest.issueCertificate");
-    } else if (rowData === "CERTIFICATE_ISSUED") {
-      return t("certificationRequest.startSupervision");
-    } else {
-      return t("common.edit");
-    }
-  };
   const actionTemplate = (rowData: any) => {
     const menu = useRef<any>(null);
 
@@ -256,7 +137,13 @@ export const CertificationRequestList = () => {
       ...withPermission("VIEW_CERTIFICATIONREQUEST", {
         label: t("common.view"),
         icon: "pi pi-eye",
-        command: () => navigate(`/certification-request/view/${rowData.id}`),
+        command: () =>
+          navigate(`/certification-request/view/${rowData.id}`, {
+            state: {
+              originPath: "/certification-request",
+              activeSidebarPath: "/certification-request",
+            },
+          }),
       }),
       // ...withPermission("UPDATE_CERTIFICATIONREQUEST", {
       //   label: editButtonLabel(rowData.requestStatus),

@@ -145,7 +145,13 @@ export const CertificationRequestListStandardManagement = () => {
       {
         label: t("common.view"),
         icon: "pi pi-eye",
-        command: () => navigate(`/certification-request/view/${rowData.id}`),
+        command: () =>
+          navigate(`/certification-request/view/${rowData.id}`, {
+            state: {
+              originPath: "/standard-management",
+              activeSidebarPath: "/standard-management",
+            },
+          }),
       },
       // {
       //   label: editButtonLabel(rowData.requestStatus),

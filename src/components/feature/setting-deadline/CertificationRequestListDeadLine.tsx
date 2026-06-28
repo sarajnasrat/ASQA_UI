@@ -157,7 +157,13 @@ export const CertificationRequestListDeadLine = () => {
       {
         label: t("common.view"),
         icon: "pi pi-eye",
-        command: () => navigate(`/certification-request/view/${rowData.id}`),
+        command: () =>
+          navigate(`/certification-request/view/${rowData.id}`, {
+            state: {
+              originPath: "/certification-request-deadline",
+              activeSidebarPath: "/certification-request-deadline",
+            },
+          }),
       },
       // {
       //   label: editButtonLabel(rowData.requestStatus),

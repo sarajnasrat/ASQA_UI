@@ -13,6 +13,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import FileUploadField from "../../common/FileUploadField";
 import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
+import { SmartDatePicker } from "../../common/datepicker/SmartDatePicker";
 import CompanyService from "../../../services/company.service";
 import CategoryService from "../../../services/category.service";
 
@@ -36,6 +37,17 @@ export const CompanyUpdate: React.FC = () => {
   const [categories, setCategories] = useState<CategoryReference[]>([]);
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [jawazCalendarType, setJawazCalendarType] = useState<
+    "gregorian" | "persian" | "arabic"
+  >("gregorian");
+  const [companyLogoPreview, setCompanyLogoPreview] = useState<string | null>(
+    null,
+  );
+  const [businessLogoPreview, setBusinessLogoPreview] = useState<string | null>(
+    null,
+  );
+  const [currentCompanyLogoUrl, setCurrentCompanyLogoUrl] = useState("");
+  const [currentBusinessLogoUrl, setCurrentBusinessLogoUrl] = useState("");
 
   const {
     control,
@@ -75,13 +87,66 @@ export const CompanyUpdate: React.FC = () => {
   });
 
   const {
-    fields: socialLinksFields,
-    append,
-    remove,
+
   } = useFieldArray({
     control,
-    name: "socialLinks",
+    name: "categories",
   });
+
+  const resolveMediaUrl = (path?: string | null) => {
+    if (!path) return "";
+    if (path.startsWith("http")) return path;
+    return `http://localhost:8080${path}`;
+  };
+
+  const parseApiDate = (value?: string | null) => {
+    if (!value) return null;
+
+    const dateOnlyMatch = /^(\d{4})-(\d{2})-(\d{2})/.exec(value);
+    if (dateOnlyMatch) {
+      const [, year, month, day] = dateOnlyMatch;
+      return new Date(Number(year), Number(month) - 1, Number(day));
+    }
+
+    const parsedDate = new Date(value);
+    return Number.isNaN(parsedDate.getTime()) ? null : parsedDate;
+  };
+
+  const formatGregorianDate = (value?: Date | string | null): string | null => {
+    if (!value) return null;
+
+    const date = value instanceof Date ? value : new Date(value);
+    if (Number.isNaN(date.getTime())) return null;
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  useEffect(() => {
+    if (!companyLogoFile) {
+      setCompanyLogoPreview(null);
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(companyLogoFile);
+    setCompanyLogoPreview(objectUrl);
+
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [companyLogoFile]);
+
+  useEffect(() => {
+    if (!businessLogoFile) {
+      setBusinessLogoPreview(null);
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(businessLogoFile);
+    setBusinessLogoPreview(objectUrl);
+
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [businessLogoFile]);
 
   // ================= LOAD DATA =================
   useEffect(() => {
@@ -103,6 +168,9 @@ export const CompanyUpdate: React.FC = () => {
       const res = await CompanyService.getCompanyById(Number(id));
       const data = res.data.data;
 
+      setCurrentCompanyLogoUrl(resolveMediaUrl(data.logoUrl));
+      setCurrentBusinessLogoUrl(resolveMediaUrl(data.bussinessLogoUrl));
+
  
       reset({
         companyNameEN: data.companyNameEN || "",
@@ -121,17 +189,13 @@ export const CompanyUpdate: React.FC = () => {
 
         jawazNumber: data.jawazNumber || "",
 
-        jawazIssueDate: data.jawazIssueDate
-          ? new Date(data.jawazIssueDate)
-          : null,
-        jawazExpiryDate: data.jawazExpiryDate
-          ? new Date(data.jawazExpiryDate)
-          : null,
+        jawazIssueDate: parseApiDate(data.jawazIssueDate),
+        jawazExpiryDate: parseApiDate(data.jawazExpiryDate),
 
         tinNumber: data.tinNumber || "",
         websiteUrl: data.websiteUrl || "",
 
-        establishYear: data.establishYear ? new Date(data.establishYear) : null,
+        establishYear: parseApiDate(data.establishYear),
 
         companyOwnerNameEn: data.companyOwnerNameEn || "",
         companyOwnerNameDr: data.companyOwnerNameDr || "",
@@ -155,6 +219,7 @@ export const CompanyUpdate: React.FC = () => {
   };
   // ================= SUBMIT =================
   const onSubmit = async (data: Company) => {
+    console.log(data);
     setIsSubmitting(true);
 
     try {
@@ -171,18 +236,16 @@ export const CompanyUpdate: React.FC = () => {
           }))
         : [];
 
-      const serializeDate = (d?: Date | string | null): string | null => {
-        if (!d) return null;
-        if (d instanceof Date) return d.toISOString();
-        return d;
-      };
       const payload = {
         ...data,
         categories: categoriesPayload,
         socialLinks: socialLinksPayload,
-        establishYear: serializeDate(data.establishYear),
-        jawazIssueDate: serializeDate(data.jawazIssueDate),
-        jawazExpiryDate: serializeDate(data.jawazExpiryDate),
+        establishYear: formatGregorianDate(data.establishYear),
+        jawazIssueDate: formatGregorianDate(data.jawazIssueDate),
+        jawazExpiryDate: formatGregorianDate(data.jawazExpiryDate),
+        companyOwnerNameEn: data.companyOwnerNameEn || "",
+        companyOwnerNameDr: data.companyOwnerNameDr || "",
+        companyOwnerNamePs: data.companyOwnerNamePs || "",
       };
 
       const formData = new FormData();
@@ -199,7 +262,7 @@ export const CompanyUpdate: React.FC = () => {
 
       if (response) {
         showToast("success", t("common.success"), t("company.updateSuccess"));
-        setTimeout(() => navigate("/companies"), 1500);
+        setTimeout(() => navigate("/company"), 1500);
       }
     } catch (error) {
       console.error(error);
@@ -217,14 +280,10 @@ export const CompanyUpdate: React.FC = () => {
     "OTHER",
   ];
 
-  const platformOptions = [
-    { label: "Facebook", value: "Facebook" },
-    { label: "Twitter", value: "Twitter" },
-    { label: "LinkedIn", value: "LinkedIn" },
-    { label: "Instagram", value: "Instagram" },
-    { label: "YouTube", value: "YouTube" },
-    { label: "Website", value: "Website" },
-  ];
+
+
+  const getCategoryLabel = (category?: CategoryReference | null) =>
+    category?.categoryName || category?.name || "";
 
   if (loading) return <div className="p-5">{t("common.loading")}</div>;
 
@@ -232,8 +291,8 @@ export const CompanyUpdate: React.FC = () => {
     <>
       <DynamicBreadcrumb
         items={[
-          { label: t("company.list"), url: "/companies" },
-          { label: t("company.edit"), url: `/companies/${id}` },
+          { label: t("company.list"), url: "/company" },
+          { label: t("company.edit"), url: `/company/edit/${id}` },
         ]}
       />
 
@@ -433,7 +492,7 @@ export const CompanyUpdate: React.FC = () => {
 
                 <div className="field md:col-span-2">
                   <label htmlFor="address" className="font-medium block mb-2">
-                    = {t("company.labels.address")}{" "}
+                     {t("company.labels.address")}{" "}
                   </label>
                   <Controller
                     name="address"
@@ -517,46 +576,56 @@ export const CompanyUpdate: React.FC = () => {
                 </div>
 
                 <div className="field">
-                  <label
-                    htmlFor="jawazIssueDate"
-                    className="font-medium block mb-2"
-                  >
-                    {t("company.labels.jawazIssueDate")}{" "}
+                  <label className="font-medium block mb-2">
+                    {t("common.selectDateType")}
+                  </label>
+                  <Dropdown
+                    className="w-full"
+                    value={jawazCalendarType}
+                    options={[
+                      { label: t("common.gregorian"), value: "gregorian" },
+                      { label: t("common.arabic"), value: "arabic" },
+                      { label: t("common.persian"), value: "persian" },
+                    ]}
+                    onChange={(e) => setJawazCalendarType(e.value)}
+                  />
+                </div>
+
+                <div className="field">
+                  <label className="font-medium block mb-2">
+                    {t("company.labels.jawazIssueDate")}
                   </label>
                   <Controller
                     name="jawazIssueDate"
                     control={control}
                     render={({ field }) => (
-                      <Calendar
-                        id="jawazIssueDate"
-                        {...field}
-                        dateFormat="yy-mm-dd"
-                        className="w-full"
-                        placeholder="Select date"
-                        showIcon
+                      <SmartDatePicker
+                        key={`jawazIssueDate-${jawazCalendarType}`}
+                        value={field.value ?? undefined}
+                        calendarType={jawazCalendarType}
+                        onChange={(date: any) =>
+                          field.onChange(date ? new Date(date?.date || date) : null)
+                        }
                       />
                     )}
                   />
                 </div>
 
                 <div className="field">
-                  <label
-                    htmlFor="jawazExpiryDate"
-                    className="font-medium block mb-2"
-                  >
+                  <label className="font-medium block mb-2">
                     {t("company.labels.jawazExpiryDate")}
                   </label>
                   <Controller
                     name="jawazExpiryDate"
                     control={control}
                     render={({ field }) => (
-                      <Calendar
-                        id="jawazExpiryDate"
-                        {...field}
-                        dateFormat="yy-mm-dd"
-                        className="w-full"
-                        placeholder="Select date"
-                        showIcon
+                      <SmartDatePicker
+                        key={`jawazExpiryDate-${jawazCalendarType}`}
+                        value={field.value ?? undefined}
+                        calendarType={jawazCalendarType}
+                        onChange={(date: any) =>
+                          field.onChange(date ? new Date(date?.date || date) : null)
+                        }
                       />
                     )}
                   />
@@ -658,7 +727,7 @@ export const CompanyUpdate: React.FC = () => {
                     )}
                   />
                 </div>
-
+{/* 
                 <div className="field">
                   <label
                     htmlFor="aboutCompanyDr"
@@ -701,11 +770,11 @@ export const CompanyUpdate: React.FC = () => {
                       />
                     )}
                   />
-                </div>
+                </div> */}
               </div>
             </div>{" "}
             {/* Social Links Section */}
-            <div className="mb-5">
+            {/* <div className="mb-5">
               {socialLinksFields.length === 0 ? (
                 <Message
                   severity="info"
@@ -787,7 +856,7 @@ export const CompanyUpdate: React.FC = () => {
                   onClick={() => append({ socialLinkName: "", address: "" })}
                 />
               </div>
-            </div>
+            </div> */}
             {/* Categories Section */}
             <div className="mb-5">
               <div className="field">
@@ -803,7 +872,7 @@ export const CompanyUpdate: React.FC = () => {
                         id="categories"
                         {...field}
                         options={categories.map((c) => ({
-                          label: c.name,
+                          label: getCategoryLabel(c),
                           value: c,
                         }))}
                         placeholder={t("company.labels.selectCategories")}
@@ -828,6 +897,20 @@ export const CompanyUpdate: React.FC = () => {
                   <label className="font-medium block mb-2">
                     {t("company.labels.companyLogo")}
                   </label>
+                  {(companyLogoPreview || currentCompanyLogoUrl) && (
+                    <div className="mb-3 rounded-lg border border-gray-200 bg-gray-50 p-3">
+                      <div className="mb-2 text-xs font-medium text-gray-500">
+                        {companyLogoPreview
+                          ? t("common.preview")
+                          : t("common.current") || "Current"}
+                      </div>
+                      <img
+                        src={companyLogoPreview || currentCompanyLogoUrl}
+                        alt={t("company.labels.companyLogo")}
+                        className="h-28 w-full rounded-lg border border-gray-200 bg-white object-contain p-2"
+                      />
+                    </div>
+                  )}
                   <FileUploadField
                     name="companyLogo"
                     accept="image/*"
@@ -840,6 +923,20 @@ export const CompanyUpdate: React.FC = () => {
                   <label className="font-medium block mb-2">
                     {t("company.labels.businessLogo")}{" "}
                   </label>
+                  {(businessLogoPreview || currentBusinessLogoUrl) && (
+                    <div className="mb-3 rounded-lg border border-gray-200 bg-gray-50 p-3">
+                      <div className="mb-2 text-xs font-medium text-gray-500">
+                        {businessLogoPreview
+                          ? t("common.preview")
+                          : t("common.current") || "Current"}
+                      </div>
+                      <img
+                        src={businessLogoPreview || currentBusinessLogoUrl}
+                        alt={t("company.labels.businessLogo")}
+                        className="h-28 w-full rounded-lg border border-gray-200 bg-white object-contain p-2"
+                      />
+                    </div>
+                  )}
                   <FileUploadField
                     name="businessLogo"
                     accept="image/*"

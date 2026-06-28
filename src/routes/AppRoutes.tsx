@@ -40,10 +40,10 @@ export const AppRoutes = () => {
             path="/certification-detals"
             element={<CertificationDetails />}
           />
-                      <Route
-                           path="certification-verification"
-                           element={<CertificationVerification />}
-                         />
+          <Route
+            path="certification-verification"
+            element={<CertificationVerification />}
+          />
           <Route path="/contact" element={<Contact />} />
           <Route
             path="/certification/select-type"
@@ -53,7 +53,7 @@ export const AppRoutes = () => {
 
         {/* Protected routes with MainLayout */}
         <Route path="/login" element={<Login />} />
-        
+
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route
           path="/*"

@@ -166,7 +166,7 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex justify-center items-center p-8">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 flex justify-center items-center p-8">
       <div className="flex flex-col items-center gap-8">
         <div
           id="certificate-content"

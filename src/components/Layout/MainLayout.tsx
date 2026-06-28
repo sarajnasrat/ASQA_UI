@@ -246,12 +246,14 @@ export const MainLayout = () => {
               />
               <Route
                 path="company/under-review"
-                element={<CompanyStatusList status="UNDER_REVIEW" />}
+                element={<CompanyStatusList statuses={["SUBMITTED", "UNDER_REVIEW","STANDARDS_PROVIDED","DEADLINE_REQUIRED","DEADLINE_ASSIGNED","INSPECTION_IN_PROGRESS","REPORTED_TO_COMMITTEE","REPORT_APPROVED","PAYMENT_PENDING"]} />}
               />
-              <Route
+
+      
+              {/* <Route
                 path="company/inspection-in-progress"
-                element={<CompanyStatusList status="INSPECTION_IN_PROGRESS" />}
-              />
+                element={<CompanyStatusList status="INSPECTION_IN_PROGRESS" statuses={["INSPECTION_IN_PROGRESS", "PAYMENT_PENDING", "CERTIFICATE_ISSUED"]} />}
+              /> */}
               <Route
                 path="company/payment-pending"
                 element={<CompanyStatusList status="PAYMENT_PENDING" />}

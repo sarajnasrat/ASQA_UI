@@ -1572,6 +1572,8 @@
     }
   },
   "common": {
+    "current":"فعلی",
+    "editcompany": "اصلاح معلومات شرکت",
     "months": "ماه",
     "confirmation": "تائید",
     "selectDateType": "انتخاب نوع تاریخ",

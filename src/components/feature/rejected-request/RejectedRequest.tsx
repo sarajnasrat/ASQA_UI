@@ -145,7 +145,13 @@ export const RejectedRequest = () => {
       {
         label: t("common.view"),
         icon: "pi pi-eye",
-        command: () => navigate(`/certification-request/view/${rowData.id}`),
+        command: () =>
+          navigate(`/certification-request/view/${rowData.id}`, {
+            state: {
+              originPath: "/rejected-request",
+              activeSidebarPath: "/rejected-request",
+            },
+          }),
       },
       // {
       //   label: editButtonLabel(rowData.requestStatus),

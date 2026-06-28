@@ -700,7 +700,13 @@ export const CertificationRequestPayment = () => {
       {
         label: t("common.view"),
         icon: "pi pi-eye",
-        command: () => navigate(`/certification-request/view/${rowData.id}`),
+        command: () =>
+          navigate(`/certification-request/view/${rowData.id}`, {
+            state: {
+              originPath: "/payment-management",
+              activeSidebarPath: "/payment-management",
+            },
+          }),
       },
       // {
       //   label: editButtonLabel(rowData.requestStatus),

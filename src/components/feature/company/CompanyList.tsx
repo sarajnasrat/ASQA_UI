@@ -101,7 +101,13 @@ export const CompanyList: React.FC = () => {
       ...withPermission("VIEW_COMPANY", {
         label: t("common.view"),
         icon: "pi pi-eye",
-        command: () => navigate(`/company/view/${rowData.id}`),
+        command: () =>
+          navigate(`/company/view/${rowData.id}`, {
+            state: {
+              originPath: "/company",
+              activeSidebarPath: "/company",
+            },
+          }),
       }),
     ];
     return (

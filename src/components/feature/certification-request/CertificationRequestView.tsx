@@ -1,6 +1,6 @@
 // components/feature/certification/CertificationRequestView.tsx
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Dialog } from "primereact/dialog";
 import { Dropdown } from "primereact/dropdown";
 import { Toast } from "primereact/toast";
@@ -103,6 +103,7 @@ const CommitteeSelectionField: React.FC<{
 const CertificationRequestView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useTranslation();
   const { toast, showToast } = useAppToast();
   const [tracker, setTracker] = useState<Tracker[]>([]);
@@ -144,6 +145,25 @@ const CertificationRequestView: React.FC = () => {
   const [paymentAmount, setPaymentAmount] = useState<string>("");
   const [uploadingPayment, setUploadingPayment] = useState(false);
   const [requestPrinted, setRequestPrinted] = useState(false);
+
+  const getFallbackListUrl = (status?: string) => {
+    switch (status) {
+      case "PAYMENT_PENDING":
+      case "PAYMENT_COMPLETED":
+        return "/payment-management";
+      case "DEADLINE_REQUIRED":
+      case "DEADLINE_ASSIGNED":
+      case "INSPECTION_IN_PROGRESS":
+        return "/certification-request-deadline";
+      default:
+        return "/certification-request";
+    }
+  };
+
+  const listUrl =
+    typeof location.state?.originPath === "string"
+      ? location.state.originPath
+      : getFallbackListUrl(request?.requestStatus);
 
   useEffect(() => {
     if (id) {
@@ -1413,6 +1433,7 @@ const CertificationRequestView: React.FC = () => {
 
         <CertificationRequestViewHeader
           request={request}
+          listUrl={listUrl}
           statusConfig={statusConfig}
           finalStates={finalStates}
           getNextStatuses={getNextStatuses}

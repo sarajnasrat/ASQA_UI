@@ -120,6 +120,10 @@ export const Sidebar = ({
 
   const theme = themes[currentTheme];
   const isRTL = i18n.language === "ps" || i18n.language === "dr";
+  const activeSidebarPath =
+    typeof location.state?.activeSidebarPath === "string"
+      ? location.state.activeSidebarPath
+      : location.pathname;
 
   useEffect(() => {
     const storedMenus = JSON.parse(localStorage.getItem("menus") || "[]");
@@ -159,6 +163,19 @@ export const Sidebar = ({
     return () => document.removeEventListener("keydown", handleEscape);
   }, []);
 
+  useEffect(() => {
+    if (!menuItems.length) return;
+
+    const activeParentIds = collectExpandedParentIds(menuItems);
+    if (!activeParentIds.length) return;
+
+    setExpandedItems((prev) => {
+      const next = new Set(prev);
+      activeParentIds.forEach((id) => next.add(id));
+      return next;
+    });
+  }, [location.pathname, menuItems]);
+
   const getAccentColor = useMemo(() => {
     switch (currentTheme) {
       case "darkSlate":
@@ -185,13 +202,120 @@ export const Sidebar = ({
     }
   };
 
-  const isActive = (path: string) => location.pathname === path;
+  const normalizePath = (path?: string) => {
+    if (!path) return "";
+    if (path === "/") return "/";
+    return path.replace(/\/+$/, "");
+  };
+
+  const matchesPath = (path?: string) => {
+    const normalizedPath = normalizePath(path);
+    const normalizedLocation = normalizePath(activeSidebarPath);
+
+    if (!normalizedPath) return false;
+    if (normalizedPath === "/") return normalizedLocation === "/";
+
+    return (
+      normalizedLocation === normalizedPath ||
+      normalizedLocation.startsWith(`${normalizedPath}/`)
+    );
+  };
+
+  const hasActiveDescendant = (item: any): boolean => {
+    if (!item?.children?.length) return false;
+
+    return item.children.some(
+      (child: any) => matchesPath(child.path) || hasActiveDescendant(child)
+    );
+  };
+
+  const collectExpandedParentIds = (items: any[]) => {
+    const expandedIds = new Set<number>();
+
+    const walk = (item: any, parentIds: number[] = []) => {
+      const itemMatches = matchesPath(item.path);
+      const descendantMatches = hasActiveDescendant(item);
+
+      if (itemMatches || descendantMatches) {
+        parentIds.forEach((id) => expandedIds.add(id));
+        if (descendantMatches && item.children?.length) {
+          expandedIds.add(item.id);
+        }
+      }
+
+      item.children?.forEach((child: any) => walk(child, [...parentIds, item.id]));
+    };
+
+    items.forEach((item) => walk(item));
+    return Array.from(expandedIds);
+  };
+
+  const isActive = (path?: string) => matchesPath(path);
+
+  const collectDescendantIds = (item: any): number[] => {
+    if (!item?.children?.length) return [];
+
+    return item.children.flatMap((child: any) => [
+      child.id,
+      ...collectDescendantIds(child),
+    ]);
+  };
+
+  const findSiblingsById = (items: any[], targetId: number): any[] | null => {
+    for (const item of items) {
+      if (item.children?.some((child: any) => child.id === targetId)) {
+        return item.children;
+      }
+
+      if (item.children?.length) {
+        const nestedSiblings = findSiblingsById(item.children, targetId);
+        if (nestedSiblings) return nestedSiblings;
+      }
+    }
+
+    if (items.some((item) => item.id === targetId)) {
+      return items;
+    }
+
+    return null;
+  };
+
+  const findItemById = (items: any[], targetId: number): any | null => {
+    for (const item of items) {
+      if (item.id === targetId) return item;
+      if (item.children?.length) {
+        const nestedItem = findItemById(item.children, targetId);
+        if (nestedItem) return nestedItem;
+      }
+    }
+
+    return null;
+  };
 
   const toggleSubmenu = (id: number) => {
+    const targetItem = findItemById(menuItems, id);
+    const siblingItems = findSiblingsById(menuItems, id) || [];
+
     setExpandedItems((prev) => {
       const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
+
+      if (next.has(id)) {
+        next.delete(id);
+        collectDescendantIds(targetItem).forEach((descendantId) =>
+          next.delete(descendantId)
+        );
+        return next;
+      }
+
+      siblingItems.forEach((sibling) => {
+        if (sibling.id === id) return;
+        next.delete(sibling.id);
+        collectDescendantIds(sibling).forEach((descendantId) =>
+          next.delete(descendantId)
+        );
+      });
+
+      next.add(id);
       return next;
     });
   };
@@ -207,7 +331,7 @@ export const Sidebar = ({
 
   const renderChildren = (children: any[], level = 1) =>
     children.map((child) => {
-      const childActive = isActive(child.path);
+      const childActive = isActive(child.path) || hasActiveDescendant(child);
       const hasGrandChildren = child.children && child.children.length > 0;
       const isExpanded = expandedItems.has(child.id);
       const isHovered = hoveredItem === child.id;
@@ -337,7 +461,7 @@ export const Sidebar = ({
     });
 
   const renderMenuItem = (item: any) => {
-    const active = isActive(item.path);
+    const active = isActive(item.path) || hasActiveDescendant(item);
     const hasChildren = item.children && item.children.length > 0;
     const isExpanded = expandedItems.has(item.id);
     const isHovered = hoveredItem === item.id;

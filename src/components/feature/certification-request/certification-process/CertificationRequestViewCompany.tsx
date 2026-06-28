@@ -24,6 +24,8 @@ import type {
   ContactPerson,
   Address,
 } from "./CertificationRequestView.types";
+import { Button } from "primereact/button";
+import { useNavigate } from "react-router-dom";
 
 type CompanySection = "contactPersonDetails";
 
@@ -54,29 +56,46 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
   apiBaseUrl,
   t,
 }) => {
+  const navigate = useNavigate();
   const translatedCompanyType = (type: any) =>
     type ? t(`company.typeOptions.${type?.companyType}`) : "";
+  const handleEdit = () => {
+    navigate("/company/edit/" + request.company.id);
+  };
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div className="lg:col-span-2 space-y-6">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="relative h-32 bg-linear-to-r from-blue-600 to-indigo-600">
             <div className="absolute -bottom-12 left-6">
-              <div className="w-24 h-24 bg-white rounded-2xl shadow-lg flex items-center justify-center overflow-hidden border-4 border-white">
-                {request.company.logoUrl ? (
-                  <img
-                    src={`${apiBaseUrl}${request.company.logoUrl}`}
-                    alt={request.company.companyNameEN}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <Building2 className="h-12 w-12 text-blue-600" />
-                )}
+              <div className="relative">
+                <div className="w-24 h-24 bg-white rounded-2xl shadow-lg flex items-center justify-center overflow-hidden border-4 border-white">
+                  {request.company.logoUrl ? (
+                    <img
+                      src={`${apiBaseUrl}${request.company.logoUrl}`}
+                      alt={request.company.companyNameEN}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <Building2 className="h-12 w-12 text-blue-600" />
+                  )}
+                </div>
               </div>
             </div>
           </div>
 
           <div className="pt-16 px-6 pb-6">
+            <div className="flex items-end justify-end">
+              <Button
+                raised
+                text
+                label={t("common.editcompany")}
+                rounded
+                className="p-button-sm"
+                onClick={handleEdit}
+              />
+            </div>
+
             <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
               <div>
                 <h3 className="text-2xl font-bold text-gray-900">
