@@ -51,7 +51,7 @@ export const CertificationRequestListDeadLine = () => {
     },
 
     {
-      label: t("certificationRequest.statusOptions.DEADLINE_ASSIGNED"),
+      label: t("certificationRequest.statusOptions.INSPECTION_IN_PROGRESS"),
       value: "DEADLINE_ASSIGNED",
       icon: "pi pi-calendar",
     },

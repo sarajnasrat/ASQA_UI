@@ -23,6 +23,7 @@ import { handleApi } from "../../../hooks/handleApi";
 import type { Company, CategoryReference, CompanyType } from "./company";
 import { useTranslation } from "react-i18next";
 
+
 export const CompanyUpdate: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -248,13 +249,14 @@ export const CompanyUpdate: React.FC = () => {
         companyOwnerNamePs: data.companyOwnerNamePs || "",
       };
 
-      const formData = new FormData();
-      formData.append("company", JSON.stringify(payload));
-      if (companyLogoFile) formData.append("companyLogo", companyLogoFile);
-      if (businessLogoFile) formData.append("bussinessLogo", businessLogoFile);
-
       const response = await handleApi(
-        () => CompanyService.updateCompany(Number(id), formData),
+        () =>
+          CompanyService.updateCompany(
+            Number(id),
+            payload,
+            companyLogoFile,
+            businessLogoFile,
+          ),
         showSuccess,
         showError,
         t,

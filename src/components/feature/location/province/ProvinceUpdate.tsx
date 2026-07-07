@@ -92,7 +92,7 @@ export const ProvinceUpdate: React.FC<ProvinceUpdateProps> = ({
         translations: {
           en: data.translations.en,
           ps: data.translations.ps,
-          fa: data.translations.fa,
+          dr: data.translations.fa,
         },
         countryId: data.countryId,
       };

@@ -14,6 +14,24 @@ export const CertificationRequestService = {
   getAllPaginated(params?: any) {
     return httpClient.get(`${BASE_URL}`, { params });
   },
+
+  searchCertificationRequest(
+    trackingNumber?: string,
+    companyName?: string,
+    page: number = 0,
+    size: number = 10,
+    sort: string = "id,desc",
+  ) {
+    return httpClient.get(`${BASE_URL}/search`, {
+      params: {
+        trackingNumber,
+        companyName,
+        page,
+        size,
+        sort,
+      },
+    });
+  },
   
   getAllPaginatedByStatus(
     status: string,

@@ -7,6 +7,7 @@ import {
   Hash,
   Calendar,
   XCircle,
+  Printer,
 } from "lucide-react";
 import type {
   CertificationRequest,
@@ -78,7 +79,12 @@ const CertificationRequestViewHeader: React.FC<Props> = ({
                 className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${statusConfig.bgColor} ${statusConfig.color}`}
               >
                 {statusConfig.icon}
-                {statusConfig.label}
+                {statusConfig.label === "COMMITTEE_REPORTED" ||
+                statusConfig.label === "COMMITTEE_APPROVED" 
+                  ? t(
+                      `certificationRequest.statusOptions.${statusConfig.label}`,
+                    )
+                  : statusConfig.label}
               </span>
             </div>
             <div className="flex flex-wrap gap-4 text-sm text-gray-500">
@@ -142,7 +148,7 @@ const CertificationRequestViewHeader: React.FC<Props> = ({
                       onClick={onPrintBill}
                       className="flex items-center justify-center px-6 py-2.5 border-2 border-blue-600 text-blue-700 hover:bg-blue-50 active:bg-blue-100 font-medium rounded-lg transition-all duration-200 w-full sm:w-auto"
                     >
-                      <Download className="h-4 w-4 mr-2" />
+                      <Printer className="h-4 w-4 mr-2 " />
                       {t("certificationRequest.printBill") || "Print Bill"}
                     </button>
                   )}

@@ -237,68 +237,500 @@ const CertificationRequestView: React.FC = () => {
     if (!printWindow) return;
 
     const companyName = getCompanyName() || "";
-    const billAmount = (request as any).paymentAmount || "To be determined";
+    const invoiceNumber = request.serialNumber || `INV-${Date.now()}`;
+    const invoiceDate = IslamicDateFormatter.formatQamari(new Date());
+    const dueDate = IslamicDateFormatter.formatQamari(
+      new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    );
+    const itemDescription = getCertificationTypeLabel(request.certificationType);
+    const billAmount =
+      (request as any).paymentAmount !== undefined &&
+      (request as any).paymentAmount !== null &&
+      (request as any).paymentAmount !== ""
+        ? String((request as any).paymentAmount)
+        : "Contact Support";
+    const logoUrl = `${window.location.origin}/asqanew.png`;
 
     const billContent = `
       <!DOCTYPE html>
-      <html>
+      <html lang="en">
       <head>
-        <title>Payment Bill - ${request.serialNumber}</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Payment Bill - ${invoiceNumber}</title>
         <style>
-          body { font-family: Arial, sans-serif; padding: 40px; margin: 0; }
-          .bill-container { max-width: 800px; margin: 0 auto; border: 1px solid #ddd; padding: 30px; }
-          .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 20px; }
-          .company-name { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
-          .bill-title { font-size: 28px; font-weight: bold; margin: 20px 0; text-align: center; }
-          .details-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-          .details-table td, .details-table th { padding: 12px; border: 1px solid #ddd; }
-          .details-table th { background-color: #f5f5f5; font-weight: bold; width: 40%; }
-          .amount { font-size: 24px; font-weight: bold; color: #28a745; text-align: right; margin-top: 20px; }
-          .footer { margin-top: 50px; text-align: center; font-size: 12px; color: #666; border-top: 1px solid #ddd; padding-top: 20px; }
-          .payment-instructions { margin-top: 30px; padding: 20px; background-color: #f9f9f9; border-left: 4px solid #007bff; }
-          @media print { body { padding: 0; } .no-print { display: none; } }
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+
+          body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            color: #1f2747;
+            padding: 18px;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+
+          .page-wrap {
+            max-width: 820px;
+            margin: 0 auto;
+          }
+
+          .invoice {
+            background: #fff;
+            padding: 34px 38px 30px;
+            width: 794px;
+            min-height: 1123px;
+            border: 1px solid #ececec;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            position: relative;
+            margin: 0 auto;
+          }
+
+          .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+          }
+
+          .invoice-title {
+            font-size: 56px;
+            line-height: 0.9;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            color: #28345f;
+            text-transform: uppercase;
+          }
+
+          .logo-circle {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            background: #b9bbc3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+
+          .logo-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+
+          .company-block {
+            margin-top: 10px;
+            margin-bottom: 18px;
+            font-size: 13px;
+            line-height: 1.45;
+            color: #1f2747;
+          }
+
+          .company-block .name {
+            font-weight: 700;
+            margin-bottom: 4px;
+          }
+
+          .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1.2fr;
+            gap: 26px;
+            margin-bottom: 22px;
+          }
+
+          .info-col h3 {
+            font-size: 13px;
+            line-height: 1.1;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #28345f;
+            margin-bottom: 8px;
+          }
+
+          .info-col p {
+            font-size: 13px;
+            line-height: 1.45;
+            color: #111;
+          }
+
+          .info-col .person {
+            font-weight: 700;
+            margin-bottom: 2px;
+          }
+
+          .meta-col {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 8px 14px;
+            align-content: start;
+          }
+
+          .meta-col .label {
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #28345f;
+          }
+
+          .meta-col .value {
+            font-size: 13px;
+            font-weight: 700;
+            color: #111;
+            text-align: right;
+          }
+
+          .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 18px;
+          }
+
+          .items-table thead tr {
+            border-top: 2px solid #e76657;
+            border-bottom: 2px solid #e76657;
+          }
+
+          .items-table thead th {
+            color: #28345f;
+            text-align: left;
+            padding: 8px 10px;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            background: transparent;
+          }
+
+          .items-table tbody td {
+            padding: 8px 10px;
+            font-size: 13px;
+            color: #111;
+            vertical-align: top;
+          }
+
+          .items-table th:nth-child(1),
+          .items-table td:nth-child(1) {
+            width: 44px;
+            text-align: center;
+          }
+
+          .items-table th:nth-child(3),
+          .items-table td:nth-child(3),
+          .items-table th:nth-child(4),
+          .items-table td:nth-child(4),
+          .items-table th:nth-child(5),
+          .items-table td:nth-child(5) {
+            text-align: right;
+          }
+
+          .totals {
+            width: 240px;
+            margin-left: auto;
+            margin-bottom: 24px;
+          }
+
+          .totals-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 4px 0;
+            font-size: 12px;
+          }
+
+          .totals-row strong {
+            font-size: 13px;
+            color: #28345f;
+            text-transform: uppercase;
+          }
+
+          .grand-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-top: 6px;
+            color: #28345f;
+            font-weight: 800;
+          }
+
+          .grand-total .label {
+            font-size: 15px;
+            text-transform: uppercase;
+          }
+
+          .grand-total .value {
+            font-size: 34px;
+          }
+
+          .signature-wrap {
+            text-align: right;
+            margin-bottom: 120px;
+          }
+
+          .signature {
+            font-family: "Brush Script MT", cursive;
+            font-size: 58px;
+            color: #111;
+            line-height: 1;
+          }
+
+          .bottom-row {
+            position: absolute;
+            left: 38px;
+            right: 38px;
+            bottom: 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 24px;
+          }
+
+          .thank-you {
+            font-family: "Brush Script MT", cursive;
+            font-size: 62px;
+            color: #28345f;
+            line-height: 0.95;
+            white-space: nowrap;
+          }
+
+          .terms {
+            width: 260px;
+          }
+
+          .terms h4 {
+            color: #e76657;
+            font-size: 16px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+          }
+
+          .terms p {
+            font-size: 12px;
+            line-height: 1.45;
+            color: #111;
+            margin-bottom: 10px;
+          }
+
+          .action-buttons {
+            text-align: center;
+            padding-top: 18px;
+          }
+
+          .btn {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            margin: 0 6px;
+          }
+
+          .btn-print {
+            background: #111;
+            color: #fff;
+          }
+
+            .btn-close {
+              background: #e9e9e9;
+              color: #111;
+            }
+
+          @media print {
+            @page {
+              size: 210mm 297mm;
+              margin: 0;
+            }
+
+            html,
+            body {
+              background: #fff;
+              padding: 0;
+              margin: 0;
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
+            }
+
+            .page-wrap {
+              width: 210mm;
+              margin: 0;
+            }
+
+            .invoice {
+              border: none;
+              width: 210mm;
+              min-height: 297mm;
+              padding: 34px 38px 30px;
+              box-shadow: none;
+              page-break-inside: avoid;
+              break-inside: avoid;
+            }
+
+            .action-buttons {
+              display: none;
+            }
+          }
+
+          @media (max-width: 768px) {
+            body {
+              padding: 12px;
+            }
+
+            .page-wrap,
+            .invoice {
+              width: 100%;
+              min-height: auto;
+            }
+
+            .invoice {
+              padding: 24px 20px 140px;
+            }
+
+            .top-row,
+            .info-grid,
+            .bottom-row {
+              display: block;
+            }
+
+            .invoice-title {
+              font-size: 46px;
+              margin-bottom: 18px;
+            }
+
+            .logo-circle {
+              margin-left: auto;
+              margin-bottom: 14px;
+            }
+
+            .info-col,
+            .meta-col,
+            .terms {
+              margin-bottom: 18px;
+            }
+
+            .totals {
+              width: 100%;
+            }
+
+            .signature-wrap {
+              margin-bottom: 40px;
+            }
+
+            .bottom-row {
+              position: static;
+            }
+
+            .thank-you {
+              font-size: 48px;
+              margin-bottom: 18px;
+            }
+
+            .items-table {
+              display: block;
+              overflow-x: auto;
+              white-space: nowrap;
+            }
+          }
         </style>
       </head>
       <body>
-        <div class="bill-container">
-          <div class="header">
-            <div class="company-name">${companyName || "Certification Authority"}</div>
-            <div>Payment Invoice / Bill</div>
+        <div class="page-wrap">
+          <div class="invoice">
+            <div class="top-row">
+              <h1 class="invoice-title">Invoice</h1>
+              <div class="logo-circle">
+                <img src="${logoUrl}" alt="ASQA" />
+              </div>
+            </div>
+
+            <div class="company-block">
+              <div class="name">ASQA</div>
+              <div>Kabul, Afghanistan</div>
+              <div>Afghanistan Quality Standards Authority</div>
+            </div>
+
+            <div class="info-grid">
+              <div class="info-col">
+                <h3>Bill To</h3>
+                <p class="person">${companyName || "-"}</p>
+                <p>Certification Request Holder</p>
+                <p>${request.trackingNumber || "-"}</p>
+              </div>
+
+              <div class="info-col">
+                <h3>Ship To</h3>
+                <p class="person">${companyName || "-"}</p>
+                <p>Certification Service</p>
+                <p>${itemDescription}</p>
+              </div>
+
+              <div class="meta-col">
+                <div class="label">Invoice #</div>
+                <div class="value">${invoiceNumber}</div>
+                <div class="label">Invoice Date</div>
+                <div class="value">${invoiceDate}</div>
+                <div class="label">P.O.#</div>
+                <div class="value">${request.trackingNumber || "-"}</div>
+                <div class="label">Due Date</div>
+                <div class="value">${dueDate}</div>
+              </div>
+            </div>
+
+            <table class="items-table">
+              <thead>
+                <tr>
+                  <th>Qty</th>
+                  <th>Description</th>
+                  <th>Unit Price</th>
+                  <th>Qty</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>${itemDescription}</td>
+                  <td>${billAmount}</td>
+                  <td>1</td>
+                  <td>${billAmount}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="totals">
+              <div class="totals-row">
+                <span>Subtotal</span>
+                <span>${billAmount}</span>
+              </div>
+              <div class="totals-row">
+                <span>Service Tax 0%</span>
+                <span>0.00</span>
+              </div>
+        
+            </div>
+
+       
+
+            <div class="bottom-row">
+              <div class="terms">
+                <h4>Terms & Conditions</h4>
+                <p>Payment is due within 15 days.</p>
+                <p>Name of Bank<br>Da Afghanistan Bank</p>
+                <p>Account Number: 001-234567-89<br>Routing: 098765432</p>
+              </div>
+            </div>
           </div>
 
-          <div class="bill-title">PAYMENT INVOICE</div>
-
-          <table class="details-table">
-            <tr><th>Serial Number</th><td>${request.serialNumber || "-"}</td></tr>
-            <tr><th>Tracking Number</th><td>${request.trackingNumber || "-"}</td></tr>
-            <tr><th>Company Name</th><td>${companyName || "-"}</td></tr>
-            <tr><th>Request Type</th><td>${getCertificationTypeLabel(request.certificationType)}</td></tr>
-            <tr><th>Payment Amount</th><td>${billAmount}</td></tr>
-            <tr><th>Payment Status</th><td>Pending</td></tr>
-          </table>
-
-          <div class="payment-instructions">
-            <strong>Payment Instructions:</strong><br/>
-            Please transfer the amount to the following bank account:<br/>
-            Bank: ABC Bank<br/>
-            Account Name: Certification Authority<br/>
-            Account Number: 1234567890<br/>
-            IBAN: IBAN123456789<br/>
-            SWIFT/BIC: ABCDEF123<br/>
-            Reference: ${request.serialNumber || "-"}
+          <div class="action-buttons">
+            <button class="btn btn-print" onclick="window.print()">Print Bill</button>
+            <button class="btn btn-close" onclick="window.close()">Close</button>
           </div>
-
-          <div class="amount">Total Amount: ${billAmount}</div>
-
-          <div class="footer">
-            This is a system generated invoice. For any queries, please contact support.<br/>
-            Generated on: ${new Date().toLocaleString()}
-          </div>
-        </div>
-
-        <div class="no-print" style="text-align:center; margin-top:20px;">
-          <button onclick="window.print()" style="padding:10px 20px; font-size:16px;">Print Bill</button>
-          <button onclick="window.close()" style="padding:10px 20px; font-size:16px; margin-left:10px;">Close</button>
         </div>
       </body>
       </html>

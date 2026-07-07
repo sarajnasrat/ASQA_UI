@@ -220,7 +220,7 @@ export const CountryList = () => {
       header: t("country.code"),
       style: { minWidth: "120px" },
       body: (rowData: any) => (
-        <span className="font-mono bg-gray-100 px-2 py-1 rounded-md text-sm">
+        <span className="ltr-inline-value font-mono bg-gray-100 px-2 py-1 rounded-md text-sm">
           {rowData.countryCode || t("common.notSpecified")}
         </span>
       ),

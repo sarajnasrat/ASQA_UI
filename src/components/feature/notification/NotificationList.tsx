@@ -4,6 +4,8 @@ import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 import { Tag } from "primereact/tag";
 import { Dropdown } from "primereact/dropdown";
+import { TieredMenu } from "primereact/tieredmenu";
+import type { MenuItem } from "primereact/menuitem";
 import { useTranslation } from "react-i18next";
 import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
 import { DynamicTable } from "../../common/DynamicTable";
@@ -12,11 +14,18 @@ import { handleApi } from "../../../hooks/handleApi";
 import { useToast } from "../../../hooks/ToastContext";
 import NotificationService from "../../../services/notification.service";
 import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
+import {
+  translateNotificationMessage,
+  translateNotificationTitle,
+} from "../../../utils/notificationTranslation";
 
 type NotificationItem = {
   id: number;
   title?: string;
   message?: string;
+  titleKey?: string;
+  messageKey?: string;
+  messageParams?: string | null;
   notificationType?: string;
   priority?: string;
   recipientType?: string;
@@ -34,27 +43,6 @@ type NotificationItem = {
 };
 
 const NOTIFICATION_EVENT = "notifications-updated";
-
-const notificationTypeOptions = [
-  { label: "All Types", value: null },
-  { label: "Request Submitted", value: "REQUEST_SUBMITTED" },
-  { label: "Request Status Changed", value: "REQUEST_STATUS_CHANGED" },
-  { label: "Certificate Issued", value: "CERTIFICATE_ISSUED" },
-  { label: "Certificate Expiring Soon", value: "CERTIFICATE_EXPIRING_SOON" },
-  { label: "Certificate Expired", value: "CERTIFICATE_EXPIRED" },
-  {
-    label: "Inspection Deadline Reached",
-    value: "INSPECTION_DEADLINE_REACHED",
-  },
-  { label: "Inspection Overdue", value: "INSPECTION_OVERDUE" },
-];
-
-const priorityOptions = [
-  { label: "All Priorities", value: null },
-  { label: "Info", value: "INFO" },
-  { label: "Warning", value: "WARNING" },
-  { label: "Urgent", value: "URGENT" },
-];
 
 const NotificationList: React.FC = () => {
   const navigate = useNavigate();
@@ -133,6 +121,51 @@ const NotificationList: React.FC = () => {
     [list],
   );
 
+  const notificationTypeOptions = useMemo(
+    () => [
+      { label: t("notification.filters.allTypes"), value: null },
+      {
+        label: t("notification.types.REQUEST_SUBMITTED"),
+        value: "REQUEST_SUBMITTED",
+      },
+      {
+        label: t("notification.types.REQUEST_STATUS_CHANGED"),
+        value: "REQUEST_STATUS_CHANGED",
+      },
+      {
+        label: t("notification.types.CERTIFICATE_ISSUED"),
+        value: "CERTIFICATE_ISSUED",
+      },
+      {
+        label: t("notification.types.CERTIFICATE_EXPIRING_SOON"),
+        value: "CERTIFICATE_EXPIRING_SOON",
+      },
+      {
+        label: t("notification.types.CERTIFICATE_EXPIRED"),
+        value: "CERTIFICATE_EXPIRED",
+      },
+      {
+        label: t("notification.types.INSPECTION_DEADLINE_REACHED"),
+        value: "INSPECTION_DEADLINE_REACHED",
+      },
+      {
+        label: t("notification.types.INSPECTION_OVERDUE"),
+        value: "INSPECTION_OVERDUE",
+      },
+    ],
+    [t],
+  );
+
+  const priorityOptions = useMemo(
+    () => [
+      { label: t("notification.filters.allPriorities"), value: null },
+      { label: t("notification.priorities.INFO"), value: "INFO" },
+      { label: t("notification.priorities.WARNING"), value: "WARNING" },
+      { label: t("notification.priorities.URGENT"), value: "URGENT" },
+    ],
+    [t],
+  );
+
   const handleMarkAsRead = async (id: number) => {
     const response = await handleApi(
       () => NotificationService.markAsRead(id),
@@ -197,6 +230,40 @@ const NotificationList: React.FC = () => {
     loadData();
   };
 
+  const actionTemplate = (row: NotificationItem) => {
+    const menu = React.useRef<TieredMenu>(null);
+
+    const items: MenuItem[] = [
+      ...(!getIsRead(row)
+        ? [
+            {
+              label: t("notification.markAsRead"),
+              icon: "pi pi-check",
+              command: () => handleMarkAsRead(row.id),
+            },
+          ]
+        : []),
+      {
+        label: t("notification.open"),
+        icon: "pi pi-arrow-right",
+        command: () => handleOpenRelated(row),
+      },
+    ];
+
+    return (
+      <div className="flex justify-center">
+        <TieredMenu model={items} popup ref={menu} />
+        <Button
+          icon="pi pi-ellipsis-v"
+          className="p-button-text p-button-sm"
+          onClick={(e) => menu.current?.toggle(e)}
+          tooltip={t("common.action")}
+          tooltipOptions={{ position: "top" }}
+        />
+      </div>
+    );
+  };
+
   const columns = [
     { field: "id", header: t("common.id") },
     {
@@ -205,7 +272,7 @@ const NotificationList: React.FC = () => {
       body: (row: NotificationItem) => (
         <div className="min-w-[180px]">
           <div className="font-semibold text-gray-800">
-            {row.title || t("common.notSpecified")}
+            {translateNotificationTitle(row, t)}
           </div>
           {row.trackingNumber ? (
             <div className="text-xs text-gray-500 mt-1">
@@ -220,9 +287,20 @@ const NotificationList: React.FC = () => {
       header: t("notification.columns.message"),
       body: (row: NotificationItem) => (
         <div className="max-w-xl text-sm text-gray-700 whitespace-normal">
-          {row.message || t("common.notSpecified")}
+          {translateNotificationMessage(row, t)}
         </div>
       ),
+    },
+    {
+      field: "notificationType",
+      header: t("notification.filterByType"),
+      body: (row: NotificationItem) =>
+        row.notificationType
+          ? t(
+              `notification.types.${row.notificationType}`,
+              row.notificationType,
+            )
+          : t("common.notSpecified"),
     },
     {
       field: "priority",
@@ -236,7 +314,12 @@ const NotificationList: React.FC = () => {
               ? "warning"
               : "info";
 
-        return <Tag value={priority} severity={severity} />;
+        return (
+          <Tag
+            value={t(`notification.priorities.${priority}`)}
+            severity={severity}
+          />
+        );
       },
     },
     {
@@ -263,46 +346,69 @@ const NotificationList: React.FC = () => {
     },
     {
       header: t("common.action"),
-      body: (row: NotificationItem) => (
-        <div className="flex flex-wrap gap-2 justify-center">
-          {!getIsRead(row) ? (
-            <Button
-              icon="pi pi-check"
-              label={t("notification.markAsRead")}
-              className="p-button-sm p-button-text"
-              onClick={() => handleMarkAsRead(row.id)}
-            />
-          ) : null}
-          <Button
-            icon="pi pi-arrow-right"
-            label={t("notification.open")}
-            className="p-button-sm p-button-text"
-            onClick={() => handleOpenRelated(row)}
-          />
-        </div>
-      ),
-      style: { width: "240px" },
+      body: actionTemplate,
+      style: { width: "120px" },
     },
   ];
 
   const header = (
-    <div>
-      <div>
-        <h2 className="text-xl font-semibold text-gray-800">
-          {t("notification.title")}
-        </h2>
-        {/* <p className="text-sm text-gray-500 mt-0.5">
-          {t("notification.manageDescription")}
-        </p> */}
-      </div>
-      <div className="">
-        <div className="flex gap-2 flex-wrap mt-3 justify-between">
-          <div>
-            <div className="flex justify-end gap-3">
-              <div className="">
-                <div className="pb-2">
-                  <label className="">{t("notification.filterByType")}</label>
+    <div className="rounded-2xl border border-slate-200 bg-gradient-to-r from-slate-50 via-white to-blue-50/70 p-4 md:p-6 shadow-sm">
+      <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-2 rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-700">
+              <i className="pi pi-bell text-xs" />
+              <span>{t("notification.title")}</span>
+            </div>
+            <h2 className="mt-3 text-2xl font-bold text-slate-900">
+              {t("notification.title")}
+            </h2>
+            <p className="mt-2 text-sm text-slate-600">
+              {t("notification.manageDescription")}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:min-w-90">
+            <div className="rounded-2xl border border-blue-200 bg-white/90 p-2">
+              <div className="flex items-center justify-between gap-3">
+                <div className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                  {t("notification.status.unread")}
                 </div>
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-blue-700">
+                  <i className="pi pi-envelope text-sm" />
+                </span>
+              </div>
+              <div className="mt-2 text-2xl font-bold text-blue-700">
+                {unreadCount}
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-emerald-200 bg-white/90 p-2">
+              <div className="flex items-center justify-between gap-3">
+                <div className=" font-medium uppercase tracking-wide text-slate-500">
+                  {t("common.total")}
+                </div>
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+                  <i className="pi pi-inbox text-sm" />
+                </span>
+              </div>
+              <div className="mt-2 text-2xl font-bold text-emerald-700">
+                {totalRecords}
+              </div>
+              {/* <div className="mt-1 text-xs text-slate-500">
+                {t("notification.title")}
+              </div> */}
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-slate-200 bg-white/90 p-4">
+          <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+            <div className="grid flex-1 grid-cols-1 gap-4 md:grid-cols-2">
+              <div>
+                <label className="mb-2 block text-sm font-medium text-slate-700">
+                  {t("notification.filterByType")}
+                </label>
                 <Dropdown
                   value={selectedType}
                   options={notificationTypeOptions}
@@ -312,17 +418,16 @@ const NotificationList: React.FC = () => {
                   }}
                   optionLabel="label"
                   optionValue="value"
-                  placeholder="Filter by type"
-                  className="min-w-[220px]"
+                  placeholder={t("notification.filterByType")}
+                  className="w-full"
                   showClear
                 />
               </div>
+
               <div>
-                <div className="pb-2">
-                  <label className="">
-                    {t("notification.filterByPriority")}
-                  </label>
-                </div>
+                <label className="mb-2 block text-sm font-medium text-slate-700">
+                  {t("notification.filterByPriority")}
+                </label>
                 <Dropdown
                   value={selectedPriority}
                   options={priorityOptions}
@@ -332,38 +437,33 @@ const NotificationList: React.FC = () => {
                   }}
                   optionLabel="label"
                   optionValue="value"
-                  placeholder="Filter by priority"
-                  className="min-w-[200px]"
+                  placeholder={t("notification.filterByPriority")}
+                  className="w-full"
                   showClear
                 />
               </div>
             </div>
-          </div>
 
-          <div className="flex gap-2">
-            <div className="px-4 py-2 rounded-xl bg-blue-50 text-blue-700 text-sm font-medium">
-              {t("notification.unreadSummary", { count: unreadCount })}
+            <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap xl:justify-end">
+              <Button
+                icon="pi pi-check-circle"
+                label={t("notification.markAllAsRead")}
+                loading={markingAll}
+                disabled={loading || unreadCount === 0}
+                onClick={handleMarkAllAsRead}
+                className="sm:min-w-[190px]"
+              />
+              <Button
+                icon="pi pi-refresh"
+                label={t("common.refresh")}
+                outlined
+                onClick={() => {
+                  setSelectedType(null);
+                  setSelectedPriority(null);
+                  setFirst(0);
+                }}
+              />
             </div>
-            <Button
-              icon="pi pi-check-circle"
-              label={t("notification.markAllAsRead")}
-              text
-              raised
-              loading={markingAll}
-              disabled={loading || unreadCount === 0}
-              onClick={handleMarkAllAsRead}
-            />
-            <Button
-              icon="pi pi-refresh"
-              label={t("common.refresh")}
-              text
-              raised
-              onClick={() => {
-                setSelectedType(null);
-                setSelectedPriority(null);
-                setFirst(0);
-              }}
-            />
           </div>
         </div>
       </div>

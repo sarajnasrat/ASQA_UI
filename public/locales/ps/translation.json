@@ -9,15 +9,15 @@
     "logout": "وتل"
   },
   "notification": {
-  "filterByType": "نوعیت اعلانات را انتخاب کنید",
-  "filterByPriority": "اولویت را انتخاب کنید",
-  "filters": {
-    "allTypes": "ټول ډولونه",
-    "allPriorities": "ټول لومړيتوبونه"
-  },
-  "newUser": "یو نوی کارونکی شامل شو",
-  "systemUpdate": "د سیسټم تازه معلومات موجود دي",
-  "reportReady": "ستاسو راپور چمتو دی",
+    "filterByType": "نوعیت اعلانات را انتخاب کنید",
+    "filterByPriority": "اولویت را انتخاب کنید",
+    "filters": {
+      "allTypes": "ټول ډولونه",
+      "allPriorities": "ټول لومړيتوبونه"
+    },
+    "newUser": "یو نوی کارونکی شامل شو",
+    "systemUpdate": "د سیسټم تازه معلومات موجود دي",
+    "reportReady": "ستاسو راپور چمتو دی",
     "title": "خبرتیاوې",
     "manageDescription": "خپلې خبرتیاوې وګورئ، اړوند موضوعات پرانیزئ او دغه لېست منظم وساتئ.",
     "markAsRead": "د لوستل شوي په توګه ونیسئ",
@@ -35,72 +35,73 @@
       "createdDate": "د جوړېدو نېټه",
       "trackingNumber": "د تعقیب شمېره"
     },
-  "status": {
-    "read": "لوستل شوی",
-    "unread": "نه لوستل شوی"
-  },
-  "priorities": {
-    "INFO": "عادي",
-    "WARNING": "خبرداری",
-    "URGENT": "بیړنی"
-  },
-  "types": {
-    "REQUEST_SUBMITTED": "د غوښتنې ثبت",
-    "REQUEST_STATUS_CHANGED": "د غوښتنې د حالت بدلون",
-    "CERTIFICATE_ISSUED": "سند صادر شو",
-    "CERTIFICATE_EXPIRING_SOON": "سند ژر ختمېږي",
-    "CERTIFICATE_EXPIRED": "سند ختم شوی",
-    "INSPECTION_DEADLINE_REACHED": "د تفتیش مهلت ورسېد",
-    "INSPECTION_OVERDUE": "تفتیش ځنډېدلی"
-  },
-  "requestStatuses": {
-    "SUBMITTED": "ثبت شوی",
-    "UNDER_REVIEW": "تر ارزونې لاندې",
-    "STANDARDS_PROVIDED": "معیارونه ورکړل شول",
-    "DEADLINE_REQUIRED": "مهلت ته اړتیا ده",
-    "DEADLINE_ASSIGNED": "مهلت وټاکل شو",
-    "INSPECTION_IN_PROGRESS": "تفتیش روان دی",
-    "REPORTED_TO_COMMITTEE": "کمیټې ته راپور شو",
-    "REPORT_APPROVED": "راپور تایید شو",
-    "PAYMENT_PENDING": "د تادیې په انتظار",
-    "PAYMENT_COMPLETED": "تادیه بشپړه شوه",
-    "CERTIFICATE_ISSUED": "سند صادر شو",
-    "REJECTED": "رد شو",
-    "CANCELLED": "لغوه شو"
-  },
-  "templates": {
-    "requestSubmitted": {
-      "title": "د تصدیق نوې غوښتنه ثبت شوه",
-      "message": "د {{trackingNumber}} تعقیبي شمېرې سره د تصدیق نوې غوښتنه ثبت شوې او د ارزونې په انتظار کې ده."
+    "status": {
+      "read": "لوستل شوی",
+      "unread": "نه لوستل شوی"
     },
-    "requestStatusChanged": {
-      "title": "د غوښتنې حالت تازه شو",
-      "message": "د {{trackingNumber}} غوښتنې حالت له {{oldStatus}} څخه {{newStatus}} ته بدل شو. مهلت په {{endDate}} پای ته رسېږي. دلیل: {{rejectionReason}}"
+    "priorities": {
+      "INFO": "عادي",
+      "WARNING": "خبرداری",
+      "URGENT": "بیړنی"
     },
-    "requestRejectedForAdmin": {
-      "title": "د تصدیق غوښتنه رد شوه",
-      "message": "د {{trackingNumber}} غوښتنه رد شوې ده."
+    "types": {
+      "REQUEST_SUBMITTED": "د غوښتنې ثبت",
+      "REQUEST_STATUS_CHANGED": "د غوښتنې د حالت بدلون",
+      "CERTIFICATE_ISSUED": "سند صادر شو",
+      "CERTIFICATE_EXPIRING_SOON": "سند ژر ختمېږي",
+      "CERTIFICATE_EXPIRED": "سند ختم شوی",
+      "INSPECTION_DEADLINE_REACHED": "د تفتیش مهلت ورسېد",
+      "INSPECTION_OVERDUE": "تفتیش ځنډېدلی"
     },
-    "certificateIssued": {
-      "title": "سند صادر شو",
-      "message": "ستاسو {{certificateName}} سند د {{trackingNumber}} غوښتنې لپاره صادر شو."
+    "requestStatuses": {
+      "SUBMITTED": "ثبت شوی",
+      "UNDER_REVIEW": "تر ارزونې لاندې",
+      "STANDARDS_PROVIDED": "معیارونه ورکړل شول",
+      "DEADLINE_REQUIRED": "مهلت ته اړتیا ده",
+      "DEADLINE_ASSIGNED": "مهلت وټاکل شو",
+      "INSPECTION_IN_PROGRESS": "تفتیش روان دی",
+      "REPORTED_TO_COMMITTEE": "کمیټې ته راپور شو",
+      "REPORT_APPROVED": "راپور تایید شو",
+      "PAYMENT_PENDING": "د تادیې په انتظار",
+      "PAYMENT_COMPLETED": "تادیه بشپړه شوه",
+      "CERTIFICATE_ISSUED": "سند صادر شو",
+      "REJECTED": "رد شو",
+      "CANCELLED": "لغوه شو",
+      "COMMITTEE_APPROVED": "تائید هئیت تائید دهی"
     },
-    "certificateExpiringSoon": {
-      "title": "سند ژر ختمېږي",
-      "companyMessage": "{{certificateName}} سند به په {{expiryDate}} نېټه ختم شي.",
-      "adminMessage": "د {{companyName}} شرکت {{certificateName}} سند به په {{expiryDate}} نېټه ختم شي."
-    },
-    "certificateExpired": {
-      "title": "سند ختم شوی",
-      "companyMessage": "{{certificateName}} سند په {{expiryDate}} نېټه ختم شوی دی.",
-      "adminMessage": "د {{companyName}} شرکت {{certificateName}} سند ختم شوی دی."
-    },
-    "inspectionOverdue": {
-      "title": "د تفتیش مهلت بشپړ شو",
-      "message": "د {{trackingNumber}} غوښتنې د تفتیش مهلت بشپړ شوی او غوښتنه باید وکتل شي."
+    "templates": {
+      "requestSubmitted": {
+        "title": "د تصدیق نوې غوښتنه ثبت شوه",
+        "message": "د {{trackingNumber}} تعقیبي شمېرې سره د تصدیق نوې غوښتنه ثبت شوې او د ارزونې په انتظار کې ده."
+      },
+      "requestStatusChanged": {
+        "title": "د غوښتنې حالت تازه شو",
+        "message": "د {{trackingNumber}} غوښتنې حالت له {{oldStatus}} څخه {{newStatus}} ته بدل شو. مهلت په {{endDate}} پای ته رسېږي. دلیل: {{rejectionReason}}"
+      },
+      "requestRejectedForAdmin": {
+        "title": "د تصدیق غوښتنه رد شوه",
+        "message": "د {{trackingNumber}} غوښتنه رد شوې ده."
+      },
+      "certificateIssued": {
+        "title": "سند صادر شو",
+        "message": "ستاسو {{certificateName}} سند د {{trackingNumber}} غوښتنې لپاره صادر شو."
+      },
+      "certificateExpiringSoon": {
+        "title": "سند ژر ختمېږي",
+        "companyMessage": "{{certificateName}} سند به په {{expiryDate}} نېټه ختم شي.",
+        "adminMessage": "د {{companyName}} شرکت {{certificateName}} سند به په {{expiryDate}} نېټه ختم شي."
+      },
+      "certificateExpired": {
+        "title": "سند ختم شوی",
+        "companyMessage": "{{certificateName}} سند په {{expiryDate}} نېټه ختم شوی دی.",
+        "adminMessage": "د {{companyName}} شرکت {{certificateName}} سند ختم شوی دی."
+      },
+      "inspectionOverdue": {
+        "title": "د تفتیش مهلت بشپړ شو",
+        "message": "د {{trackingNumber}} غوښتنې د تفتیش مهلت بشپړ شوی او غوښتنه باید وکتل شي."
+      }
     }
-  }
-},
+  },
   "languages": {
     "english": "انګلیسي",
     "persian": "فارسي (دری)",
@@ -416,7 +417,15 @@
       "companyInfo": "د شرکت معلومات",
       "active": "فعال",
       "inactive": "غیر فعال",
-      "issueDate": "د صدور نېټه"
+      "issueDate": "د صدور نېټه",
+      "links": "رساه ها",
+      "visitWebsite": "بازدید از وبسایت",
+      "documents": "اسناد",
+      "categoriesCount": "دسته‌بندی‌ ها",
+      "documentsCount": "اسناد",
+      "companyAttachments": "اسناد های ارایه شده توسط شرکت",
+      "quickContact": "تماس سریع",
+      "businessLogo": "لوگوی تجاری"
     },
     "placeholder": {
       "companyNameEN": "د شرکت نوم په انګلیسي کې دننه کړئ",
@@ -825,7 +834,19 @@
         "createFailed": "د تصدیق غوښتنه جوړول ناکام شول"
       },
       "cardTitle": "? ????? ??????",
-      "cardSubtitle": "? ??? ????? ??? ?? ???? ?????"
+      "cardSubtitle": "? ??? ????? ??? ?? ???? ?????",
+      "mainType": {
+        "title": "نوع درخواست را انتخاب کنید",
+        "subtitle": "انتخاب کنید که این درخواست داخلی است یا بین المللی",
+        "internal": {
+          "title": "داخلی",
+          "description": "تائید نامه برای اولین بار برای کسب و کار شما"
+        },
+        "external": {
+          "title": "بین المللی",
+          "description": "تائید نامه برای اولین بار برای کسب و کار شما"
+        }
+      }
     },
     "validation": {
       "certificationScope": "??????? ???? ? ????? ???? ?????"
@@ -915,7 +936,9 @@
       "totalDocuments": "ټول اسناد",
       "requestAttachments": "د غوښتنې ضمیمې",
       "noAttachments": "هیڅ ضمیمه نشته",
-      "moreAttachments": "{{count}} نور ضمیمې"
+      "moreAttachments": "{{count}} نور ضمیمې",
+      "startDate": "تاریخ شروع",
+      "endDate": "تاریخ پایان"
     },
     "placeholder": {
       "requestType": "د غوښتنې ډول وټاکئ",
@@ -952,7 +975,8 @@
       "CANCELLED": "لغوه شوې",
       "UNDER_REVIEW": "تر بیاکتنې لاندې",
       "STANDARDS_REQUIRED": "معیارونه اړین دي",
-      "DEADLINE_REQUIRED": "نېټه اړینه ده"
+      "DEADLINE_REQUIRED": "نېټه اړینه ده",
+      "COMMITTEE_APPROVED": "تائید هئیت تائید دهی"
     },
     "certificationTypeOptions": {
       "DOMESTIC_QUALITY_CERTIFICATION": "د کورني کیفیت تصدیق",
@@ -1018,6 +1042,17 @@
       "totalAmountDue": "ټوله ورکړه",
       "contactSupport": "له ملاتړ سره اړیکه ونیسئ",
       "printInvoice": "انوایس چاپ کړئ"
+    },
+    "printable": "چاپ شده",
+    "scanned": "سکن شده",
+    "standardRequired": "حالت را روی «استانداردهای مورد نیاز» تنظیم کنید و سپس استانداردهای مورد نیاز را در اختیار متقاضی قرار دهید. آیا مطمئن هستید که می‌خواهید ادامه دهید؟",
+    "certificationScope": "محدوده تائید نامه",
+    "tabOptions": {
+      "SUBMITTED": "درخواست های دریافت شده"
+    },
+    "scopeOptions": {
+      "NATIONAL": " ملی/ داخلی",
+      "INTERNATIONAL": "بین المللی/ خارجی"
     }
   },
   "attachment": {
@@ -1192,6 +1227,15 @@
       "stepCompleted": "بشپړ شو",
       "submitButton": "د بیاکتنې لپاره وسپارئ"
     },
+
+    "successDialog": {
+      "title": "مبارک شه! 🎉",
+      "message": "ستاسو غوښتنه په بریالیتوب سره وسپارل شوه.",
+      "description": "ستاسو د تصدیق غوښتنې د سپارلو څخه مننه. زموږ ټیم به ستاسو معلومات وڅېړي او ژر به له تاسو سره اړیکه ونیسي.",
+      "referenceNumber": "د مرجع شمېره",
+      "copyTrackingNumber": "د تعقیب شمېره کاپي کړئ",
+      "trackMyRequest": "زما غوښتنه تعقیب کړئ"
+    },
     "toasts": {
       "companySuccess": "شرکت په بریالیتوب سره جوړ شو!",
       "contactSuccess": "اړیکه نیونکی کس په بریالیتوب سره جوړ شو!",
@@ -1199,8 +1243,10 @@
       "submitSuccess": "د تصدیق غوښتنه د بیاکتنې لپاره وسپارل شوه!",
       "submitError": "د تصدیق غوښتنه سپارل ناکام شول!",
       "noRequestError": "د تصدیق غوښتنه ونه موندل شوه!",
-      "certificationSuccess": "? ????? ??????? ?? ????????? ??? ??? ???",
-      "trackingCopied": "? ????? ????? ???? ???"
+      "certificationSuccess": "د تصدیق غوښتنه په بریالیتوب سره جوړه شوه!",
+      "trackingCopied": "د تعقیب شمېره کلپ بورډ ته کاپي شوه!",
+      "trackingCopyFailed": "د تعقیب شمېره کاپي نه شوه. مهرباني وکړئ په لاس یې کاپي کړئ.",
+      "noTrackingNumber": "د کاپي کولو لپاره د تعقیب شمېره نشته."
     },
     "errors": {
       "submitFailed": "د تصدیق غوښتنه سپارل ناکام شول!"
@@ -1312,7 +1358,9 @@
     "types": {
       "technical": "تخنیکي کمېټه",
       "quality": "د کیفیت کمېټه",
-      "administrative": "اداري کمېټه"
+      "administrative": "اداري کمېټه",
+      "approval": "هئیت تائید دهی",
+      "inspection": "هئیت تفتیش"
     },
     "validation": {
       "nameRequired": "د کمېټې نوم اړین دی",
@@ -1391,8 +1439,29 @@
         "pinding": "په انتظار کې",
         "rejected": "رد شوی",
         "in_progress": "په روانو کې",
-        "completed": "بشپړ شوی"
-      }
+        "completed": "بشپړ شوی",
+        "assigned": "راجع شده"
+      },
+      "details": "جزئیات واگذاری کمیته",
+      "viewAssignmentDetails": "بررسی متادیتای واگذاری و اطلاعات درخواست مرتبط",
+      "detailsNotFound": "واگذاری یافت نشد",
+      "detailsNotFoundMessage": "بارگیری این واگذاری کمیته امکان پذیر نیست",
+      "summary": "خلاصه",
+      "summaryShort": "خلاصه",
+      "requestInfoTab": "درخواست",
+      "requestShort": "درخواست",
+      "committeeTab": "کمیته",
+      "committeeShort": "کمیته",
+      "requestInfo": "اطلاعات درخواست",
+      "committeeInfo": "اطلاعات کمیته",
+      "assignedBy": "واگذار شده توسط",
+      "requestStatusDetails": "وضعیت درخواست",
+      "deadlineStart": "تاریخ شروع",
+      "deadlineEnd": "تاریخ پایان",
+      "startedAt": "تاریخ شروع",
+      "requestStatus": "وضعیت درخواست",
+      "yes": "بله",
+      "no": "خیر"
     },
     "member": {
       "list": "د کمیټې غړي",
@@ -1427,7 +1496,8 @@
       "committee": "کمېټه",
       "joinedAt": "د غړيتوب نېټه",
       "deleteConfirm": "آيا تاسې ډاډه ياست چې دا غړی لرې کول غواړئ؟",
-      "viewTitle": "د کمېټې غړي کتنه"
+      "viewTitle": "د کمېټې غړي کتنه",
+      "updateDescription": "برای اصلاح این عضو هئیت معلومات زیر را تکمیل کنید"
     }
   },
   "common": {
@@ -1488,8 +1558,8 @@
     "pleaseWait": "مهرباني وکړئ انتظار وکړئ",
     "asqa": "ASQA",
     "asqaDescription": "د افغانستان د ستندرد او کیفیت اداره",
-     "systme": "سیستم مدیریتی ",
-    "name":"تائید نامه های کیفی",
+    "systme": "سیستم مدیریتی ",
+    "name": "تائید نامه های کیفی",
     "contactPersonLoadFailed": "? ???? ??? ???????? ????? ????? ???",
     "countryLoadFailed": "? ???????? ????? ????? ???",
     "districtLoadFailed": "? ???????? ????? ????? ???",
@@ -1500,7 +1570,15 @@
       "fileSize": "? ???? ?????? ?? ????? ????? ??",
       "fillRequiredFields": "??????? ???? ??? ???? ?????? ?? ???",
       "imageOnly": "????? ??????? ???? ????? ???"
-    }
+    },
+    "current": "فعلی",
+    "editcompany": "اصلاح معلومات شرکت",
+    "confirmation": "تائید",
+    "choosefile": "انتخاب فایل",
+    "clearfileselected": "پاک کردن فایل انتخاب شده",
+    "...More": "...بیشتر",
+    "maxfilesize": "حداکثر حجم فایل: {{size}}",
+    "required": "این فیلد ضروری است"
   },
   "home": {
     "badge": "د افغانستان د کیفیت معیارونو اداره",
@@ -1711,7 +1789,9 @@
       "noRole": "بې رول",
       "notAssigned": "نه دی ټاکل شوی",
       "notProvided": "نه دی چمتو شوی",
-      "profileImage": "د پروفایل انځور"
+      "profileImage": "د پروفایل انځور",
+      "loadingUserDetails": "در حال بارگذاری جزئیات کاربر...",
+      "profileImageAlt": "تصویر پروفایل کاربر"
     },
     "fields": {
       "firstName": "نوم",
@@ -1721,12 +1801,24 @@
       "role": "رول",
       "zone": "زون",
       "currentProfileImage": "اوسنی د پروفایل انځور",
-      "updateProfileImage": "د پروفایل انځور تازه کړئ"
+      "updateProfileImage": "د پروفایل انځور تازه کړئ",
+      "username": "نام کاربری",
+      "createdDate": "تاریخ ایجاد",
+      "updatedDate": "تاریخ به‌روزرسانی",
+      "status": "وضعیت",
+      "password": "رمز عبور",
+      "confirmPassword": "تأیید رمز عبور"
     },
     "placeholders": {
       "phoneNumber": "۰۷۰۱۲۳۴۵۶۷",
       "selectRole": "یو رول وټاکئ",
-      "selectZone": "یو زون وټاکئ"
+      "selectZone": "یو زون وټاکئ",
+      "email": "example@email.com",
+      "firstName": "نام را وارد کنید",
+      "lastName": "نام خانوادگی را وارد کنید",
+      "password": "رمز عبور را وارد کنید",
+      "confirmPassword": "رمز عبور را تأیید کنید",
+      "imageHint": "تصویر پروفایل را آپلود کنید (حداکثر ۱MB، JPG، PNG)"
     },
     "buttons": {
       "create": "کارونکی جوړ کړئ",
@@ -1734,7 +1826,9 @@
       "delete": "ړنګول",
       "cancel": "لغوه کول",
       "update": "تازه کول",
-      "save": "خوندي کول"
+      "save": "خوندي کول",
+      "tryAgain": "تلاش مجدد",
+      "back": "بازگشت"
     },
     "actions": {
       "edit": "کارونکی سمول",
@@ -1750,7 +1844,10 @@
       "createSuccess": "کارونکی په بریالیتوب سره جوړ شو",
       "createFailed": "د کارونکي جوړول ناکام شول",
       "notFound": "کارونکی ونه موندل شو",
-      "zoneLoadFailed": "د زونونو بارول ناکام شول"
+      "zoneLoadFailed": "د زونونو بارول ناکام شول",
+      "userNotFound": "کاربر یافت نشد",
+      "loadingError": "خطا در بارگذاری اطلاعات کاربر",
+      "roleLoadFailed": "بارگیری نقش‌ها ناموفق بود"
     },
     "dialogs": {
       "deleteTitle": "کارونکی ړنګ کړئ",
@@ -1773,12 +1870,15 @@
     },
     "status": {
       "active": "فعال",
-      "inactive": "غیر فعال"
+      "inactive": "غیر فعال",
+      "enabled": "فعال",
+      "disabled": "غیرفعال"
     },
     "breadcrumb": {
       "editUser": "کارونکی سمول",
       "createUser": "کارونکی جوړول",
-      "viewUser": "کارونکی کتل"
+      "viewUser": "کارونکی کتل",
+      "users": "کاربران"
     },
     "validation": {
       "firstNameRequired": "نوم اړین دی",
@@ -1788,7 +1888,11 @@
       "phoneRequired": "د تلیفون شمېره اړینه ده",
       "phoneInvalid": "د تلیفون شمېره باید له 07 سره پیل شي او 10 عددونه ولري",
       "roleRequired": "رول اړین دی",
-      "zoneRequired": "زون اړین دی"
+      "zoneRequired": "زون اړین دی",
+      "passwordsMatch": "رمزهای عبور مطابقت دارند",
+      "roleLoadFailed": "بارگیری نقش‌ها ناموفق بود",
+      "passwordsNotMatch": "رمزهای عبور مطابقت ندارند",
+      "passwordsDoNotMatch": "رمزهای عبور مطابقت ندارند"
     },
     "roles": {
       "ADMIN": "مدیر",
@@ -1800,6 +1904,53 @@
       "SUPER_ADMIN": "لوی مدیر",
       "COMMITTEE_MEMBER": "د کمیټې غړی",
       "INSPECTOR": "تفتیش کوونکی"
+    },
+    "passwordStrength": {
+      "weak": "ضعیف",
+      "fair": "متوسط",
+      "good": "خوب",
+      "strong": "قوی"
+    },
+    "columns": {
+      "id": "شناسه",
+      "name": "نام",
+      "email": "ایمیل",
+      "phoneNumber": "شماره تماس",
+      "roles": "نقش‌ها",
+      "zone": "زون",
+      "createdDate": "تاریخ ایجاد",
+      "actions": "عملیات"
+    },
+    "table": {
+      "noData": "هیچ داده‌ای یافت نشد",
+      "loading": "در حال بارگذاری...",
+      "totalRecords": "مجموع رکوردها"
+    },
+    "form": {
+      "title": {
+        "edit": "ویرایش کاربر",
+        "create": "ایجاد کاربر جدید",
+        "view": "مشاهده کاربر"
+      },
+      "subtitle": {
+        "edit": "اطلاعات کاربر را ویرایش کنید",
+        "create": "اطلاعات کاربر جدید را وارد کنید",
+        "view": "مشاهده اطلاعات کاربر"
+      }
+    },
+    "errors": {
+      "fetchFailed": "دریافت اطلاعات کاربر ناموفق بود",
+      "updateFailed": "به‌روزرسانی کاربر ناموفق بود",
+      "createFailed": "ایجاد کاربر ناموفق بود",
+      "deleteFailed": "حذف کاربر ناموفق بود",
+      "invalidData": "داده‌های نامعتبر",
+      "networkError": "خطای شبکه"
+    },
+    "success": {
+      "fetched": "اطلاعات کاربر با موفقیت دریافت شد",
+      "updated": "کاربر با موفقیت به‌روزرسانی شد",
+      "created": "کاربر با موفقیت ایجاد شد",
+      "deleted": "کاربر با موفقیت حذف شد"
     }
   },
   "permissions": {
@@ -1942,7 +2093,43 @@
     "VIEW_DASHBOARD": "ډشبورډ کتل",
     "VIEW_REPORT": "راپور کتل",
     "VIEW_LOCATION": "موقعیت کتل",
-    "VIEW_STANDARD": "سټنډرډ کتل"
+    "VIEW_STANDARD": "سټنډرډ کتل",
+    "ADD_AUDITLOG": "? ??? ????????? ????? ????? ???",
+    "UPDATE_AUDITLOG": "? ??? ????????? ????? ????",
+    "DELETE_AUDITLOG": "? ??? ????????? ????? ??? ???",
+    "VIEW_AUDITLOG": "? ??? ????????? ????? ???",
+    "ADD_AUDITLOGDETAIL": "? ??? ????????? ????? ????? ????? ???",
+    "UPDATE_AUDITLOGDETAIL": "? ??? ????????? ????? ????? ????",
+    "DELETE_AUDITLOGDETAIL": "? ??? ????????? ????? ????? ??? ???",
+    "VIEW_AUDITLOGDETAIL": "? ??? ????????? ????? ????? ???",
+    "ADD_CONTACTUS": "?? ??? ??? ????? ????? ???",
+    "UPDATE_CONTACTUS": "?? ??? ??? ????? ????",
+    "DELETE_CONTACTUS": "?? ??? ??? ????? ??? ???",
+    "VIEW_CONTACTUS": "?? ??? ??? ????? ???",
+    "ADD_NOTIFICATION": "?????? ????? ???",
+    "UPDATE_NOTIFICATION": "?????? ????",
+    "DELETE_NOTIFICATION": "?????? ??? ???",
+    "VIEW_NOTIFICATION": "?????? ???",
+    "ADD_ABOUTUS": "???? ?? ??? ????? ???",
+    "UPDATE_ABOUTUS": "???? ?? ??? ????",
+    "DELETE_ABOUTUS": "???? ?? ??? ??? ???",
+    "VIEW_ABOUTUS": "???? ?? ??? ???",
+    "ADD_ORGANIZATION": "?????? ????? ???",
+    "UPDATE_ORGANIZATION": "?????? ????",
+    "DELETE_ORGANIZATION": "?????? ??? ???",
+    "VIEW_ORGANIZATION": "?????? ???",
+    "ADD_ORGANIZATIONINFO": "? ?????? ??????? ????? ???",
+    "UPDATE_ORGANIZATIONINFO": "? ?????? ??????? ????",
+    "DELETE_ORGANIZATIONINFO": "? ?????? ??????? ??? ???",
+    "VIEW_ORGANIZATIONINFO": "? ?????? ??????? ???",
+    "ADD_INTERNATIONALPARTY": "??? ?????? ????? ????? ???",
+    "UPDATE_INTERNATIONALPARTY": "??? ?????? ????? ????",
+    "DELETE_INTERNATIONALPARTY": "??? ?????? ????? ??? ???",
+    "VIEW_INTERNATIONALPARTY": "??? ?????? ????? ???",
+    "VIEW_PARTNERORGANIZATION": "???? ?????? ???",
+    "VIEW_REQUEST": "?????? ???",
+    "VIEW_ORGANIZATIONACTIVITY": "? ?????? ?????? ???",
+    "VIEW_REPORTS": "???????? ???"
   },
   "permission": {
     "title": "د صلاحیتونو مدیریت",
@@ -2160,7 +2347,8 @@
       "address": "بشپړ آدرس دننه کړئ",
       "satelliteHorizontal": "افقي کوآرډینټ دننه کړئ",
       "satelliteVertical": "عمودي کوآرډینټ دننه کړئ",
-      "emailAddress": "info@sazman.com"
+      "emailAddress": "info@sazman.com",
+      "organizationDetail": "جزئیات سازمان را وارد کنید"
     },
     "columns": {
       "id": "آی ډي",
@@ -2178,7 +2366,8 @@
       "satelliteVerticalRequired": "عمودي سپوږمکۍ اړینه ده",
       "emailAddressRequired": "بریښنالیک آدرس اړین دی",
       "invalidEmail": "مهرباني وکړئ یو معتبر بریښنالیک آدرس دننه کړئ"
-    }
+    },
+    "organizationDetail": "جزئیات سازمان"
   },
   "role": {
     "ROLE_ADMIN": "د سیسټم عمومي مدیر",
@@ -2422,6 +2611,55 @@
       "serviceRequired": "د خدمت تشریح اړینه ده"
     }
   },
+  "auditLog": {
+    "title": "د پلټنې لاګ",
+    "manageDescription": "د سيستم فعاليتونه او د فيلډونو بدلونونه وګورئ.",
+    "columns": {
+      "user": "کاروونکی",
+      "userEmail": "د کاروونکي برېښنالیک",
+      "role": "رول",
+      "entity": "موجوديت",
+      "field": "فيلډ",
+      "totalDetails": "ټول بدلونونه",
+      "action": "عمل",
+      "method": "مېتود",
+      "status": "حالت",
+      "entityId": "د موجوديت پېژند",
+      "changes": "بدلونونه",
+      "oldValue": "پخوانی",
+      "newValue": "نوی",
+      "ipAddress": "IP پته"
+    },
+    "detailsTitle": "د پلټنې لاګ جزئيات",
+    "detailsDescription": "د لاګ لنډيز او د هغه اړوند د فيلډ بدلونونه وګورئ.",
+    "detailListTitle": "د فيلډ بدلون جزئيات",
+    "noDetailChanges": "د دې لاګ لپاره د فيلډ په کچه هېڅ بدلون نه دی ثبت شوی.",
+    "showMore": "نور ښکاره کړئ",
+    "showLess": "کم ښکاره کړئ",
+    "changeSummary": "{{count}} بدلون",
+    "notFound": "د پلټنې لاګ ونه موندل شو",
+    "filters": {
+      "search": "لټون",
+      "action": "عمل",
+      "status": "حالت",
+      "allActions": "ټول عملونه",
+      "allStatuses": "ټول حالتونه"
+    },
+    "placeholders": {
+      "search": "کاروونکی، موجوديت، عمل يا فيلډ ولټوئ...",
+      "action": "د عمل له مخې فلټر",
+      "status": "د حالت له مخې فلټر"
+    },
+    "actions": {
+      "CREATE": "جوړول",
+      "UPDATE": "تازه کول",
+      "DELETE": "حذف"
+    },
+    "status": {
+      "SUCCESS": "بریالی",
+      "FAILED": "ناکام"
+    }
+  },
   "website": {
     "internationalParties": {
       "badge": "نړیواله شبکه",
@@ -2441,9 +2679,262 @@
       "emptyDescription": "اوس مهال د سازمان د خدمتونو معلومات شتون نه لري.",
       "activeService": "فعال خدمت",
       "footerNote": "دا خدمتونه د سازمان د اوسنيو خپرو شويو معلوماتو له مخې ښودل کېږي."
+    },
+    "navbar": {
+      "homeAria": " بازگشت به صفحه اصلی",
+      "toggleMenu": "تغییر وضعیت منو",
+      "internationalParties": "نهادهای بین المللی",
+      "organizationServices": "فعالیت ریاست تائید نامه های کیفی"
+    },
+    "about": {
+      "title": "درباره ما"
+    },
+    "footer": {
+      "description": "شما می توانید با کلیک بر روی لینک‌های سریع زیر به سایت ASQA متصل شوید.",
+      "quickLinks": "لینک‌های سریع",
+      "ourServices": "خدمات ما",
+      "contactUs": "تماس با ما",
+      "phone": "+93 (555) 123-4567",
+      "email": "info@asqa.com",
+      "copyright": "© {{year}} سیستم مدیریت ASQA. تمامی حقوق محفوظ است.",
+      "links": {
+        "register": "ثبت نام"
+      },
+      "address": {
+        "line1": "خیابان گواهینامه 123، واحد 100",
+        "line2": "کابل، 1001"
+      },
+      "services": {
+        "companyCertification": "گواهینامه شرکت",
+        "qualityAssurance": "تضمین کیفیت",
+        "complianceReview": "بررسی انطباق",
+        "documentVerification": "تایید اسناد",
+        "certificateGeneration": "ایجاد گواهینامه"
+      }
+    },
+    "services": {
+      "header": {
+        "title": "خدمات ما",
+        "description": "خدمات جامع گواهینامه برای شرکت‌ها در سراسر جهان"
+      },
+      "process": {
+        "title": "فرآیند گواهینامه",
+        "description": "مسیری مستقیم برای اخذ گواهینامه ASQA"
+      },
+      "steps": {
+        "1": {
+          "title": "مشاوره اولیه",
+          "description": "در مورد نیازها و الزامات گواهینامه خود با کارشناسان ما صحبت کنید"
+        },
+        "2": {
+          "title": "ثبت نام شرکت",
+          "description": "جزئیات شرکت خود را در سیستم ما ثبت کنید"
+        },
+        "3": {
+          "title": "ارسال مدارک",
+          "description": "تمام مدارک مورد نیاز را برای بررسی بارگذاری کنید"
+        },
+        "4": {
+          "title": "بررسی انطباق",
+          "description": "تیم ما ارسال شما را در برابر استانداردهای ASQA بررسی می‌کند"
+        },
+        "5": {
+          "title": "ارزیابی سایت",
+          "description": "ارزیابی اختیاری در محل یا مجازی از تاسیسات شما"
+        },
+        "6": {
+          "title": "صدور گواهینامه",
+          "description": "پس از تایید، گواهینامه رسمی ASQA خود را دریافت کنید"
+        }
+      },
+      "benefits": {
+        "title": "مزایای گواهینامه ASQA",
+        "description": "چرا شرکت‌ها ASQA را برای نیازهای گواهینامه خود انتخاب می‌کنند",
+        "items": {
+          "1": {
+            "title": "شناسایی بین‌المللی",
+            "description": "گواهینامه ASQA در سطح جهانی شناخته شده است"
+          },
+          "2": {
+            "title": "اعتبار بیشتر",
+            "description": "با مشتریان و ذینفعان اعتماد ایجاد کنید"
+          },
+          "3": {
+            "title": "دسترسی به بازار",
+            "description": "به بازارها و فرصت‌های جدید دسترسی پیدا کنید"
+          },
+          "4": {
+            "title": "فرآیند کارآمد",
+            "description": "فرآیند دیجیتال ساده گواهینامه"
+          }
+        }
+      },
+      "cta": {
+        "title": "آماده دریافت گواهینامه هستید؟",
+        "description": "سفر گواهینامه خود را امروز با فرآیند ساده ثبت نام آنلاین ما شروع کنید",
+        "button": "ثبت نام شرکت خود"
+      }
+    },
+    "contact": {
+      "header": {
+        "title": "تماس با ما",
+        "description": "برای هرگونه سوال یا پشتیبانی با تیم ما در تماس باشید"
+      },
+      "cards": {
+        "phone": {
+          "title": "تلفن",
+          "action": "با ما تماس بگیرید"
+        },
+        "email": {
+          "title": "ایمیل",
+          "action": "به ما ایمیل بزنید"
+        },
+        "office": {
+          "title": "دفتر",
+          "action": "از ما دیدن کنید"
+        },
+        "hours": {
+          "title": "ساعات کاری",
+          "action": "روزهای کاری",
+          "line1": "شنبه - چهارشنبه: 8 صبح تا 1 بعد از ظهر",
+          "line2": "پنجشنبه: 8 صبح تا 1 بعد از ظهر"
+        }
+      },
+      "form": {
+        "title": "برای ما پیام بفرستید",
+        "successMessage": "از پیام شما سپاسگزاریم! به زودی با شما تماس خواهیم گرفت.",
+        "successToast": "بازخورد شما ارسال شد.",
+        "sending": "در حال ارسال...",
+        "submit": "ارسال پیام",
+        "labels": {
+          "name": "نام شما *",
+          "email": "آدرس ایمیل *",
+          "subject": "موضوع *",
+          "message": "پیام *"
+        },
+        "validation": {
+          "nameRequired": "نام الزامی است",
+          "emailRequired": "ایمیل الزامی است",
+          "emailInvalid": "ایمیل نامعتبر است",
+          "subjectRequired": "موضوع الزامی است",
+          "messageRequired": "پیام الزامی است"
+        }
+      },
+      "map": {
+        "popupTitle": "دفتر ASQA",
+        "addressLine1": "خیابان گواهینامه 123",
+        "addressLine2": "واحد 100، کابل، 10001",
+        "country": "افغانستان",
+        "title": "از دفتر ما دیدن کنید",
+        "description": "تیم ما برای مشاوره حضوری در ساعات کاری در دسترس است. لطفا از قبل وقت ملاقات تعیین کنید.",
+        "directions": "دریافت مسیر →"
+      },
+      "faq": {
+        "title": "سوالات متداول",
+        "items": {
+          "1": {
+            "question": "فرآیند گواهینامه چقدر طول می‌کشد؟",
+            "answer": "فرآیند گواهینامه معمولاً 2 تا 3 هفته از ثبت نام اولیه تا تایید نهایی طول می‌کشد."
+          },
+          "2": {
+            "question": "برای ثبت نام چه مدارکی لازم است؟",
+            "answer": "مدارک مورد نیاز شامل مجوز کسب و کار، ثبت مالیاتی و اسناد ثبت شرکت می‌باشد."
+          },
+          "3": {
+            "question": "آیا گواهینامه ASQA در سطح بین‌المللی شناخته شده است؟",
+            "answer": "بله، گواهینامه ASQA در بیش از 50 کشور جهان شناخته شده است."
+          },
+          "4": {
+            "question": "چگونه می‌توانم وضعیت درخواست خود را بررسی کنم؟",
+            "answer": "شما می‌توانید وضعیت درخواست خود را از طریق داشبورد شرکت خود پیگیری کنید یا با تیم پشتیبانی ما تماس بگیرید."
+          }
+        }
+      }
+    },
+    "homeLinks": {
+      "title": "منابع کلیدی ما",
+      "description": "با شرکای بین المللی و ارائه دهندگان خدمات که به رشد و تعالی کسب و کار شما کمک می‌کنند، ارتباط برقرار کنید.",
+      "internationalParties": {
+        "title": "نهادهای بین المللی",
+        "description": "با سازمان‌های جهانی که استانداردهای ASQA را دنبال می‌کنند، همکاری کنید.",
+        "button": "مشاهده نهادهای بین المللی"
+      },
+      "organizationServices": {
+        "title": "فعالیت ریاست تائید نامه های کیفی",
+        "description": "به خدمات و راه حل‌های تخصصی ارائه شده توسط شرکای مورد اعتماد ما دسترسی پیدا کنید.",
+        "button": "مشاهده فعالیت ریاست تائید نامه های کیفی"
+      }
+    },
+    "companies": {
+      "badge": "شرکت‌های دارای گواهینامه ASQA",
+      "title": "شرکت‌های دارای گواهینامه ما",
+      "titleAccent": "",
+      "description": "کسب و کارهای مورد اعتمادی که گواهینامه ASQA خود را با موفقیت به پایان رسانده‌اند و به جامعه تعالی ما پیوسته‌اند، کشف کنید.",
+      "searchPlaceholder": "جستجوی شرکت‌ها بر اساس نام، مکان یا صنعت...",
+      "loading": "در حال بارگذاری شرکت‌های شگفت‌انگیز...",
+      "showing": "نمایش {{shown}} از {{total}} شرکت",
+      "clearSearch": "پاک کردن جستجو",
+      "companyFallback": "شرکت",
+      "addressNotSpecified": "آدرس مشخص نشده است",
+      "emptyTitle": "هیچ شرکتی یافت نشد",
+      "emptyDescription": "سعی کنید معیارهای جستجوی خود را تنظیم کنید"
     }
   },
   "organization": {
     "failedtofetch": "? ?????? ? ??????? ????? ????? ???"
+  },
+  "certificationVerification": {
+    "title": "تائید اصالت تائید نامه کیفی",
+    "subtitle": "با وارد نمودن شماره تائید نامه کیفی صادر شده می توانید اصالت تائید نامه خویش را در ادراه معیار و کیفیت بررسی نمائید.",
+    "verificationBadge": "تائید اصالت",
+    "certificateNumber": "شماره تائید نامه کیفی",
+    "certificateNumberPlaceholder": "شماره تائید نامه کیفی را وارد کنید",
+    "searchButton": "جستجو",
+    "searchingButton": "در حال جستجو...",
+    "verified": "تأیید شد",
+    "expired": "منقضی شد",
+    "certificateValid": "تائید نامه معتبر معتبر است",
+    "certificateExpired": "تائید نامه پیدا شد، اما منقضی شده است",
+    "certificateDetails": "جزئیات تائید نامه",
+    "certificationType": "نوع تائید نامه",
+    "companyName": "نام شرکت",
+    "issueDate": "تاریخ صدور",
+    "expiryDate": "تاریخ انقضا",
+    "validityInformation": "اطلاعات اعتبار",
+    "certificateActive": "این تائید نامه در حال حاضر فعال و معتبر است.",
+    "certificateExpiredMessage": "این تائید نامه وجود دارد، اما تاریخ انقضای آن گذشته است.",
+    "notSpecified": "تعیین نشده",
+    "error": "تأیید ناموفق بود",
+    "errorMessages": {
+      "serialNumberRequired": "لطفاً شماره تائید نامه را وارد کنید.",
+      "noData": "تائید نامه پیدا نشد."
+    },
+    "certificationTypeOptions": {
+      "DOMESTIC_QUALITY_CERTIFICATION": "احذ  علامت معیار",
+      "INTERNATIONAL_QUALITY_CERTIFICATION": "تائید نامه کیفی سیستم مدیریتی یا خدمات، محصول",
+      "STANDARD_MARK_CERTIFICATION": "احذ علامت معیار"
+    }
+  },
+  "certificationTracking": {
+    "badge": "د غوښتنې پیگیری",
+    "title": "د تصدیق غوښتنو پیگیری",
+    "description": "د تصدیق غوښتنې د تعقیب شمېرې یا د شرکت د نوم له لارې ولټوئ او د غوښتنې پوره جزئیات وګورئ.",
+    "helper": "تاسو کولای شئ د تعقیب شمېرې، د شرکت نوم یا دواړو په واسطه لټون وکړئ.",
+    "tableTitle": "د لټونې پایلې",
+    "tableHint": "د مطابقو غوښتنو د لیدلو لپاره لټونه وکړئ.",
+    "searchSummary": "د تعقیب شمېره: {{trackingNumber}} | شرکت: {{companyName}}",
+    "notProvided": "نه دی ورکړل شوی",
+    "emptyInitialTitle": "لټونه پیل کړئ",
+    "emptyInitialDescription": "د تعقیب شمېره یا د شرکت نوم وارد کړئ تر څو مطابقې غوښتنې وموندل شي.",
+    "placeholders": {
+      "tracking": "د تعقیب شمېره وارد کړئ",
+      "company": "د شرکت نوم وارد کړئ"
+    },
+    "messages": {
+      "loadFailed": "د غوښتنې د پیگیری معلوماتو په بارولو کې ستونزه رامنځته شوه."
+    }
   }
 }
+
+
+

@@ -143,7 +143,7 @@ export const CategoryList: React.FC = () => {
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-        {hasPermission("CREATE_CATEGORY") && (
+        {hasPermission("ADD_CATEGORY") && (
           <Button
             icon="pi pi-plus"
             label={t("category.create")}
@@ -197,15 +197,6 @@ export const CategoryList: React.FC = () => {
       style: { minWidth: "200px" },
       body: (row: any) => (
         <span className="font-medium text-gray-800">{row.name || "—"}</span>
-      ),
-    },
-    {
-      field: "categoryType",
-      header: t("category.type"),
-      sortable: true,
-      style: { minWidth: "150px" },
-      body: (row: any) => (
-        <span className="text-gray-700">{row.categoryType || "—"}</span>
       ),
     },
     {

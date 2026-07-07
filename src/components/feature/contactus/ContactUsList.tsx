@@ -150,16 +150,18 @@ export const ContactUsList: React.FC = () => {
         </p>
       </div>
       <div className="flex gap-2">
-    {hasPermission("CREATE_CONTACTUS") && (    <Button
-          icon="pi pi-plus"
-          label={t("contactUs.create")}
-          text
-          raised
-          onClick={() => {
-            setSelectedId(null);
-            setShowForm(true);
-          }}
-        />)}
+        {hasPermission("ADD_CONTACTUS") && (
+          <Button
+            icon="pi pi-plus"
+            label={t("contactUs.create")}
+            text
+            raised
+            onClick={() => {
+              setSelectedId(null);
+              setShowForm(true);
+            }}
+          />
+        )}
         <Button
           icon="pi pi-refresh"
           label={t("common.refresh")}

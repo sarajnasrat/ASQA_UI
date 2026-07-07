@@ -91,19 +91,22 @@ export const CompanyService = {
    * @param id Company ID
    * @param data Company object
    * @param companyLogo Optional new company logo file
-   * @param companyCover Optional company cover file
+   * @param bussinessLogo Optional business logo file
    */
   updateCompany(
-    
     id: number,
     data: any,
     companyLogo?: File | any,
-    companyCover?: File | any,
+    bussinessLogo?: File | any,
   ) {
-    const formData = new FormData();
-    formData.append("company", JSON.stringify(data));
-    if (companyLogo) formData.append("companyLogo", companyLogo);
-    if (companyCover) formData.append("companyCover", companyCover);
+    const formData =
+      data instanceof FormData ? data : new FormData();
+
+    if (!(data instanceof FormData)) {
+      formData.append("company", JSON.stringify(data));
+      if (companyLogo) formData.append("companyLogo", companyLogo);
+      if (bussinessLogo) formData.append("bussinessLogo", bussinessLogo);
+    }
 
     return httpClient.put(`${COMPANY_BASE}/${id}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
 import { useTranslation } from "react-i18next";
@@ -8,6 +8,7 @@ import { Badge } from "primereact/badge";
 import { OverlayPanel } from "primereact/overlaypanel";
 import NotificationService from "../../../services/notification.service";
 import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
+import UserProfileMenuLinks from "../../feature/user/profile/UserProfileMenuLinks";
 import {
   translateNotificationMessage,
   translateNotificationTitle,
@@ -406,33 +407,9 @@ export const Navbar = ({ collapsed = false }: NavbarProps) => {
                     </div>
                   </div>
 
-                  <div className="p-2">
-                    <Link
-                      to="/profile"
-                      className="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-gray-50 transition-colors group"
-                      onClick={() => setShowUserMenu(false)}
-                    >
-                      <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center group-hover:bg-blue-100 transition-colors">
-                        <i className="pi pi-user text-blue-600 text-sm" />
-                      </div>
-                      <span className="text-sm text-gray-700">
-                        {t("navbar.myProfile")}
-                      </span>
-                    </Link>
-
-                    <Link
-                      to="/settings"
-                      className="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-gray-50 transition-colors group"
-                      onClick={() => setShowUserMenu(false)}
-                    >
-                      <div className="w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center group-hover:bg-purple-100 transition-colors">
-                        <i className="pi pi-cog text-purple-600 text-sm" />
-                      </div>
-                      <span className="text-sm text-gray-700">
-                        {t("navbar.accountSettings")}
-                      </span>
-                    </Link>
-                  </div>
+                  <UserProfileMenuLinks
+                    onLinkClick={() => setShowUserMenu(false)}
+                  />
 
                   <div className="p-3 border-t border-gray-100">
                     <Button

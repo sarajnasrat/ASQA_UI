@@ -1,8 +1,10 @@
 {
   "navbar": {
+    
     "welcome": "سیستم مدیریتی تائید نامه های کیفی اداره معیار و کیفیت افغانستان",
     "notifications": "اطلاعیه‌ها",
     "unread": "خوانده نشده",
+
     "viewAllNotifications": "مشاهده همه اطلاعیه‌ها",
     "myProfile": "پروفایل من",
     "accountSettings": "تنظیمات حساب",
@@ -598,8 +600,8 @@
     "notFound": "شرکت یافت نشد"
   },
   "nav": {
+    "certificationVerification": " اصالت تائید نامه های کیفی",
     "home": "خانه",
-
     "services": "خدمات",
     "companies": "شرکت ها",
     "contact": "تماس",
@@ -611,10 +613,10 @@
     "logout": "خروج",
     "certicificationrequest": "درخواست تائید نامه",
     "internationalParties": "نهادهای بین المللی",
-
     "organizationServices": "فعالیت ریاست تائید نامه های کیفی"
   },
   "certification": {
+    "all": "همه تائید نامه ها",
     "latest": "آخرین",
     "updatedBy": "به روز شده توسط",
     "stepProgress": "مرحله {{step}} از {{total}}",
@@ -638,9 +640,9 @@
     "noDetailsFound": "جزیات تایید نامه کیفی پیدا نشد",
     "steps": {
       "DRAFT": "جزئیات سند را قبل از چاپ کامل کنید",
-      "PRINTED": "چاپ سند",
-      "SCANNED": "اپلود سند امضا شده",
-      "UNDER_SUPERVISION": "تصویب نهایی"
+      "PRINTED": "چاپ تائید نامه کیفی",
+      "SCANNED": "اپلود تائید نامه امضا شده مقام ",
+      "UNDER_SUPERVISION": "تصویب نهایی تائید نامه کیفی"
     },
     "statusOptions": {
       "DRAFT": "اولیه",
@@ -924,7 +926,6 @@
     "totalDocuments": "مجموع اسناد",
     "requestAttachments": "اسناد های ضمیمه شده به درخواست شرکت",
     "certificationScope": "محدوده تائید نامه",
-
     "tabOptions": {
       "SUBMITTED": "درخواست های دریافت شده"
     },
@@ -969,8 +970,7 @@
       "EXTENSION": "تمدید مهلت"
     },
     "statusOptions": {
-            "COMMITTEE_APPROVED": "تائید هئیت تائید دهی",
-
+      "COMMITTEE_APPROVED": "تائید هئیت تائید دهی",
       "DRAFT": "پیش‌ نویس",
       "SUBMITTED": "ارسال شده",
       "REGISTERED": "اهدای سند ثبت دیتابیس",
@@ -978,15 +978,15 @@
       "DEADLINE_ASSIGNED": "تعیین مهلت به مشتری ",
       "INSPECTION_IN_PROGRESS": "راجع نمودن به کمیته تفتیش",
       "REPORTED_TO_COMMITTEE": "گزارش به کمیته",
-      "REPORT_APPROVED": "گزارش تأیید شد",
+      "REPORT_APPROVED": "گذارش تائید شده هیئت تائید دهی",
       "PAYMENT_PENDING": "در انتظار پرداخت",
       "PAYMENT_COMPLETED": "تکمیل حق الاجرت",
-      "CERTIFICATE_ISSUED": "ایجاد تائید نامه کیفی ",
+      "CERTIFICATE_ISSUED": "درخواست به حکم مقام",
       "UNDER_SUPERVISION": "تحت نظارت",
       "REJECTED": "رد شده",
       "CANCELLED": "لغو شده",
       "UNDER_REVIEW": "در حال بررسی",
-      "STANDARDS_REQUIRED": "استانداردها مورد نیاز",
+      "STANDARDS_REQUIRED": "اضافه نمودن استاندرد",
       "DEADLINE_REQUIRED": "مهلت مورد نیاز"
     },
     "scopeOptions": {
@@ -1135,7 +1135,7 @@
     "no_companies_found": "شرکتی یافت نشد. لطفاً ابتدا یک شرکت اضافه کنید.",
     "required_documents_title": "اسناد مورد نیاز",
     "combine_documents_message": "همه اسناد را در یک فایل PDF ترکیب کنید",
-    "combine_documents_description": "لطفاً همه اسناد مورد نیاز را در یک فایل PDF ادغام کنید.",
+    "combine_documents_description": "لطفا اسناد های ذیل را ضمیمه کنید: 1: تذکره مالک 2:جواز شرکت 3: سند مالیاتی 4: نشان تجارتی",
     "drag_drop_message": "فایل PDF ترکیبی خود را اینجا بکشید و رها کنید، یا برای مرور کلیک کنید",
     "supported_formats_simple": "فرمت پشتیبانی شده: فقط PDF حداکثر 10MB",
     "browse_files": "مرور فایل‌ها",
@@ -1231,6 +1231,15 @@
       "stepCompleted": "تکمیل شد",
       "submitButton": "ارسال برای بررسی"
     },
+
+    "successDialog": {
+      "title": "تبریک! 🎉",
+      "message": "درخواست شما با موفقیت ارسال شد.",
+      "description": "از ارسال درخواست تائید نامه شما سپاسگزاریم. تیم ما معلومات شما را بررسی کرده و به زودی با شما تماس خواهد گرفت.",
+      "referenceNumber": "شماره مرجع",
+      "copyTrackingNumber": "کاپی شماره پیگیری",
+      "trackMyRequest": "پیگیری درخواست من"
+    },
     "toasts": {
       "companySuccess": "شرکت با موفقیت ایجاد شد!",
       "contactSuccess": "شخص تماس با موفقیت ایجاد شد!",
@@ -1238,8 +1247,10 @@
       "submitSuccess": "درخواست گواهینامه برای بررسی ارسال شد!",
       "submitError": "ارسال درخواست گواهینامه ناموفق بود!",
       "noRequestError": "هیچ درخواست گواهینامه یافت نشد!",
-      "certificationSuccess": "??????? ????? ?? ?????? ??? ??",
-      "trackingCopied": "????? ????? ???? ??"
+      "certificationSuccess": "درخواست تائید نامه با موفقیت ایجاد شد!",
+      "trackingCopied": "شماره پیگیری در کلیپ‌بورد کاپی شد!",
+      "trackingCopyFailed": "کاپی کردن شماره پیگیری ناموفق بود. لطفاً آن را به صورت دستی کاپی کنید.",
+      "noTrackingNumber": "هیچ شماره پیگیری برای کاپی موجود نیست."
     },
     "errors": {
       "submitFailed": "ارسال درخواست گواهینامه ناموفق بود!"
@@ -1350,7 +1361,7 @@
     "lastName": "نام خانوادگی",
     "phoneNumber": "شماره تلفن",
     "email": "آدرس ایمیل",
-    "organization": "سازمان",
+    "organization": "اداره",
     "generalDirectorateNumber": "شماره ریاست عمومی",
     "generalDirectorateAddress": "آدرس ریاست عمومی",
     "generateEmail": "ایمیل تولید شده",
@@ -1362,13 +1373,20 @@
     "deleteSuccess": "پیام تماس با موفقیت حذف شد",
     "createSuccess": "پیام تماس با موفقیت ایجاد شد",
     "updateSuccess": "پیام تماس با موفقیت به‌روزرسانی شد",
+    "placeholder": {
+      "name": "نام را وارد کنید",
+      "lastName": "نام خانوادگی را وارد کنید",
+      "phoneNumber": "شماره تلفن را وارد کنید",
+      "email": "ایمیل را وارد کنید",
+      "organization": "نام اداره را وارد کنید"
+    },
     "columns": {
       "id": "شناسه",
       "name": "نام",
       "lastName": "نام خانوادگی",
       "phoneNumber": "تلفن",
       "email": "ایمیل",
-      "organization": "سازمان",
+      "organization": "اداره",
       "createdAt": "تاریخ ایجاد"
     },
     "validation": {
@@ -1513,9 +1531,9 @@
         "commentsLabel": "نظرات",
         "uploadReportFile": "فایل گزارش را بارگذاری کنید"
       },
-      "updated": "اختصاص با موفقیت به‌روزرسانی شد",
-      "deleted": "اختصاص با موفقیت حذف شد",
-      "deleteConfirm": "آیا مطمئن هستید که می‌خواهید این اختصاص را حذف کنید؟",
+      "updated": "درخواست ارایه شده به کمیته با موفقیت به‌روزرسانی شد",
+      "deleted": "درخواست ارایه شده به کمیته با موفقیت حذف شد",
+      "deleteConfirm": "آیا مطمئن هستید که می‌خواهید این درخواست را حذف کنید؟",
       "certificationType": "نوع تائید نامه",
       "roles": {
         "CHAIRPERSON": "رئیس",
@@ -1572,7 +1590,7 @@
     }
   },
   "common": {
-    "current":"فعلی",
+    "current": "فعلی",
     "editcompany": "اصلاح معلومات شرکت",
     "months": "ماه",
     "confirmation": "تائید",
@@ -1748,7 +1766,7 @@
         "contact": "تماس با ما"
       },
       "badges": {
-        "iso": "دارای گواهی ISO",
+        "iso": "دارای تائید نامه ISO",
         "government": "تأیید شده توسط دولت",
         "international": "شناخته شده بین‌المللی",
         "support": "پشتیبانی ۲۴/۷"
@@ -1760,29 +1778,29 @@
     "dashboardTitle": "داشبورد گزارش سیستم",
     "dashboardSubtitle": "ایجاد و خروجی گرفتن از گزارش‌های جامع سیستم",
     "exportToExcel": "خروجی اکسل",
-    "detailedExport": "خروجی دقیق",
+    "detailedExport": "دانلود گزارش اکسل",
     "exporting": "در حال خروجی گرفتن...",
     "reportType": "نوع گزارش",
     "yearlyReport": "گزارش سالانه",
     "monthlyReport": "گزارش ماهانه",
-    "customRange": "بازه سفارشی",
+    "customRange": "انتخاب نظر به تاریخ دلخواه",
     "year": "سال",
     "month": "ماه",
     "startDate": "تاریخ شروع",
     "endDate": "تاریخ پایان",
-    "modules": "ماژول‌ها",
-    "modulesSelected": "ماژول انتخاب شده",
+    "modules": "بخش ها",
+    "modulesSelected": "بخش انتخاب شده",
     "selectAll": "انتخاب همه",
     "generateReport": "ایجاد گزارش",
     "generating": "در حال ایجاد...",
     "reportResults": "نتایج گزارش",
-    "lastUpdated": "آخرین بروزرسانی",
+    "lastUpdated": "آخرین تعییرات",
     "noReportGenerated": "هنوز گزارشی ایجاد نشده است. فیلترها را انتخاب کرده و روی 'ایجاد گزارش' کلیک کنید.",
     "summary": "خلاصه گزارش",
     "systemReport": "گزارش سیستم",
     "allMetrics": "همه معیارها",
     "generatedOn": "تاریخ ایجاد گزارش",
-    "selectedModules": "ماژول‌های انتخاب شده",
+    "selectedModules": "بخش انتخاب شده",
     "requestStatistics": "آمار درخواست‌ها",
     "userStatistics": "آمار کاربران",
     "committeeStatistics": "آمار کمیته",
@@ -1799,18 +1817,18 @@
     "activeCommittee": "کمیته فعال",
     "inactiveCommittee": "کمیته غیرفعال",
     "totalCompanies": "مجموع شرکت‌ها",
-    "totalCertifications": "مجموع گواهینامه‌ها",
+    "totalCertifications": "مجموعه تائید نامه ها ",
     "totalMenuItems": "مجموع آیتم‌های منو",
     "module": {
       "USER": "کاربران",
-      "COMPANY": "شرکت‌ها",
+      "COMPANY": "شرکت‌ ها",
       "COMMITTEE": "کمیته",
       "MENU": "آیتم‌های منو",
-      "CERTIFICATION": "گواهینامه‌ها",
-      "CERTIFICATION_REQUEST": "درخواست‌های گواهینامه",
-      "ROLE": "نقش‌ها",
-      "ATTACHMENT": "پیوست‌ها",
-      "COMPANY_CONTACT_PERSON": "اشخاص تماس شرکت",
+      "CERTIFICATION": "تائید نامه ها",
+      "CERTIFICATION_REQUEST": "درخواست‌ های تائید نامه ",
+      "ROLE": "نقش‌ ها",
+      "ATTACHMENT": "ضمایم",
+      "COMPANY_CONTACT_PERSON": " نماینده شرکت ",
       "COMMITTEE_MEMBER": "اعضای کمیته"
     }
   },
@@ -1972,6 +1990,7 @@
       "passwordsDoNotMatch": "رمزهای عبور مطابقت ندارند"
     },
     "roles": {
+      "INSPECTION_USERS": "کاربران هئیت تفتیش",
       "ADMIN": "مدیر",
       "MANAGER": "مدیر اجرایی",
       "USER": "کاربر عادی",
@@ -2025,6 +2044,8 @@
     }
   },
   "role": {
+    "INSPECTION_USERS": "کاربران هئیت تفتیش",
+
     "ROLE_ADMIN": "مدیر عمومی سیستم",
     "ROLE_USER": "کاربر عادی",
     "ROLE_COMMITTEE": "عضو کمیته",
@@ -2278,7 +2299,43 @@
     "VIEW_DASHBOARD": "نمایش داشبورد",
     "VIEW_REPORT": "نمایش راپور",
     "VIEW_LOCATION": "نمایش موقعیت",
-    "VIEW_STANDARD": "نمایش استندرد"
+    "VIEW_STANDARD": "نمایش استندرد",
+    "ADD_AUDITLOG": "افزودن گزارش بازرسی",
+    "UPDATE_AUDITLOG": "اصلاح گزارش بازرسی",
+    "DELETE_AUDITLOG": "حذف گزارش بازرسی",
+    "VIEW_AUDITLOG": "نمایش گزارش بازرسی",
+    "ADD_AUDITLOGDETAIL": "افزودن جزییات گزارش بازرسی",
+    "UPDATE_AUDITLOGDETAIL": "ویرایش جزییات گزارش بازرسی",
+    "DELETE_AUDITLOGDETAIL": "حذف جزییات گزارش بازرسی",
+    "VIEW_AUDITLOGDETAIL": "نمایش جزییات گزارش بازرسی",
+    "ADD_CONTACTUS": "اضافه تماس با ما",
+    "UPDATE_CONTACTUS": "ویرایش تماس با ما",
+    "DELETE_CONTACTUS": "حذف تماس با ما",
+    "VIEW_CONTACTUS": "نمایش تماس با ما",
+    "ADD_NOTIFICATION": "افزودن اطلاعیه",
+    "UPDATE_NOTIFICATION": "ویرایش اطلاعیه",
+    "DELETE_NOTIFICATION": "حذف اطلاعیه",
+    "VIEW_NOTIFICATION": "نمایش اطلاعیه",
+    "ADD_ABOUTUS": "افزودن درباره ما",
+    "UPDATE_ABOUTUS": "ویرایش درباره ما",
+    "DELETE_ABOUTUS": "حذف درباره ما",
+    "VIEW_ABOUTUS": "نمایش درباره ما",
+    "ADD_ORGANIZATION": "افزودن اداره",
+    "UPDATE_ORGANIZATION": "ویرایش اداره",
+    "DELETE_ORGANIZATION": "حذف اداره",
+    "VIEW_ORGANIZATION": "نمایش اداره",
+    "ADD_ORGANIZATIONINFO": "افزودن معلومات اداره",
+    "UPDATE_ORGANIZATIONINFO": "ویرایش معلومات اداره",
+    "DELETE_ORGANIZATIONINFO": "حذف معلومات اداره",
+    "VIEW_ORGANIZATIONINFO": "نمایش معلومات اداره",
+    "ADD_INTERNATIONALPARTY": "افزودن اداره های همکار",
+    "UPDATE_INTERNATIONALPARTY": "ویرایش اداره های همکار",
+    "DELETE_INTERNATIONALPARTY": "حذف اداره های همکار",
+    "VIEW_INTERNATIONALPARTY": "نمایش اداره های همکار",
+    "VIEW_PARTNERORGANIZATION": "نمایش اداره های همکار",
+    "VIEW_REQUEST": "نمایش درخواست",
+    "VIEW_ORGANIZATIONACTIVITY": "نمایش فعالیت های اداره",
+    "VIEW_REPORTS": "نمایش گزارش ها"
   },
   "permission": {
     "title": "مدیریت صلاحیت‌ها",
@@ -2383,17 +2440,17 @@
     }
   },
   "organizationInfo": {
-    "organizationDetail": "جزئیات سازمان",
-    "title": "اطلاعات سازمان",
-    "manageDescription": "مدیریت رکوردهای اطلاعات سازمان",
-    "details": "جزئیات سازمان",
-    "detailsHeader": "جزئیات اطلاعات سازمان",
+    "organizationDetail": "جزئیات اداره",
+    "title": "اطلاعات اداره",
+    "manageDescription": "مدیریت رکوردهای اطلاعات اداره",
+    "details": "جزئیات اداره",
+    "detailsHeader": "جزئیات اطلاعات اداره",
     "create": "ایجاد",
-    "editTitle": "ویرایش اطلاعات سازمان",
-    "createTitle": "ایجاد اطلاعات سازمان",
-    "editDescription": "ویرایش اطلاعات موجود سازمان",
-    "createDescription": "افزودن اطلاعات جدید سازمان به سیستم",
-    "organizationName": "نام سازمان",
+    "editTitle": "ویرایش اطلاعات اداره",
+    "createTitle": "ایجاد اطلاعات اداره",
+    "editDescription": "ویرایش اطلاعات موجود اداره",
+    "createDescription": "افزودن اطلاعات جدید اداره به سیستم",
+    "organizationName": "نام اداره",
     "phoneNumber": "شماره تلفن",
     "address": "آدرس",
     "satelliteHorizontal": "ماهواره افقی",
@@ -2401,19 +2458,19 @@
     "emailAddress": "آدرس ایمیل",
     "createdAt": "تاریخ ایجاد",
     "updatedAt": "تاریخ به‌روزرسانی",
-    "notFound": "اطلاعات سازمان یافت نشد",
-    "deleteConfirm": "آیا مطمئن هستید که می‌خواهید سازمان \"{{organizationName}}\" را حذف کنید؟",
-    "deleteSuccess": "اطلاعات سازمان با موفقیت حذف شد",
-    "createSuccess": "اطلاعات سازمان با موفقیت ایجاد شد",
-    "updateSuccess": "اطلاعات سازمان با موفقیت به‌روزرسانی شد",
+    "notFound": "اطلاعات اداره یافت نشد",
+    "deleteConfirm": "آیا مطمئن هستید که می‌خواهید اداره \"{{organizationName}}\" را حذف کنید؟",
+    "deleteSuccess": "اطلاعات اداره با موفقیت حذف شد",
+    "createSuccess": "اطلاعات اداره با موفقیت ایجاد شد",
+    "updateSuccess": "اطلاعات اداره با موفقیت به‌روزرسانی شد",
     "basicInformation": "اطلاعات اولیه",
     "locationInfo": "اطلاعات موقعیت",
     "satelliteInformation": "اطلاعات ماهواره‌ای",
     "contactInformation": "اطلاعات تماس",
     "placeholder": {
-      "organizationDetail": "جزئیات سازمان را وارد کنید",
-      "organizationName": "نام سازمان را وارد کنید",
-      "phoneNumber": "+۹۳ ۱۲۳ ۴۵۶ ۷۸۹",
+      "organizationDetail": "جزئیات اداره را وارد کنید",
+      "organizationName": "نام اداره را وارد کنید",
+      "phoneNumber": "0202223234",
       "address": "آدرس کامل را وارد کنید",
       "satelliteHorizontal": "مختصات افقی را وارد کنید",
       "satelliteVertical": "مختصات عمودی را وارد کنید",
@@ -2421,14 +2478,14 @@
     },
     "columns": {
       "id": "شناسه",
-      "organizationName": "نام سازمان",
+      "organizationName": "نام اداره",
       "address": "آدرس",
       "phoneNumber": "شماره تلفن",
       "emailAddress": "آدرس ایمیل",
       "createdAt": "تاریخ ایجاد"
     },
     "validation": {
-      "organizationNameRequired": "نام سازمان الزامی است",
+      "organizationNameRequired": "نام اداره الزامی است",
       "addressRequired": "آدرس الزامی است",
       "phoneNumberRequired": "شماره تلفن الزامی است",
       "satelliteHorizontalRequired": "ماهواره افقی الزامی است",
@@ -2742,7 +2799,7 @@
       "description": "با شرکای بین المللی و ارائه دهندگان خدمات که به رشد و تعالی کسب و کار شما کمک می‌کنند، ارتباط برقرار کنید.",
       "internationalParties": {
         "title": "نهادهای بین المللی",
-        "description": "با سازمان‌های جهانی که استانداردهای ASQA را دنبال می‌کنند، همکاری کنید.",
+        "description": "با اداره‌های جهانی که استانداردهای ASQA را دنبال می‌کنند، همکاری کنید.",
         "button": "مشاهده نهادهای بین المللی"
       },
       "organizationServices": {
@@ -2768,7 +2825,7 @@
     "internationalParties": {
       "badge": "شبکه بین المللی",
       "title": "نهادهای بین المللی",
-      "description": "نهادها، سازمان‌ها و شرکای بین‌المللی مرتبط با اداره ملی معیار کیفیت را مشاهده کنید که در بخش‌های ارزیابی مطابقت، تصدیق، ستندرد سازی، اعتباردهی و تضمین کیفیت همکاری رسمی دارند. این همکاری‌ها زمینه هماهنگی با معیارها و ستندردهای بین‌المللی را فراهم نموده و به شرکت‌ها و نهادهای داخلی کمک می‌کند تا تصدیق‌نامه‌ها، ارزیابی‌ها و خدمات خویش را مطابق الزامات جهانی دریافت نمایند. از طریق این مشارکت‌ها، ASQA توانایی آن را دارد تا روند اعتباردهی، تصدیق و تضمین کیفیت را با معیارهای معتبر بین‌المللی همسو ساخته و زمینه پذیرش خدمات و محصولات داخلی را در بازارهای منطقه‌ای و جهانی تقویت نماید.",
+      "description": "نهادها، اداره‌ها و شرکای بین‌المللی مرتبط با اداره ملی معیار کیفیت را مشاهده کنید که در بخش‌های ارزیابی مطابقت، تصدیق، ستندرد سازی، اعتباردهی و تضمین کیفیت همکاری رسمی دارند. این همکاری‌ها زمینه هماهنگی با معیارها و ستندردهای بین‌المللی را فراهم نموده و به شرکت‌ها و نهادهای داخلی کمک می‌کند تا تصدیق‌نامه‌ها، ارزیابی‌ها و خدمات خویش را مطابق الزامات جهانی دریافت نمایند. از طریق این مشارکت‌ها، ASQA توانایی آن را دارد تا روند اعتباردهی، تصدیق و تضمین کیفیت را با معیارهای معتبر بین‌المللی همسو ساخته و زمینه پذیرش خدمات و محصولات داخلی را در بازارهای منطقه‌ای و جهانی تقویت نماید.",
       "loading": "در حال بارگذاری نهادهای بین المللی...",
       "emptyTitle": "هیچ نهاد بین المللی یافت نشد",
       "emptyDescription": "در حال حاضر هیچ نهاد بین المللی برای نمایش وجود ندارد.",
@@ -2777,12 +2834,61 @@
     "organizationServices": {
       "badge": "فعالیت ریاست تائید نامه های کیفی",
       "title": "فعالیت ریاست تائید نامه های کیفی",
-      "description": "در مورد خدمات و فعالیت های ارائه شده توسط سازمان بیشتر بدانید.",
+      "description": "در مورد خدمات و فعالیت های ارائه شده توسط اداره بیشتر بدانید.",
       "loading": "در حال بارگذاری فعالیت ریاست تائید نامه های کیفی...",
-      "emptyTitle": "هیچ خدمت سازمانی یافت نشد",
+      "emptyTitle": "هیچ خدمت ادارهی یافت نشد",
       "emptyDescription": "در حال حاضر معلوماتی درباره فعالیت ریاست تائید نامه های کیفی موجود نیست.",
       "activeService": "خدمت فعال",
-      "footerNote": "این خدمات بر اساس اطلاعات فعلی منتشر شده توسط سازمان نمایش داده می‌شود."
+      "footerNote": "این خدمات بر اساس اطلاعات فعلی منتشر شده توسط اداره نمایش داده می‌شود."
+    }
+  },
+  "auditLog": {
+    "title": "گزارش ثبت رویدادها",
+    "manageDescription": "فعالیت های سیستم و تغییرات سطح فیلد را مشاهده کنید.",
+    "columns": {
+      "user": "کاربر",
+      "userEmail": "ایمیل کاربر",
+      "role": "نقش",
+      "entity": "موجودیت",
+      "field": "فیلد",
+      "totalDetails": "مجموع تغییرات",
+      "action": "عملیات",
+      "method": "متد",
+      "status": "وضعیت",
+      "entityId": "شناسه موجودیت",
+      "changes": "تغییرات",
+      "oldValue": "قبلی",
+      "newValue": "جدید",
+      "ipAddress": "آدرس IP"
+    },
+    "detailsTitle": "جزئیات گزارش ثبت رویدادها",
+    "detailsDescription": "خلاصه لاگ و تغییرات مربوط به فیلدها را مشاهده کنید.",
+    "detailListTitle": "جزئیات تغییرات فیلدها",
+    "noDetailChanges": "برای این لاگ هیچ تغییر در سطح فیلد ثبت نشده است.",
+    "showMore": "نمایش بیشتر",
+    "showLess": "نمایش کمتر",
+    "changeSummary": "{{count}} تغییر",
+    "notFound": "گزارش ثبت رویدادها یافت نشد",
+    "filters": {
+      "search": "جستجو",
+      "action": "عملیات",
+      "status": "وضعیت",
+      "allActions": "همه عملیات",
+      "allStatuses": "همه وضعیت ها"
+    },
+    "placeholders": {
+      "search": "کاربر، موجودیت، عملیات یا فیلد را جستجو کنید...",
+      "action": "فیلتر بر اساس عملیات",
+      "status": "فیلتر بر اساس وضعیت"
+    },
+    "actions": {
+      "CREATE": "ایجاد",
+      "UPDATE": "به روزرسانی",
+      "DELETE": "حذف"
+    },
+    "status": {
+      "SUCCESS": "موفق",
+      "FAILED": "ناموفق"
     }
   },
   "organization": {
@@ -2798,7 +2904,7 @@
     "searchingButton": "در حال جستجو...",
     "verified": "تأیید شد",
     "expired": "منقضی شد",
-    "certificateValid": "تائید نامه معتبر معتبر است",
+    "certificateValid": "تائید نامه معتبر است",
     "certificateExpired": "تائید نامه پیدا شد، اما منقضی شده است",
     "certificateDetails": "جزئیات تائید نامه",
     "certificationType": "نوع تائید نامه",
@@ -2818,6 +2924,25 @@
       "DOMESTIC_QUALITY_CERTIFICATION": "احذ  علامت معیار",
       "INTERNATIONAL_QUALITY_CERTIFICATION": "تائید نامه کیفی سیستم مدیریتی یا خدمات، محصول",
       "STANDARD_MARK_CERTIFICATION": "احذ علامت معیار"
+    }
+  },
+  "certificationTracking": {
+    "badge": "پیگیری درخواست",
+    "title": "پیگیری درخواست‌ های تائید نامه ها",
+    "description": "درخواست‌ های تائید نامه را با استفاده از شماره تعقیب یا نام شرکت جستجو کنید و جزئیات کامل آن را ببینید.",
+    "helper": "شما می‌توانید با شماره تعقیب، نام شرکت یا هر دو جستجو کنید.",
+    "tableTitle": "نتایج جستجو",
+    "tableHint": "برای مشاهده درخواست‌های مطابق، جستجو انجام دهید.",
+    "searchSummary": "شماره تعقیب: {{trackingNumber}} | شرکت: {{companyName}}",
+    "notProvided": "وارد نشده",
+    "emptyInitialTitle": "جستجو را آغاز کنید",
+    "emptyInitialDescription": "شماره تعقیب یا نام شرکت را وارد کنید تا درخواست‌های مطابق یافت شود.",
+    "placeholders": {
+      "tracking": "شماره تعقیب را وارد کنید",
+      "company": "نام شرکت را وارد کنید"
+    },
+    "messages": {
+      "loadFailed": "بارگذاری اطلاعات پیگیری درخواست ناموفق بود."
     }
   }
 }

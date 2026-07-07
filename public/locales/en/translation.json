@@ -66,7 +66,8 @@
       "PAYMENT_COMPLETED": "Payment Completed",
       "CERTIFICATE_ISSUED": "Certificate Issued",
       "REJECTED": "Rejected",
-      "CANCELLED": "Cancelled"
+      "CANCELLED": "Cancelled",
+      "COMMITTEE_APPROVED": "تائید هئیت تائید دهی"
     },
     "templates": {
       "requestSubmitted": {
@@ -378,7 +379,8 @@
       "selectLogo": "Select Logo",
       "companytyperequired": "Company type is required",
       "selectvalid": "Select a valid company type",
-      "issueDate": "Issue Date"
+      "issueDate": "Issue Date",
+      "documents": "اسناد"
     },
     "placeholder": {
       "companyNameEN": "Enter company name in English",
@@ -549,7 +551,12 @@
     "categoryLoadFailed": "Failed to load categories",
     "loadSingleFailed": "Failed to load company",
     "invalidId": "Invalid company id.",
-    "notFound": "Company not found"
+    "notFound": "Company not found",
+    "companyOwnerName": "نام مالک",
+    "verifiedCompany": "شرکت تأیید شده",
+    "verifiedMessage": "این شرکت توسط ASQA تأیید شده است",
+    "registeredMember": "عضو ثبت نام شده",
+    "companyAttachments": "اسناد های ارایه شده توسط شرکت"
   },
   "forgotPassword": {
     "title": "Forgot Password",
@@ -619,7 +626,6 @@
     "success": "Success",
     "error": "Error",
     "warning": "Warning",
-
     "type": {
       "STANDARD": "Standard",
       "COMPANY": "Company",
@@ -678,7 +684,7 @@
     "no_companies_found": "No companies found. Please add a company first.",
     "required_documents_title": "Required Documents",
     "combine_documents_message": "Combine all documents into ONE PDF file",
-    "combine_documents_description": "Please merge all required documents into a single PDF file.",
+    "combine_documents_description": "Please attach the following documents: 1: Ownership Declaration 2: Company Registration Certificate 3: Tax Certificate 4: Business License",
     "drag_drop_message": "Drag and drop your combined PDF file here, or click to browse",
     "supported_formats_simple": "Supported format: PDF only Max 10MB",
     "browse_files": "Browse Files",
@@ -702,6 +708,7 @@
     "sizeUnitKb": "KB"
   },
   "nav": {
+    "certificationVerification": "Certification Verification",
     "home": "Home",
     "services": "Services",
     "companies": "Companies",
@@ -935,7 +942,25 @@
       "messages": {
         "created": "Certification request created successfully!",
         "createFailed": "Failed to create certification request"
-      }
+      },
+      "mainType": {
+        "title": "نوع درخواست را انتخاب کنید",
+        "subtitle": "انتخاب کنید که این درخواست داخلی است یا بین المللی",
+        "internal": {
+          "title": "داخلی",
+          "description": "تائید نامه برای اولین بار برای کسب و کار شما"
+        },
+        "external": {
+          "title": "بین المللی",
+          "description": "تائید نامه برای اولین بار برای کسب و کار شما"
+        }
+      },
+      "cardTitle": "?????? ?????",
+      "cardSubtitle": "??? ? ?????? ????? ??? ?? ?????? ????"
+    },
+    "confirmPayment": "تائید پرداخت",
+    "validation": {
+      "certificationScope": "????? ?????? ????? ?? ?????? ????"
     }
   },
   "certificationRequest": {
@@ -1064,7 +1089,8 @@
       "CANCELLED": "Cancelled",
       "UNDER_REVIEW": "Under Review",
       "STANDARDS_REQUIRED": "Standards Required",
-      "DEADLINE_REQUIRED": "Deadline Required"
+      "DEADLINE_REQUIRED": "Deadline Required",
+      "COMMITTEE_APPROVED": "تائید هئیت تائید دهی"
     },
     "certificationTypeOptions": {
       "DOMESTIC_QUALITY_CERTIFICATION": "Domestic Quality Certification",
@@ -1130,6 +1156,14 @@
       "totalAmountDue": "Total Amount Due",
       "contactSupport": "Contact Support",
       "printInvoice": "Print Invoice"
+    },
+    "certificationScope": "محدوده تائید نامه",
+    "tabOptions": {
+      "SUBMITTED": "درخواست های دریافت شده"
+    },
+    "scopeOptions": {
+      "NATIONAL": " ملی/ داخلی",
+      "INTERNATIONAL": "بین المللی/ خارجی"
     }
   },
   "zone": {
@@ -1205,13 +1239,25 @@
       "stepCompleted": "Completed",
       "submitButton": "Submit for Review"
     },
+    "successDialog": {
+      "title": "Congratulations! 🎉",
+      "message": "Your request has been submitted successfully.",
+      "description": "Thank you for submitting your certification request. Our team will review your information and contact you soon.",
+      "referenceNumber": "Reference Number",
+      "copyTrackingNumber": "Copy tracking number",
+      "trackMyRequest": "Track My Request"
+    },
     "toasts": {
       "companySuccess": "Company created successfully!",
       "contactSuccess": "Contact created successfully!",
       "documentsSuccess": "Documents uploaded successfully!",
       "submitSuccess": "Certification request submitted for review!",
       "submitError": "Failed to submit certification request!",
-      "noRequestError": "No certification request found!"
+      "noRequestError": "No certification request found!",
+      "certificationSuccess": "Certification request created successfully!",
+      "trackingCopied": "Tracking number copied to clipboard!",
+      "trackingCopyFailed": "Failed to copy tracking number. Please copy it manually.",
+      "noTrackingNumber": "No tracking number available to copy."
     },
     "errors": {
       "submitFailed": "Failed to submit certification request!"
@@ -1257,7 +1303,9 @@
         "HEAD_OFFICE": "Head Office",
         "BRANCH_OFFICE": "Branch Office",
         "HOME": "Home",
-        "OTHER": "Other"
+        "OTHER": "Other",
+        "FACTORY": "کارخانه",
+        "WAREHOUSE": "انبار"
       },
       "country": "Country",
       "province": "Province",
@@ -1293,7 +1341,9 @@
       "remarks": "Remarks",
       "certificationRequestId": "Certification Request ID",
       "noMembers": "No members found",
-      "noAssignments": "No assignments found"
+      "noAssignments": "No assignments found",
+      "loadError": "خطا در بارگیری جزئیات کمیته",
+      "notFound": "کمیته یافت نشد"
     },
     "createMember": "Add Member",
     "selectCommittee": "Select Committee",
@@ -1319,7 +1369,9 @@
     "types": {
       "technical": "Technical Committee",
       "quality": "Quality Committee",
-      "administrative": "Administrative Committee"
+      "administrative": "Administrative Committee",
+      "approval": "هئیت تائید دهی",
+      "inspection": "هئیت تفتیش"
     },
     "validation": {
       "nameRequired": "Committee name is required",
@@ -1416,8 +1468,11 @@
         "pinding": "Pending",
         "rejected": "Rejected",
         "in_progress": "In Progress",
-        "completed": "Compeleted"
-      }
+        "completed": "Compeleted",
+        "assigned": "راجع شده"
+      },
+      "yes": "بله",
+      "no": "خیر"
     },
     "member": {
       "list": "Committee Members",
@@ -1452,7 +1507,8 @@
       "committee": "Committee",
       "joinedAt": "Joined At",
       "deleteConfirm": "Are you sure you want to remove this member?",
-      "viewTitle": "Committee Member View"
+      "viewTitle": "Committee Member View",
+      "updateDescription": "برای اصلاح این عضو هئیت معلومات زیر را تکمیل کنید"
     }
   },
   "common": {
@@ -1476,8 +1532,8 @@
     "copy": "Copy",
     "asqa": "ASQA",
     "asqaDescription": "Afghanistan Standard Quality Authority",
-     "systme": "Standard Quality",
-    "name":"Mangement System",
+    "systme": "Standard Quality",
+    "name": "Mangement System",
     "save": "Save",
     "cancel": "Cancel",
     "delete": "Delete",
@@ -1519,7 +1575,21 @@
     "createdDate": "Created Date",
     "selectScope": "Please first select a scope",
     "selectRequest": "Please first select a request",
-    "pleaseWait": "Please wait"
+    "pleaseWait": "Please wait",
+    "current": "فعلی",
+    "editcompany": "اصلاح معلومات شرکت",
+    "confirmation": "تائید",
+    "contactPersonLoadFailed": "???????? ??????? ??? ???? ?????? ???",
+    "countryLoadFailed": "???????? ?????? ?????? ???",
+    "districtLoadFailed": "???????? ??????? ?? ?????? ???",
+    "fillRequiredFields": "????? ???? ??????? ????? ?? ???? ??? ????",
+    "provinceLoadFailed": "???????? ?????? ?????? ???",
+    "submitting": "?? ??? ?????...",
+    "validation": {
+      "fileSize": "?????? ???? ????? ?? ?? ???? ???",
+      "fillRequiredFields": "????? ???? ??????? ????? ?? ???? ??? ????",
+      "imageOnly": "??? ???? ?????? ???? ???"
+    }
   },
   "home": {
     "badge": "Afghanistan Quality Standards Authority",
@@ -1587,7 +1657,8 @@
         "4": {
           "title": "Review & Certificate",
           "description": "Get certified upon approval"
-        }
+        },
+        "step": "?????"
       }
     },
     "features": {
@@ -2150,7 +2221,43 @@
     "VIEW_DASHBOARD": "View Dashboard",
     "VIEW_REPORT": "View Report",
     "VIEW_LOCATION": "View Location",
-    "VIEW_STANDARD": "View Standard"
+    "VIEW_STANDARD": "View Standard",
+    "ADD_AUDITLOG": "Add Audit Log",
+    "UPDATE_AUDITLOG": "Update Audit Log",
+    "DELETE_AUDITLOG": "Delete Audit Log",
+    "VIEW_AUDITLOG": "View Audit Log",
+    "ADD_AUDITLOGDETAIL": "Add Audit Log Detail",
+    "UPDATE_AUDITLOGDETAIL": "Update Audit Log Detail",
+    "DELETE_AUDITLOGDETAIL": "Delete Audit Log Detail",
+    "VIEW_AUDITLOGDETAIL": "View Audit Log Detail",
+    "ADD_CONTACTUS": "Add Contact Us",
+    "UPDATE_CONTACTUS": "Update Contact Us",
+    "DELETE_CONTACTUS": "Delete Contact Us",
+    "VIEW_CONTACTUS": "View Contact Us",
+    "ADD_NOTIFICATION": "Add Notification",
+    "UPDATE_NOTIFICATION": "Update Notification",
+    "DELETE_NOTIFICATION": "Delete Notification",
+    "VIEW_NOTIFICATION": "View Notification",
+    "ADD_ABOUTUS": "Add About Us",
+    "UPDATE_ABOUTUS": "Update About Us",
+    "DELETE_ABOUTUS": "Delete About Us",
+    "VIEW_ABOUTUS": "View About Us",
+    "ADD_ORGANIZATION": "Add Organization",
+    "UPDATE_ORGANIZATION": "Update Organization",
+    "DELETE_ORGANIZATION": "Delete Organization",
+    "VIEW_ORGANIZATION": "View Organization",
+    "ADD_ORGANIZATIONINFO": "Add Organization Info",
+    "UPDATE_ORGANIZATIONINFO": "Update Organization Info",
+    "DELETE_ORGANIZATIONINFO": "Delete Organization Info",
+    "VIEW_ORGANIZATIONINFO": "View Organization Info",
+    "ADD_INTERNATIONALPARTY": "Add International Party",
+    "UPDATE_INTERNATIONALPARTY": "Update International Party",
+    "DELETE_INTERNATIONALPARTY": "Delete International Party",
+    "VIEW_INTERNATIONALPARTY": "View International Party",
+    "VIEW_PARTNERORGANIZATION": "View Partner Organization",
+    "VIEW_REQUEST": "View Request",
+    "VIEW_ORGANIZATIONACTIVITY": "View Organization Activity",
+    "VIEW_REPORTS": "View Reports"
   },
   "permission": {
     "title": "Permission Management",
@@ -2391,7 +2498,11 @@
       "satelliteHorizontal": "Enter horizontal coordinate",
       "satelliteVertical": "Enter vertical coordinate",
       "emailAddress": "info@organization.com"
-    }
+    },
+    "basicInformation": "اطلاعات اولیه",
+    "locationInfo": "اطلاعات موقعیت",
+    "satelliteInformation": "اطلاعات ماهواره‌ای",
+    "contactInformation": "اطلاعات تماس"
   },
   "menu": {
     "management": "Menu Management",
@@ -2519,6 +2630,56 @@
     "validation": {
       "nameRequired": "Name is required",
       "serviceRequired": "Service description is required"
+    }
+  },
+  "auditLog": {
+    "title": "Audit Log",
+    "manageDescription": "View system activity and field-level changes.",
+    "columns": {
+      "user": "User",
+      "userEmail": "User Email",
+      "role": "Role",
+      "entity": "Entity",
+      "field": "Field",
+      "totalDetails": "Total Changes",
+      "action": "Action",
+      "method": "Method",
+      "status": "Status",
+      "entityId": "Entity ID",
+      "changes": "Changes",
+      "oldValue": "Old",
+      "newValue": "New",
+      "ipAddress": "IP Address"
+    },
+    "detailsTitle": "Audit Log Details",
+    "detailsDescription": "View the summary log and its related field changes.",
+    "detailListTitle": "Field Change Details",
+    "noDetailChanges": "No field-level changes were recorded for this log.",
+    "showMore": "Show more",
+    "showLess": "Show less",
+    "changeSummary": "{{count}} change",
+    "changeSummary_plural": "{{count}} changes",
+    "notFound": "Audit log not found",
+    "filters": {
+      "search": "Search",
+      "action": "Action",
+      "status": "Status",
+      "allActions": "All Actions",
+      "allStatuses": "All Statuses"
+    },
+    "placeholders": {
+      "search": "Search user, entity, action, field...",
+      "action": "Filter by action",
+      "status": "Filter by status"
+    },
+    "actions": {
+      "CREATE": "Create",
+      "UPDATE": "Update",
+      "DELETE": "Delete"
+    },
+    "status": {
+      "SUCCESS": "Success",
+      "FAILED": "Failed"
     }
   },
   "website": {
@@ -2739,6 +2900,60 @@
         "description": "Access specialized services and solutions offered by our trusted partners.",
         "button": "View Organization Services"
       }
+    }
+  },
+  "organization": {
+    "failedtofetch": "???????? ????? ?????? ?????? ???"
+  },
+  "certificationVerification": {
+    "title": "تائید اصالت تائید نامه کیفی",
+    "subtitle": "با وارد نمودن شماره تائید نامه کیفی صادر شده می توانید اصالت تائید نامه خویش را در ادراه معیار و کیفیت بررسی نمائید.",
+    "verificationBadge": "تائید اصالت",
+    "certificateNumber": "شماره تائید نامه کیفی",
+    "certificateNumberPlaceholder": "شماره تائید نامه کیفی را وارد کنید",
+    "searchButton": "جستجو",
+    "searchingButton": "در حال جستجو...",
+    "verified": "تأیید شد",
+    "expired": "منقضی شد",
+    "certificateValid": "تائید نامه معتبر معتبر است",
+    "certificateExpired": "تائید نامه پیدا شد، اما منقضی شده است",
+    "certificateDetails": "جزئیات تائید نامه",
+    "certificationType": "نوع تائید نامه",
+    "companyName": "نام شرکت",
+    "issueDate": "تاریخ صدور",
+    "expiryDate": "تاریخ انقضا",
+    "validityInformation": "اطلاعات اعتبار",
+    "certificateActive": "این تائید نامه در حال حاضر فعال و معتبر است.",
+    "certificateExpiredMessage": "این تائید نامه وجود دارد، اما تاریخ انقضای آن گذشته است.",
+    "notSpecified": "تعیین نشده",
+    "error": "تأیید ناموفق بود",
+    "errorMessages": {
+      "serialNumberRequired": "لطفاً شماره تائید نامه را وارد کنید.",
+      "noData": "تائید نامه پیدا نشد."
+    },
+    "certificationTypeOptions": {
+      "DOMESTIC_QUALITY_CERTIFICATION": "احذ  علامت معیار",
+      "INTERNATIONAL_QUALITY_CERTIFICATION": "تائید نامه کیفی سیستم مدیریتی یا خدمات، محصول",
+      "STANDARD_MARK_CERTIFICATION": "احذ علامت معیار"
+    }
+  },
+  "certificationTracking": {
+    "badge": "Request Tracking",
+    "title": "Track Certification Requests",
+    "description": "Search certification requests by tracking number or company name and open the full request details.",
+    "helper": "You can search using a tracking number, a company name, or both.",
+    "tableTitle": "Search Results",
+    "tableHint": "Run a search to view matching certification requests.",
+    "searchSummary": "Tracking: {{trackingNumber}} | Company: {{companyName}}",
+    "notProvided": "Not provided",
+    "emptyInitialTitle": "Start your search",
+    "emptyInitialDescription": "Enter a tracking number or company name to find matching certification requests.",
+    "placeholders": {
+      "tracking": "Enter tracking number",
+      "company": "Enter company name"
+    },
+    "messages": {
+      "loadFailed": "Failed to load certification request tracking data."
     }
   }
 }

@@ -153,7 +153,7 @@ export const ProvinceList: React.FC = () => {
                 </span>
             </div>
             <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-            {hasPermission("CREATE_PROVINCE") && (
+            {hasPermission("ADD_PROVINCE") && (
                     <Button
                     icon="pi pi-plus"
                     label={t("province.create")}

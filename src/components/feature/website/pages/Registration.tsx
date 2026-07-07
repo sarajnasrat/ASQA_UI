@@ -1,6 +1,7 @@
 // pages/Registration.tsx
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Toast } from "primereact/toast";
 import {
   Building2,
   User,
@@ -50,7 +51,7 @@ const Registration = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const { showToast } = useAppToast();
+  const { toast, showToast } = useAppToast();
 
   useEffect(() => {
     // Get certification info from location state or session storage
@@ -220,13 +221,59 @@ const Registration = () => {
     }
   };
 
-  const handleCopyTrackingNumber = () => {
-    navigator.clipboard.writeText(trackingNumber);
-    showToast(
-      "success",
-      t("common.success"),
-      t("registration.toasts.trackingCopied")
-    );
+  const copyTrackingNumberFallback = (value: string) => {
+    const textArea = document.createElement("textarea");
+    textArea.value = value;
+    textArea.setAttribute("readonly", "");
+    textArea.style.position = "absolute";
+    textArea.style.left = "-9999px";
+    document.body.appendChild(textArea);
+    textArea.select();
+    const copied = document.execCommand("copy");
+    document.body.removeChild(textArea);
+    return copied;
+  };
+
+  const handleCopyTrackingNumber = async () => {
+    if (!trackingNumber) {
+      showToast(
+        "warn",
+        t("common.warning"),
+        t("registration.toasts.noTrackingNumber"),
+      );
+      return;
+    }
+
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(trackingNumber);
+      } else if (!copyTrackingNumberFallback(trackingNumber)) {
+        throw new Error("Clipboard fallback failed");
+      }
+
+      showToast(
+        "success",
+        t("common.success"),
+        t("registration.toasts.trackingCopied"),
+      );
+    } catch (error) {
+      console.error("Failed to copy tracking number:", error);
+
+      if (copyTrackingNumberFallback(trackingNumber)) {
+        showToast(
+          "success",
+          t("common.success"),
+          t("registration.toasts.trackingCopied"),
+        );
+        return;
+      }
+
+      showToast(
+        "error",
+        t("common.error"),
+        t("registration.toasts.trackingCopyFailed"),
+      );
+    }
   };
 
   const handleCancel = () => {
@@ -467,11 +514,11 @@ const Registration = () => {
 
                       {/* Congratulations Message */}
                       <h2 className="text-3xl font-bold text-center text-gray-800 mb-3">
-                        Congratulations! 🎉
+                        {t("registration.successDialog.title")}
                       </h2>
                       
                       <p className="text-gray-600 text-center text-lg mb-2">
-                        Your request has been submitted successfully.
+                        {t("registration.successDialog.message")}
                       </p>
 
                       {/* Divider with flowers */}
@@ -483,14 +530,14 @@ const Registration = () => {
 
                       {/* Thank You Message */}
                       <p className="text-gray-500 text-center mb-6 leading-relaxed">
-                        Thank you for submitting your certification request. Our team will review your information and contact you soon.
+                        {t("registration.successDialog.description")}
                       </p>
 
                       {/* Tracking Number Section (if available) */}
                       {trackingNumber && (
                         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-4 mb-6">
                           <p className="text-xs text-blue-800 mb-2 text-center font-medium uppercase tracking-wide">
-                            📋 Reference Number
+                            {t("registration.successDialog.referenceNumber")}
                           </p>
                           <div className="flex items-center justify-between gap-3 bg-white rounded-lg p-3 border border-blue-200">
                             <code className="text-lg font-bold text-blue-900 font-mono tracking-wider">
@@ -499,7 +546,7 @@ const Registration = () => {
                             <button
                               onClick={handleCopyTrackingNumber}
                               className="p-1.5 hover:bg-blue-100 rounded-lg transition-all group"
-                              title="Copy tracking number"
+                              title={t("registration.successDialog.copyTrackingNumber")}
                             >
                               <Copy className="h-4 w-4 text-blue-600 group-hover:scale-110 transition-transform" />
                             </button>
@@ -521,7 +568,7 @@ const Registration = () => {
                           className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
                         >
                           <Shield className="h-5 w-5" />
-                          Track My Request
+                          {t("registration.successDialog.trackMyRequest")}
                         </button>
                         
                         <button
@@ -532,7 +579,7 @@ const Registration = () => {
                           className="w-full px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-all duration-200 flex items-center justify-center gap-2"
                         >
                           <Home className="h-5 w-5" />
-                          Close
+                          {t("common.close")}
                         </button>
                       </div>
                     </div>
@@ -550,6 +597,7 @@ const Registration = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
+      <Toast ref={toast} position="top-right" />
       <div className="container mx-auto px-4 py-8 max-w-8xl">
         {/* Header */}
         <div className="mb-8">

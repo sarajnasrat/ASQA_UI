@@ -62,6 +62,10 @@ import { ApprovalCommiteeList } from "../feature/commitee/ApprovalCommiteeList.t
 import { InspectionCommiteeList } from "../feature/commitee/InspectionCommiteeList.tsx";
 import { InspectionAssignmentList } from "../feature/commiteeassignment/InspectionAssignmentList.tsx";
 import { ApprovalAssignmentList } from "../feature/commiteeassignment/ApprovalAssignmentList.tsx";
+import AuditLogList from "../feature/auditlog/AuditLogList.tsx";
+import UserProfilePage from "../feature/user/profile/UserProfilePage";
+import UserSettingsPage from "../feature/user/profile/UserSettingsPage";
+import CertificationRequestTracking from "../feature/certification-request/CertificationRequestTracking.tsx";
 
 export const MainLayout = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -151,6 +155,10 @@ export const MainLayout = () => {
               <Route
                 path="commitee-assignment-list"
                 element={<InspectionAssignmentList />}
+              />
+              <Route
+                path="request-tracking"
+                element={<CertificationRequestTracking />}
               />
               <Route
                 path="approval-commitee-assignment"
@@ -246,10 +254,23 @@ export const MainLayout = () => {
               />
               <Route
                 path="company/under-review"
-                element={<CompanyStatusList statuses={["SUBMITTED", "UNDER_REVIEW","STANDARDS_PROVIDED","DEADLINE_REQUIRED","DEADLINE_ASSIGNED","INSPECTION_IN_PROGRESS","REPORTED_TO_COMMITTEE","REPORT_APPROVED","PAYMENT_PENDING"]} />}
+                element={
+                  <CompanyStatusList
+                    statuses={[
+                      "SUBMITTED",
+                      "UNDER_REVIEW",
+                      "STANDARDS_PROVIDED",
+                      "DEADLINE_REQUIRED",
+                      "DEADLINE_ASSIGNED",
+                      "INSPECTION_IN_PROGRESS",
+                      "REPORTED_TO_COMMITTEE",
+                      "REPORT_APPROVED",
+                      "PAYMENT_PENDING",
+                    ]}
+                  />
+                }
               />
 
-      
               {/* <Route
                 path="company/inspection-in-progress"
                 element={<CompanyStatusList status="INSPECTION_IN_PROGRESS" statuses={["INSPECTION_IN_PROGRESS", "PAYMENT_PENDING", "CERTIFICATE_ISSUED"]} />}
@@ -320,6 +341,9 @@ export const MainLayout = () => {
               <Route path="comment" element={<CommentList />} />
               <Route path="comment/view/:id" element={<CommentDetails />} />
               <Route path="notification" element={<NotificationList />} />
+              <Route path="audit-log" element={<AuditLogList />} />
+              <Route path="profile" element={<UserProfilePage />} />
+              <Route path="settings" element={<UserSettingsPage />} />
 
               {/* Remove the unauthorized route from here */}
               <Route path="*" element={<div>404 Not Found</div>} />

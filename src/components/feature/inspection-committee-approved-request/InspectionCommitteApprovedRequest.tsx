@@ -190,13 +190,30 @@ export const InspectionCommitteApprovedRequest = () => {
 
     const printWindow = window.open("", "_blank");
     if (!printWindow) return;
-const billContent = `
+
+    const invoiceNumber = request.serialNumber || `INV-${Date.now()}`;
+    const companyName = request.company?.[getCompanyNameField()] || "-";
+    const invoiceDate = IslamicDateFormatter.formatQamari(new Date());
+    const dueDate = IslamicDateFormatter.formatQamari(
+      new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+    );
+    const itemDescription =
+      t(`certificationRequest.certificationTypeOptions.${request.certificationType}`) ||
+      "Certification Fee";
+    const amountDisplay =
+      request.paymentAmount !== undefined &&
+      request.paymentAmount !== null &&
+      request.paymentAmount !== ""
+        ? String(request.paymentAmount)
+        : "Contact Support";
+
+    const billContent = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Invoice - ${request.serialNumber}</title>
+  <title>Invoice - ${invoiceNumber}</title>
   <style>
     * {
       margin: 0;
@@ -453,35 +470,456 @@ const billContent = `
         text-align: center;
       }
     }
+
+    :root {
+      --invoice-accent: #f68b1f;
+      --invoice-text: #1f2937;
+      --invoice-muted: #6b7280;
+      --invoice-border: #e5e7eb;
+      --invoice-row: #f8fafc;
+      --invoice-bg: #fffaf5;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(246, 139, 31, 0.16), transparent 180px),
+        radial-gradient(circle at 85% 6%, rgba(246, 139, 31, 0.10), transparent 130px),
+        linear-gradient(180deg, #fffdf9 0%, #fff7ef 100%);
+      color: var(--invoice-text);
+      padding: 32px 16px;
+    }
+
+    .invoice {
+      max-width: 960px;
+      margin: 0 auto;
+      border: 1px solid rgba(246, 139, 31, 0.18);
+      border-radius: 24px;
+      box-shadow: 0 22px 60px rgba(15, 23, 42, 0.10);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .invoice::before,
+    .invoice::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .invoice::before {
+      width: 220px;
+      height: 220px;
+      top: -120px;
+      right: -90px;
+      background: radial-gradient(circle, rgba(246, 139, 31, 0.20) 0%, rgba(246, 139, 31, 0) 72%);
+    }
+
+    .invoice::after {
+      width: 180px;
+      height: 180px;
+      top: -75px;
+      right: 35px;
+      border: 1px dashed rgba(31, 41, 55, 0.20);
+    }
+
+    .invoice > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .invoice-header {
+      margin-bottom: 28px;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .brand-mark {
+      width: 18px;
+      height: 18px;
+      border-radius: 6px 6px 6px 0;
+      background: linear-gradient(135deg, #f68b1f, #ffb463);
+      transform: rotate(45deg);
+      box-shadow: 0 8px 16px rgba(246, 139, 31, 0.30);
+    }
+
+    .brand-text {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .invoice-title h1 {
+      font-size: clamp(2.8rem, 7vw, 4.6rem);
+      line-height: 0.95;
+      letter-spacing: -0.06em;
+      color: var(--invoice-accent);
+      margin-bottom: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .invoice-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 0.95rem;
+      color: var(--invoice-text);
+    }
+
+    .invoice-meta span + span {
+      padding-left: 12px;
+      border-left: 1px solid var(--invoice-border);
+    }
+
+    .company-name {
+      text-align: right;
+      max-width: 280px;
+      font-size: inherit;
+      font-weight: inherit;
+      color: inherit;
+    }
+
+    .company-name strong {
+      display: block;
+      font-size: 1.3rem;
+      margin-bottom: 6px;
+      color: #111827;
+    }
+
+    .company-name p {
+      color: var(--invoice-muted);
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .invoice-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.9fr);
+      gap: 26px;
+      margin-bottom: 30px;
+    }
+
+    .bill-card,
+    .bank-details {
+      background: var(--invoice-bg);
+      border: 1px solid rgba(246, 139, 31, 0.15);
+      border-radius: 20px;
+      padding: 22px 24px;
+    }
+
+    .section-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--invoice-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+
+    .billed-name {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 14px;
+    }
+
+    .bill-dates {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .bill-dates strong,
+    .bank-details h3 {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--invoice-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .bill-dates span,
+    .bank-details p {
+      font-size: 1rem;
+      color: var(--invoice-text);
+      line-height: 1.7;
+      margin-bottom: 0;
+    }
+
+    .summary-box {
+      align-self: start;
+      background: linear-gradient(135deg, #f68b1f 0%, #ff9f43 100%);
+      color: white;
+      border-radius: 22px;
+      padding: 24px;
+      box-shadow: 0 18px 32px rgba(246, 139, 31, 0.28);
+    }
+
+    .summary-box h3 {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+      opacity: 0.92;
+    }
+
+    .summary-box p {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      word-break: break-word;
+    }
+
+    .summary-box small {
+      display: block;
+      margin-top: 12px;
+      font-size: 0.88rem;
+      opacity: 0.95;
+    }
+
+    .items-table {
+      border-collapse: separate;
+      border-spacing: 0 10px;
+    }
+
+    .items-table th {
+      padding: 16px 18px;
+      background: var(--invoice-accent);
+      color: white;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      border-bottom: none;
+    }
+
+    .items-table th:first-child {
+      border-top-left-radius: 14px;
+      border-bottom-left-radius: 14px;
+    }
+
+    .items-table th:last-child {
+      border-top-right-radius: 14px;
+      border-bottom-right-radius: 14px;
+    }
+
+    .items-table tbody tr {
+      background: white;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+    }
+
+    .items-table tbody tr:nth-child(even) {
+      background: var(--invoice-row);
+    }
+
+    .items-table td {
+      padding: 16px 18px;
+      font-size: 0.97rem;
+      color: var(--invoice-text);
+      border-top: 1px solid #eef2f7;
+      border-bottom: 1px solid #eef2f7;
+    }
+
+    .items-table td:first-child {
+      border-left: 1px solid #eef2f7;
+      border-top-left-radius: 14px;
+      border-bottom-left-radius: 14px;
+      width: 60px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .items-table td:last-child {
+      border-right: 1px solid #eef2f7;
+      border-top-right-radius: 14px;
+      border-bottom-right-radius: 14px;
+      font-weight: 700;
+    }
+
+    .notes-footer {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+      gap: 24px;
+      margin-top: 10px;
+      align-items: stretch;
+    }
+
+    .contact-panel {
+      background: linear-gradient(135deg, #f68b1f 0%, #ff9f43 100%);
+      color: white;
+      border-radius: 20px;
+      padding: 22px 24px;
+    }
+
+    .contact-panel p {
+      line-height: 1.8;
+      font-size: 0.96rem;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px 20px;
+      margin-top: 14px;
+      font-size: 0.92rem;
+    }
+
+    .thank-you {
+      background: #111827;
+      color: white;
+      border-radius: 20px;
+      padding: 22px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 0.98rem;
+      line-height: 1.7;
+    }
+
+    .action-buttons {
+      padding-top: 24px;
+      border-top: 1px solid var(--invoice-border);
+    }
+
+    .btn {
+      padding: 12px 24px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: 999px;
+    }
+
+    .btn-print {
+      background: #111827;
+      color: white;
+    }
+
+    .btn-print:hover {
+      background: #1f2937;
+    }
+
+    .btn-close {
+      background: #f3f4f6;
+      color: #111827;
+    }
+
+    .btn-close:hover {
+      background: #e5e7eb;
+    }
+
+    @media print {
+      @page {
+        size: A4;
+        margin: 10mm;
+      }
+
+      body {
+        background: white;
+        padding: 0;
+      }
+
+      .invoice {
+        box-shadow: none;
+        border: none;
+        border-radius: 0;
+        max-width: none;
+        padding: 18px;
+      }
+
+      .action-buttons {
+        display: none;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .invoice {
+        padding: 28px 20px;
+      }
+
+      .invoice-header {
+        flex-direction: column;
+      }
+
+      .company-name {
+        text-align: left;
+        max-width: none;
+      }
+
+      .invoice-grid,
+      .notes-footer,
+      .bill-dates,
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .items-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="invoice">
-    <!-- Header -->
     <div class="invoice-header">
       <div class="invoice-title">
+        <div class="brand">
+          <div class="brand-mark"></div>
+          <div class="brand-text">ASQA Studio</div>
+        </div>
         <h1>Invoice</h1>
-        <p>Invoice no: ${request.serialNumber || "INV-" + Date.now()}</p>
+        <div class="invoice-meta">
+          <span>Invoice no : ${invoiceNumber}</span>
+          <span>${invoiceDate}</span>
+        </div>
       </div>
       <div class="company-name">
-        ASQA<br>
-        Afghanistan Quality Standards Authority
+        <strong>Bill Issuer</strong>
+        <p>ASQA<br>Afghanistan Quality Standards Authority</p>
       </div>
     </div>
 
-    <!-- Billed To & Dates -->
-    <div class="info-row">
-      <div class="info-section">
-        <h3>Billed To:</h3>
-        <p>${request.company?.[getCompanyNameField()] || "-"}</p>
+    <div class="invoice-grid">
+      <div>
+        <div class="bill-card">
+          <div class="section-label">Billed To</div>
+          <div class="billed-name">${companyName}</div>
+          <div class="bill-dates">
+            <div>
+              <strong>Invoice Date</strong>
+              <span>${invoiceDate}</span>
+            </div>
+            <div>
+              <strong>Due Date</strong>
+              <span>${dueDate}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bank-details" style="margin-top: 18px;">
+          <h3>Please make payment via</h3>
+          <p>Bank Name : Da Afghanistan Bank</p>
+          <p>Account Number : 001-234567-89</p>
+          <p>Account Holder : ASQA Certification Authority</p>
+          <p>Reference : ${invoiceNumber}</p>
+        </div>
       </div>
-      <div class="info-section">
-        <h3>Invoice Date:</h3>
-        <p>${IslamicDateFormatter.formatQamari(new Date())}</p>
-      </div>
-      <div class="info-section">
-        <h3>Due Date:</h3>
-        <p>${IslamicDateFormatter.formatQamari(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000))}</p>
+
+      <div class="summary-box">
+        <h3>Total Amount Due</h3>
+        <p>${amountDisplay}</p>
+        <small>Kindly complete the payment before the due date and keep this invoice for your records.</small>
       </div>
     </div>
 
@@ -499,37 +937,27 @@ const billContent = `
       <tbody>
         <tr>
           <td>1</td>
-          <td>${t(`certificationRequest.certificationTypeOptions.${request.certificationType}`) || "Certification Fee"}</td>
-          <td>${request.paymentAmount || "To be determined"}</td>
+          <td>${itemDescription}</td>
+          <td>${amountDisplay}</td>
           <td>1</td>
-          <td>${request.paymentAmount || "To be determined"}</td>
+          <td>${amountDisplay}</td>
         </tr>
      
       </tbody>
     </table>
 
-    <!-- Payment Instructions -->
-    <div class="bank-details">
-      <h3>Please make payment via</h3>
-      <p>Bank Name : Da Afghanistan Bank</p>
-      <p>Account Number : 001-234567-89</p>
-      <p>Account Holder : ASQA Certification Authority</p>
-      <p>Reference : ${request.serialNumber || "-"}</p>
-    </div>
-
-    <!-- Total Amount Due -->
-    <div class="total-amount">
-      <h3>Total Amount Due:</h3>
-      <p>${request.paymentAmount || "Contact Support"}</p>
-    </div>
-
-    <!-- Footer -->
-    <div class="footer">
-      <div class="footer-company">ASQA</div>
-      <div class="footer-contact">
-        <p>+93 (555) 123-4567</p>
-        <p>support@asqa.af</p>
-        <p>Kabul, Afghanistan</p>
+    <div class="notes-footer">
+      <div class="contact-panel">
+        <p>If you have any questions about this invoice, feel free to contact us at:</p>
+        <div class="contact-grid">
+          <div>+93 (555) 123-4567</div>
+          <div>support@asqa.af</div>
+          <div>www.asqa.af</div>
+          <div>Kabul, Afghanistan</div>
+        </div>
+      </div>
+      <div class="thank-you">
+        Thank you for trusting ASQA. We are proud to support your certification journey.
       </div>
     </div>
 
@@ -713,7 +1141,7 @@ const billContent = `
       items.push({
         label: t("certificationRequest.printBill") || "Print Bill",
         icon: "pi pi-print",
-        command: () => printBill(rowData),
+        // command: () => printBill(rowData),
       });
 
       const hasPrintedFlag =

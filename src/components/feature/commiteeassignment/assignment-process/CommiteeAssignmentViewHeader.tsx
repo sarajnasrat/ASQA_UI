@@ -62,7 +62,7 @@ const CommiteeAssignmentViewHeader: React.FC<Props> = ({
                 {assignmentStatusConfig.icon}
                 {assignmentStatusConfig.label}
               </span>
-              {request?.requestStatus && (
+              {/* {request?.requestStatus && (
                 <span
                   className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${requestStatusConfig.bgColor} ${requestStatusConfig.color}`}
                 >
@@ -70,7 +70,7 @@ const CommiteeAssignmentViewHeader: React.FC<Props> = ({
                   {t(`certificationRequest.statusOptions.${requestStatusConfig.label}`)}
 
                 </span>
-              )}
+              )} */}
             </div>
 
             <div className="flex flex-wrap gap-4 text-sm text-gray-500">

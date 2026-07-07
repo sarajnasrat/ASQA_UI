@@ -27,12 +27,15 @@ const Navbar = () => {
   }, [i18n.language]);
 
   const navLinks = [
-    { name: t("nav.home"), path: "/" },
+    // { name: t("nav.home"), path: "/" },
     // { name: t("nav.services"), path: "/services" },
+      { name: t("nav.organizationServices"), path: "/organization-services" },
+          { name: t("nav.certificationVerification"), path: "/certification-verification" },
     { name: t("nav.internationalParties"), path: "/international-parties" },
-    { name: t("nav.organizationServices"), path: "/organization-services" },
+  
     { name: t("nav.companies"), path: "/companies" },
     { name: t("nav.contact"), path: "/contact" },
+  
   ];
 
   const changeLanguage = (lang: string) => {

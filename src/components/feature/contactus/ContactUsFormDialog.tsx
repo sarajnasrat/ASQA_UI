@@ -213,7 +213,7 @@ export const ContactUsFormDialog: React.FC<Props> = ({
       visible={visible}
       onHide={onClose}
       header={dialogHeader}
-      style={{ width: "95vw", maxWidth: "650px" }}
+      style={{ width: "95vw", maxWidth: "800px" }}
       modal
       draggable={false}
       resizable={false}

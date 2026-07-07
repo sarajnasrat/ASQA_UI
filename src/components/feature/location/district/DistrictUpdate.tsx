@@ -17,7 +17,7 @@ interface DistrictUpdateProps {
   onSuccess: () => void;
 }
 
-type Translations = { en: string; fa: string; ps: string };
+type Translations = { en: string; dr: string; ps: string };
 
 interface DistrictFormValues {
   provinceId: number | null;
@@ -39,7 +39,7 @@ export const DistrictUpdate: React.FC<DistrictUpdateProps> = ({
   const { control, handleSubmit, formState: { errors }, reset } = useForm<DistrictFormValues>({
     defaultValues: {
       provinceId: null,
-      translations: { en: "", fa: "", ps: "" },
+      translations: { en: "", dr: "", ps: "" },
     },
   });
 
@@ -49,7 +49,7 @@ export const DistrictUpdate: React.FC<DistrictUpdateProps> = ({
   if (!districtId) {
     reset({
       provinceId: provinces[0].id, // set first province as default
-      translations: { en: "", fa: "", ps: "" },
+      translations: { en: "", dr: "", ps: "" },
     });}
     const loadDistrict = async () => {
       try {
@@ -110,8 +110,8 @@ export const DistrictUpdate: React.FC<DistrictUpdateProps> = ({
     }
   };
 
-  const languages: (keyof Translations)[] = ["en", "fa", "ps"];
-  const getLanguageName = (lang: keyof Translations) => ({"en": t("languages.english"), "fa": t("languages.persian"), "ps": t("languages.pashto")})[lang];
+  const languages: (keyof Translations)[] = ["en", "dr", "ps"];
+  const getLanguageName = (lang: keyof Translations) => ({"en": t("languages.english"), "dr": t("languages.persian"), "ps": t("languages.pashto")})[lang];
 
   if (loading) return <div className="p-6 text-center text-gray-500">{t("common.loading")}...</div>;
   return (
@@ -182,10 +182,10 @@ export const DistrictUpdate: React.FC<DistrictUpdateProps> = ({
                         onBlur={field.onBlur}
                         type="text"
                         disabled={isSubmitting}
-                        dir={lang === "fa" || lang === "ps" ? "rtl" : "ltr"}
+                        dir={lang === "dr" || lang === "ps" ? "rtl" : "ltr"}
                         className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 transition-all
                           ${errors.translations?.[lang] ? "border-red-300 bg-red-50 focus:ring-red-200" : "border-gray-300 focus:ring-blue-200"}
-                          ${lang === "fa" || lang === "ps" ? "text-right" : "text-left"}`}
+                          ${lang === "dr" || lang === "ps" ? "text-right" : "text-left"}`}
                         placeholder={t("district.form.placeholder.name", { language: getLanguageName(lang) })}
                       />
                     )}

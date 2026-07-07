@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import { useTranslation } from "react-i18next";
 import {
@@ -36,6 +36,7 @@ const transitionMap: Record<string, string[]> = {
 export const CommiteeAssignmentDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useTranslation();
   const { showError, showSuccess } = useToast();
 
@@ -53,6 +54,18 @@ export const CommiteeAssignmentDetails: React.FC = () => {
     quickStats: true,
     contactPersonDetails: true,
   });
+
+  const getDefaultReturnPath = () => {
+    const committeeType = assignment?.committee?.committeeType?.toUpperCase();
+    return committeeType === "APPROVAL"
+      ? "/approval-commitee-assignment"
+      : "/commitee-assignment-list";
+  };
+
+  const getReturnPath = () => {
+    const from = (location.state as { from?: string } | null)?.from;
+    return from || getDefaultReturnPath();
+  };
 
   const loadAssignment = async () => {
     if (!id) return;
@@ -95,8 +108,9 @@ export const CommiteeAssignmentDetails: React.FC = () => {
       showError,
       t,
     );
-    if(response?.status==200) {
-      navigate("/commitee-assignment-list");
+    if (response?.status === 200) {
+      navigate(getReturnPath());
+      return;
     }
     if (response) {
       loadAssignment();
@@ -104,14 +118,11 @@ export const CommiteeAssignmentDetails: React.FC = () => {
   };
 
   const handleUpdateSuccess = () => {
-    showSuccess(
-      t("common.success"),
-      t("commitee.assignment.updatedSuccessfully") ||
-        "Assignment updated successfully",
-    );
     loadAssignment();
     setUpdateVisible(false);
     setPreferredStatus(null);
+
+    navigate(getReturnPath());
   };
 
   const getNextStatuses = () => {
@@ -207,37 +218,37 @@ export const CommiteeAssignmentDetails: React.FC = () => {
         color: "text-blue-700",
         bgColor: "bg-blue-100",
         icon: <Clock className="h-4 w-4" />,
-        label: t("certificationRequest.statusOptions.INSPECTION_IN_PROGRESS"),
+        label: t("INSPECTION_IN_PROGRESS"),
       },
       UNDER_REVIEW: {
         color: "text-yellow-700",
         bgColor: "bg-yellow-100",
         icon: <AlertCircle className="h-4 w-4" />,
-        label: t("certificationRequest.statusOptions.UNDER_REVIEW"),
+        label: t("UNDER_REVIEW"),
       },
       REPORTED_TO_COMMITTEE: {
         color: "text-pink-700",
         bgColor: "bg-pink-100",
         icon: <FileText className="h-4 w-4" />,
-        label: t("certificationRequest.statusOptions.REPORTED_TO_COMMITTEE"),
+        label: t("REPORTED_TO_COMMITTEE"),
       },
       REPORT_APPROVED: {
         color: "text-green-700",
         bgColor: "bg-green-100",
         icon: <CheckCircle className="h-4 w-4" />,
-        label: t("certificationRequest.statusOptions.REPORT_APPROVED"),
+        label: t("REPORT_APPROVED"),
       },
       REJECTED: {
         color: "text-red-700",
         bgColor: "bg-red-100",
         icon: <XCircle className="h-4 w-4" />,
-        label: t("certificationRequest.statusOptions.REJECTED"),
+        label: t("REJECTED"),
       },
       PAYMENT_COMPLETED: {
         color: "text-emerald-700",
         bgColor: "bg-emerald-100",
         icon: <Shield className="h-4 w-4" />,
-        label: t("certificationRequest.statusOptions.PAYMENT_COMPLETED"),
+        label: t("PAYMENT_COMPLETED"),
       },
     };
 
@@ -318,7 +329,7 @@ export const CommiteeAssignmentDetails: React.FC = () => {
             {t("commitee.assignment.detailsNotFoundMessage")}
           </p>
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => navigate(getReturnPath())}
             className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             {t("common.back")}
@@ -349,7 +360,7 @@ export const CommiteeAssignmentDetails: React.FC = () => {
           getNextStatuses={getNextStatuses}
           getStatusButtonLabel={getStatusButtonLabel}
           getCertificationTypeLabel={getCertificationTypeLabel}
-          onBack={() => navigate(-1)}
+          onBack={() => navigate(getReturnPath())}
           onStatusAction={confirmStatusUpdate}
           onOpenEdit={() => {
             setPreferredStatus(null);

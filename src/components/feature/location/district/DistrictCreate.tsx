@@ -14,7 +14,7 @@ interface DistrictFormValues {
   provinceId: number | null;
   translations: {
     en: string;
-    fa: string;
+    dr: string;
     ps: string;
   };
 }
@@ -37,7 +37,7 @@ export const DistrictCreate: React.FC<DistrictCreateProps> = ({
   const { control, handleSubmit, formState: { errors }, reset } = useForm<DistrictFormValues>({
     defaultValues: {
       provinceId: provinces[0]?.id || null,
-      translations: { en: "", fa: "", ps: "" },
+      translations: { en: "", dr: "", ps: "" },
     },
   });
 
@@ -74,11 +74,11 @@ export const DistrictCreate: React.FC<DistrictCreateProps> = ({
     }
   };
 
-  const languages: Array<keyof DistrictFormValues["translations"]> = ["en", "fa", "ps"];
+  const languages: Array<keyof DistrictFormValues["translations"]> = ["en", "dr", "ps"];
   const getLanguageName = (lang: keyof DistrictFormValues["translations"]) =>
     ({
       en: t("languages.english"),
-      fa: t("languages.persian"),
+      dr: t("languages.persian"),
       ps: t("languages.pashto"),
     })[lang];
 
@@ -165,11 +165,11 @@ export const DistrictCreate: React.FC<DistrictCreateProps> = ({
                         {...field}
                         type="text"
                         disabled={isSubmitting}
-                        dir={lang === "fa" || lang === "ps" ? "rtl" : "ltr"}
+                        dir={lang === "dr" || lang === "ps" ? "rtl" : "ltr"}
                         value={field.value ?? ""}
                         className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 transition-all
                           ${errors.translations?.[lang] ? "border-red-300 bg-red-50 focus:ring-red-200" : "border-gray-300 focus:ring-blue-200"}
-                          ${lang === "fa" || lang === "ps" ? "text-right" : "text-left"}`}
+                          ${lang === "dr" || lang === "ps" ? "text-right" : "text-left"}`}
                         placeholder={t("district.form.placeholder.name", { language: getLanguageName(lang) })}
                         onChange={field.onChange}
                         onBlur={field.onBlur}

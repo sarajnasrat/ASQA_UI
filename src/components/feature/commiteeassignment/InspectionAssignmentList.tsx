@@ -163,7 +163,10 @@ const loadData = async () => {
       ...withPermission("VIEW_COMMITEEASSIGNMENT", {
         label: t("common.view"),
         icon: "pi pi-eye",
-        command: () => navigate(`/commitee-assignment/view/${rowData.id}`),
+        command: () =>
+          navigate(`/commitee-assignment/view/${rowData.id}`, {
+            state: { from: "/commitee-assignment-list" },
+          }),
       }),
       ...withPermission("UPDATE_COMMITTEEASSIGNMENT", {
         label: t("common.edit"),

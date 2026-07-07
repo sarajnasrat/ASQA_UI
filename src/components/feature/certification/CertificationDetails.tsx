@@ -516,12 +516,15 @@ export const CertificationDetails: React.FC = () => {
   }
   const breadcrumbItems = [
     {
-      label: "Certifications",
+      label: t("certification.all"),
       url: "/certifications",
     },
     {
       label: details.certificateNumber,
-      url: `/certifications/${details.id}`,
+      url:
+        details.id != null
+          ? `/certifications/${details.id}`
+          : t("certification.certificateDetails"),
     },
   ];
   return (
@@ -533,7 +536,11 @@ export const CertificationDetails: React.FC = () => {
         <div className="container mx-auto px-3 sm:px-4 max-w-7xl">
           {/* Header */}
           <div className="mb-6">
-            <DynamicBreadcrumb items={breadcrumbItems} size="max-w-8xl" radius="rounded" />
+            <DynamicBreadcrumb
+              items={breadcrumbItems}
+              size="max-w-8xl"
+              radius="rounded"
+            />
 
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">

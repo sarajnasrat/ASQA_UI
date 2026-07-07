@@ -10,7 +10,6 @@ import CommiteeAssignmentService from "../../../services/commitee-assignment.ser
 import { handleApi } from "../../../hooks/handleApi";
 import { useToast } from "../../../hooks/ToastContext";
 import FileUploadField from "../../common/FileUploadField";
-import { Navigate, useNavigate } from "react-router-dom";
 
 interface Props {
   visible: boolean;
@@ -46,7 +45,6 @@ export const CommiteeAssingmentUpdate: React.FC<Props> = ({
       remarks: "",
     },
   });
-  const navigate = useNavigate();
   const watchedStatus = watch("assignmentStatus");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
@@ -71,7 +69,7 @@ export const CommiteeAssingmentUpdate: React.FC<Props> = ({
       value: status,
     }));
   }, [currentStatus, t]);
-
+  console.log("commiteeType", commiteeType);
   useEffect(() => {
     if (assignmentId && visible) {
       CommiteeAssignmentService.getById(assignmentId).then((res: any) => {
@@ -106,16 +104,11 @@ export const CommiteeAssingmentUpdate: React.FC<Props> = ({
         showSuccess,
         showError,
         t,
+
       );
       if (response?.status == 200) {
-        if(commiteeType="ISPECTION"){
-          navigate("/commitee-assignment-list");
-        }
-        if(commiteeType="APPROVAL"){
-          navigate("/approval-commitee-assignment");
-        }
+        onSuccess();
       }
-      // onSuccess();
       onHide();
     } finally {
       setLoading(false);
