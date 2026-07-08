@@ -293,7 +293,7 @@ const NotificationList: React.FC = () => {
     },
     {
       field: "notificationType",
-      header: t("notification.filterByType"),
+      header: t("notification.notificationType"),
       body: (row: NotificationItem) =>
         row.notificationType
           ? t(
@@ -302,26 +302,26 @@ const NotificationList: React.FC = () => {
             )
           : t("common.notSpecified"),
     },
-    {
-      field: "priority",
-      header: t("notification.columns.priority"),
-      body: (row: NotificationItem) => {
-        const priority = row.priority || "INFO";
-        const severity =
-          priority === "URGENT"
-            ? "danger"
-            : priority === "WARNING"
-              ? "warning"
-              : "info";
+    // {
+    //   field: "priority",
+    //   header: t("notification.columns.priority"),
+    //   body: (row: NotificationItem) => {
+    //     const priority = row.priority || "INFO";
+    //     const severity =
+    //       priority === "URGENT"
+    //         ? "danger"
+    //         : priority === "WARNING"
+    //           ? "warning"
+    //           : "info";
 
-        return (
-          <Tag
-            value={t(`notification.priorities.${priority}`)}
-            severity={severity}
-          />
-        );
-      },
-    },
+    //     return (
+    //       <Tag
+    //         value={t(`notification.priorities.${priority}`)}
+    //         severity={severity}
+    //       />
+    //     );
+    //   },
+    // },
     {
       field: "isRead",
       header: t("notification.columns.status"),
@@ -423,7 +423,7 @@ const NotificationList: React.FC = () => {
                   showClear
                 />
               </div>
-
+{/* 
               <div>
                 <label className="mb-2 block text-sm font-medium text-slate-700">
                   {t("notification.filterByPriority")}
@@ -441,7 +441,7 @@ const NotificationList: React.FC = () => {
                   className="w-full"
                   showClear
                 />
-              </div>
+              </div> */}
             </div>
 
             <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap xl:justify-end">
@@ -451,7 +451,9 @@ const NotificationList: React.FC = () => {
                 loading={markingAll}
                 disabled={loading || unreadCount === 0}
                 onClick={handleMarkAllAsRead}
-                className="sm:min-w-[190px]"
+                className="sm:min-w-47.5"
+                text
+                raised
               />
               <Button
                 icon="pi pi-refresh"

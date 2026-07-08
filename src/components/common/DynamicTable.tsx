@@ -40,9 +40,7 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({
   rowsPerPageOptions = [5, 10, 25, 50],
 }) => {
   return (
-    <div
-      className="pl-5 pr-5 md:pb-6 max-w-8xl mx-auto"
-    >
+    <div className="pl-5 pr-5 md:pb-6 max-w-8xl mx-auto">
       <Card className="shadow-xl border-0 rounded-xl overflow-hidden bg-white">
         <DataTable
           value={value}
@@ -57,16 +55,16 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({
           responsiveLayout="scroll"
           emptyMessage="No data found"
           selectionMode="single"
+          stripedRows
           className="p-datatable-sm"
           scrollable
-            scrollHeight="500px"
+          scrollHeight="500px"
           height={"12rem"}
           header={header}
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown CurrentPageReport"
           rowsPerPageOptions={rowsPerPageOptions}
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} records"
           globalFilter={globalFilter}
-          stripedRows
         >
           {columns.map((col, index) => (
             <Column

@@ -9,6 +9,7 @@
     "logout": "Logout"
   },
   "notification": {
+    "notificationType": "Notification Type",
     "filterByType": "Select notification Type",
     "filterByPriority": "Select Priority",
     "filters": {
