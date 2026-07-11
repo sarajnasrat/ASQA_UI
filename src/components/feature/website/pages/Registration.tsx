@@ -24,10 +24,13 @@ import CompanyForm from "./CompanyForm";
 import CertificationRequestService from "../../../../services/CertificationReques.service";
 import { useTranslation } from "react-i18next";
 import CertificationTypeSelection from "./CertificationTypeSelection";
+import CertificationEntrySelection from "./CertificationEntrySelection";
 
 interface LocationState {
   certificationMainType?: string;
   certificationType?: string;
+  selectedCertificationType?: string;
+  domesticCategory?: string;
   requestType?: string;
   requestId?: number;
   step?: number;
@@ -38,6 +41,9 @@ const Registration = () => {
   const [step, setStep] = useState<number>(1);
   const [companyId, setCompanyId] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [selectedCertificationType, setSelectedCertificationType] =
+    useState<string>("");
+
   const [showConfirmationModal, setShowConfirmationModal] =
     useState<boolean>(false);
   const [showSuccessDialog, setShowSuccessDialog] = useState<boolean>(false);
@@ -45,6 +51,7 @@ const Registration = () => {
   const [certificationInfo, setCertificationInfo] = useState<{
     mainType: string;
     type: string;
+    domesticCategory?: string;
     requestType: string;
     requestId: number;
   } | null>(null);
@@ -53,26 +60,54 @@ const Registration = () => {
   const location = useLocation();
   const { toast, showToast } = useAppToast();
 
+  const getSelectedCertificationStepTitle = () => {
+    if (selectedCertificationType === "STANDARD_MARK_CERTIFICATION") {
+      return t(
+        "certification.page.certificationType.standard.requestTitle",
+        "Standard Mark Request",
+      );
+    }
+
+    if (selectedCertificationType === "DOMESTIC_QUALITY_CERTIFICATION") {
+      return t(
+        "certification.page.certificationType.domestic.requestTitle",
+        "Quality Certification Request",
+      );
+    }
+
+    return t("registration.steps.certificationrequest");
+  };
+
   useEffect(() => {
     // Get certification info from location state or session storage
     const state = location.state as LocationState;
     const storedRequestId = sessionStorage.getItem("certificationRequestId");
     const storedCertificationType = sessionStorage.getItem("certificationType");
+    const storedSelectedCertificationType = sessionStorage.getItem("selectedCertificationType");
+    const storedDomesticCategory = sessionStorage.getItem("domesticCategory");
     const storedMainType = sessionStorage.getItem("certificationMainType");
     const storedRequestType = sessionStorage.getItem("requestType");
 
     if (state?.requestId && state?.certificationType) {
+      setSelectedCertificationType(
+        state.selectedCertificationType || state.certificationType,
+      );
       setCertificationInfo({
         mainType: state.certificationMainType || "",
         type: state.certificationType,
+        domesticCategory: state.domesticCategory || "",
         requestType: state.requestType || "",
         requestId: state.requestId,
       });
       if (state.step) setStep(state.step);
     } else if (storedRequestId && storedCertificationType) {
+      setSelectedCertificationType(
+        storedSelectedCertificationType || storedCertificationType,
+      );
       setCertificationInfo({
         mainType: storedMainType || "",
         type: storedCertificationType,
+        domesticCategory: storedDomesticCategory || "",
         requestType: storedRequestType || "",
         requestId: parseInt(storedRequestId),
       });
@@ -90,7 +125,7 @@ const Registration = () => {
   const steps = [
     {
       number: 1,
-      title: t("registration.steps.certificationrequest"),
+      title: getSelectedCertificationStepTitle(),
       icon: Check,
     },
     { number: 2, title: t("registration.steps.companyInfo"), icon: Building2 },
@@ -100,15 +135,42 @@ const Registration = () => {
   ];
 
   const getCertificationIcon = (type: string) => {
-    if (type?.includes("DOMESTIC")) return <Building2 className="h-5 w-5" />;
+    if (
+      type?.includes("DOMESTIC") ||
+      type === "MANAGEMENT_SYSTEM_QUALITY" ||
+      type === "SERVICE_QUALITY" ||
+      type === "PRODUCT_QUALITY"
+    ) {
+      return <Building2 className="h-5 w-5" />;
+    }
     if (type?.includes("INTERNATIONAL")) return <Globe className="h-5 w-5" />;
     return <Award className="h-5 w-5" />;
   };
 
   const getCertificationColor = (type: string) => {
-    if (type?.includes("DOMESTIC")) return "from-blue-600 to-blue-700";
+    if (
+      type?.includes("DOMESTIC") ||
+      type === "MANAGEMENT_SYSTEM_QUALITY" ||
+      type === "SERVICE_QUALITY" ||
+      type === "PRODUCT_QUALITY"
+    ) {
+      return "from-blue-600 to-blue-700";
+    }
     if (type?.includes("INTERNATIONAL")) return "from-indigo-600 to-indigo-700";
     return "from-purple-600 to-purple-700";
+  };
+
+  const getDomesticCategoryLabel = (value: string) => {
+    switch (value) {
+      case "MANAGEMENT_SYSTEM_QUALITY":
+        return t("certification.page.certificationType.domesticOptions.system");
+      case "SERVICE_QUALITY":
+        return t("certification.page.certificationType.domesticOptions.services");
+      case "PRODUCT_QUALITY":
+        return t("certification.page.certificationType.domesticOptions.product");
+      default:
+        return value;
+    }
   };
 
   const handleCertificationSuccess = (
@@ -116,10 +178,16 @@ const Registration = () => {
     mainType: string,
     certificationType: string,
     requestId: number,
+    domesticCategory?: string,
+    selectedType?: string,
   ) => {
+    if (selectedType) {
+      setSelectedCertificationType(selectedType);
+    }
     setCertificationInfo({
       mainType,
       type: certificationType,
+      domesticCategory: domesticCategory || "",
       requestType,
       requestId,
     });
@@ -200,6 +268,8 @@ const Registration = () => {
         // Clear session storage
         sessionStorage.removeItem("certificationRequestId");
         sessionStorage.removeItem("certificationType");
+        sessionStorage.removeItem("selectedCertificationType");
+        sessionStorage.removeItem("domesticCategory");
         sessionStorage.removeItem("certificationMainType");
         sessionStorage.removeItem("requestType");
         sessionStorage.removeItem("companyId");
@@ -277,9 +347,19 @@ const Registration = () => {
   };
 
   const handleCancel = () => {
-    // Clear session storage
+    // Clear persisted draft and session state
+    sessionStorage.removeItem("certificationRequestId");
+    sessionStorage.removeItem("certificationType");
+    sessionStorage.removeItem("selectedCertificationType");
+    sessionStorage.removeItem("domesticCategory");
+    sessionStorage.removeItem("certificationMainType");
+    sessionStorage.removeItem("requestType");
+    sessionStorage.removeItem("companyId");
+    sessionStorage.removeItem("contactPersonId");
+    sessionStorage.removeItem("attachmentId");
     localStorage.removeItem("certificationRequestId");
     localStorage.removeItem("certificationType");
+    localStorage.removeItem("domesticCategory");
     localStorage.removeItem("certificationMainType");
     localStorage.removeItem("requestType");
     localStorage.removeItem("companyId");
@@ -290,17 +370,60 @@ const Registration = () => {
     navigate("/");
   };
 
+  const handleCertificationTypeSelect = (value: string) => {
+    setSelectedCertificationType(value);
+    setCertificationInfo(null);
+    sessionStorage.removeItem("certificationRequestId");
+    sessionStorage.removeItem("certificationType");
+    sessionStorage.removeItem("domesticCategory");
+    sessionStorage.removeItem("certificationMainType");
+    sessionStorage.removeItem("requestType");
+    localStorage.removeItem("certificationDraft");
+  };
+
+  const handleBackToFirstSelection = () => {
+    setStep(1);
+    setSelectedCertificationType("");
+    setCertificationInfo(null);
+    sessionStorage.removeItem("certificationRequestId");
+    sessionStorage.removeItem("certificationType");
+    sessionStorage.removeItem("domesticCategory");
+    sessionStorage.removeItem("certificationMainType");
+    sessionStorage.removeItem("requestType");
+    localStorage.removeItem("certificationDraft");
+  };
+
+  const handleStepNavigation = (targetStep: number) => {
+    if (targetStep === 1) {
+      handleBackToFirstSelection();
+      return;
+    }
+
+    if (targetStep < step) {
+      setStep(targetStep);
+    }
+  };
+
   const renderForm = () => {
     switch (step) {
       case 1:
         return (
-          <CertificationTypeSelection
-            onSuccess={handleCertificationSuccess}
-            onCancel={handleCancel}
-            isSubmitting={isSubmitting}
-            setIsSubmitting={setIsSubmitting}
-            isStandalone={false}
-          />
+          selectedCertificationType ? (
+            <CertificationTypeSelection
+              onSuccess={handleCertificationSuccess}
+              onCancel={handleBackToFirstSelection}
+              isSubmitting={isSubmitting}
+              setIsSubmitting={setIsSubmitting}
+              isStandalone={false}
+              presetCertificationType={selectedCertificationType}
+            />
+          ) : (
+            <CertificationEntrySelection
+              embedded
+              selectedValue={selectedCertificationType}
+              onSelect={handleCertificationTypeSelect}
+            />
+          )
         );
       case 2:
         return (
@@ -365,6 +488,13 @@ const Registration = () => {
                         )}
                       </p>
                       <div className="flex gap-2 mt-2">
+                        {certificationInfo.domesticCategory && (
+                          <span className="text-xs bg-white/20 px-2 py-1 rounded">
+                            {getDomesticCategoryLabel(
+                              certificationInfo.domesticCategory,
+                            )}
+                          </span>
+                        )}
                         <span className="text-xs bg-white/20 px-2 py-1 rounded">
                           {t(
                             `certification.page.requestType.${certificationInfo.requestType?.toLowerCase()}.title`,
@@ -595,6 +725,8 @@ const Registration = () => {
     }
   };
 
+  const shouldShowStepper = !(step === 1 && !selectedCertificationType);
+
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
       <Toast ref={toast} position="top-right" />
@@ -608,35 +740,47 @@ const Registration = () => {
         </div>
 
         {/* Stepper */}
-        <div className="mb-10 bg-white rounded-xl p-6 shadow-sm">
-          <div className="flex items-center justify-between">
-            {steps.map((s, index) => (
-              <div key={s.number} className="flex-1">
-                <div className="flex items-center">
-                  <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-all duration-300 ${
-                      step >= s.number
-                        ? "bg-blue-600 text-white shadow-md"
-                        : "bg-gray-200 text-gray-600"
+        {shouldShowStepper && (
+          <div className="mb-10 bg-white rounded-xl p-6 shadow-sm">
+            <div className="flex items-center justify-between">
+              {steps.map((s, index) => (
+                <div key={s.number} className="flex-1">
+                  <div className="flex items-center">
+                    <button
+                      type="button"
+                      onClick={() => handleStepNavigation(s.number)}
+                      className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-all duration-300 ${
+                        step >= s.number
+                          ? "bg-blue-600 text-white shadow-md"
+                          : "bg-gray-200 text-gray-600"
+                      } ${step >= s.number || s.number === 1 ? "cursor-pointer" : "cursor-default"}`}
+                    >
+                      {step > s.number ? <Check size={20} /> : s.number}
+                    </button>
+                    {index < steps.length - 1 && (
+                      <div
+                        className={`flex-1 h-1 mx-2 transition-all duration-300 ${
+                          step > s.number ? "bg-blue-600" : "bg-gray-200"
+                        }`}
+                      ></div>
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleStepNavigation(s.number)}
+                    className={`mt-2 text-sm text-left hidden md:block ${
+                      step >= s.number || s.number === 1
+                        ? "text-gray-700 hover:text-blue-700"
+                        : "text-gray-500"
                     }`}
                   >
-                    {step > s.number ? <Check size={20} /> : s.number}
-                  </div>
-                  {index < steps.length - 1 && (
-                    <div
-                      className={`flex-1 h-1 mx-2 transition-all duration-300 ${
-                        step > s.number ? "bg-blue-600" : "bg-gray-200"
-                      }`}
-                    ></div>
-                  )}
+                    {s.title}
+                  </button>
                 </div>
-                <div className="mt-2 text-sm text-gray-600 hidden md:block">
-                  {s.title}
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Form Section */}
         {renderForm()}

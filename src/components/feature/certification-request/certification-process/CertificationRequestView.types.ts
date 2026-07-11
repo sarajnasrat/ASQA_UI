@@ -103,6 +103,7 @@ export interface CertificationRequest {
   transactionId?: string;
   paymentDate?: string;
   paymentReceiptUrl?: string;
+  certificationScope?: string;
   receiptFilePath?: string;
 }
 

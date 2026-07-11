@@ -1060,6 +1060,9 @@ const CertificationRequestView: React.FC = () => {
       STANDARD_MARK_CERTIFICATION: t(
         "certificationRequest.certificationTypeOptions.STANDARD_MARK_CERTIFICATION",
       ),
+      MANAGEMENT_SYSTEM_QUALITY:t("certificationRequest.certificationTypeOptions.MANAGEMENT_SYSTEM_QUALITY"),
+      SERVICE_QUALITY:t("certificationRequest.certificationTypeOptions.SERVICE_QUALITY"),
+      PRODUCT_QUALITY:"certificationRequest.certificationTypeOptions.PRODUCT_QUALITY"
     };
     return types[type] || type;
   };

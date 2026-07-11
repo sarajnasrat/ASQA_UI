@@ -23,6 +23,14 @@ interface District {
   nameEn?: string;
   nameDr?: string;
   namePs?: string;
+  province?: {
+    id?: number;
+    provinceName?: string;
+    country?: {
+      id?: number;
+      countryName?: string;
+    };
+  };
 }
 
 interface Address {
@@ -92,25 +100,6 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
   const [loadingDistricts, setLoadingDistricts] = useState<
     Record<number, boolean>
   >({});
-
-  const addressTypeOptions = [
-    {
-      value: AddressType.HEAD_OFFICE,
-      label: t("contactPerson.addresses.addressTypes.HEAD_OFFICE"),
-    },
-    {
-      value: AddressType.BRANCH_OFFICE,
-      label: t("contactPerson.addresses.addressTypes.BRANCH_OFFICE"),
-    },
-    {
-      value: AddressType.FACTORY,
-      label: t("contactPerson.addresses.addressTypes.HOME"),
-    },
-    {
-      value: AddressType.OTHER,
-      label: t("contactPerson.addresses.addressTypes.OTHER"),
-    },
-  ];
 
   useEffect(() => {
     loadCountries();
@@ -230,26 +219,60 @@ const loadDistrictsByProvince = async (
         position: data.position || "",
       });
 
-      // Map district -> districtId with safe navigation
-      const mappedAddresses = (data.addresses || []).map((address: any) => ({
-        districtId: address.district?.id,
-        details: address.details || "",
-        addressType: address.addressType || AddressType.HEAD_OFFICE,
-      }));
+      // Contact person getById returns only district basics, so resolve each district
+      // to its province/country before initializing dependent selects.
+      const mappedAddresses = await Promise.all(
+        (data.addresses || []).map(async (address: any) => {
+          const districtId = address.district?.id;
+          let provinceId: number | undefined;
+          let countryId: number | undefined;
 
-      setAddresses(
-        mappedAddresses.length
-          ? mappedAddresses
-          : [
-              {
-                countryId: undefined,
-                provinceId: undefined,
-                districtId: undefined,
-                details: "",
-                addressType: AddressType.HEAD_OFFICE,
-              },
-            ],
+          if (districtId) {
+            try {
+              const districtResponse = await DistrictService.getDistrict(
+                districtId,
+              );
+              const districtData =
+                districtResponse.data?.data || districtResponse.data;
+              provinceId = districtData?.province?.id;
+              countryId = districtData?.province?.country?.id;
+            } catch (error) {
+              console.error("Error loading district details:", error);
+            }
+          }
+
+          return {
+            countryId,
+            provinceId,
+            districtId,
+            details: address.details || "",
+            addressType: address.addressType || AddressType.HEAD_OFFICE,
+          };
+        }),
       );
+
+      const initialAddresses = mappedAddresses.length
+        ? mappedAddresses
+        : [
+            {
+              countryId: undefined,
+              provinceId: undefined,
+              districtId: undefined,
+              details: "",
+              addressType: AddressType.HEAD_OFFICE,
+            },
+          ];
+
+      setAddresses(initialAddresses);
+
+      initialAddresses.forEach((address, index) => {
+        if (address.countryId) {
+          loadProvincesByCountry(address.countryId, index);
+        }
+        if (address.provinceId) {
+          loadDistrictsByProvince(address.provinceId, index);
+        }
+      });
     } catch (error) {
       showToast(
         "error",
@@ -285,16 +308,6 @@ const loadDistrictsByProvince = async (
       const addressError: any = {};
       if (!address.districtId) {
         addressError.districtId = t("contactPerson.addresses.districtRequired");
-        hasAddressError = true;
-      }
-      if (!address.details?.trim()) {
-        addressError.details = t("contactPerson.addresses.detailsRequired");
-        hasAddressError = true;
-      }
-      if (!address.addressType) {
-        addressError.addressType = t(
-          "contactPerson.addresses.addressTypeRequired",
-        );
         hasAddressError = true;
       }
       newAddressErrors[index] = addressError;
@@ -382,11 +395,11 @@ const loadDistrictsByProvince = async (
     setIsSubmitting(true);
 
     try {
-      // Prepare addresses - only send districtId, details, addressType
+      // Keep backend-required address fields populated even though they are hidden in the UI.
       const addressesToSend = addresses.map((addr) => ({
         district: addr.districtId ? { id: addr.districtId } : null,
-        details: addr.details,
-        addressType: addr.addressType,
+        details: addr.details?.trim() || "N/A",
+        addressType: addr.addressType || AddressType.HEAD_OFFICE,
       }));
 
       // Prepare payload
@@ -748,64 +761,6 @@ const loadDistrictsByProvince = async (
                 </div>
               </div>
 
-              {/* Row 2: Address Type, Details */}
-              <div className="grid md:grid-cols-2 gap-4">
-                {/* Address Type */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {t("contactPerson.addresses.addressType")} *
-                  </label>
-                  <select
-                    value={address.addressType}
-                    onChange={(e) =>
-                      handleAddressChange(index, "addressType", e.target.value)
-                    }
-                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
-                      addressErrors[index]?.addressType
-                        ? "border-red-500"
-                        : "border-gray-300"
-                    }`}
-                  >
-                    {addressTypeOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                  {addressErrors[index]?.addressType && (
-                    <p className="mt-1 text-xs text-red-500">
-                      {addressErrors[index].addressType}
-                    </p>
-                  )}
-                </div>
-
-                {/* Address Details */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {t("contactPerson.addresses.details")} *
-                  </label>
-                  <input
-                    type="text"
-                    value={address.details}
-                    onChange={(e) =>
-                      handleAddressChange(index, "details", e.target.value)
-                    }
-                    placeholder={t(
-                      "contactPerson.addresses.detailsPlaceholder",
-                    )}
-                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
-                      addressErrors[index]?.details
-                        ? "border-red-500"
-                        : "border-gray-300"
-                    }`}
-                  />
-                  {addressErrors[index]?.details && (
-                    <p className="mt-1 text-xs text-red-500">
-                      {addressErrors[index].details}
-                    </p>
-                  )}
-                </div>
-              </div>
             </div>
           ))}
         </div>

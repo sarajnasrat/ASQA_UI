@@ -904,6 +904,9 @@
         "subtitle": "Choose the certification that matches your business needs",
         "domestic": {
           "title": "Quality certificate of management system or services",
+          "requestTitle": "Quality Certification Request",
+          "requestTypeLabel": "Quality Certification Request Type",
+          "scopeLabel": "Quality Certification Scope",
           "description": "For local business operations",
           "benefits": {
             "1": "Nationally recognized",
@@ -922,12 +925,22 @@
         },
         "standard": {
           "title": "Standard Mark",
+          "requestTitle": "Standard Mark Request",
+          "requestTypeLabel": "Standard Mark Request Type",
+          "scopeLabel": "Standard Mark Scope",
           "description": "For product/service standards",
           "benefits": {
             "1": "Quality mark",
             "2": "Consumer trust",
             "3": "Competitive edge"
           }
+        },
+        "domesticOptions": {
+          "title": "Select Domestic Certification Category",
+          "subtitle": "Choose the category for the domestic quality certification",
+          "system": "Management System Quality",
+          "services": "Services",
+          "product": "Product Quality"
         },
         "popular": "Most Popular"
       },
@@ -938,7 +951,8 @@
       "trust": "⚡ 1000+ companies have successfully completed their certification",
       "validation": {
         "requestTypeRequired": "Please select a request type",
-        "certificationTypeRequired": "Please select a certification type"
+        "certificationTypeRequired": "Please select a certification type",
+        "domesticCategoryRequired": "Please select a domestic certification category"
       },
       "messages": {
         "created": "Certification request created successfully!",
@@ -1096,7 +1110,10 @@
     "certificationTypeOptions": {
       "DOMESTIC_QUALITY_CERTIFICATION": "Domestic Quality Certification",
       "INTERNATIONAL_QUALITY_CERTIFICATION": "International Quality Certification",
-      "STANDARD_MARK_CERTIFICATION": "Standard Mark Certification"
+      "STANDARD_MARK_CERTIFICATION": "Standard Mark Certification",
+      "MANAGEMENT_SYSTEM_QUALITY": "Management System Quality",
+      "SERVICE_QUALITY": "Service Quality",
+      "PRODUCT_QUALITY": "Product Quality"
     },
     "fileSize": {
       "zero": "0 Bytes",

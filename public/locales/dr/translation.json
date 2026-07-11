@@ -350,7 +350,7 @@
     "visitWebsite": "بازدید از وبسایت",
     "businessInformation": "اطلاعات تجاری",
     "companyStats": "آمار شرکت",
-    "quickContact": "تماس سریع",
+    "quickContact": "ارتباط با شرکت",
     "categoriesCount": "دسته‌بندی‌ها",
     "documentsCount": "اسناد",
     "socialLinks": "لینک‌های اجتماعی",
@@ -376,7 +376,7 @@
       "documentsCount": "اسناد",
       "companyAttachments": "اسناد های ارایه شده توسط شرکت",
       "businessInformation": "معلومات تجاری",
-      "quickContact": "تماس سریع",
+      "quickContact": "ارتباط با شرکت",
       "businessLogo": "لوگوی تجاری",
       "companyStats": "آمار شرکت",
       "companyNameEN": "نام شرکت (انگلیسی)",
@@ -606,12 +606,12 @@
     "companies": "شرکت ها",
     "contact": "تماس",
     "register": "ثبت شرکت",
-    "subtitle": "اداره معیارهای کیفیت افغانستان",
+    "subtitle": "اداره معیار و کیفیت افغانستان",
     "language": "زبان",
     "profile": "پروفایل",
     "dashboard": "داشبورد",
     "logout": "خروج",
-    "certicificationrequest": "درخواست تائید نامه",
+    "certicificationrequest": "ایجاد درخواست",
     "internationalParties": "نهادهای بین المللی",
     "organizationServices": "فعالیت ریاست تائید نامه های کیفی"
   },
@@ -755,7 +755,7 @@
       "title": "ثبت درخواست تائید نامه کیفی",
       "subtitle": "ثبت درخواست",
       "leftSide": {
-        "title": "تائید نامه خود را آغاز کنید",
+        "title": "درخواست خود را آغاز کنید",
         "subtitle": "مسیر درست تائید نامه را برای کسب و کار خود انتخاب کنید",
         "steps": {
           "1": "نوع درخواست را انتخاب کنید",
@@ -776,7 +776,7 @@
           "description": "این تائید نامه برای استفاده داخلی است"
         },
         "external": {
-          "title": "خارجی",
+          "title": "بین المللی",
           "description": "این تائید نامه برای استفاده خارجی است"
         }
       },
@@ -805,10 +805,16 @@
         }
       },
       "certificationType": {
+        "selectCertificationType": "انتخاب نوعیت تائید نامه",
+        "domesticType": "اخذ تائید نامه کیفی ",
+        "selectedType": " درخواست انتخاب شده",
         "title": "۲. نوع تائید نامه را انتخاب کنید",
         "subtitle": "لطفا یکی از انواع تائید نامه کیفی را انتخاب کنید که با نیازهای کسب و کار شما مطابقت دارد",
         "domestic": {
-          "title": "تائید نامه کیفی سیستم مدیریتی یا خدمات محصول",
+          "title": "تائید نامه کیفی",
+          "requestTitle": "درخواست تائید نامه کیفی",
+          "requestTypeLabel": "نوع درخواست تائید نامه کیفی",
+          "scopeLabel": "اعتبار",
           "description": "برای عملیات تجاری محلی",
           "benefits": {
             "1": "شناخته شده در سطح ملی",
@@ -827,6 +833,9 @@
         },
         "standard": {
           "title": "اخذ علامت معیار",
+          "requestTitle": "درخواست علامت معیار",
+          "requestTypeLabel": "نوع درخواست علامت معیار",
+          "scopeLabel": "حوزه علامت معیار",
           "description": "برای استانداردهای محصول/خدمت",
           "benefits": {
             "1": "نشان کیفیت",
@@ -834,7 +843,13 @@
             "3": "برتری رقابتی"
           }
         },
-        "popular": "محبوب‌ترین"
+        "popular": "محبوب‌ترین",
+        "domesticOptions": {
+          "title": "نوع تائید نامه کیفی داخلی را انتخاب کنید",
+          "system": "تائید نامه کیفی سیستم مدیریتی",
+          "services": "تائید نامه کیفی خدمات",
+          "product": "تائید نامه کیفی محصول"
+        }
       },
       "button": {
         "creating": "در حال ایجاد...",
@@ -843,7 +858,8 @@
       "trust": "⚡ بیش از ۱۰۰۰ شرکت با موفقیت تائید نامه خود را تکمیل کرده‌اند",
       "validation": {
         "requestTypeRequired": "لطفاً یک نوع درخواست را انتخاب کنید",
-        "certificationTypeRequired": "لطفاً یک نوع تائید نامه را انتخاب کنید"
+        "certificationTypeRequired": "لطفاً یک نوع تائید نامه را انتخاب کنید",
+        "domesticCategoryRequired": "لطفاً نوع تائید نامه کیفی داخلی را انتخاب کنید"
       },
       "messages": {
         "created": "درخواست تائید نامه با موفقیت ایجاد شد!",
@@ -930,6 +946,8 @@
       "SUBMITTED": "درخواست های دریافت شده"
     },
     "labels": {
+      "certificationScope": "اعتبار",
+
       "startDate": "تاریخ شروع",
       "endDate": "تاریخ پایان",
       "trackingNumber": "شماره پیگیری",
@@ -996,7 +1014,10 @@
     "certificationTypeOptions": {
       "DOMESTIC_QUALITY_CERTIFICATION": "تائید نامه کیفی سیستم مدیریتی یا خدمات، محصول ",
       "INTERNATIONAL_QUALITY_CERTIFICATION": "تائید نامه کیفی سیستم مدیریتی یا خدمات، محصول",
-      "STANDARD_MARK_CERTIFICATION": "اخذ علامت معیار"
+      "STANDARD_MARK_CERTIFICATION": "اخذ علامت معیار",
+      "MANAGEMENT_SYSTEM_QUALITY": "تائید نامه کیفی سیستم مدیریتی",
+      "SERVICE_QUALITY": "تائید نامه کیفی خدمات",
+      "PRODUCT_QUALITY": "تائید نامه کیفی محصول"
     },
     "fileSize": {
       "zero": "0 بایت",
@@ -1207,7 +1228,7 @@
     },
     "steps": {
       "companyInfo": "اطلاعات شرکت",
-      "contactPerson": "شخص تماس",
+      "contactPerson": "معرفی نماینده شرکت",
       "documents": "اسناد و رسانه",
       "reviewSubmit": "بررسی و ارسال",
       "certificationrequest": "درخواست تائید نامه",
@@ -1670,14 +1691,14 @@
     }
   },
   "home": {
-    "badge": "اداره معیارهای کیفیت افغانستان",
+    "badge": "اداره معیار و کیفیت افغانستان",
     "hero": {
       "title": "راه آسان جهت بدست آوردن تائید نامه کیفیت در افغانستان",
       "description": "پروسه دریافت تائید نامه کیفیت خود را با ASQA ساده کنید. شناخته شوید، اعتماد بسازید و فرصت‌های تجاری خود را گسترش دهید.",
       "cta": {
-        "start": "تائید نامه خود را آغاز کنید",
+        "start": "درخواست نامه خود را آغاز کنید",
         "learn": "بیشتر بیاموزید",
-        "search": "جستجوی تائید نامه‌ها"
+        "search": "پیگیری درخواست"
       }
     },
     "certificationTypes": {
@@ -1729,7 +1750,7 @@
           "description": "جزئیات شرکت خود را ثبت کنید"
         },
         "3": {
-          "title": "شخص تماس",
+          "title": "معرفی نماینده شرکت",
           "description": "اطلاعات تماس اولیه را اضافه کنید"
         },
         "4": {
@@ -2921,9 +2942,9 @@
       "noData": "تائید نامه پیدا نشد."
     },
     "certificationTypeOptions": {
-      "DOMESTIC_QUALITY_CERTIFICATION": "احذ  علامت معیار",
+      "DOMESTIC_QUALITY_CERTIFICATION": "اخذ علامت معیار",
       "INTERNATIONAL_QUALITY_CERTIFICATION": "تائید نامه کیفی سیستم مدیریتی یا خدمات، محصول",
-      "STANDARD_MARK_CERTIFICATION": "احذ علامت معیار"
+      "STANDARD_MARK_CERTIFICATION": "اخذ علامت معیار"
     }
   },
   "certificationTracking": {

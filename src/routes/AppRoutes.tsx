@@ -10,6 +10,7 @@ import Registration from "../components/feature/website/pages/Registration";
 import Companies from "../components/feature/website/pages/Companies";
 import { WebsiteLayout } from "./WebsiteLayout";
 import CertificationTypeSelection from "../components/feature/website/pages/CertificationTypeSelection";
+import CertificationEntrySelection from "../components/feature/website/pages/CertificationEntrySelection";
 import { CertificationDetails } from "../components/feature/certification-request/CertificationDetails";
 import ForgotPassword from "../components/feature/forgotpassword/ForgotPassword";
 import { MainLayout } from "../components/Layout/MainLayout";
@@ -45,6 +46,10 @@ export const AppRoutes = () => {
             element={<CertificationVerification />}
           />
           <Route path="/contact" element={<Contact />} />
+          <Route
+            path="/certification/start"
+            element={<CertificationEntrySelection />}
+          />
           <Route
             path="/certification/select-type"
             element={<CertificationTypeSelection />}

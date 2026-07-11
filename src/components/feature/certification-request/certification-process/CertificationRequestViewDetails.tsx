@@ -130,6 +130,13 @@ const CertificationRequestViewDetails: React.FC<Props> = ({
                   <p className="text-sm text-gray-500 mb-1">{t("certificationRequest.labels.certificationType")}</p>
                   <p className="font-medium text-gray-900">{getCertificationTypeLabel(request.certificationType)}</p>
                 </div>
+
+               
+                
+                   <div>
+                  <p className="text-sm text-gray-500 mb-1">{t("certificationRequest.labels.certificationScope")}</p>
+                  <p className="font-medium text-gray-900">{getCertificationTypeLabel(request.certificationScope!)}</p>
+                </div>
                 {request.startDate && (
                   <div>
                     <p className="text-sm text-gray-500 mb-1">{t("common.startDate")}</p>
@@ -170,7 +177,7 @@ const CertificationRequestViewDetails: React.FC<Props> = ({
           </div>
         </div> */}
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        {/* <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <button
             onClick={() => toggleSection("quickStats")}
             className="w-full flex items-center justify-between p-6 hover:bg-gray-50 transition-colors"
@@ -204,7 +211,7 @@ const CertificationRequestViewDetails: React.FC<Props> = ({
               </div>
             </div>
           )}
-        </div>
+        </div> */}
       </div>
     </div>
   );

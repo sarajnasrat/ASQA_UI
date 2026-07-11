@@ -66,7 +66,7 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div className="lg:col-span-2 space-y-6">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="relative h-32 bg-linear-to-r from-blue-600 to-indigo-600">
+          <div className="relative h-32 bg-linear-to-r ">
             <div className="absolute -bottom-12 left-6">
               <div className="relative">
                 <div className="w-24 h-24 bg-white rounded-2xl shadow-lg flex items-center justify-center overflow-hidden border-4 border-white">
@@ -102,7 +102,7 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
                   {getCompanyName()}
                 </h3>
                 <div className="flex items-center gap-2 mt-2 flex-wrap">
-                  <span className="px-2.5 py-1 bg-gray-100 text-gray-700 rounded-lg text-xs font-medium">
+                  <span className="px-2.5 py-1  text-gray-700 rounded-lg text-xs font-medium">
                     {translatedCompanyType(request.company)}
                     {/* {request.company.companyType?.replace(/_/g, " ")} */}
                   </span>
@@ -129,7 +129,7 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
                   href={request.company.websiteUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-xl text-gray-700 transition-colors text-sm"
+                  className="inline-flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded-xl text-gray-700 transition-colors text-sm"
                 >
                   <Globe className="h-4 w-4" />
                   {t("company.labels.visitWebsite")}
@@ -138,7 +138,7 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
+              <div className="flex items-start gap-3 p-3 rounded-xl">
                 <Mail className="h-5 w-5 text-blue-500 mt-0.5" />
                 <div>
                   <p className="text-xs text-gray-500 uppercase tracking-wide">
@@ -149,7 +149,7 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
                   </p>
                 </div>
               </div>
-              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
+              <div className="flex items-start gap-3 p-3  rounded-xl">
                 <Phone className="h-5 w-5 text-blue-500 mt-0.5" />
                 <div>
                   <p className="text-xs text-gray-500 uppercase tracking-wide">
@@ -160,7 +160,7 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
                   </p>
                 </div>
               </div>
-              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl md:col-span-2">
+              <div className="flex items-start gap-3 p-3  rounded-xl md:col-span-2">
                 <MapPin className="h-5 w-5 text-blue-500 mt-0.5" />
                 <div>
                   <p className="text-xs text-gray-500 uppercase tracking-wide">
@@ -174,12 +174,12 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
             </div>
 
             <div className="border-t border-gray-100 pt-6">
-              <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              {/* <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
                 <Briefcase className="h-5 w-5 text-blue-600" />
                 {t("company.labels.businessInformation")}
-              </h4>
+              </h4> */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div className="bg-linear-to-br from-blue-50 to-indigo-50 rounded-xl p-4">
+                <div className=" rounded-xl p-4">
                   <p className="text-xs text-blue-600 uppercase tracking-wide mb-1">
                     {t("company.labels.jawazNumber")}
                   </p>
@@ -187,7 +187,7 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
                     {request.company.jawazNumber}
                   </p>
                 </div>
-                <div className="bg-linear-to-br from-purple-50 to-pink-50 rounded-xl p-4">
+                <div className=" rounded-xl p-4">
                   <p className="text-xs text-purple-600 uppercase tracking-wide mb-1">
                     {t("company.labels.jawazIssueDate")}
                   </p>
@@ -195,7 +195,7 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
                     {formatDate(request.company.jawazIssueDate)}
                   </p>
                 </div>
-                <div className="bg-linear-to-br from-orange-50 to-red-50 rounded-xl p-4">
+                <div className=" rounded-xl p-4">
                   <p className="text-xs text-orange-600 uppercase tracking-wide mb-1">
                     {t("company.labels.jawazExpiryDate")}
                   </p>
@@ -203,7 +203,7 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
                     {formatDate(request.company.jawazExpiryDate)}
                   </p>
                 </div>
-                <div className="bg-linear-to-br from-green-50 to-emerald-50 rounded-xl p-4">
+                <div className="  rounded-xl p-4">
                   <p className="text-xs text-green-600 uppercase tracking-wide mb-1">
                     {t("company.labels.establishYear")}
                   </p>
@@ -211,7 +211,7 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
                     {formatDate(request.company.establishYear)}
                   </p>
                 </div>
-                <div className="bg-linear-to-br from-cyan-50 to-sky-50 rounded-xl p-4">
+                <div className="  rounded-xl p-4">
                   <p className="text-xs text-cyan-600 uppercase tracking-wide mb-1">
                     {t("company.labels.activityPlace")}
                   </p>
@@ -219,7 +219,7 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
                     {request.company.activityPlace}
                   </p>
                 </div>
-                <div className="bg-linear-to-br from-amber-50 to-yellow-50 rounded-xl p-4">
+                <div className=" rounded-xl p-4">
                   <p className="text-xs text-amber-600 uppercase tracking-wide mb-1">
                     {t("company.labels.ownerNameEn")}
                   </p>
@@ -232,7 +232,7 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className=" rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-100">
             <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
               <FileText className="h-5 w-5 text-blue-600" />
@@ -250,7 +250,7 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
 
         {request.company.categories &&
           request.company.categories.length > 0 && (
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className=" rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
               <div className="px-6 py-4 border-b border-gray-100">
                 <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
                   <Tag className="h-5 w-5 text-blue-600" />
@@ -262,7 +262,7 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
                   {request.company.categories.map((category) => (
                     <span
                       key={category.id}
-                      className="px-4 py-2 bg-linear-to-r from-blue-500 to-indigo-500 text-white rounded-full text-sm font-medium shadow-sm hover:shadow-md transition-shadow cursor-default"
+                      className="px-4 py-2  text-white rounded-full text-sm font-medium shadow-sm hover:shadow-md transition-shadow cursor-default"
                     >
                       {category.categoryName}
                     </span>
@@ -281,7 +281,7 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
               </h3>
             </div>
             <div className="px-6 py-4">
-              <div className="flex justify-center p-4 bg-gray-50 rounded-xl">
+              <div className="flex justify-center p-4  rounded-xl">
                 <img
                   src={`${apiBaseUrl}${request.company.bussinessLogoUrl}`}
                   alt="Business Logo"
@@ -294,7 +294,7 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
       </div>
 
       <div className="space-y-6">
-        {/* <div className="bg-linear-to-br from-green-600 to-teal-700 rounded-2xl shadow-lg p-6 text-white relative overflow-hidden">
+        {/* <div className="bg-linear-to-br rounded-2xl shadow-lg p-6 text-white relative overflow-hidden">
           <div className="absolute top-0 right-0 opacity-10">
             <Shield className="h-32 w-32" />
           </div>
@@ -307,51 +307,9 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
           </div>
         </div> */}
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-100">
-            <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-blue-600" />
-              {t("company.labels.companyStats")}
-            </h3>
-          </div>
-          <div className="px-6 py-4 space-y-4">
-            <div className="flex justify-between items-center py-2 border-b border-gray-50">
-              <span className="text-gray-600">
-                {t("company.labels.companyType")}
-              </span>
-              <span className="font-semibold text-gray-900 px-2 py-1 bg-blue-50 rounded-lg text-sm">
-                {translatedCompanyType(request.company)}
-                {/* {request.company.companyType?.replace(/_/g, " ")} */}
-              </span>
-            </div>
-            <div className="flex justify-between items-center py-2 border-b border-gray-50">
-              <span className="text-gray-600">
-                {t("company.categoriesCount")}
-              </span>
-              <span className="font-semibold text-gray-900 px-2 py-1 bg-purple-50 rounded-lg text-sm">
-                {request.company.categories?.length || 0}{" "}
-              </span>
-            </div>
-            <div className="flex justify-between items-center py-2 border-b border-gray-50">
-              <span className="text-gray-600">
-                {t("company.documentsCount")}
-              </span>
-              <span className="font-semibold text-gray-900 px-2 py-1 bg-green-50 rounded-lg text-sm">
-                {request.company.attachments?.length || 0}{" "}
-              </span>
-            </div>
-            <div className="flex justify-between items-center py-2">
-              <span className="text-gray-600">
-                {t("company.labels.socialLinks")}
-              </span>
-              <span className="font-semibold text-gray-900 px-2 py-1 bg-amber-50 rounded-lg text-sm">
-                {request.company.socialLinks?.length || 0}{" "}
-              </span>
-            </div>
-          </div>
-        </div>
+     
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className=" rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-100">
             <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
               <Phone className="h-5 w-5 text-blue-600" />
@@ -363,7 +321,7 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
               onClick={() =>
                 (window.location.href = `mailto:${request.company.email}`)
               }
-              className="w-full flex items-center gap-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors group"
+              className="w-full flex items-center gap-3 p-3  hover:bg-blue-100 rounded-xl transition-colors group"
             >
               <Mail className="h-5 w-5 text-blue-600 group-hover:scale-110 transition-transform" />
               <span className="text-sm font-medium text-gray-700 flex-1 text-left">
@@ -374,7 +332,7 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
               onClick={() =>
                 (window.location.href = `tel:${request.company.phoneNumber}`)
               }
-              className="w-full flex items-center gap-3 p-3 bg-green-50 hover:bg-green-100 rounded-xl transition-colors group"
+              className="w-full flex items-center gap-3 p-3  hover:bg-green-100 rounded-xl transition-colors group"
             >
               <Phone className="h-5 w-5 text-green-600 group-hover:scale-110 transition-transform" />
               <span className="text-sm font-medium text-gray-700 flex-1 text-left">
@@ -386,7 +344,7 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
                 onClick={() =>
                   window.open(request.company.websiteUrl, "_blank")
                 }
-                className="w-full flex items-center gap-3 p-3 bg-purple-50 hover:bg-purple-100 rounded-xl transition-colors group"
+                className="w-full flex items-center gap-3 p-3  hover:bg-purple-100 rounded-xl transition-colors group"
               >
                 <Globe className="h-5 w-5 text-purple-600 group-hover:scale-110 transition-transform" />
                 <span className="text-sm font-medium text-gray-700 flex-1 text-left">
@@ -398,7 +356,7 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
         </div>
 
         {contactPerson && (
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className=" rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             <button
               onClick={() => toggleSection("contactPersonDetails")}
               className="w-full flex items-center justify-between p-6 hover:bg-gray-50 transition-colors"
@@ -417,7 +375,7 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
             {expandedSections.contactPersonDetails && (
               <div className="px-6 pb-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                  <div className="flex items-start gap-3 p-3 bg-linear-to-r from-blue-50 to-indigo-50 rounded-xl">
+                  <div className="flex items-start gap-3 p-3  rounded-xl">
                     <User className="h-5 w-5 text-blue-600 mt-0.5" />
                     <div>
                       <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">
@@ -430,7 +388,7 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3 p-3 bg-linear-to-r from-purple-50 to-pink-50 rounded-xl">
+                  <div className="flex items-start gap-3 p-3  rounded-xl">
                     <Briefcase className="h-5 w-5 text-purple-600 mt-0.5" />
                     <div>
                       <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">
@@ -448,7 +406,7 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
                     onClick={() =>
                       (window.location.href = `mailto:${contactPerson.email}`)
                     }
-                    className="w-full flex items-center gap-3 p-3 bg-green-50 hover:bg-green-100 rounded-xl transition-all group"
+                    className="w-full flex items-center gap-3 p-3  hover:bg-green-100 rounded-xl transition-all group"
                   >
                     <Mail className="h-5 w-5 text-green-600 group-hover:scale-110 transition-transform" />
                     <div className="flex-1 text-left">
@@ -466,7 +424,7 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
                     onClick={() =>
                       (window.location.href = `tel:${contactPerson.phoneNumber}`)
                     }
-                    className="w-full flex items-center gap-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-xl transition-all group"
+                    className="w-full flex items-center gap-3 p-3  hover:bg-blue-100 rounded-xl transition-all group"
                   >
                     <Phone className="h-5 w-5 text-blue-600 group-hover:scale-110 transition-transform" />
                     <div className="flex-1 text-left">
@@ -494,10 +452,10 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
                         {contactPerson.addresses.map((address: Address) => (
                           <div
                             key={address.id}
-                            className="bg-linear-to-r from-gray-50 to-gray-100 rounded-xl p-4 hover:shadow-md transition-shadow"
+                            className=" rounded-xl p-4 hover:shadow-md transition-shadow"
                           >
                             <div className="flex flex-wrap gap-2 mb-2">
-                              <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs font-medium">
+                              <span className="inline-flex items-center gap-1 px-2 py-1  text-blue-700 rounded-lg text-xs font-medium">
                                 {address.addressType === "HOME" && (
                                   <Home className="h-3 w-3" />
                                 )}

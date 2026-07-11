@@ -260,7 +260,7 @@ const Home = () => {
                 </ul>
 
                 <button
-                  onClick={() => navigate("/certification/select-type")}
+                  onClick={() => navigate("/registration")}
                   className={`inline-flex items-center text-sm font-semibold ${type.textColor} hover:gap-2 transition-all`}
                 >
                   {t("home.certificationTypes.learnMore")}
@@ -401,7 +401,7 @@ const Home = () => {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
-              onClick={() => navigate("/certification/select-type")}
+              onClick={() => navigate("/registration")}
               className="group inline-flex items-center bg-white text-blue-600 px-10 py-5 rounded-2xl font-semibold text-xl hover:bg-blue-50 transition-all duration-300 shadow-2xl hover:shadow-3xl transform hover:scale-105"
             >
               {t("home.cta.buttons.start")}
