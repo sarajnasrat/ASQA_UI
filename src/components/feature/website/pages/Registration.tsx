@@ -1,5 +1,5 @@
 // pages/Registration.tsx
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Toast } from "primereact/toast";
 import {
@@ -16,7 +16,10 @@ import {
   Copy,
   Home,
   X,
+  Download,
 } from "lucide-react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 import { useAppToast } from "../../../../hooks/useToast";
 import ContactPersonForm from "./ContactPersonForm";
 import AttachmentForm from "./AttachmentFormProps";
@@ -36,8 +39,23 @@ interface LocationState {
   step?: number;
 }
 
+const REGISTRATION_STORAGE_KEYS = [
+  "certificationDraft",
+  "certificationRequestId",
+  "certificationType",
+  "selectedCertificationType",
+  "domesticCategory",
+  "certificationMainType",
+  "requestType",
+  "companyId",
+  "contactPersonId",
+  "attachmentId",
+  "company_70_attachment_id",
+];
+
 const Registration = () => {
   const { t } = useTranslation();
+  const pdfTemplateRef = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState<number>(1);
   const [companyId, setCompanyId] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -48,6 +66,7 @@ const Registration = () => {
     useState<boolean>(false);
   const [showSuccessDialog, setShowSuccessDialog] = useState<boolean>(false);
   const [trackingNumber, setTrackingNumber] = useState<string>("");
+  const [submittedRequestData, setSubmittedRequestData] = useState<any>(null);
   const [certificationInfo, setCertificationInfo] = useState<{
     mainType: string;
     type: string;
@@ -81,9 +100,10 @@ const Registration = () => {
   useEffect(() => {
     // Get certification info from location state or session storage
     const state = location.state as LocationState;
+    const storedDraft = localStorage.getItem("certificationDraft");
+    const storedSelectedCertificationType = localStorage.getItem("selectedCertificationType");
     const storedRequestId = sessionStorage.getItem("certificationRequestId");
     const storedCertificationType = sessionStorage.getItem("certificationType");
-    const storedSelectedCertificationType = sessionStorage.getItem("selectedCertificationType");
     const storedDomesticCategory = sessionStorage.getItem("domesticCategory");
     const storedMainType = sessionStorage.getItem("certificationMainType");
     const storedRequestType = sessionStorage.getItem("requestType");
@@ -111,6 +131,27 @@ const Registration = () => {
         requestType: storedRequestType || "",
         requestId: parseInt(storedRequestId),
       });
+    } else if (storedDraft) {
+      try {
+        const draft = JSON.parse(storedDraft);
+        const draftSelectedType =
+          draft.selectedCertificationType || draft.certificationType || "";
+
+        setSelectedCertificationType(
+          storedSelectedCertificationType || draftSelectedType,
+        );
+        setCertificationInfo({
+          mainType: draft.certificationMainType || "",
+          type: draft.certificationType || "",
+          domesticCategory: draft.domesticCategory || "",
+          requestType: draft.requestType || "",
+          requestId: draft.id || 0,
+        });
+      } catch (error) {
+        console.error("Failed to parse saved certification draft:", error);
+      }
+    } else if (storedSelectedCertificationType) {
+      setSelectedCertificationType(storedSelectedCertificationType);
     }
 
     // Also try to get companyId from session storage
@@ -263,17 +304,13 @@ const Registration = () => {
         // Extract tracking number from response
         const trackingNum = response.data?.data?.trackingNumber;
         setTrackingNumber(trackingNum);
+        setSubmittedRequestData(response.data?.data || null);
         setShowSuccessDialog(true); // Show success dialog instead of toast
-        
-        // Clear session storage
-        sessionStorage.removeItem("certificationRequestId");
-        sessionStorage.removeItem("certificationType");
-        sessionStorage.removeItem("selectedCertificationType");
-        sessionStorage.removeItem("domesticCategory");
-        sessionStorage.removeItem("certificationMainType");
-        sessionStorage.removeItem("requestType");
-        sessionStorage.removeItem("companyId");
-        sessionStorage.removeItem("contactPersonId");
+        // Clear all persisted registration state after successful completion
+        REGISTRATION_STORAGE_KEYS.forEach((key) => {
+          localStorage.removeItem(key);
+          sessionStorage.removeItem(key);
+        });
       } else {
         const errorMessage =
           response.data?.errors?.[0] || t("registration.errors.submitFailed");
@@ -347,50 +384,99 @@ const Registration = () => {
   };
 
   const handleCancel = () => {
-    // Clear persisted draft and session state
-    sessionStorage.removeItem("certificationRequestId");
-    sessionStorage.removeItem("certificationType");
-    sessionStorage.removeItem("selectedCertificationType");
-    sessionStorage.removeItem("domesticCategory");
-    sessionStorage.removeItem("certificationMainType");
-    sessionStorage.removeItem("requestType");
-    sessionStorage.removeItem("companyId");
-    sessionStorage.removeItem("contactPersonId");
-    sessionStorage.removeItem("attachmentId");
-    localStorage.removeItem("certificationRequestId");
-    localStorage.removeItem("certificationType");
-    localStorage.removeItem("domesticCategory");
-    localStorage.removeItem("certificationMainType");
-    localStorage.removeItem("requestType");
-    localStorage.removeItem("companyId");
-    localStorage.removeItem("contactPersonId");
-    localStorage.removeItem("attachmentId");
-    localStorage.removeItem("certificationDraft");
-    localStorage.removeItem("company_70_attachment_id");
+    REGISTRATION_STORAGE_KEYS.forEach((key) => {
+      localStorage.removeItem(key);
+      sessionStorage.removeItem(key);
+    });
     navigate("/");
+  };
+
+  const formatDateTime = (value?: string | null) => {
+    if (!value) return "-";
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return value;
+    return date.toLocaleString();
+  };
+
+  const getAddressLine = (addresses?: any[]) => {
+    const address = addresses?.[0];
+    if (!address) return "-";
+
+    return [
+      address.district?.districtName,
+      address.district?.province?.provinceName,
+      address.district?.province?.country?.countryName,
+    ]
+      .filter(Boolean)
+      .join(", ") || "-";
+  };
+
+  const resolveAssetUrl = (path?: string | null) => {
+    if (!path) return "";
+    if (/^https?:\/\//i.test(path)) return path;
+    const assetBaseUrl =
+      import.meta.env.VITE_API_BASE_URL?.replace(/\/api\/?$/, "") ||
+      "http://localhost:8080";
+    return `${assetBaseUrl}${path.startsWith("/") ? path : `/${path}`}`;
+  };
+
+  const handleDownloadSubmissionPdf = async () => {
+    if (!submittedRequestData) {
+      showToast("warn", t("common.warning"), t("registration.toasts.noRequestError"));
+      return;
+    }
+
+    try {
+      if (!pdfTemplateRef.current) {
+        throw new Error("PDF template not ready");
+      }
+
+      const canvas = await html2canvas(pdfTemplateRef.current, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: "#ffffff",
+      });
+
+      const imgData = canvas.toDataURL("image/png", 1.0);
+      const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const imgWidth = pageWidth;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      let position = 0;
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+
+      let remainingHeight = imgHeight - pageHeight;
+      while (remainingHeight > 0) {
+        position = remainingHeight - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        remainingHeight -= pageHeight;
+      }
+
+      pdf.save(`certification-request-${submittedRequestData.trackingNumber || submittedRequestData.id || "summary"}.pdf`);
+    } catch (error) {
+      console.error("Error generating submission PDF:", error);
+      showToast("error", t("common.error"), t("registration.errors.submitFailed"));
+    }
   };
 
   const handleCertificationTypeSelect = (value: string) => {
     setSelectedCertificationType(value);
     setCertificationInfo(null);
-    sessionStorage.removeItem("certificationRequestId");
-    sessionStorage.removeItem("certificationType");
-    sessionStorage.removeItem("domesticCategory");
-    sessionStorage.removeItem("certificationMainType");
-    sessionStorage.removeItem("requestType");
-    localStorage.removeItem("certificationDraft");
+    localStorage.setItem("certificationDraft", JSON.stringify({ selectedCertificationType: value }));
+    localStorage.setItem("selectedCertificationType", value);
+    sessionStorage.setItem("selectedCertificationType", value);
   };
 
   const handleBackToFirstSelection = () => {
     setStep(1);
     setSelectedCertificationType("");
     setCertificationInfo(null);
-    sessionStorage.removeItem("certificationRequestId");
-    sessionStorage.removeItem("certificationType");
-    sessionStorage.removeItem("domesticCategory");
-    sessionStorage.removeItem("certificationMainType");
-    sessionStorage.removeItem("requestType");
-    localStorage.removeItem("certificationDraft");
+    localStorage.removeItem("selectedCertificationType");
+    sessionStorage.removeItem("selectedCertificationType");
   };
 
   const handleStepNavigation = (targetStep: number) => {
@@ -595,31 +681,7 @@ const Registration = () => {
               <div className="fixed inset-0 flex items-center justify-center z-50 p-4 success-overlay">
                 <div className="relative max-w-md w-full">
                   {/* Flower Bouquet - Behind the dialog */}
-                  <div className="flower-bouquet">
-                    <svg className="bouquet-svg" viewBox="0 0 200 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      {/* Stems */}
-                      <path d="M100 130 L85 165 M100 130 L115 165 M100 130 L100 170" stroke="#6c9e6f" strokeWidth="3" strokeLinecap="round"/>
-                      {/* Leaves */}
-                      <path d="M90 145 L72 138 M110 145 L128 138" stroke="#5f8b62" strokeWidth="2.5" strokeLinecap="round"/>
-                      <path d="M95 152 L82 160 M105 152 L118 160" stroke="#5f8b62" strokeWidth="2.5" strokeLinecap="round"/>
-                      {/* Left Pink Flower */}
-                      <circle cx="68" cy="95" r="18" fill="#FFB7C5" opacity="0.95"/>
-                      <circle cx="68" cy="95" r="7" fill="#FFE2AA"/>
-                      {/* Center Peach Flower */}
-                      <circle cx="100" cy="85" r="24" fill="#FFC8A2" opacity="0.95"/>
-                      <circle cx="100" cy="85" r="9" fill="#FCE6B4"/>
-                      {/* Right Lavender Flower */}
-                      <circle cx="133" cy="97" r="17" fill="#D9C2FF" opacity="0.95"/>
-                      <circle cx="133" cy="97" r="6.5" fill="#FEF5D3"/>
-                      {/* Small accent flowers */}
-                      <circle cx="48" cy="115" r="9" fill="#F7C5D6" opacity="0.9"/>
-                      <circle cx="152" cy="112" r="10" fill="#C9E6D0" opacity="0.9"/>
-                      {/* Sparkles */}
-                      <circle cx="40" cy="78" r="2.5" fill="#FFDC9F" opacity="0.8"/>
-                      <circle cx="160" cy="75" r="3" fill="#FAD0A0" opacity="0.8"/>
-                      <circle cx="115" cy="55" r="2" fill="#FFE0B5" opacity="0.8"/>
-                    </svg>
-                  </div>
+              
 
                   {/* Main Dialog Card */}
                   <div className="bg-white rounded-2xl shadow-2xl overflow-hidden transform transition-all duration-300 success-dialog">
@@ -687,6 +749,14 @@ const Registration = () => {
                       {/* Action Buttons */}
                       <div className="flex flex-col gap-3">
                         <button
+                          onClick={handleDownloadSubmissionPdf}
+                          className="w-full px-6 py-3 bg-green-600 text-white rounded-xl font-semibold hover:bg-green-700 transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
+                        >
+                          <Download className="h-5 w-5" />
+                          {t("registration.downloadPdf")}
+                        </button>
+
+                        <button
                           onClick={() => {
                             setShowSuccessDialog(false);
                             if (trackingNumber) {
@@ -726,6 +796,85 @@ const Registration = () => {
   };
 
   const shouldShowStepper = !(step === 1 && !selectedCertificationType);
+  const request = submittedRequestData || {};
+  const company = request.company || {};
+  const contact = request.contactPerson || {};
+  const companyCategories = Array.isArray(company.categories)
+    ? company.categories.map((item: any) => item.categoryName).join(", ")
+    : "-";
+  const companyLogoUrl = resolveAssetUrl(
+    company.logoUrl || company.bussinessLogoUrl,
+  );
+  const asqaLogoUrl = "/asqanew.png";
+  const pdfText = {
+    title: t("certificationRequest.pdf.title") || t("certificationRequest.requestDetails"),
+    trackingNumber: t("certificationRequest.labels.trackingNumber"),
+    serialNumber: t("certificationRequest.labels.serialNumber"),
+    requestType: t("certificationRequest.labels.requestType"),
+    createdDate: t("certificationRequest.labels.createdDate"),
+    requestInfo: t("certificationRequest.pdf.requestInfo") || t("certificationRequest.requestInformation"),
+    companyInfo: t("company.companyInfo") || t("company.labels.companyInfo"),
+    contactInfo: t("contactPerson.info"),
+    requestId: t("certificationRequest.labels.requestId") || "ID",
+    requestStatus: t("certificationRequest.labels.requestStatus"),
+    certificationType: t("certificationRequest.labels.certificationType"),
+    companyNameEn: t("company.labels.companyNameEN"),
+    companyNameDr: t("company.labels.companyNameDR"),
+    companyNamePs: t("company.labels.companyNamePS"),
+    email: t("company.labels.email"),
+    phoneNumber: t("company.labels.phoneNumber"),
+    address: t("company.labels.address"),
+    mainBranchAddress: t("company.labels.mainBranchAddress"),
+    activityPlace: t("company.labels.activityPlace"),
+    jawazNumber: t("company.labels.jawazNumber"),
+    tinNumber: t("company.labels.tinNumber"),
+    website: t("company.labels.websiteUrl"),
+    category: t("company.labels.categories") || t("company.labels.companyInfo"),
+    firstName: t("contactPerson.firstName"),
+    lastName: t("contactPerson.lastName"),
+    position: t("contactPerson.position"),
+    headerTitle: t("certificationRequest.pdf.headerTitle") || "Field",
+    headerInfo: t("certificationRequest.pdf.headerInfo") || "Value",
+    detailsTitle: t("certificationRequest.pdf.detailsTitle") || "Details",
+    footer: t("certificationRequest.pdf.footer") || "This document was generated automatically by the ASQA request system.",
+  };
+  const translateRequestType = (value: string) =>
+    value ? t(`certificationRequest.typeOptions.${value}`) || value : "-";
+  const translateRequestStatus = (value: string) =>
+    value ? t(`certificationRequest.statusOptions.${value}`) || value : "-";
+  const translateCertificationType = (value: string) =>
+    value ? t(`certificationRequest.certificationTypeOptions.${value}`) || value : "-";
+  const requestRows = [
+    [pdfText.requestId, String(request.id ?? "-")],
+    [pdfText.serialNumber, request.serialNumber || "-"],
+    [pdfText.trackingNumber, request.trackingNumber || "-"],
+    [pdfText.requestType, translateRequestType(request.requestType || "")],
+    [pdfText.requestStatus, translateRequestStatus(request.requestStatus || "")],
+    [pdfText.certificationType, translateCertificationType(request.certificationType || "")],
+    [pdfText.createdDate, formatDateTime(request.createdDate)],
+  ];
+  const companyRows = [
+    [pdfText.companyNameEn, company.companyNameEN || "-"],
+    [pdfText.companyNameDr, company.companyNameDR || "-"],
+    [pdfText.companyNamePs, company.companyNamePS || "-"],
+    [pdfText.phoneNumber, company.phoneNumber || "-"],
+    [pdfText.email, company.email || "-"],
+    [pdfText.address, company.address || "-"],
+    [pdfText.mainBranchAddress, company.mainBranchAddress || "-"],
+    [pdfText.activityPlace, company.activityPlace || "-"],
+    [pdfText.jawazNumber, company.jawazNumber || "-"],
+    [pdfText.tinNumber, company.tinNumber || "-"],
+    [pdfText.website, company.websiteUrl || "-"],
+    [pdfText.category, companyCategories || "-"],
+  ];
+  const contactRows = [
+    [pdfText.firstName, contact.firstName || "-"],
+    [pdfText.lastName, contact.lastName || "-"],
+    [pdfText.position, contact.position || "-"],
+    [pdfText.phoneNumber, contact.phoneNumber || "-"],
+    [pdfText.email, contact.email || "-"],
+    [pdfText.address, getAddressLine(contact.addresses)],
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
@@ -786,7 +935,89 @@ const Registration = () => {
         {renderForm()}
       </div>
 
-      {/* Add custom CSS animations */}
+      <div className="fixed -left-[9999px] top-0 pointer-events-none opacity-0">
+        <div
+          ref={pdfTemplateRef}
+          dir="rtl"
+          style={{
+            width: "1020px",
+            background: "#ffffff",
+            color: "#111827",
+            fontFamily: "Tahoma, Arial, sans-serif",
+            padding: "20px 24px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              borderBottom: "1px solid #cbd5e1",
+              paddingBottom: "12px",
+              marginBottom: "12px",
+            }}
+          >
+            <div style={{ width: "92px", height: "92px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              {companyLogoUrl ? <img src={companyLogoUrl} alt="Company" style={{ maxWidth: "84px", maxHeight: "84px", objectFit: "contain" }} /> : <div style={{ width: "84px", height: "84px", border: "1px solid #d1d5db" }} />}
+            </div>
+            <div style={{ textAlign: "center", flex: 1 }}>
+              <div style={{ fontSize: "22px", fontWeight: 700, lineHeight: 1.3 }}>{pdfText.title}</div>
+       
+            </div>
+            <div style={{ width: "92px", height: "92px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <img src={asqaLogoUrl} alt="ASQA" style={{ maxWidth: "84px", maxHeight: "84px", objectFit: "contain" }} />
+            </div>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "8px", marginBottom: "12px", fontSize: "11px" }}>
+            {/* <div style={{ border: "1px solid #d1d5db", padding: "8px 10px", background: "#f8fafc" }}>
+              <div style={{ fontWeight: 700, marginBottom: "4px" }}>{pdfText.requestType}</div>
+              <div>{request.requestType || "-"}</div>
+            </div>
+            <div style={{ border: "1px solid #d1d5db", padding: "8px 10px", background: "#f8fafc" }}>
+              <div style={{ fontWeight: 700, marginBottom: "4px" }}>{pdfText.certificationType}</div>
+              <div>{request.certificationType || "-"}</div>
+            </div> */}
+            <div style={{ border: "1px solid #d1d5db", padding: "8px 10px", background: "#f8fafc" }}>
+              <div style={{ fontWeight: 700, marginBottom: "4px" }}>{pdfText.createdDate}</div>
+              <div>{formatDateTime(request.createdDate)}</div>
+            </div>
+          </div>
+
+          {[
+            { title: pdfText.requestInfo, rows: requestRows },
+            { title: pdfText.companyInfo, rows: companyRows },
+            { title: pdfText.contactInfo, rows: contactRows },
+          ].map((section) => (
+            <div key={section.title} style={{ marginBottom: "12px" }}>
+              <div style={{ background: "#f3f4f6", border: "1px solid #d1d5db", borderBottom: "none", padding: "8px 10px", fontWeight: 700, fontSize: "13px" }}>
+                {section.title}
+              </div>
+              <table style={{ width: "100%", borderCollapse: "collapse", tableLayout: "fixed", border: "1px solid #d1d5db", fontSize: "11px" }}>
+                <thead>
+                  <tr>
+                    <th style={{ width: "34%", background: "#f8fafc", borderBottom: "1px solid #d1d5db", padding: "7px 8px", textAlign: "right" }}>{pdfText.headerTitle}</th>
+                    <th style={{ background: "#f8fafc", borderBottom: "1px solid #d1d5db", padding: "7px 8px", textAlign: "right" }}>{pdfText.detailsTitle}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {section.rows.map(([label, value], index) => (
+                    <tr key={`${section.title}-${index}`} style={{ background: index % 2 === 0 ? "#fcfcfc" : "#ffffff" }}>
+                      <td style={{ borderBottom: "1px solid #e5e7eb", borderLeft: "1px solid #e5e7eb", padding: "7px 8px", fontWeight: 700 }}>{label}</td>
+                      <td style={{ borderBottom: "1px solid #e5e7eb", padding: "7px 8px", wordBreak: "break-word" }}>{value || "-"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ))}
+
+          <div style={{ borderTop: "1px solid #d1d5db", marginTop: "8px", paddingTop: "8px", fontSize: "10px", color: "#6b7280", textAlign: "right" }}>
+            {pdfText.footer}
+          </div>
+        </div>
+      </div>
+
       <style>{`
         @keyframes fadeIn {
           from {
@@ -849,6 +1080,10 @@ const Registration = () => {
           animation: scaleUp 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
         }
 
+        .pdf-export-sheet * {
+          box-sizing: border-box;
+        }
+
         @media (max-width: 640px) {
           .flower-bouquet {
             width: 160px;
@@ -862,3 +1097,4 @@ const Registration = () => {
 };
 
 export default Registration;
+

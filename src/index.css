@@ -144,12 +144,14 @@ html[dir="rtl"] .p-dropdown-clear-icon {
 
 /* Keep phone numbers and country codes in natural LTR order inside RTL pages */
 [dir="rtl"] input[type="tel"],
-[dir="rtl"] input[name="phoneNumber"],
-[dir="rtl"] input[id="phoneNumber"],
-[dir="rtl"] input[autocomplete="tel"] {
-  direction: ltr;
-  unicode-bidi: plaintext;
-  text-align: left;
+[dir="rtl"] input[inputmode="tel"],
+[dir="rtl"] input[name*="phone"],
+[dir="rtl"] input[id*="phone"],
+[dir="rtl"] input[autocomplete="tel"],
+[dir="rtl"] .phone-number-input {
+  direction: ltr !important;
+  unicode-bidi: plaintext !important;
+  text-align: left !important;
 }
 
 .ltr-inline-value {

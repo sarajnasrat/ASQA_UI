@@ -574,7 +574,10 @@ const loadDistrictsByProvince = async (
               name="phoneNumber"
               value={formData.phoneNumber}
               onChange={handleInputChange}
-              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-all ${
+              dir="ltr"
+              inputMode="tel"
+              style={{ direction: "ltr", unicodeBidi: "plaintext", textAlign: "left" }}
+              className={`phone-number-input w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-all ${
                 errors.phoneNumber ? "border-red-500" : "border-gray-300"
               }`}
               placeholder={t("contactPerson.placeholders.phoneNumber")}

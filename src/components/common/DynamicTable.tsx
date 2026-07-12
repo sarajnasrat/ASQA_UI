@@ -60,6 +60,7 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({
           scrollable
           scrollHeight="500px"
           height={"12rem"}
+        showGridlines={true}
           header={header}
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown CurrentPageReport"
           rowsPerPageOptions={rowsPerPageOptions}

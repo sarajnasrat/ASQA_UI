@@ -216,6 +216,11 @@ export const CertificationRequestListStandardManagement = () => {
       body: (row: any) =>
         t(`certificationRequest.typeOptions.${row.requestType}`),
     },
+          
+    {
+      header: t("certificationRequest.labels.certificationType"),
+      body: (row: any) => t(`certificationRequest.certificationTypeOptions.${row.certificationType}`) || "-",
+    },
     {
       header: t("company.labels.companyName"),
       body: (row: any) => row.company?.[getCompanyNameField()] || "-",
@@ -320,7 +325,7 @@ export const CertificationRequestListStandardManagement = () => {
         const getStatusText = () => {
           if (!start || !end) return t("certificationRequest.deadline.noDeadline");
           if (isExpired) return t("certificationRequest.deadline.expired");
-          if (daysRemaining !== null && daysRemaining <= 20)
+          if (daysRemaining !== null && daysRemaining <= 15)
             return t("certificationRequest.deadline.daysRemaining", { count: daysRemaining });
           // return `${daysRemaining} days left`;
         };
@@ -328,7 +333,7 @@ export const CertificationRequestListStandardManagement = () => {
         const getStatusColor = () => {
           if (!start || !end) return "text-gray-400";
           if (isExpired) return "text-red-600";
-          if (daysRemaining !== null && daysRemaining <= 20)
+          if (daysRemaining !== null && daysRemaining <= 15)
             return "text-orange-600";
           return "text-green-600";
         };

@@ -57,8 +57,10 @@ export interface Company {
   logoUrl: string;
   activityPlace: string;
   jawazNumber: string;
+  companyOwnerNameDr: string;
   jawazExpiryDate: string;
   jawazIssueDate: string;
+  tinNumber: string;
   bussinessLogoUrl: string;
   aboutCompanyEn: string;
   aboutCompanyDr: string;

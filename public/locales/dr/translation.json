@@ -941,6 +941,16 @@
     "requestInfo": "اطلاعات درخواست",
     "totalDocuments": "مجموع اسناد",
     "requestAttachments": "اسناد های ضمیمه شده به درخواست شرکت",
+    "pdf": {
+      "title": "خلاصه درخواست",
+      "requestInfo": "معومات درخواست",
+      "companyInfo": "معلومات شرکت",
+      "contactInfo": "معلومات نماینده شرکت",
+      "headerTitle": "عنوان",
+      "headerInfo": "جزئیات",
+      "detailsTitle": "جزئیات",
+      "footer": "این سند به طور خودکار از سیستم درخواست ASQA تولید شده است."
+    },
     "certificationScope": "محدوده تائید نامه",
     "tabOptions": {
       "SUBMITTED": "درخواست های دریافت شده"
@@ -1206,6 +1216,7 @@
     "locationPlaceholder": "موقعیت را وارد کنید"
   },
   "registration": {
+    "downloadPdf": "دانلود PDF",
     "title": "ثبت درخواست تائید نامه کیفی و یا علامت معیار   ",
     "subtitle": "لطفا تمام مراحل را به دقت خانه پری نمائید",
     "confirmation": {
@@ -1257,7 +1268,7 @@
       "title": "تبریک! 🎉",
       "message": "درخواست شما با موفقیت ارسال شد.",
       "description": "از ارسال درخواست تائید نامه شما سپاسگزاریم. تیم ما معلومات شما را بررسی کرده و به زودی با شما تماس خواهد گرفت.",
-      "referenceNumber": "شماره مرجع",
+      "referenceNumber": "شماره پیگیری شما",
       "copyTrackingNumber": "کاپی شماره پیگیری",
       "trackMyRequest": "پیگیری درخواست من"
     },
@@ -1611,6 +1622,7 @@
     }
   },
   "common": {
+    "close": "بستن",
     "current": "فعلی",
     "editcompany": "اصلاح معلومات شرکت",
     "months": "ماه",

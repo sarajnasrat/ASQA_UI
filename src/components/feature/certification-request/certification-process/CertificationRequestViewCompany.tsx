@@ -187,6 +187,14 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
                     {request.company.jawazNumber}
                   </p>
                 </div>
+                   <div className=" rounded-xl p-4">
+                  <p className="text-xs text-blue-600 uppercase tracking-wide mb-1">
+                    {t("company.labels.tinNumber")}
+                  </p>
+                  <p className="text-lg font-bold text-gray-900">
+                    {request.company.tinNumber}
+                  </p>
+                </div>
                 <div className=" rounded-xl p-4">
                   <p className="text-xs text-purple-600 uppercase tracking-wide mb-1">
                     {t("company.labels.jawazIssueDate")}
@@ -225,6 +233,14 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
                   </p>
                   <p className="text-lg font-bold text-gray-900">
                     {request.company.companyOwnerNameEn}
+                  </p>
+                </div>
+                      <div className=" rounded-xl p-4">
+                  <p className="text-xs text-amber-600 uppercase tracking-wide mb-1">
+                    {t("company.labels.ownerNameDr")}
+                  </p>
+                  <p className="text-lg font-bold text-gray-900">
+                    {request.company.companyOwnerNameDr}
                   </p>
                 </div>
               </div>

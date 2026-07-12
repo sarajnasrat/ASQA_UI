@@ -918,6 +918,16 @@
     "requestInfo": "د غوښتنې معلومات",
     "totalDocuments": "ټول اسناد",
     "requestAttachments": "د غوښتنې ضمیمې",
+    "pdf": {
+      "title": "د تصدیق غوښتنې لنډیز",
+      "requestInfo": "د غوښتنې معلومات",
+      "companyInfo": "د شرکت معلومات",
+      "contactInfo": "د اړیکې د شخص معلومات",
+      "headerTitle": "عنوان",
+      "headerInfo": "جزئیات",
+      "detailsTitle": "جزئیات",
+      "footer": "دا سند په اتومات ډول د ASQA د غوښتنو له سیستم څخه جوړ شوی دی."
+    },
     "labels": {
       "trackingNumber": "د تعقیب شمېره",
       "requestType": "د غوښتنې ډول",

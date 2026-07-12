@@ -1047,6 +1047,16 @@
     "requestInfo": "Request Information",
     "totalDocuments": "Total Documents",
     "requestAttachments": "Request Attachments",
+    "pdf": {
+      "title": "Certification Request Summary",
+      "requestInfo": "Request Information",
+      "companyInfo": "Company Information",
+      "contactInfo": "Contact Person Information",
+      "headerTitle": "Field",
+      "headerInfo": "Value",
+      "detailsTitle": "Details",
+      "footer": "This document was generated automatically by the ASQA request system."
+    },
     "labels": {
       "trackingNumber": "Tracking Number",
       "requestType": "Request Type",
