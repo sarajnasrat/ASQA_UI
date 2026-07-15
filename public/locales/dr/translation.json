@@ -3,7 +3,6 @@
     "welcome": "سیستم مدیریتی تائید نامه های کیفی اداره معیار و کیفیت افغانستان",
     "notifications": "اطلاعیه‌ها",
     "unread": "خوانده نشده",
-
     "viewAllNotifications": "مشاهده همه اطلاعیه‌ها",
     "myProfile": "پروفایل من",
     "accountSettings": "تنظیمات حساب",
@@ -392,7 +391,7 @@
       "isActive": "فعال است",
       "mainBranchAddress": "آدرس شعبه اصلی",
       "activityPlace": "محل فعالیت",
-      "activityType": "نوع فعالیت",
+      "activityType": "سکتور فعالیت",
       "jawazNumber": "شماره جواز",
       "jawazExpiryDate": "تاریخ انقضای جواز",
       "jawazIssueDate": "تاریخ صدور جواز",
@@ -406,7 +405,7 @@
       "companyOwnerNameDr": "نام مالک شرکت (دری)",
       "companyOwnerNamePs": "نام مالک شرکت (پشتو)",
       "companyOwnerName": "نام مالک",
-      "companyType": "نوع شرکت",
+      "companyType": "مالکیت شرکت",
       "noSocialLinksAdded": "هنوز لینک‌های اجتماعی اضافه نشده است. برای افزودن لینک‌های شبکه‌های اجتماعی روی 'افزودن لینک' کلیک کنید.",
       "categories": "دسته‌بندی‌ها",
       "addLink": "افزودن لینک اجتماعی",
@@ -542,7 +541,7 @@
     "typeOptions": {
       "PRIVATE": "شرکت خصوصی",
       "PUBLIC": "شرکت عمومی",
-      "GOVERNMENT": "موسسه دولتی",
+      "GOVERNMENT": "امارتی",
       "EDUCATIONAL_INSTITUTIONS": "موسسه آموزشی",
       "OTHER": "سایر"
     },
@@ -957,7 +956,6 @@
     },
     "labels": {
       "certificationScope": "اعتبار",
-
       "startDate": "تاریخ شروع",
       "endDate": "تاریخ پایان",
       "trackingNumber": "شماره پیگیری",
@@ -1004,7 +1002,7 @@
       "REGISTERED": "اهدای سند ثبت دیتابیس",
       "STANDARDS_PROVIDED": " اضافه نمودن استاندرد",
       "DEADLINE_ASSIGNED": "تعیین مهلت به مشتری ",
-      "INSPECTION_IN_PROGRESS": "راجع نمودن به کمیته تفتیش",
+      "INSPECTION_IN_PROGRESS": "راجع نمودن به هئیت  تفتیش",
       "REPORTED_TO_COMMITTEE": "گزارش به کمیته",
       "REPORT_APPROVED": "گذارش تائید شده هیئت تائید دهی",
       "PAYMENT_PENDING": "در انتظار پرداخت",
@@ -1166,7 +1164,7 @@
     "no_companies_found": "شرکتی یافت نشد. لطفاً ابتدا یک شرکت اضافه کنید.",
     "required_documents_title": "اسناد مورد نیاز",
     "combine_documents_message": "همه اسناد را در یک فایل PDF ترکیب کنید",
-    "combine_documents_description": "لطفا اسناد های ذیل را ضمیمه کنید: 1: تذکره مالک 2:جواز شرکت 3: سند مالیاتی 4: نشان تجارتی",
+    "combine_documents_description": "لطفا اسناد های ذیل را ضمیمه کنید: 1:  مالک 2:جواز شرکت 3: سند مالیاتی 4: نشان تجارتیو 5: تذکره نماینده شرکت",
     "drag_drop_message": "فایل PDF ترکیبی خود را اینجا بکشید و رها کنید، یا برای مرور کلیک کنید",
     "supported_formats_simple": "فرمت پشتیبانی شده: فقط PDF حداکثر 10MB",
     "browse_files": "مرور فایل‌ها",
@@ -1248,8 +1246,8 @@
         "ready": "آماده برای ارسال",
         "pleaseConfirm": "لطفاً قبل از ارسال بررسی کنید",
         "confirmInfo": "تمام اطلاعات شرکت و شخص تماس دقیق است",
-        "confirmDocuments": "تمام اسناد مورد نیاز بارگذاری شده است",
-        "confirmAccuracy": "اطلاعات ارائه شده صحیح و کامل است"
+        "confirmDocuments": "تمام اسناد مورد نیاز اضافه شده است",
+        "confirmAccuracy": "مغلومات ارائه شده صحیح و کامل است"
       }
     },
     "leftPanel": {
@@ -1263,7 +1261,6 @@
       "stepCompleted": "تکمیل شد",
       "submitButton": "ارسال برای بررسی"
     },
-
     "successDialog": {
       "title": "تبریک! 🎉",
       "message": "درخواست شما با موفقیت ارسال شد.",
@@ -1456,7 +1453,9 @@
       "noMembers": "هیچ عضوی یافت نشد",
       "noAssignments": "هیچ وظیفه‌ای یافت نشد",
       "loadError": "خطا در بارگیری جزئیات کمیته",
-      "notFound": "کمیته یافت نشد"
+      "notFound": "کمیته یافت نشد",
+      "memberDirectorate": "ریاست",
+      "position": "وظیفه"
     },
     "createMember": "افزودن عضو",
     "selectCommittee": "انتخاب کمیته",
@@ -1618,7 +1617,11 @@
       "committee": "کمیته",
       "joinedAt": "تاریخ عضویت",
       "deleteConfirm": "آیا مطمئن هستید که می خواهید این عضو را حذف کنید؟",
-      "viewTitle": "نمای عضو کمیته"
+      "viewTitle": "نمای عضو کمیته",
+      "memberDirectoratePlaceholder": "ریاست عضو را وارد کنید",
+      "positionPlaceholder": "وظیفه را وارد کنید",
+      "memberDirectorate": "ریاست",
+      "position": "وظیفه"
     }
   },
   "common": {
@@ -1708,9 +1711,9 @@
       "title": "راه آسان جهت بدست آوردن تائید نامه کیفیت در افغانستان",
       "description": "پروسه دریافت تائید نامه کیفیت خود را با ASQA ساده کنید. شناخته شوید، اعتماد بسازید و فرصت‌های تجاری خود را گسترش دهید.",
       "cta": {
-        "start": "درخواست نامه خود را آغاز کنید",
+        "start": "درخواست خود را آغاز کنید",
         "learn": "بیشتر بیاموزید",
-        "search": "پیگیری درخواست"
+        "search": "تعقیب و پیگیری درخواست شما"
       }
     },
     "certificationTypes": {
@@ -2078,7 +2081,6 @@
   },
   "role": {
     "INSPECTION_USERS": "کاربران هئیت تفتیش",
-
     "ROLE_ADMIN": "مدیر عمومی سیستم",
     "ROLE_USER": "کاربر عادی",
     "ROLE_COMMITTEE": "عضو کمیته",

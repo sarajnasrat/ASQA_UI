@@ -34,10 +34,6 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
 
     SUBMITTED: ["UNDER_REVIEW", "REJECTED"],
 
-    UNDER_REVIEW: ["STANDARDS_PROVIDED"],
-
-    /* STANDARD STEP */
-    STANDARDS_REQUIRED: ["STANDARDS_PROVIDED"],
     STANDARDS_PROVIDED: ["DEADLINE_REQUIRED"],
 
     /* DEADLINE STEP */
@@ -59,6 +55,7 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
   const { showError, showSuccess } = useToast();
   const navigate = useNavigate();
 
+  const [standardRequired, setStandardRequired] = useState<boolean>(false);
   const [status, setStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -80,16 +77,34 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
   /* ================= STATUS OPTIONS ================= */
 
   const statusOptions = useMemo(() => {
-    const allowed = transitionMap[currentStatus] || [];
+    const allowed =
+      currentStatus === "UNDER_REVIEW"
+        ? ["DEADLINE_REQUIRED"]
+        : transitionMap[currentStatus] || [];
     return allowed.map((s) => ({
       label: t(`certificationRequest.statusOptions.${s}`),
       value: s,
     }));
-  }, [currentStatus, t]);
+  }, [currentStatus, standardRequired, t]);
 
   useEffect(() => {
     setStatus(statusOptions[0]?.value || null);
   }, [statusOptions]);
+
+  useEffect(() => {
+    const loadRequest = async () => {
+      if (!visible || !requestId) return;
+      try {
+        const response = await CertificationRequestService.getById(requestId);
+        const request = response?.data?.data || response?.data;
+        setStandardRequired(Boolean(request?.standardRequired));
+      } catch {
+        setStandardRequired(false);
+      }
+    };
+
+    loadRequest();
+  }, [requestId, visible]);
 
   /* ================= LOAD COMMITTEES ================= */
 
@@ -120,14 +135,6 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
 
       /* PREVENT STEP SKIPPING */
       if (
-        currentStatus === "STANDARDS_REQUIRED" &&
-        status !== "STANDARDS_PROVIDED"
-      ) {
-        showError(t("standard.mustProvide"));
-        return;
-      }
-
-      if (
         currentStatus === "DEADLINE_REQUIRED" &&
         status !== "DEADLINE_ASSIGNED"
       ) {
@@ -135,8 +142,22 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
         return;
       }
 
-      /* ===== DEADLINE ===== */
-      if (status === "DEADLINE_ASSIGNED") {
+      if (currentStatus === "UNDER_REVIEW" && standardRequired) {
+        if (!selectedFile) {
+          showError(t("attachment.STANDARD") || "Please upload standard file");
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append("file", selectedFile);
+
+        response = await handleApi(
+          () => CertificationRequestService.standardProvided(requestId, formData),
+          showSuccess,
+          showError,
+          t,
+        );
+      } else if (status === "DEADLINE_ASSIGNED") {
         if (!startDate || !endDate) {
           showError(t("deadline.required"));
           return;
@@ -193,7 +214,15 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
         );
       } else {
         response = await handleApi(
-          () => CertificationRequestService.updateStatus(requestId, status),
+          () =>
+            CertificationRequestService.updateStatus(
+              requestId,
+              currentStatus === "UNDER_REVIEW"
+                ? standardRequired
+                  ? "STANDARDS_PROVIDED"
+                  : "DEADLINE_REQUIRED"
+                : status,
+            ),
           showSuccess,
           showError,
           t,
@@ -203,7 +232,11 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
       if (response?.status === 200) {
         onSuccess?.();
         onHide();
-        navigateAfterStatusUpdate(status);
+        navigateAfterStatusUpdate(
+          currentStatus === "UNDER_REVIEW" && standardRequired
+            ? "STANDARDS_PROVIDED"
+            : status,
+        );
       }
     } finally {
       setLoading(false);
@@ -273,7 +306,7 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
         return t("certificationRequest.underReview");
 
       case "UNDER_REVIEW":
-        return t("certificationRequest.standardsProvided");
+        return t("certificationRequest.updateStatus");
 
       case "STANDARDS_PROVIDED":
         return t("certificationRequest.deadlineRequired");
@@ -313,8 +346,40 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
         className="w-full"
       />
 
+      {currentStatus === "UNDER_REVIEW" && (
+        <div className="mt-3 rounded-lg border border-gray-200 bg-white p-4">
+          <label className="flex items-start gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={standardRequired}
+              onChange={(e) => {
+                setStandardRequired(e.target.checked);
+                if (!e.target.checked) {
+                  setSelectedFile(null);
+                }
+              }}
+              className="mt-1 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            />
+            <div>
+              <div className="text-sm font-medium text-gray-800">
+                {t("certificationRequest.standardsRequired") ||
+                  "Standard is required for this request"}
+              </div>
+              <div className="text-sm text-gray-500">
+                {standardRequired
+                  ? t("certificationRequest.standardsProvided") ||
+                    "Upload the standard file before continuing."
+                  : t("certificationRequest.deadlineRequired") ||
+                    "Continue without standard and move to the next step."}
+              </div>
+            </div>
+          </label>
+        </div>
+      )}
+
       {/* STANDARD UPLOAD */}
-      {status === "STANDARDS_PROVIDED" && (
+      {(status === "STANDARDS_PROVIDED" ||
+        (currentStatus === "UNDER_REVIEW" && standardRequired)) && (
         <div className="mt-3">
           <FileUploadField
             label={t("attachment.STANDARD")}

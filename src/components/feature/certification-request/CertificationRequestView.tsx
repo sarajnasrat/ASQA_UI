@@ -37,8 +37,6 @@ const API_BASE_URL = "http://localhost:8080";
 const transitionMap: Record<string, string[]> = {
   DRAFT: ["SUBMITTED"],
   SUBMITTED: ["UNDER_REVIEW", "REJECTED"],
-  UNDER_REVIEW: ["STANDARDS_PROVIDED"],
-  STANDARDS_REQUIRED: ["STANDARDS_PROVIDED"],
   STANDARDS_PROVIDED: ["DEADLINE_REQUIRED"],
   DEADLINE_REQUIRED: ["DEADLINE_ASSIGNED"],
   DEADLINE_ASSIGNED: ["INSPECTION_IN_PROGRESS"],
@@ -131,6 +129,7 @@ const CertificationRequestView: React.FC = () => {
   const [selectedStandardFile, setSelectedStandardFile] = useState<File | null>(
     null,
   );
+  const [standardRequiredChoice, setStandardRequiredChoice] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(null);
   const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(null);
   const [rejectionReason, setRejectionReason] = useState<string>("");
@@ -216,6 +215,9 @@ const CertificationRequestView: React.FC = () => {
 
   const getNextStatuses = () => {
     if (!request?.requestStatus) return [];
+    if (request.requestStatus === "UNDER_REVIEW") {
+      return ["DEADLINE_REQUIRED"];
+    }
     return transitionMap[request.requestStatus] || [];
   };
 
@@ -908,6 +910,7 @@ const CertificationRequestView: React.FC = () => {
     nextStatus: string,
     options?: {
       rejectionReason?: string | null;
+      standardRequired?: boolean;
       standardFile?: File | null;
       startDate?: Date | null;
       endDate?: Date | null;
@@ -936,7 +939,14 @@ const CertificationRequestView: React.FC = () => {
 
     let response;
 
-    if (nextStatus === "REJECTED") {
+    const effectiveNextStatus =
+      request.requestStatus === "UNDER_REVIEW"
+        ? options?.standardRequired
+          ? "STANDARDS_PROVIDED"
+          : "DEADLINE_REQUIRED"
+        : nextStatus;
+
+    if (effectiveNextStatus === "REJECTED") {
       if (!cleanReason) {
         showToast(
           "warn",
@@ -956,7 +966,7 @@ const CertificationRequestView: React.FC = () => {
         showError,
         t,
       );
-    } else if (nextStatus === "STANDARDS_PROVIDED") {
+    } else if (effectiveNextStatus === "STANDARDS_PROVIDED") {
       if (!options?.standardFile) {
         showToast("warn", t("common.warning"), "Please upload standard file");
         return;
@@ -972,7 +982,7 @@ const CertificationRequestView: React.FC = () => {
         showError,
         t,
       );
-    } else if (nextStatus === "DEADLINE_ASSIGNED") {
+    } else if (effectiveNextStatus === "DEADLINE_ASSIGNED") {
       if (!options?.startDate || !options?.endDate) {
         showToast("warn", t("common.warning"), t("deadline.required"));
         return;
@@ -998,7 +1008,7 @@ const CertificationRequestView: React.FC = () => {
         showError,
         t,
       );
-    } else if (nextStatus === "INSPECTION_IN_PROGRESS") {
+    } else if (effectiveNextStatus === "INSPECTION_IN_PROGRESS") {
       if (!options?.committeeId) {
         showToast("warn", t("common.warning"), t("committee.required"));
         return;
@@ -1017,11 +1027,11 @@ const CertificationRequestView: React.FC = () => {
     } else {
       response = await handleApi(
         () =>
-          CertificationRequestService.updateStatus(
-            request.id,
-            nextStatus,
-            request.company?.id,
-          ),
+            CertificationRequestService.updateStatus(
+              request.id,
+              effectiveNextStatus,
+              request.company?.id,
+            ),
         showSuccess,
         showError,
         t,
@@ -1032,6 +1042,7 @@ const CertificationRequestView: React.FC = () => {
       // Reset dialog states
       setSelectedCommitteeId(null);
       setSelectedStandardFile(null);
+      setStandardRequiredChoice(false);
       setSelectedStartDate(null);
       setSelectedEndDate(null);
       setRejectionReason("");
@@ -1099,6 +1110,7 @@ const CertificationRequestView: React.FC = () => {
     setPendingStatus(null);
     setSelectedCommitteeId(null);
     setSelectedStandardFile(null);
+    setStandardRequiredChoice(false);
     setSelectedStartDate(null);
     setSelectedEndDate(null);
     setRejectionReason("");
@@ -1108,6 +1120,7 @@ const CertificationRequestView: React.FC = () => {
   const confirmStatusUpdate = (nextStatus: string) => {
     setSelectedCommitteeId(null);
     setSelectedStandardFile(null);
+    setStandardRequiredChoice(Boolean(request?.standardRequired));
     setSelectedStartDate(null);
     setSelectedEndDate(null);
     setRejectionReason("");
@@ -1120,7 +1133,12 @@ const CertificationRequestView: React.FC = () => {
     if (!pendingStatus || statusSubmitting) return;
 
     const isReject = pendingStatus === "REJECTED";
-    const isStandardProvided = pendingStatus === "STANDARDS_PROVIDED";
+    const isUnderReviewDecision =
+      request?.requestStatus === "UNDER_REVIEW" &&
+      pendingStatus === "DEADLINE_REQUIRED";
+    const isStandardProvided =
+      pendingStatus === "STANDARDS_PROVIDED" ||
+      (isUnderReviewDecision && standardRequiredChoice);
     const isDeadlineAssigned = pendingStatus === "DEADLINE_ASSIGNED";
     const isInspectionInProgress = pendingStatus === "INSPECTION_IN_PROGRESS";
 
@@ -1171,6 +1189,7 @@ const CertificationRequestView: React.FC = () => {
       setStatusSubmitting(true);
       const response = await handleStatusUpdate(pendingStatus, {
         rejectionReason: isReject ? rejectionReason : null,
+        standardRequired: isUnderReviewDecision ? standardRequiredChoice : undefined,
         standardFile: isStandardProvided ? selectedStandardFile : null,
         startDate: isDeadlineAssigned ? selectedStartDate : null,
         endDate: isDeadlineAssigned ? selectedEndDate : null,
@@ -1179,7 +1198,11 @@ const CertificationRequestView: React.FC = () => {
 
       if (response?.status === 200) {
         closeStatusDialog();
-        navigateAfterStatusUpdate(pendingStatus);
+        navigateAfterStatusUpdate(
+          isUnderReviewDecision && standardRequiredChoice
+            ? "STANDARDS_PROVIDED"
+            : pendingStatus,
+        );
       }
     } catch (error) {
       console.error("Status update failed:", error);
@@ -1325,12 +1348,6 @@ const CertificationRequestView: React.FC = () => {
         icon: <XCircle className="h-4 w-4" />,
         label: t("certificationRequest.statusOptions.CANCELLED"),
       },
-      STANDARDS_REQUIRED: {
-        color: "text-rose-700",
-        bgColor: "bg-rose-100",
-        icon: <AlertCircle className="h-4 w-4" />,
-        label: t("certificationRequest.statusOptions.STANDARDS_PROVIDED"),
-      },
       DEADLINE_REQUIRED: {
         color: "text-amber-700",
         bgColor: "bg-amber-100",
@@ -1436,7 +1453,12 @@ const CertificationRequestView: React.FC = () => {
     0;
   const contactPerson = getContactPerson();
   const isRejectDialog = pendingStatus === "REJECTED";
-  const isStandardProvidedDialog = pendingStatus === "STANDARDS_PROVIDED";
+  const isUnderReviewDecisionDialog =
+    request?.requestStatus === "UNDER_REVIEW" &&
+    pendingStatus === "DEADLINE_REQUIRED";
+  const isStandardProvidedDialog =
+    pendingStatus === "STANDARDS_PROVIDED" ||
+    (isUnderReviewDecisionDialog && standardRequiredChoice);
   const isDeadlineAssignedDialog = pendingStatus === "DEADLINE_ASSIGNED";
   const isInspectionInProgressDialog =
     pendingStatus === "INSPECTION_IN_PROGRESS";
@@ -1504,6 +1526,8 @@ const CertificationRequestView: React.FC = () => {
                     ? t("common.updating")
                     : isRejectDialog
                       ? `X ${getStatusButtonLabel("REJECTED")}`
+                      : isUnderReviewDecisionDialog && standardRequiredChoice
+                        ? `${getStatusButtonLabel("STANDARDS_PROVIDED")}`
                       : `${getStatusButtonLabel(pendingStatus)}`
                   : ""}
               </button>
@@ -1557,6 +1581,37 @@ const CertificationRequestView: React.FC = () => {
                     className="w-full min-h-25 rounded-lg border border-gray-300 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-red-400 transition-all duration-200 resize-y"
                     rows={4}
                   />
+                </div>
+              )}
+
+              {isUnderReviewDecisionDialog && (
+                <div className="w-full rounded-lg border border-gray-200 bg-white p-4">
+                  <label className="flex items-start gap-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={standardRequiredChoice}
+                      onChange={(e) => {
+                        setStandardRequiredChoice(e.target.checked);
+                        if (!e.target.checked) {
+                          setSelectedStandardFile(null);
+                        }
+                      }}
+                      className="mt-1 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    <div>
+                      <div className="text-sm font-medium text-gray-800">
+                        {t("certificationRequest.standardsRequired") ||
+                          "Standard is required for this request"}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        {standardRequiredChoice
+                          ? t("certificationRequest.standardsProvided") ||
+                            "Upload the standard file before continuing."
+                          : t("certificationRequest.deadlineRequired") ||
+                            "Continue without standard and move to the next step."}
+                      </div>
+                    </div>
+                  </label>
                 </div>
               )}
 

@@ -88,6 +88,7 @@ export interface CertificationRequest {
   id: number;
   requestType: string;
   requestStatus: string;
+  standardRequired?: boolean;
   certificationType: string;
   serialNumber: string;
   trackingNumber: string;

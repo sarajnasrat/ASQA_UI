@@ -46,12 +46,12 @@ type CalendarType = "gregorian" | "persian" | "arabic";
 
 const COMPANY_TYPES = [
   { value: "PRIVATE", labelKey: "company.typeOptions.PRIVATE" },
-  { value: "PUBLIC", labelKey: "company.typeOptions.PUBLIC" },
+  // { value: "PUBLIC", labelKey: "company.typeOptions.PUBLIC" },
   { value: "GOVERNMENT", labelKey: "company.typeOptions.GOVERNMENT" },
-  {
-    value: "EDUCATIONAL_INSTITUTIONS",
-    labelKey: "company.typeOptions.EDUCATIONAL_INSTITUTIONS",
-  },
+  // {
+  //   value: "EDUCATIONAL_INSTITUTIONS",
+  //   labelKey: "company.typeOptions.EDUCATIONAL_INSTITUTIONS",
+  // },
   { value: "OTHER", labelKey: "company.typeOptions.OTHER" },
 ];
 

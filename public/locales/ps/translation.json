@@ -1237,7 +1237,6 @@
       "stepCompleted": "بشپړ شو",
       "submitButton": "د بیاکتنې لپاره وسپارئ"
     },
-
     "successDialog": {
       "title": "مبارک شه! 🎉",
       "message": "ستاسو غوښتنه په بریالیتوب سره وسپارل شوه.",
@@ -1342,7 +1341,9 @@
       "noMembers": "هیڅ غړی ونه موندل شو",
       "noAssignments": "هیڅ دنده ونه موندل شوه",
       "loadError": "د کمیټې د جزئیاتو په بارولو کې تېروتنه",
-      "notFound": "کمیټه ونه موندل شوه"
+      "notFound": "کمیټه ونه موندل شوه",
+      "memberDirectorate": "ریاست",
+      "position": "دنده"
     },
     "createMember": "غړی اضافه کړئ",
     "selectCommittee": "کمیټه وټاکئ",
@@ -1507,7 +1508,11 @@
       "joinedAt": "د غړيتوب نېټه",
       "deleteConfirm": "آيا تاسې ډاډه ياست چې دا غړی لرې کول غواړئ؟",
       "viewTitle": "د کمېټې غړي کتنه",
-      "updateDescription": "برای اصلاح این عضو هئیت معلومات زیر را تکمیل کنید"
+      "updateDescription": "برای اصلاح این عضو هئیت معلومات زیر را تکمیل کنید",
+      "memberDirectoratePlaceholder": "ریاست وليکئ",
+      "positionPlaceholder": "دنده وليکئ",
+      "memberDirectorate": "ریاست",
+      "position": "دنده"
     }
   },
   "common": {
@@ -2945,6 +2950,3 @@
     }
   }
 }
-
-
-

@@ -212,8 +212,19 @@ export const CommiteeMemberList: React.FC = () => {
           : t("common.notSpecified"),
     },
     {
+      field: "memberDirectorate",
+      header: t("commitee.details.memberDirectorate") || "Directorate",
+      body: (row: any) => row.memberDirectorate || t("common.notSpecified"),
+    },
+    {
+      field: "position",
+      header: t("commitee.details.position") || "Position",
+      body: (row: any) => row.position || t("common.notSpecified"),
+    },
+    {
       field: "responsibility",
       header: t("commitee.member.responsibility"),
+      body: (row: any) => row.responsibility || t("common.notSpecified"),
     },
     {
       field: "joinedAt",

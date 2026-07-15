@@ -1371,7 +1371,9 @@
       "noMembers": "No members found",
       "noAssignments": "No assignments found",
       "loadError": "خطا در بارگیری جزئیات کمیته",
-      "notFound": "کمیته یافت نشد"
+      "notFound": "کمیته یافت نشد",
+      "memberDirectorate": "Directorate",
+      "position": "Position"
     },
     "createMember": "Add Member",
     "selectCommittee": "Select Committee",
@@ -1536,7 +1538,11 @@
       "joinedAt": "Joined At",
       "deleteConfirm": "Are you sure you want to remove this member?",
       "viewTitle": "Committee Member View",
-      "updateDescription": "برای اصلاح این عضو هئیت معلومات زیر را تکمیل کنید"
+      "updateDescription": "برای اصلاح این عضو هئیت معلومات زیر را تکمیل کنید",
+      "memberDirectoratePlaceholder": "Enter directorate",
+      "positionPlaceholder": "Enter position",
+      "memberDirectorate": "Directorate",
+      "position": "Position"
     }
   },
   "common": {

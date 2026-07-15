@@ -21,6 +21,8 @@ interface FormValues {
   userId: number | null;
   committeeId: number | null;
   memberRole: string;
+  memberDirectorate: string;
+  position: string;
   responsibility: string;
   active: boolean;
 }
@@ -43,6 +45,8 @@ export const CommiteeMemberUpdate: React.FC<Props> = ({
       userId: null,
       committeeId: null,
       memberRole: "",
+      memberDirectorate: "",
+      position: "",
       responsibility: "",
       active: true,
     },
@@ -106,6 +110,8 @@ export const CommiteeMemberUpdate: React.FC<Props> = ({
         userId: data?.user?.id ?? null,
         committeeId: data?.committee?.id ?? null,
         memberRole: data?.memberRole ?? "",
+        memberDirectorate: data?.memberDirectorate ?? "",
+        position: data?.position ?? "",
         responsibility: data?.responsibility ?? "",
         active: data?.active ?? true,
       });
@@ -143,6 +149,8 @@ export const CommiteeMemberUpdate: React.FC<Props> = ({
       user: { id: data.userId },
       committee: { id: data.committeeId },
       memberRole: data.memberRole,
+      memberDirectorate: data.memberDirectorate,
+      position: data.position,
       responsibility: data.responsibility,
       active: data.active,
     };
@@ -286,6 +294,48 @@ export const CommiteeMemberUpdate: React.FC<Props> = ({
                       className="w-full"
                       onChange={(e) => field.onChange(e.value)}
                       showClear
+                    />
+                  )}
+                />
+              </div>
+
+              <div>
+                <label className="mb-2 block text-sm font-semibold text-gray-700">
+                  {t("commitee.details.memberDirectorate") || "Directorate"}
+                </label>
+                <Controller
+                  name="memberDirectorate"
+                  control={control}
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      type="text"
+                      placeholder={
+                        t("commitee.member.memberDirectoratePlaceholder") ||
+                        "Enter directorate"
+                      }
+                      className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    />
+                  )}
+                />
+              </div>
+
+              <div>
+                <label className="mb-2 block text-sm font-semibold text-gray-700">
+                  {t("commitee.details.position") || "Position"}
+                </label>
+                <Controller
+                  name="position"
+                  control={control}
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      type="text"
+                      placeholder={
+                        t("commitee.member.positionPlaceholder") ||
+                        "Enter position"
+                      }
+                      className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
                     />
                   )}
                 />

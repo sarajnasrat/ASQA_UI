@@ -8,7 +8,7 @@ import { Button } from "primereact/button";
 import FileUploadField from "../../common/FileUploadField";
 // @ts-ignore
 import UserService from "../../../services/user.service.ts";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAppToast } from "../../../hooks/useToast.js";
 import { Toast } from "primereact/toast";
 import DynamicBreadcrumb from "../../common/DynamicBreadcrumb.js";
@@ -27,13 +27,27 @@ type FormValues = {
   zoneId: number;
 };
 
+type UserRegistrationLocationState = {
+  from?: string;
+  returnTo?: string;
+  committeeId?: number | null;
+  commiteeType?: string | null;
+};
+
 export const UserRegistration = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useTranslation();
   const { toast, showToast } = useAppToast();
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [zones, setZones] = useState<{ label: string; value: any }[]>([]);
   const [roles, setRoles] = useState<{ label: string; value: any }[]>([]);
+  const navigationState = (location.state as UserRegistrationLocationState) || {};
+  const isFromCommitteeMemberCreate =
+    navigationState.from === "committee-member-create";
+  const redirectPath = isFromCommitteeMemberCreate
+    ? navigationState.returnTo || "/commitee-list"
+    : "/users";
 
   const {
     control,
@@ -112,7 +126,17 @@ export const UserRegistration = () => {
       setProfileImage(null);
 
       showToast("success", t("common.success"), t("user.messages.createSuccess"));
-      setTimeout(() => navigate("/users"), 1500);
+      setTimeout(() => {
+        navigate(redirectPath, {
+          state: isFromCommitteeMemberCreate
+            ? {
+                fromUserRegistration: true,
+                committeeId: navigationState.committeeId ?? null,
+                commiteeType: navigationState.commiteeType ?? null,
+              }
+            : undefined,
+        });
+      }, 1500);
     } catch (error) {
       showToast("error", t("common.error"), t("user.messages.createFailed"));
     }
@@ -475,7 +499,17 @@ export const UserRegistration = () => {
                 raised
                 text
                 icon="pi pi-times"
-                onClick={() => navigate("/users")}
+                onClick={() =>
+                  navigate(redirectPath, {
+                    state: isFromCommitteeMemberCreate
+                      ? {
+                          fromUserRegistration: true,
+                          committeeId: navigationState.committeeId ?? null,
+                          commiteeType: navigationState.commiteeType ?? null,
+                        }
+                      : undefined,
+                  })
+                }
                 className="p-button-outlined"
                 style={{ minWidth: "100px" }}
               />

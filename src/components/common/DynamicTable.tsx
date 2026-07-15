@@ -28,6 +28,7 @@ interface DynamicTableProps {
 }
 
 export const DynamicTable: React.FC<DynamicTableProps> = ({
+  title,
   value,
   columns,
   header,
@@ -41,7 +42,7 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({
 }) => {
   return (
     <div className="pl-5 pr-5 md:pb-6 max-w-8xl mx-auto">
-      <Card className="shadow-xl border-0 rounded-xl overflow-hidden bg-white">
+      <Card className="dynamic-table-card border-0 rounded-2xl overflow-hidden bg-white shadow-lg">
         <DataTable
           value={value}
           lazy
@@ -56,16 +57,20 @@ export const DynamicTable: React.FC<DynamicTableProps> = ({
           emptyMessage="No data found"
           selectionMode="single"
           stripedRows
-          className="p-datatable-sm"
+          className=""
           scrollable
-          scrollHeight="500px"
-          height={"12rem"}
-        showGridlines={true}
+          scrollHeight="700px"
+          showGridlines={false}
           header={header}
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown CurrentPageReport"
           rowsPerPageOptions={rowsPerPageOptions}
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} records"
           globalFilter={globalFilter}
+          dataKey="id"
+          size="small"
+          removableSort
+          rowHover
+          aria-label={title}
         >
           {columns.map((col, index) => (
             <Column

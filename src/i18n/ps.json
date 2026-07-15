@@ -13,13 +13,13 @@
     "systemUpdate": "د سیسټم تازه معلومات موجود دي",
     "reportReady": "ستاسو راپور چمتو دی"
   },
-    "languages": {
+  "languages": {
     "english": "انګلیسي",
     "persian": "فارسي (دری)",
     "pashto": "پښتو"
   },
   "country": {
-     "code":{
+    "code": {
       "label": "Country Code",
       "placeholder": "kjdakfdsakj"
     },
@@ -45,6 +45,18 @@
       "hint": {
         "translations": "ټولې ژباړې اختیاري دي پرته له انګلیسي"
       }
+    }
+  },
+  "commitee": {
+    "details": {
+      "memberDirectorate": "ریاست",
+      "position": "دنده"
+    },
+    "member": {
+      "memberDirectoratePlaceholder": "ریاست وليکئ",
+      "positionPlaceholder": "دنده وليکئ",
+      "memberDirectorate": "ریاست",
+      "position": "دنده"
     }
   }
 }

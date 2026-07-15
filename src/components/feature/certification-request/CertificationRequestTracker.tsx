@@ -183,12 +183,6 @@ const useStatusConfig = (): StatusConfig => {
       color: "text-gray-600",
       bg: "bg-gray-50",
     },
-    STANDARDS_REQUIRED: {
-      label: t("certificationRequest.statusOptions.STANDARDS_REQUIRED"),
-      icon: <AlertCircle size={14} />,
-      color: "text-yellow-600",
-      bg: "bg-yellow-50",
-    },
     DEADLINE_REQUIRED: {
       label: t("certificationRequest.statusOptions.DEADLINE_REQUIRED"),
       icon: <AlertCircle size={14} />,

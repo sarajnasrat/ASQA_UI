@@ -17,12 +17,18 @@ import { CommiteeUpdate } from "../commitee/CommiteeUpdate";
 import CommiteeService from "../../../services/comitee.service";
 import { useToast } from "../../../hooks/ToastContext";
 import { Tag } from "primereact/tag";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 import CommiteeMemberCreate from "../commiteemember/CommiteeMemberCreate";
 import ExcelExport from "../../common/ExcelExport";
 import { useAuth } from "../../../context/AuthContext";
 import type { CommitteeResponse } from "../../../services/comitee.service";
+
+type CommitteeLocationState = {
+  fromUserRegistration?: boolean;
+  committeeId?: number | null;
+  commiteeType?: string | null;
+};
 
 export const InspectionCommiteeList: React.FC = () => {
   const [commiteeList, setCommiteeList] = useState<CommitteeResponse[]>([]);
@@ -33,6 +39,7 @@ export const InspectionCommiteeList: React.FC = () => {
   >(null);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
@@ -75,6 +82,20 @@ export const InspectionCommiteeList: React.FC = () => {
   useEffect(() => {
     getAllCommitees();
   }, [first, rows]);
+
+  useEffect(() => {
+    const state = (location.state as CommitteeLocationState) || {};
+
+    if (
+      state.fromUserRegistration &&
+      state.committeeId &&
+      state.commiteeType === "INSPECTION"
+    ) {
+      setSelectedCommitteeForMember(state.committeeId);
+      setShowMemberCreateDialog(true);
+      navigate(location.pathname, { replace: true, state: null });
+    }
+  }, [location.pathname, location.state, navigate]);
 
   // ================= CREATE =================
   const handleCreateSuccess = () => {

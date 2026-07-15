@@ -29,6 +29,8 @@ interface MemberType {
   user: UserType | null;
   committee: null;
   memberRole: string;
+  memberDirectorate: string;
+  position: string;
   responsibility: string;
   joinedAt: string;
   active: boolean;
@@ -689,6 +691,58 @@ export const CommiteeDetails = () => {
                                     />
                                   </svg>
                                   <span>{member.user.phoneNumber}</span>
+                                </div>
+                              )}
+
+                              {member.memberDirectorate && (
+                                <div className="flex items-start gap-2 text-gray-600">
+                                  <svg
+                                    className="w-4 h-4 text-gray-400 flex-shrink-0 mt-0.5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M3 7h18M5 7v10a2 2 0 002 2h10a2 2 0 002-2V7M9 11h6M9 15h4"
+                                    />
+                                  </svg>
+                                  <span className="flex-1">
+                                    <span className="font-medium">
+                                      {t("commitee.details.memberDirectorate") ||
+                                        "Directorate"}
+                                      :
+                                    </span>{" "}
+                                    {member.memberDirectorate}
+                                  </span>
+                                </div>
+                              )}
+
+                              {member.position && (
+                                <div className="flex items-start gap-2 text-gray-600">
+                                  <svg
+                                    className="w-4 h-4 text-gray-400 flex-shrink-0 mt-0.5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M12 8c-1.657 0-3 1.343-3 3v7h6v-7c0-1.657-1.343-3-3-3zM7 18h10M8 8V6a4 4 0 118 0v2"
+                                    />
+                                  </svg>
+                                  <span className="flex-1">
+                                    <span className="font-medium">
+                                      {t("commitee.details.position") ||
+                                        "Position"}
+                                      :
+                                    </span>{" "}
+                                    {member.position}
+                                  </span>
                                 </div>
                               )}
 

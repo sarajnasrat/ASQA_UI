@@ -42,5 +42,17 @@
         "translations": "تمام ترجمه‌ها به جز انگلیسی اختیاری هستند"
       }
     }
+  },
+  "commitee": {
+    "details": {
+      "memberDirectorate": "ریاست",
+      "position": "وظیفه"
+    },
+    "member": {
+      "memberDirectoratePlaceholder": "ریاست عضو را وارد کنید",
+      "positionPlaceholder": "وظیفه را وارد کنید",
+      "memberDirectorate": "ریاست",
+      "position": "وظیفه"
+    }
   }
 }

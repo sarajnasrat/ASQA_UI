@@ -19,7 +19,7 @@
     "pashto": "Pashto"
   },
   "country": {
-    "code":{
+    "code": {
       "label": "Country Code",
       "placeholder": "sdafkdsakf"
     },
@@ -45,6 +45,18 @@
       "hint": {
         "translations": "All translations are optional except English"
       }
+    }
+  },
+  "commitee": {
+    "details": {
+      "memberDirectorate": "Directorate",
+      "position": "Position"
+    },
+    "member": {
+      "memberDirectoratePlaceholder": "Enter directorate",
+      "positionPlaceholder": "Enter position",
+      "memberDirectorate": "Directorate",
+      "position": "Position"
     }
   }
 }

@@ -8,10 +8,14 @@ import { useToast } from "../../../hooks/ToastContext";
 import { useTranslation } from "react-i18next";
 import { UserService } from "../../../services/user.service";
 import CommiteeMemberService from "../../../services/commiteeMember.service";
+import { Button } from "primereact/button";
+import { useNavigate } from "react-router-dom";
 
 interface FormValues {
   userIds: number[];
   memberRole: string;
+  memberDirectorate: string;
+  position: string;
   responsibility: string;
   joinedAt: Date | null;
   active: boolean;
@@ -26,6 +30,7 @@ interface Props {
 
 export const CommiteeMemberCreate: React.FC<Props> = ({
   committeeId,
+  commiteeType,
   onClose,
   onSuccess,
 }) => {
@@ -35,11 +40,13 @@ export const CommiteeMemberCreate: React.FC<Props> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [users, setUsers] = useState<any[]>([]);
   const isRTL = i18n.language === "ps" || i18n.language === "dr";
-
+  const navigate = useNavigate();
   const { control, handleSubmit, reset } = useForm<FormValues>({
     defaultValues: {
       userIds: [],
       memberRole: "",
+      memberDirectorate: "",
+      position: "",
       responsibility: "",
       joinedAt: new Date(),
       active: true,
@@ -92,6 +99,8 @@ export const CommiteeMemberCreate: React.FC<Props> = ({
       user: { id: userId },
       committee: { id: committeeId },
       memberRole: data.memberRole,
+      memberDirectorate: data.memberDirectorate,
+      position: data.position,
       responsibility: data.responsibility,
       joinedAt: data.joinedAt,
       active: data.active,
@@ -129,6 +138,24 @@ export const CommiteeMemberCreate: React.FC<Props> = ({
       : i18n.language === "dr"
         ? "{0} مورد انتخاب شده"
         : "{0} items selected";
+
+  const handleCreateUser = () => {
+    const returnTo =
+      commiteeType === "APPROVAL"
+        ? "/approva-commitee"
+        : commiteeType === "INSPECTION"
+          ? "/inspection-commitee"
+          : "/commitee-list";
+
+    navigate("/users/new", {
+      state: {
+        from: "committee-member-create",
+        returnTo,
+        committeeId,
+        commiteeType,
+      },
+    });
+  };
 
   return (
     <>
@@ -178,10 +205,23 @@ export const CommiteeMemberCreate: React.FC<Props> = ({
             dir={isRTL ? "rtl" : "ltr"}
           >
             <div>
-              <label className="mb-2 block text-sm font-semibold text-gray-700">
+              <div className="flex justify-between items-center mb-2">
+           
+                   <label className="mb-2 block text-sm font-semibold text-gray-700">
                 {t("commitee.member.user") || "User"}
                 <span className="ml-1 text-red-500">*</span>
               </label>
+                   <Button
+                  label={t("common.create")}
+                  type="button"
+                  // link
+                  icon="pi pi-plus"
+                
+                  onClick={handleCreateUser}
+                />
+              </div>
+
+           
               <Controller
                 name="userIds"
                 control={control}
@@ -233,6 +273,48 @@ export const CommiteeMemberCreate: React.FC<Props> = ({
                     className="w-full"
                     onChange={(e) => field.onChange(e.value)}
                     showClear
+                  />
+                )}
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-gray-700">
+                {t("commitee.details.memberDirectorate") || "Directorate"}
+              </label>
+              <Controller
+                name="memberDirectorate"
+                control={control}
+                render={({ field }) => (
+                  <input
+                    {...field}
+                    type="text"
+                    placeholder={
+                      t("commitee.member.memberDirectoratePlaceholder") ||
+                      "Enter directorate"
+                    }
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                  />
+                )}
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-gray-700">
+                {t("commitee.details.position") || "Position"}
+              </label>
+              <Controller
+                name="position"
+                control={control}
+                render={({ field }) => (
+                  <input
+                    {...field}
+                    type="text"
+                    placeholder={
+                      t("commitee.member.positionPlaceholder") ||
+                      "Enter position"
+                    }
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
                   />
                 )}
               />
