@@ -1,6 +1,14 @@
 // components/feature/registration/ContactPersonForm.tsx
 import React, { useState, useEffect } from "react";
-import { User, Mail, Phone, Briefcase, MapPin, Building } from "lucide-react";
+import {
+  User,
+  Mail,
+  Phone,
+  Briefcase,
+  MapPin,
+  Building,
+  PlusCircle,
+} from "lucide-react";
 
 import DistrictService from "../../../../services/district.service";
 import { useAppToast } from "../../../../hooks/useToast";
@@ -100,6 +108,31 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
   const [loadingDistricts, setLoadingDistricts] = useState<
     Record<number, boolean>
   >({});
+  const [isCreatingNew, setIsCreatingNew] = useState(false);
+
+  const createEmptyAddress = (addressType = AddressType.HEAD_OFFICE): Address => ({
+    countryId: undefined,
+    provinceId: undefined,
+    districtId: undefined,
+    details: "",
+    addressType,
+  });
+
+  const resetContactPersonForm = () => {
+    setFormData({
+      firstName: "",
+      lastName: "",
+      email: "",
+      phoneNumber: "",
+      position: "",
+    });
+    setAddresses([createEmptyAddress()]);
+    setErrors({});
+    setAddressErrors([]);
+    setProvincesPerAddress({});
+    setDistrictsPerAddress({});
+    localStorage.removeItem("contactPersonId");
+  };
 
   useEffect(() => {
     loadCountries();
@@ -107,10 +140,16 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
 
   useEffect(() => {
     const contactPersonId = Number(localStorage.getItem("contactPersonId"));
-    if (contactPersonId) {
+
+    if (contactPersonId && !isCreatingNew) {
       getContactPersonById(contactPersonId);
+      return;
     }
-  }, []);
+
+    if (companyId && !isCreatingNew) {
+      getActiveCompanyContactPersonByCompanyId(companyId);
+    }
+  }, [companyId, isCreatingNew]);
 
   const loadCountries = async () => {
     try {
@@ -210,69 +249,9 @@ const loadDistrictsByProvince = async (
     try {
       const response = await CompanyContactPersonService.getById(id);
       const data = response.data.data;
-
-      setFormData({
-        firstName: data.firstName || "",
-        lastName: data.lastName || "",
-        email: data.email || "",
-        phoneNumber: data.phoneNumber || "",
-        position: data.position || "",
-      });
-
-      // Contact person getById returns only district basics, so resolve each district
-      // to its province/country before initializing dependent selects.
-      const mappedAddresses = await Promise.all(
-        (data.addresses || []).map(async (address: any) => {
-          const districtId = address.district?.id;
-          let provinceId: number | undefined;
-          let countryId: number | undefined;
-
-          if (districtId) {
-            try {
-              const districtResponse = await DistrictService.getDistrict(
-                districtId,
-              );
-              const districtData =
-                districtResponse.data?.data || districtResponse.data;
-              provinceId = districtData?.province?.id;
-              countryId = districtData?.province?.country?.id;
-            } catch (error) {
-              console.error("Error loading district details:", error);
-            }
-          }
-
-          return {
-            countryId,
-            provinceId,
-            districtId,
-            details: address.details || "",
-            addressType: address.addressType || AddressType.HEAD_OFFICE,
-          };
-        }),
-      );
-
-      const initialAddresses = mappedAddresses.length
-        ? mappedAddresses
-        : [
-            {
-              countryId: undefined,
-              provinceId: undefined,
-              districtId: undefined,
-              details: "",
-              addressType: AddressType.HEAD_OFFICE,
-            },
-          ];
-
-      setAddresses(initialAddresses);
-
-      initialAddresses.forEach((address, index) => {
-        if (address.countryId) {
-          loadProvincesByCountry(address.countryId, index);
-        }
-        if (address.provinceId) {
-          loadDistrictsByProvince(address.provinceId, index);
-        }
-      });
+      localStorage.setItem("contactPersonId", String(data?.id || id));
+      setIsCreatingNew(false);
+      await applyContactPersonData(data);
     } catch (error) {
       showToast(
         "error",
@@ -280,6 +259,89 @@ const loadDistrictsByProvince = async (
         t("common.contactPersonLoadFailed"),
       );
     }
+  };
+
+  const getActiveCompanyContactPersonByCompanyId = async (
+    currentCompanyId: number,
+  ) => {
+    try {
+      const response =
+        await CompanyContactPersonService.getActiveCompanyContactPersonByCompanyId(
+          currentCompanyId,
+        );
+      const data = response.data?.data || response.data;
+
+      if (!data) {
+        resetContactPersonForm();
+        return;
+      }
+
+      if (data.id) {
+        localStorage.setItem("contactPersonId", String(data.id));
+      }
+      setIsCreatingNew(false);
+      await applyContactPersonData(data);
+    } catch (error) {
+      resetContactPersonForm();
+    }
+  };
+
+  const applyContactPersonData = async (data: any) => {
+    if (!data) return;
+
+    setFormData({
+      firstName: data.firstName || "",
+      lastName: data.lastName || "",
+      email: data.email || "",
+      phoneNumber: data.phoneNumber || "",
+      position: data.position || "",
+    });
+
+    const mappedAddresses = await Promise.all(
+      (data.addresses || []).map(async (address: any) => {
+        const districtId = address.district?.id;
+        let provinceId: number | undefined;
+        let countryId: number | undefined;
+
+        if (districtId) {
+          try {
+            const districtResponse = await DistrictService.getDistrict(
+              districtId,
+            );
+            const districtData =
+              districtResponse.data?.data || districtResponse.data;
+            provinceId = districtData?.province?.id;
+            countryId = districtData?.province?.country?.id;
+          } catch (error) {
+            console.error("Error loading district details:", error);
+          }
+        }
+ 
+        return {
+          countryId,
+          provinceId,
+          districtId,
+          details: address.details || "",
+          addressType: address.addressType || AddressType.HEAD_OFFICE,
+        };
+      }),
+    );
+
+    const initialAddresses = mappedAddresses.length
+      ? mappedAddresses
+      : [createEmptyAddress()];
+
+    setAddresses(initialAddresses);
+    setAddressErrors([]);
+
+    initialAddresses.forEach((address, index) => {
+      if (address.countryId) {
+        loadProvincesByCountry(address.countryId, index);
+      }
+      if (address.provinceId) {
+        loadDistrictsByProvince(address.provinceId, index);
+      }
+    });
   };
 
   const validateForm = (): boolean => {
@@ -366,13 +428,7 @@ const loadDistrictsByProvince = async (
   const addAddress = () => {
     setAddresses([
       ...addresses,
-      {
-        countryId: undefined,
-        provinceId: undefined,
-        districtId: undefined,
-        details: "",
-        addressType: AddressType.BRANCH_OFFICE,
-      },
+      createEmptyAddress(AddressType.BRANCH_OFFICE),
     ]);
     setAddressErrors([...addressErrors, {}]);
   };
@@ -453,6 +509,7 @@ const loadDistrictsByProvince = async (
         }
       }
 
+      setIsCreatingNew(false);
 
       showToast(
         "success",
@@ -476,10 +533,24 @@ const loadDistrictsByProvince = async (
   };
   return (
     <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-lg p-8">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
-        <User className="h-6 w-6 text-blue-600 mr-2" />
-        {t("contactPerson.info")}
-      </h2>
+      <div className="flex items-center justify-between gap-4 mb-6">
+        <h2 className="text-2xl font-semibold text-gray-800 flex items-center">
+          <User className="h-6 w-6 text-blue-600 mr-2" />
+          {t("contactPerson.info")}
+        </h2>
+        <button
+          type="button"
+          onClick={() => {
+            setIsCreatingNew(true);
+            resetContactPersonForm();
+          }}
+          className="px-4 py-2 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium flex items-center"
+          disabled={isSubmitting}
+        >
+          <PlusCircle className="h-4 w-4 mr-2" />
+          {t("common.add", "Add")} {t("contactPerson.info")}
+        </button>
+      </div>
 
       <div className="space-y-6">
         {/* Contact Person Details */}

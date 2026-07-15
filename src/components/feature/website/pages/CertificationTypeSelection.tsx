@@ -7,6 +7,7 @@ import {
   Award,
 } from "lucide-react";
 import CertificationRequestService from "../../../../services/CertificationReques.service";
+import CompanyService from "../../../../services/company.service";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { handleApi } from "../../../../hooks/handleApi";
@@ -22,6 +23,7 @@ interface CertificationTypeSelectionProps {
     requestId: number,
     domesticCategory?: string,
     selectedCertificationType?: string,
+    renewalCompanyData?: any,
   ) => void;
   onCancel?: () => void;
   isSubmitting?: boolean;
@@ -43,6 +45,7 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
     domesticCategory: "",
     requestType: "",
     mainType: "",
+    jawazNumber: "",
   });
 
   const [errors, setErrors] = useState({
@@ -50,7 +53,10 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
     domesticCategory: "",
     requestType: "",
     mainType: "",
+    jawazNumber: "",
   });
+  const [isLookingUpCompany, setIsLookingUpCompany] = useState(false);
+  const [renewalCompanyData, setRenewalCompanyData] = useState<any>(null);
 
   const { showError, showSuccess } = useToast();
   const [internalIsSubmitting, setInternalIsSubmitting] = useState(false);
@@ -92,6 +98,7 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
             : draft.domesticCategory || "",
         requestType: draft.requestType || "",
         mainType: draft.certificationMainType || "",
+        jawazNumber: draft.jawazNumber || "",
       });
       return;
     }
@@ -108,6 +115,7 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
         domesticCategory: sessionDomesticCategory || "",
         requestType: sessionRequestType || "",
         certificationMainType: sessionMainType || "",
+        jawazNumber: sessionStorage.getItem("renewalJawazNumber") || "",
       };
 
       setFormData({
@@ -119,6 +127,7 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
             : draftToSave.domesticCategory,
         requestType: draftToSave.requestType,
         mainType: draftToSave.certificationMainType,
+        jawazNumber: draftToSave.jawazNumber || "",
       });
 
       localStorage.setItem(STORAGE_KEY, JSON.stringify(draftToSave));
@@ -158,6 +167,7 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
         domesticCategory: formData.domesticCategory,
         requestType: formData.requestType,
         certificationMainType: formData.mainType,
+        jawazNumber: formData.jawazNumber,
       }),
     );
   }, [formData]);
@@ -265,6 +275,7 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
       domesticCategory: "",
       requestType: "",
       mainType: "",
+      jawazNumber: "",
     };
 
     let isValid = true;
@@ -291,6 +302,11 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
       isValid = false;
     }
 
+    if (formData.requestType === "RENEWAL" && !formData.jawazNumber.trim()) {
+      newErrors.jawazNumber = t("company.validation.jawazNumber.required");
+      isValid = false;
+    }
+
     if (!formData.mainType) {
       newErrors.mainType = t("certification.validation.certificationScope");
       isValid = false;
@@ -307,6 +323,27 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
     }
 
     setIsSubmitting(true);
+    let fetchedRenewalCompanyData = renewalCompanyData;
+
+    if (formData.requestType === "RENEWAL") {
+      setIsLookingUpCompany(true);
+      const companyResponse = await handleApi(
+        () => CompanyService.getCompanyByJawazNumber(formData.jawazNumber.trim()),
+        () => {},
+        showError,
+        t,
+      );
+      setIsLookingUpCompany(false);
+
+      if (!companyResponse) {
+        setIsSubmitting(false);
+        return;
+      }
+
+      fetchedRenewalCompanyData =
+        companyResponse.data?.data || companyResponse.data || null;
+      setRenewalCompanyData(fetchedRenewalCompanyData);
+    }
 
     const requestData = {
       requestType: formData.requestType,
@@ -358,6 +395,7 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
         domesticCategory: formData.domesticCategory,
         requestType: formData.requestType,
         certificationMainType: formData.mainType,
+        jawazNumber: formData.jawazNumber,
       };
 
       localStorage.setItem(STORAGE_KEY, JSON.stringify(draftToSave));
@@ -367,6 +405,13 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
       sessionStorage.setItem("domesticCategory", formData.domesticCategory);
       sessionStorage.setItem("certificationMainType", formData.mainType);
       sessionStorage.setItem("requestType", formData.requestType);
+      sessionStorage.setItem("renewalJawazNumber", formData.jawazNumber);
+      if (fetchedRenewalCompanyData) {
+        sessionStorage.setItem(
+          "renewalCompanyData",
+          JSON.stringify(fetchedRenewalCompanyData),
+        );
+      }
 
       if (onSuccess) {
         onSuccess(
@@ -376,6 +421,7 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
           requestId,
           formData.domesticCategory,
           formData.certificationType,
+          fetchedRenewalCompanyData,
         );
       } else if (isStandalone) {
         navigate("/registration", {
@@ -387,6 +433,7 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
             requestType: formData.requestType,
             requestId,
             step: 2,
+            renewalCompanyData: fetchedRenewalCompanyData,
           },
         });
       }
@@ -401,6 +448,11 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
 
       if (field === "certificationType") {
         newData.domesticCategory = "";
+      }
+
+      if (field === "requestType" && value !== "RENEWAL") {
+        newData.jawazNumber = "";
+        setRenewalCompanyData(null);
       }
 
       return newData;
@@ -511,6 +563,32 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
                 </p>
               )}
             </div>
+
+            {formData.requestType === "RENEWAL" && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {t("company.labels.jawazNumber")}{" "}
+                  <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={formData.jawazNumber}
+                  onChange={(e) =>
+                    handleInputChange("jawazNumber", e.target.value)
+                  }
+                  placeholder={t("company.placeholder.jawazNumber")}
+                  className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors ${
+                    errors.jawazNumber ? "border-red-500" : "border-gray-300"
+                  }`}
+                />
+                {errors.jawazNumber && (
+                  <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
+                    <AlertCircle className="h-4 w-4" />
+                    {errors.jawazNumber}
+                  </p>
+                )}
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -565,18 +643,23 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
           type="submit"
           disabled={
             isSubmitting ||
+            isLookingUpCompany ||
             !formData.certificationType ||
             (formData.certificationType === "DOMESTIC_QUALITY_CERTIFICATION" &&
               !formData.domesticCategory) ||
             !formData.requestType ||
+            (formData.requestType === "RENEWAL" &&
+              !formData.jawazNumber.trim()) ||
             !formData.mainType
           }
           className="px-8 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isSubmitting ? (
+          {isSubmitting || isLookingUpCompany ? (
             <span className="flex items-center justify-center gap-2">
               <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-              {t("common.saving")}
+              {isLookingUpCompany
+                ? t("common.loading", "Loading")
+                : t("common.saving")}
             </span>
           ) : (
             <span className="flex items-center justify-center gap-2">

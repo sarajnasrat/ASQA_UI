@@ -37,6 +37,7 @@ interface LocationState {
   requestType?: string;
   requestId?: number;
   step?: number;
+  renewalCompanyData?: any;
 }
 
 const REGISTRATION_STORAGE_KEYS = [
@@ -47,6 +48,8 @@ const REGISTRATION_STORAGE_KEYS = [
   "domesticCategory",
   "certificationMainType",
   "requestType",
+  "renewalJawazNumber",
+  "renewalCompanyData",
   "companyId",
   "contactPersonId",
   "attachmentId",
@@ -74,6 +77,7 @@ const Registration = () => {
     requestType: string;
     requestId: number;
   } | null>(null);
+  const [renewalCompanyData, setRenewalCompanyData] = useState<any>(null);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -107,6 +111,10 @@ const Registration = () => {
     const storedDomesticCategory = sessionStorage.getItem("domesticCategory");
     const storedMainType = sessionStorage.getItem("certificationMainType");
     const storedRequestType = sessionStorage.getItem("requestType");
+    const storedRenewalCompanyData = sessionStorage.getItem("renewalCompanyData");
+    const parsedRenewalCompanyData = storedRenewalCompanyData
+      ? JSON.parse(storedRenewalCompanyData)
+      : null;
 
     if (state?.requestId && state?.certificationType) {
       setSelectedCertificationType(
@@ -119,6 +127,7 @@ const Registration = () => {
         requestType: state.requestType || "",
         requestId: state.requestId,
       });
+      setRenewalCompanyData(state.renewalCompanyData || parsedRenewalCompanyData);
       if (state.step) setStep(state.step);
     } else if (storedRequestId && storedCertificationType) {
       setSelectedCertificationType(
@@ -131,6 +140,7 @@ const Registration = () => {
         requestType: storedRequestType || "",
         requestId: parseInt(storedRequestId),
       });
+      setRenewalCompanyData(parsedRenewalCompanyData);
     } else if (storedDraft) {
       try {
         const draft = JSON.parse(storedDraft);
@@ -147,6 +157,7 @@ const Registration = () => {
           requestType: draft.requestType || "",
           requestId: draft.id || 0,
         });
+        setRenewalCompanyData(parsedRenewalCompanyData);
       } catch (error) {
         console.error("Failed to parse saved certification draft:", error);
       }
@@ -221,6 +232,7 @@ const Registration = () => {
     requestId: number,
     domesticCategory?: string,
     selectedType?: string,
+    fetchedRenewalCompanyData?: any,
   ) => {
     if (selectedType) {
       setSelectedCertificationType(selectedType);
@@ -232,6 +244,12 @@ const Registration = () => {
       requestType,
       requestId,
     });
+    setRenewalCompanyData(fetchedRenewalCompanyData || null);
+    if (fetchedRenewalCompanyData?.id) {
+      setCompanyId(fetchedRenewalCompanyData.id);
+      sessionStorage.setItem("companyId", String(fetchedRenewalCompanyData.id));
+      localStorage.setItem("companyId", String(fetchedRenewalCompanyData.id));
+    }
     setStep(2);
     showToast(
       "success",
@@ -518,6 +536,7 @@ const Registration = () => {
             onCancel={handlePreviousStep}
             isSubmitting={isSubmitting}
             setIsSubmitting={setIsSubmitting}
+            prefillCompanyData={renewalCompanyData}
           />
         );
 

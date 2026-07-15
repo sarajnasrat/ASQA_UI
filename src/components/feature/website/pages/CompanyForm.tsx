@@ -40,6 +40,7 @@ interface CompanyFormProps {
   setIsSubmitting: (value: boolean) => void;
   savedData?: CompanyFormData | null;
   onDataChange?: (data: CompanyFormData) => void;
+  prefillCompanyData?: any;
 }
 
 type CalendarType = "gregorian" | "persian" | "arabic";
@@ -62,6 +63,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
   setIsSubmitting,
   savedData,
   onDataChange,
+  prefillCompanyData,
 }) => {
   const { t } = useTranslation();
   const { showToast } = useAppToast();
@@ -115,6 +117,31 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
   const [jawazExpiryCalendarType, setJawazExpiryCalendarType] =
     useState<CalendarType>("gregorian");
 
+  const mapCompanyToFormData = (c: any) => ({
+    companyNameEN: c?.companyNameEN || "",
+    companyNameDR: c?.companyNameDR || "",
+    companyNamePS: c?.companyNamePS || "",
+    email: c?.email || "",
+    phoneNumber: c?.phoneNumber || "",
+    address: c?.address || "",
+    mainBranchAddress: c?.mainBranchAddress || "",
+    activityPlace: c?.activityPlace || "",
+    activityType: c?.activityType || "",
+    jawazNumber: c?.jawazNumber || "",
+    jawazExpiryDate: c?.jawazExpiryDate || "",
+    jawazIssueDate: c?.jawazIssueDate || "",
+    tinNumber: c?.tinNumber || "",
+    websiteUrl: c?.websiteUrl || "",
+    establishYear: c?.establishYear || "",
+    companyOwnerNameEn: c?.companyOwnerNameEn || "",
+    companyOwnerNameDr: c?.companyOwnerNameDr || "",
+    companyOwnerNamePs: c?.companyOwnerNamePs || "",
+    companyType: c?.companyType || "PRIVATE",
+    aboutCompanyEn: c?.aboutCompanyEn || "",
+    aboutCompanyDr: c?.aboutCompanyDr || "",
+    aboutCompanyPs: c?.aboutCompanyPs || "",
+  });
+
   // Load categories
   useEffect(() => {
     loadCategories();
@@ -135,6 +162,18 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
         setExistingBusinessLogoUrl(savedData.existingBusinessLogoUrl);
     }
   }, [savedData]);
+
+  useEffect(() => {
+    if (!prefillCompanyData || savedData) return;
+
+    setFormData(mapCompanyToFormData(prefillCompanyData));
+    setSelectedCategories(
+      prefillCompanyData.categories?.map((cat: any) => cat.id) || [],
+    );
+    setSocialLinks(prefillCompanyData.socialLinks || []);
+    setExistingLogoUrl(prefillCompanyData.logoUrl || "");
+    setExistingBusinessLogoUrl(prefillCompanyData.bussinessLogoUrl || "");
+  }, [prefillCompanyData, savedData]);
 
   // Save data on every change
   useEffect(() => {
@@ -167,10 +206,11 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
   ]);
   const [company, setCompany] = useState<any>(null);
   const getCompanyById = async () => {
+    const companyId = localStorage.getItem("companyId");
+    if (!companyId || prefillCompanyData) return;
+
     try {
-      const res = await CompanyService.getCompanyById(
-        Number(localStorage.getItem("companyId")),
-      );
+      const res = await CompanyService.getCompanyById(Number(companyId));
       setCompany(res.data);
     } catch (err) {
       console.log(err);
@@ -186,37 +226,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
 
     if (!c) return;
 
-    setFormData({
-      companyNameEN: c.companyNameEN || "",
-      companyNameDR: c.companyNameDR || "",
-      companyNamePS: c.companyNamePS || "",
-      email: c.email || "",
-      phoneNumber: c.phoneNumber || "",
-
-      address: c.address || "",
-      mainBranchAddress: c.mainBranchAddress || "",
-      activityPlace: c.activityPlace || "",
-      activityType: c.activityType || "",
-
-      jawazNumber: c.jawazNumber || "",
-      jawazExpiryDate: c.jawazExpiryDate || "",
-      jawazIssueDate: c.jawazIssueDate || "",
-
-      tinNumber: c.tinNumber || "",
-      websiteUrl: c.websiteUrl || "",
-
-      establishYear: c.establishYear || "",
-
-      companyOwnerNameEn: c.companyOwnerNameEn || "",
-      companyOwnerNameDr: c.companyOwnerNameDr || "",
-      companyOwnerNamePs: c.companyOwnerNamePs || "",
-
-      companyType: c.companyType || "PRIVATE",
-
-      aboutCompanyEn: c.aboutCompanyEn || "",
-      aboutCompanyDr: c.aboutCompanyDr || "",
-      aboutCompanyPs: c.aboutCompanyPs || "",
-    });
+    setFormData(mapCompanyToFormData(c));
     // ✅ Categories (VERY IMPORTANT - you were missing this)
     setSelectedCategories(c.categories?.map((cat: any) => cat.id) || []);
 

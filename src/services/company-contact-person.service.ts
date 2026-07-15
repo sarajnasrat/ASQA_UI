@@ -35,6 +35,13 @@ export const CompanyContactPersonService = {
     });
   },
 
+  // Get active contact person by company id
+  getActiveCompanyContactPersonByCompanyId(companyId: number | string) {
+    return httpClient.get(`${BASE_URL}/company/${companyId}/active`, {
+      headers: { skipAuth: true },
+    });
+  },
+
   // Update a contact person
   update(id: number | string, data: any) {
     return httpClient.put(`${BASE_URL}/${id}`, data, {

@@ -65,6 +65,12 @@ export const CompanyService = {
     return httpClient.get(`${COMPANY_BASE}/${id}`);
   },
 
+  getCompanyByJawazNumber(jawazNumber: string) {
+    return httpClient.get(
+      `${COMPANY_BASE}/by-jawaz-number/${encodeURIComponent(jawazNumber)}`,
+    );
+  },
+
   /**
    * Search companies by name (paginated)
    * @param name Company name to search
