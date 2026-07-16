@@ -15,6 +15,8 @@ const CertificationRequestViewDocuments: React.FC<Props> = ({
   apiBaseUrl,
   t,
 }) => {
+  const companyAttachments = [...(request.company?.attachments ?? [])].reverse();
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
@@ -82,11 +84,14 @@ const CertificationRequestViewDocuments: React.FC<Props> = ({
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
           <Building2 className="h-5 w-5 text-blue-600" />
-          {t("company.labels.companyAttachments")} ({request.company?.attachments?.length || 0})
+          {t("company.labels.companyAttachments")} ({companyAttachments.length})
         </h3>
-        {request.company?.attachments && request.company.attachments.length > 0 ? (
+        {companyAttachments.length > 0 ? (
           <div className="space-y-3">
-            {request.company.attachments.map((attachment) => (
+            {companyAttachments.map((attachment, index) => {
+              const isCurrentDocument = index === 0;
+
+              return (
               <div
                 key={attachment.id}
                 className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
@@ -94,7 +99,22 @@ const CertificationRequestViewDocuments: React.FC<Props> = ({
                 <div className="flex items-center gap-3">
                   <File className="h-5 w-5 text-green-500" />
                   <div>
-                    <p className="font-medium text-gray-900">{attachment.attachmentName}</p>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <p className="font-medium text-gray-900">
+                        {attachment.attachmentName}
+                      </p>
+                      <span
+                        className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+                          isCurrentDocument
+                            ? "bg-green-100 text-green-700"
+                            : "bg-amber-100 text-amber-700"
+                        }`}
+                      >
+                        {isCurrentDocument
+                          ? t("common.currentDocument")
+                          : t("common.oldDocument")}
+                      </span>
+                    </div>
                     <p className="text-xs text-gray-500">{formatFileSize(attachment.fileSize)}</p>
                   </div>
                 </div>
@@ -118,7 +138,8 @@ const CertificationRequestViewDocuments: React.FC<Props> = ({
                   </a>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         ) : (
           <div className="text-center py-8">

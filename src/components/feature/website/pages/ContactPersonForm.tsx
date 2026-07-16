@@ -52,6 +52,7 @@ interface Address {
 
 interface ContactPersonFormProps {
   companyId: number;
+  requestType?: string;
   onSuccess: () => void;
   onCancel: () => void;
   isSubmitting: boolean;
@@ -60,6 +61,7 @@ interface ContactPersonFormProps {
 
 const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
   companyId,
+  requestType,
   onSuccess,
   onCancel,
   isSubmitting,
@@ -68,6 +70,7 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
   const { showToast } = useAppToast();
   const { t } = useTranslation();
   const { showError, showSuccess } = useToast();
+  const showAddNewContactPersonButton = requestType === "RENEWAL";
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -538,18 +541,20 @@ const loadDistrictsByProvince = async (
           <User className="h-6 w-6 text-blue-600 mr-2" />
           {t("contactPerson.info")}
         </h2>
-        <button
-          type="button"
-          onClick={() => {
-            setIsCreatingNew(true);
-            resetContactPersonForm();
-          }}
-          className="px-4 py-2 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium flex items-center"
-          disabled={isSubmitting}
-        >
-          <PlusCircle className="h-4 w-4 mr-2" />
-          {t("common.add", "Add")} {t("contactPerson.info")}
-        </button>
+        {showAddNewContactPersonButton && (
+          <button
+            type="button"
+            onClick={() => {
+              setIsCreatingNew(true);
+              resetContactPersonForm();
+            }}
+            className="px-4 py-2 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium flex items-center"
+            disabled={isSubmitting}
+          >
+            <PlusCircle className="h-4 w-4 mr-2" />
+            {t("common.add", "Add")} {t("contactPerson.info")}
+          </button>
+        )}
       </div>
 
       <div className="space-y-6">

@@ -545,6 +545,7 @@ const Registration = () => {
         return (
           <ContactPersonForm
             companyId={companyId}
+            requestType={certificationInfo?.requestType}
             onSuccess={handleContactSuccess}
             onCancel={handlePreviousStep}
             isSubmitting={isSubmitting}

@@ -549,6 +549,15 @@
       "documents": "Documents",
       "certificates": "Certificates"
     },
+    "pdf": {
+      "emirate": "Islamic Emirate of Afghanistan",
+      "authority": "Standards and Quality Authority",
+      "directorate": "Quality Certification Directorate",
+      "companyInfo": "Company Information",
+      "contactInfo": "Company Representative Information",
+      "requestInfo": "Request Information",
+      "certificationInfo": "Certification Information"
+    },
     "categoryLoadFailed": "Failed to load categories",
     "loadSingleFailed": "Failed to load company",
     "invalidId": "Invalid company id.",
@@ -1604,6 +1613,8 @@
     "startDate": "Start Date",
     "endDate": "End Date",
     "noDocuments": "No documents attached",
+    "currentDocument": "Current Document",
+    "oldDocument": "Old Document",
     "saveAndContinue": "Save & Continue",
     "status": "Status",
     "createdDate": "Created Date",

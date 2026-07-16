@@ -595,7 +595,16 @@
     "categoryLoadFailed": "د کټګوریو په بارولو کې ستونزه رامنځته شوه",
     "loadSingleFailed": "د شرکت په بارولو کې ستونزه رامنځته شوه",
     "invalidId": "د شرکت پېژند ناسم دی.",
-    "notFound": "شرکت ونه موندل شو"
+    "notFound": "شرکت ونه موندل شو",
+    "pdf": {
+      "emirate": "د افغانستان اسلامي امارت",
+      "authority": "د معيار او کیفیت اداره",
+      "directorate": "د کيفي تصدیق نامو ریاست",
+      "companyInfo": "د شرکت معلومات",
+      "contactInfo": "د شرکت د استازي معلومات",
+      "requestInfo": "د غوښتنو معلومات",
+      "certificationInfo": "د تصدیق نامې معلومات"
+    }
   },
   "nav": {
     "home": "کور",
@@ -1565,6 +1574,8 @@
     "startDate": "پیل نیټه",
     "endDate": "پای نیټه",
     "noDocuments": "هیڅ سند ندی ضمیمه شوی",
+    "currentDocument": "اوسنی سند",
+    "oldDocument": "پخوانی سند",
     "saveAndContinue": "خوندي کړئ او ادامه ورکړئ",
     "status": "حالت",
     "createdDate": "د جوړېدو نیټه",

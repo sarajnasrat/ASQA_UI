@@ -232,7 +232,9 @@ export const CertificationDetails: React.FC = () => {
     ...(details?.certificateAttachment ? [details.certificateAttachment] : []),
     ...(details?.attachments || []),
   ];
-  const companyAttachments: Attachment[] = company?.attachments || [];
+  const companyAttachments: Attachment[] = [
+    ...(company?.attachments || []),
+  ].reverse();
 
   // Get all payment attachments
   const paymentAttachments: Attachment[] = payments.flatMap(
@@ -1545,6 +1547,7 @@ export const CertificationDetails: React.FC = () => {
                 emptyMessage={t("common.noDocuments")}
                 getFileTypeIcon={getFileTypeIcon}
                 t={t}
+                showCurrentOldLabels
               />
               {/* <AttachmentCard
                 title={t("certificationRequest.payment.scannedBill")}
@@ -1739,6 +1742,7 @@ const AttachmentCard = ({
   emptyMessage,
   getFileTypeIcon,
   t,
+  showCurrentOldLabels = false,
 }: {
   title: string;
   attachments: Attachment[];
@@ -1749,15 +1753,19 @@ const AttachmentCard = ({
 
   getFileTypeIcon: (fileType?: string) => React.ReactNode;
   t: TFunction;
+  showCurrentOldLabels?: boolean;
 }) => (
   <PlainCard title={`${title} (${attachments.length})`} icon={<File />}>
     {attachments.length > 0 ? (
       <div className="space-y-3">
-        {attachments.map((attachment, index) => (
-          <div
-            key={attachment.id || index}
-            className="flex items-center justify-between gap-3 p-3 bg-gray-50 rounded-xl hover:shadow-md transition-shadow group"
-          >
+        {attachments.map((attachment, index) => {
+          const isCurrentDocument = showCurrentOldLabels && index === 0;
+
+          return (
+            <div
+              key={attachment.id || index}
+              className="flex items-center justify-between gap-3 p-3 bg-gray-50 rounded-xl hover:shadow-md transition-shadow group"
+            >
             {/* <div className="flex items-center gap-3 min-w-0">
               {getFileTypeIcon(attachment.fileType)}
               <div className="min-w-0">
@@ -1783,6 +1791,19 @@ const AttachmentCard = ({
                   <p className="font-medium text-gray-900 truncate">
                     {attachment.attachmentName}
                   </p>
+                  {showCurrentOldLabels && (
+                    <span
+                      className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+                        isCurrentDocument
+                          ? "bg-green-100 text-green-700"
+                          : "bg-amber-100 text-amber-700"
+                      }`}
+                    >
+                      {isCurrentDocument
+                        ? t("common.currentDocument")
+                        : t("common.oldDocument")}
+                    </span>
+                  )}
                   {attachment.attachmentReferenceType && (
                     <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-200 text-gray-700">
                       {t(
@@ -1815,8 +1836,9 @@ const AttachmentCard = ({
                 <Download className="h-4 w-4" />
               </a>
             </div>
-          </div>
-        ))}
+            </div>
+          );
+        })}
       </div>
     ) : (
       <p className="text-center text-gray-500 py-6">{emptyMessage}</p>

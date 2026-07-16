@@ -3,36 +3,31 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Toast } from "primereact/toast";
 import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
+import CompanyPdfExport, {
+  CompanyPdfExportHandle,
+} from "../../common/pdf/CompanyPdfExport";
 import {
   ArrowLeft,
   Building2,
   CalendarDays,
-  CheckCircle2,
   Mail,
   MapPin,
   Phone,
   Briefcase,
   ChevronDown,
   ChevronUp,
-  ChevronRight,
   Globe,
   Tag,
   FileText,
   Award,
-  TrendingUp,
   AlertCircle,
   Hash,
-  CreditCard,
   Eye,
   Download,
   File,
   Link2,
-  Store,
-  Calendar,
   Shield,
-  IdCard,
   BookOpen,
-  ShieldCheck,
   Facebook,
   Twitter,
   Linkedin,
@@ -48,17 +43,22 @@ export const CompanyDetails: React.FC = () => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const toast = React.useRef<Toast>(null);
+  const pdfExportRef = React.useRef<CompanyPdfExportHandle>(null);
 
   const [company, setCompany] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"info" | "legal" | "documents">("info");
+  const [activeTab, setActiveTab] = useState<
+    "info" | "legal" | "certification" | "documents"
+  >("info");
   const [expandedSections, setExpandedSections] = useState({
     basicInfo: true,
     contactInfo: true,
     legalInfo: true,
     businessInfo: true,
     categories: true,
+    contactPersons: true,
     about: true,
+    logos: true,
     stats: true,
   });
 
@@ -66,6 +66,10 @@ export const CompanyDetails: React.FC = () => {
 
   const showError = (summary: string, detail?: string) => {
     toast.current?.show({ severity: "error", summary, detail });
+  };
+
+  const showSuccess = (summary: string, detail?: string) => {
+    toast.current?.show({ severity: "success", summary, detail });
   };
 
   const loadCompanyDetails = async () => {
@@ -80,7 +84,7 @@ export const CompanyDetails: React.FC = () => {
       () => CompanyService.getCompanyById(numericId),
       () => {},
       showError,
-      t
+      t,
     );
 
     if (response) {
@@ -105,17 +109,6 @@ export const CompanyDetails: React.FC = () => {
     }
   }, [i18n.language]);
 
-  const aboutCompanyField = useMemo(() => {
-    switch (i18n.language) {
-      case "dr":
-        return "aboutCompanyDr";
-      case "ps":
-        return "aboutCompanyPs";
-      default:
-        return "aboutCompanyEn";
-    }
-  }, [i18n.language]);
-
   const ownerNameField = useMemo(() => {
     switch (i18n.language) {
       case "dr":
@@ -127,11 +120,31 @@ export const CompanyDetails: React.FC = () => {
     }
   }, [i18n.language]);
 
-  const companyName = company?.[companyNameField] ||
+  const ownerNameLabelKey = useMemo(() => {
+    switch (i18n.language) {
+      case "dr":
+        return "company.labels.ownerNameDr";
+      case "ps":
+        return "company.labels.ownerNamePs";
+      default:
+        return "company.labels.ownerNameEn";
+    }
+  }, [i18n.language]);
+
+  const companyName =
+    company?.[companyNameField] ||
     company?.companyNameEN ||
     company?.companyNameDR ||
     company?.companyNamePS ||
     "-";
+  const companyAttachments = [...(company?.attachments || [])].reverse();
+  const companyContactPersons = company?.contactPersons || [];
+  const companyCertificationRequests = company?.certificationRequests || [];
+  const companyCertifications = [...(company?.certifications || [])].sort(
+    (a: any, b: any) =>
+      new Date(b?.createdDate || b?.issueDate || 0).getTime() -
+      new Date(a?.createdDate || a?.issueDate || 0).getTime(),
+  );
 
   const formatDate = (value?: string) => {
     if (!value) return "-";
@@ -167,25 +180,124 @@ export const CompanyDetails: React.FC = () => {
     return translated === typeKey ? labelize(type) : translated;
   };
 
-  const getStatusLabel = (status?: string) => {
-    if (!status) return "-";
-    const statusKey = `company.status.${status}`;
-    const translated = t(statusKey);
-    return translated === statusKey ? labelize(status) : translated;
-  };
-
   const toggleSection = (section: keyof typeof expandedSections) => {
     setExpandedSections((prev) => ({ ...prev, [section]: !prev[section] }));
   };
 
   const getSocialIcon = (platform: string) => {
     const platformLower = platform.toLowerCase();
-    if (platformLower.includes("facebook")) return <Facebook className="h-4 w-4" />;
-    if (platformLower.includes("twitter") || platformLower.includes("x")) return <Twitter className="h-4 w-4" />;
-    if (platformLower.includes("linkedin")) return <Linkedin className="h-4 w-4" />;
-    if (platformLower.includes("instagram")) return <Instagram className="h-4 w-4" />;
-    if (platformLower.includes("youtube")) return <Youtube className="h-4 w-4" />;
+    if (platformLower.includes("facebook"))
+      return <Facebook className="h-4 w-4" />;
+    if (platformLower.includes("twitter") || platformLower.includes("x"))
+      return <Twitter className="h-4 w-4" />;
+    if (platformLower.includes("linkedin"))
+      return <Linkedin className="h-4 w-4" />;
+    if (platformLower.includes("instagram"))
+      return <Instagram className="h-4 w-4" />;
+    if (platformLower.includes("youtube"))
+      return <Youtube className="h-4 w-4" />;
     return <Link2 className="h-4 w-4" />;
+  };
+
+  const formatFileSize = (bytes?: number) => {
+    if (!bytes) return t("company.messages.unknownSize");
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const index = Math.min(
+      Math.floor(Math.log(bytes) / Math.log(1024)),
+      sizes.length - 1,
+    );
+    return `${(bytes / Math.pow(1024, index)).toFixed(index === 0 ? 0 : 1)} ${sizes[index]}`;
+  };
+
+  const formatContactAddress = (address: any) =>
+    [address?.district?.districtName, address?.details]
+      .filter(Boolean)
+      .join(" - ") || t("common.notSpecified");
+
+  const phoneDisplayClass =
+    "inline-block text-left [direction:ltr] [unicode-bidi:isolate]";
+  const aboutCompany =
+    company?.aboutCompanyEn ||
+    company?.aboutCompanyDr ||
+    company?.aboutCompanyPs ||
+    "";
+
+  const companyInfoItems = [
+    {
+      label: t("company.labels.companyType"),
+      value: getCompanyTypeLabel(company?.companyType),
+    },
+    {
+      label: t("company.labels.ownerNameEn"),
+      value:
+        company?.companyOwnerNameEn ||
+        company?.[ownerNameField] ||
+        t("common.notSpecified"),
+    },
+    {
+      label: t("company.labels.ownerNameDr"),
+      value: company?.companyOwnerNameDr || t("common.notSpecified"),
+    },
+    {
+      label: t("company.labels.establishYear"),
+      value: formatDate(company?.establishYear),
+    },
+    {
+      label: t("company.labels.email"),
+      value: company?.email || t("common.notSpecified"),
+    },
+
+    {
+      label: t("company.labels.mainBranchAddress"),
+      value: company?.mainBranchAddress || t("common.notSpecified"),
+    },
+    {
+      label: t("company.labels.activityPlace"),
+      value: company?.activityPlace || t("common.notSpecified"),
+    },
+    {
+      label: t("company.labels.activityType"),
+      value: company?.activityType || t("common.notSpecified"),
+    },
+    {
+      label: t("company.labels.jawazNumber"),
+      value: company?.jawazNumber || t("common.notSpecified"),
+    },
+    {
+      label: t("company.labels.jawazIssueDate"),
+      value: formatDate(company?.jawazIssueDate),
+    },
+    {
+      label: t("company.labels.jawazExpiryDate"),
+      value: formatDate(company?.jawazExpiryDate),
+    },
+    {
+      label: t("company.labels.tinNumber"),
+      value: company?.tinNumber || t("common.notSpecified"),
+    },
+    {
+      label: t("company.table.createdAt"),
+      value: formatDateTime(company?.createdDate),
+    },
+  ];
+  const companyAddressItem = {
+    label: t("company.labels.address"),
+    value: company?.address || t("common.notSpecified"),
+  };
+
+  const handleDownloadPdf = async () => {
+    if (!company) {
+      showError(t("common.error"), t("company.messages.noData"));
+      return;
+    }
+
+    try {
+      await pdfExportRef.current?.downloadPdf();
+      showSuccess(t("common.success"), t("common.download"));
+    } catch (error) {
+      console.error("Error generating company PDF:", error);
+      showError(t("common.error"), t("registration.errors.submitFailed"));
+    }
   };
 
   if (loading) {
@@ -207,9 +319,7 @@ export const CompanyDetails: React.FC = () => {
           <h2 className="text-2xl font-bold text-gray-800 mb-2">
             {t("company.notFound")}
           </h2>
-          <p className="text-gray-600 mb-6">
-            {t("company.messages.noData")}
-          </p>
+          <p className="text-gray-600 mb-6">{t("company.messages.noData")}</p>
           <button
             onClick={() => navigate("/company")}
             className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -268,18 +378,27 @@ export const CompanyDetails: React.FC = () => {
                     <div className="flex items-center gap-1">
                       <Hash className="h-4 w-4" />
                       <span>
-                        {t("company.labels.companyId") || "Company ID"}: {company.id || t("common.notSpecified")}
+                        {t("common.id")}:{" "}
+                        {company.id || t("common.notSpecified")}
                       </span>
                     </div>
                     <div className="flex items-center gap-1">
                       <CalendarDays className="h-4 w-4" />
                       <span>
-                        {t("company.table.createdAt")}: {formatDateTime(company.createdDate)}
+                        {t("company.table.createdAt")}:{" "}
+                        {formatDateTime(company.createdDate)}
                       </span>
                     </div>
                   </div>
                 </div>
                 <div className="flex gap-2">
+                  <button
+                    onClick={handleDownloadPdf}
+                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-2"
+                  >
+                    <Download className="h-4 w-4" />
+                    {t("common.download")}
+                  </button>
                   <button
                     onClick={() => navigate(`/company/edit/${id}`)}
                     className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
@@ -307,6 +426,11 @@ export const CompanyDetails: React.FC = () => {
                   icon: <Shield className="h-4 w-4" />,
                 },
                 {
+                  id: "certification",
+                  label: t("company.sections.certificates"),
+                  icon: <Award className="h-4 w-4" />,
+                },
+                {
                   id: "documents",
                   label: t("company.sections.documents"),
                   icon: <File className="h-4 w-4" />,
@@ -327,8 +451,10 @@ export const CompanyDetails: React.FC = () => {
                     {tab.id === "info"
                       ? t("common.info")
                       : tab.id === "legal"
-                      ? t("common.legal")
-                      : t("common.documents")}
+                        ? t("common.legal")
+                        : tab.id === "certification"
+                          ? t("company.sections.certificates")
+                          : t("common.documents")}
                   </span>
                 </button>
               ))}
@@ -340,7 +466,6 @@ export const CompanyDetails: React.FC = () => {
             {/* Info Tab */}
             {activeTab === "info" && (
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Left Column - Main Info */}
                 <div className="lg:col-span-2 space-y-6">
                   {/* Company Profile Card */}
                   <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
@@ -362,7 +487,7 @@ export const CompanyDetails: React.FC = () => {
                     </div>
 
                     {/* Company Info */}
-                    <div className="pt-16 px-6 pb-6">
+                    <div className="pt-16 px-5 pb-5">
                       <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
                         <div>
                           <h3 className="text-2xl font-bold text-gray-900">
@@ -378,7 +503,9 @@ export const CompanyDetails: React.FC = () => {
                             {company.phoneNumber && (
                               <span className="flex items-center gap-1 text-sm text-gray-500">
                                 <Phone className="h-3 w-3" />
-                                {company.phoneNumber}
+                                <span className={phoneDisplayClass} dir="ltr">
+                                  {company.phoneNumber}
+                                </span>
                               </span>
                             )}
                           </div>
@@ -396,12 +523,54 @@ export const CompanyDetails: React.FC = () => {
                         )}
                       </div>
 
-                      {/* About Section */}
-                      {company?.[aboutCompanyField] && (
-                        <div className="mb-6">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                        {companyInfoItems.map((item, index) => (
+                          <div
+                            key={`${item.label}-${index}`}
+                            className={`rounded-xl border border-gray-200 p-3 ${item.className || ""}`}
+                          >
+                            <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                              {item.label}
+                            </p>
+                            <p className="text-xs sm:text-sm font-normal text-gray-800 break-words leading-relaxed">
+                              {item.value || t("common.notSpecified")}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="mt-4 rounded-xl border border-gray-200 p-3">
+                        <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                          {companyAddressItem.label}
+                        </p>
+                        <p className="text-xs sm:text-sm font-normal text-gray-800 break-words leading-relaxed">
+                          {companyAddressItem.value}
+                        </p>
+                      </div>
+
+                      {company.categories?.length > 0 && (
+                        <div className="mt-6">
+                          <h4 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-3">
+                            <Tag className="h-5 w-5 text-blue-600" />
+                            {t("company.labels.categories")}
+                          </h4>
+                          <div className="flex flex-wrap gap-2">
+                            {company.categories.map((category: any) => (
+                              <span
+                                key={category.id}
+                                className="px-4 py-2 border border-gray-200 text-gray-700 rounded-full text-sm font-medium"
+                              >
+                                {category.categoryName}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {aboutCompany && (
+                        <div className="mt-6 rounded-xl border border-gray-200">
                           <button
                             onClick={() => toggleSection("about")}
-                            className="w-full flex items-center justify-between py-3 hover:bg-gray-50 transition-colors rounded-lg px-3"
+                            className="w-full flex items-center justify-between p-3 text-left"
                           >
                             <h4 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
                               <BookOpen className="h-5 w-5 text-blue-600" />
@@ -414,177 +583,65 @@ export const CompanyDetails: React.FC = () => {
                             )}
                           </button>
                           {expandedSections.about && (
-                            <div className="px-3 pt-2 pb-4">
-                              <p className="text-gray-700 leading-relaxed">
-                                {company[aboutCompanyField]}
+                            <div className="px-3 pb-3">
+                              <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+                                {aboutCompany}
                               </p>
                             </div>
                           )}
                         </div>
                       )}
 
-                      {/* Contact Information */}
-                      <div className="mb-6">
+                      <div className="mt-6 rounded-xl border border-gray-200">
                         <button
-                          onClick={() => toggleSection("contactInfo")}
-                          className="w-full flex items-center justify-between py-3 hover:bg-gray-50 transition-colors rounded-lg px-3"
+                          onClick={() => toggleSection("logos")}
+                          className="w-full flex items-center justify-between p-3 text-left"
                         >
                           <h4 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                            <Phone className="h-5 w-5 text-blue-600" />
-                            {t("company.sections.contactInfo")}
+                            <Building2 className="h-5 w-5 text-blue-600" />
+                            {t("company.companyLogos")}
                           </h4>
-                          {expandedSections.contactInfo ? (
+                          {expandedSections.logos ? (
                             <ChevronUp className="h-5 w-5 text-gray-400" />
                           ) : (
                             <ChevronDown className="h-5 w-5 text-gray-400" />
                           )}
                         </button>
-                        {expandedSections.contactInfo && (
-                          <div className="px-3 pt-2 pb-4">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
-                                <Mail className="h-5 w-5 text-blue-500 mt-0.5" />
-                                <div>
-                                  <p className="text-xs text-gray-500 uppercase tracking-wide">
-                                    {t("company.labels.email")}
-                                  </p>
-                                  <p className="font-medium text-gray-900 break-all">
-                                    {company.email || t("common.notSpecified")}
-                                  </p>
+                        {expandedSections.logos && (
+                          <div className="px-3 pb-3">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                              <div className="text-center">
+                                <div className="w-32 h-32 mx-auto rounded-2xl border border-gray-200 flex items-center justify-center overflow-hidden">
+                                  {company.logoUrl ? (
+                                    <img
+                                      src={assetUrl(company.logoUrl)}
+                                      alt={t("company.labels.companyLogo")}
+                                      className="w-full h-full object-cover"
+                                    />
+                                  ) : (
+                                    <Building2 className="h-12 w-12 text-gray-400" />
+                                  )}
                                 </div>
-                              </div>
-                              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
-                                <Phone className="h-5 w-5 text-blue-500 mt-0.5" />
-                                <div>
-                                  <p className="text-xs text-gray-500 uppercase tracking-wide">
-                                    {t("company.labels.phoneNumber")}
-                                  </p>
-                                  <p className="font-medium text-gray-900">
-                                    {company.phoneNumber || t("common.notSpecified")}
-                                  </p>
-                                </div>
-                              </div>
-                              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl md:col-span-2">
-                                <MapPin className="h-5 w-5 text-blue-500 mt-0.5" />
-                                <div>
-                                  <p className="text-xs text-gray-500 uppercase tracking-wide">
-                                    {t("company.labels.address")}
-                                  </p>
-                                  <p className="font-medium text-gray-900">
-                                    {company.address || company.mainBranchAddress || t("common.notSpecified")}
-                                  </p>
-                                </div>
-                              </div>
-                              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl md:col-span-2">
-                                <Store className="h-5 w-5 text-blue-500 mt-0.5" />
-                                <div>
-                                  <p className="text-xs text-gray-500 uppercase tracking-wide">
-                                    {t("company.labels.activityPlace")}
-                                  </p>
-                                  <p className="font-medium text-gray-900">
-                                    {company.activityPlace || t("common.notSpecified")}
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Categories */}
-                      {company.categories?.length > 0 && (
-                        <div className="mb-6">
-                          <button
-                            onClick={() => toggleSection("categories")}
-                            className="w-full flex items-center justify-between py-3 hover:bg-gray-50 transition-colors rounded-lg px-3"
-                          >
-                            <h4 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                              <Tag className="h-5 w-5 text-blue-600" />
-                              {t("company.labels.categories")}
-                              <span className="ml-2 px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full text-xs">
-                                {company.categories.length}
-                              </span>
-                            </h4>
-                            {expandedSections.categories ? (
-                              <ChevronUp className="h-5 w-5 text-gray-400" />
-                            ) : (
-                              <ChevronDown className="h-5 w-5 text-gray-400" />
-                            )}
-                          </button>
-                          {expandedSections.categories && (
-                            <div className="px-3 pt-2 pb-4">
-                              <div className="flex flex-wrap gap-2">
-                                {company.categories.map((category: any) => (
-                                  <span
-                                    key={category.id}
-                                    className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full text-sm font-medium shadow-sm"
-                                  >
-                                    {category.categoryName}
-                                  </span>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      )}
-
-                      {/* Business Information */}
-                      <div>
-                        <button
-                          onClick={() => toggleSection("businessInfo")}
-                          className="w-full flex items-center justify-between py-3 hover:bg-gray-50 transition-colors rounded-lg px-3"
-                        >
-                          <h4 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                            <Briefcase className="h-5 w-5 text-blue-600" />
-                            {t("company.sections.companyInfo")}
-                          </h4>
-                          {expandedSections.businessInfo ? (
-                            <ChevronUp className="h-5 w-5 text-gray-400" />
-                          ) : (
-                            <ChevronDown className="h-5 w-5 text-gray-400" />
-                          )}
-                        </button>
-                        {expandedSections.businessInfo && (
-                          <div className="px-3 pt-2 pb-4">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4">
-                                <p className="text-xs text-blue-600 uppercase tracking-wide mb-1">
-                                  {t("company.labels.ownerName")}
-                                </p>
-                                <p className="text-lg font-bold text-gray-900">
-                                  {company[ownerNameField] ||
-                                    company.companyOwnerNameEn ||
-                                    "-"}
+                                <p className="mt-3 font-medium text-gray-700">
+                                  {t("company.labels.companyLogo")}
                                 </p>
                               </div>
-                              <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4">
-                                <p className="text-xs text-green-600 uppercase tracking-wide mb-1">
-                                  {t("company.labels.establishYear")}
-                                </p>
-                                <p className="text-lg font-bold text-gray-900">
-                                  {formatDate(company.establishYear)}
+                              <div className="text-center">
+                                <div className="w-32 h-32 mx-auto rounded-2xl border border-gray-200 flex items-center justify-center overflow-hidden">
+                                  {company.bussinessLogoUrl ? (
+                                    <img
+                                      src={assetUrl(company.bussinessLogoUrl)}
+                                      alt={t("company.labels.businessLogo")}
+                                      className="w-full h-full object-cover"
+                                    />
+                                  ) : (
+                                    <Briefcase className="h-12 w-12 text-gray-400" />
+                                  )}
+                                </div>
+                                <p className="mt-3 font-medium text-gray-700">
+                                  {t("company.labels.businessLogo")}
                                 </p>
                               </div>
-                              {company.activityType && (
-                                <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4">
-                                  <p className="text-xs text-purple-600 uppercase tracking-wide mb-1">
-                                    {t("company.labels.activityType")}
-                                  </p>
-                                  <p className="text-lg font-bold text-gray-900">
-                                    {company.activityType}
-                                  </p>
-                                </div>
-                              )}
-                              {company.tinNumber && (
-                                <div className="bg-gradient-to-br from-orange-50 to-red-50 rounded-xl p-4">
-                                  <p className="text-xs text-orange-600 uppercase tracking-wide mb-1">
-                                    {t("company.labels.tinNumber")}
-                                  </p>
-                                  <p className="text-lg font-bold text-gray-900">
-                                    {company.tinNumber}
-                                  </p>
-                                </div>
-                              )}
                             </div>
                           </div>
                         )}
@@ -593,104 +650,103 @@ export const CompanyDetails: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Right Column - Stats and Additional Info */}
                 <div className="space-y-6">
-                  {/* Company Stats Card */}
-                  <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <button
-                      onClick={() => toggleSection("stats")}
-                      className="w-full flex items-center justify-between p-6 hover:bg-gray-50 transition-colors"
-                    >
-                      <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                        <TrendingUp className="h-5 w-5 text-blue-600" />
-                        {t("company.companyStats")}
-                      </h3>
-                      {expandedSections.stats ? (
-                        <ChevronUp className="h-5 w-5 text-gray-400" />
-                      ) : (
-                        <ChevronDown className="h-5 w-5 text-gray-400" />
-                      )}
-                    </button>
-                    {expandedSections.stats && (
-                      <div className="px-6 pb-6">
-                        <div className="space-y-3">
-                          <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                            <span className="text-gray-600">
-                              {t("company.labels.companyType")}
-                            </span>
-                            <span className="font-semibold text-gray-900 px-2 py-1 bg-blue-50 rounded-lg text-sm">
-                              {getCompanyTypeLabel(company.companyType)}
-                            </span>
-                          </div>
-                          <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                            <span className="text-gray-600">
-                              {t("company.categoriesCount")}
-                            </span>
-                            <span className="font-semibold text-gray-900 px-2 py-1 bg-purple-50 rounded-lg text-sm">
-                              {company.categories?.length || 0}
-                            </span>
-                          </div>
-                          <div className="flex justify-between items-center py-2">
-                            <span className="text-gray-600">
-                              {t("company.table.status")}
-                            </span>
-                            <span
-                              className={`font-semibold px-2 py-1 rounded-lg text-sm ${
-                                company.isActive || company.active
-                                  ? "bg-green-50 text-green-700"
-                                  : "bg-gray-100 text-gray-700"
-                              }`}
-                            >
-                              {getStatusLabel(company.isActive || company.active ? "ACTIVE" : "INACTIVE")}
-                            </span>
-                          </div>
+                  {companyContactPersons.length > 0 && (
+                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                      <button
+                        onClick={() => toggleSection("contactPersons")}
+                        className="w-full flex items-center justify-between p-5 transition-colors"
+                      >
+                        <h4 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                          <Phone className="h-5 w-5 text-blue-600" />
+                          {t("contactPerson.info")} (
+                          {companyContactPersons.length})
+                        </h4>
+                        {expandedSections.contactPersons ? (
+                          <ChevronUp className="h-5 w-5 text-gray-400" />
+                        ) : (
+                          <ChevronDown className="h-5 w-5 text-gray-400" />
+                        )}
+                      </button>
+                      {expandedSections.contactPersons && (
+                        <div className="px-5 pb-5 space-y-4">
+                          {companyContactPersons.map(
+                            (person: any, index: number) => (
+                              <div
+                                key={person.id || index}
+                                className="p-3 rounded-xl border border-gray-200"
+                              >
+                                <div className="flex items-start justify-between gap-3 mb-3">
+                                  <div>
+                                    <p className="font-semibold text-gray-900">
+                                      {[person.firstName, person.lastName]
+                                        .filter(Boolean)
+                                        .join(" ") || t("common.notSpecified")}
+                                    </p>
+                                    <p className="text-sm text-gray-500">
+                                      {person.position ||
+                                        t("common.notSpecified")}
+                                    </p>
+                                  </div>
+                                  <span
+                                    className={`inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold ${
+                                      person.active
+                                        ? "bg-green-100 text-green-700"
+                                        : "bg-gray-100 text-gray-700"
+                                    }`}
+                                  >
+                                    <div
+                                      className={`w-1.5 h-1.5 rounded-full ${
+                                        person.active
+                                          ? "bg-green-500"
+                                          : "bg-gray-400"
+                                      }`}
+                                    />
+                                    {person.active
+                                      ? t("company.status.ACTIVE")
+                                      : t("company.status.INACTIVE")}
+                                  </span>
+                                </div>
+                                <div className="grid grid-cols-1 gap-3 text-sm">
+                                  <div className="flex items-center gap-2 text-gray-700">
+                                    <Mail className="h-4 w-4 text-blue-500" />
+                                    <span>
+                                      {person.email || t("common.notSpecified")}
+                                    </span>
+                                  </div>
+                                  <div className="flex items-center gap-2 text-gray-700">
+                                    <Phone className="h-4 w-4 text-blue-500" />
+                                    <span
+                                      className={phoneDisplayClass}
+                                      dir="ltr"
+                                    >
+                                      {person.phoneNumber ||
+                                        t("common.notSpecified")}
+                                    </span>
+                                  </div>
+                                </div>
+                                {person.addresses?.length > 0 && (
+                                  <div className="mt-3 space-y-2">
+                                    {person.addresses.map(
+                                      (address: any, addressIndex: number) => (
+                                        <div
+                                          key={address.id || addressIndex}
+                                          className="flex items-start gap-2 text-sm text-gray-600"
+                                        >
+                                          <MapPin className="h-4 w-4 text-blue-500 mt-0.5 shrink-0" />
+                                          <span>
+                                            {formatContactAddress(address)}
+                                          </span>
+                                        </div>
+                                      ),
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            ),
+                          )}
                         </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Quick Actions Card */}
-                  <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl shadow-lg p-6 text-white">
-                    <Building2 className="h-12 w-12 mb-4 opacity-80" />
-                    <h3 className="text-xl font-bold mb-2">
-                      {t("company.quickContact")}
-                    </h3>
-                    <p className="text-blue-100 mb-4">
-                      {t("company.messages.updateSuccess")}
-                    </p>
-                    <button
-                      onClick={() => navigate(`/company/edit/${id}`)}
-                      className="w-full mt-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors flex items-center justify-center gap-2"
-                    >
-                      <Building2 className="h-4 w-4" />
-                      {t("common.edit")}
-                    </button>
-                  </div>
-
-                  {/* Social Links Card */}
-                  {company.socialLinks && company.socialLinks.length > 0 && (
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                      <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-4">
-                        <Link2 className="h-5 w-5 text-blue-600" />
-                        {t("company.socialLinks")}
-                      </h3>
-                      <div className="space-y-2">
-                        {company.socialLinks.map((link: any, index: number) => (
-                          <a
-                            key={index}
-                            href={link.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-3 p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors group"
-                          >
-                            {getSocialIcon(link.platform)}
-                            <span className="flex-1 text-gray-700">
-                              {link.platform}
-                            </span>
-                            <ChevronRight className="h-4 w-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
-                          </a>
-                        ))}
-                      </div>
+                      )}
                     </div>
                   )}
                 </div>
@@ -700,127 +756,287 @@ export const CompanyDetails: React.FC = () => {
             {/* Legal Tab */}
             {activeTab === "legal" && (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="space-y-6">
-                  {/* Jawaz Information */}
-                  <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div className="p-6">
-                      <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-4">
-                        <Shield className="h-5 w-5 text-blue-600" />
-                        {t("company.jawazInformation")}
-                      </h3>
-                      <div className="space-y-4">
-                        <div className="flex items-start gap-3 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl">
-                          <IdCard className="h-5 w-5 text-blue-600 mt-0.5" />
+                {companyCertificationRequests.length > 0 ? (
+                  companyCertificationRequests
+                    .slice()
+                    .sort(
+                      (a: any, b: any) =>
+                        new Date(b?.createdDate || 0).getTime() -
+                        new Date(a?.createdDate || 0).getTime(),
+                    )
+                    .map((request: any, index: number) => (
+                      <div
+                        key={request.id || index}
+                        className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6"
+                      >
+                        <div className="flex items-start justify-between gap-3 mb-4">
+                          <div>
+                            <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                              <Shield className="h-5 w-5 text-blue-600" />
+                              {request.trackingNumber ||
+                                request.serialNumber ||
+                                `#${request.id}`}
+                            </h3>
+                            <p className="text-sm text-gray-500 mt-1">
+                              {t(
+                                `certificationRequest.typeOptions.${request.requestType}`,
+                                labelize(request.requestType),
+                              )}{" "}
+                              -{" "}
+                              {t(
+                                `certificationRequest.statusOptions.${request.requestStatus}`,
+                                labelize(request.requestStatus),
+                              )}
+                            </p>
+                          </div>
+                          <span
+                            className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
+                              index === 0
+                                ? "bg-green-100 text-green-700"
+                                : "bg-amber-100 text-amber-700"
+                            }`}
+                          >
+                            {index === 0
+                              ? t("common.currentDocument")
+                              : t("common.oldDocument")}
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div>
                             <p className="text-xs text-gray-500 uppercase tracking-wide">
-                              {t("company.labels.jawazNumber")}
+                              {t("certificationRequest.labels.requestType")}
                             </p>
-                            <p className="text-lg font-bold text-gray-900">
-                              {company.jawazNumber || t("common.notSpecified")}
+                            <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed">
+                              {t(
+                                `certificationRequest.typeOptions.${request.requestType}`,
+                                labelize(request.requestType),
+                              )}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500 uppercase tracking-wide">
+                              {t("certificationRequest.labels.requestStatus")}
+                            </p>
+                            <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed">
+                              {t(
+                                `certificationRequest.statusOptions.${request.requestStatus}`,
+                                labelize(request.requestStatus),
+                              )}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500 uppercase tracking-wide">
+                              {t(
+                                "certificationRequest.labels.certificationType",
+                              )}
+                            </p>
+                            <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed">
+                              {t(
+                                `certificationRequest.certificationTypeOptions.${request.certificationType}`,
+                                labelize(request.certificationType),
+                              )}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500 uppercase tracking-wide">
+                              {t("certificationRequest.labels.serialNumber")}
+                            </p>
+                            <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed">
+                              {request.serialNumber || t("common.notSpecified")}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500 uppercase tracking-wide">
+                              {t("certificationRequest.labels.trackingNumber")}
+                            </p>
+                            <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed">
+                              {request.trackingNumber ||
+                                t("common.notSpecified")}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500 uppercase tracking-wide">
+                              {t("certificationRequest.labels.createdDate")}
+                            </p>
+                            <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed">
+                              {formatDateTime(request.createdDate)}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500 uppercase tracking-wide">
+                              {t("certificationRequest.labels.startDate")}
+                            </p>
+                            <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed">
+                              {formatDateTime(request.startDate)}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500 uppercase tracking-wide">
+                              {t("certificationRequest.labels.endDate")}
+                            </p>
+                            <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed">
+                              {formatDateTime(request.endDate)}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500 uppercase tracking-wide">
+                              {t("certification.printable")}
+                            </p>
+                            <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed">
+                              {request.isPrint
+                                ? t("common.yes")
+                                : t("common.no")}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500 uppercase tracking-wide">
+                              {t("certification.scanned")}
+                            </p>
+                            <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed">
+                              {request.isScanned
+                                ? t("common.yes")
+                                : t("common.no")}
                             </p>
                           </div>
                         </div>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
-                            <Calendar className="h-5 w-5 text-purple-500 mt-0.5" />
-                            <div>
-                              <p className="text-xs text-gray-500 uppercase tracking-wide">
-                                {t("company.labels.jawazIssueDate")}
-                              </p>
-                              <p className="font-medium text-gray-900">
-                                {formatDate(company.jawazIssueDate)}
-                              </p>
-                            </div>
-                          </div>
-                          <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
-                            <Calendar className="h-5 w-5 text-red-500 mt-0.5" />
-                            <div>
-                              <p className="text-xs text-gray-500 uppercase tracking-wide">
-                                {t("company.labels.jawazExpiryDate")}
-                              </p>
-                              <p className="font-medium text-gray-900">
-                                {formatDate(company.jawazExpiryDate)}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
                       </div>
-                    </div>
-                  </div>
-
-                  {/* Tax Information */}
-                  {(company.tinNumber || company.companyRegistrationNumber) && (
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                      <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-4">
-                        <CreditCard className="h-5 w-5 text-blue-600" />
-                        {t("company.registrationInfo")}
-                      </h3>
-                      <div className="space-y-3">
-                        {company.companyRegistrationNumber && (
-                          <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                            <span className="text-gray-600">
-                              {t("company.labels.registrationNumber") || "Registration Number"}
-                            </span>
-                            <span className="font-medium text-gray-900">
-                              {company.companyRegistrationNumber}
-                            </span>
-                          </div>
-                        )}
-                        {company.tinNumber && (
-                          <div className="flex justify-between items-center py-2">
-                            <span className="text-gray-600">
-                              {t("company.labels.tinNumber")}
-                            </span>
-                            <span className="font-medium text-gray-900">
-                              {company.tinNumber}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <div className="space-y-6">
-                  {/* Compliance Status */}
-                  <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-4">
-                      <ShieldCheck className="h-5 w-5 text-blue-600" />
-                      {t("company.status.title")}
-                    </h3>
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                        <span className="text-gray-600">
-                          {t("company.labels.verifiedCompany")}
-                        </span>
-                        <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 rounded-lg text-sm font-semibold">
-                          <CheckCircle2 className="h-3 w-3" />
-                          {t("company.labels.verifiedCompany")}
-                        </span>
-                      </div>
-                      <div className="flex justify-between items-center py-2">
-                        <span className="text-gray-600">
-                          {t("company.labels.registeredMember")}
-                        </span>
-                        <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded-lg text-sm font-semibold">
-                          <Award className="h-3 w-3" />
-                          {t("company.labels.registeredMember")}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Verification Badge */}
-                  <div className="bg-gradient-to-br from-green-600 to-emerald-700 rounded-2xl shadow-lg p-6 text-white">
-                    <ShieldCheck className="h-12 w-12 mb-4 opacity-80" />
-                    <h3 className="text-xl font-bold mb-2">
-                      {t("company.labels.verifiedCompany")}
-                    </h3>
-                    <p className="text-green-100">
-                      {t("company.labels.verifiedMessage")}
+                    ))
+                ) : (
+                  <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 p-10 text-center">
+                    <Shield className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+                    <p className="text-gray-500">
+                      {t("company.messages.noData")}
                     </p>
                   </div>
-                </div>
+                )}
+              </div>
+            )}
+
+            {/* Certification Tab */}
+            {activeTab === "certification" && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {companyCertifications.length > 0 ? (
+                  companyCertifications.map((cert: any, index: number) => (
+                    <div
+                      key={cert.id || index}
+                      className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6"
+                    >
+                      <div className="flex items-start justify-between gap-3 mb-4">
+                        <div>
+                          <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                            <Award className="h-5 w-5 text-blue-600" />
+                            {cert.certificateNumber || `#${cert.id}`}
+                          </h3>
+                          <p className="text-sm text-gray-500 mt-1">
+                            {t(
+                              `certificationRequest.certificationTypeOptions.${cert.certificationType}`,
+                              labelize(cert.certificationType),
+                            )}
+                          </p>
+                        </div>
+                        <span
+                          className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
+                            index === 0
+                              ? "bg-green-100 text-green-700"
+                              : "bg-amber-100 text-amber-700"
+                          }`}
+                        >
+                          {index === 0
+                            ? t("common.currentDocument")
+                            : t("common.oldDocument")}
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <p className="text-xs text-gray-500 uppercase tracking-wide">
+                            {t("certification.certificateNumber")}
+                          </p>
+                          <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed">
+                            {cert.certificateNumber || t("common.notSpecified")}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-500 uppercase tracking-wide">
+                            {t("certification.requestId")}
+                          </p>
+                          <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed">
+                            {cert.requestId || t("common.notSpecified")}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-500 uppercase tracking-wide">
+                            {t("certification.certificateStatus")}
+                          </p>
+                          <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed">
+                            {t(
+                              `certification.statusOptions.${cert.certificationStatus}`,
+                              labelize(cert.certificationStatus),
+                            )}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-500 uppercase tracking-wide">
+                            {t("certification.issueDate")}
+                          </p>
+                          <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed">
+                            {formatDateTime(cert.issueDate)}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-500 uppercase tracking-wide">
+                            {t("certification.expiryDate")}
+                          </p>
+                          <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed">
+                            {formatDateTime(cert.expiryDate)}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-500 uppercase tracking-wide">
+                            {t("certification.createdDate")}
+                          </p>
+                          <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed">
+                            {formatDateTime(cert.createdDate)}
+                          </p>
+                        </div>
+                      </div>
+                      {(cert.certificateAttachment?.file ||
+                        cert.certificateUrl) && (
+                        <div className="flex gap-2 mt-4 pt-4 border-t border-gray-100">
+                          <a
+                            href={assetUrl(
+                              cert.certificateAttachment?.file ||
+                                cert.certificateUrl,
+                            )}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-2 px-3 py-2 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors"
+                          >
+                            <Eye className="h-4 w-4" />
+                            {t("common.view")}
+                          </a>
+                          <a
+                            href={assetUrl(
+                              cert.certificateAttachment?.file ||
+                                cert.certificateUrl,
+                            )}
+                            download
+                            className="inline-flex items-center gap-2 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                          >
+                            <Download className="h-4 w-4" />
+                            {t("common.download")}
+                          </a>
+                        </div>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 p-10 text-center">
+                    <Award className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+                    <p className="text-gray-500">
+                      {t("company.messages.noData")}
+                    </p>
+                  </div>
+                )}
               </div>
             )}
 
@@ -831,29 +1047,54 @@ export const CompanyDetails: React.FC = () => {
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
                     <FileText className="h-5 w-5 text-blue-600" />
-                    {t("company.sections.documents")}
+                    {t("company.labels.companyAttachments")} (
+                    {companyAttachments.length})
                   </h3>
-                  {company.documents?.length > 0 ? (
+                  {companyAttachments.length > 0 ? (
                     <div className="space-y-3">
-                      {company.documents.map((doc: any, index: number) => (
+                      {companyAttachments.map((doc: any, index: number) => (
                         <div
                           key={doc.id || index}
                           className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                         >
                           <div className="flex items-center gap-3 flex-1">
                             <File className="h-5 w-5 text-blue-500 shrink-0" />
-                            <div className="flex-1">
-                              <p className="font-medium text-gray-900">
-                                {doc.name || doc.fileName || t("company.sections.documents")}
-                              </p>
-                              <p className="text-xs text-gray-500">
-                                {doc.fileSize ? `${(doc.fileSize / 1024).toFixed(1)} ${t("attachment.sizeUnitKb")}` : t("company.messages.unknownSize")}
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <p className="text-sm font-medium text-gray-900 truncate">
+                                  {doc.attachmentName ||
+                                    doc.name ||
+                                    doc.fileName ||
+                                    t("company.sections.documents")}
+                                </p>
+                                {doc.attachmentReferenceType && (
+                                  <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-200 text-gray-700">
+                                    {t(
+                                      `attachment.type.${doc.attachmentReferenceType}`,
+                                      labelize(doc.attachmentReferenceType),
+                                    )}
+                                  </span>
+                                )}
+                                <span
+                                  className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+                                    index === 0
+                                      ? "bg-green-100 text-green-700"
+                                      : "bg-amber-100 text-amber-700"
+                                  }`}
+                                >
+                                  {index === 0
+                                    ? t("common.currentDocument")
+                                    : t("common.oldDocument")}
+                                </span>
+                              </div>
+                              <p className="text-xs text-gray-500 mt-0.5">
+                                {formatFileSize(doc.fileSize)}
                               </p>
                             </div>
                           </div>
                           <div className="flex gap-2">
                             <a
-                              href={assetUrl(doc.filePath || doc.file)}
+                              href={assetUrl(doc.file)}
                               target="_blank"
                               rel="noreferrer"
                               className="p-1.5 text-gray-500 hover:text-blue-600 transition-colors"
@@ -862,7 +1103,7 @@ export const CompanyDetails: React.FC = () => {
                               <Eye className="h-4 w-4" />
                             </a>
                             <a
-                              href={assetUrl(doc.filePath || doc.file)}
+                              href={assetUrl(doc.file)}
                               download
                               className="p-1.5 text-gray-500 hover:text-blue-600 transition-colors"
                               title={t("common.download")}
@@ -883,110 +1124,148 @@ export const CompanyDetails: React.FC = () => {
                   )}
                 </div>
 
-                {/* Certificates */}
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                    <Award className="h-5 w-5 text-blue-600" />
-                    {t("company.sections.certificates")}
+                    <FileText className="h-5 w-5 text-blue-600" />
+                    {t("certificationRequest.labels.requestAttachments")}
                   </h3>
-                  {company.certificates?.length > 0 ? (
-                    <div className="space-y-3">
-                      {company.certificates.map((cert: any, index: number) => (
-                        <div
-                          key={cert.id || index}
-                          className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                        >
-                          <div className="flex items-center gap-3 flex-1">
-                            <Award className="h-5 w-5 text-green-500 shrink-0" />
-                            <div className="flex-1">
-                              <p className="font-medium text-gray-900">
-                                {cert.name || cert.certificateName || t("company.sections.certificates")}
-                              </p>
-                              <p className="text-xs text-gray-500">
-                                {cert.issueDate && `${t("company.labels.issueDate")}: ${formatDate(cert.issueDate)}`}
-                              </p>
+                  {companyCertificationRequests.length > 0 ? (
+                    <div className="space-y-4">
+                      {companyCertificationRequests
+                        .slice()
+                        .sort(
+                          (a: any, b: any) =>
+                            new Date(b?.createdDate || 0).getTime() -
+                            new Date(a?.createdDate || 0).getTime(),
+                        )
+                        .map((request: any, requestIndex: number) => (
+                          <div
+                            key={request.id || requestIndex}
+                            className="rounded-xl border border-gray-200 p-4"
+                          >
+                            <div className="flex items-start justify-between gap-3 mb-3">
+                              <div>
+                                <p className="font-medium text-gray-900">
+                                  {request.trackingNumber ||
+                                    request.serialNumber ||
+                                    `#${request.id}`}
+                                </p>
+                                <p className="text-xs text-gray-500 mt-1">
+                                  {t(
+                                    `certificationRequest.typeOptions.${request.requestType}`,
+                                    labelize(request.requestType),
+                                  )}{" "}
+                                  -{" "}
+                                  {t(
+                                    `certificationRequest.statusOptions.${request.requestStatus}`,
+                                    labelize(request.requestStatus),
+                                  )}
+                                </p>
+                              </div>
+                              <span
+                                className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+                                  requestIndex === 0
+                                    ? "bg-green-100 text-green-700"
+                                    : "bg-amber-100 text-amber-700"
+                                }`}
+                              >
+                                {requestIndex === 0
+                                  ? t("common.currentDocument")
+                                  : t("common.oldDocument")}
+                              </span>
                             </div>
+                            {request.attachments?.length > 0 ? (
+                              <div className="space-y-3">
+                                {request.attachments.map(
+                                  (doc: any, docIndex: number) => (
+                                    <div
+                                      key={doc.id || docIndex}
+                                      className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                                    >
+                                      <div className="flex items-center gap-3 flex-1">
+                                        <File className="h-5 w-5 text-blue-500 shrink-0" />
+                                        <div className="flex-1 min-w-0">
+                                          <div className="flex items-center gap-2 flex-wrap">
+                                            <p className="text-sm font-medium text-gray-900 truncate">
+                                              {doc.attachmentName ||
+                                                doc.name ||
+                                                doc.fileName ||
+                                                t("company.sections.documents")}
+                                            </p>
+                                            {doc.attachmentReferenceType && (
+                                              <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-200 text-gray-700">
+                                                {t(
+                                                  `attachment.type.${doc.attachmentReferenceType}`,
+                                                  labelize(
+                                                    doc.attachmentReferenceType,
+                                                  ),
+                                                )}
+                                              </span>
+                                            )}
+                                          </div>
+                                          <div className="flex items-center gap-3 mt-0.5">
+                                            <p className="text-xs text-gray-500">
+                                              {formatFileSize(doc.fileSize)}
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div className="flex gap-2">
+                                        <a
+                                          href={assetUrl(doc.file)}
+                                          target="_blank"
+                                          rel="noreferrer"
+                                          className="p-1.5 text-gray-500 hover:text-blue-600 transition-colors"
+                                          title={t("common.view")}
+                                        >
+                                          <Eye className="h-4 w-4" />
+                                        </a>
+                                        <a
+                                          href={assetUrl(doc.file)}
+                                          download
+                                          className="p-1.5 text-gray-500 hover:text-blue-600 transition-colors"
+                                          title={t("common.download")}
+                                        >
+                                          <Download className="h-4 w-4" />
+                                        </a>
+                                      </div>
+                                    </div>
+                                  ),
+                                )}
+                              </div>
+                            ) : (
+                              <p className="text-sm text-gray-500">
+                                {t("certificationRequest.labels.noAttachments")}
+                              </p>
+                            )}
                           </div>
-                          <div className="flex gap-2">
-                            <a
-                              href={assetUrl(cert.filePath || cert.file)}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="p-1.5 text-gray-500 hover:text-blue-600 transition-colors"
-                              title={t("common.view")}
-                            >
-                              <Eye className="h-4 w-4" />
-                            </a>
-                            <a
-                              href={assetUrl(cert.filePath || cert.file)}
-                              download
-                              className="p-1.5 text-gray-500 hover:text-blue-600 transition-colors"
-                              title={t("common.download")}
-                            >
-                              <Download className="h-4 w-4" />
-                            </a>
-                          </div>
-                        </div>
-                      ))}
+                        ))}
                     </div>
                   ) : (
                     <div className="text-center py-8">
-                      <Award className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+                      <File className="h-12 w-12 text-gray-300 mx-auto mb-3" />
                       <p className="text-gray-500">
                         {t("company.messages.noData")}
                       </p>
                     </div>
                   )}
                 </div>
-
-                {/* Logos Section */}
-                <div className="lg:col-span-2">
-                  <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                      <Building2 className="h-5 w-5 text-blue-600" />
-                      {t("company.companyLogos")}
-                    </h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                      <div className="text-center">
-                        <div className="w-32 h-32 mx-auto bg-gray-50 rounded-2xl shadow-md flex items-center justify-center overflow-hidden">
-                          {company.logoUrl ? (
-                            <img
-                              src={assetUrl(company.logoUrl)}
-                              alt={t("company.labels.companyLogo")}
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            <Building2 className="h-12 w-12 text-gray-400" />
-                          )}
-                        </div>
-                        <p className="mt-3 font-medium text-gray-700">
-                          {t("company.labels.companyLogo")}
-                        </p>
-                      </div>
-                      <div className="text-center">
-                        <div className="w-32 h-32 mx-auto bg-gray-50 rounded-2xl shadow-md flex items-center justify-center overflow-hidden">
-                          {company.bussinessLogoUrl ? (
-                            <img
-                              src={assetUrl(company.bussinessLogoUrl)}
-                              alt={t("company.labels.businessLogo")}
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            <Briefcase className="h-12 w-12 text-gray-400" />
-                          )}
-                        </div>
-                        <p className="mt-3 font-medium text-gray-700">
-                          {t("company.labels.businessLogo")}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
             )}
           </div>
         </div>
       </div>
+      <CompanyPdfExport
+        ref={pdfExportRef}
+        company={company}
+        contactPersons={companyContactPersons}
+        certificationRequests={companyCertificationRequests}
+        certifications={companyCertifications}
+        assetUrl={assetUrl}
+        filename={`company-details-${company?.id || "export"}.pdf`}
+        authorityLogoSrc={`${window.location.origin}/asqanew.png`}
+        fallbackLogoSrc={`${window.location.origin}/MOLSA-LOGO.png`}
+      />
     </>
   );
 };
