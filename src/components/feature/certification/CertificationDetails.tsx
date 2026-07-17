@@ -46,6 +46,7 @@ import { useAppToast } from "../../../hooks/useToast";
 import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 import type { TFunction } from "i18next";
 import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
+import CompanyPdfExport, { type CompanyPdfExportHandle } from "../../common/pdf/CompanyPdfExport";
 
 // Type Definitions
 type Attachment = {
@@ -198,6 +199,7 @@ export const CertificationDetails: React.FC = () => {
   const { requestId } = useParams<{ requestId: string }>();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
+  const pdfExportRef = React.useRef<CompanyPdfExportHandle>(null);
 
   const [details, setDetails] = useState<CertificationDetails | null>(null);
   const [loading, setLoading] = useState(true);
@@ -265,6 +267,8 @@ export const CertificationDetails: React.FC = () => {
     company?.companyNameDR ||
     company?.companyNamePS ||
     "-";
+  const phoneDisplayClass =
+    "inline-block text-left [direction:ltr] [unicode-bidi:isolate]";
 
   const { toast, showToast } = useAppToast();
 
@@ -293,6 +297,20 @@ export const CertificationDetails: React.FC = () => {
     }
 
     setLoading(false);
+  };
+
+  const handleDownloadPdf = async () => {
+    try {
+      await pdfExportRef.current?.downloadPdf();
+      showToast("success", t("common.success"), t("common.download"));
+    } catch (error) {
+      console.error("Error generating certification PDF:", error);
+      showToast(
+        "error",
+        t("common.error"),
+        t("registration.errors.submitFailed"),
+      );
+    }
   };
 
   useEffect(() => {
@@ -575,9 +593,19 @@ export const CertificationDetails: React.FC = () => {
                   </div>
                 </div>
 
-                {!finalStates.includes(currentStatus) && (
-                  <div className="flex flex-wrap gap-2">
-                    {getNextStatuses().map((status) => (
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={handleDownloadPdf}
+                    className="px-4 py-2 rounded-xl text-sm font-semibold border border-gray-300 text-gray-700 hover:bg-gray-50"
+                  >
+                    <span className="inline-flex items-center gap-2">
+                      <Download className="h-4 w-4" />
+                      {t("common.download")}
+                    </span>
+                  </button>
+                  {!finalStates.includes(currentStatus) &&
+                    getNextStatuses().map((status) => (
                       <button
                         key={status}
                         onClick={() => confirmStatusUpdate(status)}
@@ -590,8 +618,7 @@ export const CertificationDetails: React.FC = () => {
                         {t(`certification.steps.${status}`, labelize(status))}
                       </button>
                     ))}
-                  </div>
-                )}
+                </div>
               </div>
             </div>
           </div>
@@ -1158,80 +1185,88 @@ export const CertificationDetails: React.FC = () => {
                       )}
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                      <InfoBox
-                        icon={<Mail />}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                      <CompanyStatBox
+                        label={t("company.labels.companyType")}
+                        value={t(`company.typeOptions.${company.companyType}`)}
+                      />
+                      <CompanyStatBox
+                        label={t("company.labels.ownerNameEn")}
+                        value={company.companyOwnerNameEn || company[companyOwnerField]}
+                      />
+                      <CompanyStatBox
+                        label={t("company.labels.ownerNameDr")}
+                        value={company.companyOwnerNameDr}
+                      />
+                      <CompanyStatBox
+                        label={t("company.labels.establishYear")}
+                        value={formatShortDate(company.establishYear)}
+                      />
+                      <CompanyStatBox
                         label={t("company.labels.email")}
                         value={company.email}
                       />
-                      <InfoBox
-                        icon={<Phone />}
+                      <CompanyStatBox
                         label={t("company.labels.phoneNumber")}
-                        value={company.phoneNumber}
+                        value={
+                          company.phoneNumber ? (
+                            <span className={phoneDisplayClass} dir="ltr">
+                              {company.phoneNumber}
+                            </span>
+                          ) : (
+                            "-"
+                          )
+                        }
                       />
-                      <div className="md:col-span-2">
-                        <InfoBox
-                          icon={<MapPin />}
-                          label={t("company.labels.address")}
-                          value={company.address}
-                        />
-                      </div>
+                      <CompanyStatBox
+                        label={t("company.labels.mainBranchAddress")}
+                        value={company.mainBranchAddress}
+                      />
+                      <CompanyStatBox
+                        label={t("company.labels.activityPlace")}
+                        value={company.activityPlace}
+                      />
+                      <CompanyStatBox
+                        label={t("company.labels.activityType")}
+                        value={company.activityType}
+                      />
+                      <CompanyStatBox
+                        label={t("company.labels.categories")}
+                        value={
+                          company.categories
+                            ?.map((category: Category) => category.categoryName)
+                            .filter(Boolean)
+                            .join(", ") || "-"
+                        }
+                      />
+                      <CompanyStatBox
+                        label={t("company.labels.jawazNumber")}
+                        value={company.jawazNumber}
+                      />
+                      <CompanyStatBox
+                        label={t("company.labels.jawazIssueDate")}
+                        value={formatShortDate(company.jawazIssueDate)}
+                      />
+                      <CompanyStatBox
+                        label={t("company.labels.jawazExpiryDate")}
+                        value={formatShortDate(company.jawazExpiryDate)}
+                      />
+                      <CompanyStatBox
+                        label={t("company.labels.tinNumber")}
+                        value={company.tinNumber}
+                      />
+                      <CompanyStatBox
+                        label={t("company.table.createdAt")}
+                        value={formatDate(company.createdDate)}
+                      />
                     </div>
-
-                    {/* Jawaz Information */}
-                    <SectionCard
-                      title={t("company.jawazInformation")}
-                      icon={<Shield />}
-                      expanded={expandedSections.companyJawaz}
-                      onToggle={() => toggleSection("companyJawaz")}
-                    >
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <CompanyStatBox
-                          color="blue"
-                          label={t("company.labels.jawazNumber")}
-                          value={company.jawazNumber}
-                        />
-                        <CompanyStatBox
-                          color="purple"
-                          label={t("company.labels.jawazIssueDate")}
-                          value={formatShortDate(company.jawazIssueDate)}
-                        />
-                        <CompanyStatBox
-                          color="orange"
-                          label={t("company.labels.jawazExpiryDate")}
-                          value={formatShortDate(company.jawazExpiryDate)}
-                        />
-                        <CompanyStatBox
-                          color="green"
-                          label={t("company.labels.establishYear")}
-                          value={formatShortDate(company.establishYear)}
-                        />
-                        <CompanyStatBox
-                          color="cyan"
-                          label={t("company.labels.activityPlace")}
-                          value={company.activityPlace}
-                        />
-                        <CompanyStatBox
-                          color="amber"
-                          label={t("company.labels.tinNumber")}
-                          value={company.tinNumber}
-                        />
-                      </div>
-                    </SectionCard>
-
-                    {/* Business Information */}
-                    <div className="border-t border-gray-100 pt-6">
-                      <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                        <Briefcase className="h-5 w-5 text-blue-600" />
-                        {t("company.labels.businessInformation")}
-                      </h4>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <CompanyStatBox
-                          color="amber"
-                          label={t("company.labels.ownerNameEn")}
-                          value={company[companyOwnerField]}
-                        />
-                      </div>
+                    <div className="mt-4 rounded-xl border border-gray-200 p-3">
+                      <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                        {t("company.labels.address")}
+                      </p>
+                      <p className="text-xs sm:text-sm font-normal text-gray-800 break-words leading-relaxed">
+                        {company.address || "-"}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -1355,7 +1390,9 @@ export const CertificationDetails: React.FC = () => {
                       >
                         <Phone className="h-5 w-5 text-green-600 group-hover:scale-110 transition-transform" />
                         <span className="text-sm font-medium text-gray-700 flex-1 text-left">
-                          {company.phoneNumber}
+                          <span className={phoneDisplayClass} dir="ltr">
+                            {company.phoneNumber}
+                          </span>
                         </span>
                         <ChevronRight className="h-4 w-4 text-green-400 opacity-0 group-hover:opacity-100" />
                       </button>
@@ -1445,7 +1482,9 @@ export const CertificationDetails: React.FC = () => {
                               {t("contactPerson.phoneNumber")}
                             </p>
                             <p className="font-medium text-gray-800">
-                              {contactPerson.phoneNumber}
+                              <span className={phoneDisplayClass} dir="ltr">
+                                {contactPerson.phoneNumber}
+                              </span>
                             </p>
                           </div>
                           <ChevronRight className="h-4 w-4 text-blue-400 opacity-0 group-hover:opacity-100" />
@@ -1578,6 +1617,17 @@ export const CertificationDetails: React.FC = () => {
             );
           }}
         />
+        <CompanyPdfExport
+          ref={pdfExportRef}
+          company={company}
+          contactPersons={contactPerson?.id ? [contactPerson] : []}
+          certificationRequests={request?.id ? [request] : []}
+          certifications={details ? [details] : []}
+          assetUrl={assetUrl}
+          filename={`certification-${details?.id || "export"}.pdf`}
+          authorityLogoSrc={`${window.location.origin}/asqanew.png`}
+          fallbackLogoSrc={`${window.location.origin}/MOLSA-LOGO.png`}
+        />
       </div>
     </>
   );
@@ -1686,13 +1736,17 @@ const InfoBox = ({
   label: string;
   value?: any;
 }) => (
-  <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl min-w-0">
+  <div className="rounded-xl border border-gray-200 p-3 min-w-0">
     <span className="text-blue-500 shrink-0 [&>svg]:h-5 [&>svg]:w-5">
       {icon}
     </span>
     <div className="min-w-0">
-      <p className="text-xs text-gray-500 uppercase tracking-wide">{label}</p>
-      <p className="font-medium text-gray-900 break-words">{value || "-"}</p>
+      <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+        {label}
+      </p>
+      <p className="text-xs sm:text-sm font-normal text-gray-800 break-words leading-relaxed">
+        {value || "-"}
+      </p>
     </div>
   </div>
 );
@@ -1700,24 +1754,18 @@ const InfoBox = ({
 const CompanyStatBox = ({
   label,
   value,
-  color = "blue",
+  color: _color,
 }: {
   label: string;
   value?: any;
-  color?: "blue" | "purple" | "orange" | "green" | "cyan" | "amber";
+  color?: string;
 }) => {
-  const styles: Record<string, string> = {
-    blue: "from-blue-50 to-indigo-50 text-blue-600",
-    purple: "from-purple-50 to-pink-50 text-purple-600",
-    orange: "from-orange-50 to-red-50 text-orange-600",
-    green: "from-green-50 to-emerald-50 text-green-600",
-    cyan: "from-cyan-50 to-sky-50 text-cyan-600",
-    amber: "from-amber-50 to-yellow-50 text-amber-600",
-  };
   return (
-    <div className={`bg-gradient-to-br ${styles[color]} rounded-xl p-4`}>
-      <p className="text-xs uppercase tracking-wide mb-1">{label}</p>
-      <p className="text-lg font-bold text-gray-900 break-words">
+    <div className="rounded-xl border border-gray-200 p-3">
+      <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+        {label}
+      </p>
+      <p className="text-xs sm:text-sm font-normal text-gray-800 break-words leading-relaxed">
         {value || "-"}
       </p>
     </div>

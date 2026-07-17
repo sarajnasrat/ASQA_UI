@@ -3,9 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Toast } from "primereact/toast";
 import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
-import CompanyPdfExport, {
-  CompanyPdfExportHandle,
-} from "../../common/pdf/CompanyPdfExport";
+import CompanyPdfExport, { type CompanyPdfExportHandle } from "../../common/pdf/CompanyPdfExport";
 import {
   ArrowLeft,
   Building2,

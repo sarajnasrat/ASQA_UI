@@ -27,6 +27,7 @@ interface Props {
   getCertificationTypeLabel: (type: string) => string;
   onBack: () => void;
   onStatusAction: (nextStatus: string) => void;
+  onDownloadPdf: () => void;
   onPrintBill: () => void;
   onOpenPaymentDialog: () => void;
   canUploadScannedBillButton: boolean;
@@ -44,6 +45,7 @@ const CertificationRequestViewHeader: React.FC<Props> = ({
   getCertificationTypeLabel,
   onBack,
   onStatusAction,
+  onDownloadPdf,
   onPrintBill,
   onOpenPaymentDialog,
 
@@ -110,8 +112,17 @@ const CertificationRequestViewHeader: React.FC<Props> = ({
               </div>
             </div>
           </div>
-          {hasPermission("UPDATE_CERTIFICATIONREQUEST") && (
-            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+            <button
+              type="button"
+              onClick={onDownloadPdf}
+              className="flex items-center justify-center px-6 py-2.5 border-2 border-gray-400 text-gray-700 hover:bg-gray-50 active:bg-gray-100 font-medium rounded-lg transition-all duration-200 w-full sm:w-auto"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              {t("common.download")}
+            </button>
+            {hasPermission("UPDATE_CERTIFICATIONREQUEST") && (
+              <>
               {!finalStates.includes(request.requestStatus) &&
                 getNextStatuses().map((nextStatus) => {
                   const isReject = nextStatus === "REJECTED";
@@ -193,12 +204,9 @@ const CertificationRequestViewHeader: React.FC<Props> = ({
                       "View Payment Details"}
                   </button>
                 )}
-              {/* <button className="flex items-center justify-center px-6 py-2.5 border-2 border-gray-400 text-gray-700 hover:bg-gray-50 active:bg-gray-100 font-medium rounded-lg transition-all duration-200 w-full sm:w-auto">
-              <Download className="h-4 w-4 mr-2" />
-              {t("common.download")}
-            </button> */}
-            </div>
-          )}
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

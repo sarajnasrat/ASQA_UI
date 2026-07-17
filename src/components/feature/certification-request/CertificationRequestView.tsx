@@ -1,5 +1,5 @@
 // components/feature/certification/CertificationRequestView.tsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Dialog } from "primereact/dialog";
 import { Dropdown } from "primereact/dropdown";
@@ -22,6 +22,7 @@ import CommiteeService from "../../../services/comitee.service";
 import FileUploadField from "../../common/FileUploadField";
 import { SmartDatePicker } from "../../common/datepicker/SmartDatePicker";
 import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
+import CompanyPdfExport, { type CompanyPdfExportHandle } from "../../common/pdf/CompanyPdfExport";
 import CertificationRequestViewHeader from "./certification-process/CertificationRequestViewHeader";
 import CertificationRequestViewTabs from "./certification-process/CertificationRequestViewTabs";
 import CertificationRequestViewDetails from "./certification-process/CertificationRequestViewDetails";
@@ -144,6 +145,7 @@ const CertificationRequestView: React.FC = () => {
   const [paymentAmount, setPaymentAmount] = useState<string>("");
   const [uploadingPayment, setUploadingPayment] = useState(false);
   const [requestPrinted, setRequestPrinted] = useState(false);
+  const pdfExportRef = useRef<CompanyPdfExportHandle>(null);
 
   const getFallbackListUrl = (status?: string) => {
     switch (status) {
@@ -211,6 +213,20 @@ const CertificationRequestView: React.FC = () => {
       setRequestPrinted(false);
     }
     setLoading(false);
+  };
+
+  const handleDownloadPdf = async () => {
+    try {
+      await pdfExportRef.current?.downloadPdf();
+      showToast("success", t("common.success"), t("common.download"));
+    } catch (error) {
+      console.error("Error generating certification request PDF:", error);
+      showToast(
+        "error",
+        t("common.error"),
+        t("registration.errors.submitFailed"),
+      );
+    }
   };
 
   const getNextStatuses = () => {
@@ -1931,6 +1947,7 @@ const CertificationRequestView: React.FC = () => {
           getCertificationTypeLabel={getCertificationTypeLabel}
           onBack={() => navigate(-1)}
           onStatusAction={confirmStatusUpdate}
+          onDownloadPdf={handleDownloadPdf}
           onPrintBill={() => printBill(request)}
           onOpenPaymentDialog={openPaymentDialog}
           canUploadScannedBillButton={
@@ -2000,6 +2017,24 @@ const CertificationRequestView: React.FC = () => {
             t={t}
           />
         )}
+        <CompanyPdfExport
+          ref={pdfExportRef}
+          company={request?.company}
+          contactPersons={contactPerson ? [contactPerson] : []}
+          certificationRequests={request?.id ? [request] : []}
+          certifications={[]}
+          assetUrl={(path?: string) => {
+            if (!path) return "";
+            if (path.startsWith("http")) return path;
+            const baseUrl =
+              import.meta.env.VITE_API_BASE_URL?.replace(/\/api\/?$/, "") ||
+              "http://localhost:8080";
+            return `${baseUrl}${path}`;
+          }}
+          filename={`certification-request-${request?.id || "export"}.pdf`}
+          authorityLogoSrc={`${window.location.origin}/asqanew.png`}
+          fallbackLogoSrc={`${window.location.origin}/MOLSA-LOGO.png`}
+        />
       </div>
     </div>
   );

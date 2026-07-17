@@ -15,6 +15,12 @@ import { useToast } from "../../../../hooks/ToastContext";
 
 const STORAGE_KEY = "certificationDraft";
 
+const normalizeCertificationScope = (value?: string) => {
+  if (value === "INTERNAL") return "NATIONAL";
+  if (value === "EXTERNAL") return "INTERNATIONAL";
+  return value || "";
+};
+
 interface CertificationTypeSelectionProps {
   onSuccess?: (
     requestType: string,
@@ -88,6 +94,9 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
       const draft = JSON.parse(savedDraft);
       const draftSelectedCertificationType =
         draft.selectedCertificationType || draft.certificationType || "";
+      const normalizedDraftMainType = normalizeCertificationScope(
+        draft.certificationMainType,
+      );
 
       setFormData({
         certificationType:
@@ -97,13 +106,15 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
             ? ""
             : draft.domesticCategory || "",
         requestType: draft.requestType || "",
-        mainType: draft.certificationMainType || "",
+        mainType: normalizedDraftMainType,
         jawazNumber: draft.jawazNumber || "",
       });
       return;
     }
 
     if (sessionRequestId && sessionCertificationType) {
+      const normalizedSessionMainType =
+        normalizeCertificationScope(sessionMainType);
       const sessionSelectedCertificationType =
         sessionStorage.getItem("selectedCertificationType") ||
         sessionCertificationType ||
@@ -114,7 +125,7 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
         selectedCertificationType: sessionSelectedCertificationType,
         domesticCategory: sessionDomesticCategory || "",
         requestType: sessionRequestType || "",
-        certificationMainType: sessionMainType || "",
+        certificationMainType: normalizedSessionMainType,
         jawazNumber: sessionStorage.getItem("renewalJawazNumber") || "",
       };
 
@@ -216,11 +227,11 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
 
   const mainTypeOptions = [
     {
-      value: "INTERNAL",
+      value: "NATIONAL",
       label: t("certification.page.certificationScope.internal.title"),
     },
     {
-      value: "EXTERNAL",
+      value: "INTERNATIONAL",
       label: t("certification.page.certificationScope.external.title"),
     },
   ];
@@ -348,7 +359,8 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
     const requestData = {
       requestType: formData.requestType,
       requestStatus: "DRAFT",
-      certificationMainType: formData.mainType,
+      certificationScope: normalizeCertificationScope(formData.mainType),
+      certificationMainType: normalizeCertificationScope(formData.mainType),
       certificationType:
         formData.certificationType === "DOMESTIC_QUALITY_CERTIFICATION"
           ? formData.domesticCategory

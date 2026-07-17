@@ -57,6 +57,8 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
   t,
 }) => {
   const navigate = useNavigate();
+  const phoneDisplayClass =
+    "inline-block text-left [direction:ltr] [unicode-bidi:isolate]";
   const translatedCompanyType = (type: any) =>
     type ? t(`company.typeOptions.${type?.companyType}`) : "";
   const handleEdit = () => {
@@ -66,25 +68,23 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div className="lg:col-span-2 space-y-6">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="relative h-32 bg-linear-to-r ">
+          <div className="relative h-32 bg-gradient-to-r from-blue-600 to-indigo-600">
             <div className="absolute -bottom-12 left-6">
-              <div className="relative">
-                <div className="w-24 h-24 bg-white rounded-2xl shadow-lg flex items-center justify-center overflow-hidden border-4 border-white">
-                  {request.company.logoUrl ? (
-                    <img
-                      src={`${apiBaseUrl}${request.company.logoUrl}`}
-                      alt={request.company.companyNameEN}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <Building2 className="h-12 w-12 text-blue-600" />
-                  )}
-                </div>
+              <div className="w-24 h-24 bg-white rounded-2xl shadow-lg flex items-center justify-center overflow-hidden border-4 border-white">
+                {request.company.logoUrl ? (
+                  <img
+                    src={`${apiBaseUrl}${request.company.logoUrl}`}
+                    alt={request.company.companyNameEN}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <Building2 className="h-12 w-12 text-blue-600" />
+                )}
               </div>
             </div>
           </div>
 
-          <div className="pt-16 px-6 pb-6">
+          <div className="pt-16 px-5 pb-5">
             <div className="flex items-end justify-end">
               <Button
                 raised
@@ -102,26 +102,9 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
                   {getCompanyName()}
                 </h3>
                 <div className="flex items-center gap-2 mt-2 flex-wrap">
-                  <span className="px-2.5 py-1  text-gray-700 rounded-lg text-xs font-medium">
+                  <span className="px-2.5 py-1 text-gray-700 rounded-lg text-xs font-medium">
                     {translatedCompanyType(request.company)}
-                    {/* {request.company.companyType?.replace(/_/g, " ")} */}
                   </span>
-                  {/* <span
-                    className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium ${
-                      request.company.active
-                        ? "bg-green-100 text-green-700"
-                        : "bg-gray-100 text-gray-700"
-                    }`}
-                  >
-                    <div
-                      className={`w-1.5 h-1.5 rounded-full ${
-                        request.company.active ? "bg-green-500" : "bg-gray-400"
-                      }`}
-                    />
-                    {request.company.active
-                      ? t("company.labels.active")
-                      : t("company.labels.inactive")}
-                  </span> */}
                 </div>
               </div>
               {request.company.websiteUrl && (
@@ -129,7 +112,7 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
                   href={request.company.websiteUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded-xl text-gray-700 transition-colors text-sm"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-xl text-gray-700 transition-colors text-sm"
                 >
                   <Globe className="h-4 w-4" />
                   {t("company.labels.visitWebsite")}
@@ -137,113 +120,138 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
               )}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              <div className="flex items-start gap-3 p-3 rounded-xl">
-                <Mail className="h-5 w-5 text-blue-500 mt-0.5" />
-                <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wide">
-                    {t("company.labels.email")}
-                  </p>
-                  <p className="font-medium text-gray-900 break-all">
-                    {request.company.email}
-                  </p>
-                </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+              <div className="rounded-xl border border-gray-200 p-3">
+                <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                  {t("company.labels.companyType")}
+                </p>
+                <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed">
+                  {translatedCompanyType(request.company) || t("common.notSpecified")}
+                </p>
               </div>
-              <div className="flex items-start gap-3 p-3  rounded-xl">
-                <Phone className="h-5 w-5 text-blue-500 mt-0.5" />
-                <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wide">
-                    {t("company.labels.phoneNumber")}
-                  </p>
-                  <p className="font-medium text-gray-900">
+              <div className="rounded-xl border border-gray-200 p-3">
+                <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                  {t("company.labels.ownerNameEn")}
+                </p>
+                <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed">
+                  {request.company.companyOwnerNameEn || t("common.notSpecified")}
+                </p>
+              </div>
+              <div className="rounded-xl border border-gray-200 p-3">
+                <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                  {t("company.labels.ownerNameDr")}
+                </p>
+                <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed">
+                  {request.company.companyOwnerNameDr || t("common.notSpecified")}
+                </p>
+              </div>
+              <div className="rounded-xl border border-gray-200 p-3">
+                <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                  {t("company.labels.establishYear")}
+                </p>
+                <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed">
+                  {formatDate(request.company.establishYear)}
+                </p>
+              </div>
+              <div className="rounded-xl border border-gray-200 p-3">
+                <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                  {t("company.labels.email")}
+                </p>
+                <p className="text-xs sm:text-sm font-normal text-gray-800 break-all leading-relaxed">
+                  {request.company.email}
+                </p>
+              </div>
+              <div className="rounded-xl border border-gray-200 p-3">
+                <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                  {t("company.labels.phoneNumber")}
+                </p>
+                <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed">
+                  <span className={phoneDisplayClass} dir="ltr">
                     {request.company.phoneNumber}
-                  </p>
-                </div>
+                  </span>
+                </p>
               </div>
-              <div className="flex items-start gap-3 p-3  rounded-xl md:col-span-2">
-                <MapPin className="h-5 w-5 text-blue-500 mt-0.5" />
-                <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wide">
-                    {t("company.labels.address")}
-                  </p>
-                  <p className="font-medium text-gray-900">
-                    {request.company.address}
-                  </p>
-                </div>
+              <div className="rounded-xl border border-gray-200 p-3">
+                <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                  {t("company.labels.mainBranchAddress")}
+                </p>
+                <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed">
+                  {request.company.mainBranchAddress || t("common.notSpecified")}
+                </p>
+              </div>
+              <div className="rounded-xl border border-gray-200 p-3">
+                <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                  {t("company.labels.jawazNumber")}
+                </p>
+                <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed">
+                  {request.company.jawazNumber}
+                </p>
+              </div>
+              <div className="rounded-xl border border-gray-200 p-3">
+                <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                  {t("company.labels.tinNumber")}
+                </p>
+                <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed">
+                  {request.company.tinNumber}
+                </p>
+              </div>
+              <div className="rounded-xl border border-gray-200 p-3">
+                <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                  {t("company.labels.jawazIssueDate")}
+                </p>
+                <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed">
+                  {formatDate(request.company.jawazIssueDate)}
+                </p>
+              </div>
+              <div className="rounded-xl border border-gray-200 p-3">
+                <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                  {t("company.labels.jawazExpiryDate")}
+                </p>
+                <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed">
+                  {formatDate(request.company.jawazExpiryDate)}
+                </p>
+              </div>
+              <div className="rounded-xl border border-gray-200 p-3">
+                <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                  {t("company.labels.activityPlace")}
+                </p>
+                <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed">
+                  {request.company.activityPlace}
+                </p>
+              </div>
+              <div className="rounded-xl border border-gray-200 p-3">
+                <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                  {t("company.labels.activityType")}
+                </p>
+                <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed">
+                  {request.company.activityType || t("common.notSpecified")}
+                </p>
+              </div>
+              <div className="rounded-xl border border-gray-200 p-3">
+                <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                  {t("company.labels.categories")}
+                </p>
+                <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed break-words">
+                  {request.company.categories?.map((category) => category.categoryName).filter(Boolean).join(", ") ||
+                    t("common.notSpecified")}
+                </p>
+              </div>
+              <div className="rounded-xl border border-gray-200 p-3">
+                <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                  {t("company.table.createdAt")}
+                </p>
+                <p className="text-xs sm:text-sm font-normal text-gray-800 leading-relaxed">
+                  {formatDate((request.company as any).createdDate)}
+                </p>
               </div>
             </div>
-
-            <div className="border-t border-gray-100 pt-6">
-              {/* <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <Briefcase className="h-5 w-5 text-blue-600" />
-                {t("company.labels.businessInformation")}
-              </h4> */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div className=" rounded-xl p-4">
-                  <p className="text-xs text-blue-600 uppercase tracking-wide mb-1">
-                    {t("company.labels.jawazNumber")}
-                  </p>
-                  <p className="text-lg font-bold text-gray-900">
-                    {request.company.jawazNumber}
-                  </p>
-                </div>
-                   <div className=" rounded-xl p-4">
-                  <p className="text-xs text-blue-600 uppercase tracking-wide mb-1">
-                    {t("company.labels.tinNumber")}
-                  </p>
-                  <p className="text-lg font-bold text-gray-900">
-                    {request.company.tinNumber}
-                  </p>
-                </div>
-                <div className=" rounded-xl p-4">
-                  <p className="text-xs text-purple-600 uppercase tracking-wide mb-1">
-                    {t("company.labels.jawazIssueDate")}
-                  </p>
-                  <p className="text-lg font-bold text-gray-900">
-                    {formatDate(request.company.jawazIssueDate)}
-                  </p>
-                </div>
-                <div className=" rounded-xl p-4">
-                  <p className="text-xs text-orange-600 uppercase tracking-wide mb-1">
-                    {t("company.labels.jawazExpiryDate")}
-                  </p>
-                  <p className="text-lg font-bold text-gray-900">
-                    {formatDate(request.company.jawazExpiryDate)}
-                  </p>
-                </div>
-                <div className="  rounded-xl p-4">
-                  <p className="text-xs text-green-600 uppercase tracking-wide mb-1">
-                    {t("company.labels.establishYear")}
-                  </p>
-                  <p className="text-lg font-bold text-gray-900">
-                    {formatDate(request.company.establishYear)}
-                  </p>
-                </div>
-                <div className="  rounded-xl p-4">
-                  <p className="text-xs text-cyan-600 uppercase tracking-wide mb-1">
-                    {t("company.labels.activityPlace")}
-                  </p>
-                  <p className="text-lg font-bold text-gray-900">
-                    {request.company.activityPlace}
-                  </p>
-                </div>
-                <div className=" rounded-xl p-4">
-                  <p className="text-xs text-amber-600 uppercase tracking-wide mb-1">
-                    {t("company.labels.ownerNameEn")}
-                  </p>
-                  <p className="text-lg font-bold text-gray-900">
-                    {request.company.companyOwnerNameEn}
-                  </p>
-                </div>
-                      <div className=" rounded-xl p-4">
-                  <p className="text-xs text-amber-600 uppercase tracking-wide mb-1">
-                    {t("company.labels.ownerNameDr")}
-                  </p>
-                  <p className="text-lg font-bold text-gray-900">
-                    {request.company.companyOwnerNameDr}
-                  </p>
-                </div>
-              </div>
+            <div className="mt-4 rounded-xl border border-gray-200 p-3">
+              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                {t("company.labels.address")}
+              </p>
+              <p className="text-xs sm:text-sm font-normal text-gray-800 break-words leading-relaxed">
+                {request.company.address}
+              </p>
             </div>
           </div>
         </div>
@@ -264,8 +272,7 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
           </div>
         </div>
 
-        {request.company.categories &&
-          request.company.categories.length > 0 && (
+        {request.company.categories?.some((category) => category?.categoryName) && (
             <div className=" rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
               <div className="px-6 py-4 border-b border-gray-100">
                 <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
@@ -275,10 +282,12 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
               </div>
               <div className="px-6 py-4">
                 <div className="flex flex-wrap gap-2">
-                  {request.company.categories.map((category) => (
+                  {request.company.categories
+                    .filter((category) => category?.categoryName)
+                    .map((category) => (
                     <span
                       key={category.id}
-                      className="px-4 py-2  text-white rounded-full text-sm font-medium shadow-sm hover:shadow-md transition-shadow cursor-default"
+                      className="inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs sm:text-sm font-medium text-blue-800"
                     >
                       {category.categoryName}
                     </span>
@@ -352,7 +361,9 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
             >
               <Phone className="h-5 w-5 text-green-600 group-hover:scale-110 transition-transform" />
               <span className="text-sm font-medium text-gray-700 flex-1 text-left">
-                {request.company.phoneNumber}
+                <span className={phoneDisplayClass} dir="ltr">
+                  {request.company.phoneNumber}
+                </span>
               </span>
             </button>
             {request.company.websiteUrl && (
@@ -448,7 +459,9 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
                         {t("contactPerson.phoneNumber")}
                       </p>
                       <p className="font-medium text-gray-800 group-hover:text-gray-900">
-                        {contactPerson.phoneNumber}
+                        <span className={phoneDisplayClass} dir="ltr">
+                          {contactPerson.phoneNumber}
+                        </span>
                       </p>
                     </div>
                     <ChevronRight className="h-4 w-4 text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity" />
