@@ -26,6 +26,7 @@ const transitionMap: Record<string, string[]> = {
   IN_PROGRESS: ["COMPLETED", "REJECTED"],
   COMPLETED: [],
   REJECTED: [],
+  ROLLED_BACK: [],
 };
 
 export const CommiteeAssingmentUpdate: React.FC<Props> = ({

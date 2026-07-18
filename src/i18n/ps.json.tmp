@@ -1,0 +1,62 @@
+﻿{
+  "navbar": {
+    "welcome": "ÚšÙ‡ Ø±Ø§ØºÙ„Ø§Ø³Øª",
+    "notifications": "Ø®Ø¨Ø±ØªÛŒØ§ÙˆÛ",
+    "unread": "Ù†Ù‡ Ù„ÙˆØ³ØªÙ„ Ø´ÙˆÛ",
+    "viewAllNotifications": "Ù¼ÙˆÙ„Û Ø®Ø¨Ø±ØªÛŒØ§ÙˆÛ ÙˆÚ«ÙˆØ±Ø¦",
+    "myProfile": "Ø²Ù…Ø§ Ù¾Ø±ÙˆÙØ§ÛŒÙ„",
+    "accountSettings": "Ø¯ Ø­Ø³Ø§Ø¨ ØªØ±ØªÛŒØ¨Ø§Øª",
+    "logout": "ÙˆØªÙ„"
+  },
+  "notification": {
+    "newUser": "ÛŒÙˆ Ù†ÙˆÛŒ Ú©Ø§Ø±ÙˆÙ†Ú©ÛŒ Ø´Ø§Ù…Ù„ Ø´Ùˆ",
+    "systemUpdate": "Ø¯ Ø³ÛŒØ³Ù¼Ù… ØªØ§Ø²Ù‡ Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ù…ÙˆØ¬ÙˆØ¯ Ø¯ÙŠ",
+    "reportReady": "Ø³ØªØ§Ø³Ùˆ Ø±Ø§Ù¾ÙˆØ± Ú†Ù…ØªÙˆ Ø¯ÛŒ"
+  },
+  "languages": {
+    "english": "Ø§Ù†Ú«Ù„ÛŒØ³ÙŠ",
+    "persian": "ÙØ§Ø±Ø³ÙŠ (Ø¯Ø±ÛŒ)",
+    "pashto": "Ù¾ÚšØªÙˆ"
+  },
+  "country": {
+    "code": {
+      "label": "Country Code",
+      "placeholder": "kjdakfdsakj"
+    },
+    "form": {
+      "labels": {
+        "countryCode": "Ø¯ Ù‡ÛÙˆØ§Ø¯ Ú©ÙˆÚ‰",
+        "translations": "Ú˜Ø¨Ø§Ú“Û"
+      },
+      "placeholder": {
+        "countryCode": "Ù„Ú©Ù‡ USAØŒ CANØŒ GBR",
+        "enterName": "Ø¯ {{language}} Ù†ÙˆÙ… Ø¯Ù†Ù†Ù‡ Ú©Ú“Ø¦"
+      },
+      "validation": {
+        "countryCode": {
+          "required": "Ø¯ Ù‡ÛÙˆØ§Ø¯ Ú©ÙˆÚ‰ Ø§Ú“ÛŒÙ† Ø¯ÛŒ",
+          "minLength": "Ø¯ Ù‡ÛÙˆØ§Ø¯ Ú©ÙˆÚ‰ Ø¨Ø§ÛŒØ¯ Ù„Ú– ØªØ± Ù„Ú–Ù‡ Û² ØªÙˆØ±ÙŠ ÙˆÙŠ",
+          "maxLength": "Ø¯ Ù‡ÛÙˆØ§Ø¯ Ú©ÙˆÚ‰ Ø¨Ø§ÛŒØ¯ Ù„Ù‡ Û³ ØªÙˆØ±Ùˆ Ø²ÛŒØ§Øª Ù†Ù‡ ÙˆÙŠ"
+        },
+        "translations": {
+          "required": "Ø§Ù†Ú«Ù„ÛŒØ³ÙŠ Ù†ÙˆÙ… Ø§Ú“ÛŒÙ† Ø¯ÛŒ"
+        }
+      },
+      "hint": {
+        "translations": "Ù¼ÙˆÙ„Û Ú˜Ø¨Ø§Ú“Û Ø§Ø®ØªÛŒØ§Ø±ÙŠ Ø¯ÙŠ Ù¾Ø±ØªÙ‡ Ù„Ù‡ Ø§Ù†Ú«Ù„ÛŒØ³ÙŠ"
+      }
+    }
+  },
+  "commitee": {
+    "details": {
+      "memberDirectorate": "Ø±ÛŒØ§Ø³Øª",
+      "position": "Ø¯Ù†Ø¯Ù‡"
+    },
+    "member": {
+      "memberDirectoratePlaceholder": "Ø±ÛŒØ§Ø³Øª ÙˆÙ„ÙŠÚ©Ø¦",
+      "positionPlaceholder": "Ø¯Ù†Ø¯Ù‡ ÙˆÙ„ÙŠÚ©Ø¦",
+      "memberDirectorate": "Ø±ÛŒØ§Ø³Øª",
+      "position": "Ø¯Ù†Ø¯Ù‡"
+    }
+  }
+}

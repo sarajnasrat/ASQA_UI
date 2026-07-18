@@ -7,6 +7,7 @@ import {
   FileText,
   Hash,
   XCircle,
+  RotateCcw,
 } from "lucide-react";
 import type { Assignment, StatusConfig } from "./CommiteeAssignmentView.types";
 import { useAuth } from "../../../../context/AuthContext";
@@ -19,6 +20,7 @@ interface Props {
   getNextStatuses: () => string[];
   getStatusButtonLabel: (status: string) => string;
   getCertificationTypeLabel: (type?: string) => string;
+  onRollbackRequest: () => void;
   onBack: () => void;
   onStatusAction: (status: string) => void;
   onOpenEdit: () => void;
@@ -32,6 +34,7 @@ const CommiteeAssignmentViewHeader: React.FC<Props> = ({
   getNextStatuses,
   getStatusButtonLabel,
   getCertificationTypeLabel,
+  onRollbackRequest,
   onBack,
   onStatusAction,
   t,
@@ -104,6 +107,18 @@ const CommiteeAssignmentViewHeader: React.FC<Props> = ({
           </div>
           {hasPermission("UPDATE_CERTIFICATION") && (
             <div className="flex flex-col sm:flex-row gap-3  lg:w-auto">
+              {request?.requestStatus &&
+                request.requestStatus === "REPORTED_TO_COMMITTEE" && (
+                  <button
+                    type="button"
+                    onClick={onRollbackRequest}
+                    className="flex items-center justify-center px-6 py-2.5 border-2 border-orange-600 text-orange-700 hover:bg-orange-50 active:bg-orange-100 font-medium rounded-lg transition-all duration-200 w-full sm:w-auto"
+                  >
+                    <RotateCcw className="h-4 w-4 mr-2" />
+                    {t("commitee.assignment.recommend")}
+                  </button>
+                )}
+
               {getNextStatuses().map((nextStatus) => {
                 const isReject = nextStatus === "REJECTED";
 

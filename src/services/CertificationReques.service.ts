@@ -75,16 +75,23 @@ export const CertificationRequestService = {
 
   // ✅ PATCH - Update request status
   updateStatus(id: number, status: string, companyId?: number) {
+    const params: Record<string, any> = { status };
+
+    if (companyId !== undefined && companyId !== null && companyId !== "") {
+      params.companyId = companyId;
+    }
+
     return httpClient.patch(
       `${BASE_URL}/${id}/status`,
       null,
       {
-        params: {
-          status,
-          ...(companyId !== undefined && companyId !== null ? { companyId } : {}),
-        },
+        params,
       }
     );
+  },
+
+  rollbackRequest(id: number, status: string, companyId?: number) {
+    return this.updateStatus(id, status, companyId);
   },
   
   rejectCertificationRequest(id: number, rejectionReason: string) {

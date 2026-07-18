@@ -1438,6 +1438,7 @@
       }
     },
     "assignment": {
+          "recommend": "Recommend",
       "details": "Committee Assignment Details",
       "viewAssignmentDetails": "Review assignment metadata and related request information.",
       "detailsNotFound": "Assignment not found",

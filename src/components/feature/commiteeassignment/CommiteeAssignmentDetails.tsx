@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+import { Dialog } from "primereact/dialog";
+import { Dropdown } from "primereact/dropdown";
 import { useTranslation } from "react-i18next";
 import {
   AlertCircle,
   CheckCircle,
   Clock,
   FileText,
+  RotateCcw,
   Shield,
   Users,
   XCircle,
@@ -31,7 +34,26 @@ const transitionMap: Record<string, string[]> = {
   IN_PROGRESS: ["COMPLETED", "REJECTED"],
   COMPLETED: [],
   REJECTED: [],
+  ROLLED_BACK: [],
 };
+
+const rollbackOrder = [
+  "DRAFT",
+  "SUBMITTED",
+  "UNDER_REVIEW",
+  "STANDARDS_PROVIDED",
+  "DEADLINE_REQUIRED",
+  "DEADLINE_ASSIGNED",
+  "INSPECTION_IN_PROGRESS",
+  "REPORTED_TO_COMMITTEE",
+  "REPORT_APPROVED",
+  "APPROVAL_IN_PROGRESS",
+  "COMMITTEE_APPROVED",
+  "PAYMENT_PENDING",
+  "PAYMENT_COMPLETED",
+  "CERTIFICATE_ISSUED",
+  "UNDER_SUPERVISION",
+];
 
 export const CommiteeAssignmentDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -47,6 +69,8 @@ export const CommiteeAssignmentDetails: React.FC = () => {
   >("details");
   const [updateVisible, setUpdateVisible] = useState(false);
   const [preferredStatus, setPreferredStatus] = useState<string | null>(null);
+  const [rollbackVisible, setRollbackVisible] = useState(false);
+  const [rollbackStatus, setRollbackStatus] = useState<string | null>(null);
   const [expandedSections, setExpandedSections] = useState({
     timeline: true,
     assignmentInfo: true,
@@ -130,6 +154,18 @@ export const CommiteeAssignmentDetails: React.FC = () => {
     return transitionMap[assignment.assignmentStatus] || [];
   };
 
+  const getRollbackOptions = () => {
+    const status = request?.requestStatus?.toUpperCase();
+    if (!status) return [];
+    const currentIndex = rollbackOrder.indexOf(status);
+    if (currentIndex <= 0) return [];
+
+    return rollbackOrder.slice(0, currentIndex).reverse().map((value) => ({
+      value,
+      label: t(`certificationRequest.statusOptions.${value}`) || value,
+    }));
+  };
+
   const confirmStatusUpdate = (nextStatus: string) => {
     if (!assignment) return;
 
@@ -152,6 +188,32 @@ export const CommiteeAssignmentDetails: React.FC = () => {
     });
   };
 
+  const handleRollbackRequest = async () => {
+    if (!request?.id || !rollbackStatus) return;
+
+    const response = await handleApi(
+      () =>
+        CommiteeAssignmentService.rollbackRequest(
+          request.id,
+          rollbackStatus,
+          request.company?.id,
+        ),
+      () =>
+        showSuccess(
+          t("common.success"),
+          t("commitee.assignment.rollbackSuccess") || rollbackStatus,
+        ),
+      showError,
+      t,
+    );
+
+    if (response?.status === 200) {
+      setRollbackVisible(false);
+      setRollbackStatus(null);
+      loadAssignment();
+    }
+  };
+
   const formatDate = (value?: string | null) => {
     if (!value) return "-";
     return IslamicDateFormatter.formatQamari(value, true);
@@ -169,6 +231,7 @@ export const CommiteeAssignmentDetails: React.FC = () => {
       IN_PROGRESS: t("commitee.assignment.status.in_progress"),
       COMPLETED: t("commitee.assignment.status.completed"),
       REJECTED: t("commitee.assignment.status.rejected"),
+      ROLLED_BACK: t("commitee.assignment.status.rolled_back"),
     };
 
     return statusMap[status] || status;
@@ -199,6 +262,12 @@ export const CommiteeAssignmentDetails: React.FC = () => {
         bgColor: "bg-red-100",
         icon: <XCircle className="h-4 w-4" />,
         label: t("commitee.assignment.status.rejected"),
+      },
+      ROLLED_BACK: {
+        color: "text-orange-700",
+        bgColor: "bg-orange-100",
+        icon: <RotateCcw className="h-4 w-4" />,
+        label: t("commitee.assignment.status.rolled_back"),
       },
     };
 
@@ -282,6 +351,7 @@ export const CommiteeAssignmentDetails: React.FC = () => {
       STANDARD_MARK_CERTIFICATION: t(
         "certificationRequest.certificationTypeOptions.STANDARD_MARK_CERTIFICATION",
       ),
+      SERVICE_QUALITY: t("certificationRequest.certificationTypeOptions.SERVICE_QUALITY"),
     };
     return type ? types[type] || type : "-";
   };
@@ -360,6 +430,7 @@ export const CommiteeAssignmentDetails: React.FC = () => {
           getNextStatuses={getNextStatuses}
           getStatusButtonLabel={getStatusButtonLabel}
           getCertificationTypeLabel={getCertificationTypeLabel}
+          onRollbackRequest={() => setRollbackVisible(true)}
           onBack={() => navigate(getReturnPath())}
           onStatusAction={confirmStatusUpdate}
           onOpenEdit={() => {
@@ -435,6 +506,51 @@ export const CommiteeAssignmentDetails: React.FC = () => {
         preferredStatus={preferredStatus}
         onSuccess={handleUpdateSuccess}
       />
+
+      <Dialog
+        visible={rollbackVisible}
+        onHide={() => {
+          setRollbackVisible(false);
+          setRollbackStatus(null);
+        }}
+        header={t("commitee.assignment.recommend")}
+        style={{ width: "32rem" }}
+        footer={
+          <div className="flex justify-end gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                setRollbackVisible(false);
+                setRollbackStatus(null);
+              }}
+              className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700"
+            >
+              {t("common.cancel")}
+            </button>
+            <button
+              type="button"
+              onClick={handleRollbackRequest}
+              disabled={!rollbackStatus}
+              className="px-4 py-2 rounded-lg bg-orange-600 text-white disabled:opacity-50"
+            >
+              {t("common.save")}
+            </button>
+          </div>
+        }
+      >
+        <div className="space-y-3">
+          <p className="text-sm text-gray-600">
+            {t("commitee.assignment.rollbackDescription")}
+          </p>
+          <Dropdown
+            className="w-full"
+            value={rollbackStatus}
+            options={getRollbackOptions()}
+            onChange={(e) => setRollbackStatus(e.value)}
+            placeholder={t("commitee.assignment.rollbackSelect")}
+          />
+        </div>
+      </Dialog>
     </div>
   );
 };

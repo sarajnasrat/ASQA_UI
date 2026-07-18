@@ -9,13 +9,13 @@
     "logout": "وتل"
   },
   "notification": {
-    "newUser": "یو نوی کارونکی شامل شو",
+    "newUser": "یو نوی کاروونکی شامل شو",
     "systemUpdate": "د سیسټم تازه معلومات موجود دي",
     "reportReady": "ستاسو راپور چمتو دی"
   },
   "languages": {
     "english": "انګلیسي",
-    "persian": "فارسي (دری)",
+    "persian": "فارسي (دري)",
     "pashto": "پښتو"
   },
   "country": {
@@ -25,7 +25,7 @@
     },
     "form": {
       "labels": {
-        "countryCode": "د هېواد کوډ",
+        "countryCode": "د هیواد کوډ",
         "translations": "ژباړې"
       },
       "placeholder": {
@@ -34,9 +34,9 @@
       },
       "validation": {
         "countryCode": {
-          "required": "د هېواد کوډ اړین دی",
-          "minLength": "د هېواد کوډ باید لږ تر لږه ۲ توري وي",
-          "maxLength": "د هېواد کوډ باید له ۳ تورو زیات نه وي"
+          "required": "د هیواد کوډ اړین دی",
+          "minLength": "د هیواد کوډ باید لږ تر لږه ۲ توري وي",
+          "maxLength": "د هیواد کوډ باید له ۳ تورو زیات نه وي"
         },
         "translations": {
           "required": "انګلیسي نوم اړین دی"
@@ -52,9 +52,62 @@
       "memberDirectorate": "ریاست",
       "position": "دنده"
     },
+    "assignment": {
+      "details": "د سپارنې جزئیات",
+      "list": "د کمیټې د سپارنو لست",
+      "requestType": "د غوښتنې ډول",
+      "certificationType": "د تصدیق ډول",
+      "assignmentBy": "سپارل شوی له خوا",
+      "assignmentAt": "د سپارنې نېټه",
+      "reason": "دلیل",
+      "notMentioned": "یاد شوی نه دی",
+      "payments": "تادیات",
+      "noPaymentRecords": "د تادیې ریکارډ نشته",
+      "timelineEvents": "مهالي پېښې",
+      "schedule": "مهالوېش",
+      "detailsNotFound": "د سپارنې جزئیات ونه موندل شول",
+      "detailsNotFoundMessage": "غوښتل شوې سپارنه ونه موندل شوه.",
+      "confirmStartProgress": "ایا تاسو ډاډه یاست چې غواړئ دا سپارنه د جریان حالت ته یوسئ؟",
+      "confirmComplete": "ایا تاسو ډاډه یاست چې غواړئ دا سپارنه بشپړه کړئ؟",
+      "yes": "هو",
+      "no": "نه",
+      "byLabel": "له خوا",
+      "deadline": "وروستۍ نېټه",
+      "recommend": "توصیه",
+      "rollbackSelect": "د بېرته ګرځولو مرحله وټاکئ",
+      "rollbackDescription": "د دې غوښتنې د بېرته ګرځولو لپاره پخوانۍ مرحله وټاکئ.",
+      "rollbackSuccess": "غوښتنه په بریالیتوب سره پخوانۍ مرحلې ته بېرته وګرځول شوه",
+      "roles": {
+        "CHAIRPERSON": "رئیس",
+        "MEMBER": "غړی"
+      },
+      "tabs": {
+        "detailsShort": "جزئیات",
+        "companyShort": "شرکت",
+        "documentsShort": "اسناد"
+      },
+      "dialog": {
+        "updateTitle": "د سپارنې وضعیت تازه کول",
+        "statusLabel": "وضعیت",
+        "statusPlaceholder": "وضعیت وټاکئ",
+        "commentsLabel": "تبصرې",
+        "uploadReportFile": "د راپور فایل پورته کړئ"
+      },
+      "status": {
+        "assinged": "سپارل شوی",
+        "in_progress": "په جریان کې",
+        "completed": "بشپړ شوی",
+        "rejected": "رد شوی",
+        "rolled_back": "بېرته ګرځول شوی",
+        "under_review": "تر بیاکتنې لاندې",
+        "pinding": "په تمه",
+        "ACTIVE": "فعال",
+        "INACTIVE": "غیر فعال"
+      }
+    },
     "member": {
-      "memberDirectoratePlaceholder": "ریاست وليکئ",
-      "positionPlaceholder": "دنده وليکئ",
+      "memberDirectoratePlaceholder": "ریاست ولیکئ",
+      "positionPlaceholder": "دنده ولیکئ",
       "memberDirectorate": "ریاست",
       "position": "دنده"
     }

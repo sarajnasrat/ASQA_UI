@@ -232,7 +232,7 @@ const CertificationRequestView: React.FC = () => {
   const getNextStatuses = () => {
     if (!request?.requestStatus) return [];
     if (request.requestStatus === "UNDER_REVIEW") {
-      return ["DEADLINE_REQUIRED"];
+      return ["STANDARDS_PROVIDED"];
     }
     return transitionMap[request.requestStatus] || [];
   };
@@ -1046,7 +1046,7 @@ const CertificationRequestView: React.FC = () => {
             CertificationRequestService.updateStatus(
               request.id,
               effectiveNextStatus,
-              request.company?.id,
+              request.company?.id ?? undefined,
             ),
         showSuccess,
         showError,
@@ -1151,10 +1151,10 @@ const CertificationRequestView: React.FC = () => {
     const isReject = pendingStatus === "REJECTED";
     const isUnderReviewDecision =
       request?.requestStatus === "UNDER_REVIEW" &&
-      pendingStatus === "DEADLINE_REQUIRED";
+      pendingStatus === "STANDARDS_PROVIDED";
     const isStandardProvided =
-      pendingStatus === "STANDARDS_PROVIDED" ||
-      (isUnderReviewDecision && standardRequiredChoice);
+      pendingStatus === "STANDARDS_PROVIDED" &&
+      (!isUnderReviewDecision || standardRequiredChoice);
     const isDeadlineAssigned = pendingStatus === "DEADLINE_ASSIGNED";
     const isInspectionInProgress = pendingStatus === "INSPECTION_IN_PROGRESS";
 
@@ -1215,8 +1215,10 @@ const CertificationRequestView: React.FC = () => {
       if (response?.status === 200) {
         closeStatusDialog();
         navigateAfterStatusUpdate(
-          isUnderReviewDecision && standardRequiredChoice
-            ? "STANDARDS_PROVIDED"
+          isUnderReviewDecision
+            ? standardRequiredChoice
+              ? "STANDARDS_PROVIDED"
+              : "DEADLINE_REQUIRED"
             : pendingStatus,
         );
       }
@@ -1471,10 +1473,10 @@ const CertificationRequestView: React.FC = () => {
   const isRejectDialog = pendingStatus === "REJECTED";
   const isUnderReviewDecisionDialog =
     request?.requestStatus === "UNDER_REVIEW" &&
-    pendingStatus === "DEADLINE_REQUIRED";
+    pendingStatus === "STANDARDS_PROVIDED";
   const isStandardProvidedDialog =
-    pendingStatus === "STANDARDS_PROVIDED" ||
-    (isUnderReviewDecisionDialog && standardRequiredChoice);
+    pendingStatus === "STANDARDS_PROVIDED" &&
+    (!isUnderReviewDecisionDialog || standardRequiredChoice);
   const isDeadlineAssignedDialog = pendingStatus === "DEADLINE_ASSIGNED";
   const isInspectionInProgressDialog =
     pendingStatus === "INSPECTION_IN_PROGRESS";

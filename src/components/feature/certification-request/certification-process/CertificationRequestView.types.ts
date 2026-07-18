@@ -116,3 +116,8 @@ export interface StatusConfig {
   icon: ReactNode;
   label: string;
 }
+
+export interface RollbackOption {
+  label: string;
+  value: string;
+}

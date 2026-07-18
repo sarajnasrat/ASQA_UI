@@ -48,6 +48,59 @@
       "memberDirectorate": "ریاست",
       "position": "وظیفه"
     },
+    "assignment": {
+      "details": "جزئیات ارجاع",
+      "list": "لیست ارجاعات کمیته",
+      "requestType": "نوع درخواست",
+      "certificationType": "نوع تاییدیه",
+      "assignmentBy": "ارجاع شده از طرف",
+      "assignmentAt": "تاریخ ارجاع",
+      "reason": "دلیل",
+      "notMentioned": "ذکر نشده",
+      "payments": "پرداخت‌ها",
+      "noPaymentRecords": "رکورد پرداخت موجود نیست",
+      "timelineEvents": "رویدادهای زمانی",
+      "schedule": "برنامه زمانی",
+      "detailsNotFound": "جزئیات ارجاع یافت نشد",
+      "detailsNotFoundMessage": "ارجاع درخواست شده یافت نشد.",
+      "confirmStartProgress": "آیا مطمئن هستید که می‌خواهید این ارجاع را در حالت در جریان ببرید؟",
+      "confirmComplete": "آیا مطمئن هستید که می‌خواهید این ارجاع را تکمیل کنید؟",
+      "yes": "بلی",
+      "no": "خیر",
+      "byLabel": "از طرف",
+      "deadline": "میعاد",
+      "recommend": "توصیه",
+      "rollbackSelect": "مرحله برگشت را انتخاب کنید",
+      "rollbackDescription": "مرحله قبلی را برای برگشت این درخواست انتخاب کنید.",
+      "rollbackSuccess": "درخواست با موفقیت به مرحله قبلی برگشت داده شد",
+      "roles": {
+        "CHAIRPERSON": "رئیس",
+        "MEMBER": "عضو"
+      },
+      "tabs": {
+        "detailsShort": "جزئیات",
+        "companyShort": "شرکت",
+        "documentsShort": "اسناد"
+      },
+      "dialog": {
+        "updateTitle": "به‌روزرسانی وضعیت ارجاع",
+        "statusLabel": "وضعیت",
+        "statusPlaceholder": "وضعیت را انتخاب کنید",
+        "commentsLabel": "نظرات",
+        "uploadReportFile": "آپلود فایل گزارش"
+      },
+      "status": {
+        "assinged": "ارجاع شده",
+        "in_progress": "در جریان",
+        "completed": "تکمیل شده",
+        "rejected": "رد شده",
+        "rolled_back": "برگشت داده شد",
+        "under_review": "در بررسی",
+        "pinding": "در انتظار",
+        "ACTIVE": "فعال",
+        "INACTIVE": "غیر فعال"
+      }
+    },
     "member": {
       "memberDirectoratePlaceholder": "ریاست عضو را وارد کنید",
       "positionPlaceholder": "وظیفه را وارد کنید",

@@ -248,6 +248,8 @@ const loadData = async () => {
               ? "success"
               : row.assignmentStatus === "REJECTED"
                 ? "danger"
+                : row.assignmentStatus === "ROLLED_BACK"
+                  ? "warning"
                 : row.assignmentStatus === "IN_PROGRESS"
                   ? "warning"
                   : "info"
@@ -333,6 +335,11 @@ const loadData = async () => {
       label: t("commitee.assignment.status.rejected"),
       value: "REJECTED",
       icon: "pi pi-cancel",
+    },
+    {
+      label: t("commitee.assignment.status.rolled_back"),
+      value: "ROLLED_BACK",
+      icon: "pi pi-undo",
     },
   ];
 

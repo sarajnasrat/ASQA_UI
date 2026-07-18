@@ -116,6 +116,19 @@ patchUpdate(id: number, data: any, file?: File) {
     },
   });
 },
+
+rollbackRequest(requestId: number, status: string, companyId?: number) {
+  const params: Record<string, any> = { status };
+
+  if (companyId !== undefined && companyId !== null && companyId !== "") {
+    params.companyId = companyId;
+  }
+
+  return httpClient.patch(`/certificationrequest/${requestId}/status`, null, {
+    params,
+  });
+},
+
   // ================= DELETE =================
   delete(id: number) {
     return httpClient.delete(`${BASE_URL}/${id}`);

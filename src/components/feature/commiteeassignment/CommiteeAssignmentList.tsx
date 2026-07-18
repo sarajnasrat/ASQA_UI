@@ -244,6 +244,8 @@ export const CommiteeAssignmentList: React.FC = () => {
               ? "success"
               : row.assignmentStatus === "REJECTED"
                 ? "danger"
+                : row.assignmentStatus === "ROLLED_BACK"
+                  ? "warning"
                 : row.assignmentStatus === "IN_PROGRESS"
                   ? "warning"
                   : "info"
@@ -329,6 +331,11 @@ export const CommiteeAssignmentList: React.FC = () => {
       label: t("commitee.assignment.status.rejected"),
       value: "REJECTED",
       icon: "pi pi-cancel",
+    },
+    {
+      label: t("commitee.assignment.status.rolled_back"),
+      value: "ROLLED_BACK",
+      icon: "pi pi-undo",
     },
   ];
 

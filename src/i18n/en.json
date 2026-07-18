@@ -52,6 +52,59 @@
       "memberDirectorate": "Directorate",
       "position": "Position"
     },
+    "assignment": {
+      "details": "Assignment Details",
+      "list": "Committee Assignments",
+      "requestType": "Request Type",
+      "certificationType": "Certification Type",
+      "assignmentBy": "Assigned By",
+      "assignmentAt": "Assigned At",
+      "reason": "Reason",
+      "notMentioned": "Not mentioned",
+      "payments": "Payments",
+      "noPaymentRecords": "No payment records",
+      "timelineEvents": "Timeline Events",
+      "schedule": "Schedule",
+      "detailsNotFound": "Assignment details not found",
+      "detailsNotFoundMessage": "The requested assignment could not be found.",
+      "confirmStartProgress": "Are you sure you want to start progress for this assignment?",
+      "confirmComplete": "Are you sure you want to complete this assignment?",
+      "yes": "Yes",
+      "no": "No",
+      "byLabel": "By",
+      "deadline": "Deadline",
+      "recommend": "Recommend",
+      "rollbackSelect": "Select rollback stage",
+      "rollbackDescription": "Select the earlier stage to roll back this request.",
+      "rollbackSuccess": "Request rolled back successfully",
+      "roles": {
+        "CHAIRPERSON": "Chairperson",
+        "MEMBER": "Member"
+      },
+      "tabs": {
+        "detailsShort": "Details",
+        "companyShort": "Company",
+        "documentsShort": "Documents"
+      },
+      "dialog": {
+        "updateTitle": "Update Assignment Status",
+        "statusLabel": "Status",
+        "statusPlaceholder": "Select status",
+        "commentsLabel": "Comments",
+        "uploadReportFile": "Upload report file"
+      },
+      "status": {
+        "assinged": "Assigned",
+        "in_progress": "In Progress",
+        "completed": "Completed",
+        "rejected": "Rejected",
+        "rolled_back": "Rolled back",
+        "under_review": "Under Review",
+        "pinding": "Pending",
+        "ACTIVE": "Active",
+        "INACTIVE": "Inactive"
+      }
+    },
     "member": {
       "memberDirectoratePlaceholder": "Enter directorate",
       "positionPlaceholder": "Enter position",
