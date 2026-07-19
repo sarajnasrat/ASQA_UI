@@ -18,6 +18,7 @@ import { useAppToast } from "../../../hooks/useToast";
 import { handleApi } from "../../../hooks/handleApi";
 import { useTranslation } from "react-i18next";
 import CertificationRequestService from "../../../services/CertificationReques.service";
+import AttachmentService from "../../../services/attachment.service";
 import CommiteeService from "../../../services/comitee.service";
 import FileUploadField from "../../common/FileUploadField";
 import { SmartDatePicker } from "../../common/datepicker/SmartDatePicker";
@@ -982,6 +983,43 @@ const CertificationRequestView: React.FC = () => {
         showError,
         t,
       );
+    } else if (
+      request.requestStatus === "UNDER_REVIEW" &&
+      options?.standardRequired
+    ) {
+      if (!options?.standardFile) {
+        showToast("warn", t("common.warning"), "Please upload standard file");
+        return;
+      }
+
+      response = await handleApi(
+        () =>
+          AttachmentService.create(
+            options.standardFile!,
+            options.standardFile!.name,
+            request.id,
+            "STANDARD",
+          ),
+        showSuccess,
+        showError,
+        t,
+      );
+      if (!response) {
+        return response;
+      }
+
+      response = await handleApi(
+        () =>
+          CertificationRequestService.updateStatus(
+            request.id,
+            "STANDARDS_PROVIDED",
+            request.company?.id ?? undefined,
+            true,
+          ),
+        showSuccess,
+        showError,
+        t,
+      );
     } else if (effectiveNextStatus === "STANDARDS_PROVIDED") {
       if (!options?.standardFile) {
         showToast("warn", t("common.warning"), "Please upload standard file");
@@ -992,8 +1030,7 @@ const CertificationRequestView: React.FC = () => {
       formData.append("file", options.standardFile);
 
       response = await handleApi(
-        () =>
-          CertificationRequestService.standardProvided(request.id, formData),
+        () => CertificationRequestService.standardProvided(request.id, formData),
         showSuccess,
         showError,
         t,
@@ -1047,6 +1084,9 @@ const CertificationRequestView: React.FC = () => {
               request.id,
               effectiveNextStatus,
               request.company?.id ?? undefined,
+              request.requestStatus === "UNDER_REVIEW"
+                ? options?.standardRequired
+                : undefined,
             ),
         showSuccess,
         showError,
@@ -1215,11 +1255,7 @@ const CertificationRequestView: React.FC = () => {
       if (response?.status === 200) {
         closeStatusDialog();
         navigateAfterStatusUpdate(
-          isUnderReviewDecision
-            ? standardRequiredChoice
-              ? "STANDARDS_PROVIDED"
-              : "DEADLINE_REQUIRED"
-            : pendingStatus,
+          isUnderReviewDecision ? "DEADLINE_REQUIRED" : pendingStatus,
         );
       }
     } catch (error) {
@@ -1480,7 +1516,10 @@ const CertificationRequestView: React.FC = () => {
   const isDeadlineAssignedDialog = pendingStatus === "DEADLINE_ASSIGNED";
   const isInspectionInProgressDialog =
     pendingStatus === "INSPECTION_IN_PROGRESS";
-  const dialogRequestType = getCertificationTypeLabel(
+  const dialogRequestType = getRequestTypeLabel(
+    request?.requestType || "",
+  );
+    const dialogCertificationType = getCertificationTypeLabel(
     request?.certificationType || "",
   );
   const dialogRequestId =
@@ -1555,6 +1594,14 @@ const CertificationRequestView: React.FC = () => {
           <div className="space-y-4">
             <div className="bg-gray-50 rounded-lg p-4 space-y-2 border border-gray-100">
               <div className="flex justify-between items-center py-1">
+                <span className="text-sm text-gray-500">
+                  {t("certificationRequest.labels.certificationType")}
+                </span>
+                <span className="text-sm font-semibold text-gray-800">
+                  {dialogCertificationType}
+                </span>
+              </div>
+                   <div className="flex justify-between items-center py-1">
                 <span className="text-sm text-gray-500">
                   {t("certificationRequest.labels.requestType")}
                 </span>

@@ -152,7 +152,12 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
         formData.append("file", selectedFile);
 
         response = await handleApi(
-          () => CertificationRequestService.standardProvided(requestId, formData),
+          () =>
+            CertificationRequestService.standardProvided(
+              requestId,
+              formData,
+              true,
+            ),
           showSuccess,
           showError,
           t,
@@ -207,7 +212,10 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
 
         response = await handleApi(
           () =>
-            CertificationRequestService.standardProvided(requestId, formData),
+            CertificationRequestService.standardProvided(
+              requestId,
+              formData,
+            ),
           showSuccess,
           showError,
           t,

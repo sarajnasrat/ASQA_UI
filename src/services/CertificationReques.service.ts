@@ -74,11 +74,20 @@ export const CertificationRequestService = {
   },
 
   // ✅ PATCH - Update request status
-  updateStatus(id: number, status: string, companyId?: number) {
+  updateStatus(
+    id: number,
+    status: string,
+    companyId?: number,
+    standardRequired?: boolean,
+  ) {
     const params: Record<string, any> = { status };
 
     if (companyId !== undefined && companyId !== null && companyId !== "") {
       params.companyId = companyId;
+    }
+
+    if (standardRequired !== undefined) {
+      params.standardRequired = standardRequired;
     }
 
     return httpClient.patch(

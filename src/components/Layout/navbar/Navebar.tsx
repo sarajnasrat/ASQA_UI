@@ -112,6 +112,8 @@ export const Navbar = ({ collapsed = false }: NavbarProps) => {
       i18n.language === "ps" || i18n.language === "dr" ? "rtl" : "ltr";
   }, [i18n.language]);
 
+  const isRTL = i18n.language === "ps" || i18n.language === "dr";
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -251,8 +253,12 @@ export const Navbar = ({ collapsed = false }: NavbarProps) => {
               dismissable
               className="w-[92vw] max-w-md"
             >
-              <div className="min-w-0">
-                <div className="mb-3 flex items-center justify-between gap-3 border-b border-gray-100 pb-3">
+              <div dir={isRTL ? "rtl" : "ltr"} className="min-w-0">
+                <div
+                  className={`mb-3 flex items-center justify-between gap-3 border-b border-gray-100 pb-3 ${
+                    isRTL ? "text-right" : "text-left"
+                  }`}
+                >
                   <div>
                     <h3 className="text-base font-semibold text-gray-800">
                       {t("notification.title")}
@@ -279,13 +285,19 @@ export const Navbar = ({ collapsed = false }: NavbarProps) => {
                     {t("notification.empty") || t("company.messages.noData")}
                   </div>
                 ) : (
-                  <div className="max-h-96 space-y-2 overflow-y-auto pr-1">
+                  <div
+                    className={`max-h-96 space-y-2 overflow-y-auto ${
+                      isRTL ? "pl-1" : "pr-1"
+                    }`}
+                  >
                     {notifications.map((item) => (
                       <button
                         key={item.id}
                         type="button"
                         onClick={() => handleOpenNotification(item)}
-                        className={`w-full rounded-xl border p-3 text-left transition-colors ${
+                        className={`w-full rounded-xl border p-3 transition-colors ${
+                          isRTL ? "text-right" : "text-left"
+                        } ${
                           getIsRead(item)
                             ? "border-gray-100 bg-white hover:bg-gray-50"
                             : "border-blue-100 bg-blue-50/70 hover:bg-blue-50"

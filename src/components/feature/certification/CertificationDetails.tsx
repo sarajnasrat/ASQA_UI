@@ -422,7 +422,7 @@ export const CertificationDetails: React.FC = () => {
       t,
     );
     if (response) {
-      loadDetails();
+      navigate("/certifications");
     }
   };
 
