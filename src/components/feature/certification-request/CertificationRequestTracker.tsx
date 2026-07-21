@@ -111,8 +111,8 @@ const useStatusConfig = (): StatusConfig => {
       color: "text-amber-600",
       bg: "bg-amber-50",
     },
-    CERTIFICATE_ISSUED: {
-      label: t("certificationRequest.statusOptions.public.CERTIFICATE_ISSUED"),
+    CERTIFICATION_ISSUED: {
+      label: t("certificationRequest.statusOptions.public.CERTIFICATION_ISSUED"),
       icon: <CheckCircle2 size={14} />,
       color: "text-green-600",
       bg: "bg-green-50",

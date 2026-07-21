@@ -13,8 +13,8 @@ export const Report = () => {
   // ================= TAB ITEMS =================
   const statusTabs: StatusTabItem[] = [
         {
-      label: t("certificationRequest.statusOptions.CERTIFICATE_ISSUED"),
-      value: "CERTIFICATE_ISSUED",
+      label: t("certificationRequest.statusOptions.AUTHORITY_DECISION"),
+      value: "AUTHORITY_DECISION",
       icon: "pi pi-check-circle",
     },
     {

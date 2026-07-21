@@ -67,7 +67,7 @@ export const CertificationRequestTracking = () => {
         return "warning";
       case "REPORT_APPROVED":
       case "PAYMENT_COMPLETED":
-      case "CERTIFICATE_ISSUED":
+      case "CERTIFICATION_ISSUED":
         return "success";
       case "REJECTED":
       case "CANCELLED":

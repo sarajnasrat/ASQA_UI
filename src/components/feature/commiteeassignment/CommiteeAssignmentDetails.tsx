@@ -51,7 +51,7 @@ const rollbackOrder = [
   "COMMITTEE_APPROVED",
   "PAYMENT_PENDING",
   "PAYMENT_COMPLETED",
-  "CERTIFICATE_ISSUED",
+  "CERTIFICATION_ISSUED",
   "UNDER_SUPERVISION",
 ];
 
@@ -351,6 +351,9 @@ export const CommiteeAssignmentDetails: React.FC = () => {
       STANDARD_MARK_CERTIFICATION: t(
         "certificationRequest.certificationTypeOptions.STANDARD_MARK_CERTIFICATION",
       ),
+      MANAGEMENT_SYSTEM_QUALITY: t(
+        "certificationRequest.certificationTypeOptions.MANAGEMENT_SYSTEM_QUALITY",
+      ),
       SERVICE_QUALITY: t("certificationRequest.certificationTypeOptions.SERVICE_QUALITY"),
     };
     return type ? types[type] || type : "-";
@@ -430,6 +433,10 @@ export const CommiteeAssignmentDetails: React.FC = () => {
           getNextStatuses={getNextStatuses}
           getStatusButtonLabel={getStatusButtonLabel}
           getCertificationTypeLabel={getCertificationTypeLabel}
+          showRecommendation={
+            assignment.committee?.committeeType?.toUpperCase() === "APPROVAL" &&
+            assignment.assignmentStatus !== "ASSIGNED"
+          }
           onRollbackRequest={() => setRollbackVisible(true)}
           onBack={() => navigate(getReturnPath())}
           onStatusAction={confirmStatusUpdate}

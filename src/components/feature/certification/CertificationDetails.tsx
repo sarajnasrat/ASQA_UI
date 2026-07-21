@@ -189,7 +189,8 @@ type CertificationDetails = {
 const statusTransitions: Record<string, string[]> = {
   DRAFT: ["PRINTED"],
   PRINTED: ["SCANNED"],
-  SCANNED: ["UNDER_SUPERVISION"],
+  CERTIFICATION_ISSUED: ["UNDER_SUPERVISION"],
+  SCANNED: ["CERTIFICATION_ISSUED"],
   UNDER_SUPERVISION: [],
 };
 
@@ -393,6 +394,12 @@ export const CertificationDetails: React.FC = () => {
         icon: <CheckCircle2 className="h-4 w-4" />,
         label: t("certification.statusOptions.SCANNED"),
       },
+      CERTIFICATION_ISSUED: {
+        color: "text-green-700",
+        bgColor: "bg-green-100",
+        icon: <CheckCircle2 className="h-4 w-4" />,
+        label: t("certification.statusOptions.CERTIFICATION_ISSUED"),
+      },
       UNDER_SUPERVISION: {
         color: "text-purple-700",
         bgColor: "bg-purple-100",
@@ -448,7 +455,11 @@ export const CertificationDetails: React.FC = () => {
       message: (
         <div className="space-y-4">
           <p className="text-gray-700">
-            {t("certification.confirmStatusUpdate")}{" "}
+            {t(
+              normalizedStatus === "CERTIFICATION_ISSUED"
+                ? "certification.confirmCertificationIssued"
+                : "certification.confirmStatusUpdate",
+            )}{" "}
             {/* <b>{t(`certification.statusOptions.${normalizedStatus}` || normalizedStatus)}</b>? */}
           </p>
           <div className="rounded-xl bg-gray-50 border border-gray-100 p-4 text-sm space-y-2">
@@ -530,6 +541,7 @@ export const CertificationDetails: React.FC = () => {
           >
             {t("common.back")}
           </button>
+          
         </div>
       </div>
     );
@@ -615,7 +627,7 @@ export const CertificationDetails: React.FC = () => {
                             : "bg-green-600 text-white hover:bg-green-700"
                         }`}
                       >
-                        {t(`certification.steps.${status}`, labelize(status))}
+                        {t(`certification.steps.${status}`)}
                       </button>
                     ))}
                 </div>
@@ -728,7 +740,7 @@ export const CertificationDetails: React.FC = () => {
                         icon: <Tag />,
                         label: t("certificationRequest.certificationScope"),
                         value: t(
-                          `certificationRequest.scoreOptions.${details.certificationRequest.certificationScope}`,
+                          `certificationRequest.scopeOptions.${details.certificationRequest.certificationScope}`,
                         ), // TODO: use labelize(  details.certificationType),
                       },
                       {
@@ -1607,13 +1619,12 @@ export const CertificationDetails: React.FC = () => {
           onHide={() => setUpdateDialogVisible(false)}
           showToast={showToast}
           onUpdated={async () => {
-            await updateStatus("PRINTED");
             await loadDetails();
             setUpdateDialogVisible(false);
             showToast(
               "success",
               t("common.success"),
-              t("certification.statusOptions.PRINTED"),
+              t("certification.statusOptions.SCANNED"),
             );
           }}
         />

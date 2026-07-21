@@ -46,7 +46,9 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
 
     REPORT_APPROVED: ["PAYMENT_PENDING"],
     PAYMENT_PENDING: ["PAYMENT_COMPLETED"],
-    PAYMENT_COMPLETED: ["CERTIFICATE_ISSUED"],
+    PAYMENT_COMPLETED: ["AUTHORITY_DECISION"],
+    // Final issuance is performed from the certification module.
+    AUTHORITY_DECISION: [],
   };
 
   const finalStates = ["UNDER_SUPERVISION", "REJECTED", "CANCELLED"];
@@ -256,7 +258,8 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
       case "UNDER_REVIEW":
       case "REJECTED":
       case "REPORT_APPROVED":
-      case "CERTIFICATE_ISSUED":
+      case "AUTHORITY_DECISION":
+      case "CERTIFICATION_ISSUED":
         navigate("/certification-request");
         break;
       case "PAYMENT_PENDING":

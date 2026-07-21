@@ -48,9 +48,9 @@
     "types": {
       "REQUEST_SUBMITTED": "ثبت درخواست",
       "REQUEST_STATUS_CHANGED": "تغییر وضعیت درخواست",
-      "CERTIFICATE_ISSUED": "صدور تصدیق‌نامه",
-      "CERTIFICATE_EXPIRING_SOON": "نزدیک شدن ختم اعتبار تصدیق‌نامه",
-      "CERTIFICATE_EXPIRED": "ختم اعتبار تصدیق‌نامه",
+      "CERTIFICATE_ISSUED": "صدور سند",
+      "CERTIFICATE_EXPIRING_SOON": "نزدیک شدن ختم اعتبار سند",
+      "CERTIFICATE_EXPIRED": "ختم اعتبار سند",
       "INSPECTION_DEADLINE_REACHED": "رسیدن مهلت بررسی",
       "INSPECTION_OVERDUE": "تاخیر در بررسی"
     },
@@ -66,36 +66,36 @@
       "REPORT_APPROVED": "گزارش تایید شد",
       "PAYMENT_PENDING": "در انتظار پرداخت",
       "PAYMENT_COMPLETED": "پرداخت تکمیل شد",
-      "CERTIFICATE_ISSUED": "تصدیق‌نامه صادر شد",
+      "CERTIFICATE_ISSUED": "سند صادر شده",
       "REJECTED": "رد شد",
       "CANCELLED": "لغو شد"
     },
     "templates": {
       "requestSubmitted": {
-        "title": "درخواست جدید تصدیق‌نامه ثبت شد",
-        "message": "درخواست جدید تصدیق‌نامه با شماره تعقیب {{trackingNumber}} ثبت شده و منتظر بررسی است."
+        "title": "درخواست جدیدسند ثبت شد",
+        "message": "درخواست جدید سند با شماره تعقیب {{trackingNumber}} ثبت شده و منتظر بررسی است."
       },
       "requestStatusChanged": {
         "title": "وضعیت درخواست به‌روزرسانی شد",
         "message": "وضعیت درخواست {{trackingNumber}} از {{oldStatus}} به {{newStatus}} تغییر کرد. مهلت در {{endDate}} ختم می‌شود. دلیل: {{rejectionReason}}"
       },
       "requestRejectedForAdmin": {
-        "title": "درخواست تصدیق‌نامه رد شد",
+        "title": "درخواست سند رد شد",
         "message": "درخواست {{trackingNumber}} رد شده است."
       },
       "certificateIssued": {
-        "title": "تصدیق‌نامه صادر شد",
-        "message": "تصدیق‌نامه شما {{certificateName}} برای درخواست {{trackingNumber}} صادر شد."
+        "title": "سند صادر شده",
+        "message": "سند شما {{certificateName}} برای درخواست {{trackingNumber}} صادر شد."
       },
       "certificateExpiringSoon": {
-        "title": "تصدیق‌نامه به زودی منقضی می‌شود",
-        "companyMessage": "تصدیق‌نامه {{certificateName}} در تاریخ {{expiryDate}} منقضی می‌شود.",
-        "adminMessage": "تصدیق‌نامه {{certificateName}} مربوط شرکت {{companyName}} در تاریخ {{expiryDate}} منقضی می‌شود."
+        "title": "سند به زودی منقضی می‌شود",
+        "companyMessage": "سند {{certificateName}} در تاریخ {{expiryDate}} منقضی می‌شود.",
+        "adminMessage": "سند {{certificateName}} مربوط شرکت {{companyName}} در تاریخ {{expiryDate}} منقضی می‌شود."
       },
       "certificateExpired": {
-        "title": "تصدیق‌نامه منقضی شد",
-        "companyMessage": "تصدیق‌نامه {{certificateName}} در تاریخ {{expiryDate}} منقضی شده است.",
-        "adminMessage": "تصدیق‌نامه {{certificateName}} مربوط شرکت {{companyName}} منقضی شده است."
+        "title": "سند منقضی شد",
+        "companyMessage": "سند {{certificateName}} در تاریخ {{expiryDate}} منقضی شده است.",
+        "adminMessage": "سند {{certificateName}} مربوط شرکت {{companyName}} منقضی شده است."
       },
       "inspectionOverdue": {
         "title": "مهلت بررسی تکمیل شد",
@@ -647,15 +647,18 @@
       "text": "متن"
     },
     "confirmStatusUpdate": "آیا مطمین هستید تمام مراحل کاری تائید نامه را تکمیل نموده اید و تائید نامه را به حالت تحت نظارت قرار دهید؟",
+    "confirmCertificationIssued": "آیا مطمین هستید که می خواهید این تائید نامه را صادر شده علامت بزنید؟",
     "noDetailsFound": "جزیات تایید نامه کیفی پیدا نشد",
     "steps": {
       "DRAFT": "جزئیات سند را قبل از چاپ کامل کنید",
       "PRINTED": "چاپ تائید نامه کیفی",
       "SCANNED": "اپلود تائید نامه امضا شده مقام ",
+      "CERTIFICATION_ISSUED": "تائید نامه صادر شده",
       "UNDER_SUPERVISION": "تصویب نهایی تائید نامه کیفی"
     },
     "statusOptions": {
       "DRAFT": "اولیه",
+      "CERTIFICATION_ISSUED": "سند صادر شد",
       "PRINTED": "چاپ شده",
       "SCANNED": "اسکن شده",
       "UNDER_SUPERVISION": "تحت نظارت"
@@ -683,7 +686,7 @@
     "certificateDetails": "جزییات تائید نامه",
     "requestId": "شماره درخواست",
     "issuedTo": "صادر شده به",
-    "certificateStatus": "وضعیت تائید نامه",
+    "certificateStatus": "وضعیت  سند",
     "certificateId": "شماره تائید نامه",
     "list": "جدول تائید نامه های کیفی",
     "management": "مدیریت تائید نامه های کیفی",
@@ -700,19 +703,19 @@
     "active": "فعال",
     "inactive": "غیرفعال",
     "total": "مجموع تائید نامه‌ها",
-    "trackBadge": "تعقیب تائید نامه کیفی درخواست شده",
-    "trackTitle": "وضعیت تائید نامه",
+    "trackBadge": "تعقیب سند درخواست شده",
+    "trackTitle": "وضعیت سند ",
     "certificationStatus": "تحت تعقیب شما",
     "trackDescription": "لطفا شماره درخواست ثبت شده خود را وارد نمائید",
     "searchPlaceholder": "لطفا شماره تعقیب درخواست شده خود را وارد نمایید",
     "searchingMessage": "درحال جستجو...",
     "showingResult": "نمایش نتایج برای شماره تعقیب:",
     "request": "درخواست",
-    "requestDetails": "جزییات تائید نامه درخواست شده",
-    "trackProgress": "تعقیب تائید نامه کیفی درخواست شده",
+    "requestDetails": "جزییات سند درخواست شده",
+    "trackProgress": "تعقیب سند  کیفی درخواست شده",
     "dialog": {
-      "updateTitle": "به‌روزرسانی تائید نامه",
-      "scanOfCertification": "اسکن تائید نامه",
+      "updateTitle": "به‌روزرسانی سند ",
+      "scanOfCertification": "اسکن سند ",
       "scanHelperText": "فایل PDF، JPG یا PNG را تا ۵ مگابایت آپلود کنید"
     },
     "placeholders": {
@@ -751,7 +754,7 @@
     "noResultsMessage": "هیچ نتیجه مطابق به شماره درخواست شما در سیستم یاقت نگردید.",
     "tryAnotherSearch": "لطفا شماره تعقیب دیگری را امتحان کنید.",
     "easyTracking": "تعقیب آسان",
-    "easyTrackingDesc": "فقط شماره تعقیب درخواست ثبت شده خود را وارد کنید تا وضعیت تائید نامه خود را مشاهده کنید",
+    "easyTrackingDesc": "فقط شماره تعقیب درخواست ثبت شده خود را وارد کنید تا وضعیت سند  خود را مشاهده کنید",
     "realTimeUpdates": "به‌روزرسانی‌های لحظه‌ای",
     "realTimeUpdatesDesc": "دریافت اطلاعات جدید درباره درخواست تائید نامه کیفی شما",
     "secureReliable": "امن و قابل اعتماد",
@@ -759,8 +762,8 @@
     "helpFinding": "نیاز به کمک برای یافتن شماره تعقیب خود دارید؟",
     "confirmPayment": "تائید پرداخت",
     "helpFindingDesc": "شماره تعقیب شما می‌تواند در درخواست تائید نامه کیفی شما یا ایمیل تأیید شما یافت شود.",
-    "welcomeTitle": "وضعیت تائید نامه کیفی خود را تعقیب کنید",
-    "welcomeDescription": "وضعیت تائید نامه کیفی خود را به راحتی با وارد کردن شماره تعقیب درخواست ثبت شده خود در زیر تعقیب کنید.",
+    "welcomeTitle": "وضعیت  سند  خود را تعقیب کنید",
+    "welcomeDescription": "وضعیت سند   خود را به راحتی با وارد کردن شماره تعقیب درخواست ثبت شده خود در زیر تعقیب .",
     "page": {
       "title": "ثبت درخواست تائید نامه کیفی",
       "subtitle": "ثبت درخواست",
@@ -1013,8 +1016,9 @@
       "REJECTED": "رد شد",
       "CANCELLED": "لغو شده",
       "PAYMENT_PENDING": "در انتظار پرداخت",
-      "PAYMENT_COMPLETED": "پرداخت تکمیل شد",
-      "CERTIFICATE_ISSUED": "تائید نامه صادر شد",
+      "PAYMENT_COMPLETED": "پرداخت انجام شد",
+      "AUTHORITY_DECISION": "درخواست به حکم مقام",
+      "CERTIFICATION_ISSUED": "سند صادر شد",
       "STANDARDS_PROVIDED": "استانداردها ارائه شد",
       "DEADLINE_ASSIGNED": "مهلت تعیین شد",
       "INSPECTION_IN_PROGRESS": "درحال انجام تفتیش",
@@ -1034,7 +1038,8 @@
       "REPORT_APPROVED": "گذارش تائید شده هیئت تائید دهی",
       "PAYMENT_PENDING": "در انتظار پرداخت",
       "PAYMENT_COMPLETED": "تکمیل حق الاجرت",
-      "CERTIFICATE_ISSUED": "درخواست به حکم مقام",
+      "AUTHORITY_DECISION": "درخواست به حکم مقام",
+      "CERTIFICATION_ISSUED": "سند صادر شد",
       "UNDER_SUPERVISION": "تحت نظارت",
       "REJECTED": "رد شده",
       "CANCELLED": "لغو شده",
@@ -1763,6 +1768,7 @@
       "DOMESTIC_QUALITY_CERTIFICATION": "تائید نامه کیفی سیستم مدیریتی یا خدمات محصول(داخلی)",
       "INTERNATIONAL_QUALITY_CERTIFICATION": "تائید نامه کیفی سیستم مدیریتی یا خدمات محصول(بین المللی)",
       "STANDARD_MARK_CERTIFICATION": "اخذ علامت معیار",
+      "MANAGEMENT_SYSTEM_QUALITY": "تائید نامه کیفی سیستم مدیریتی",
       "international": {
         "title": "تائید نامه کیفی سیستم مدیرتی یا خدمات، محصول(بین المللی)",
         "description": "برای گسترش بازار جهانی",
@@ -2892,7 +2898,7 @@
     "internationalParties": {
       "badge": "شبکه بین المللی",
       "title": "نهادهای بین المللی",
-      "description": "نهادها، اداره‌ها و شرکای بین‌المللی مرتبط با اداره ملی معیار کیفیت را مشاهده کنید که در بخش‌های ارزیابی مطابقت، تصدیق، ستندرد سازی، اعتباردهی و تضمین کیفیت همکاری رسمی دارند. این همکاری‌ها زمینه هماهنگی با معیارها و ستندردهای بین‌المللی را فراهم نموده و به شرکت‌ها و نهادهای داخلی کمک می‌کند تا تصدیق‌نامه‌ها، ارزیابی‌ها و خدمات خویش را مطابق الزامات جهانی دریافت نمایند. از طریق این مشارکت‌ها، ASQA توانایی آن را دارد تا روند اعتباردهی، تصدیق و تضمین کیفیت را با معیارهای معتبر بین‌المللی همسو ساخته و زمینه پذیرش خدمات و محصولات داخلی را در بازارهای منطقه‌ای و جهانی تقویت نماید.",
+      "description": "نهادها، اداره‌ها و شرکای بین‌المللی مرتبط با اداره ملی معیار کیفیت را مشاهده کنید که در بخش‌های ارزیابی مطابقت، تصدیق، ستندرد سازی، اعتباردهی و تضمین کیفیت همکاری رسمی دارند. این همکاری‌ها زمینه هماهنگی با معیارها و ستندردهای بین‌المللی را فراهم نموده و به شرکت‌ها و نهادهای داخلی کمک می‌کند تا سند‌ها، ارزیابی‌ها و خدمات خویش را مطابق الزامات جهانی دریافت نمایند. از طریق این مشارکت‌ها، ASQA توانایی آن را دارد تا روند اعتباردهی، تصدیق و تضمین کیفیت را با معیارهای معتبر بین‌المللی همسو ساخته و زمینه پذیرش خدمات و محصولات داخلی را در بازارهای منطقه‌ای و جهانی تقویت نماید.",
       "loading": "در حال بارگذاری نهادهای بین المللی...",
       "emptyTitle": "هیچ نهاد بین المللی یافت نشد",
       "emptyDescription": "در حال حاضر هیچ نهاد بین المللی برای نمایش وجود ندارد.",

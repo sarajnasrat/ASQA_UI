@@ -39,13 +39,22 @@ const CertificationService = {
   deleteCertification(id: number) {
     return httpClient.delete(`${CERTIFICATION_BASE}/${id}`);
   },
-  updateSerialNumber(id: number, serialNumber: string, file?: File) {
+  updateSerialNumber(
+    id: number,
+    serialNumber: string,
+    file?: File,
+    status?: string,
+  ) {
     const formData = new FormData();
 
     formData.append("serialNumber", serialNumber);
 
     if (file) {
       formData.append("file", file);
+    }
+
+    if (status) {
+      formData.append("status", status);
     }
 
     return httpClient.patch(
@@ -77,6 +86,10 @@ const CertificationService = {
   });
   
 },
+
+  issueCertification(id: number) {
+    return this.updateCertificationStatus(id, "CERTIFICATION_ISSUED");
+  },
 
 };
 

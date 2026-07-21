@@ -73,7 +73,7 @@ export const AcceptedRequest = () => {
   const [rows, setRows] = useState(10);
   const [totalRecords, setTotalRecords] = useState(0);
 
-  const [status, setStatus] = useState<string>("CERTIFICATE_ISSUED");
+  const [status, setStatus] = useState<string>("AUTHORITY_DECISION");
   const [activeIndex, setActiveIndex] = useState(0);
 
   const [updateVisible, setUpdateVisible] = useState(false);
@@ -90,8 +90,8 @@ export const AcceptedRequest = () => {
 
   const statusTabs: StatusTabItem[] = [
     {
-      label: t("certificationRequest.statusOptions.CERTIFICATE_ISSUED"),
-      value: "CERTIFICATE_ISSUED",
+      label: t("certificationRequest.statusOptions.AUTHORITY_DECISION"),
+      value: "AUTHORITY_DECISION",
       icon: "pi pi-credit-card",
     }
   ];
@@ -170,7 +170,7 @@ export const AcceptedRequest = () => {
       return t("certificationRequest.confirmPayment");
     } else if (requestStatus === "PAYMENT_COMPLETED") {
       return t("certificationRequest.issueCertificate");
-    } else if (requestStatus === "CERTIFICATE_ISSUED") {
+    } else if (requestStatus === "AUTHORITY_DECISION") {
       return t("certificationRequest.startSupervision");
     } else {
       return t("common.edit");

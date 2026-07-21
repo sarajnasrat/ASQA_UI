@@ -52,7 +52,9 @@ const transitionMap: Record<string, string[]> = {
   REPORTED_TO_COMMITTEE: ["REPORT_APPROVED", "REJECTED"],
   COMMITTEE_APPROVED: ["PAYMENT_PENDING"],
   PAYMENT_PENDING: ["PAYMENT_COMPLETED"],
-  PAYMENT_COMPLETED: ["CERTIFICATE_ISSUED"],
+  PAYMENT_COMPLETED: ["AUTHORITY_DECISION"],
+  // Final issuance is performed from the certification module.
+  AUTHORITY_DECISION: [],
 };
 
 const finalStates = ["UNDER_SUPERVISION", "REJECTED", "CANCELLED"];
@@ -947,7 +949,7 @@ const CertificationRequestView: React.FC = () => {
       PAYMENT_COMPLETED:
         t("certificationRequest.paymentCompleted") ||
         "Payment will be marked as completed.",
-      CERTIFICATE_ISSUED:
+      AUTHORITY_DECISION:
         t("certificationRequest.certificateIssued") ||
         "Certificate will be issued for this request.",
       UNDER_SUPERVISION:
@@ -1357,7 +1359,8 @@ const CertificationRequestView: React.FC = () => {
       case "REPORT_APPROVED":
         navigate("/certification-request");
         break;
-      case "CERTIFICATE_ISSUED":
+      case "AUTHORITY_DECISION":
+      case "CERTIFICATION_ISSUED":
         navigate("/certification-request");
         break;
       default:
@@ -1396,11 +1399,11 @@ const CertificationRequestView: React.FC = () => {
         icon: <XCircle className="h-4 w-4" />,
         label: t("certificationRequest.statusOptions.REJECTED"),
       },
-      CERTIFICATE_ISSUED: {
+      AUTHORITY_DECISION: {
         color: "text-purple-700",
         bgColor: "bg-purple-100",
         icon: <Award className="h-4 w-4" />,
-        label: t("certificationRequest.statusOptions.CERTIFICATE_ISSUED"),
+        label: t("certificationRequest.statusOptions.AUTHORITY_DECISION"),
       },
       STANDARDS_PROVIDED: {
         color: "text-cyan-700",

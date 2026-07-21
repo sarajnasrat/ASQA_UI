@@ -48,7 +48,8 @@
     "types": {
       "REQUEST_SUBMITTED": "Request Submitted",
       "REQUEST_STATUS_CHANGED": "Request Status Changed",
-      "CERTIFICATE_ISSUED": "Certificate Issued",
+      "AUTHORITY_DECISION": "Authority Decision",
+      "CERTIFICATION_ISSUED": "Certification Issued",
       "CERTIFICATE_EXPIRING_SOON": "Certificate Expiring Soon",
       "CERTIFICATE_EXPIRED": "Certificate Expired",
       "INSPECTION_DEADLINE_REACHED": "Inspection Deadline Reached",
@@ -65,7 +66,8 @@
       "REPORT_APPROVED": "Report Approved",
       "PAYMENT_PENDING": "Payment Pending",
       "PAYMENT_COMPLETED": "Payment Completed",
-      "CERTIFICATE_ISSUED": "Certificate Issued",
+      "AUTHORITY_DECISION": "Authority Decision",
+      "CERTIFICATION_ISSUED": "Certification Issued",
       "REJECTED": "Rejected",
       "CANCELLED": "Cancelled",
       "COMMITTEE_APPROVED": "تائید هئیت تائید دهی"
@@ -756,15 +758,18 @@
       "text": "Text"
     },
     "confirmStatusUpdate": "Are you sure you want to change certificate status to",
+    "confirmCertificationIssued": "Are you sure you want to mark this certificate as issued?",
     "noDetailsFound": "No certification details found",
     "steps": {
       "DRAFT": "Complete certificate details before printing",
       "PRINTED": "Print Certificate",
       "SCANNED": "Upload Signed Certificate",
+      "CERTIFICATION_ISSUED": "Certification Issued",
       "UNDER_SUPERVISION": "Final Approval"
     },
     "statusOptions": {
       "DRAFT": "Draft",
+      "CERTIFICATION_ISSUED": "Certification Issued",
       "PRINTED": "Printed",
       "SCANNED": "Scanned",
       "UNDER_SUPERVISION": "Under Supervision"
@@ -1116,7 +1121,8 @@
       "CANCELLED": "Cancelled",
       "PAYMENT_PENDING": "Payment Pending",
       "PAYMENT_COMPLETED": "Payment Completed",
-      "CERTIFICATE_ISSUED": "Certificate Issued",
+      "AUTHORITY_DECISION": "Authority Decision",
+      "CERTIFICATION_ISSUED": "Certification Issued",
       "STANDARDS_PROVIDED": "Standards Provided",
       "DEADLINE_ASSIGNED": "Deadline Assigned",
       "INSPECTION_IN_PROGRESS": "Inspection In Progress",
@@ -1135,7 +1141,8 @@
       "REPORT_APPROVED": "Report Approved",
       "PAYMENT_PENDING": "Payment Pending",
       "PAYMENT_COMPLETED": "Payment Completed",
-      "CERTIFICATE_ISSUED": "Certificate Issued",
+      "AUTHORITY_DECISION": "Authority Decision",
+      "CERTIFICATION_ISSUED": "Certification Issued",
       "UNDER_SUPERVISION": "Under Supervision",
       "REJECTED": "Rejected",
       "CANCELLED": "Cancelled",
@@ -1682,6 +1689,7 @@
       "DOMESTIC_QUALITY_CERTIFICATION": "د کورني کیفیت تصدیق",
       "INTERNATIONAL_QUALITY_CERTIFICATION": "نړیوال کیفیت تصدیق",
       "STANDARD_MARK_CERTIFICATION": "د معیاري نښې تصدیق",
+      "MANAGEMENT_SYSTEM_QUALITY": "Management System Quality",
       "international": {
         "title": "International Quality",
         "description": "For global market expansion",

@@ -608,7 +608,11 @@ const Registration = () => {
                         </span>
                         <span className="text-xs bg-white/20 px-2 py-1 rounded">
                           {t(
-                            `certification.page.mainType.${certificationInfo.mainType?.toLowerCase()}.title`,
+                            `certification.page.certificationScope.${
+                              certificationInfo.mainType === "NATIONAL"
+                                ? "internal"
+                                : "external"
+                            }.title`,
                           )}
                         </span>
                       </div>

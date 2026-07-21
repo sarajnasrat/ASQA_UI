@@ -644,15 +644,18 @@
       "text": "متن"
     },
     "confirmStatusUpdate": "آیا تاسو ډاډه یاست چې غواړئ د سند حالت ته بدل کړئ",
+    "confirmCertificationIssued": "ایا تاسو ډاډه یاست چې دا سند صادر شوی وټاکئ؟",
     "noDetailsFound": "د تصدیق توضیحات ونه موندل شول",
     "steps": {
       "DRAFT": "د چاپ کولو دمخه د سند جزئیات بشپړ کړئ",
       "PRINTED": "سند چاپ کړئ",
       "SCANNED": "لاسلیک شوی سند اپلوډ کړئ",
+      "CERTIFICATION_ISSUED": "تصدیق صادر شوی",
       "UNDER_SUPERVISION": "وروستی تصویب"
     },
     "statusOptions": {
       "DRAFT": "مسوده",
+      "CERTIFICATION_ISSUED": "تصدیق صادر شو",
       "PRINTED": "چاپ شوی",
       "SCANNED": "اسکن شوی",
       "UNDER_SUPERVISION": "تر څارنې لاندې"
@@ -987,7 +990,8 @@
       "CANCELLED": "لغوه شوې",
       "PAYMENT_PENDING": "تادیه په تمه ده",
       "PAYMENT_COMPLETED": " تادیه بشپړه شوه",
-      "CERTIFICATE_ISSUED": "   ",
+      "AUTHORITY_DECISION": "د مقام حکم ته غوښتنه",
+      "CERTIFICATION_ISSUED": "تصدیق صادر شو",
       "STANDARDS_PROVIDED": "معیارونه چمتو شوي",
       "DEADLINE_ASSIGNED": "",
       "INSPECTION_IN_PROGRESS": "ارزونه روانه ده",
@@ -1006,7 +1010,8 @@
       "REPORT_APPROVED": "راپور تصویب شو",
       "PAYMENT_PENDING": "تادیه په تمه ده",
       "PAYMENT_COMPLETED": "تادیه بشپړه شوه",
-      "CERTIFICATE_ISSUED": "تصدیق صادر شو",
+      "AUTHORITY_DECISION": "د مقام حکم ته غوښتنه",
+      "CERTIFICATION_ISSUED": "تصدیق صادر شو",
       "UNDER_SUPERVISION": "تر څارنې لاندې",
       "REJECTED": "رد شوې",
       "CANCELLED": "لغوه شوې",
@@ -1018,7 +1023,8 @@
     "certificationTypeOptions": {
       "DOMESTIC_QUALITY_CERTIFICATION": "د کورني کیفیت تصدیق",
       "INTERNATIONAL_QUALITY_CERTIFICATION": "نړیوال کیفیت تصدیق",
-      "STANDARD_MARK_CERTIFICATION": "د معیاري نښې تصدیق"
+      "STANDARD_MARK_CERTIFICATION": "د معیاري نښې تصدیق",
+      "MANAGEMENT_SYSTEM_QUALITY": "د مدیریتي سیستم کیفیت تصدیق"
     },
     "fileSize": {
       "zero": "0 بایټ",
@@ -1652,6 +1658,7 @@
       "DOMESTIC_QUALITY_CERTIFICATION": "د کورني کیفیت تصدیق",
       "INTERNATIONAL_QUALITY_CERTIFICATION": "نړیوال کیفیت تصدیق",
       "STANDARD_MARK_CERTIFICATION": "د معیاري نښې تصدیق",
+      "MANAGEMENT_SYSTEM_QUALITY": "د مدیریتي سیستم کیفیت تصدیق",
       "international": {
         "title": "نړیوال کیفیت",
         "description": "د نړیوال بازار پراختیا لپاره",

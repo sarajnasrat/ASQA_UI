@@ -132,7 +132,7 @@ export const RejectedRequest = () => {
       return t("certificationRequest.confirmPayment");
     } else if (rowData === "PAYMENT_COMPLETED") {
       return t("certificationRequest.issueCertificate");
-    } else if (rowData === "CERTIFICATE_ISSUED") {
+    } else if (rowData === "CERTIFICATION_ISSUED") {
       return t("certificationRequest.startSupervision");
     } else {
       return t("common.edit");

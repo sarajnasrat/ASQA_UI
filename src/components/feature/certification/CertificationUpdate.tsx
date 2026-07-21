@@ -51,18 +51,6 @@ export const CertificationUpdate: React.FC<CertificationUpdateProps> = ({
       setFile(undefined);
     }
   }, [certification]);
-  const handlePrint = async () => {
-   await handleApi(
-      () =>
-        CertificationService.updateCertificationStatus(
-          Number(certification.id),
-          "SCANNED",
-        ),
-      showSuccess,
-      showError,
-      t,
-    );
-  };
   const handleSubmit = async () => {
     if (!certification?.id) {
       showToast(
@@ -90,6 +78,7 @@ export const CertificationUpdate: React.FC<CertificationUpdateProps> = ({
           certification.id,
           serialNumber.trim(),
           file,
+          file ? "SCANNED" : undefined,
         ),
       showSuccess,
       showError,
@@ -97,8 +86,6 @@ export const CertificationUpdate: React.FC<CertificationUpdateProps> = ({
     );
 
     setLoading(false);
-    handlePrint();
-
     if (result) {
       onUpdated();
       onHide();

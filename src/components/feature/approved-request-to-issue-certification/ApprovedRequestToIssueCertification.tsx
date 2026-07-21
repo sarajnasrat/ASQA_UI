@@ -175,7 +175,7 @@ export const ApprovedRequestToIssueCertification = () => {
       return t("certificationRequest.confirmPayment");
     } else if (requestStatus === "PAYMENT_COMPLETED") {
       return t("certificationRequest.issueCertificate");
-    } else if (requestStatus === "CERTIFICATE_ISSUED") {
+    } else if (requestStatus === "CERTIFICATION_ISSUED") {
       return t("certificationRequest.startSupervision");
     } else {
       return t("common.edit");

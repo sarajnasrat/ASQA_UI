@@ -40,6 +40,10 @@ export const CertificationList = () => {
     { label: t("certification.statusOptions.PRINTED"), value: "PRINTED" },
     { label: t("certification.statusOptions.SCANNED"), value: "SCANNED" },
     {
+      label: t("certification.statusOptions.CERTIFICATION_ISSUED"),
+      value: "CERTIFICATION_ISSUED",
+    },
+    {
       label: t("certification.statusOptions.UNDER_SUPERVISION"),
       value: "UNDER_SUPERVISION",
     },

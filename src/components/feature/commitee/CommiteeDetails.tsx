@@ -284,9 +284,9 @@ export const CommiteeDetails = () => {
           className: "bg-emerald-100 text-emerald-800",
         };
 
-      case "CERTIFICATE_ISSUED":
+      case "CERTIFICATION_ISSUED":
         return {
-          text: t("certificationRequest.statusOptions.CERTIFICATE_ISSUED"),
+          text: t("certificationRequest.statusOptions.CERTIFICATION_ISSUED"),
           className: "bg-green-100 text-green-800",
         };
 

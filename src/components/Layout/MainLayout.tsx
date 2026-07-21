@@ -246,7 +246,7 @@ export const MainLayout = () => {
               <Route path="company" element={<CompanyList />} />
               <Route
                 path="company/certificate-issued"
-                element={<CompanyStatusList status="CERTIFICATE_ISSUED" />}
+                element={<CompanyStatusList status="CERTIFICATION_ISSUED" />}
               />
               <Route
                 path="company/rejected"
@@ -273,7 +273,7 @@ export const MainLayout = () => {
 
               {/* <Route
                 path="company/inspection-in-progress"
-                element={<CompanyStatusList status="INSPECTION_IN_PROGRESS" statuses={["INSPECTION_IN_PROGRESS", "PAYMENT_PENDING", "CERTIFICATE_ISSUED"]} />}
+                element={<CompanyStatusList status="INSPECTION_IN_PROGRESS" statuses={["INSPECTION_IN_PROGRESS", "PAYMENT_PENDING", "CERTIFICATION_ISSUED"]} />}
               /> */}
               <Route
                 path="company/payment-pending"

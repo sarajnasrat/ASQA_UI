@@ -26,7 +26,7 @@ interface CompanyStatusListProps {
     | "REPORT_APPROVED"
     | "PAYMENT_PENDING"
     | "PAYMENT_COMPLETED"
-    | "CERTIFICATE_ISSUED"
+    | "CERTIFICATION_ISSUED"
     | "UNDER_SUPERVISION"
     | "REJECTED"
     | "CANCELLED"
@@ -44,7 +44,7 @@ interface CompanyStatusListProps {
     | "REPORT_APPROVED"
     | "PAYMENT_PENDING"
     | "PAYMENT_COMPLETED"
-    | "CERTIFICATE_ISSUED"
+    | "CERTIFICATION_ISSUED"
     | "UNDER_SUPERVISION"
     | "REJECTED"
     | "CANCELLED"
@@ -55,14 +55,14 @@ interface CompanyStatusListProps {
 }
 
 type CompanyRequestStatus =
-  | "CERTIFICATE_ISSUED"
+  | "CERTIFICATION_ISSUED"
   | "REJECTED"
   | "UNDER_REVIEW"
   | "INSPECTION_IN_PROGRESS"
   | "PAYMENT_PENDING";
 
 const STATUS_LABELS: Record<CompanyRequestStatus, string> = {
-  CERTIFICATE_ISSUED: "Certificate Issued",
+  CERTIFICATION_ISSUED: "Certification Issued",
   REJECTED: "Rejected",
   UNDER_REVIEW: "Under Review",
   INSPECTION_IN_PROGRESS: "Inspection In Progress",
@@ -70,7 +70,7 @@ const STATUS_LABELS: Record<CompanyRequestStatus, string> = {
 };
 
 const STATUS_ROUTES: Record<CompanyRequestStatus, string> = {
-  CERTIFICATE_ISSUED: "/company/certificate-issued",
+  CERTIFICATION_ISSUED: "/company/certification-issued",
   REJECTED: "/company/rejected",
   UNDER_REVIEW: "/company/under-review",
   INSPECTION_IN_PROGRESS: "/company/inspection-in-progress",
@@ -255,7 +255,9 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
           sheetName={
             title ||
             (mappedStatuses.length
-              ? mappedStatuses.map((item) => STATUS_LABELS[item]).join(", ")
+              ? mappedStatuses
+                  .map((item) => t(`certificationRequest.statusOptions.${item}`))
+                  .join(", ")
               : t("company.list"))
           }
           fetchAllData={async () => {
