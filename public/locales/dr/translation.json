@@ -626,6 +626,8 @@
   "certification": {
     "all": "همه تائید نامه ها",
     "latest": "آخرین",
+    "selectExistingStandard": "استاندارد موجود را انتخاب کنید",
+    "uploadNewStandard": "استاندارد جدید را آپلود کنید",
     "updatedBy": "به روز شده توسط",
     "stepProgress": "مرحله {{step}} از {{total}}",
     "progressTitle": "پیگیری درخواست شما",
@@ -1005,6 +1007,22 @@
       "EXTENSION": "تمدید مهلت"
     },
     "statusOptions": {
+      "public":{
+      "SUBMITTED": "ثبت شده در سیستم",
+      "UNDER_REVIEW": "در حال بررسی ",
+      "REJECTED": "رد شد",
+      "CANCELLED": "لغو شده",
+      "PAYMENT_PENDING": "در انتظار پرداخت",
+      "PAYMENT_COMPLETED": "پرداخت تکمیل شد",
+      "CERTIFICATE_ISSUED": "تائید نامه صادر شد",
+      "STANDARDS_PROVIDED": "استانداردها ارائه شد",
+      "DEADLINE_ASSIGNED": "مهلت تعیین شد",
+      "INSPECTION_IN_PROGRESS": "درحال انجام تفتیش",
+      "REPORTED_TO_COMMITTEE": "گزارش به کمیته تائید دهی ", 
+      "REPORT_APPROVED": "گزارش تایید شده"
+     
+
+      },
       "COMMITTEE_APPROVED": "تائید هئیت تائید دهی",
       "DRAFT": "پیش‌ نویس",
       "SUBMITTED": "ارسال شده",
@@ -1566,9 +1584,9 @@
         "documentsShort": "اسناد"
       },
       "dialog": {
-        "updateTitle": "به‌روزرسانی تخصیص",
-        "statusLabel": "وضعیت",
-        "statusPlaceholder": "وضعیت را انتخاب کنید",
+        "updateTitle": "اصلاح حالت درخواست اضافه شده به کمیته",
+        "statusLabel": "حالت",
+        "statusPlaceholder": "حالت را انتخاب کنید",
         "commentsLabel": "نظرات",
         "uploadReportFile": "فایل گزارش را بارگذاری کنید"
       },
@@ -1636,6 +1654,7 @@
     }
   },
   "common": {
+    "or": "یا",
     "close": "بستن",
     "current": "فعلی",
     "editcompany": "اصلاح معلومات شرکت",

@@ -735,6 +735,8 @@
   },
   "certification": {
     "latest": "Latest",
+    "selectExistingStandard": "Select existing standard",
+    "uploadNewStandard": "Upload new standard",
     "updatedBy": "Updated by",
     "stepProgress": "Step {{step}} of {{total}}",
     "progressTitle": "Certification Progress",
@@ -1107,6 +1109,22 @@
       "EXTENSION": "Extension"
     },
     "statusOptions": {
+            "public":{
+      "SUBMITTED": "Submitted",
+      "UNDER_REVIEW": "Under Review",
+      "REJECTED": "Rejected",
+      "CANCELLED": "Cancelled",
+      "PAYMENT_PENDING": "Payment Pending",
+      "PAYMENT_COMPLETED": "Payment Completed",
+      "CERTIFICATE_ISSUED": "Certificate Issued",
+      "STANDARDS_PROVIDED": "Standards Provided",
+      "DEADLINE_ASSIGNED": "Deadline Assigned",
+      "INSPECTION_IN_PROGRESS": "Inspection In Progress",
+      "REPORTED_TO_COMMITTEE": "Reported To Committee",
+      "REPORT_APPROVED": "Report Approved"
+     
+
+      },
       "DRAFT": "Draft",
       "SUBMITTED": "Submitted",
       "REGISTERED": "Registered",
@@ -1556,6 +1574,7 @@
     }
   },
   "common": {
+    "or": "OR",
     "months": "Months",
     "selectDateType": "selectDateType",
     "gregorian": "gregorian",

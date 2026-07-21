@@ -79,6 +79,7 @@ export const CertificationRequestService = {
     status: string,
     companyId?: number,
     standardRequired?: boolean,
+    standardAttachmentId?: number,
   ) {
     const params: Record<string, any> = { status };
 
@@ -88,6 +89,14 @@ export const CertificationRequestService = {
 
     if (standardRequired !== undefined) {
       params.standardRequired = standardRequired;
+    }
+
+    if (
+      standardAttachmentId !== undefined &&
+      standardAttachmentId !== null &&
+      standardAttachmentId !== 0
+    ) {
+      params.standardAttachmentId = standardAttachmentId;
     }
 
     return httpClient.patch(

@@ -36,6 +36,12 @@ import type {
 
 const API_BASE_URL = "http://localhost:8080";
 
+type StandardAttachmentOption = {
+  label: string;
+  value: number;
+  file?: string;
+};
+
 const transitionMap: Record<string, string[]> = {
   DRAFT: ["SUBMITTED"],
   SUBMITTED: ["UNDER_REVIEW", "REJECTED"],
@@ -131,7 +137,17 @@ const CertificationRequestView: React.FC = () => {
   const [selectedStandardFile, setSelectedStandardFile] = useState<File | null>(
     null,
   );
+  const [selectedStandardAttachmentId, setSelectedStandardAttachmentId] =
+    useState<number | null>(null);
+  const [standardAttachmentOptions, setStandardAttachmentOptions] = useState<
+    StandardAttachmentOption[]
+  >([]);
+  const [loadingStandardAttachments, setLoadingStandardAttachments] =
+    useState(false);
   const [standardRequiredChoice, setStandardRequiredChoice] = useState(false);
+  const [standardInputMode, setStandardInputMode] = useState<
+    "existing" | "new"
+  >("existing");
   const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(null);
   const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(null);
   const [rejectionReason, setRejectionReason] = useState<string>("");
@@ -192,6 +208,32 @@ const CertificationRequestView: React.FC = () => {
     };
 
     loadCommittees();
+  }, []);
+
+  useEffect(() => {
+    const loadStandardAttachments = async () => {
+      try {
+        setLoadingStandardAttachments(true);
+        const response = await AttachmentService.getByReferenceType("STANDARD");
+        const items = response?.data?.data || response?.data || [];
+
+        setStandardAttachmentOptions(
+          (Array.isArray(items) ? items : [])
+            .filter((item: any) => item?.id && item?.attachmentName)
+            .map((item: any) => ({
+              label: item.attachmentName,
+              value: Number(item.id),
+              file: item.file,
+            })),
+        );
+      } catch {
+        setStandardAttachmentOptions([]);
+      } finally {
+        setLoadingStandardAttachments(false);
+      }
+    };
+
+    loadStandardAttachments();
   }, []);
 
   const loadRequestDetail = async () => {
@@ -987,25 +1029,31 @@ const CertificationRequestView: React.FC = () => {
       request.requestStatus === "UNDER_REVIEW" &&
       options?.standardRequired
     ) {
-      if (!options?.standardFile) {
-        showToast("warn", t("common.warning"), "Please upload standard file");
+      if (!options?.standardFile && !selectedStandardAttachmentId) {
+        showToast(
+          "warn",
+          t("common.warning"),
+          t("attachment.STANDARD") || "Please upload standard file",
+        );
         return;
       }
 
-      response = await handleApi(
-        () =>
-          AttachmentService.create(
-            options.standardFile!,
-            options.standardFile!.name,
-            request.id,
-            "STANDARD",
-          ),
-        showSuccess,
-        showError,
-        t,
-      );
-      if (!response) {
-        return response;
+      if (options.standardFile) {
+        response = await handleApi(
+          () =>
+            AttachmentService.create(
+              options.standardFile!,
+              options.standardFile!.name,
+              request.id,
+              "STANDARD",
+            ),
+          showSuccess,
+          showError,
+          t,
+        );
+        if (!response) {
+          return response;
+        }
       }
 
       response = await handleApi(
@@ -1015,6 +1063,7 @@ const CertificationRequestView: React.FC = () => {
             "STANDARDS_PROVIDED",
             request.company?.id ?? undefined,
             true,
+            selectedStandardAttachmentId ?? undefined,
           ),
         showSuccess,
         showError,
@@ -1087,6 +1136,7 @@ const CertificationRequestView: React.FC = () => {
               request.requestStatus === "UNDER_REVIEW"
                 ? options?.standardRequired
                 : undefined,
+              selectedStandardAttachmentId ?? undefined,
             ),
         showSuccess,
         showError,
@@ -1098,7 +1148,9 @@ const CertificationRequestView: React.FC = () => {
       // Reset dialog states
       setSelectedCommitteeId(null);
       setSelectedStandardFile(null);
+      setSelectedStandardAttachmentId(null);
       setStandardRequiredChoice(false);
+      setStandardInputMode("existing");
       setSelectedStartDate(null);
       setSelectedEndDate(null);
       setRejectionReason("");
@@ -1166,6 +1218,7 @@ const CertificationRequestView: React.FC = () => {
     setPendingStatus(null);
     setSelectedCommitteeId(null);
     setSelectedStandardFile(null);
+    setSelectedStandardAttachmentId(null);
     setStandardRequiredChoice(false);
     setSelectedStartDate(null);
     setSelectedEndDate(null);
@@ -1176,6 +1229,7 @@ const CertificationRequestView: React.FC = () => {
   const confirmStatusUpdate = (nextStatus: string) => {
     setSelectedCommitteeId(null);
     setSelectedStandardFile(null);
+    setSelectedStandardAttachmentId(null);
     setStandardRequiredChoice(Boolean(request?.standardRequired));
     setSelectedStartDate(null);
     setSelectedEndDate(null);
@@ -1208,7 +1262,11 @@ const CertificationRequestView: React.FC = () => {
       return;
     }
 
-    if (isStandardProvided && !selectedStandardFile) {
+    if (
+      isStandardProvided &&
+      !selectedStandardFile &&
+      !selectedStandardAttachmentId
+    ) {
       showToast(
         "warn",
         t("common.warning"),
@@ -1254,9 +1312,7 @@ const CertificationRequestView: React.FC = () => {
 
       if (response?.status === 200) {
         closeStatusDialog();
-        navigateAfterStatusUpdate(
-          isUnderReviewDecision ? "DEADLINE_REQUIRED" : pendingStatus,
-        );
+        navigateAfterStatusUpdate(pendingStatus);
       }
     } catch (error) {
       console.error("Status update failed:", error);
@@ -1286,15 +1342,13 @@ const CertificationRequestView: React.FC = () => {
         navigate("/payment-management");
         break;
       case "STANDARDS_PROVIDED":
-        // Refresh current page to show updated data
         navigate("/standard-management");
         break;
       case "DEADLINE_REQUIRED":
-        navigate("/certification-request-deadline");
+        navigate("/standard-management");
         break;
 
       case "DEADLINE_ASSIGNED":
-        // Navigate to the request detail page
         navigate(`/certification-request-deadline`);
         break;
       case "INSPECTION_IN_PROGRESS":
@@ -1650,7 +1704,7 @@ const CertificationRequestView: React.FC = () => {
               )}
 
               {isUnderReviewDecisionDialog && (
-                <div className="w-full rounded-lg border border-gray-200 bg-white p-4">
+                <div className="w-full rounded-xl border border-gray-200 bg-white p-4 shadow-sm space-y-4">
                   <label className="flex items-start gap-3 cursor-pointer">
                     <input
                       type="checkbox"
@@ -1659,6 +1713,8 @@ const CertificationRequestView: React.FC = () => {
                         setStandardRequiredChoice(e.target.checked);
                         if (!e.target.checked) {
                           setSelectedStandardFile(null);
+                          setSelectedStandardAttachmentId(null);
+                          setStandardInputMode("existing");
                         }
                       }}
                       className="mt-1 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
@@ -1677,10 +1733,91 @@ const CertificationRequestView: React.FC = () => {
                       </div>
                     </div>
                   </label>
+
+                  {standardRequiredChoice ? (
+                    <div className="space-y-4 rounded-lg border border-blue-100 bg-blue-50/40 p-4">
+                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setStandardInputMode("existing");
+                            setSelectedStandardFile(null);
+                          }}
+                          className={`rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
+                            standardInputMode === "existing"
+                              ? "border-blue-600 bg-blue-600 text-white"
+                              : "border-blue-200 bg-white text-blue-700 hover:bg-blue-50"
+                          }`}
+                        >
+                          {t("certification.selectExistingStandard") ||
+                            "Select existing standard"}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setStandardInputMode("new");
+                            setSelectedStandardAttachmentId(null);
+                          }}
+                          className={`rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
+                            standardInputMode === "new"
+                              ? "border-blue-600 bg-blue-600 text-white"
+                              : "border-blue-200 bg-white text-blue-700 hover:bg-blue-50"
+                          }`}
+                        >
+                          {t("certification.uploadNewStandard") ||
+                            t("attachment.STANDARD")}
+                        </button>
+                      </div>
+
+                      {standardInputMode === "existing" ? (
+                        <div>
+                          <label className="mb-2 block text-sm font-medium text-gray-700">
+                            {t("certification.selectExistingStandard") ||
+                              "Select existing standard"}
+                          </label>
+                          <Dropdown
+                            className="w-full"
+                            value={selectedStandardAttachmentId}
+                            options={standardAttachmentOptions}
+                            optionLabel="label"
+                            optionValue="value"
+                            filter
+                            showClear
+                            loading={loadingStandardAttachments}
+                            placeholder={
+                              t("certification.selectExistingStandard") ||
+                              "Select existing standard"
+                            }
+                            onChange={(e) => {
+                              const value =
+                                e.value === null || e.value === undefined
+                                  ? null
+                                  : Number(e.value);
+                              setSelectedStandardAttachmentId(value);
+                            }}
+                          />
+                        </div>
+                      ) : (
+                        <FileUploadField
+                          key={`status-standard-${statusDialogVisible ? "open" : "closed"}-${pendingStatus ?? "none"}`}
+                          label={
+                            t("certification.uploadNewStandard") ||
+                            t("attachment.STANDARD")
+                          }
+                          accept=".pdf,.jpg,.png"
+                          maxFileSize={5000000}
+                          required
+                          onFileSelect={(file) => {
+                            setSelectedStandardFile(file);
+                          }}
+                        />
+                      )}
+                    </div>
+                  ) : null}
                 </div>
               )}
 
-              {isStandardProvidedDialog && (
+              {isStandardProvidedDialog && !isUnderReviewDecisionDialog && (
                 <FileUploadField
                   key={`status-standard-${statusDialogVisible ? "open" : "closed"}-${pendingStatus ?? "none"}`}
                   label={t("attachment.STANDARD")}

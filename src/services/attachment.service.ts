@@ -6,6 +6,7 @@ export const AttachmentService = {
   getAll() {
     return httpClient.get(`${BASE_URL}/all`);
   },
+
   getPaginatedAttachments(params: any) {
     return httpClient.get(`${BASE_URL}/paginated-attachments`, { params });
   },
@@ -14,14 +15,16 @@ export const AttachmentService = {
     return httpClient.get(`${BASE_URL}/${id}`);
   },
 
-  // ✅ generic fetch
+  getByReferenceType(referenceType: string) {
+    return httpClient.get(`${BASE_URL}/by-reference-type/${referenceType}`);
+  },
+
   getByReference(referenceId: number, referenceType: string) {
     return httpClient.get(
       `${BASE_URL}/reference/${referenceType}/${referenceId}`,
     );
   },
 
-  // ✅ create attachment
   create(
     file: File,
     attachmentName: string,
@@ -39,6 +42,7 @@ export const AttachmentService = {
       headers: { "Content-Type": "multipart/form-data" },
     });
   },
+
   update(
     id: number,
     file: File | null,
@@ -47,7 +51,6 @@ export const AttachmentService = {
   ) {
     const formData = new FormData();
 
-    // file is optional
     if (file) {
       formData.append("file", file);
     }
@@ -59,6 +62,7 @@ export const AttachmentService = {
       headers: { "Content-Type": "multipart/form-data" },
     });
   },
+
   delete(id: number) {
     return httpClient.delete(`${BASE_URL}/${id}`);
   },

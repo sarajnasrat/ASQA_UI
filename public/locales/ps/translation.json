@@ -623,6 +623,8 @@
   },
   "certification": {
     "latest": "وروستی",
+    "selectExistingStandard": "موجود معیار وټاکئ",
+    "uploadNewStandard": "نوی معیار پورته کړئ",
     "updatedBy": "تازه شوی د",
     "stepProgress": "ګام {{step}} د {{total}}",
     "progressTitle": "د تصدیق پرمختګ",
@@ -978,6 +980,22 @@
       "EXTENSION": "غځول"
     },
     "statusOptions": {
+            "public":{
+      "SUBMITTED": "سپارل شوې",
+      "UNDER_REVIEW": "تر بیاکتنې لاندې",
+      "REJECTED": "رد شوې",
+      "CANCELLED": "لغوه شوې",
+      "PAYMENT_PENDING": "تادیه په تمه ده",
+      "PAYMENT_COMPLETED": " تادیه بشپړه شوه",
+      "CERTIFICATE_ISSUED": "   ",
+      "STANDARDS_PROVIDED": "معیارونه چمتو شوي",
+      "DEADLINE_ASSIGNED": "",
+      "INSPECTION_IN_PROGRESS": "ارزونه روانه ده",
+      "REPORTED_TO_COMMITTEE": "کمیټې ته راپور شوی", 
+      "REPORT_APPROVED": " راپور تصویب شو"
+     
+
+      },
       "DRAFT": "مسوده",
       "SUBMITTED": "سپارل شوې",
       "REGISTERED": "ثبت شوې",
@@ -1526,6 +1544,7 @@
     }
   },
   "common": {
+    "or": "یا",
     "months": "میاشتې",
     "selectDateType": "د تاریخ ډول",
     "gregorian": "میلادی",

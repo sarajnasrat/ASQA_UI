@@ -108,7 +108,7 @@ const CommiteeAssignmentViewHeader: React.FC<Props> = ({
           {hasPermission("UPDATE_CERTIFICATION") && (
             <div className="flex flex-col sm:flex-row gap-3  lg:w-auto">
               {request?.requestStatus &&
-                request.requestStatus === "REPORTED_TO_COMMITTEE" && (
+                assignment.assignmentStatus !== "ASSIGNED" && (
                   <button
                     type="button"
                     onClick={onRollbackRequest}
