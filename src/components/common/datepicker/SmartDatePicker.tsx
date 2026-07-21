@@ -37,6 +37,8 @@ interface Props {
   label?: string;
   className?: string;
   widthValue?: number;
+  inputClassName?: string;
+  labelClassName?: string;
 }
 
 export const SmartDatePicker: React.FC<Props> = ({
@@ -46,6 +48,8 @@ export const SmartDatePicker: React.FC<Props> = ({
   label,
   className = "",
   widthValue = 0,
+  inputClassName = "",
+  labelClassName = "font-semibold mb-2 block",
 }) => {
   const [internalValue, setInternalValue] = useState<any>(null);
 
@@ -94,7 +98,7 @@ export const SmartDatePicker: React.FC<Props> = ({
   return (
     <div className={`w-full ${className}`}>
       {label && (
-        <label className="font-semibold mb-2 block">
+        <label className={labelClassName}>
           {label}
         </label>
       )}
@@ -110,7 +114,7 @@ export const SmartDatePicker: React.FC<Props> = ({
         style={{
           width: widthValue?`${widthValue}px`:"100%",
         }}
-        inputClass="w-full border border-gray-300 rounded-lg px-3 py-2"
+        inputClass={`w-full border border-gray-300 rounded-lg px-3 py-2 ${inputClassName}`}
         calendarPosition="bottom-right"
       />
     </div>

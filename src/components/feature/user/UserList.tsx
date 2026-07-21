@@ -1,8 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "primereact/button";
+import { Dropdown } from "primereact/dropdown";
+import { Dialog } from "primereact/dialog";
+import { Password } from "primereact/password";
 import { useNavigate } from "react-router-dom";
 import { useAppToast } from "../../../hooks/useToast.js";
+import { handleApi } from "../../../hooks/handleApi";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 // @ts-ignore
 import UserService from "../../../services/user.service.ts";
@@ -13,6 +17,8 @@ import type { MenuItem } from "primereact/menuitem";
 import { Toast } from "primereact/toast";
 import { useAuth } from "../../../context/AuthContext.tsx";
 import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
+import { SmartDatePicker } from "../../common/datepicker/SmartDatePicker";
+import RoleService from "../../../services/role.service";
 
 export const UserList = () => {
   const { t } = useTranslation();
@@ -22,24 +28,55 @@ export const UserList = () => {
   const { toast, showToast } = useAppToast();
   const { hasPermission, withPermission } = useAuth();
   const navigate = useNavigate();
+  const [resetUser, setResetUser] = useState<any>(null);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [resettingPassword, setResettingPassword] = useState(false);
+
+  const showSuccess = (summary: string, detail?: string) =>
+    showToast("success", summary, detail || "");
+  const showError = (summary: string, detail?: string) =>
+    showToast("error", summary, detail || "");
 
   // pagination state
   const [first, setFirst] = useState(0);
   const [rows, setRows] = useState(10);
   const [totalRecords, setTotalRecords] = useState(0);
+  const [keyword, setKeyword] = useState("");
+  const [role, setRole] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [searchFilters, setSearchFilters] = useState({ keyword: "", role: "", startDate: "", endDate: "" });
+  const [roleOptions, setRoleOptions] = useState<any[]>([]);
 
   useEffect(() => {
     loadUsers();
-  }, [first, rows]);
+  }, [first, rows, searchFilters]);
+
+  useEffect(() => {
+    RoleService.getAllRoles()
+      .then((response) => {
+        const roles = response.data?.data || response.data || [];
+        setRoleOptions(roles.map((item: any) => ({
+          label: item.name?.replace(/^ROLE_/, "") || item.name,
+          value: item.name,
+        })));
+      })
+      .catch(() => showToast("error", t("common.error"), t("user.messages.roleLoadFailed")));
+  }, []);
 
   const loadUsers = async () => {
     setLoading(true);
     try {
       const page = first / rows;
-      const res = await UserService.getPaginatedUsers({
+      const res = await UserService.searchUsers({
         page,
         size: rows,
         sort: "id,desc",
+        ...(searchFilters.keyword && { keyword: searchFilters.keyword }),
+        ...(searchFilters.role && { role: searchFilters.role }),
+        ...(searchFilters.startDate && { startDate: `${searchFilters.startDate}T00:00:00` }),
+        ...(searchFilters.endDate && { endDate: `${searchFilters.endDate}T23:59:59` }),
       });
       setUsers(res.data.data);
       setTotalRecords(res.data.totalElements);
@@ -49,10 +86,30 @@ export const UserList = () => {
       setLoading(false);
     }
   };
-const translatedRoles = (user: any) =>
-  user?.roles
-    ?.map((r: any) => t(`role.${r?.name}`))
-    .join(", ") || "";
+
+  const applySearch = () => {
+    setFirst(0);
+    setSearchFilters({ keyword: keyword.trim(), role: role.trim(), startDate, endDate });
+  };
+
+  const clearSearch = () => {
+    setKeyword("");
+    setRole("");
+    setStartDate("");
+    setEndDate("");
+    setFirst(0);
+    setSearchFilters({ keyword: "", role: "", startDate: "", endDate: "" });
+  };
+
+  const toIsoDateString = (value: any): string => {
+    if (!value) return "";
+    const rawDate = value?.toDate?.() ?? value?.date ?? value;
+    const date = rawDate instanceof Date ? rawDate : new Date(rawDate);
+    if (Number.isNaN(date.getTime())) return "";
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+  };
+  const translatedRoles = (user: any) =>
+    user?.roles?.map((r: any) => t(`role.${r?.name}`)).join(", ") || "";
   const roleBodyTemplate = (rowData: any) => {
     if (!rowData.roles || rowData.roles.length === 0) {
       return (
@@ -104,7 +161,8 @@ const translatedRoles = (user: any) =>
   };
 
   const dateBodyTemplate = (rowData: any) => {
-    if (!rowData.createdDate) return <span className="text-gray-400">{t("common.notSpecified")}</span>;
+    if (!rowData.createdDate)
+      return <span className="text-gray-400">{t("common.notSpecified")}</span>;
 
     const formattedDate = IslamicDateFormatter.formatQamari(
       rowData.createdDate,
@@ -276,6 +334,49 @@ const translatedRoles = (user: any) =>
     }
   };
 
+  const openResetPassword = (user: any) => {
+    setResetUser(user);
+    setNewPassword("");
+    setConfirmNewPassword("");
+  };
+
+  const handleResetPassword = async () => {
+    if (!resetUser) return;
+    if (newPassword.length < 6) {
+      showToast(
+        "warn",
+        t("common.warning"),
+        t("user.resetPassword.passwordTooShort"),
+      );
+      return;
+    }
+    if (newPassword !== confirmNewPassword) {
+      showToast(
+        "warn",
+        t("common.warning"),
+        t("user.resetPassword.passwordMismatch"),
+      );
+      return;
+    }
+
+    setResettingPassword(true);
+    const response = await handleApi(
+      () =>
+        UserService.resetUserPassword(resetUser.id, {
+          newPassword,
+          confirmNewPassword,
+        }),
+      showSuccess,
+      showError,
+      t,
+    );
+
+    if (response) {
+      setResetUser(null);
+    }
+    setResettingPassword(false);
+  };
+
   const actionTemplate = (rowData: any) => {
     const menu = useRef<any>(null);
 
@@ -284,6 +385,12 @@ const translatedRoles = (user: any) =>
         label: t("user.actions.edit"),
         icon: "pi pi-pencil",
         command: () => handleEdit(rowData),
+      }),
+
+      ...withPermission("UPDATE_USER", {
+        label: t("user.resetPassword.action"),
+        icon: "pi pi-key",
+        command: () => openResetPassword(rowData),
       }),
 
       ...withPermission("DELETE_USER", {
@@ -313,7 +420,8 @@ const translatedRoles = (user: any) =>
 
   const header = () => {
     return (
-      <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-4 px-2">
+      <div className="mb-4 space-y-4 px-2">
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-3">
           <h2 className="text-2xl font-bold bg-linear-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
             {t("user.title")}
@@ -344,6 +452,76 @@ const translatedRoles = (user: any) =>
             onClick={loadUsers}
           />
         </div>
+        </div>
+   <div className="rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 via-white to-blue-50 p-4 shadow-sm">
+  <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-700">
+    <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 text-blue-700">
+      <i className="pi pi-search" />
+    </span>
+    {t("user.search.title")}
+  </div>
+  <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-5">
+    <div className="space-y-1">
+      <label className="block text-xs font-semibold text-slate-600">
+        {t("user.search.nameOrEmail")}
+      </label>
+      <input 
+        value={keyword} 
+        onChange={(e) => setKeyword(e.target.value)} 
+        placeholder={t("user.search.keywordPlaceholder")} 
+        className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100" 
+      />
+    </div>
+    <div className="space-y-1">
+      <label className="block text-xs font-semibold text-slate-600">
+        {t("user.fields.role")}
+      </label>
+      <Dropdown
+        value={role}
+        options={roleOptions}
+        onChange={(e) => setRole(e.value || "")}
+        placeholder={t("user.search.rolePlaceholder")}
+        showClear
+        className="w-full rounded-xl border border-slate-200 text-sm shadow-sm"
+        panelClassName="rounded-xl shadow-xl"
+      />
+    </div>
+    <SmartDatePicker
+      value={startDate}
+      onChange={(date) => setStartDate(toIsoDateString(date))}
+      calendarType="persian"
+      label={t("user.search.startDate")}
+      className="text-sm"
+      inputClassName="px-3 py-2 text-sm"
+      labelClassName="mb-1 block text-xs font-semibold text-slate-600"
+    />
+    <SmartDatePicker
+      value={endDate}
+      onChange={(date) => setEndDate(toIsoDateString(date))}
+      calendarType="persian"
+      label={t("user.search.endDate")}
+      className="text-sm"
+      inputClassName="px-3 py-2 text-sm"
+      labelClassName="mb-1 block text-xs font-semibold text-slate-600"
+    />
+    <div className="flex items-end gap-2">
+      <Button 
+        label={t("user.search.button")} 
+        icon="pi pi-search" 
+        onClick={applySearch} 
+        className="h-9.5 flex-none rounded-xl border-0 bg-blue-700 px-4 py-2 text-sm shadow-sm hover:bg-blue-800" 
+      />
+      <Button 
+        icon="pi pi-filter-slash" 
+        text 
+        onClick={clearSearch} 
+        tooltip={t("user.search.clear")} 
+        tooltipOptions={{ position: "top" }} 
+        className="h-9.5 w-9.5 rounded-xl text-slate-500 hover:bg-slate-100" 
+      />
+    </div>
+  </div>
+</div>
       </div>
     );
   };
@@ -398,6 +576,109 @@ const translatedRoles = (user: any) =>
     <>
       <Toast ref={toast} />
       <ConfirmDialog className="max-h-5/12" header={false} />
+      <Dialog
+        header={t("user.resetPassword.title")}
+        visible={Boolean(resetUser)}
+        modal
+        className="w-[min(92vw,40rem)] overflow-hidden rounded-3xl border-0 shadow-2xl"
+        headerClassName="border-0 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 px-6 py-5 text-white"
+        contentClassName="bg-gradient-to-b from-gray-50 to-white px-6 py-6"
+        onHide={() => !resettingPassword && setResetUser(null)}
+        footer={
+          <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-between sm:gap-4">
+            <Button
+              label={t("common.cancel")}
+              outlined
+              onClick={() => setResetUser(null)}
+              disabled={resettingPassword}
+              className="w-full rounded-xl border-2 border-gray-300 bg-white/80 px-6 py-3 font-medium text-gray-700 backdrop-blur-sm transition-all duration-300 hover:border-gray-400 hover:bg-gray-100 hover:shadow-md sm:w-auto"
+            />
+            <Button
+              label={t("user.resetPassword.button")}
+              icon="pi pi-key"
+              onClick={handleResetPassword}
+              loading={resettingPassword}
+              className="w-full rounded-xl border-0 bg-gradient-to-r from-indigo-600 to-purple-600 px-8 py-3 font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all duration-300 hover:from-indigo-700 hover:to-purple-700 hover:shadow-xl hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-0 sm:w-auto"
+            />
+          </div>
+        }
+      >
+        <div className="min-w-0 space-y-6 sm:min-w-[320px]">
+          {/* User Info Card */}
+          <div className="group relative overflow-hidden rounded-2xl border border-indigo-100 bg-white p-5 shadow-md transition-all duration-300 hover:shadow-lg">
+            <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+            <div className="relative flex items-center gap-4">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-xl font-bold text-white shadow-lg shadow-indigo-500/25 ring-2 ring-white">
+                {`${resetUser?.firstName?.[0] || ""}${resetUser?.lastName?.[0] || ""}`.toUpperCase() ||
+                  "U"}
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-lg font-bold text-gray-800">
+                  {resetUser?.firstName} {resetUser?.lastName}
+                </p>
+                <p className="truncate text-sm font-medium text-gray-500">
+                  {resetUser?.email}
+                </p>
+              </div>
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-50">
+                <i className="pi pi-shield text-xl text-indigo-600" />
+              </div>
+            </div>
+          </div>
+
+          {/* Info Alert */}
+          {/* <div className="flex items-start gap-3 rounded-2xl border border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50 p-4 shadow-sm">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-amber-100">
+              <i className="pi pi-info-circle text-amber-600" />
+            </div>
+            <p className="text-sm font-medium leading-6 text-amber-800">
+              {t("user.resetPassword.title")}
+            </p>
+          </div> */}
+
+          {/* Password Fields */}
+          <div className="space-y-5">
+            <div className="space-y-2.5">
+              <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                <i className="pi pi-lock text-indigo-500" />
+                {t("user.fields.password")}
+              </label>
+              <Password
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder={t("user.placeholders.password")}
+                toggleMask
+                feedback={false}
+                className="w-full"
+                inputClassName="w-full rounded-xl border-2 border-gray-200 py-3.5 pl-4 pr-10 text-gray-700 shadow-sm transition-all duration-300 placeholder:text-gray-400 hover:border-indigo-300 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20"
+              />
+            </div>
+
+            <div className="space-y-2.5">
+              <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                <i className="pi pi-check-circle text-purple-500" />
+                {t("user.fields.confirmPassword")}
+              </label>
+              <Password
+                value={confirmNewPassword}
+                onChange={(e) => setConfirmNewPassword(e.target.value)}
+                placeholder={t("user.placeholders.confirmPassword")}
+                toggleMask
+                feedback={false}
+                inputClassName="w-full rounded-xl border-2 border-gray-200 py-3.5 pl-4 pr-10 text-gray-700 shadow-sm transition-all duration-300 placeholder:text-gray-400 hover:border-purple-300 focus:border-purple-500 focus:ring-4 focus:ring-purple-500/20"
+              />
+            </div>
+          </div>
+
+          {/* Password Requirements Hint */}
+          <div className="rounded-xl border border-blue-100 bg-blue-50/50 p-3">
+            <p className="flex items-center gap-2 text-xs font-medium text-blue-700">
+              <i className="pi pi-shield text-blue-500" />
+              Password must be at least 8 characters with letters and numbers
+            </p>
+          </div>
+        </div>
+      </Dialog>
       <DynamicBreadcrumb
         items={breadcrumbItems}
         size="pl-5 pr-5 max-w-8xl mx-auto mt-3"

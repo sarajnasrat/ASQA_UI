@@ -13,6 +13,10 @@ export const UserService = {
     return httpClient.get(`${USER_BASE}/pagenated-users`, { params });
   },
 
+  searchUsers(params: any) {
+    return httpClient.get(`${USER_BASE}/search`, { params });
+  },
+
   registerUser(data: any) {
     return httpClient.post(`${USER_BASE}/register`, data, {
       headers: {
@@ -35,6 +39,10 @@ export const UserService = {
 
   deleteUser(id: string | number) {
     return httpClient.delete(`${USER_BASE}/delete/${id}`);
+  },
+
+  resetUserPassword(id: string | number, data: { newPassword: string; confirmNewPassword: string }) {
+    return httpClient.put(`${USER_BASE}/${id}/reset-password`, data);
   },
 
   /* ================= EMAIL OTP ================= */

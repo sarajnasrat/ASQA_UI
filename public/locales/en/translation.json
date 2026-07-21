@@ -1867,6 +1867,25 @@
     }
   },
   "user": {
+    "resetPassword": {
+      "title": "Reset User Password",
+      "action": "Reset Password",
+      "button": "Reset Password",
+      "passwordTooShort": "Password must be at least 6 characters",
+      "passwordMismatch": "Passwords do not match",
+      "success": "Password reset successfully",
+      "failed": "Failed to reset password"
+    },
+    "search": {
+      "title": "Search Users",
+      "nameOrEmail": "Name or email",
+      "keywordPlaceholder": "Search by name or email",
+      "rolePlaceholder": "Role (e.g. ADMIN)",
+      "startDate": "Start date",
+      "endDate": "End date",
+      "button": "Search",
+      "clear": "Clear filters"
+    },
     "title": "User Management",
     "total": "Total",
     "labels": {
@@ -1913,11 +1932,13 @@
       "save": "Save",
       "tryAgain": "Try Again",
       "back": "Back"
+      ,"resetPassword": "Reset Password"
     },
     "actions": {
       "edit": "Edit User",
       "delete": "Delete User",
       "viewDetails": "View Details"
+      ,"resetPassword": "Reset Password"
     },
     "messages": {
       "loadFailed": "Failed to load users",
@@ -1932,10 +1953,15 @@
       "userNotFound": "User not found",
       "loadingError": "Error loading user data",
       "roleLoadFailed": "Failed to load roles"
+      ,"passwordTooShort": "Password must be at least 6 characters",
+      "passwordMismatch": "Passwords do not match",
+      "passwordResetSuccess": "Password reset successfully",
+      "passwordResetFailed": "Failed to reset password"
     },
     "dialogs": {
       "deleteTitle": "Delete User",
       "deleteConfirm": "Are you sure you want to delete"
+      ,"resetPasswordTitle": "Reset User Password"
     },
     "details": {
       "userDetails": "User Details",

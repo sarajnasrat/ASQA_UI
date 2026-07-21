@@ -1836,6 +1836,25 @@
     }
   },
   "user": {
+    "resetPassword": {
+      "title": "د کارونکي پټنوم بیا تنظیمول",
+      "action": "پټنوم بیا تنظیمول",
+      "button": "پټنوم بیا تنظیمول",
+      "passwordTooShort": "پټنوم باید لږ تر لږه ۶ توري ولري",
+      "passwordMismatch": "پټنومونه سره سمون نه لري",
+      "success": "پټنوم بیا تنظیم شو",
+      "failed": "د پټنوم بیا تنظیمول ناکام شول"
+    },
+    "search": {
+      "title": "کاروونکي لټون",
+      "nameOrEmail": "نوم یا برېښنالیک",
+      "keywordPlaceholder": "د نوم یا برېښنالیک له مخې لټون",
+      "rolePlaceholder": "رول (لکه ADMIN)",
+      "startDate": "د پیل نېټه",
+      "endDate": "د پای نېټه",
+      "button": "لټون",
+      "clear": "فلټرونه پاکول"
+    },
     "title": "د کاروونکو مدیریت",
     "total": "ټول",
     "labels": {

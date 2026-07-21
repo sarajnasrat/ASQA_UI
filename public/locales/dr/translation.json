@@ -1946,6 +1946,25 @@
     }
   },
   "user": {
+    "resetPassword": {
+      "title": "بازنشانی رمز عبور کاربر",
+      "action": "بازنشانی رمز عبور",
+      "button": "بازنشانی رمز عبور",
+      "passwordTooShort": "رمز عبور باید حداقل ۶ حرف باشد",
+      "passwordMismatch": "رمزهای عبور مطابقت ندارند",
+      "success": "رمز عبور با موفقیت بازنشانی شد",
+      "failed": "بازنشانی رمز عبور ناموفق بود"
+    },
+    "search": {
+      "title": "جستجوی کاربران",
+      "nameOrEmail": "نام یا ایمیل",
+      "keywordPlaceholder": "جستجو بر اساس نام یا ایمیل",
+      "rolePlaceholder": "نقش (مثلاً ADMIN)",
+      "startDate": "تاریخ شروع",
+      "endDate": "تاریخ پایان",
+      "button": "جستجو",
+      "clear": "پاک کردن فیلترها"
+    },
     "title": "مدیریت کاربران",
     "total": "مجموع",
     "labels": {
