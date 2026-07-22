@@ -18,7 +18,7 @@ import { Tag } from "primereact/tag";
 import { useAuth } from "../../../context/AuthContext";
 
 export const RoleList = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [roles, setRoles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
@@ -37,7 +37,7 @@ export const RoleList = () => {
 
   useEffect(() => {
     getRoles();
-  }, [first, rows]);
+  }, [first, rows, i18n.language]);
 
   const getRoles = async () => {
     const page = first / rows;
@@ -73,7 +73,13 @@ export const RoleList = () => {
   const handleViewDetails = (role: any) => {
     navigate(`/users/role/${role.id}`);
   };
-  const translatedRole = (role: any) => (role ? t(`role.${role?.name}`) : "");
+  const translatedRole = (role: any) => {
+    if (!role?.name) return "";
+    const roleName = role.name.replace(/^ROLE_/, "");
+    return t(`role.${role.name}`, {
+      defaultValue: t(`user.roles.${roleName}`, { defaultValue: role.name }),
+    });
+  };
   const confirmDelete = (role: any) => {
     confirmDialog({
       message: (

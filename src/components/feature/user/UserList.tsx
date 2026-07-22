@@ -23,7 +23,7 @@ import { UserRegistration } from "./UserRegistration";
 import { EditUser } from "./EditUser";
 
 export const UserList = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [globalFilter] = useState("");
@@ -69,7 +69,7 @@ export const UserList = () => {
           })));
       })
       .catch(() => showToast("error", t("common.error"), t("user.messages.roleLoadFailed")));
-  }, []);
+  }, [i18n.language]);
 
   const loadUsers = async () => {
     setLoading(true);

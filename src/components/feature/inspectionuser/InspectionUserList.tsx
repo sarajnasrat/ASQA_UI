@@ -23,7 +23,7 @@ import { InspectionUserRegistration } from "./InspectionUserRegistration";
 import { InspectionUserEdit } from "./InspectionUserEdit";
 
 export const InspectionUserList = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [globalFilter] = useState("");
@@ -67,7 +67,7 @@ export const InspectionUserList = () => {
         })));
       })
       .catch(() => showToast("error", t("common.error"), t("user.messages.roleLoadFailed")));
-  }, []);
+  }, [i18n.language]);
 
   const loadUsers = async () => {
     setLoading(true);

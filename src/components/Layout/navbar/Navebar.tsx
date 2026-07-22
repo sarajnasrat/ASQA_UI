@@ -58,11 +58,11 @@ export const Navbar = ({ collapsed = false }: NavbarProps) => {
 
   const languageOptions: LangOption[] = useMemo(
     () => [
-      { label: "English", value: "en", icon: "/us.png" },
-      { label: "پښتو", value: "ps", icon: "/af.png" },
-      { label: "دری", value: "dr", icon: "/af.png" },
+      { label: t("languages.english", "English"), value: "en", icon: "/us.png" },
+      { label: t("languages.pashto", "Pashto"), value: "ps", icon: "/af.png" },
+      { label: t("languages.dari", "Dari"), value: "dr", icon: "/af.png" },
     ],
-    [],
+    [t, i18n.language],
   );
 
   const translatedRoles =
@@ -146,7 +146,7 @@ export const Navbar = ({ collapsed = false }: NavbarProps) => {
   };
 
   const handleLanguageChange = (e: { value: LangOption["value"] }) => {
-    i18n.changeLanguage(e.value);
+    void i18n.changeLanguage(e.value);
   };
 
   const getIsRead = (item: NotificationItem) =>

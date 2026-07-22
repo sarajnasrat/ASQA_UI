@@ -36,7 +36,7 @@ type ZoneOption = {
 export type EditUserProps = { userId?: number; onClose?: () => void; onSaved?: () => void };
 
 export const EditUser = ({ userId, onClose, onSaved }: EditUserProps = {}) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { id: routeId } = useParams<{ id: string }>();
   const id = userId?.toString() || routeId;
@@ -105,7 +105,7 @@ export const EditUser = ({ userId, onClose, onSaved }: EditUserProps = {}) => {
 
     fetchRoles();
     fetchZones();
-  }, [t]);
+  }, [t, i18n.language]);
 
   useEffect(() => {
     const loadUser = async () => {

@@ -41,7 +41,7 @@ export type UserRegistrationProps = { onClose?: () => void; onSaved?: () => void
 export const UserRegistration = ({ onClose, onSaved }: UserRegistrationProps = {}) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { toast, showToast } = useAppToast();
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [profilePreviewUrl, setProfilePreviewUrl] = useState<string | null>(null);
@@ -79,7 +79,7 @@ export const UserRegistration = ({ onClose, onSaved }: UserRegistrationProps = {
 
   useEffect(() => {
     getAllRoles();
-  }, []);
+  }, [i18n.language]);
 
   useEffect(() => {
     const fetchZones = async () => {
