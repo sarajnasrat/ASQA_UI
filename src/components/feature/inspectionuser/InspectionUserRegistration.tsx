@@ -14,7 +14,6 @@ import { useAppToast } from "../../../hooks/useToast.js";
 import { Toast } from "primereact/toast";
 import DynamicBreadcrumb from "../../common/DynamicBreadcrumb.js";
 import ZoneService from "../../../services/zone.service.ts";
-import RoleService from "../../../services/role.service.ts";
 import { useTranslation } from "react-i18next";
 
 type FormValues = {
@@ -35,20 +34,19 @@ type UserRegistrationLocationState = {
   commiteeType?: string | null;
 };
 
-export const UserRegistration = () => {
+export const InspectionUserRegistration = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
   const { toast, showToast } = useAppToast();
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [zones, setZones] = useState<{ label: string; value: any }[]>([]);
-  const [roles, setRoles] = useState<{ label: string; value: any }[]>([]);
   const navigationState = (location.state as UserRegistrationLocationState) || {};
   const isFromCommitteeMemberCreate =
     navigationState.from === "committee-member-create";
   const redirectPath = isFromCommitteeMemberCreate
     ? navigationState.returnTo || "/commitee-list"
-    : "/users";
+    : "/inspection-users";
 
   const {
     control,
@@ -59,23 +57,6 @@ export const UserRegistration = () => {
   } = useForm<FormValues>();
 
   const passwordValue = watch("password");
-
-  const getAllRoles = async () => {
-    try {
-      const response = await RoleService.getAllRoles();
-      const roleOptions = response.data.map((role: any) => ({
-        label: t(`user.roles.${role.name?.replace(/^ROLE_/, "")}`) || role.name,
-        value: role.name,
-      }));
-      setRoles(roleOptions);
-    } catch (error) {
-      showToast("error", t("common.error"), t("user.messages.roleLoadFailed"));
-    }
-  };
-
-  useEffect(() => {
-    getAllRoles();
-  }, []);
 
   useEffect(() => {
     const fetchZones = async () => {
@@ -109,7 +90,7 @@ export const UserRegistration = () => {
               password: data.password,
               active: true,
               phoneNumber: data.phoneNumber,
-              roles: [data.role],
+              roles: ["INSPECTION_USERS"],
               zone: { id: data.zoneId },
             }),
           ],
@@ -194,8 +175,8 @@ export const UserRegistration = () => {
     <>
       <DynamicBreadcrumb
         items={[
-          { label: t("user.breadcrumb.users"), url: "/users" },
-          { label: t("user.breadcrumb.createUser"), url: "/users/new" },
+          { label: t("user.inspection.title", "Inspection Users"), url: "/inspection-users" },
+          { label: t("user.inspection.createTitle", "Create Inspection User"), url: "/inspection-users/new" },
         ]}
         size="pl-5 pr-5 max-w-8xl mx-auto mt-1"
       />
@@ -207,20 +188,20 @@ export const UserRegistration = () => {
           visible
           modal
           dismissableMask
-          onHide={() => navigate("/users")}
-          header={t("user.form.title.create")}
+          onHide={() => navigate("/inspection-users")}
+          header={t("user.inspection.createTitle")}
           className="w-[min(96vw,1100px)]"
           contentClassName="max-h-[78vh] overflow-y-auto"
         >
         <Card className="w-full shadow-none">
-          <div className="mb-6 pb-2 border-b border-gray-200">
+          {/* <div className="mb-6 pb-2 border-b border-gray-200">
             <h2 className="text-2xl font-bold text-gray-800">
-              {t("user.form.title.create")}
+              {t("user.inspection.createTitle", "Create Inspection User")}
             </h2>
             <p className="text-sm text-gray-500 mt-1">
-              {t("user.form.subtitle.create")}
+              {t("user.inspection.formSubtitle", "Enter inspection user information")}
             </p>
-          </div>
+          </div> */}
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4">
@@ -431,7 +412,8 @@ export const UserRegistration = () => {
                 )}
               />
 
-              {/* Role */}
+              {false && <>
+              {/* Inspection role is assigned automatically and is not editable. */}
               <Controller
                 name="role"
                 control={control}
@@ -445,6 +427,7 @@ export const UserRegistration = () => {
                     <Dropdown
                       {...field}
                       options={roles}
+                      style={{ display: "none" }}
                       placeholder={t("user.placeholders.selectRole")}
                       className={`w-full ${errors.role ? "p-invalid" : ""}`}
                     />
@@ -456,6 +439,8 @@ export const UserRegistration = () => {
                   </div>
                 )}
               />
+
+              </>}
 
               {/* Zone */}
               <Controller
@@ -482,10 +467,8 @@ export const UserRegistration = () => {
                   </div>
                 )}
               />
-            </div>
-
             {/* Profile Image */}
-            <div className="mt-6 pt-4 border-t border-gray-200">
+            <div className="lg:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 {t("user.labels.profileImage")}
               </label>
@@ -498,6 +481,7 @@ export const UserRegistration = () => {
               <p className="text-xs text-gray-400 mt-1">
                 {t("user.placeholders.imageHint")}
               </p>
+            </div>
             </div>
 
             {/* Action Buttons */}
@@ -541,3 +525,5 @@ export const UserRegistration = () => {
     </>
   );
 };
+
+export default InspectionUserRegistration;

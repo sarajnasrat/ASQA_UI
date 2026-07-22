@@ -1676,6 +1676,7 @@
     "export": "دانلود فایل اکسل",
     "choosefile": "انتخاب فایل",
     "clearfileselected": "پاک کردن فایل انتخاب شده",
+    "itemsSelected": "{0} مورد انتخاب شده",
     "...More": "...بیشتر",
     "maxfilesize": "حداکثر حجم فایل: {{size}}",
     "required": "این فیلد ضروری است",
@@ -1946,6 +1947,14 @@
     }
   },
   "user": {
+    "inspection": {
+      "title": "کاربران تفتیش",
+      "searchTitle": "جستجوی کاربران تفتیش",
+      "createTitle": "ایجاد کاربر تفتیش",
+      "editTitle": "ویرایش کاربر تفتیش",
+      "detailsTitle": "جزئیات کاربر تفتیش",
+      "formSubtitle": "معلومات کاربر تفتیش را وارد کنید"
+    },
     "resetPassword": {
       "title": "بازنشانی رمز عبور کاربر",
       "action": "بازنشانی رمز عبور",
@@ -2035,7 +2044,8 @@
       "zoneLoadFailed": "بارگذاری زون‌ها ناموفق بود",
       "userNotFound": "کاربر یافت نشد",
       "loadingError": "خطا در بارگذاری اطلاعات کاربر",
-      "roleLoadFailed": "بارگیری نقش‌ها ناموفق بود"
+      "roleLoadFailed": "بارگیری نقش‌ها ناموفق بود",
+      "inspection": { "title": "کاربران تفتیش", "searchTitle": "جستجوی کاربران تفتیش", "createTitle": "ایجاد کاربر تفتیش", "editTitle": "ویرایش کاربر تفتیش", "detailsTitle": "جزئیات کاربر تفتیش", "formSubtitle": "معلومات کاربر تفتیش را وارد کنید" }
     },
     "dialogs": {
       "deleteTitle": "حذف کاربر",
@@ -2092,6 +2102,7 @@
       "MONITORING": "نظارت",
       "SUPER_ADMIN": "مدیر ارشد",
       "COMMITTEE_MEMBER": "عضو کمیته",
+      "DATABASE_EXPERT": "کارشناس دیتابیس",
       "INSPECTOR": "بازرس"
     },
     "columns": {

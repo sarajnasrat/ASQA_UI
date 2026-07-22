@@ -20,7 +20,7 @@ import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatt
 import { SmartDatePicker } from "../../common/datepicker/SmartDatePicker";
 import RoleService from "../../../services/role.service";
 
-export const UserList = () => {
+export const InspectionUserList = () => {
   const { t } = useTranslation();
   const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -57,12 +57,10 @@ export const UserList = () => {
     RoleService.getAllRoles()
       .then((response) => {
         const roles = response.data?.data || response.data || [];
-        setRoleOptions(roles
-          .filter((item: any) => !["INSPECTION_USERS", "ROLE_INSPECTION_USERS"].includes(item.name?.toUpperCase()))
-          .map((item: any) => ({
+        setRoleOptions(roles.map((item: any) => ({
           label: t(`user.roles.${item.name?.replace(/^ROLE_/, "")}`) || item.name,
           value: item.name,
-          })));
+        })));
       })
       .catch(() => showToast("error", t("common.error"), t("user.messages.roleLoadFailed")));
   }, []);
@@ -76,17 +74,13 @@ export const UserList = () => {
         size: rows,
         sort: "id,desc",
         ...(searchFilters.keyword && { keyword: searchFilters.keyword }),
-        ...(searchFilters.roles.length > 0 && { roles: searchFilters.roles }),
         ...(searchFilters.startDate && { startDate: `${searchFilters.startDate}T00:00:00` }),
         ...(searchFilters.endDate && { endDate: `${searchFilters.endDate}T23:59:59` }),
       };
-      const hasFilters = Boolean(
-        searchFilters.keyword || searchFilters.roles.length ||
-        searchFilters.startDate || searchFilters.endDate,
-      );
+      const hasFilters = Boolean(searchFilters.keyword || searchFilters.startDate || searchFilters.endDate);
       const res = hasFilters
-        ? await UserService.searchUsers(params)
-        : await UserService.getPaginatedUsers(params);
+        ? await UserService.searchInspectionUsers(params)
+        : await UserService.getPaginatedInspectionUsers(params);
       setUsers(res.data.data);
       setTotalRecords(res.data.totalElements);
     } catch (error) {
@@ -411,7 +405,7 @@ export const UserList = () => {
       ...withPermission("VIEW_USER", {
         label: t("user.actions.viewDetails"),
         icon: "pi pi-eye",
-        command: () => navigate(`/users/view/${rowData.id}`),
+        command: () => navigate(`/inspection-users/view/${rowData.id}`),
       }),
     ];
 
@@ -433,7 +427,7 @@ export const UserList = () => {
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-3">
           <h2 className="text-2xl font-bold bg-linear-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
-            {t("user.title")}
+            {t("user.inspection.title", "Inspection Users")}
           </h2>
           <span className="bg-blue-100 text-blue-800 text-xs font-medium px-3 py-1 rounded-full shadow-sm">
             {t("user.total")}: {totalRecords}
@@ -448,7 +442,7 @@ export const UserList = () => {
               raised
               severity="info"
               text
-              onClick={() => navigate("/users/new")}
+              onClick={() => navigate("/inspection-users/new")}
             />
           )}
 
@@ -467,7 +461,7 @@ export const UserList = () => {
     <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 text-blue-700">
       <i className="pi pi-search" />
     </span>
-    {t("user.search.title")}
+    {t("user.inspection.searchTitle", "Search Inspection Users")}
   </div>
   <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-5">
     <div className="space-y-1">
@@ -479,22 +473,6 @@ export const UserList = () => {
         onChange={(e) => setKeyword(e.target.value)} 
         placeholder={t("user.search.keywordPlaceholder")} 
         className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100" 
-      />
-    </div>
-    <div className="space-y-1">
-      <label className="block text-xs font-semibold text-slate-600">
-        {t("user.fields.role")}
-      </label>
-      <MultiSelect
-        value={roles}
-        options={roleOptions}
-        onChange={(e) => setRoles(e.value || [])}
-        placeholder={t("user.search.rolePlaceholder")}
-        display="chip"
-        maxSelectedLabels={2}
-        selectedItemsLabel={t("common.itemsSelected")}
-        className="w-full rounded-xl border border-slate-200 text-sm shadow-sm"
-        panelClassName="rounded-xl shadow-xl"
       />
     </div>
     <SmartDatePicker
@@ -581,7 +559,7 @@ export const UserList = () => {
     },
   ];
 
-  const breadcrumbItems = [{ label: t("user.title"), url: "" }];
+  const breadcrumbItems = [{ label: t("user.inspection.title", "Inspection Users"), url: "" }];
 
   return (
     <>
@@ -695,7 +673,7 @@ export const UserList = () => {
         size="pl-5 pr-5 max-w-8xl mx-auto mt-3"
       />
       <DynamicTable
-        title={t("user.title")}
+        title={t("user.inspection.title", "Inspection Users")}
         value={users}
         columns={columns}
         header={header()}
@@ -713,4 +691,4 @@ export const UserList = () => {
   );
 };
 
-export default UserList;
+export default InspectionUserList;

@@ -13,8 +13,21 @@ export const UserService = {
     return httpClient.get(`${USER_BASE}/pagenated-users`, { params });
   },
 
+  getPaginatedInspectionUsers(params: any) {
+    return httpClient.get(`${USER_BASE}/inspection-users`, { params });
+  },
+
+  searchInspectionUsers(params: any) {
+    return httpClient.get(`${USER_BASE}/inspection-users/search`, { params });
+  },
+
   searchUsers(params: any) {
-    return httpClient.get(`${USER_BASE}/search`, { params });
+    return httpClient.get(`${USER_BASE}/search`, {
+      params,
+      paramsSerializer: {
+        indexes: null,
+      },
+    });
   },
 
   registerUser(data: any) {

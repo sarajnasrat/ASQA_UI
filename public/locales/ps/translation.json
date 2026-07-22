@@ -1628,6 +1628,7 @@
     "confirmation": "تائید",
     "choosefile": "انتخاب فایل",
     "clearfileselected": "پاک کردن فایل انتخاب شده",
+    "itemsSelected": "{0} توکي ټاکل شوي",
     "...More": "...بیشتر",
     "maxfilesize": "حداکثر حجم فایل: {{size}}",
     "required": "این فیلد ضروری است"
@@ -1836,6 +1837,14 @@
     }
   },
   "user": {
+    "inspection": {
+      "title": "د تفتیش کاروونکي",
+      "searchTitle": "د تفتیش کاروونکو لټون",
+      "createTitle": "د تفتیش کاروونکی جوړول",
+      "editTitle": "د تفتیش کاروونکی سمول",
+      "detailsTitle": "د تفتیش کاروونکي جزیات",
+      "formSubtitle": "د تفتیش کاروونکي معلومات دننه کړئ"
+    },
     "resetPassword": {
       "title": "د کارونکي پټنوم بیا تنظیمول",
       "action": "پټنوم بیا تنظیمول",
@@ -1919,7 +1928,8 @@
       "zoneLoadFailed": "د زونونو بارول ناکام شول",
       "userNotFound": "کاربر یافت نشد",
       "loadingError": "خطا در بارگذاری اطلاعات کاربر",
-      "roleLoadFailed": "بارگیری نقش‌ها ناموفق بود"
+      "roleLoadFailed": "بارگیری نقش‌ها ناموفق بود",
+      "inspection": { "title": "د تفتیش کاروونکي", "searchTitle": "د تفتیش کاروونکو لټون", "createTitle": "د تفتیش کاروونکی جوړول", "editTitle": "د تفتیش کاروونکی سمول", "detailsTitle": "د تفتیش کاروونکي جزیات", "formSubtitle": "د تفتیش کاروونکي معلومات دننه کړئ" }
     },
     "dialogs": {
       "deleteTitle": "کارونکی ړنګ کړئ",

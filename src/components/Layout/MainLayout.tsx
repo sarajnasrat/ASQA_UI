@@ -66,6 +66,10 @@ import AuditLogList from "../feature/auditlog/AuditLogList.tsx";
 import UserProfilePage from "../feature/user/profile/UserProfilePage";
 import UserSettingsPage from "../feature/user/profile/UserSettingsPage";
 import CertificationRequestTracking from "../feature/certification-request/CertificationRequestTracking.tsx";
+import InspectionUserList from "../feature/inspectionuser/InspectionUserList";
+import InspectionUserRegistration from "../feature/inspectionuser/InspectionUserRegistration";
+import InspectionUserEdit from "../feature/inspectionuser/InspectionUserEdit";
+import InspectionUserDetails from "../feature/inspectionuser/InspectionUserDetails";
 
 export const MainLayout = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -136,6 +140,10 @@ export const MainLayout = () => {
               <Route path="users/role/:id" element={<ViewDetails />} />
               <Route path="users/roles" element={<RoleList />} />
               <Route path="users/permissions" element={<PermissionList />} />
+              <Route path="inspection-users" element={<InspectionUserList />} />
+              <Route path="inspection-users/new" element={<InspectionUserRegistration />} />
+              <Route path="inspection-users/edit/:id" element={<InspectionUserEdit />} />
+              <Route path="inspection-users/view/:id" element={<InspectionUserDetails />} />
 
               {/* Protected Routes */}
               <Route

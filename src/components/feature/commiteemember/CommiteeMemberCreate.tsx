@@ -132,12 +132,7 @@ export const CommiteeMemberCreate: React.FC<Props> = ({
     value: user.id,
   }));
 
-  const selectedItemsLabel =
-    i18n.language === "ps"
-      ? "{0} توکي ټاکل شوي"
-      : i18n.language === "dr"
-        ? "{0} مورد انتخاب شده"
-        : "{0} items selected";
+  const selectedItemsLabel = t("common.itemsSelected");
 
   const handleCreateUser = () => {
     const returnTo =

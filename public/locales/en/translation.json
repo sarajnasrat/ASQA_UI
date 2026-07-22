@@ -1594,6 +1594,7 @@
     "exporting": "Exporting...",
     "choosefile": "Select file",
     "clearfileselected": "Clear Selected File",
+    "itemsSelected": "{0} items selected",
     "maxfilesize": "Max file size: {{size}}",
     "required": "This field is required",
     "...More": "...More",
@@ -1867,6 +1868,14 @@
     }
   },
   "user": {
+    "inspection": {
+      "title": "Inspection Users",
+      "searchTitle": "Search Inspection Users",
+      "createTitle": "Create Inspection User",
+      "editTitle": "Edit Inspection User",
+      "detailsTitle": "Inspection User Details",
+      "formSubtitle": "Enter inspection user information"
+    },
     "resetPassword": {
       "title": "Reset User Password",
       "action": "Reset Password",
@@ -1952,7 +1961,8 @@
       "zoneLoadFailed": "Failed to load zones",
       "userNotFound": "User not found",
       "loadingError": "Error loading user data",
-      "roleLoadFailed": "Failed to load roles"
+      "roleLoadFailed": "Failed to load roles",
+      "inspection": { "title": "Inspection Users", "searchTitle": "Search Inspection Users", "createTitle": "Create Inspection User", "editTitle": "Edit Inspection User", "detailsTitle": "Inspection User Details", "formSubtitle": "Enter inspection user information" }
       ,"passwordTooShort": "Password must be at least 6 characters",
       "passwordMismatch": "Passwords do not match",
       "passwordResetSuccess": "Password reset successfully",

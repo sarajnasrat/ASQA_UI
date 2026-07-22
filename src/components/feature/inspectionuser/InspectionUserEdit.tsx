@@ -6,7 +6,6 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import UserService from "../../../services/user.service";
 import ZoneService from "../../../services/zone.service";
-import RoleService from "../../../services/role.service";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Toast } from "primereact/toast";
@@ -32,7 +31,7 @@ type ZoneOption = {
   value: number;
 };
 
-export const EditUser = () => {
+export const InspectionUserEdit = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
@@ -43,7 +42,6 @@ export const EditUser = () => {
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [existingImageUrl, setExistingImageUrl] = useState<string | null>(null);
   const [zones, setZones] = useState<ZoneOption[]>([]);
-  const [roles, setRoles] = useState<{ label: string; value: string }[]>([]);
   const { showError, showSuccess } = useToast();
   const {
     control,
@@ -62,23 +60,6 @@ export const EditUser = () => {
   });
 
   useEffect(() => {
-    const fetchRoles = async () => {
-      try {
-        const response = await RoleService.getAllRoles();
-        const roleOptions = response.data.map((role: any) => ({
-          label: t(`user.roles.${role.name?.replace(/^ROLE_/, "")}`) || role.name,
-          value: role.name,
-        }));
-        setRoles(roleOptions);
-      } catch {
-        showToast(
-          "error",
-          t("common.error"),
-          t("user.messages.roleLoadFailed"),
-        );
-      }
-    };
-
     const fetchZones = async () => {
       try {
         const response = await ZoneService.getAllZones();
@@ -98,9 +79,8 @@ export const EditUser = () => {
       }
     };
 
-    fetchRoles();
     fetchZones();
-  }, [t]);
+  }, []);
 
   useEffect(() => {
     const loadUser = async () => {
@@ -134,6 +114,16 @@ export const EditUser = () => {
     loadUser();
   }, [id, reset]);
 
+  const roleOptions = [
+    { label: t("user.roles.ADMIN"), value: "ROLE_ADMIN" },
+    { label: t("user.roles.USER"), value: "ROLE_USER" },
+    { label: t("user.roles.COMPANY_ADMIN"), value: "ROLE_COMPANY_ADMIN" },
+    { label: t("user.roles.MONITORING"), value: "ROLE_MONITORING" },
+    { label: t("user.roles.SUPER_ADMIN"), value: "ROLE_SUPER_ADMIN" },
+    { label: t("user.roles.COMMITTEE_MEMBER"), value: "ROLE_COMMITTEE_MEMBER" },
+    { label: t("user.roles.INSPECTOR"), value: "ROLE_INSPECTOR" },
+  ];
+
   const onSubmit = async (data: FormValues) => {
     if (!id) return;
 
@@ -150,7 +140,7 @@ export const EditUser = () => {
               email: data.email,
               active: true,
               phoneNumber: data.phoneNumber,
-              roles: [data.role],
+              roles: ["INSPECTION_USERS"],
               zone: { id: data.zoneId },
             }),
           ],
@@ -170,7 +160,7 @@ export const EditUser = () => {
       );
       if (response?.status === 200) {
         setTimeout(() => {
-          navigate("/users");
+          navigate("/inspection-users");
         }, 1000);
       }
     } catch {
@@ -193,8 +183,8 @@ export const EditUser = () => {
 
       <DynamicBreadcrumb
         items={[
-          { label: t("user.title"), url: "/users" },
-          { label: t("user.breadcrumb.editUser"), url: `/users/edit/${id}` },
+          { label: t("user.inspection.title", "Inspection Users"), url: "/inspection-users" },
+          { label: t("user.inspection.editTitle", "Edit Inspection User"), url: `/inspection-users/edit/${id}` },
         ]}
         size="w-full max-w-7xl mx-auto px-0 pt-4"
       />
@@ -207,8 +197,8 @@ export const EditUser = () => {
             visible
             modal
             dismissableMask
-            onHide={() => navigate("/users")}
-            header={t("user.breadcrumb.editUser")}
+            onHide={() => navigate("/inspection-users")}
+            header={t("user.inspection.editTitle")}
             className="w-[min(96vw,1100px)]"
             contentClassName="max-h-[78vh] overflow-y-auto"
           >
@@ -220,7 +210,7 @@ export const EditUser = () => {
                   control={control}
                   rules={{ required: t("user.validation.firstNameRequired") }}
                   render={({ field }) => (
-                    <div>
+                      <div>
                       <label className="font-medium">
                         {t("user.fields.firstName")}
                       </label>
@@ -319,7 +309,8 @@ export const EditUser = () => {
                       </label>
                       <Dropdown
                         {...field}
-                        options={roles}
+                        options={roleOptions}
+                        style={{ display: "none" }}
                         placeholder={t("user.placeholders.selectRole")}
                         className="w-full"
                       />
@@ -353,6 +344,13 @@ export const EditUser = () => {
                           {errors.zoneId.message}
                         </small>
                       )}
+                      <FileUploadField
+                        label={t("user.fields.updateProfileImage")}
+                        name="profileImage"
+                        accept="image/*"
+                        maxFileSize={1048576}
+                        onFileSelect={(file) => setProfileImage(file)}
+                      />
                     </div>
                   )}
                 />
@@ -371,13 +369,13 @@ export const EditUser = () => {
                 </div>
               )}
 
-              <FileUploadField
+              <div><FileUploadField
                 label={t("user.fields.updateProfileImage")}
                 name="profileImage"
                 accept="image/*"
                 maxFileSize={1048576}
                 onFileSelect={(file) => setProfileImage(file)}
-              />
+              /></div>
 
               <div className="flex justify-start gap-2 pt-4">
                 <Button
@@ -397,7 +395,7 @@ export const EditUser = () => {
                   text
                   raised
                   icon="pi pi-times"
-                  onClick={() => navigate("/users")}
+                  onClick={() => navigate("/inspection-users")}
                 />
               </div>
             </form>
@@ -408,3 +406,5 @@ export const EditUser = () => {
     </>
   );
 };
+
+export default InspectionUserEdit;
