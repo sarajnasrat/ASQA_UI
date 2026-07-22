@@ -58,9 +58,9 @@ export const Navbar = ({ collapsed = false }: NavbarProps) => {
 
   const languageOptions: LangOption[] = useMemo(
     () => [
-      { label: t("languages.english", "English"), value: "en", icon: "/us.png" },
-      { label: t("languages.pashto", "Pashto"), value: "ps", icon: "/af.png" },
-      { label: t("languages.dari", "Dari"), value: "dr", icon: "/af.png" },
+      { label: "English", value: "en", icon: "/us.png" },
+      { label: "دری", value: "dr", icon: "/af.png" },
+      { label: "پښتو", value: "ps", icon: "/af.png" },
     ],
     [t, i18n.language],
   );
