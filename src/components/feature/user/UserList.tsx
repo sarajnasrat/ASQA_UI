@@ -19,6 +19,8 @@ import { useAuth } from "../../../context/AuthContext.tsx";
 import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 import { SmartDatePicker } from "../../common/datepicker/SmartDatePicker";
 import RoleService from "../../../services/role.service";
+import { UserRegistration } from "./UserRegistration";
+import { EditUser } from "./EditUser";
 
 export const UserList = () => {
   const { t } = useTranslation();
@@ -32,6 +34,8 @@ export const UserList = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [resettingPassword, setResettingPassword] = useState(false);
+  const [userDialog, setUserDialog] = useState<"create" | "edit" | null>(null);
+  const [editingUserId, setEditingUserId] = useState<number>();
 
   const showSuccess = (summary: string, detail?: string) =>
     showToast("success", summary, detail || "");
@@ -286,7 +290,8 @@ export const UserList = () => {
   };
 
   const handleEdit = (user: any) => {
-    navigate(`/users/edit/${user.id}`);
+    setEditingUserId(user.id);
+    setUserDialog("edit");
   };
 
   const confirmDelete = (user: any) => {
@@ -448,7 +453,7 @@ export const UserList = () => {
               raised
               severity="info"
               text
-              onClick={() => navigate("/users/new")}
+              onClick={() => setUserDialog("create")}
             />
           )}
 
@@ -690,6 +695,12 @@ export const UserList = () => {
           </div>
         </div>
       </Dialog>
+      {userDialog === "create" && (
+        <UserRegistration onClose={() => setUserDialog(null)} onSaved={loadUsers} />
+      )}
+      {userDialog === "edit" && editingUserId && (
+        <EditUser userId={editingUserId} onClose={() => setUserDialog(null)} onSaved={loadUsers} />
+      )}
       <DynamicBreadcrumb
         items={breadcrumbItems}
         size="pl-5 pr-5 max-w-8xl mx-auto mt-3"

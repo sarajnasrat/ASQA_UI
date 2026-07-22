@@ -5,8 +5,8 @@ import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
+import { Checkbox } from "primereact/checkbox";
 import { Dialog } from "primereact/dialog";
-import FileUploadField from "../../common/FileUploadField";
 // @ts-ignore
 import UserService from "../../../services/user.service.ts";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -26,6 +26,7 @@ type FormValues = {
   phoneNumber: string;
   role: string;
   zoneId: number;
+  active: boolean;
 };
 
 type UserRegistrationLocationState = {
@@ -35,12 +36,15 @@ type UserRegistrationLocationState = {
   commiteeType?: string | null;
 };
 
-export const UserRegistration = () => {
+export type UserRegistrationProps = { onClose?: () => void; onSaved?: () => void };
+
+export const UserRegistration = ({ onClose, onSaved }: UserRegistrationProps = {}) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
   const { toast, showToast } = useAppToast();
   const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [profilePreviewUrl, setProfilePreviewUrl] = useState<string | null>(null);
   const [zones, setZones] = useState<{ label: string; value: any }[]>([]);
   const [roles, setRoles] = useState<{ label: string; value: any }[]>([]);
   const navigationState = (location.state as UserRegistrationLocationState) || {};
@@ -107,7 +111,7 @@ export const UserRegistration = () => {
               lastName: data.lastName,
               email: data.email,
               password: data.password,
-              active: true,
+              active: data.active ?? true,
               phoneNumber: data.phoneNumber,
               roles: [data.role],
               zone: { id: data.zoneId },
@@ -128,7 +132,9 @@ export const UserRegistration = () => {
 
       showToast("success", t("common.success"), t("user.messages.createSuccess"));
       setTimeout(() => {
-        navigate(redirectPath, {
+        onSaved?.();
+        if (onClose) onClose();
+        else navigate(redirectPath, {
           state: isFromCommitteeMemberCreate
             ? {
                 fromUserRegistration: true,
@@ -192,13 +198,7 @@ export const UserRegistration = () => {
 
   return (
     <>
-      <DynamicBreadcrumb
-        items={[
-          { label: t("user.breadcrumb.users"), url: "/users" },
-          { label: t("user.breadcrumb.createUser"), url: "/users/new" },
-        ]}
-        size="pl-5 pr-5 max-w-8xl mx-auto mt-1"
-      />
+
 
       <div className="flex justify-center pl-5 pr-5 max-w-8xl mx-auto">
         <Toast ref={toast} />
@@ -207,23 +207,23 @@ export const UserRegistration = () => {
           visible
           modal
           dismissableMask
-          onHide={() => navigate("/users")}
+          onHide={() => (onClose ? onClose() : navigate("/users"))}
           header={t("user.form.title.create")}
-          className="w-[min(96vw,1100px)]"
+          className="w-[min(96vw,900px)]"
           contentClassName="max-h-[78vh] overflow-y-auto"
         >
-        <Card className="w-full shadow-none">
-          <div className="mb-6 pb-2 border-b border-gray-200">
-            <h2 className="text-2xl font-bold text-gray-800">
-              {t("user.form.title.create")}
-            </h2>
-            <p className="text-sm text-gray-500 mt-1">
-              {t("user.form.subtitle.create")}
-            </p>
-          </div>
+        <div>
+  
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4">
+              <div className="order-first flex justify-center min-w-0 lg:col-span-3">
+                <div className="relative h-40 w-40 overflow-visible rounded-full border-4 border-white bg-blue-100 shadow-lg ring-4 ring-blue-50">
+                  {profilePreviewUrl ? <img src={profilePreviewUrl} alt={t("user.labels.profileImage")} className="h-full w-full rounded-full object-cover" /> : <div className="flex h-full w-full items-center justify-center rounded-full text-2xl font-semibold text-blue-500"><i className="pi pi-user" /></div>}
+                  <label htmlFor="user-profile-image" className="absolute bottom-0 right-0 z-10 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 border-white bg-blue-600 text-white shadow-lg transition hover:scale-105 hover:bg-blue-700"><i className="pi pi-camera text-base" /></label>
+                  <input id="user-profile-image" type="file" accept="image/*" className="hidden" onChange={(event) => { const file = event.target.files?.[0] || null; setProfileImage(file); setProfilePreviewUrl(file ? URL.createObjectURL(file) : null); }} />
+                </div>
+              </div>
               {/* First Name */}
               <Controller
                 name="firstName"
@@ -457,6 +457,18 @@ export const UserRegistration = () => {
                 )}
               />
 
+              <Controller
+                name="active"
+                control={control}
+                defaultValue={true}
+                render={({ field }) => (
+                  <div className="flex items-center gap-2">
+                    <Checkbox inputId="user-active" checked={field.value ?? true} onChange={(e) => field.onChange(e.checked)} />
+                    <label htmlFor="user-active" className="text-sm font-medium text-gray-700">{t("user.status.active")}</label>
+                  </div>
+                )}
+              />
+
               {/* Zone */}
               <Controller
                 name="zoneId"
@@ -484,21 +496,6 @@ export const UserRegistration = () => {
               />
             </div>
 
-            {/* Profile Image */}
-            <div className="mt-6 pt-4 border-t border-gray-200">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t("user.labels.profileImage")}
-              </label>
-              <FileUploadField
-                name="profileImage"
-                accept="image/*"
-                maxFileSize={1048576}
-                onFileSelect={(file) => setProfileImage(file)}
-              />
-              <p className="text-xs text-gray-400 mt-1">
-                {t("user.placeholders.imageHint")}
-              </p>
-            </div>
 
             {/* Action Buttons */}
             <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-200">
@@ -509,8 +506,7 @@ export const UserRegistration = () => {
                 raised
                 text
                 icon="pi pi-times"
-                onClick={() =>
-                  navigate(redirectPath, {
+                onClick={() => onClose ? onClose() : navigate(redirectPath, {
                     state: isFromCommitteeMemberCreate
                       ? {
                           fromUserRegistration: true,
@@ -518,8 +514,7 @@ export const UserRegistration = () => {
                           commiteeType: navigationState.commiteeType ?? null,
                         }
                       : undefined,
-                  })
-                }
+        })}
                 className="p-button-outlined"
                 style={{ minWidth: "100px" }}
               />
@@ -535,7 +530,7 @@ export const UserRegistration = () => {
               />
             </div>
           </form>
-        </Card>
+        </div>
         </Dialog>
       </div>
     </>

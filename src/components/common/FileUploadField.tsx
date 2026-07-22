@@ -330,6 +330,8 @@ interface FileUploadFieldProps {
   onFileSelect?: (file: File | null) => void;
   required?: boolean;
   helperText?: string;
+  existingFileUrl?: string | null;
+  existingFileName?: string;
   className?: string;
 }
 
@@ -341,6 +343,8 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
   onFileSelect,
   required = false,
   helperText,
+  existingFileUrl,
+  existingFileName,
   className = "",
 }) => {
   const fileUploadRef = useRef<FileUpload | null>(null);
@@ -587,7 +591,24 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
         onDragLeave={() => setIsDragging(false)}
         onDrop={() => setIsDragging(false)}
       >
-        {/* Upload Icon */}
+        {existingFileUrl && !selectedFile ? (
+          <div className="mb-4 flex w-full max-w-md items-center gap-3 rounded-lg border border-blue-100 bg-blue-50 p-3 text-left">
+            <img
+              src={existingFileUrl}
+              alt={existingFileName || t("user.labels.profileImage")}
+              className="h-16 w-16 rounded-lg border border-blue-200 object-cover"
+            />
+            <div className="min-w-0">
+              <p className="text-xs font-medium text-blue-700">
+                {t("common.current", "Current file")}
+              </p>
+              <p className="truncate text-sm text-gray-700">
+                {existingFileName || t("user.labels.profileImage")}
+              </p>
+              <p className="text-xs text-gray-500">{t("common.choosefile")}</p>
+            </div>
+          </div>
+        ) : (
         <div className={`
           w-20 h-20 rounded-full flex items-center justify-center mb-4
           transition-all duration-200
@@ -601,6 +622,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
             ${isDragging ? 'text-blue-600' : 'text-blue-500'}
           `}></i>
         </div>
+        )}
 
         {/* Title */}
         {/* <h3 className="text-lg font-semibold text-gray-800 mb-2">
@@ -707,8 +729,8 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
         />
       </div>
 
-      {/* Selected File Success Message */}
-      {/* {selectedFile && (
+
+      {selectedFile && (
         <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg">
           <div className="flex items-center gap-2 text-sm">
             <i className="pi pi-check-circle text-green-600"></i>
@@ -719,7 +741,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
             </span>
           </div>
         </div>
-      )} */}
+      )}
     </div>
   );
 };

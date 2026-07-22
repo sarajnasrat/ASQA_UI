@@ -3,6 +3,7 @@ import { Card } from "primereact/card";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
+import { Checkbox } from "primereact/checkbox";
 import { Dialog } from "primereact/dialog";
 import UserService from "../../../services/user.service";
 import ZoneService from "../../../services/zone.service";
@@ -13,7 +14,6 @@ import { Toast } from "primereact/toast";
 import { useAppToast } from "../../../hooks/useToast";
 import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
 import SkeletonForm from "../../common/SkeletonForm";
-import FileUploadField from "../../common/FileUploadField";
 import { useTranslation } from "react-i18next";
 import { useToast } from "../../../hooks/ToastContext";
 import { handleApi } from "../../../hooks/handleApi";
@@ -25,6 +25,7 @@ type FormValues = {
   phoneNumber: string;
   role: string;
   zoneId: number | null;
+  active: boolean;
 };
 
 type ZoneOption = {
@@ -32,16 +33,19 @@ type ZoneOption = {
   value: number;
 };
 
-export const EditUser = () => {
+export type EditUserProps = { userId?: number; onClose?: () => void; onSaved?: () => void };
+
+export const EditUser = ({ userId, onClose, onSaved }: EditUserProps = {}) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { id } = useParams<{ id: string }>();
+  const { id: routeId } = useParams<{ id: string }>();
+  const id = userId?.toString() || routeId;
   const { toast, showToast } = useAppToast();
-  const baseUrl =
-    import.meta.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
   const [loading, setLoading] = useState(false);
   const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [profilePreviewUrl, setProfilePreviewUrl] = useState<string | null>(null);
   const [existingImageUrl, setExistingImageUrl] = useState<string | null>(null);
+  const [existingImageName, setExistingImageName] = useState("");
   const [zones, setZones] = useState<ZoneOption[]>([]);
   const [roles, setRoles] = useState<{ label: string; value: string }[]>([]);
   const { showError, showSuccess } = useToast();
@@ -58,6 +62,7 @@ export const EditUser = () => {
       phoneNumber: "",
       role: "ROLE_USER",
       zoneId: null,
+      active: true,
     },
   });
 
@@ -119,11 +124,12 @@ export const EditUser = () => {
           phoneNumber: user.phoneNumber || "",
           role: user.roles?.[0]?.name || "ROLE_USER",
           zoneId: user.zone?.id || null,
+          active: user.active ?? true,
         });
 
-        setExistingImageUrl(
-          user?.profileImage ? `${baseUrl}${user.profileImage}` : null,
-        );
+        setExistingImageUrl(user?.profileImage ? `${import.meta.env.REACT_APP_API_BASE_URL || "http://localhost:8080"}${user.profileImage}` : null);
+        setExistingImageName(user?.profileImage?.split("/").pop() || "");
+
       } catch {
         showToast("error", t("common.error"), t("user.messages.loadFailed"));
       } finally {
@@ -148,7 +154,7 @@ export const EditUser = () => {
               firstName: data.firstName,
               lastName: data.lastName,
               email: data.email,
-              active: true,
+              active: data.active,
               phoneNumber: data.phoneNumber,
               roles: [data.role],
               zone: { id: data.zoneId },
@@ -169,9 +175,13 @@ export const EditUser = () => {
         t,
       );
       if (response?.status === 200) {
+        onSaved?.();
+        if (onClose) onClose();
+        else {
         setTimeout(() => {
           navigate("/users");
         }, 1000);
+        }
       }
     } catch {
       showToast("error", t("common.error"), t("user.messages.updateFailed"));
@@ -191,13 +201,7 @@ export const EditUser = () => {
     <>
       <Toast ref={toast} />
 
-      <DynamicBreadcrumb
-        items={[
-          { label: t("user.title"), url: "/users" },
-          { label: t("user.breadcrumb.editUser"), url: `/users/edit/${id}` },
-        ]}
-        size="w-full max-w-7xl mx-auto px-0 pt-4"
-      />
+    
 
       {loading ? (
         <SkeletonForm skeletonType="row" fields={fields} />
@@ -207,14 +211,21 @@ export const EditUser = () => {
             visible
             modal
             dismissableMask
-            onHide={() => navigate("/users")}
+            onHide={() => (onClose ? onClose() : navigate("/users"))}
             header={t("user.breadcrumb.editUser")}
             className="w-[min(96vw,1100px)]"
             contentClassName="max-h-[78vh] overflow-y-auto"
           >
-          <Card className="w-full shadow-none">
+          <div>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="order-first flex justify-center min-w-0 lg:col-span-3">
+                  <div className="relative h-40 w-40 overflow-visible rounded-full border-4 border-white bg-blue-100 shadow-lg ring-4 ring-blue-50">
+                    {profilePreviewUrl || existingImageUrl ? <img src={profilePreviewUrl || existingImageUrl || ""} alt={t("user.labels.profileImage")} className="h-full w-full rounded-full object-cover" /> : <div className="flex h-full w-full items-center justify-center rounded-full text-2xl font-semibold text-blue-500"><i className="pi pi-user" /></div>}
+                    <label htmlFor="user-edit-profile-image" className="absolute bottom-0 right-0 z-10 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 border-white bg-blue-600 text-white shadow-lg transition hover:scale-105 hover:bg-blue-700"><i className="pi pi-camera text-base" /></label>
+                    <input id="user-edit-profile-image" type="file" accept="image/*" className="hidden" onChange={(event) => { const file = event.target.files?.[0] || null; setProfileImage(file); setProfilePreviewUrl(file ? URL.createObjectURL(file) : null); }} />
+                  </div>
+                </div>
                 <Controller
                   name="firstName"
                   control={control}
@@ -333,6 +344,17 @@ export const EditUser = () => {
                 />
 
                 <Controller
+                  name="active"
+                  control={control}
+                  render={({ field }) => (
+                    <div className="flex items-center gap-2">
+                      <Checkbox inputId="user-edit-active" checked={field.value ?? true} onChange={(e) => field.onChange(e.checked)} />
+                      <label htmlFor="user-edit-active" className="text-sm font-medium text-gray-700">{t("user.status.active")}</label>
+                    </div>
+                  )}
+                />
+
+                <Controller
                   name="zoneId"
                   control={control}
                   rules={{ required: t("user.validation.zoneRequired") }}
@@ -358,26 +380,6 @@ export const EditUser = () => {
                 />
               </div>
 
-              {existingImageUrl && (
-                <div>
-                  <label className="font-medium block mb-2">
-                    {t("user.fields.currentProfileImage")}
-                  </label>
-                  <img
-                    src={existingImageUrl}
-                    alt={t("user.labels.profileImage")}
-                    className="w-32 h-32 object-cover rounded border"
-                  />
-                </div>
-              )}
-
-              <FileUploadField
-                label={t("user.fields.updateProfileImage")}
-                name="profileImage"
-                accept="image/*"
-                maxFileSize={1048576}
-                onFileSelect={(file) => setProfileImage(file)}
-              />
 
               <div className="flex justify-start gap-2 pt-4">
                 <Button
@@ -397,11 +399,11 @@ export const EditUser = () => {
                   text
                   raised
                   icon="pi pi-times"
-                  onClick={() => navigate("/users")}
+                  onClick={() => (onClose ? onClose() : navigate("/users"))}
                 />
               </div>
             </form>
-          </Card>
+          </div>
           </Dialog>
         </div>
       )}

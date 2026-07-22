@@ -3,6 +3,7 @@ import { Card } from "primereact/card";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
+import { Checkbox } from "primereact/checkbox";
 import { Dialog } from "primereact/dialog";
 import UserService from "../../../services/user.service";
 import ZoneService from "../../../services/zone.service";
@@ -12,7 +13,6 @@ import { Toast } from "primereact/toast";
 import { useAppToast } from "../../../hooks/useToast";
 import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
 import SkeletonForm from "../../common/SkeletonForm";
-import FileUploadField from "../../common/FileUploadField";
 import { useTranslation } from "react-i18next";
 import { useToast } from "../../../hooks/ToastContext";
 import { handleApi } from "../../../hooks/handleApi";
@@ -24,6 +24,7 @@ type FormValues = {
   phoneNumber: string;
   role: string;
   zoneId: number | null;
+  active: boolean;
 };
 
 type ZoneOption = {
@@ -31,16 +32,19 @@ type ZoneOption = {
   value: number;
 };
 
-export const InspectionUserEdit = () => {
+type InspectionUserEditProps = { userId?: number; onClose?: () => void; onSaved?: () => void };
+
+export const InspectionUserEdit = ({ userId, onClose, onSaved }: InspectionUserEditProps = {}) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { id } = useParams<{ id: string }>();
+  const { id: routeId } = useParams<{ id: string }>();
+  const id = userId?.toString() || routeId;
   const { toast, showToast } = useAppToast();
-  const baseUrl =
-    import.meta.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
   const [loading, setLoading] = useState(false);
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [existingImageUrl, setExistingImageUrl] = useState<string | null>(null);
+  const [existingImageName, setExistingImageName] = useState("");
+  const [profilePreviewUrl, setProfilePreviewUrl] = useState<string | null>(null);
   const [zones, setZones] = useState<ZoneOption[]>([]);
   const { showError, showSuccess } = useToast();
   const {
@@ -56,6 +60,7 @@ export const InspectionUserEdit = () => {
       phoneNumber: "",
       role: "ROLE_USER",
       zoneId: null,
+      active: true,
     },
   });
 
@@ -99,11 +104,12 @@ export const InspectionUserEdit = () => {
           phoneNumber: user.phoneNumber || "",
           role: user.roles?.[0]?.name || "ROLE_USER",
           zoneId: user.zone?.id || null,
+          active: user.active ?? true,
         });
 
-        setExistingImageUrl(
-          user?.profileImage ? `${baseUrl}${user.profileImage}` : null,
-        );
+        setExistingImageUrl(user?.profileImage ? `${import.meta.env.REACT_APP_API_BASE_URL || "http://localhost:8080"}${user.profileImage}` : null);
+        setExistingImageName(user?.profileImage?.split("/").pop() || "");
+
       } catch {
         showToast("error", t("common.error"), t("user.messages.loadFailed"));
       } finally {
@@ -113,16 +119,6 @@ export const InspectionUserEdit = () => {
 
     loadUser();
   }, [id, reset]);
-
-  const roleOptions = [
-    { label: t("user.roles.ADMIN"), value: "ROLE_ADMIN" },
-    { label: t("user.roles.USER"), value: "ROLE_USER" },
-    { label: t("user.roles.COMPANY_ADMIN"), value: "ROLE_COMPANY_ADMIN" },
-    { label: t("user.roles.MONITORING"), value: "ROLE_MONITORING" },
-    { label: t("user.roles.SUPER_ADMIN"), value: "ROLE_SUPER_ADMIN" },
-    { label: t("user.roles.COMMITTEE_MEMBER"), value: "ROLE_COMMITTEE_MEMBER" },
-    { label: t("user.roles.INSPECTOR"), value: "ROLE_INSPECTOR" },
-  ];
 
   const onSubmit = async (data: FormValues) => {
     if (!id) return;
@@ -138,7 +134,7 @@ export const InspectionUserEdit = () => {
               firstName: data.firstName,
               lastName: data.lastName,
               email: data.email,
-              active: true,
+              active: data.active,
               phoneNumber: data.phoneNumber,
               roles: ["INSPECTION_USERS"],
               zone: { id: data.zoneId },
@@ -159,9 +155,13 @@ export const InspectionUserEdit = () => {
         t,
       );
       if (response?.status === 200) {
+        onSaved?.();
+        if (onClose) onClose();
+        else {
         setTimeout(() => {
           navigate("/inspection-users");
         }, 1000);
+        }
       }
     } catch {
       showToast("error", t("common.error"), t("user.messages.updateFailed"));
@@ -197,7 +197,7 @@ export const InspectionUserEdit = () => {
             visible
             modal
             dismissableMask
-            onHide={() => navigate("/inspection-users")}
+          onHide={() => (onClose ? onClose() : navigate("/inspection-users"))}
             header={t("user.inspection.editTitle")}
             className="w-[min(96vw,1100px)]"
             contentClassName="max-h-[78vh] overflow-y-auto"
@@ -299,26 +299,12 @@ export const InspectionUserEdit = () => {
                 />
 
                 <Controller
-                  name="role"
+                  name="active"
                   control={control}
-                  rules={{ required: t("user.validation.roleRequired") }}
                   render={({ field }) => (
-                    <div>
-                      <label className="font-medium">
-                        {t("user.fields.role")}
-                      </label>
-                      <Dropdown
-                        {...field}
-                        options={roleOptions}
-                        style={{ display: "none" }}
-                        placeholder={t("user.placeholders.selectRole")}
-                        className="w-full"
-                      />
-                      {errors.role && (
-                        <small className="text-red-500">
-                          {errors.role.message}
-                        </small>
-                      )}
+                    <div className="flex w-fit items-center gap-2 rounded-lg border border-gray-200 px-3 py-2">
+                      <Checkbox inputId="inspection-edit-active" checked={field.value ?? true} onChange={(e) => field.onChange(e.checked)} />
+                      <label htmlFor="inspection-edit-active" className="text-sm font-medium text-gray-700">{t("user.status.active")}</label>
                     </div>
                   )}
                 />
@@ -344,38 +330,36 @@ export const InspectionUserEdit = () => {
                           {errors.zoneId.message}
                         </small>
                       )}
-                      <FileUploadField
-                        label={t("user.fields.updateProfileImage")}
-                        name="profileImage"
-                        accept="image/*"
-                        maxFileSize={1048576}
-                        onFileSelect={(file) => setProfileImage(file)}
-                      />
                     </div>
                   )}
                 />
-              </div>
 
-              {existingImageUrl && (
-                <div>
-                  <label className="font-medium block mb-2">
-                    {t("user.fields.currentProfileImage")}
-                  </label>
-                  <img
-                    src={existingImageUrl}
-                    alt={t("user.labels.profileImage")}
-                    className="w-32 h-32 object-cover rounded border"
-                  />
+              <div className="order-first flex justify-center min-w-0 lg:col-span-3 lg:row-span-1">
+                <div className="group relative h-40 w-40 shrink-0 overflow-visible rounded-full border-4 border-white bg-blue-100 shadow-lg ring-4 ring-blue-50">
+                    {profilePreviewUrl || existingImageUrl ? (
+                      <img src={profilePreviewUrl || existingImageUrl || ""} alt={t("user.labels.profileImage")} className="h-full w-full rounded-full object-cover" />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-2xl font-semibold text-blue-500"><i className="pi pi-user" /></div>
+                    )}
+                    <label htmlFor="inspection-edit-profile-image" className="absolute bottom-0 right-0 z-10 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 border-white bg-blue-600 text-white shadow-lg transition hover:scale-105 hover:bg-blue-700" aria-label={t("common.choosefile")}>
+                      <i className="pi pi-camera text-base" />
+                    </label>
                 </div>
-              )}
-
-              <div><FileUploadField
-                label={t("user.fields.updateProfileImage")}
-                name="profileImage"
-                accept="image/*"
-                maxFileSize={1048576}
-                onFileSelect={(file) => setProfileImage(file)}
-              /></div>
+                <div>
+                    <input
+                      id="inspection-edit-profile-image"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(event) => {
+                        const file = event.target.files?.[0] || null;
+                        setProfileImage(file);
+                        setProfilePreviewUrl(file ? URL.createObjectURL(file) : null);
+                      }}
+                    />
+                </div>
+              </div>
+              </div>
 
               <div className="flex justify-start gap-2 pt-4">
                 <Button
@@ -395,7 +379,7 @@ export const InspectionUserEdit = () => {
                   text
                   raised
                   icon="pi pi-times"
-                  onClick={() => navigate("/inspection-users")}
+                  onClick={() => (onClose ? onClose() : navigate("/inspection-users"))}
                 />
               </div>
             </form>

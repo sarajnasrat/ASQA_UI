@@ -19,6 +19,8 @@ import { useAuth } from "../../../context/AuthContext.tsx";
 import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 import { SmartDatePicker } from "../../common/datepicker/SmartDatePicker";
 import RoleService from "../../../services/role.service";
+import { InspectionUserRegistration } from "./InspectionUserRegistration";
+import { InspectionUserEdit } from "./InspectionUserEdit";
 
 export const InspectionUserList = () => {
   const { t } = useTranslation();
@@ -32,6 +34,8 @@ export const InspectionUserList = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [resettingPassword, setResettingPassword] = useState(false);
+  const [userDialog, setUserDialog] = useState<"create" | "edit" | null>(null);
+  const [editingUserId, setEditingUserId] = useState<number>();
 
   const showSuccess = (summary: string, detail?: string) =>
     showToast("success", summary, detail || "");
@@ -280,7 +284,8 @@ export const InspectionUserList = () => {
   };
 
   const handleEdit = (user: any) => {
-    navigate(`/users/edit/${user.id}`);
+    setEditingUserId(user.id);
+    setUserDialog("edit");
   };
 
   const confirmDelete = (user: any) => {
@@ -421,6 +426,8 @@ export const InspectionUserList = () => {
     );
   };
 
+
+
   const header = () => {
     return (
       <div className="mb-4 space-y-4 px-2">
@@ -442,7 +449,7 @@ export const InspectionUserList = () => {
               raised
               severity="info"
               text
-              onClick={() => navigate("/inspection-users/new")}
+              onClick={() => setUserDialog("create")}
             />
           )}
 
@@ -546,6 +553,11 @@ export const InspectionUserList = () => {
       header: t("user.columns.zone"),
       body: zoneBodyTemplate,
     },
+    // {
+    //   field: "active",
+    //   header: t("user.inspection.status", "Status"),
+    //   body: activeBodyTemplate,
+    // },
     {
       field: "createdDate",
       header: t("user.columns.createdDate"),
@@ -668,6 +680,12 @@ export const InspectionUserList = () => {
           </div>
         </div>
       </Dialog>
+      {userDialog === "create" && (
+        <InspectionUserRegistration onClose={() => setUserDialog(null)} onSaved={loadUsers} />
+      )}
+      {userDialog === "edit" && editingUserId && (
+        <InspectionUserEdit userId={editingUserId} onClose={() => setUserDialog(null)} onSaved={loadUsers} />
+      )}
       <DynamicBreadcrumb
         items={breadcrumbItems}
         size="pl-5 pr-5 max-w-8xl mx-auto mt-3"
