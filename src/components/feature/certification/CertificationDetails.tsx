@@ -455,11 +455,7 @@ export const CertificationDetails: React.FC = () => {
       message: (
         <div className="space-y-4">
           <p className="text-gray-700">
-            {t(
-              normalizedStatus === "CERTIFICATION_ISSUED"
-                ? "certification.confirmCertificationIssued"
-                : "certification.confirmStatusUpdate",
-            )}{" "}
+            {t("certification.confirmStatusUpdate")}{" "}
             {/* <b>{t(`certification.statusOptions.${normalizedStatus}` || normalizedStatus)}</b>? */}
           </p>
           <div className="rounded-xl bg-gray-50 border border-gray-100 p-4 text-sm space-y-2">
@@ -627,7 +623,7 @@ export const CertificationDetails: React.FC = () => {
                             : "bg-green-600 text-white hover:bg-green-700"
                         }`}
                       >
-                        {t(`certification.steps.${status}`)}
+                        {t(`certification.steps.${status}`, labelize(status))}
                       </button>
                     ))}
                 </div>

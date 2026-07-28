@@ -64,6 +64,30 @@ interface DashboardData {
   inProgressRequest: number;
   totalCompletedRequest: number;
   userLastSixMonth: MonthlyUser[];
+  requestStatusCounts: Record<string, number>;
+  certificationStatusCounts: Record<string, number>;
+}
+
+interface AdminDashboardResponse {
+  certificationRequest: {
+    total: number;
+    statuses: Record<string, number>;
+  };
+  user: {
+    total: number;
+    active: number;
+    inactive: number;
+    registrationsLastSixMonths: MonthlyUser[];
+  };
+  company: {
+    total: number;
+    active: number;
+    inactive: number;
+  };
+  certification: {
+    total: number;
+    statuses: Record<string, number>;
+  };
 }
 
 interface StatCard {
@@ -80,7 +104,13 @@ interface StatCard {
 }
 
 export const Dashboard: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const requestChartStatuses = [
+    "UNDER_REVIEW",
+    "REJECTED",
+    "AUTHORITY_DECISION",
+    "SUBMITTED",
+  ];
   const [dashboardData, setDashboardData] =
     React.useState<DashboardData | null>(null);
   const [loading, setLoading] = React.useState<boolean>(true);
@@ -91,7 +121,33 @@ export const Dashboard: React.FC = () => {
     setError(null);
     try {
       const response = await DashboardService.getDashboardData();
-      setDashboardData(response.data.data);
+      const dto: AdminDashboardResponse = response.data.data;
+      const requestStatuses = dto.certificationRequest?.statuses || {};
+      const completedStatuses = ["CERTIFICATION_ISSUED", "UNDER_SUPERVISION"];
+      const sumStatuses = (statuses: string[]) =>
+        statuses.reduce((total, status) => total + (requestStatuses[status] || 0), 0);
+
+      setDashboardData({
+        totalCertificationRequests: dto.certificationRequest?.total || 0,
+        totalCertifications: dto.certification?.total || 0,
+        totalUsers: dto.user?.total || 0,
+        totalCompanies: dto.company?.total || 0,
+        totalActiveUsers: dto.user?.active || 0,
+        totalInActiveUsers: dto.user?.inactive || 0,
+        totalActiveCompany: dto.company?.active || 0,
+        totalInActiveCompany: dto.company?.inactive || 0,
+        totalCommitee: 0,
+        totalActiveCommitee: 0,
+        totalInActiveCommitee: 0,
+        totalMenu: 0,
+        totalSubmittedRequest: requestStatuses.SUBMITTED || 0,
+        totalRejectedRequest: requestStatuses.REJECTED || 0,
+        inProgressRequest: sumStatuses(requestChartStatuses),
+        totalCompletedRequest: sumStatuses(completedStatuses),
+        userLastSixMonth: dto.user?.registrationsLastSixMonths || [],
+        requestStatusCounts: requestStatuses,
+        certificationStatusCounts: dto.certification?.statuses || {},
+      });
     } catch (error) {
       const errorMessage =
         error instanceof Error
@@ -145,7 +201,7 @@ export const Dashboard: React.FC = () => {
           ],
           backgroundColor: ["#10B981", "#6B7280"],
           borderColor: ["#fff", "#fff"],
-          borderWidth: 2,
+          borderWidth: 1,
         },
       ],
     };
@@ -164,7 +220,7 @@ export const Dashboard: React.FC = () => {
           ],
           backgroundColor: ["#10B981", "#6B7280"],
           borderColor: ["#fff", "#fff"],
-          borderWidth: 2,
+          borderWidth: 1,
         },
       ],
     };
@@ -174,21 +230,15 @@ export const Dashboard: React.FC = () => {
     if (!dashboardData) return { labels: [], datasets: [] };
 
     return {
-      labels: [
-        t("dashboard.status.inProgress"),
-        t("dashboard.status.completed"),
-        t("dashboard.status.submitted"),
-        t("dashboard.status.rejected"),
-      ],
+      labels: requestChartStatuses.map((status) =>
+        t(`certificationRequest.statusOptions.${status}`, status),
+      ),
       datasets: [
         {
           label: t("dashboard.charts.numberOfRequests"),
-          data: [
-            dashboardData.inProgressRequest,
-            dashboardData.totalCompletedRequest,
-            dashboardData.totalSubmittedRequest,
-            dashboardData.totalRejectedRequest,
-          ],
+          data: requestChartStatuses.map(
+            (status) => dashboardData.requestStatusCounts[status] || 0,
+          ),
           backgroundColor: [
             "rgba(59, 130, 246, 0.8)",
             "rgba(16, 185, 129, 0.8)",
@@ -442,14 +492,6 @@ export const Dashboard: React.FC = () => {
       borderColor: "border-emerald-100",
     },
     {
-      title: t("dashboard.cards.totalCommittee"),
-      value: dashboardData.totalCommitee,
-      icon: Users,
-      color: "text-amber-600",
-      bgColor: "bg-amber-50",
-      borderColor: "border-amber-100",
-    },
-    {
       title: t("dashboard.cards.completedRequests"),
       value: dashboardData.totalCompletedRequest,
       icon: CheckCircle2,
@@ -459,12 +501,48 @@ export const Dashboard: React.FC = () => {
     },
   ];
 
+  const requestStatusCards = Object.entries(dashboardData.requestStatusCounts).map(
+    ([status, value]) => ({
+      status,
+      value,
+      label: t(`certificationRequest.statusOptions.dashboard.${status}`, status),
+    }),
+  );
+
+  const certificationStatusCards = Object.entries(
+    dashboardData.certificationStatusCounts,
+  ).map(([status, value]) => ({
+      status,
+      value,
+      label: t(`certification.statusOptions.${status}`, status),
+    }));
+
+  const companyStatsCards: StatCard[] = [
+    statsCards[3], // Companies
+    {
+      title: t("dashboard.status.active"),
+      value: dashboardData.totalActiveCompany,
+      icon: Building2,
+      color: "text-emerald-600",
+      bgColor: "bg-emerald-50",
+      borderColor: "border-emerald-100",
+    },
+    {
+      title: t("dashboard.status.inactive"),
+      value: dashboardData.totalInActiveCompany,
+      icon: Building2,
+      color: "text-gray-600",
+      bgColor: "bg-gray-50",
+      borderColor: "border-gray-200",
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="px-3 py-3 md:px-6 md:py-6 max-w-8xl w mx-auto">
         {/* Header Section */}
         <div className="mb-6">
-          <div className="border-l-4 border-indigo-500 pl-4">
+          <div className={`${i18n.language === "ps" || i18n.language === "dr" ? "border-r-4 pr-4" : "border-l-4 pl-4"} border-indigo-500`}>
             <h1 className="text-2xl font-bold text-gray-800">
               {t("dashboard.title")}
             </h1>
@@ -475,28 +553,96 @@ export const Dashboard: React.FC = () => {
         </div>
 
         {/* Stats Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 mb-6">
-          {statsCards.map((stat, index) => (
-            <div
-              key={index}
-              className={`bg-white rounded-b-md rounded-t-md border ${stat.borderColor} p-3 hover:shadow-md transition-shadow duration-200`}
-            >
-              <div className="flex items-center justify-between mb-3">
-                <div>
-                  <p className="text-xs text-gray-500 mt-0.5">{stat.title}</p>
-                </div>
-                <div className={`p-2 rounded-lg ${stat.bgColor}`}>
-                  <stat.icon className={`w-5 h-5 ${stat.color}`} />
-                </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 mb-6">
+          <div className="col-span-full flex items-center gap-2  pb-2">
+            <span className="h-2 w-2 rounded-full bg-blue-600" />
+            <h2 className="text-sm font-semibold text-blue-700">{t("dashboard.cards.certificationRequests")}</h2>
+          </div>
+          {requestStatusCards.map(({ status, value, label }) => (
+            <div key={`request-${status}`} className="group relative min-h-[100px] overflow-hidden rounded-2xl bg-white p-3 shadow-[0_4px_18px_rgba(30,64,175,0.07)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(30,64,175,0.14)]">
+              <div className="absolute -end-7 -top-7 h-20 w-20 rounded-full bg-blue-100/50 transition-transform duration-300 group-hover:scale-150" />
+              <div className="relative mb-3 flex items-start justify-between gap-2">
+                <p className="max-w-[75%] truncate pt-1 text-xs font-semibold uppercase tracking-wide text-slate-500" title={label}>{label}</p>
+                <div className="rounded-xl bg-blue-100/90 p-2.5 shadow-sm transition-all duration-300 group-hover:bg-blue-600 group-hover:shadow-md"><FileCheck className="h-5 w-5 text-blue-600 transition-colors group-hover:text-white" /></div>
               </div>
-              <div className="mx-auto text-start">
-                <p className="text-1xl font-bold ">
-                  {stat.value.toLocaleString()}
-                </p>
+              <p className="relative text-xl font-bold tracking-tight text-slate-800">{value.toLocaleString()}</p>
+            </div>
+          ))}
+          <div className="col-span-full mt-2 flex items-center gap-2 border-b border-emerald-100 pb-2">
+            <span className="h-2 w-2 rounded-full bg-emerald-600" />
+            <h2 className="text-sm font-semibold text-emerald-700">{t("dashboard.cards.certifications")}</h2>
+          </div>
+          {certificationStatusCards.map(({ status, value, label }) => (
+            <div key={`certification-${status}`} className="group relative min-h-[100px] overflow-hidden rounded-2xl bg-white p-3 shadow-[0_4px_18px_rgba(5,150,105,0.07)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(5,150,105,0.14)]">
+              <div className="absolute -end-7 -top-7 h-20 w-20 rounded-full bg-emerald-100/50 transition-transform duration-300 group-hover:scale-150" />
+              <div className="relative mb-3 flex items-start justify-between gap-2">
+                <p className="max-w-[75%] truncate pt-1 text-xs font-semibold uppercase tracking-wide text-slate-500" title={label}>{label}</p>
+                <div className="rounded-xl bg-emerald-100/90 p-2.5 shadow-sm transition-all duration-300 group-hover:bg-emerald-600 group-hover:shadow-md"><Award className="h-5 w-5 text-emerald-600 transition-colors group-hover:text-white" /></div>
               </div>
+              <p className="relative text-xl font-bold tracking-tight text-slate-800">{value.toLocaleString()}</p>
+            </div>
+          ))}
+          <div className="col-span-full mt-2 flex items-center gap-2 border-b border-purple-100 pb-2">
+            <span className="h-2 w-2 rounded-full bg-purple-600" />
+            <h2 className="text-sm font-semibold text-purple-700">{t("dashboard.cards.totalCompanies")}</h2>
+          </div>
+          {companyStatsCards.map((stat, index) => (
+            <div key={`company-${index}`} className="group relative min-h-[100px] overflow-hidden rounded-2xl bg-white p-3 shadow-[0_4px_18px_rgba(124,58,237,0.07)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(124,58,237,0.14)]">
+              <div className="absolute -end-7 -top-7 h-20 w-20 rounded-full bg-purple-100/50 transition-transform duration-300 group-hover:scale-150" />
+              <div className="relative mb-3 flex items-start justify-between gap-2">
+                <p className="max-w-[75%] truncate pt-1 text-xs font-semibold uppercase tracking-wide text-slate-500">{stat.title}</p>
+                <div className={`rounded-xl p-2.5 shadow-sm transition-all duration-300 ${stat.bgColor} group-hover:bg-purple-600 group-hover:shadow-md`}><stat.icon className={`h-5 w-5 ${stat.color} transition-colors group-hover:text-white`} /></div>
+              </div>
+              <p className="relative text-xl font-bold tracking-tight text-slate-800">{stat.value.toLocaleString()}</p>
             </div>
           ))}
         </div>
+
+        {/* Status summaries are represented in the cards above. */}
+        {/*
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 mb-6">
+          <div className="rounded-xl border border-blue-100 bg-white p-4 shadow-sm">
+            <div className="mb-4 flex items-center justify-between">
+              <div>
+                <h2 className="text-sm font-semibold text-gray-800">
+                  {t("dashboard.cards.certificationRequests")}
+                </h2>
+                <p className="mt-1 text-xs text-gray-500">
+                  {t("dashboard.charts.requestStatusOverview")}
+                </p>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+              {requestStatusCards.map(({ status, value, label }) => (
+                <div key={status} className="rounded-lg border border-gray-100 bg-gray-50 p-3">
+                  <p className="truncate text-xs text-gray-500" title={label}>{label}</p>
+                  <p className="mt-1 text-xl font-bold text-gray-800">{value.toLocaleString()}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-emerald-100 bg-white p-4 shadow-sm">
+            <div className="mb-4 flex items-center justify-between">
+              <div>
+                <h2 className="text-sm font-semibold text-gray-800">
+                  {t("dashboard.cards.certifications")}
+                </h2>
+                <p className="mt-1 text-xs text-gray-500">
+                  {t("dashboard.charts.requestStatusOverview")}
+                </p>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+              {certificationStatusCards.map(({ status, value, label }) => (
+                <div key={status} className="rounded-lg border border-gray-100 bg-gray-50 p-3">
+                  <p className="truncate text-xs text-gray-500" title={label}>{label}</p>
+                  <p className="mt-1 text-xl font-bold text-gray-800">{value.toLocaleString()}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div> */}
 
         {/* Charts Row */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">

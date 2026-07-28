@@ -420,7 +420,7 @@ export const CompanyDetails: React.FC = () => {
                 },
                 {
                   id: "legal",
-                  label: t("company.sections.registrationInfo"),
+                  label: t("company.certificationrequests"),
                   icon: <Shield className="h-4 w-4" />,
                 },
                 {

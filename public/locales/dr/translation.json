@@ -321,6 +321,7 @@
     "pressEsc": "برای لغو ESC را فشار دهید"
   },
   "company": {
+    "certificationrequests":"درخواست ها",
     "companytyperequired": "نوع شرکت الزامی است",
     "companyOwnerName": "نام مالک",
     "selectvalid": "لطفاً نوع شرکت معتبر را انتخاب کنید",
@@ -1010,22 +1011,36 @@
       "EXTENSION": "تمدید مهلت"
     },
     "statusOptions": {
-      "public":{
-      "SUBMITTED": "ثبت شده در سیستم",
-      "UNDER_REVIEW": "در حال بررسی ",
-      "REJECTED": "رد شد",
-      "CANCELLED": "لغو شده",
-      "PAYMENT_PENDING": "در انتظار پرداخت",
-      "PAYMENT_COMPLETED": "پرداخت انجام شد",
-      "AUTHORITY_DECISION": "درخواست به حکم مقام",
-      "CERTIFICATION_ISSUED": "سند صادر شد",
-      "STANDARDS_PROVIDED": "استانداردها ارائه شد",
-      "DEADLINE_ASSIGNED": "مهلت تعیین شد",
-      "INSPECTION_IN_PROGRESS": "درحال انجام تفتیش",
-      "REPORTED_TO_COMMITTEE": "گزارش به کمیته تائید دهی ", 
-      "REPORT_APPROVED": "گزارش تایید شده"
-     
-
+      "dashboard": {
+        "SUBMITTED": "دریافتی",
+        "UNDER_REVIEW": "درحال بررسی",
+        "REJECTED": "رد شده",
+        "CANCELLED": "لغو شده",
+        "PAYMENT_PENDING": "در انتظار پرداخت",
+        "PAYMENT_COMPLETED": "پرداخت انجام شد",
+        "AUTHORITY_DECISION": "درخواست به حکم مقام",
+        "CERTIFICATION_ISSUED": "سند صادر شد",
+        "STANDARDS_PROVIDED": "استانداردها ارائه شد",
+        "DEADLINE_ASSIGNED": "مهلت تعیین شده",
+        "DEADLINE_REQUIRED": "تعین مهلت به مشتری ",
+        "INSPECTION_IN_PROGRESS": "درحال انجام تفتیش",
+        "REPORTED_TO_COMMITTEE": "در خواست های هئیت تائیددهی",
+        "REPORT_APPROVED": "گزارش تایید شده"
+      },
+      "public": {
+        "SUBMITTED": "ثبت شده در سیستم",
+        "UNDER_REVIEW": "در حال بررسی ",
+        "REJECTED": "رد شد",
+        "CANCELLED": "لغو شده",
+        "PAYMENT_PENDING": "در انتظار پرداخت",
+        "PAYMENT_COMPLETED": "پرداخت انجام شد",
+        "AUTHORITY_DECISION": "درخواست به حکم مقام",
+        "CERTIFICATION_ISSUED": "سند صادر شد",
+        "STANDARDS_PROVIDED": "استانداردها ارائه شد",
+        "DEADLINE_ASSIGNED": "مهلت تعیین شد",
+        "INSPECTION_IN_PROGRESS": "درحال انجام تفتیش",
+        "REPORTED_TO_COMMITTEE": "گزارش به کمیته تائید دهی ",
+        "REPORT_APPROVED": "گزارش تایید شده"
       },
       "COMMITTEE_APPROVED": "تائید هئیت تائید دهی",
       "DRAFT": "پیش‌ نویس",
@@ -1913,18 +1928,18 @@
     "cards": {
       "totalUsers": "مجموع کاربران",
       "activeUsers": "کاربران فعال",
-      "inProgressRequests": "درخواست‌های در حال انجام",
+      "inProgressRequests": "درخواست ‌های در حال انجام",
       "totalCompanies": "مجموع شرکت‌ها",
-      "certificationRequests": "درخواست‌های تائید نامه",
-      "certifications": "تائید نامه‌ها",
+      "certificationRequests": "درخواست‌ ها",
+      "certifications": "تائید نامه ها",
       "totalCommittee": "مجموع کمیته",
       "completedRequests": "درخواست‌های تکمیل شده"
     },
     "charts": {
       "userGrowth": "رشد کاربران",
       "requestStatusOverview": "خلاصه وضعیت درخواست‌ها",
-      "userDistribution": "توزیع کاربران",
-      "companyDistribution": "توزیع شرکت‌ها",
+      "userDistribution": "احصائیه کاربران",
+      "companyDistribution": " احصائیه شرکت‌ ها",
       "last6Months": "۶ ماه اخیر",
       "users": "کاربران",
       "numberOfRequests": "تعداد درخواست‌ها"
@@ -2045,7 +2060,14 @@
       "userNotFound": "کاربر یافت نشد",
       "loadingError": "خطا در بارگذاری اطلاعات کاربر",
       "roleLoadFailed": "بارگیری نقش‌ها ناموفق بود",
-      "inspection": { "title": "کاربران تفتیش", "searchTitle": "جستجوی کاربران تفتیش", "createTitle": "ایجاد کاربر تفتیش", "editTitle": "ویرایش کاربر تفتیش", "detailsTitle": "جزئیات کاربر تفتیش", "formSubtitle": "معلومات کاربر تفتیش را وارد کنید" }
+      "inspection": {
+        "title": "کاربران تفتیش",
+        "searchTitle": "جستجوی کاربران تفتیش",
+        "createTitle": "ایجاد کاربر تفتیش",
+        "editTitle": "ویرایش کاربر تفتیش",
+        "detailsTitle": "جزئیات کاربر تفتیش",
+        "formSubtitle": "معلومات کاربر تفتیش را وارد کنید"
+      }
     },
     "dialogs": {
       "deleteTitle": "حذف کاربر",
