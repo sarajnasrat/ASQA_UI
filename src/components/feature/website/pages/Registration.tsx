@@ -262,11 +262,6 @@ const Registration = () => {
     setCompanyId(id);
     sessionStorage.setItem("companyId", id.toString());
     setStep(3);
-    showToast(
-      "success",
-      t("common.success"),
-      t("registration.toasts.companySuccess"),
-    );
   };
 
   const handleContactSuccess = () => {

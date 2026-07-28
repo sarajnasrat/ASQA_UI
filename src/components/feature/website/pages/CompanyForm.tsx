@@ -411,7 +411,6 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
           ),
         showSuccess,
         showError,
-        t,
       );
     }
     // ✅ CREATE MODE
@@ -426,7 +425,6 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
         () => CompanyService.createCompany(formDataToSend),
         showSuccess,
         showError,
-        t,
       );
     }
 

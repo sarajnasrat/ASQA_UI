@@ -1025,7 +1025,7 @@ const CertificationRequestView: React.FC = () => {
           ),
         showSuccess,
         showError,
-        t,
+        undefined,
       );
     } else if (
       request.requestStatus === "UNDER_REVIEW" &&
@@ -1051,7 +1051,7 @@ const CertificationRequestView: React.FC = () => {
             ),
           showSuccess,
           showError,
-          t,
+          undefined,
         );
         if (!response) {
           return response;
@@ -1069,7 +1069,7 @@ const CertificationRequestView: React.FC = () => {
           ),
         showSuccess,
         showError,
-        t,
+        undefined,
       );
     } else if (effectiveNextStatus === "STANDARDS_PROVIDED") {
       if (!options?.standardFile) {
@@ -1084,7 +1084,7 @@ const CertificationRequestView: React.FC = () => {
         () => CertificationRequestService.standardProvided(request.id, formData),
         showSuccess,
         showError,
-        t,
+        undefined,
       );
     } else if (effectiveNextStatus === "DEADLINE_ASSIGNED") {
       if (!options?.startDate || !options?.endDate) {
@@ -1110,7 +1110,7 @@ const CertificationRequestView: React.FC = () => {
           ),
         showSuccess,
         showError,
-        t,
+        undefined,
       );
     } else if (effectiveNextStatus === "INSPECTION_IN_PROGRESS") {
       if (!options?.committeeId) {
@@ -1126,7 +1126,7 @@ const CertificationRequestView: React.FC = () => {
           ),
         showSuccess,
         showError,
-        t,
+        undefined,
       );
     } else {
       response = await handleApi(
@@ -1142,7 +1142,7 @@ const CertificationRequestView: React.FC = () => {
             ),
         showSuccess,
         showError,
-        t,
+        undefined,
       );
     }
 
@@ -1314,7 +1314,15 @@ const CertificationRequestView: React.FC = () => {
 
       if (response?.status === 200) {
         closeStatusDialog();
-        navigateAfterStatusUpdate(pendingStatus);
+        navigateAfterStatusUpdate(
+          request.requestStatus === "UNDER_REVIEW"
+            ? isUnderReviewDecision
+              ? standardRequiredChoice
+                ? "STANDARDS_PROVIDED"
+                : "DEADLINE_REQUIRED"
+              : pendingStatus
+            : pendingStatus,
+        );
       }
     } catch (error) {
       console.error("Status update failed:", error);

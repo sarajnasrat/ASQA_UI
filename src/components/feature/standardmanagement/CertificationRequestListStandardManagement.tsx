@@ -79,71 +79,13 @@ export const CertificationRequestListStandardManagement = () => {
     loadData();
   }, [first, rows, status]);
 
-  // ================= DELETE =================
-  const handleDelete = async (id: number) => {
-    try {
-      await CertificationRequestService.delete(id);
 
-      toast.current?.show({
-        severity: "success",
-        summary: t("common.success"),
-        detail: t("certificationRequest.deleted"),
-      });
-
-      loadData();
-    } catch {
-      toast.current?.show({
-        severity: "error",
-        summary: t("common.error"),
-        detail: t("certificationRequest.deleteFailed"),
-      });
-    }
-  };
-
-  const confirmDelete = (row: any) => {
-    confirmDialog({
-      message: t("certificationRequest.deleteConfirm", {
-        serial: row.serialNumber,
-      }),
-      header: t("certificationRequest.delete"),
-      icon: "pi pi-exclamation-triangle",
-      accept: () => handleDelete(row.id),
-    });
-  };
-
-  // ================= ACTION MENU =================
-
-  const editButtonLabel = (rowData: any) => {
-    if (rowData === "STANDARDS_REQUIRED") {
-      return t("certificationRequest.providestandard");
-    } else if (rowData === "STANDARDS_PROVIDED") {
-      return t("certificationRequest.requireDeadline");
-    } else if (rowData === "DEADLINE_REQUIRED") {
-      return t("certificationRequest.setDeadline");
-    } else if (rowData === "DEADLINE_ASSIGNED") {
-      return t("certificationRequest.assigneToCommittee");
-    } else if (rowData === "INSPECTION_IN_PROGRESS") {
-      return t("certificationRequest.continueInspection");
-    } else if (rowData === "REPORTED_TO_COMMITTEE") {
-      return t("certificationRequest.reviewReport");
-    } else if (rowData === "REPORT_APPROVED") {
-      return t("certificationRequest.requestPayment");
-    } else if (rowData === "PAYMENT_PENDING") {
-      return t("certificationRequest.confirmPayment");
-    } else if (rowData === "PAYMENT_COMPLETED") {
-      return t("certificationRequest.issueCertificate");
-    } else if (rowData === "CERTIFICATION_ISSUED") {
-      return t("certificationRequest.startSupervision");
-    } else {
-      return t("common.edit");
-    }
-  };
   const actionTemplate = (rowData: any) => {
     const menu = useRef<any>(null);
 
     const items: MenuItem[] = [
       {
-        label: t("common.view"),
+        label: t("certificationRequest.statusOptions.STANDARDS_PROVIDED"),
         icon: "pi pi-eye",
         command: () =>
           navigate(`/certification-request/view/${rowData.id}`, {
@@ -153,19 +95,6 @@ export const CertificationRequestListStandardManagement = () => {
             },
           }),
       },
-      // {
-      //   label: editButtonLabel(rowData.requestStatus),
-      //   icon: "pi pi-pencil",
-      //   command: () => {
-      //     setSelectedId(rowData.id);
-      //     setUpdateVisible(true);
-      //   },
-      // },
-      // {
-      //   label: t("common.delete"),
-      //   icon: "pi pi-trash",
-      //   command: () => confirmDelete(rowData),
-      // },
     ];
 
     return (
