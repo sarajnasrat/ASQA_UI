@@ -12,11 +12,23 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import ExcelExport from "../../common/ExcelExport";
 import { CertificationUpdate } from "./CertificationUpdate";
-import StatusTabMenu, { type StatusTabItem } from "../../common/StatusTabMenu";
 import { useAuth } from "../../../context/AuthContext";
 import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 
-export const CertificationList = () => {
+type CertificationStatus =
+  | "UNDER_SUPERVISION"
+  | "CERTIFICATION_ISSUED"
+  | "SCANNED"
+  | "PRINTED"
+  | "DRAFT";
+
+interface CertificationListProps {
+  status?: CertificationStatus;
+}
+
+export const CertificationList = ({
+  status = "DRAFT",
+}: CertificationListProps) => {
   const [certifications, setCertifications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -31,23 +43,8 @@ export const CertificationList = () => {
   const [updateDialogVisible, setUpdateDialogVisible] = useState(false);
   const [selectedCertification, setSelectedCertification] = useState<any>(null);
 
-  const [activeStatusIndex, setActiveStatusIndex] = useState(0);
-  const [selectedStatus, setSelectedStatus] = useState("DRAFT");
+  const selectedStatus = status;
   const { hasPermission, withPermission } = useAuth();
-
-  const statusTabs: StatusTabItem[] = [
-    { label: t("certification.statusOptions.DRAFT"), value: "DRAFT" },
-    { label: t("certification.statusOptions.PRINTED"), value: "PRINTED" },
-    { label: t("certification.statusOptions.SCANNED"), value: "SCANNED" },
-    {
-      label: t("certification.statusOptions.CERTIFICATION_ISSUED"),
-      value: "CERTIFICATION_ISSUED",
-    },
-    {
-      label: t("certification.statusOptions.UNDER_SUPERVISION"),
-      value: "UNDER_SUPERVISION",
-    },
-  ];
 
   const getCertificates = async () => {
     try {
@@ -297,16 +294,6 @@ export const CertificationList = () => {
         certification={selectedCertification}
         onHide={() => setUpdateDialogVisible(false)}
         onUpdated={() => undefined}
-      />
-
-      <StatusTabMenu
-        items={statusTabs}
-        activeIndex={activeStatusIndex}
-        onChange={(index, value) => {
-          setActiveStatusIndex(index);
-          setSelectedStatus(value);
-          setFirst(0);
-        }}
       />
 
       <DynamicTable

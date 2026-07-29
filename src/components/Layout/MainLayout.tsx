@@ -232,7 +232,12 @@ export const MainLayout = () => {
                 path="certification-details/:requestId"
                 element={<CertificationDetails />}
               />
-              <Route path="certifications" element={<CertificationList />} />
+              <Route path="certifications" element={<CertificationList status="DRAFT" />} />
+              <Route path="under-supervision-certification" element={<CertificationList status="UNDER_SUPERVISION" />} />
+              <Route path="issued-certification" element={<CertificationList status="CERTIFICATION_ISSUED" />} />
+              <Route path="scanned-certification" element={<CertificationList status="SCANNED" />} />
+              <Route path="printed-certification" element={<CertificationList status="PRINTED" />} />
+              <Route path="initial-certification" element={<CertificationList status="DRAFT" />} />
               <Route
                 path="certification-request/edit/:id"
                 element={
