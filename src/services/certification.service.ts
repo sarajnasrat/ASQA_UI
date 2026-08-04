@@ -75,6 +75,15 @@ const CertificationService = {
       params,
     });
   },
+  getPaginatedCertificationsByType(
+    certificationType: string,
+    status: string | undefined,
+    params: any,
+  ) {
+    return httpClient.get(`${CERTIFICATION_BASE}/type/${certificationType}`, {
+      params: { ...params, ...(status ? { status } : {}) },
+    });
+  },
   verfyCertification(param: any) {
     return httpClient.get(`${CERTIFICATION_BASE}/search-by-certificate-number`, {
       params: { param },

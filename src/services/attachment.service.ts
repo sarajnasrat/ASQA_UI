@@ -19,6 +19,10 @@ export const AttachmentService = {
     return httpClient.get(`${BASE_URL}/by-reference-type/${referenceType}`);
   },
 
+  getAllByReferenceType(referenceType: string) {
+    return httpClient.get(`${BASE_URL}/by-reference-type/${referenceType}`);
+  },
+
   getByReference(referenceId: number, referenceType: string) {
     return httpClient.get(
       `${BASE_URL}/reference/${referenceType}/${referenceId}`,

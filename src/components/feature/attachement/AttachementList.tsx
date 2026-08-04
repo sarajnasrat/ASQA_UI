@@ -1,6 +1,7 @@
 import  { useEffect, useRef, useState } from "react";
 import { useAppToast } from "../../../hooks/useToast";
 import { Button } from "primereact/button";
+import { Dropdown } from "primereact/dropdown";
 import { TieredMenu } from "primereact/tieredmenu";
 import type { MenuItem } from "primereact/menuitem";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
@@ -12,8 +13,17 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import httpClientForPic from "../../../api/httpClientForPic";
 import ExcelExport from "../../common/ExcelExport";
+import { AttachmentCreate } from "./AttachmentCreate";
 
-export const AttachmentList = () => {
+interface AttachmentListProps {
+  referenceType?: string;
+  all?: boolean;
+}
+
+export const AttachmentList = ({
+  referenceType,
+  all = false,
+}: AttachmentListProps) => {
   const [attachments, setAttachments] = useState<any[]>([]);
   const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
@@ -21,6 +31,8 @@ export const AttachmentList = () => {
   const [first, setFirst] = useState(0);
   const [rows, setRows] = useState(10);
   const [totalRecords, setTotalRecords] = useState(0);
+  const [selectedReferenceType, setSelectedReferenceType] = useState<string | null>(null);
+  const [createVisible, setCreateVisible] = useState(false);
   const API_BASE_URL = httpClientForPic.getUri(); // ✅ change if needed
 
 
@@ -32,15 +44,25 @@ export const AttachmentList = () => {
     try {
       setLoading(true);
       const page = first / rows;
-      const response = await AttachmentService.getPaginatedAttachments({
-        page,
-        size: rows,
-        sort: "id,desc",
-      });
+      const response = all && selectedReferenceType
+        ? await AttachmentService.getAllByReferenceType(selectedReferenceType)
+        : all
+        ? await AttachmentService.getAll()
+        : referenceType
+        ? await AttachmentService.getAllByReferenceType(referenceType)
+        : await AttachmentService.getPaginatedAttachments({
+            page,
+            size: rows,
+            sort: "id,desc",
+          });
 
-      const data = response.data.data || [];
+      const data = all || referenceType
+        ? response.data.data || response.data || []
+        : response.data.data || [];
       setAttachments(data);
-      setTotalRecords(response.data.totalElements || 0);
+      setTotalRecords(
+        all || referenceType ? data.length : response.data.totalElements || 0,
+      );
     } catch (error) {
       console.error(error);
       showToast("error", t("attachment.error"), t("attachment.failed_to_load_attachments"));
@@ -51,7 +73,15 @@ export const AttachmentList = () => {
 
   useEffect(() => {
     loadAttachments();
-  }, [first, rows]);
+  }, [first, rows, referenceType, all, selectedReferenceType]);
+
+  const referenceTypeOptions = [
+    { label: t("attachment.referenceTypeOptions.COMPANY"), value: "COMPANY" },
+    { label: t("attachment.referenceTypeOptions.STANDARD"), value: "STANDARD" },
+    { label: t("attachment.referenceTypeOptions.CERTIFICATION"), value: "CERTIFICATION" },
+    { label: t("attachment.referenceTypeOptions.USER"), value: "USER" },
+    { label: t("attachment.referenceTypeOptions.REQUEST"), value: "REQUEST" },
+  ];
 
   /* ================= DELETE ================= */
 
@@ -256,13 +286,34 @@ const fileTemplate = (rowData: any) => {
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+        {all && (
+          <div className="flex flex-col gap-1">
+            <label htmlFor="attachment-reference-type" className="text-sm font-medium text-gray-700">
+              {t("attachment.referenceTypeLabel", "Reference type")}
+            </label>
+            <Dropdown
+            inputId="attachment-reference-type"
+            value={selectedReferenceType}
+            options={referenceTypeOptions}
+            optionLabel="label"
+            optionValue="value"
+            onChange={(e) => {
+              setSelectedReferenceType(e.value);
+              setFirst(0);
+            }}
+            placeholder={t("attachment.selectReferenceType", "Select reference type")}
+            showClear
+            className="w-full sm:w-64"
+            />
+          </div>
+        )}
         <Button
           icon="pi pi-plus"
           label={t("attachment.add")}
           raised
           severity="info"
           text
-          onClick={() => navigate("/attachments/create")}
+          onClick={() => setCreateVisible(true)}
         />
 
         <Button
@@ -279,13 +330,21 @@ const fileTemplate = (rowData: any) => {
           fileName={t("attachment.list")}
           sheetName={t("attachment.list")}
           fetchAllData={async () => {
-            const res = await AttachmentService.getPaginatedAttachments({
-              page: 0,
-              size: totalRecords,
-              sort: "id,desc",
-            });
+            const res = all && selectedReferenceType
+              ? await AttachmentService.getAllByReferenceType(selectedReferenceType)
+              : all
+              ? await AttachmentService.getAll()
+              : referenceType
+              ? await AttachmentService.getAllByReferenceType(referenceType)
+              : await AttachmentService.getPaginatedAttachments({
+                  page: 0,
+                  size: totalRecords,
+                  sort: "id,desc",
+                });
 
-            return res.data.data;
+            return all || referenceType
+              ? res.data.data || res.data || []
+              : res.data.data;
           }}
         />
       </div>
@@ -341,6 +400,21 @@ const fileTemplate = (rowData: any) => {
         items={breadcrumbItems}
         size="pl-5 pr-5 max-w-8xl mx-auto mt-3"
       />
+
+      {createVisible && (
+        <AttachmentCreate
+          referenceType={referenceType as any}
+          onSuccess={async () => {
+            await loadAttachments();
+            navigate(
+              referenceType === "STANDARD"
+                ? "/standard-attachment"
+                : "/all-attachment",
+            );
+          }}
+          onHide={() => setCreateVisible(false)}
+        />
+      )}
 
       <DynamicTable
         title={t("attachment.management_title")}

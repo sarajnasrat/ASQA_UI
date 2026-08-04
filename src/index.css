@@ -319,3 +319,7 @@ html[dir="rtl"] .p-dropdown-clear-icon {
   color: #64748b;
   text-align: center;
 }
+.p-dropdown-panel .p-dropdown-header .p-dropdown-filter {
+  padding-right: 1.5rem;
+  margin-right: 0 !important;
+}

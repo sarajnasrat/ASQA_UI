@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useAppToast } from "../../../hooks/useToast";
 import { Button } from "primereact/button";
+import { Dropdown } from "primereact/dropdown";
 import { TieredMenu } from "primereact/tieredmenu";
 import type { MenuItem } from "primereact/menuitem";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
@@ -44,21 +45,24 @@ export const CertificationList = ({
   const [selectedCertification, setSelectedCertification] = useState<any>(null);
 
   const selectedStatus = status;
+  const [filterType, setFilterType] = useState<string | null>(null);
   const { hasPermission, withPermission } = useAuth();
 
   const getCertificates = async () => {
     try {
       setLoading(true);
 
-      const response =
-        await CertificationService.getPaginatedCertificationsByStatus(
-          selectedStatus,
-          {
-            page: first / rows,
-            size: rows,
-            sort: "id,desc",
-          },
-        );
+      const params = { page: first / rows, size: rows, sort: "id,desc" };
+      const response = filterType
+        ? await CertificationService.getPaginatedCertificationsByType(
+            filterType,
+            selectedStatus,
+            params,
+          )
+        : await CertificationService.getPaginatedCertificationsByStatus(
+            selectedStatus,
+            params,
+          );
 
       setCertifications(response.data.data);
       setTotalRecords(response.data.totalElements);
@@ -71,7 +75,22 @@ export const CertificationList = ({
 
   useEffect(() => {
     getCertificates();
-  }, [first, rows, selectedStatus]);
+  }, [first, rows, selectedStatus, filterType]);
+
+  const certificationTypeOptions = [
+    "STANDARD_MARK_CERTIFICATION",
+    "MANAGEMENT_SYSTEM_QUALITY",
+    "SERVICE_QUALITY",
+    "PRODUCT_QUALITY",
+  ].map((value) => ({
+    label: t("certificationRequest.certificationTypeOptions." + value),
+    value,
+  }));
+
+  const clearFilters = () => {
+    setFilterType(null);
+    setFirst(0);
+  };
 
   const confirmDelete = (row: any) => {
     confirmDialog({
@@ -150,18 +169,57 @@ export const CertificationList = ({
   };
 
   const header = () => (
-    <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-4 px-2">
-      <div className="flex items-center gap-3">
-        <h2 className="text-2xl font-bold text-blue-700">
-          {t("certification.management")}
-        </h2>
+    <div className="flex flex-col gap-4 mb-4 px-2">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <h2 className="text-2xl font-bold text-blue-700">
+            {t("certification.management")}
+          </h2>
+          <span className="bg-blue-100 text-blue-800 text-xs font-medium px-3 py-1 rounded-full">
+            {totalRecords} {t("common.total")}
+          </span>
+        </div>
 
-        <span className="bg-blue-100 text-blue-800 text-xs font-medium px-3 py-1 rounded-full">
-          {totalRecords} {t("common.total")}
-        </span>
       </div>
 
-      <div>
+      <div className="flex flex-col sm:flex-row sm:items-end justify-end gap-3">
+        <div className="flex flex-col items-center gap-1">
+          <label htmlFor="certification-type-filter" className="text-sm font-medium text-gray-700 text-center">
+            {t("certification.filterTypeLabel", "Certification type")}
+          </label>
+          <Dropdown
+            inputId="certification-type-filter"
+            value={filterType}
+            options={certificationTypeOptions}
+            optionLabel="label"
+            onChange={(e) => {
+              setFilterType(e.value);
+              setFirst(0);
+            }}
+            placeholder={t("certification.selectType", "Select certification type")}
+            className="w-full sm:w-96"
+            panelStyle={{ minWidth: "24rem" }}
+            showClear
+            filter
+            filterPlaceholder={t("certification.searchType", "Search certification type")}
+            filterInputProps={{
+              className: "w-full text-center",
+              style: { textAlign: "center" },
+            }}
+            emptyMessage={t("common.noResults", "No results found")}
+          />
+        </div>
+
+        {filterType && (
+          <Button
+            icon="pi pi-filter-slash"
+            label={t("certification.clearFilters", "Clear filters")}
+            outlined
+            severity="secondary"
+            onClick={clearFilters}
+          />
+        )}
+
         <Button
           icon="pi pi-sync"
           label={t("common.refresh")}
@@ -178,14 +236,16 @@ export const CertificationList = ({
           sheetName={t("certification.management")}
           fetchAllData={async () => {
             const res =
-              await CertificationService.getPaginatedCertificationsByStatus(
-                selectedStatus,
-                {
-                  page: 0,
-                  size: totalRecords,
-                  sort: "id,desc",
-                },
-              );
+              filterType
+                ? await CertificationService.getPaginatedCertificationsByType(
+                    filterType,
+                    selectedStatus,
+                    { page: 0, size: totalRecords, sort: "id,desc" },
+                  )
+                : await CertificationService.getPaginatedCertificationsByStatus(
+                    selectedStatus,
+                    { page: 0, size: totalRecords, sort: "id,desc" },
+                  );
 
             return res.data.data;
           }}

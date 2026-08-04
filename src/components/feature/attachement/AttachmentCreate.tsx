@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "primereact/button";
+import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { Card } from "primereact/card";
 import { Dropdown } from "primereact/dropdown";
@@ -16,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { handleApi } from "../../../hooks/handleApi";
 import { useToast } from "../../../hooks/ToastContext";
 
-type AttachmentReferenceType = "COMPANY" | "CERTIFICATION" | "USER" | "REQUEST";
+type AttachmentReferenceType = "COMPANY" | "STANDARD" | "CERTIFICATION" | "USER" | "REQUEST";
 
 interface Company {
   id: number;
@@ -29,17 +30,21 @@ interface Props {
   referenceId?: number;
   referenceType?: AttachmentReferenceType;
   onSuccess?: () => void;
+  onHide?: () => void;
 }
 
 const referenceTypeOptions = [
   { label: "attachment.COMPANY", value: "COMPANY" },
+  { label: "attachment.STANDARD", value: "STANDARD" },
   { label: "attachment.STANDARD", value: "STANDARD" },
   { label: "attachment.CERTIFICATION", value: "CERTIFICATION" },
 ];
 
 export const AttachmentCreate: React.FC<Props> = ({
   referenceId: initialReferenceId,
-  referenceType: onSuccess,
+  referenceType: initialReferenceType,
+  onSuccess,
+  onHide,
 }) => {
   const { t, i18n } = useTranslation();
   const { toast, showToast } = useAppToast();
@@ -48,7 +53,7 @@ export const AttachmentCreate: React.FC<Props> = ({
   const [attachmentName, setAttachmentName] = useState("");
   const { showError, showSuccess } = useToast();
   const [selectedReferenceType, setSelectedReferenceType] =
-    useState<AttachmentReferenceType | null>("CERTIFICATION");
+    useState<AttachmentReferenceType | null>(initialReferenceType || null);
 
   const [selectedReferenceId, setSelectedReferenceId] = useState<number | null>(
     initialReferenceId || null,
@@ -193,16 +198,14 @@ export const AttachmentCreate: React.FC<Props> = ({
         t,
       );
 
-      // reset
-      setAttachmentName("");
-      setFile(null);
-      setSelectedReferenceType(null);
-      setSelectedReferenceId(null);
-   if(response?.status==200){
-     setTimeout(() => {
-        navigate("/admin-attachments");
-      }, 3000);
-   }
+      if (response) {
+        setAttachmentName("");
+        setFile(null);
+        setSelectedReferenceType(initialReferenceType || null);
+        setSelectedReferenceId(initialReferenceId || null);
+        onSuccess?.();
+        onHide?.();
+      }
  
     } catch (error) {
       console.error(error);
@@ -217,15 +220,23 @@ export const AttachmentCreate: React.FC<Props> = ({
     }
   };
 
+  const handleCancel = () => {
+    setAttachmentName("");
+    setFile(null);
+    setSelectedReferenceType(initialReferenceType || null);
+    setSelectedReferenceId(initialReferenceId || null);
+    onHide?.();
+    if (!onHide) navigate("/admin-attachments");
+  };
+
   return (
-    <>
-      <DynamicBreadcrumb
-        items={[
-          { label: t("attachment.list"), url: "/admin-attachments" },
-          { label: t("attachment.add"), url: "/attachment/create" },
-        ]}
-        size="pl-5 pr-5 max-w-8xl mx-auto mt-1"
-      />
+    <Dialog
+      header={t("attachment.add_attachment")}
+      visible
+      modal
+      className="w-full md:w-[52rem]"
+      onHide={handleCancel}
+    >
       <Toast ref={toast} />
 
       <div className="flex justify-center pl-5 pr-5 max-w-8xl mx-auto pb-6">
@@ -253,6 +264,7 @@ export const AttachmentCreate: React.FC<Props> = ({
                   setSelectedReferenceType(e.value);
                   setSelectedReferenceId(null);
                 }}
+                disabled={Boolean(initialReferenceType)}
                 placeholder={t("attachment.select_attachment_type")}
                 className="w-full"
               />
@@ -302,7 +314,7 @@ export const AttachmentCreate: React.FC<Props> = ({
                 raised
                 text
                 icon="pi pi-times"
-                onClick={() => navigate("/admin-attachments")}
+                onClick={handleCancel}
               />
 
               <Button
@@ -317,6 +329,6 @@ export const AttachmentCreate: React.FC<Props> = ({
           </div>
         </Card>
       </div>
-    </>
+    </Dialog>
   );
 };

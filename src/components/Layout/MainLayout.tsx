@@ -294,6 +294,14 @@ export const MainLayout = () => {
               />
               <Route path="admin-attachments" element={<AttachmentList />} />
               <Route
+                path="all-attachment"
+                element={<AttachmentList all />}
+              />
+              <Route
+                path="standard-attachment"
+                element={<AttachmentList referenceType="STANDARD" />}
+              />
+              <Route
                 path="attachments/create"
                 element={
                   <AttachmentCreate

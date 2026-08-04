@@ -148,18 +148,7 @@ const loadData = async () => {
     const menu = useRef<any>(null);
 
     const items: MenuItem[] = [
-      // {
-      //   label: t("common.view"),
-      //   icon: "pi pi-eye",
-      //   command: () =>
-      //     navigate(`/commitee-assignment/view/${rowData.id}`),
-      // },
-      // {
-      //   label: t("common.edit"),
-      //   icon: "pi pi-pencil",
-      //   command: () =>
-      //     navigate(`/commitee-assignment/edit/${rowData.id}`),
-      // },
+
       ...withPermission("VIEW_COMMITEEASSIGNMENT", {
         label: t("common.view"),
         icon: "pi pi-eye",
