@@ -221,6 +221,8 @@
     "deleteFailed": "Failed to delete province"
   },
   "category": {
+    "categoryType": "Category Type",
+    "types": { "COMPANY": "Company", "STANDARD": "Standard" },
     "create": "Create Category",
     "edit": "Edit Category",
     "delete": "Delete Category",

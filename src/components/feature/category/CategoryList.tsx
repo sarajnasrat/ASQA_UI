@@ -200,6 +200,12 @@ export const CategoryList: React.FC = () => {
       ),
     },
     {
+      field: "categoryType",
+      header: t("category.categoryType"),
+      style: { minWidth: "160px" },
+      body: (row: any) => <span className="font-medium text-blue-700">{row.categoryType || "COMPANY"}</span>,
+    },
+    {
       header: t("common.action"),
       body: actionTemplate,
       style: { width: "140px" },

@@ -219,6 +219,8 @@
     "deleteFailed": "حذف ولایت ناموفق بود"
   },
   "category": {
+    "categoryType": "نوع دسته",
+    "types": { "COMPANY": "شرکت", "STANDARD": "استاندارد" },
     "create": "ایجاد دسته",
     "edit": "ویرایش دسته",
     "delete": "حذف دسته",

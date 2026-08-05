@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { InputText } from "primereact/inputtext";
+import { Dropdown } from "primereact/dropdown";
 
 import CategoryService from "../../../services/category.service";
 import { handleApi } from "../../../hooks/handleApi";
@@ -121,6 +122,15 @@ const onSubmit = async (data: CategoryFormValues) => {
                   {errors.name.message}
                 </p>
               )}
+            </div>
+
+            {/* Footer */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">{t("category.categoryType")} *</label>
+              <Controller name="categoryType" control={control} rules={{ required: t("category.validation.type.required") }} render={({ field }) => (
+                <Dropdown {...field} options={[{ label: t("category.types.COMPANY"), value: "COMPANY" }, { label: t("category.types.STANDARD"), value: "STANDARD" }]} placeholder={t("category.placeholder.type")} className={`w-full ${errors.categoryType ? "p-invalid" : ""}`} disabled={isSubmitting} />
+              )} />
+              {errors.categoryType && <p className="text-sm text-red-600 mt-1">{errors.categoryType.message}</p>}
             </div>
 
             {/* Footer */}

@@ -240,7 +240,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
 
   const loadCategories = async () => {
     try {
-      const response = await CategoryService.getAllCategories();
+      const response = await CategoryService.getCategoriesByType("COMPANY");
       setCategories(response.data);
     } catch (error) {
       showToast("error", t("common.error"), t("company.loadFailed"));

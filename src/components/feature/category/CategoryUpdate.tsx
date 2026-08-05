@@ -3,6 +3,7 @@ import { Toast } from "primereact/toast";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { InputText } from "primereact/inputtext";
+import { Dropdown } from "primereact/dropdown";
 import CategoryService from "../../../services/category.service";
 
 interface CategoryUpdateProps {
@@ -13,6 +14,7 @@ interface CategoryUpdateProps {
 
 interface CategoryFormValues {
   name: string;
+  categoryType: "COMPANY" | "STANDARD" | null;
 }
 
 export const CategoryUpdate: React.FC<CategoryUpdateProps> = ({
@@ -35,6 +37,7 @@ export const CategoryUpdate: React.FC<CategoryUpdateProps> = ({
   } = useForm<CategoryFormValues>({
     defaultValues: {
       name: "",
+      categoryType: null,
     },
   });
 
@@ -46,10 +49,22 @@ export const CategoryUpdate: React.FC<CategoryUpdateProps> = ({
           id: categoryId,
         });
 
-        const category = res.data;
+        // The category endpoint returns paginated data (`data.data`), while
+        // some deployments return the category object directly.
+        const payload = res.data?.data ?? res.data;
+        const category = Array.isArray(payload)
+          ? payload.find((item) => Number(item.id) === Number(categoryId))
+          : payload;
+
+        if (!category) {
+          throw new Error("Category not found");
+        }
+
+        const categoryType = category.categoryType ?? category.type;
 
         reset({
           name: category.name || "",
+          categoryType: categoryType === "STANDARD" ? "STANDARD" : "COMPANY",
         });
       } catch (error: any) {
         toast.current?.show({
@@ -172,6 +187,39 @@ export const CategoryUpdate: React.FC<CategoryUpdateProps> = ({
               {errors.name && (
                 <p className="text-sm text-red-600 mt-1">
                   {errors.name.message}
+                </p>
+              )}
+            </div>
+
+            {/* Category type */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {t("category.categoryType")}
+                <span className="text-red-500 ml-1">*</span>
+              </label>
+
+              <Controller
+                name="categoryType"
+                control={control}
+                rules={{ required: t("category.validation.type.required") }}
+                render={({ field }) => (
+                  <Dropdown
+                    value={field.value}
+                    onChange={(e) => field.onChange(e.value)}
+                    options={[
+                      { label: t("category.types.COMPANY"), value: "COMPANY" },
+                      { label: t("category.types.STANDARD"), value: "STANDARD" },
+                    ]}
+                    placeholder={t("category.placeholder.type")}
+                    className={`w-full ${errors.categoryType ? "p-invalid" : ""}`}
+                    disabled={isSubmitting}
+                  />
+                )}
+              />
+
+              {errors.categoryType && (
+                <p className="text-sm text-red-600 mt-1">
+                  {errors.categoryType.message}
                 </p>
               )}
             </div>

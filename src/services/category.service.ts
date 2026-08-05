@@ -14,6 +14,10 @@ export const CategoryService = {
     return httpClient.get(`${CATEGORY_BASE}/all`);
   },
 
+  getCategoriesByType(type: "COMPANY" | "STANDARD") {
+    return httpClient.get(`${CATEGORY_BASE}/by-type`, { params: { type } });
+  },
+
   // Create category
   createCategory(data: any) {
     return httpClient.post(`${CATEGORY_BASE}`, data);
