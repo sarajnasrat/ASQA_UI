@@ -341,6 +341,13 @@
     "createFailed": "ایجاد شرکت ناموفق بود",
     "updateSuccess": "شرکت با موفقیت به روز شد",
     "updateFailed": "به روز رسانی شرکت ناموفق بود",
+    "classificationCreateBlacklist": "افزودن شرکت به لیست سیاه",
+    "classificationReasonRequired": "دلیل لیست سیاه الزامی است",
+    "classificationReasonPlaceholder": "دلیل درج این شرکت در لیست سیاه را وارد کنید",
+    "rejectedTitle": "لیست شرکت های منفی ارزیابی شده",
+    "positiveTitle": "شرکت های که مثبت ارزیابی شده",
+    "classificationBlacklistedCreated": "شرکت در لیست سیاه با موفقیت ایجاد شد",
+    "classification": { "blacklistButton": "شرکت در لیست سیاه", "whitelistButton": "شرکت در لیست سفید", "blacklistTitle": "شرکت در لیست سیاه", "changeTitle": "تغییر طبقه‌بندی شرکت", "blacklistDescription": "دلیل درج {{name}} در لیست سیاه را وارد کنید.", "confirmWhitelist": "آیا {{name}} در لیست سفید قرار گیرد؟", "reason": "دلیل", "notes": "یادداشت‌ها", "manualWhitelist": "درج دستی در لیست سفید", "updated": "طبقه‌بندی شرکت به‌روز شد" },
     "basicInformation": "اطلاعات اولیه",
     "businessDetails": "جزئیات تجاری",
     "jawazInformation": "اطلاعات جواز",
@@ -609,6 +616,7 @@
     }
   },
   "nav": {
+    "blacklistedCompanies": "شرکت‌های لیست سیاه",
     "certificationVerification": " اصالت تائید نامه های کیفی",
     "home": "خانه",
     "services": "خدمات",
@@ -2758,6 +2766,7 @@
     }
   },
   "website": {
+    "blacklistedCompanies": { "badge": "شرکت‌های لیست سیاه", "title": "شرکت‌های لیست سیاه", "titleAccent": "", "description": "شرکت‌هایی که توسط ASQA در لیست سیاه قرار دارند.", "searchPlaceholder": "جستجوی شرکت‌های لیست سیاه..." },
     "navbar": {
       "homeAria": " بازگشت به صفحه اصلی",
       "toggleMenu": "تغییر وضعیت منو",

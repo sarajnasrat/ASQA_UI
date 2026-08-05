@@ -339,6 +339,13 @@
     "createFailed": "د شرکت جوړول ناکام شول",
     "updateSuccess": "شرکت په بریالیتوب سره تازه شو",
     "updateFailed": "د شرکت تازه کول ناکام شول",
+    "classificationCreateBlacklist": "تور لېست ته د شرکت زیاتول",
+    "classificationReasonRequired": "د تور لېست دلیل اړین دی",
+    "classificationReasonPlaceholder": "د دې شرکت د تور لېست دلیل ولیکئ",
+    "rejectedTitle": "د منفي ارزول شویو شرکتونو لېست",
+    "positiveTitle": "هغه شرکتونه چې مثبت ارزول شوي",
+    "classificationBlacklistedCreated": "تور لېست شرکت په بریالیتوب جوړ شو",
+    "classification": { "blacklistButton": "شرکت تور لېست ته داخلول", "whitelistButton": "شرکت سپین لېست ته داخلول", "blacklistTitle": "شرکت تور لېست ته داخلول", "changeTitle": "د شرکت طبقه بندي بدلول", "blacklistDescription": "د {{name}} د تور لېست دلیل ولیکئ.", "confirmWhitelist": "{{name}} سپین لېست ته داخل شي؟", "reason": "دلیل", "notes": "یادښتونه", "manualWhitelist": "په لاسي ډول سپین لېست ته داخل شو", "updated": "د شرکت طبقه بندي تازه شوه" },
     "basicInformation": "اساسی معلومات",
     "businessDetails": "سوداګریز جزئیات",
     "jawazInformation": "د جواز معلومات",
@@ -607,6 +614,7 @@
     }
   },
   "nav": {
+    "blacklistedCompanies": "د تور لېست شرکتونه",
     "home": "کور",
     "services": "خدمتونه",
     "companies": "شرکتونه",
@@ -2752,6 +2760,7 @@
     }
   },
   "website": {
+    "blacklistedCompanies": { "badge": "د تور لېست شرکتونه", "title": "د تور لېست شرکتونه", "titleAccent": "", "description": "هغه شرکتونه چې د ASQA لخوا په تور لېست کې دي.", "searchPlaceholder": "د تور لېست شرکتونو لټون..." },
     "internationalParties": {
       "badge": "نړیواله شبکه",
       "title": "نړیوال بنسټونه",

@@ -34,6 +34,7 @@ const Navbar = () => {
     { name: t("nav.internationalParties"), path: "/international-parties" },
   
     { name: t("nav.companies"), path: "/companies" },
+    { name: t("nav.blacklistedCompanies"), path: "/blacklisted-companies" },
     { name: t("nav.contact"), path: "/contact" },
   
   ];

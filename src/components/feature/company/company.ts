@@ -1,7 +1,3 @@
-export interface SocialLink {
-  socialLinkName: string;
-  address: string;
-}
 
 export interface CategoryReference {
   id: number;
@@ -55,5 +51,4 @@ export interface Company {
   aboutCompanyPs: string;
 
   categories: CategoryReference[];
-  socialLinks: SocialLink[];
 }

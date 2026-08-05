@@ -8,6 +8,7 @@ import Contact from "../components/feature/website/pages/Contact";
 import Services from "../components/feature/website/pages/Services";
 import Registration from "../components/feature/website/pages/Registration";
 import Companies from "../components/feature/website/pages/Companies";
+import BlacklistedCompanies from "../components/feature/website/pages/BlacklistedCompanies";
 import { WebsiteLayout } from "./WebsiteLayout";
 import CertificationTypeSelection from "../components/feature/website/pages/CertificationTypeSelection";
 import CertificationEntrySelection from "../components/feature/website/pages/CertificationEntrySelection";
@@ -36,6 +37,7 @@ export const AppRoutes = () => {
             element={<OrganizationServices />}
           />
           <Route path="/companies" element={<Companies />} />
+          <Route path="/blacklisted-companies" element={<BlacklistedCompanies />} />
           <Route path="/registration" element={<Registration />} />
           <Route
             path="/certification-detals"

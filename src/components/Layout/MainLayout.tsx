@@ -17,6 +17,7 @@ import { ProvinceList } from "../feature/location/province/ProvinceList";
 import { CategoryList } from "../feature/category/CategoryList";
 import CompanyList from "../feature/company/CompanyList";
 import CompanyStatusList from "../feature/company/CompanyStatusList";
+import BlacklistedCompanyList from "../feature/company/BlacklistedCompanyList";
 import { CompanyCreate } from "../feature/company/CompanyCreate";
 import CompanyUpdate from "../feature/company/CompanyUpdate";
 import { CertificationRequestList } from "../feature/certification-request/CertificationRequestList";
@@ -259,16 +260,24 @@ export const MainLayout = () => {
               <Route path="company" element={<CompanyList />} />
               <Route
                 path="company/certificate-issued"
-                element={<CompanyStatusList status="CERTIFICATION_ISSUED" />}
+                element={<CompanyStatusList classificationType="WHITELISTED" status="CERTIFICATION_ISSUED" title="company.positiveTitle" />}
               />
               <Route
                 path="company/rejected"
-                element={<CompanyStatusList status="REJECTED" />}
+                element={
+                  <CompanyStatusList
+                    key="company-rejected"
+                    status="REJECTED"
+                    title="company.rejectedTitle"
+                  />
+                }
               />
+              <Route path="company/blacklisted" element={<BlacklistedCompanyList />} />
               <Route
                 path="company/under-review"
                 element={
                   <CompanyStatusList
+                    classificationType="UNDER_REVIEW"
                     statuses={[
                       "SUBMITTED",
                       "UNDER_REVIEW",

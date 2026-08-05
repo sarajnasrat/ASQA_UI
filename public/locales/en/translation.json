@@ -291,6 +291,13 @@
     "createFailed": "Failed to create company",
     "updateSuccess": "Company updated successfully",
     "updateFailed": "Failed to update company",
+    "classificationCreateBlacklist": "Add Blacklist Company",
+    "classificationReasonRequired": "Blacklist reason is required",
+    "classificationReasonPlaceholder": "Enter the reason for blacklisting this company",
+    "rejectedTitle": "Evaluated Negative Companies",
+    "positiveTitle": "Evaluated Positive Companies",
+    "classificationBlacklistedCreated": "Blacklisted company created successfully",
+    "classification": { "blacklistButton": "Blacklist Company", "whitelistButton": "Whitelist Company", "blacklistTitle": "Blacklist Company", "changeTitle": "Change Company Classification", "blacklistDescription": "Provide the reason for blacklisting {{name}}.", "confirmWhitelist": "Whitelist {{name}}?", "reason": "Reason", "notes": "Notes", "manualWhitelist": "Manually whitelisted", "updated": "Company classification updated" },
     "basicInformation": "Basic Information",
     "businessDetails": "Business Details",
     "jawazInformation": "Jawaz Information",
@@ -727,6 +734,7 @@
     "home": "Home",
     "services": "Services",
     "companies": "Companies",
+    "blacklistedCompanies": "Blacklisted Companies",
     "contact": "Contact",
     "register": "Register Company",
     "subtitle": "Afghanistan Quality Standards Authority",
@@ -2801,6 +2809,7 @@
     }
   },
   "website": {
+    "blacklistedCompanies": { "badge": "Blacklisted Companies", "title": "Blacklisted Companies", "titleAccent": "", "description": "Companies currently listed as blacklisted by ASQA.", "searchPlaceholder": "Search blacklisted companies..." },
     "companies": {
       "badge": "ASQA Certified Companies",
       "title": "Our Certified Companies",

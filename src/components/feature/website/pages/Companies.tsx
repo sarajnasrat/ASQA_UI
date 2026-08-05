@@ -1,6 +1,6 @@
 // pages/Companies.tsx
 import { useState, useEffect } from 'react';
-import { Search, MapPin, Building2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, MapPin, Building2, ChevronLeft, ChevronRight, Ban } from 'lucide-react';
 import { useAppToast } from '../../../../hooks/useToast';
 import CompanyService from '../../../../services/company.service';
 import { useTranslation } from 'react-i18next';
@@ -37,8 +37,8 @@ interface Company {
 
 const API_BASE_URL = 'http://localhost:8080';
 
-const Companies = () => {
-  const { t } = useTranslation();
+const Companies = ({ blacklisted = false }: { blacklisted?: boolean }) => {
+  const { t, i18n } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
   const [companies, setCompanies] = useState<Company[]>([]);
   const [filteredCompanies, setFilteredCompanies] = useState<Company[]>([]);
@@ -74,7 +74,9 @@ const Companies = () => {
         size: 100, // Load more companies for better UX
       };
 
-      const response = await CompanyService.getPaginatedCompanies(params);
+      const response = blacklisted
+        ? await CompanyService.getBlacklistedCompanies(params)
+        : await CompanyService.getPaginatedCompanies(params);
       const companyData = response.data.content || response.data.data || [];
       setCompanies(companyData);
       setFilteredCompanies(companyData);
@@ -96,6 +98,11 @@ const Companies = () => {
   // Get initials for avatar fallback
   const getInitials = (name: string) => {
     return name?.charAt(0)?.toUpperCase() || 'C';
+  };
+
+  const getLocalizedCompanyName = (company: Company) => {
+    const name = i18n.language === 'dr' ? company.companyNameDR : i18n.language === 'ps' ? company.companyNamePS : company.companyNameEN;
+    return name || company.companyNameEN || company.companyNameDR || company.companyNamePS || t('website.companies.companyFallback');
   };
 
   // Generate a consistent color based on company name
@@ -142,23 +149,23 @@ const Companies = () => {
             {/* Badge */}
             <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md rounded-full px-4 py-2 mb-6 border border-white/20">
               <Building2 className="h-4 w-4 text-blue-200" />
-              <span className="text-sm font-medium">{t('website.companies.badge')}</span>
+              <span className="text-sm font-medium">{t(blacklisted ? 'website.blacklistedCompanies.badge' : 'website.companies.badge')}</span>
             </div>
 
             {/* Main heading with gradient text */}
             <h1 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">
               <span className="bg-linear-to-r from-blue-200 via-white to-purple-200 bg-clip-text text-transparent">
-                {t('website.companies.title')}
+                {t(blacklisted ? 'website.blacklistedCompanies.title' : 'website.companies.title')}
               </span>
               <br />
               <span className="bg-linear-to-r from-yellow-300 via-orange-300 to-pink-300 bg-clip-text text-transparent">
-                {t('website.companies.titleAccent')}
+                {t(blacklisted ? 'website.blacklistedCompanies.titleAccent' : 'website.companies.titleAccent')}
               </span>
             </h1>
 
             {/* Description */}
             <p className="text-xl text-blue-100 mb-10 leading-relaxed max-w-2xl mx-auto">
-              {t('website.companies.description')}
+              {t(blacklisted ? 'website.blacklistedCompanies.description' : 'website.companies.description')}
             </p>
 
             {/* Search bar with enhanced design */}
@@ -168,7 +175,7 @@ const Companies = () => {
                 <Search className="absolute left-5 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
                 <input
                   type="text"
-                  placeholder={t('website.companies.searchPlaceholder')}
+                  placeholder={t(blacklisted ? 'website.blacklistedCompanies.searchPlaceholder' : 'website.companies.searchPlaceholder')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-14 pr-4 py-5 text-gray-700 bg-white rounded-2xl shadow-2xl focus:ring-4 focus:ring-blue-300 focus:outline-none text-lg"
@@ -222,9 +229,43 @@ const Companies = () => {
 
             {/* Companies Grid */}
             {currentCompanies.length > 0 ? (
+              blacklisted ? (
+                <div className="overflow-hidden rounded-2xl border border-blue-100 bg-white shadow-lg">
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full text-left text-sm">
+                      <thead className="bg-linear-to-r from-blue-600 to-indigo-600 text-white">
+                        <tr>
+                          <th className="px-5 py-4 font-semibold">#</th>
+                          <th className="px-5 py-4 font-semibold">{t('company.labels.companyName')}</th>
+                          <th className="px-5 py-4 font-semibold">{t('company.labels.email')}</th>
+                          <th className="px-5 py-4 font-semibold">{t('company.labels.phoneNumber')}</th>
+                          <th className="px-5 py-4 font-semibold">{t('company.labels.companyType')}</th>
+                          <th className="px-5 py-4 font-semibold">{t('company.labels.address')}</th>
+                          <th className="px-5 py-4 font-semibold"><span className="inline-flex items-center gap-2"><Ban className="h-4 w-4 text-red-200" />{t('company.classification.reason')}</span></th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-100">
+                        {currentCompanies.map((company, index) => {
+                          const displayName = getLocalizedCompanyName(company);
+                          return <tr key={company.id} className="transition-colors hover:bg-blue-50/60">
+                            <td className="whitespace-nowrap px-5 py-4 text-gray-500">{indexOfFirstItem + index + 1}</td>
+                            <td className="min-w-52 px-5 py-4 font-semibold text-gray-900">{displayName}</td>
+                            <td className="whitespace-nowrap px-5 py-4 text-gray-600">{company.email || '—'}</td>
+                            <td className="whitespace-nowrap px-5 py-4 text-gray-600">{company.phoneNumber || '—'}</td>
+                            <td className="whitespace-nowrap px-5 py-4 text-gray-600">{company.companyType?.replace(/_/g, ' ') || '—'}</td>
+                            <td className="min-w-56 px-5 py-4 text-gray-600">{company.address || company.mainBranchAddress || '—'}</td>
+                            <td className="min-w-64 px-5 py-4 text-indigo-700"><span className="inline-flex items-start gap-2"><Ban className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />{company.classificationReason || '—'}</span></td>
+                          </tr>;
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {currentCompanies.map((company) => {
-                  const colorGradient = getCompanyColor(company.companyNameEN);
+                  const displayName = getLocalizedCompanyName(company);
+                  const colorGradient = getCompanyColor(displayName);
 
                   return (
                     <div
@@ -244,7 +285,7 @@ const Companies = () => {
                               {company.logoUrl ? (
                                 <img
                                   src={`${API_BASE_URL}${company.logoUrl}`}
-                                  alt={company.companyNameEN}
+                                  alt={displayName}
                                   className="w-full h-full object-cover"
                                   onError={(e) => {
                                     const target = e.target as HTMLImageElement;
@@ -252,13 +293,13 @@ const Companies = () => {
                                     const parent = target.parentElement;
                                     if (parent) {
                                       parent.classList.add('flex', 'items-center', 'justify-center');
-                                      parent.innerHTML = `<span className="text-lg font-semibold text-gray-700">${getInitials(company.companyNameEN)}</span>`;
+                                      parent.innerHTML = `<span className="text-lg font-semibold text-gray-700">${getInitials(displayName)}</span>`;
                                     }
                                   }}
                                 />
                               ) : (
                                 <span className="text-lg font-semibold text-gray-700">
-                                  {getInitials(company.companyNameEN)}
+                                  {getInitials(displayName)}
                                 </span>
                               )}
                             </div>
@@ -267,7 +308,7 @@ const Companies = () => {
                           {/* Company Name and Type */}
                           <div className="flex-1 min-w-0">
                             <h3 className="text-base font-semibold text-gray-900 truncate group-hover:text-blue-600 transition-colors">
-                              {company.companyNameEN}
+                              {displayName}
                             </h3>
                             <p className="text-xs text-gray-500 mt-0.5">
                               {company.companyType ? t(`company.typeOptions.${company.companyType}`, company.companyType.replace(/_/g, ' ')) : t('website.companies.companyFallback')}
@@ -288,7 +329,7 @@ const Companies = () => {
                     </div>
                   );
                 })}
-              </div>
+              </div>)
             ) : (
               // No results found
               <div className="text-center py-20">

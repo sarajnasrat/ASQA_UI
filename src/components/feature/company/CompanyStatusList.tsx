@@ -4,6 +4,8 @@ import { Button } from "primereact/button";
 import { TieredMenu } from "primereact/tieredmenu";
 import type { MenuItem } from "primereact/menuitem";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+import { Dialog } from "primereact/dialog";
+import { InputTextarea } from "primereact/inputtextarea";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
@@ -12,8 +14,10 @@ import CompanyService from "../../../services/company.service";
 import ExcelExport from "../../common/ExcelExport";
 import i18n from "../../../i18n/i18n";
 import { useAuth } from "../../../context/AuthContext";
+import BlacklistedCompanyDialog from "./BlacklistedCompanyDialog";
 
 interface CompanyStatusListProps {
+  classificationType?: "WHITELISTED" | "BLACKLISTED" | "UNDER_REVIEW" | "UNREVIEWED";
   status?:
     | "DRAFT"
     | "SUBMITTED"
@@ -88,6 +92,7 @@ const isMappedStatus = (
 export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
   status,
   statuses,
+  classificationType,
   title,
 }) => {
   const { t } = useTranslation();
@@ -99,6 +104,10 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
   const [first, setFirst] = useState(0);
   const [rows, setRows] = useState(10);
   const [totalRecords, setTotalRecords] = useState(0);
+  const [classificationDialog, setClassificationDialog] = useState<{ company: any; type: "WHITELISTED" | "BLACKLISTED" } | null>(null);
+  const [classificationReason, setClassificationReason] = useState("");
+  const [classificationNotes, setClassificationNotes] = useState("");
+  const [showBlacklistRegistration, setShowBlacklistRegistration] = useState(false);
 
   const activeStatuses = statuses?.length
     ? statuses
@@ -111,8 +120,10 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
     ? STATUS_ROUTES[mappedStatuses[0]]
     : "/company";
   const pageTitle =
-    title ||
+    title ? t(title) :
     `${t("company.list")}`;
+
+  const resolvedClassification = classificationType;
 
   const getCompanies = async () => {
     setLoading(true);
@@ -122,16 +133,11 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
         size: rows,
         sort: "id,desc",
       };
-      const res =
-        activeStatuses.length > 1
-          ? await CompanyService.getPaginatedCompaniesByRequestStatuses(
-              activeStatuses,
-              requestParams,
-            )
-          : await CompanyService.getPaginatedCompaniesByRequestStatus(
-              primaryStatus!,
-              requestParams,
-            );
+      const res = resolvedClassification
+        ? await CompanyService.getPaginatedCompaniesByClassification(resolvedClassification, requestParams)
+        : activeStatuses.length > 1
+          ? await CompanyService.getPaginatedCompaniesByRequestStatuses(activeStatuses, requestParams)
+          : await CompanyService.getPaginatedCompaniesByRequestStatus(primaryStatus!, requestParams);
       setCompanies(res.data.data);
       setTotalRecords(res.data.totalElements);
     } catch (error) {
@@ -143,6 +149,44 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const changeClassification = (company: any, type: "WHITELISTED" | "BLACKLISTED") => {
+    if (type === "BLACKLISTED") {
+      setClassificationReason("");
+      setClassificationNotes("");
+      setClassificationDialog({ company, type });
+      return;
+    }
+    confirmDialog({
+      message: t("company.classification.confirmWhitelist", { name: company.companyNameEN || t("common.notSpecified") }),
+      header: t("company.classification.changeTitle"),
+      icon: "pi pi-exclamation-triangle",
+      acceptLabel: "Yes",
+      rejectLabel: t("common.cancel"),
+      accept: async () => {
+        try {
+          await CompanyService.changeClassification(company.id, type, t("company.classification.manualWhitelist"));
+          toast.current?.show({ severity: "success", summary: t("common.success"), detail: "Classification updated", life: 3000 });
+          getCompanies();
+        } catch {
+          toast.current?.show({ severity: "error", summary: t("common.error"), detail: t("company.loadFailed"), life: 3000 });
+        }
+      },
+    });
+  };
+
+  const submitClassification = async () => {
+    if (!classificationDialog || !classificationReason.trim()) return;
+    try {
+      await CompanyService.changeClassification(classificationDialog.company.id, classificationDialog.type,
+        classificationReason.trim(), classificationNotes.trim() || undefined);
+      setClassificationDialog(null);
+      toast.current?.show({ severity: "success", summary: t("common.success"), detail: t("company.classification.updated"), life: 3000 });
+      getCompanies();
+    } catch {
+      toast.current?.show({ severity: "error", summary: t("common.error"), detail: t("company.loadFailed"), life: 3000 });
     }
   };
 
@@ -187,6 +231,8 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
   const actionTemplate = (rowData: any) => {
     const menu = useRef<any>(null);
     const items: MenuItem[] = [
+      ...(rowData.classificationType !== "BLACKLISTED" ? [{ label: t("company.classification.blacklistButton"), icon: "pi pi-ban", command: () => changeClassification(rowData, "BLACKLISTED") }] : []),
+      ...(rowData.classificationType !== "WHITELISTED" ? [{ label: t("company.classification.whitelistButton"), icon: "pi pi-check", command: () => changeClassification(rowData, "WHITELISTED") }] : []),
       ...withPermission("UPDATE_COMPANY", {
         label: t("common.edit"),
         icon: "pi pi-pencil",
@@ -230,6 +276,16 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
         </span>
       </div>
       <div className="flex w-full flex-col gap-3 sm:flex-row md:w-auto">
+        {classificationType === "BLACKLISTED" && hasPermission("ADD_COMPANY") && (
+          <Button
+            icon="pi pi-ban"
+            label={t("company.classificationCreateBlacklist")}
+            text
+            raised
+            severity="danger"
+            onClick={() => setShowBlacklistRegistration(true)}
+          />
+        )}
         {hasPermission("CREATE_COMPANY") && (
           <Button
             icon="pi pi-plus"
@@ -264,10 +320,10 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
             const res =
               activeStatuses.length > 1
                 ? await CompanyService.getAllCompaniesByRequestStatuses(
-                    activeStatuses,
+                activeStatuses,
                   )
                 : await CompanyService.getAllCompaniesByRequestStatus(
-                    primaryStatus!,
+                  primaryStatus!,
                   );
             return activeStatuses.length > 1 ? res.data.data : res.data;
           }}
@@ -375,6 +431,25 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
     <>
       <Toast ref={toast} />
       <ConfirmDialog />
+      <Dialog header={t("company.classification.blacklistTitle")} visible={!!classificationDialog}
+        onHide={() => setClassificationDialog(null)} modal className="w-full max-w-lg">
+        <div className="flex flex-col gap-4">
+          <p>{t("company.classification.blacklistDescription", { name: classificationDialog?.company?.companyNameEN || "" })}</p>
+          <div>
+            <label className="mb-1 block font-medium">{t("company.classification.reason")} *</label>
+            <InputTextarea value={classificationReason} onChange={(e) => setClassificationReason(e.target.value)} rows={3} className="w-full" autoResize />
+          </div>
+          <div>
+            <label className="mb-1 block font-medium">{t("company.classification.notes")}</label>
+            <InputTextarea value={classificationNotes} onChange={(e) => setClassificationNotes(e.target.value)} rows={3} className="w-full" autoResize />
+          </div>
+          <div className="flex justify-end gap-2">
+            <Button label={t("common.cancel")} text onClick={() => setClassificationDialog(null)} />
+            <Button label={t("company.classification.blacklistButton")} severity="danger" disabled={!classificationReason.trim()} onClick={submitClassification} />
+          </div>
+        </div>
+      </Dialog>
+      <BlacklistedCompanyDialog visible={showBlacklistRegistration} onHide={() => setShowBlacklistRegistration(false)} onSuccess={() => { setShowBlacklistRegistration(false); getCompanies(); }} />
       <DynamicBreadcrumb
         items={breadcrumbItems}
         size="pl-5 pr-5 max-w-8xl mx-auto mt-3"

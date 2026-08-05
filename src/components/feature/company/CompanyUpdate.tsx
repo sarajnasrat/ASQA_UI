@@ -83,7 +83,6 @@ export const CompanyUpdate: React.FC = () => {
       aboutCompanyDr: "",
       aboutCompanyPs: "",
       categories: [],
-      socialLinks: [],
     },
   });
 
@@ -209,7 +208,6 @@ export const CompanyUpdate: React.FC = () => {
         aboutCompanyPs: data.aboutCompanyPs || "",
 
         categories: data.categories || [],
-        socialLinks: data.socialLinks || [],
       });
 
       setLoading(false);
@@ -230,17 +228,9 @@ export const CompanyUpdate: React.FC = () => {
           )
         : [];
 
-      const socialLinksPayload = Array.isArray(data.socialLinks)
-        ? data.socialLinks.map((link) => ({
-            socialLinkName: link.socialLinkName || "",
-            address: link.address || "",
-          }))
-        : [];
-
       const payload = {
         ...data,
         categories: categoriesPayload,
-        socialLinks: socialLinksPayload,
         establishYear: formatGregorianDate(data.establishYear),
         jawazIssueDate: formatGregorianDate(data.jawazIssueDate),
         jawazExpiryDate: formatGregorianDate(data.jawazExpiryDate),

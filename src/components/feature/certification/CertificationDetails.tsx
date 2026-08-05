@@ -112,12 +112,6 @@ type Category = {
   jobCount: string | null;
 };
 
-type SocialLink = {
-  id?: number;
-  platform?: string;
-  url?: string;
-};
-
 type Company = {
   id: number;
   companyNameEN: string;
@@ -145,7 +139,6 @@ type Company = {
   companyOwnerNamePs: string;
   attachments: Attachment[];
   categories: Category[];
-  socialLinks: SocialLink[];
   active: boolean;
   companyType: string;
 };
@@ -218,7 +211,6 @@ export const CertificationDetails: React.FC = () => {
     companyJawaz: true,
     companyOwner: false,
     companyCategories: true,
-    companySocialLinks: false,
     contactAddresses: false,
   });
 
@@ -1362,10 +1354,6 @@ export const CertificationDetails: React.FC = () => {
                     <CompanyMiniStat
                       label={t("company.labels.documentsCount")}
                       value={`${companyAttachments.length} `}
-                    />
-                    <CompanyMiniStat
-                      label={t("company.labels.socialLinks")}
-                      value={`${company.socialLinks?.length || 0} `}
                     />
                   </div>
                 </PlainCard>

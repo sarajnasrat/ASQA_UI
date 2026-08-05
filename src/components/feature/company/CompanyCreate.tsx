@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useForm, Controller, useFieldArray } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { Card } from "primereact/card";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
@@ -7,7 +7,6 @@ import { Dropdown } from "primereact/dropdown";
 import { Calendar } from "primereact/calendar";
 import { Button } from "primereact/button";
 import { Divider } from "primereact/divider";
-import { Message } from "primereact/message";
 import FileUploadField from "../../common/FileUploadField";
 import { useNavigate } from "react-router-dom";
 import { Toast } from "primereact/toast";
@@ -61,17 +60,7 @@ export const CompanyCreate: React.FC = () => {
             aboutCompanyDr: "",
             aboutCompanyPs: "",
             categories: [],
-            socialLinks: [],
         },
-    });
-
-    const {
-        fields: socialLinksFields,
-        append,
-        remove,
-    } = useFieldArray({
-        control,
-        name: "socialLinks",
     });
 
     // Load categories from backend
@@ -100,14 +89,6 @@ export const CompanyCreate: React.FC = () => {
                 )
                 : [];
 
-            // Serialize social links
-            const socialLinksPayload = Array.isArray(data.socialLinks)
-                ? data.socialLinks.map((link) => ({
-                    socialLinkName: link.socialLinkName || "",
-                    address: link.address || "",
-                }))
-                : [];
-
             // Convert Date fields to ISO strings
           const serializeDate = (d?: Date | string | null) =>
         d instanceof Date ? d.toISOString() : (d ?? null);
@@ -115,7 +96,6 @@ export const CompanyCreate: React.FC = () => {
             const payload = {
                 ...data,
                 categories: categoriesPayload,
-                socialLinks: socialLinksPayload,
                 establishYear: serializeDate(data.establishYear),
                 jawazIssueDate: serializeDate(data.jawazIssueDate),
                 jawazExpiryDate: serializeDate(data.jawazExpiryDate),
@@ -155,18 +135,6 @@ export const CompanyCreate: React.FC = () => {
         "OTHER",
     ];
 
-    const platformOptions = [
-        { label: "Facebook", value: "Facebook" },
-        { label: "Twitter", value: "Twitter" },
-        { label: "LinkedIn", value: "LinkedIn" },
-        { label: "Instagram", value: "Instagram" },
-        { label: "YouTube", value: "YouTube" },
-        { label: "Website", value: "Website" },
-    ];
-
-    const addSocialLink = () => {
-        append({ socialLinkName: "", address: "" });
-    };
 
     return (
         <>
@@ -644,93 +612,6 @@ export const CompanyCreate: React.FC = () => {
                                 </div>
                             </div>
                         </div>{" "}
-                        {/* Social Links Section */}
-                        <div className="mb-5">
-                            {socialLinksFields.length === 0 ? (
-                                <Message
-                                    severity="info"
-                                    text={t("company.labels.nosocialLinksAdded")}
-                                    className="w-full p-1"
-                                />
-                            ) : (
-                                <div className="space-y-3">
-                                    {socialLinksFields.map(
-                                        (item, index) => (
-                                            (
-                                                <div key={item.id} className=" border-round p-1">
-                                                    <div className="flex justify-content-between align-items-center mb-2">
-                                                        <span className="font-medium">
-                                                            {item.socialLinkName || t("company.labels.platform")}
-                                                        </span>
-                                                        <Button
-                                                            type="button"
-                                                            icon="pi pi-trash"
-                                                            className="p-button-rounded p-button-danger p-button-text p-button-sm"
-                                                            onClick={() => remove(index)}
-                                                            tooltip={t("fileUpload.remove")}
-                                                            tooltipOptions={{ position: "top" }}
-                                                        />
-                                                    </div>
-
-                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                                        <div className="field">
-                                                            <label
-                                                                htmlFor={`platform-${index}`}
-                                                                className="font-medium block mb-2"
-                                                            >
-                                                                {t("company.labels.platform")}
-                                                            </label>
-                                                            <Controller
-                                                                name={`socialLinks.${index}.socialLinkName`}
-                                                                control={control}
-                                                                render={({ field }) => (
-                                                                    <Dropdown
-                                                                        id={`platform-${index}`}
-                                                                        {...field}
-                                                                        options={platformOptions}
-                                                                        placeholder={t("company.labels.platform")}
-                                                                        className="w-full"
-                                                                    />
-                                                                )}
-                                                            />
-                                                        </div>
-
-                                                        <div className="field">
-                                                            <label
-                                                                htmlFor={`url-${index}`}
-                                                                className="font-medium block mb-2"
-                                                            >
-                                                                {t("company.labels.url")}                                                            </label>
-                                                            <Controller
-                                                                name={`socialLinks.${index}.address`}
-                                                                control={control}
-                                                                render={({ field }) => (
-                                                                    <InputText
-                                                                        id={`url-${index}`}
-                                                                        {...field}
-                                                                        className="w-full"
-                                                                        placeholder="https://..."
-                                                                    />
-                                                                )}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            )
-                                        ),
-                                    )}
-                                </div>
-                            )}
-                            <div className="flex align-items-center justify-content-between mb-3 pb-2 border-bottom-1 surface-border mt-2">
-                                <Button
-                                    type="button"
-                                    label={t("company.labels.addLink")}
-                                    icon="pi pi-plus"
-                                    className="p-button-sm p-button-outlined"
-                                    onClick={addSocialLink}
-                                />
-                            </div>
-                        </div>
                         {/* Categories Section */}
                         <div className="mb-5">
                             <div className="field">

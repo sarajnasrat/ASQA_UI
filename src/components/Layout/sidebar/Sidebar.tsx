@@ -205,7 +205,7 @@ export const Sidebar = ({
   const normalizePath = (path?: string) => {
     if (!path) return "";
     if (path === "/") return "/";
-    return path.replace(/\/+$/, "");
+    return `/${path.replace(/^\/+/, "").replace(/\/+$/, "")}`;
   };
 
   const matchesPath = (path?: string) => {
@@ -326,7 +326,7 @@ export const Sidebar = ({
       return;
     }
 
-    navigate(item.path);
+    navigate(normalizePath(item.path));
   };
 
   const renderChildren = (children: any[], level = 1) =>
@@ -339,7 +339,7 @@ export const Sidebar = ({
       return (
         <div key={child.id} className="relative">
           <Link
-            to={child.path}
+            to={normalizePath(child.path)}
             className="group relative block rounded-xl outline-none"
             onClick={(e) => {
               if (hasGrandChildren) {

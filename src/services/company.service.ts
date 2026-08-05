@@ -32,6 +32,20 @@ export const CompanyService = {
     });
   },
 
+  getPaginatedCompaniesByClassification(type: string, params: any) {
+    return httpClient.get(`${COMPANY_BASE}/by-classification/${type}`, { params });
+  },
+
+  getBlacklistedCompanies(params: any) {
+    return httpClient.get(`${COMPANY_BASE}/blacklisted`, { params });
+  },
+
+  changeClassification(id: number, type: string, reason?: string, notes?: string) {
+    return httpClient.put(`${COMPANY_BASE}/${id}/classification`, null, {
+      params: { type, reason, notes },
+    });
+  },
+
   /**
    * Get all companies by certification request status
    * @param status Request status value
@@ -117,6 +131,19 @@ export const CompanyService = {
     return httpClient.put(`${COMPANY_BASE}/${id}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
+  },
+
+  registerBlacklistedCompany(data: {
+    companyNameEN?: string;
+    companyNameDR?: string;
+    companyNamePS?: string;
+    email: string;
+    phoneNumber: string;
+    companyType: string;
+    address: string;
+    reason: string;
+  }) {
+    return httpClient.post(`${COMPANY_BASE}/register-blacklisted`, data);
   },
 
   /**

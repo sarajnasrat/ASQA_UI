@@ -70,7 +70,6 @@ export interface Company {
   companyOwnerNameEn: string;
   attachments?: Attachment[];
   categories: Category[];
-  socialLinks: any[];
   active: boolean;
   companyType: string;
   contactPerson?: ContactPerson;
