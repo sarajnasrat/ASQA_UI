@@ -630,6 +630,9 @@
     "networkError": "Network error. Please try again."
   },
   "attachment": {
+    "category": "Category",
+    "select_category": "Select category",
+    "failed_to_load_categories": "Failed to load categories",
     "management_title": "Attachment Management",
     "list": "Attachment List",
     "add": "Add Attachment",
@@ -657,6 +660,7 @@
       "USER": "User",
       "REQUEST": "Request",
       "INSPECTION_COMMITEE_REPORT": "Inspection Commitee Report",
+      "COMMITEE_APPROVAL_REPORT": "Committee Approval Report",
       "ISSUED_CERTIFICATION": "Final Issued Certificate",
       "PAYMENT_BILL": "Payment Bill",
       "AUDIO": "Audio",

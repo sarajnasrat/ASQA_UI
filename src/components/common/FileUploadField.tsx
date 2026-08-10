@@ -640,7 +640,6 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
             <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">{t("fileUpload.word")}</span>
             <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">{t("fileUpload.excel")}</span>
             <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">{t("fileUpload.images")}</span>
-            <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">{t("common...More")}</span>
         </div>
 
         {/* File requirements */}

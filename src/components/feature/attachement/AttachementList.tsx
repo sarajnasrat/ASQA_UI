@@ -274,7 +274,7 @@ const fileTemplate = (rowData: any) => {
   /* ================= HEADER ================= */
 
   const header = () => (
-    <div className="flex justify-between items-center mb-4">
+    <div className="flex flex-col gap-4 mb-4 lg:flex-row lg:items-end lg:justify-between">
       <div className="flex gap-3 items-center">
         <h2 className="text-2xl font-bold text-blue-700">
           {t("attachment.management_title")}
@@ -285,7 +285,7 @@ const fileTemplate = (rowData: any) => {
         </span>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+      <div className="flex flex-col gap-3 w-full lg:w-auto sm:flex-row sm:items-end sm:flex-wrap">
         {all && (
           <div className="flex flex-col gap-1">
             <label htmlFor="attachment-reference-type" className="text-sm font-medium text-gray-700">
@@ -303,7 +303,7 @@ const fileTemplate = (rowData: any) => {
             }}
             placeholder={t("attachment.selectReferenceType", "Select reference type")}
             showClear
-            className="w-full sm:w-64"
+            className="w-full sm:w-56"
             />
           </div>
         )}
@@ -312,19 +312,22 @@ const fileTemplate = (rowData: any) => {
           label={t("attachment.add")}
           raised
           severity="info"
-          text
           onClick={() => setCreateVisible(true)}
+          className="w-full sm:w-auto"
+          text
         />
 
         <Button
           icon="pi pi-sync"
           raised
           label={t("attachment.refresh")}
-          text
           severity="info"
           onClick={loadAttachments}
+          className="w-full sm:w-auto"
+          text
         />
-              <ExcelExport
+
+        <ExcelExport
           data={attachments}
           totalElements={totalRecords}
           fileName={t("attachment.list")}
@@ -367,6 +370,16 @@ const fileTemplate = (rowData: any) => {
     {
       field: "attachmentReferenceType",
       header: t("attachment.columns.module"),
+      body: (row: any) => {
+        const referenceType = row.attachmentReferenceType;
+        return (
+          <span>
+            {referenceType
+              ? t(`attachment.type.${referenceType}`, { defaultValue: referenceType })
+              : t("common.notSpecified")}
+          </span>
+        );
+      },
     },
     // {
     //   field: "referenceId",
@@ -378,6 +391,18 @@ const fileTemplate = (rowData: any) => {
       sortable: false,
     },
     
+    ...(!all
+      ? [
+          {
+            field: "categoryName",
+            header: t("attachment.category"),
+            style: { minWidth: "180px" },
+            body: (row: any) => (
+              <span>{row.categoryName || t("common.notSpecified")}</span>
+            ),
+          },
+        ]
+      : []),
     {
       header: t("attachment.columns.actions"),
       body: actionTemplate,

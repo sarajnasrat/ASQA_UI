@@ -34,6 +34,7 @@ export const AttachmentService = {
     attachmentName: string,
     referenceId: number,
     referenceType: string,
+    categoryId?: number | null,
   ) {
     const formData = new FormData();
 
@@ -41,6 +42,7 @@ export const AttachmentService = {
     formData.append("attachmentName", attachmentName);
     formData.append("referenceId", referenceId.toString());
     formData.append("referenceType", referenceType);
+    if (categoryId) formData.append("categoryId", categoryId.toString());
 
     return httpClient.post(BASE_URL, formData, {
       headers: { "Content-Type": "multipart/form-data" },
@@ -52,6 +54,7 @@ export const AttachmentService = {
     file: File | null,
     attachmentName: string,
     companyId: number,
+    categoryId?: number | null,
   ) {
     const formData = new FormData();
 
@@ -61,6 +64,7 @@ export const AttachmentService = {
 
     formData.append("attachmentName", attachmentName);
     formData.append("companyId", companyId.toString());
+    if (categoryId) formData.append("categoryId", categoryId.toString());
 
     return httpClient.put(`${BASE_URL}/${id}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },

@@ -134,6 +134,7 @@ export const CertificationList = ({
             `/certification-details/${
               rowData.requestId || rowData.certificationRequest?.id
             }`,
+            { state: { returnPath: window.location.pathname } },
           ),
       }),
       // ...withPermission("DELETE_CERTIFICATION", {
@@ -202,10 +203,7 @@ export const CertificationList = ({
             showClear
             filter
             filterPlaceholder={t("certification.searchType", "Search certification type")}
-            filterInputProps={{
-              className: "w-full text-center",
-              style: { textAlign: "center" },
-            }}
+    
             emptyMessage={t("common.noResults", "No results found")}
           />
         </div>
@@ -353,7 +351,10 @@ export const CertificationList = ({
         visible={updateDialogVisible}
         certification={selectedCertification}
         onHide={() => setUpdateDialogVisible(false)}
-        onUpdated={() => undefined}
+        onUpdated={async () => {
+          setUpdateDialogVisible(false);
+          await getCertificates();
+        }}
       />
 
       <DynamicTable

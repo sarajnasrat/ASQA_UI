@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
-import { Card } from "primereact/card";
 import { Dropdown } from "primereact/dropdown";
 import { useTranslation } from "react-i18next";
 
 import AttachmentService from "../../../services/attachment.service";
 import CompanyService from "../../../services/company.service";
+import CategoryService from "../../../services/category.service";
 import { useAppToast } from "../../../hooks/useToast";
 
 import FileUploadField from "../../common/FileUploadField";
@@ -34,10 +34,11 @@ interface Props {
 }
 
 const referenceTypeOptions = [
-  { label: "attachment.COMPANY", value: "COMPANY" },
-  { label: "attachment.STANDARD", value: "STANDARD" },
-  { label: "attachment.STANDARD", value: "STANDARD" },
-  { label: "attachment.CERTIFICATION", value: "CERTIFICATION" },
+  { label: "attachment.referenceTypeOptions.COMPANY", value: "COMPANY" },
+  { label: "attachment.referenceTypeOptions.STANDARD", value: "STANDARD" },
+  { label: "attachment.referenceTypeOptions.CERTIFICATION", value: "CERTIFICATION" },
+  { label: "attachment.referenceTypeOptions.USER", value: "USER" },
+  { label: "attachment.referenceTypeOptions.REQUEST", value: "REQUEST" },
 ];
 
 export const AttachmentCreate: React.FC<Props> = ({
@@ -67,6 +68,8 @@ export const AttachmentCreate: React.FC<Props> = ({
   const [requests, setRequests] = useState<any[]>([]);
   const navigate = useNavigate();
   const [loadingCompanies, setLoadingCompanies] = useState(false);
+  const [categories, setCategories] = useState<any[]>([]);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
 
   const getCompanyName = (company: Company) => {
     const lang = i18n.language;
@@ -93,6 +96,9 @@ export const AttachmentCreate: React.FC<Props> = ({
       case "REQUEST":
         fetchRequests();
         break;
+      case "STANDARD":
+        fetchStandardCategories();
+        break;
     }
   }, [selectedReferenceType]);
 
@@ -118,6 +124,15 @@ export const AttachmentCreate: React.FC<Props> = ({
 
   const fetchRequests = async () => {
     setRequests([]);
+  };
+
+  const fetchStandardCategories = async () => {
+    try {
+      const response = await CategoryService.getCategoriesByType("STANDARD");
+      setCategories(response.data || []);
+    } catch {
+      showToast("error", t("common.error"), t("attachment.failed_to_load_categories"));
+    }
   };
   const getReferenceOptions = () => {
     switch (selectedReferenceType) {
@@ -181,6 +196,10 @@ export const AttachmentCreate: React.FC<Props> = ({
       showToast("warn", t("common.warning"), t("attachment.please_select_company"));
       return;
     }
+    if (selectedReferenceType === "STANDARD" && !selectedCategoryId) {
+      showToast("warn", t("common.warning"), t("attachment.select_category"));
+      return;
+    }
 
     try {
       setLoading(true);
@@ -192,6 +211,7 @@ export const AttachmentCreate: React.FC<Props> = ({
             attachmentName,
             selectedReferenceId ?? 0, // optional for other types
             selectedReferenceType,
+            selectedReferenceType === "STANDARD" ? selectedCategoryId : null,
           ),
         showSuccess,
         showError,
@@ -234,25 +254,21 @@ export const AttachmentCreate: React.FC<Props> = ({
       header={t("attachment.add_attachment")}
       visible
       modal
-      className="w-full md:w-[52rem]"
+      className="w-full md:w-208 rounded-2xl overflow-hidden"
+      style={{ borderRadius: "1rem", overflow: "hidden" }}
+      contentClassName="p-0"
       onHide={handleCancel}
     >
       <Toast ref={toast} />
 
-      <div className="flex justify-center pl-5 pr-5 max-w-8xl mx-auto pb-6">
-        <Card className="w-full shadow-2">
-          <div className="flex flex-col gap-4 p-4">
+      <div className="bg-slate-50 px-4 py-5 sm:px-6">
+          <div className="flex flex-col gap-2">
             {/* TITLE */}
-            <div className="flex items-center gap-2">
-              <i className="pi pi-paperclip text-blue-600 text-xl" />
-              <h3 className="m-0 font-semibold">
-                {t("attachment.add_attachment")}
-              </h3>
-            </div>
+      
 
             {/* TYPE */}
             <div className="flex flex-col gap-2">
-              <label>{t("attachment.attachment_type")} *</label>
+              <label className="text-sm font-semibold text-slate-700">{t("attachment.attachment_type")} <span className="text-red-500">*</span></label>
 
               <Dropdown
                 value={selectedReferenceType}
@@ -263,17 +279,25 @@ export const AttachmentCreate: React.FC<Props> = ({
                 onChange={(e) => {
                   setSelectedReferenceType(e.value);
                   setSelectedReferenceId(null);
+                  setSelectedCategoryId(null);
                 }}
                 disabled={Boolean(initialReferenceType)}
                 placeholder={t("attachment.select_attachment_type")}
                 className="w-full"
+                showClear={!initialReferenceType}
               />
             </div>
 
             {/* DYNAMIC REFERENCE */}
+            {selectedReferenceType === "STANDARD" && (
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-semibold text-slate-700">{t("attachment.category")} <span className="text-red-500">*</span></label>
+                <Dropdown value={selectedCategoryId} options={categories.map(category => ({ label: category.name, value: category.id }))} onChange={e => setSelectedCategoryId(e.value)} placeholder={t("attachment.select_category")} className="w-full" filter />
+              </div>
+            )}
             {selectedReferenceType === "COMPANY" && (
               <div className="flex flex-col gap-2">
-                <label>{t("attachment.reference")} *</label>
+                <label className="text-sm font-semibold text-slate-700">{t("attachment.reference")} <span className="text-red-500">*</span></label>
 
                 <Dropdown
                   value={selectedReferenceId}
@@ -281,6 +305,7 @@ export const AttachmentCreate: React.FC<Props> = ({
                   onChange={(e) => setSelectedReferenceId(e.value)}
                   placeholder={t("attachment.select_reference")}
                   loading={loadingCompanies}
+                  filter
                   className="w-full"
                 />
               </div>
@@ -288,12 +313,14 @@ export const AttachmentCreate: React.FC<Props> = ({
 
             {/* NAME */}
             <div className="flex flex-col gap-2">
-              <label>{t("attachment.attachment_name")} *</label>
+              <label className="text-sm font-semibold text-slate-700">{t("attachment.attachment_name")} <span className="text-red-500">*</span></label>
 
               <InputText
                 value={attachmentName}
                 onChange={(e) => setAttachmentName(e.target.value)}
                 placeholder={t("attachment.enter_attachment_name")}
+                className="w-full"
+                disabled={loading}
               />
             </div>
 
@@ -308,26 +335,26 @@ export const AttachmentCreate: React.FC<Props> = ({
             />
 
             {/* SUBMIT */}
-            <div className="flex justify-end gap-2">
+            <div className="flex flex-col-reverse gap-3 border-t border-slate-200 pt-4 sm:flex-row sm:justify-end">
               <Button
                 label={t("common.cancel")}
                 raised
-                text
                 icon="pi pi-times"
+                outlined
+                severity="secondary"
                 onClick={handleCancel}
               />
 
               <Button
                 raised
-                text
                 label={t("common.save")}
-                icon="pi pi-upload"
+                icon="pi pi-save"
                 loading={loading}
                 onClick={handleSubmit}
               />
             </div>
           </div>
-        </Card>
+
       </div>
     </Dialog>
   );

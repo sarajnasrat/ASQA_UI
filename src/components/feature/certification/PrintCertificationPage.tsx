@@ -1,10 +1,12 @@
 import  { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import CertificationService from "../../../services/certification.service";
 import { PrintCertification } from "./PrintCertification";
 
 export const PrintCertificationPage = () => {
   const { id } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [certification, setCertification] = useState<any>();
 
   useEffect(() => {
@@ -16,5 +18,14 @@ export const PrintCertificationPage = () => {
     }
   }, [id]);
 
-  return <PrintCertification certification={certification} />;
+  return (
+    <PrintCertification
+      certification={certification}
+      onPrinted={() =>
+        navigate(location.state?.returnPath || "/printed-certification", {
+          replace: true,
+        })
+      }
+    />
+  );
 };

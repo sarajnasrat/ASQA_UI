@@ -9,9 +9,10 @@ import CertificationService from "../../../services/certification.service";
 
 interface Props {
   certification: any;
+  onPrinted?: () => void;
 }
 
-export const PrintCertification: React.FC<Props> = ({ certification }) => {
+export const PrintCertification: React.FC<Props> = ({ certification, onPrinted }) => {
   const certificateRef = useRef<HTMLDivElement>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isPrinting, setIsPrinting] = useState(false);
@@ -43,15 +44,16 @@ export const PrintCertification: React.FC<Props> = ({ certification }) => {
     return t(`home.certificationTypes.${type}`);
   };
 
-  const handlePrint = () => {
-    CertificationService.updateCertificationStatus(
+  const handlePrint = async () => {
+    try {
+      await CertificationService.updateCertificationStatus(
       Number(certification.id),
       "PRINTED",
-    )
-      .then(() => {})
-      .catch((error) => {
-        console.error("Error updating certification status:", error);
-      });
+      );
+      onPrinted?.();
+    } catch (error) {
+      console.error("Error updating certification status:", error);
+    }
   };
 
   const generatePDF = async (forPrint: boolean = false) => {

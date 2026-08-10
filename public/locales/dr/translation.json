@@ -1153,6 +1153,9 @@
     }
   },
   "attachment": {
+    "category": "دسته",
+    "select_category": "دسته را انتخاب کنید",
+    "failed_to_load_categories": "بارگذاری دسته‌ها ناموفق بود",
     "management_title": "مدیریت ضمیمه‌ها",
     "list": "لیست ضمیمه‌ها",
     "add": "اضافه نمودن ضمیمه",
@@ -1180,6 +1183,7 @@
       "USER": "کاربر",
       "REQUEST": "درخواست",
       "INSPECTION_COMMITEE_REPORT": "گزارش کمیته تفتیش",
+      "COMMITEE_APPROVAL_REPORT": "گزارش تاییدی کمیته",
       "ISSUED_CERTIFICATION": "تائید نامه صادر شده",
       "PAYMENT_BILL": "سند پرداخت",
       "AUDIO": "صوتی",

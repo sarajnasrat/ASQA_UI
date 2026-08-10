@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Toast } from "primereact/toast";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
@@ -192,6 +192,7 @@ const finalStates = ["UNDER_SUPERVISION"];
 export const CertificationDetails: React.FC = () => {
   const { requestId } = useParams<{ requestId: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const { t, i18n } = useTranslation();
   const pdfExportRef = React.useRef<CompanyPdfExportHandle>(null);
 
@@ -221,6 +222,18 @@ export const CertificationDetails: React.FC = () => {
   const contactPerson = request?.contactPerson || ({} as ContactPerson);
   const payments = request?.payments || [];
   const currentStatus = details?.certificationStatus || "DRAFT";
+
+  const certificationListPath = (status?: string) => {
+    const paths: Record<string, string> = {
+      DRAFT: "/certifications",
+      UNDER_SUPERVISION: "/under-supervision-certification",
+      CERTIFICATION_ISSUED: "/issued-certification",
+      SCANNED: "/scanned-certification",
+      PRINTED: "/printed-certification",
+    };
+
+    return location.state?.returnPath || paths[status || currentStatus] || "/certifications";
+  };
 
   const requestAttachments: Attachment[] = request?.attachments || [];
   const certificateAttachments: Attachment[] = [
@@ -421,7 +434,7 @@ export const CertificationDetails: React.FC = () => {
       t,
     );
     if (response) {
-      navigate("/certifications");
+      navigate(certificationListPath(nextStatus), { replace: true });
     }
   };
 
@@ -436,7 +449,9 @@ export const CertificationDetails: React.FC = () => {
       return;
     }
     if (normalizedStatus === "PRINTED") {
-      navigate(`/certifications/print/${details?.id}`);
+      navigate(`/certifications/print/${details?.id}`, {
+        state: { returnPath: location.state?.returnPath || "/printed-certification" },
+      });
       return;
     }
 
@@ -1603,13 +1618,13 @@ export const CertificationDetails: React.FC = () => {
           onHide={() => setUpdateDialogVisible(false)}
           showToast={showToast}
           onUpdated={async () => {
-            await loadDetails();
             setUpdateDialogVisible(false);
             showToast(
               "success",
               t("common.success"),
               t("certification.statusOptions.SCANNED"),
             );
+            navigate(certificationListPath("SCANNED"), { replace: true });
           }}
         />
         <CompanyPdfExport

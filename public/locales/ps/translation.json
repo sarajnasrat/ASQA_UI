@@ -1115,6 +1115,9 @@
     }
   },
   "attachment": {
+    "category": "کټګوري",
+    "select_category": "کټګوري وټاکئ",
+    "failed_to_load_categories": "د کټګوریو بارول ناکام شول",
     "management_title": "د ضمیمو مدیریت",
     "list": "د ضمیمو لیست",
     "add": "ضمیمه اضافه کول",
@@ -1142,6 +1145,7 @@
       "USER": "کاربر",
       "REQUEST": "درخواست",
       "INSPECTION_COMMITEE_REPORT": "گزارش کمیته تفتیش",
+      "COMMITEE_APPROVAL_REPORT": "د کمیټې د تایید راپور",
       "ISSUED_CERTIFICATION": "تائید نامه صادر شده",
       "PAYMENT_BILL": "سند پرداخت",
       "AUDIO": "صوتی",
