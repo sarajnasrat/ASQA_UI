@@ -314,6 +314,23 @@ export const CertificationList = ({
         t(`certification.statusOptions.${rowData.certificationStatus}`),
     },
     {
+      field: "needSuperVision",
+      header: t("certification.supervision.requirement"),
+      body: (rowData: any) => (
+        <span
+          className={`inline-flex rounded-full px-3 py-1 text-xs font-medium ${
+            rowData.needSuperVision
+              ? "bg-amber-100 text-amber-800"
+              : "bg-purple-100 text-purple-800"
+          }`}
+        >
+          {rowData.needSuperVision
+            ? t("certification.supervision.required")
+            : t("certification.supervision.underSupervision")}
+        </span>
+      ),
+    },
+    {
       field: "issueDate",
       header: t("certification.issueDate"),
       body: issueDateBodyTemplate,

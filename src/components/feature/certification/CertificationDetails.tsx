@@ -37,6 +37,8 @@ import {
   Tag,
   TrendingUp,
   UserRound,
+  Upload,
+  History,
 } from "lucide-react";
 
 import CertificationService from "../../../services/certification.service";
@@ -47,6 +49,7 @@ import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatt
 import type { TFunction } from "i18next";
 import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
 import CompanyPdfExport, { type CompanyPdfExportHandle } from "../../common/pdf/CompanyPdfExport";
+import FileUploadField from "../../common/FileUploadField";
 
 // Type Definitions
 type Attachment = {
@@ -177,6 +180,19 @@ type CertificationDetails = {
   attachments?: Attachment[];
   certificateAttachment: Attachment | null;
   certificationStatus: string;
+  needSuperVision?: boolean;
+  lifecycleEvents?: LifecycleEvent[];
+};
+
+type LifecycleEvent = {
+  id: number;
+  eventType: "SUPERVISION" | "SUSPENSION";
+  status: string;
+  reason?: string;
+  startedAt?: string;
+  endedAt?: string;
+  durationMonths?: number;
+  attachments?: Attachment[];
 };
 
 const statusTransitions: Record<string, string[]> = {
@@ -198,8 +214,13 @@ export const CertificationDetails: React.FC = () => {
 
   const [details, setDetails] = useState<CertificationDetails | null>(null);
   const [loading, setLoading] = useState(true);
+  const [supervisionDialogVisible, setSupervisionDialogVisible] = useState(false);
+  const [supervisionReason, setSupervisionReason] = useState("");
+  const [supervisionDurationMonths, setSupervisionDurationMonths] = useState(6);
+  const [supervisionFiles, setSupervisionFiles] = useState<File[]>([]);
+  const [supervisionSubmitting, setSupervisionSubmitting] = useState(false);
   const [activeTab, setActiveTab] = useState<
-    "details" | "company" | "documents" | "payments"
+    "details" | "company" | "documents" | "payments" | "supervision"
   >("details");
   const [expandedSections, setExpandedSections] = useState({
     timeline: true,
@@ -222,6 +243,8 @@ export const CertificationDetails: React.FC = () => {
   const contactPerson = request?.contactPerson || ({} as ContactPerson);
   const payments = request?.payments || [];
   const currentStatus = details?.certificationStatus || "DRAFT";
+  const lifecycleEvents = details?.lifecycleEvents || [];
+  const supervisionEvents = lifecycleEvents.filter((event) => event.eventType === "SUPERVISION");
 
   const certificationListPath = (status?: string) => {
     const paths: Record<string, string> = {
@@ -316,6 +339,33 @@ export const CertificationDetails: React.FC = () => {
         t("common.error"),
         t("registration.errors.submitFailed"),
       );
+    }
+  };
+
+  const submitSupervision = async () => {
+    if (!details?.id || !supervisionReason.trim()) {
+      showToast("error", t("common.error"), t("certification.supervision.reasonRequired"));
+      return;
+    }
+    setSupervisionSubmitting(true);
+    const response = await handleApi(
+      () => CertificationService.startSupervision(
+        details.id,
+        supervisionReason.trim(),
+        supervisionFiles,
+        supervisionDurationMonths,
+      ),
+      () => showToast("success", t("common.success"), t("certification.supervision.saved")),
+      (message: string) => showToast("error", t("common.error"), message),
+      t,
+    );
+    setSupervisionSubmitting(false);
+    if (response) {
+      setSupervisionDialogVisible(false);
+      setSupervisionReason("");
+      setSupervisionDurationMonths(6);
+      setSupervisionFiles([]);
+      await loadDetails();
     }
   };
 
@@ -609,6 +659,18 @@ export const CertificationDetails: React.FC = () => {
                 </div>
 
                 <div className="flex flex-wrap gap-2">
+                  {details.needSuperVision && (
+                    <button
+                      type="button"
+                      onClick={() => setSupervisionDialogVisible(true)}
+                      className="px-4 py-2 rounded-xl text-sm font-semibold bg-purple-600 text-white hover:bg-purple-700"
+                    >
+                      <span className="inline-flex items-center gap-2">
+                        <Upload className="h-4 w-4" />
+                        {t("certification.supervision.title")}
+                      </span>
+                    </button>
+                  )}
                   <button
                     type="button"
                     onClick={handleDownloadPdf}
@@ -637,6 +699,52 @@ export const CertificationDetails: React.FC = () => {
               </div>
             </div>
           </div>
+
+          {supervisionDialogVisible && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+              <div className="w-full max-w-4xl rounded-2xl bg-white p-6 shadow-xl">
+                <h2 className="text-xl font-bold text-gray-900">{t("certification.supervision.title")}</h2>
+                <p className="mt-1 text-sm text-gray-500">{t("certification.supervision.description")}</p>
+                <label className="mt-5 block text-sm font-medium text-gray-700">{t("certification.supervision.reason")}</label>
+                <textarea
+                  value={supervisionReason}
+                  onChange={(event) => setSupervisionReason(event.target.value)}
+                  className="mt-1 min-h-28 w-full rounded-xl border border-gray-300 p-3 text-sm focus:border-purple-500 focus:outline-none"
+                  placeholder={t("certification.supervision.reasonPlaceholder")}
+                />
+                <label className="mt-4 block text-sm font-medium text-gray-700">
+                  {t("certification.supervision.duration")}
+                </label>
+                <input
+                  type="number"
+                  min={1}
+                  max={120}
+                  value={supervisionDurationMonths}
+                  onChange={(event) => setSupervisionDurationMonths(Number(event.target.value))}
+                  className="mt-1 w-full rounded-xl border border-gray-300 p-3 text-sm focus:border-purple-500 focus:outline-none"
+                />
+                <FileUploadField
+                  label={t("certification.supervision.attachments")}
+                  name="supervisionAttachment"
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  maxFileSize={1024 * 1024 * 5}
+                  helperText={t("certification.supervision.attachmentHelper")}
+                  onFileSelect={(file) => setSupervisionFiles(file ? [file] : [])}
+                />
+                {supervisionFiles.length > 0 && (
+                  <p className="mt-2 text-xs text-gray-500">{t("certification.supervision.fileSelected")}</p>
+                )}
+                <div className="mt-6 flex justify-end gap-2">
+                  <button type="button" onClick={() => setSupervisionDialogVisible(false)} className="rounded-xl border border-gray-300 px-4 py-2 text-sm text-gray-700">
+                    {t("common.cancel")}
+                  </button>
+                  <button type="button" disabled={supervisionSubmitting} onClick={submitSupervision} className="rounded-xl bg-purple-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50">
+                    {supervisionSubmitting ? t("common.saving") : t("certification.supervision.save")}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Tabs */}
           <div className="mb-6 border-b border-gray-200 overflow-x-auto">
@@ -667,6 +775,12 @@ export const CertificationDetails: React.FC = () => {
                   label: t("certification.payments"),
                   icon: <CreditCard className="h-4 w-4" />,
                   badge: payments.length,
+                },
+                {
+                  id: "supervision",
+                  label: t("certification.supervision.historyTitle"),
+                  icon: <History className="h-4 w-4" />,
+                  badge: supervisionEvents.length,
                 },
               ].map((tab: any) => (
                 <button
@@ -1133,6 +1247,74 @@ export const CertificationDetails: React.FC = () => {
                       "certificationRequest.payment.uploadScannedBillRequired",
                     )}
                   </p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Supervision History Tab */}
+          {activeTab === "supervision" && (
+            <div className="space-y-6">
+              {supervisionEvents.length > 0 ? (
+                <div className="grid grid-cols-1 gap-6">
+                  {supervisionEvents.map((event, index) => (
+                    <div key={event.id || index} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                      <div className="p-6 border-b border-gray-100 bg-gradient-to-r from-purple-50 to-white">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                          <div className="flex items-center gap-2">
+                            <ShieldCheck className="h-5 w-5 text-purple-600" />
+                            <h3 className="text-xl font-bold text-gray-900">
+                              {t("certification.supervision.eventTitle")} {index + 1}
+                            </h3>
+                          </div>
+                          <span className="rounded-full bg-purple-100 px-3 py-1 text-sm font-medium text-purple-700">
+                            {event.status
+                              ? t(`certification.statusOptions.${event.status}`, {
+                                  defaultValue: labelize(event.status),
+                                })
+                              : t("certification.supervision.unknownStatus")}
+                          </span>
+                        </div>
+                        <div className="mt-3 flex flex-wrap gap-4 text-sm text-gray-600">
+                          <span><CalendarDays className="mr-1 inline h-4 w-4" />{t("certification.supervision.startedAt")}: {formatShortDate(event.startedAt)}</span>
+                          <span><CalendarDays className="mr-1 inline h-4 w-4" />{t("certification.supervision.endedAt")}: {formatShortDate(event.endedAt)}</span>
+                          {event.durationMonths != null && <span>{t("certification.supervision.duration")}: {event.durationMonths} {t("certification.supervision.months")}</span>}
+                        </div>
+                      </div>
+                      <div className="p-6">
+                        <p className="font-semibold text-gray-900">{t("certification.supervision.reason")}</p>
+                        <p className="mt-1 text-gray-700">{event.reason || t("certification.supervision.noReason")}</p>
+                        <h4 className="mt-5 mb-4 flex items-center gap-2 font-semibold text-gray-900">
+                          <Paperclip className="h-5 w-5 text-blue-600" />
+                          {t("certification.supervision.attachments")} ({event.attachments?.length || 0})
+                        </h4>
+                        {event.attachments?.length ? (
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {event.attachments.map((attachment, attachmentIndex) => (
+                              <div key={attachment.id || attachmentIndex} className="rounded-xl border border-gray-100 bg-gray-50 p-4">
+                                <div className="mb-3 flex items-center gap-3">
+                                  {getFileTypeIcon(attachment.fileType)}
+                                  <div className="min-w-0 flex-1">
+                                    <p className="truncate text-sm font-medium text-gray-900">{getFileName(attachment)}</p>
+                                    <p className="text-xs text-gray-500">{formatFileSize(attachment.fileSize)}</p>
+                                  </div>
+                                </div>
+                                <div className="flex justify-end gap-2">
+                                  <a href={getFileUrl(attachment)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 rounded-lg bg-blue-50 px-3 py-1.5 text-xs font-medium text-blue-600"><Eye className="h-3.5 w-3.5" />{t("common.view")}</a>
+                                  <a href={getFileUrl(attachment)} download className="inline-flex items-center gap-1 rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"><Download className="h-3.5 w-3.5" />{t("common.download")}</a>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : <p className="text-sm text-gray-500">{t("certification.supervision.noAttachments")}</p>}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="rounded-2xl border border-gray-100 bg-white p-12 text-center shadow-sm">
+                  <History className="mx-auto mb-4 h-16 w-16 text-gray-300" />
+                  <h3 className="text-lg font-semibold text-gray-700">{t("certification.supervision.noRecords")}</h3>
                 </div>
               )}
             </div>

@@ -575,6 +575,18 @@
       "confirmActivate": "آیا مطمئن هستید که می‌خواهید این شرکت را فعال کنید؟",
       "unknownSize": "اندازه نامشخص"
     },
+    "supervision": {
+      "title": "نظارت را آغاز کنید",
+      "description": "دلیل نظارت و فایل پشتیبان را اضافه کنید.",
+      "reason": "دلیل",
+      "reasonPlaceholder": "دلیل نظارت را وارد کنید",
+      "attachments": "ضمیمه",
+      "attachmentHelper": "یک فایل PDF، JPG یا PNG (حداکثر ۵ مگابایت) بارگذاری کنید.",
+      "fileSelected": "فایل انتخاب شد",
+      "reasonRequired": "لطفاً دلیل را وارد کنید.",
+      "saved": "نظارت ثبت شد.",
+      "save": "ذخیره نظارت"
+    },
     "filters": {
       "all": "همه شرکت‌ها",
       "active": "شرکت‌های فعال",
@@ -743,6 +755,32 @@
       "serialNumberRequired": "شماره سریال الزامی است",
       "invalidRequestId": "شناسه درخواست تائید نامه نامعتبر است.",
       "unknownSize": "اندازه نامشخص"
+    },
+    "supervision": {
+      "title": "نظارت را آغاز کنید",
+      "description": "دلیل نظارت و فایل پشتیبان را اضافه کنید.",
+      "reason": "دلیل",
+      "reasonPlaceholder": "دلیل نظارت را وارد کنید",
+      "attachments": "ضمیمه",
+      "attachmentHelper": "یک فایل PDF، JPG یا PNG (حداکثر ۵ مگابایت) بارگذاری کنید.",
+      "fileSelected": "فایل انتخاب شد",
+      "reasonRequired": "لطفاً دلیل را وارد کنید.",
+      "saved": "نظارت ثبت شد.",
+      "save": "ذخیره نظارت",
+      "historyTitle": "تاریخچه نظارت",
+      "eventTitle": "رویداد نظارت",
+      "status": "وضعیت",
+      "startedAt": "شروع",
+      "endedAt": "پایان",
+      "duration": "مدت",
+      "months": "ماه",
+      "unknownStatus": "وضعیت نامشخص",
+      "noReason": "دلیلی ارائه نشده است",
+      "noAttachments": "هیچ ضمیمه‌ای وجود ندارد",
+      "noRecords": "هیچ سابقه‌ای از نظارت وجود ندارد",
+      "requirement": "نیاز به نظارت",
+      "required": "برای نظارت ضروری است",
+      "underSupervision": "تحت نظارت"
     },
     "printPage": {
       "pdfError": "در ایجاد PDF خطا رخ داد. لطفاً دوباره تلاش کنید.",

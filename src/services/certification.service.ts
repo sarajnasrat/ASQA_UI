@@ -100,6 +100,16 @@ const CertificationService = {
     return this.updateCertificationStatus(id, "CERTIFICATION_ISSUED");
   },
 
+  startSupervision(id: number, reason: string, files: File[], durationMonths?: number) {
+    const formData = new FormData();
+    if (reason) formData.append("reason", reason);
+    if (durationMonths) formData.append("durationMonths", String(durationMonths));
+    files.forEach((file) => formData.append("files", file));
+    return httpClient.post(`${CERTIFICATION_BASE}/${id}/supervision`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+  },
+
 };
 
 export default CertificationService;
