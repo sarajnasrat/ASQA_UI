@@ -29,6 +29,7 @@ import CertificationRequestViewTabs from "./certification-process/CertificationR
 import CertificationRequestViewDetails from "./certification-process/CertificationRequestViewDetails";
 import CertificationRequestViewCompany from "./certification-process/CertificationRequestViewCompany";
 import CertificationRequestViewDocuments from "./certification-process/CertificationRequestViewDocuments";
+import InternationalWorkflowPanel from "./international-workflow/InternationalWorkflowPanel";
 import type {
   CertificationRequest,
   Tracker,
@@ -108,7 +109,11 @@ const CommitteeSelectionField: React.FC<{
   );
 };
 
-const CertificationRequestView: React.FC = () => {
+type CertificationRequestViewProps = {
+  expectedScope?: "NATIONAL" | "INTERNATIONAL";
+};
+
+const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ expectedScope }) => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
@@ -156,6 +161,8 @@ const CertificationRequestView: React.FC = () => {
 
   const [paymentDialogVisible, setPaymentDialogVisible] = useState(false);
   const [statusDialogVisible, setStatusDialogVisible] = useState(false);
+  const [internationalContractDialogVisible, setInternationalContractDialogVisible] = useState(false);
+  const [internationalInspectionPaymentDialogVisible, setInternationalInspectionPaymentDialogVisible] = useState(false);
   const [pendingStatus, setPendingStatus] = useState<string | null>(null);
   const [statusSubmitting, setStatusSubmitting] = useState(false);
   const [uploadedBill, setUploadedBill] = useState<File | null>(null);
@@ -253,8 +260,15 @@ const CertificationRequestView: React.FC = () => {
     );
 
     if (response) {
-      setRequest(response.data.data);
-      setTracker(response.data.data.trackers || []);
+      const loadedRequest = response.data.data;
+      if (expectedScope && loadedRequest?.certificationScope !== expectedScope) {
+        showToast("error", t("common.error"), t("internationalRequest.loadError"));
+        navigate(expectedScope === "INTERNATIONAL" ? "/international-certification-request" : "/certification-request", { replace: true });
+        setLoading(false);
+        return;
+      }
+      setRequest(loadedRequest);
+      setTracker(loadedRequest.trackers || []);
       setRequestPrinted(false);
     }
     setLoading(false);
@@ -277,7 +291,9 @@ const CertificationRequestView: React.FC = () => {
   const getNextStatuses = () => {
     if (!request?.requestStatus) return [];
     if (request.requestStatus === "UNDER_REVIEW") {
-      return ["STANDARDS_PROVIDED"];
+      return request.certificationScope === "INTERNATIONAL"
+        ? ["CONTRACT_PENDING"]
+        : ["STANDARDS_PROVIDED"];
     }
     return transitionMap[request.requestStatus] || [];
   };
@@ -1002,7 +1018,9 @@ const CertificationRequestView: React.FC = () => {
 
     const effectiveNextStatus =
       request.requestStatus === "UNDER_REVIEW"
-        ? options?.standardRequired
+        ? request.certificationScope === "INTERNATIONAL"
+          ? "CONTRACT_PENDING"
+          : options?.standardRequired
           ? "STANDARDS_PROVIDED"
           : "DEADLINE_REQUIRED"
         : nextStatus;
@@ -1314,15 +1332,11 @@ const CertificationRequestView: React.FC = () => {
 
       if (response?.status === 200) {
         closeStatusDialog();
-        navigateAfterStatusUpdate(
-          request.requestStatus === "UNDER_REVIEW"
-            ? isUnderReviewDecision
-              ? standardRequiredChoice
-                ? "STANDARDS_PROVIDED"
-                : "DEADLINE_REQUIRED"
-              : pendingStatus
-            : pendingStatus,
-        );
+        const originPath =
+          typeof location.state?.originPath === "string"
+            ? location.state.originPath
+            : location.pathname.replace(/\/view\/[^/]+$/, "");
+        navigate(originPath || "/certification-request");
       }
     } catch (error) {
       console.error("Status update failed:", error);
@@ -1334,47 +1348,6 @@ const CertificationRequestView: React.FC = () => {
       );
     } finally {
       setStatusSubmitting(false);
-    }
-  };
-
-  const navigateAfterStatusUpdate = (nextStatus: string) => {
-    switch (nextStatus) {
-      case "UNDER_REVIEW":
-        navigate(`/certification-request`);
-        break;
-      case "REJECTED":
-        navigate("/certification-request");
-        break;
-      case "PAYMENT_PENDING":
-        navigate("/payment-management");
-        break;
-      case "PAYMENT_COMPLETED":
-        navigate("/payment-management");
-        break;
-      case "STANDARDS_PROVIDED":
-        navigate("/standard-management");
-        break;
-      case "DEADLINE_REQUIRED":
-        navigate("/standard-management");
-        break;
-
-      case "DEADLINE_ASSIGNED":
-        navigate(`/certification-request-deadline`);
-        break;
-      case "INSPECTION_IN_PROGRESS":
-        navigate("/certification-request-deadline");
-        break;
-      case "REPORT_APPROVED":
-        navigate("/certification-request");
-        break;
-      case "AUTHORITY_DECISION":
-      case "CERTIFICATION_ISSUED":
-        navigate("/certification-request");
-        break;
-      default:
-        // Default: go back to list
-        navigate("/certification-request");
-        break;
     }
   };
 
@@ -2147,6 +2120,8 @@ const CertificationRequestView: React.FC = () => {
           onDownloadPdf={handleDownloadPdf}
           onPrintBill={() => printBill(request)}
           onOpenPaymentDialog={openPaymentDialog}
+          onOpenContractDialog={() => setInternationalContractDialogVisible(true)}
+          onOpenInspectionPaymentDialog={() => setInternationalInspectionPaymentDialogVisible(true)}
           canUploadScannedBillButton={
             request.requestStatus === "PAYMENT_PENDING" &&
             !request.isScanned &&
@@ -2158,6 +2133,25 @@ const CertificationRequestView: React.FC = () => {
             request.isScanned || request.requestStatus === "PAYMENT_COMPLETED",
           )}
           t={t}
+        />
+
+        <InternationalWorkflowPanel
+          request={request}
+          onChanged={loadRequestDetail}
+          showToast={showToast}
+          contractDialogVisible={internationalContractDialogVisible}
+          onContractDialogVisibleChange={setInternationalContractDialogVisible}
+          inspectionPaymentDialogVisible={internationalInspectionPaymentDialogVisible}
+          onInspectionPaymentDialogVisibleChange={setInternationalInspectionPaymentDialogVisible}
+          onContractCompleted={() => {
+            setInternationalContractDialogVisible(false);
+            setInternationalInspectionPaymentDialogVisible(false);
+            navigate("/international-contract-management");
+          }}
+          onInspectionPaymentCompleted={() => {
+            setInternationalInspectionPaymentDialogVisible(false);
+            navigate("/international-inspection-payment");
+          }}
         />
 
         <CertificationRequestViewTabs

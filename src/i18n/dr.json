@@ -1,4 +1,52 @@
 {
+  "internationalRequest": {
+    "management": "مدیریت درخواست‌های بین‌المللی",
+    "error": "خطا",
+    "loadError": "درخواست‌های بین‌المللی بارگذاری نشد.",
+    "view": "مشاهده",
+    "refresh": "تازه‌سازی",
+    "titles": {
+      "submitted": "درخواست‌های بین‌المللی ارسال‌شده",
+      "underReview": "درخواست‌های بین‌المللی تحت بررسی",
+      "contracts": "قراردادهای بین‌المللی",
+      "inspectionPayments": "پرداخت‌های بررسی بین‌المللی",
+      "deadlines": "مهلت‌های بین‌المللی",
+      "committeeRequests": "درخواست‌های کمیته بین‌المللی",
+      "certificationPayments": "پرداخت‌های تصدیق‌نامه بین‌المللی",
+      "approvedRequests": "درخواست‌های بین‌المللی تأییدشده",
+      "rejectedRequests": "درخواست‌های بین‌المللی ردشده"
+    },
+    "columns": {
+      "serialNumber": "شماره مسلسل",
+      "trackingNumber": "شماره پیگیری",
+      "requestType": "نوع درخواست",
+      "certificationType": "نوع تصدیق‌نامه",
+      "company": "شرکت",
+      "status": "وضعیت",
+      "createdDate": "تاریخ ایجاد",
+      "action": "عملیات"
+    },
+    "statuses": {
+      "SUBMITTED": "ارسال‌شده",
+      "UNDER_REVIEW": "تحت بررسی",
+      "CONTRACT_PENDING": "در انتظار قرارداد",
+      "INSPECTION_PAYMENT_PENDING": "در انتظار پرداخت بررسی",
+      "DEADLINE_REQUIRED": "نیازمند تعیین مهلت",
+      "DEADLINE_ASSIGNED": "مهلت تعیین‌شده",
+      "INSPECTION_IN_PROGRESS": "بررسی در جریان",
+      "REPORTED_TO_COMMITTEE": "به کمیته گزارش‌شده",
+      "REPORT_APPROVED": "گزارش تأییدشده",
+      "APPROVAL_IN_PROGRESS": "تأیید در جریان",
+      "COMMITTEE_APPROVED": "تأییدشده توسط کمیته",
+      "PAYMENT_PENDING": "در انتظار پرداخت",
+      "PAYMENT_COMPLETED": "پرداخت تکمیل‌شده",
+      "AUTHORITY_DECISION": "تصمیم مقام صلاحیت‌دار",
+      "CERTIFICATION_ISSUED": "تصدیق‌نامه صادرشده",
+      "UNDER_SUPERVISION": "تحت نظارت",
+      "REJECTED": "ردشده",
+      "CANCELLED": "لغوشده"
+    }
+  },
   "navbar": {
     "welcome": "خوش آمدید",
     "notifications": "اطلاعیه‌ها",

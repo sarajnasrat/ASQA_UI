@@ -30,6 +30,8 @@ interface Props {
   onDownloadPdf: () => void;
   onPrintBill: () => void;
   onOpenPaymentDialog: () => void;
+  onOpenContractDialog?: () => void;
+  onOpenInspectionPaymentDialog?: () => void;
   canUploadScannedBillButton: boolean;
   showPaymentDetailsAction: boolean;
   t: any;
@@ -48,6 +50,8 @@ const CertificationRequestViewHeader: React.FC<Props> = ({
   onDownloadPdf,
   onPrintBill,
   onOpenPaymentDialog,
+  onOpenContractDialog,
+  onOpenInspectionPaymentDialog,
 
   t,
 }) => {
@@ -123,6 +127,30 @@ const CertificationRequestViewHeader: React.FC<Props> = ({
             </button>
             {hasPermission("UPDATE_CERTIFICATIONREQUEST") && (
               <>
+              {request.certificationScope === "INTERNATIONAL" &&
+                request.requestStatus === "CONTRACT_PENDING" &&
+                onOpenContractDialog && (
+                  <button
+                    type="button"
+                    onClick={onOpenContractDialog}
+                    className="flex items-center justify-center px-6 py-2.5 border-2 border-blue-600 text-blue-700 hover:bg-blue-50 active:bg-blue-100 font-medium rounded-lg transition-all duration-200 w-full sm:w-auto"
+                  >
+                    <FileText className="h-4 w-4 mr-2" />
+                    {t("internationalWorkflow.openContractForm")}
+                  </button>
+                )}
+              {request.certificationScope === "INTERNATIONAL" &&
+                request.requestStatus === "INSPECTION_PAYMENT_PENDING" &&
+                onOpenInspectionPaymentDialog && (
+                  <button
+                    type="button"
+                    onClick={onOpenInspectionPaymentDialog}
+                    className="flex items-center justify-center px-6 py-2.5 border-2 border-blue-600 text-blue-700 hover:bg-blue-50 active:bg-blue-100 font-medium rounded-lg transition-all duration-200 w-full sm:w-auto"
+                  >
+                    <FileText className="h-4 w-4 mr-2" />
+                    {t("internationalWorkflow.completeInspectionPayment")}
+                  </button>
+                )}
               {!finalStates.includes(request.requestStatus) &&
                 getNextStatuses().map((nextStatus) => {
                   const isReject = nextStatus === "REJECTED";

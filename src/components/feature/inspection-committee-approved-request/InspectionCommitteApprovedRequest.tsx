@@ -45,7 +45,19 @@ const ActionMenu = ({ items }: { items: MenuItem[] }) => {
 const formatQamariDate = (value?: string | Date | null, showTime = false) =>
   value ? IslamicDateFormatter.formatQamari(value, showTime) : "-";
 
-export const InspectionCommitteApprovedRequest = () => {
+type InspectionCommitteApprovedRequestProps = {
+  certificationScope?: "NATIONAL" | "INTERNATIONAL";
+  menuPath?: string;
+  viewPath?: string;
+  titleKey?: string;
+};
+
+export const InspectionCommitteApprovedRequest = ({
+  certificationScope = "NATIONAL",
+  menuPath = "/approved-request",
+  viewPath = "/certification-request/view",
+  titleKey = "certificationRequest.list",
+}: InspectionCommitteApprovedRequestProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const toast = useRef<Toast>(null);
@@ -106,7 +118,8 @@ export const InspectionCommitteApprovedRequest = () => {
           status,
           first / rows,
           rows,
-          "id,desc"
+          "id,desc",
+          certificationScope,
         ),
       () => {},
       showError,
@@ -123,7 +136,7 @@ export const InspectionCommitteApprovedRequest = () => {
 
   useEffect(() => {
     loadData();
-  }, [first, rows, status]);
+  }, [first, rows, status, certificationScope]);
 
   const getCompanyNameField = () => {
     const lang = i18n.language;
@@ -283,10 +296,10 @@ export const InspectionCommitteApprovedRequest = () => {
         label: t("common.view"),
         icon: "pi pi-eye",
         command: () =>
-          navigate(`/certification-request/view/${rowData.id}`, {
+          navigate(`${viewPath}/${rowData.id}`, {
             state: {
-              originPath: "/approved-request",
-              activeSidebarPath: "/approved-request",
+              originPath: menuPath,
+              activeSidebarPath: menuPath,
             },
           }),
       },
@@ -510,7 +523,7 @@ export const InspectionCommitteApprovedRequest = () => {
 
   const header = (
     <div className="flex justify-between">
-      <h2>{t("certificationRequest.list")}</h2>
+      <h2>{t(titleKey)}</h2>
 
       <div className="flex gap-2">
         <Button
@@ -529,9 +542,10 @@ export const InspectionCommitteApprovedRequest = () => {
             const res =
               await CertificationRequestService.getAllPaginatedByStatus(
                 status,
-                first / rows,
-                rows,
+                0,
+                totalRecords || rows,
                 "id,desc",
+                certificationScope,
               );
 
             return res.data.data;
@@ -567,7 +581,7 @@ export const InspectionCommitteApprovedRequest = () => {
       <ConfirmDialog />
 
       <DynamicBreadcrumb
-        items={[{ label: t("certificationRequest.list"), url: "" }]}
+        items={[{ label: t(titleKey), url: menuPath }]}
       />
 
       <StatusTabMenu
@@ -581,7 +595,7 @@ export const InspectionCommitteApprovedRequest = () => {
       />
 
       <DynamicTable
-        title={t("certificationRequest.list")}
+        title={t(titleKey)}
         value={data}
         columns={columns}
         header={header}

@@ -103,6 +103,46 @@ type SidebarProps = {
   onCollapsedChange: (collapsed: boolean) => void;
 };
 
+const addInternationalUnderReviewMenu = (items: any[]): any[] => {
+  const underReviewPath = "/international-under-review-request";
+  const managementPath = "/international-requst-management";
+  const alreadyExists = (nodes: any[]): boolean =>
+    nodes.some((item) =>
+      item?.path === underReviewPath ||
+      (Array.isArray(item?.children) && alreadyExists(item.children)),
+    );
+
+  if (alreadyExists(items)) return items;
+
+  const addBesideManagement = (nodes: any[]): any[] => {
+    const result: any[] = [];
+    nodes.forEach((item) => {
+      const children = Array.isArray(item?.children)
+        ? addBesideManagement(item.children)
+        : item?.children;
+      const current = children === item?.children ? item : { ...item, children };
+      result.push(current);
+
+      if (item?.path === managementPath) {
+        result.push({
+          ...item,
+          id: -91001,
+          path: underReviewPath,
+          icon: "pi pi-search",
+          translationKey: "internationalRequest.titles.underReview",
+          labelEn: "Under Review International Requests",
+          labelDr: "درخواست‌های بین‌المللی تحت بررسی",
+          labelPs: "تر بیاکتنې لاندې نړیوالې غوښتنې",
+          children: [],
+        });
+      }
+    });
+    return result;
+  };
+
+  return addBesideManagement(items);
+};
+
 export const Sidebar = ({
   collapsed,
   onCollapsedChange,
@@ -127,7 +167,7 @@ export const Sidebar = ({
 
   useEffect(() => {
     const storedMenus = JSON.parse(localStorage.getItem("menus") || "[]");
-    setMenuItems(storedMenus);
+    setMenuItems(addInternationalUnderReviewMenu(storedMenus));
   }, []);
 
   useEffect(() => {
@@ -192,6 +232,7 @@ export const Sidebar = ({
   }, [currentTheme]);
 
   const getLabel = (item: any) => {
+    if (item.translationKey) return t(item.translationKey);
     switch (i18n.language) {
       case "ps":
         return item.labelPs || item.labelDr || item.labelEn;
@@ -621,7 +662,7 @@ export const Sidebar = ({
       <aside
         className={`fixed top-0 z-40 flex h-screen flex-col border-r shadow-2xl transition-all duration-300 ease-out lg:sticky lg:shadow-lg ${
           theme.sidebarBg
-        } ${theme.border} ${collapsed ? "w-20" : "w-72"} ${sidebarTranslateClass}`}
+        } ${theme.border} ${collapsed ? "w-20" : "w-80"} ${sidebarTranslateClass}`}
         style={{ [isRTL ? "right" : "left"]: 0 }}
         dir={isRTL ? "rtl" : "ltr"}
       >

@@ -22,7 +22,17 @@ import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatt
 import ExcelExport from "../../common/ExcelExport";
 import { useAuth } from "../../../context/AuthContext";
 
-export const InspectionAssignmentList: React.FC = () => {
+type InspectionAssignmentListProps = {
+  certificationScope?: "NATIONAL" | "INTERNATIONAL";
+  listPath?: string;
+  titleKey?: string;
+};
+
+export const InspectionAssignmentList: React.FC<InspectionAssignmentListProps> = ({
+  certificationScope = "NATIONAL",
+  listPath = "/commitee-assignment-list",
+  titleKey = "commitee.assignment.list",
+}) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -58,7 +68,8 @@ const loadData = async () => {
         status,
         first / rows,
         rows,
-        "id,desc"
+        "id,desc",
+        certificationScope
       );
     }
 
@@ -73,6 +84,8 @@ const loadData = async () => {
       res = await CommiteeAssignmentService.getMyCommitteeAssignments(
         user.id,
         status,
+        certificationScope,
+        "INSPECTION",
         {
           page: first / rows,
           size: rows,
@@ -120,7 +133,7 @@ const loadData = async () => {
 
   useEffect(() => {
     loadData();
-  }, [first, rows, status, user?.id]);
+  }, [first, rows, status, user?.id, certificationScope]);
 
   // ================= DELETE =================
   const handleDelete = async (id: number) => {
@@ -154,7 +167,7 @@ const loadData = async () => {
         icon: "pi pi-eye",
         command: () =>
           navigate(`/commitee-assignment/view/${rowData.id}`, {
-            state: { from: "/commitee-assignment-list" },
+            state: { from: listPath },
           }),
       }),
       ...withPermission("UPDATE_COMMITTEEASSIGNMENT", {
@@ -274,7 +287,7 @@ const loadData = async () => {
   const header = () => (
     <div className="flex justify-between items-center mb-4">
       <h2 className="text-2xl font-bold text-blue-700">
-        {t("commitee.assignment.list")}
+        {t(titleKey)}
       </h2>
       <div>
         <Button
@@ -290,11 +303,14 @@ const loadData = async () => {
           fileName="assignment"
           sheetName="assignment"
           fetchAllData={async () => {
-            const res = await CommiteeAssignmentService.getAllPaginated({
-              page: 0,
-              size: totalRecords,
-              sort: "id,desc",
-            });
+            const res = await CommiteeAssignmentService.getByAssignmentType(
+              "INSPECTION",
+              status,
+              0,
+              totalRecords,
+              "id,desc",
+              certificationScope,
+            );
 
             return res.data.data;
           }}
@@ -334,7 +350,7 @@ const loadData = async () => {
 
       <DynamicBreadcrumb
         items={[
-          { label: t("commitee.assignment.list"), url: "/commitee-assignment" },
+          { label: t(titleKey), url: listPath },
         ]}
       />
 
@@ -356,7 +372,7 @@ const loadData = async () => {
       />
 
       <DynamicTable
-        title={t("commitee.assignment.list")}
+        title={t(titleKey)}
         value={data}
         columns={columns}
         header={header()}

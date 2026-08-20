@@ -1058,6 +1058,8 @@
       "REJECTED": "رد شوې",
       "CANCELLED": "لغوه شوې",
       "UNDER_REVIEW": "تر بیاکتنې لاندې",
+      "CONTRACT_PENDING": "تړون په تمه دی",
+      "INSPECTION_PAYMENT_PENDING": "د تفتیش تادیه په تمه ده",
       "STANDARDS_REQUIRED": "معیارونه اړین دي",
       "DEADLINE_REQUIRED": "نېټه اړینه ده",
       "COMMITTEE_APPROVED": "تائید هئیت تائید دهی"
@@ -3046,6 +3048,117 @@
       "INTERNATIONAL_QUALITY_CERTIFICATION": "تائید نامه کیفی سیستم مدیریتی یا خدمات، محصول",
       "STANDARD_MARK_CERTIFICATION": "احذ علامت معیار"
     }
+  },
+  "internationalRequest": {
+    "management": "د نړیوالو غوښتنو مدیریت",
+    "error": "تېروتنه",
+    "loadError": "نړیوالې غوښتنې پورته نه شوې.",
+    "view": "کتل",
+    "refresh": "تازه کول",
+    "titles": {
+      "submitted": "سپارل شوې نړیوالې غوښتنې",
+      "underReview": "تر بیاکتنې لاندې نړیوالې غوښتنې",
+      "contracts": "نړیوال تړونونه",
+      "inspectionPayments": "د نړیوال تفتیش تادیات",
+      "deadlines": "نړیوالې نېټې",
+      "committeeRequests": "د نړیوالې کمېټې غوښتنې",
+      "inspectionCommitteeAssignments": "د نړیوالې تفتیش کمېټې دندې",
+      "approvalCommitteeAssignments": "د نړیوالې تأیید کمېټې دندې",
+      "certificationPayments": "د نړیوال تصدیق تادیات",
+      "approvedRequests": "تأیید شوې نړیوالې غوښتنې",
+      "rejectedRequests": "رد شوې نړیوالې غوښتنې"
+    },
+    "columns": {
+      "serialNumber": "مسلسل شمېره",
+      "trackingNumber": "د تعقیب شمېره",
+      "requestType": "د غوښتنې ډول",
+      "certificationType": "د تصدیق ډول",
+      "company": "شرکت",
+      "status": "حالت",
+      "createdDate": "د جوړېدو نېټه",
+      "action": "عمل"
+    },
+    "statuses": {
+      "SUBMITTED": "سپارل شوې",
+      "UNDER_REVIEW": "تر بیاکتنې لاندې",
+      "CONTRACT_PENDING": "تړون په تمه دی",
+      "INSPECTION_PAYMENT_PENDING": "د تفتیش تادیه په تمه ده",
+      "DEADLINE_REQUIRED": "د پای نېټه اړینه ده",
+      "DEADLINE_ASSIGNED": "د پای نېټه ټاکل شوې",
+      "INSPECTION_IN_PROGRESS": "تفتیش روان دی",
+      "REPORTED_TO_COMMITTEE": "کمېټې ته راپور شوی",
+      "REPORT_APPROVED": "راپور تأیید شوی",
+      "APPROVAL_IN_PROGRESS": "تأیید روان دی",
+      "COMMITTEE_APPROVED": "کمېټې تأیید کړی",
+      "PAYMENT_PENDING": "تادیه په تمه ده",
+      "PAYMENT_COMPLETED": "تادیه بشپړه شوې",
+      "AUTHORITY_DECISION": "د صلاحیت لرونکي مقام پرېکړه",
+      "CERTIFICATION_ISSUED": "تصدیق صادر شوی",
+      "UNDER_SUPERVISION": "تر څارنې لاندې",
+      "REJECTED": "رد شوې",
+      "CANCELLED": "لغوه شوې"
+    },
+    "enums": {
+      "contractStatus": {
+        "PENDING": "په تمه",
+        "COMPLETED": "بشپړ شوی",
+        "EXPIRED": "پای ته رسېدلی",
+        "CANCELLED": "لغوه شوی"
+      },
+      "paymentPurpose": {
+        "CERTIFICATION": "تصدیق",
+        "CONTRACT": "تړون",
+        "INSPECTION": "تفتیش"
+      },
+      "paymentStatus": {
+        "PENDING": "په تمه",
+        "COMPLETED": "بشپړ شوی",
+        "CANCELLED": "لغوه شوی"
+      },
+      "attachmentType": {
+        "CONTRACT": "د تړون سند"
+      }
+    }
+  },
+  "internationalWorkflow": {
+    "title": "د نړیوال تصدیق بهیر",
+    "description": "تړون او د تفتیش تادیه د ملي معیار له بهیر څخه جلا اداره کېږي.",
+    "required": "اړین",
+    "contractRequired": "د تړون شمېره، د پیل او پای نېټه اړینه ده.",
+    "invalidDates": "ناسمې نېټې",
+    "endDateAfterStart": "د تړون د پای نېټه باید د پیل له نېټې وروسته وي.",
+    "fileRequired": "د تړون سند اړین دی",
+    "contractFileRequired": "د دې پړاو له بشپړولو مخکې د تړون بشپړ شوی سند پورته کړئ.",
+    "contractCompleted": "تړون بشپړ شو.",
+    "draftSaved": "د تړون مسوده خوندي شوه.",
+    "contractSaveFailed": "تړون خوندي نه شو.",
+    "transactionRequired": "د معاملې شمېره اړینه ده.",
+    "inspectionPaymentCompleted": "د تفتیش تادیه بشپړه شوه.",
+    "paymentFailed": "تادیه ثبت نه شوه.",
+    "contractNumber": "د تړون شمېره",
+    "contractFile": "د تړون سند",
+    "startDate": "د پیل نېټه",
+    "endDate": "د پای نېټه",
+    "remarks": "یادښتونه",
+    "saveDraft": "مسوده خوندي کول",
+    "saveAndComplete": "خوندي او بشپړ کول",
+    "completeContract": "تړون بشپړول",
+    "openContractForm": "د تړون فورمه پرانیستل",
+    "completeConfirmation": "ایا غواړئ دا تړون بشپړ کړئ؟ غوښتنه به د تفتیش تادیې ته ولېږدول شي.",
+    "confirmComplete": "د بشپړولو تایید",
+    "contractCompletedPaymentHint": "تړون بشپړ شو. د دوام لپاره د تفتیش تادیه ثبت کړئ.",
+    "transactionId": "د معاملې شمېره",
+    "amount": "مبلغ",
+    "paymentDate": "د تادیې نېټه",
+    "paymentReceipt": "د تادیې رسید",
+    "placeholders": {
+      "contractNumber": "د تړون شمېره وارد کړئ",
+      "transactionId": "د معاملې شمېره وارد کړئ",
+      "amount": "د تادیې مبلغ وارد کړئ",
+      "remarks": "یادښتونه وارد کړئ"
+    },
+    "completeInspectionPayment": "د تفتیش تادیه بشپړول",
+    "completedSummary": "تړون {{number}} بشپړ شو ({{start}} – {{end}})."
   },
   "certificationTracking": {
     "badge": "د غوښتنې پیگیری",

@@ -1209,6 +1209,8 @@
       "DRAFT": "Draft",
       "SUBMITTED": "Submitted",
       "REGISTERED": "Registered",
+      "CONTRACT_PENDING": "Contract Pending",
+      "INSPECTION_PAYMENT_PENDING": "Inspection Payment Pending",
       "STANDARDS_PROVIDED": "Standards Provided",
       "DEADLINE_ASSIGNED": "Deadline Assigned",
       "INSPECTION_IN_PROGRESS": "Inspection In Progress",
@@ -3121,6 +3123,117 @@
       "INTERNATIONAL_QUALITY_CERTIFICATION": "تائید نامه کیفی سیستم مدیریتی یا خدمات، محصول",
       "STANDARD_MARK_CERTIFICATION": "احذ علامت معیار"
     }
+  },
+  "internationalRequest": {
+    "management": "International Request Management",
+    "error": "Error",
+    "loadError": "International requests could not be loaded.",
+    "view": "View",
+    "refresh": "Refresh",
+    "titles": {
+      "submitted": "International Submitted Requests",
+      "underReview": "International Requests Under Review",
+      "contracts": "International Contracts",
+      "inspectionPayments": "International Inspection Payments",
+      "deadlines": "International Deadlines",
+      "committeeRequests": "International Committee Requests",
+      "inspectionCommitteeAssignments": "International Inspection Committee Assignments",
+      "approvalCommitteeAssignments": "International Approval Committee Assignments",
+      "certificationPayments": "International Certification Payments",
+      "approvedRequests": "International Approved Requests",
+      "rejectedRequests": "International Rejected Requests"
+    },
+    "columns": {
+      "serialNumber": "Serial Number",
+      "trackingNumber": "Tracking Number",
+      "requestType": "Request Type",
+      "certificationType": "Certification Type",
+      "company": "Company",
+      "status": "Status",
+      "createdDate": "Created Date",
+      "action": "Action"
+    },
+    "statuses": {
+      "SUBMITTED": "Submitted",
+      "UNDER_REVIEW": "Under Review",
+      "CONTRACT_PENDING": "Contract Pending",
+      "INSPECTION_PAYMENT_PENDING": "Inspection Payment Pending",
+      "DEADLINE_REQUIRED": "Deadline Required",
+      "DEADLINE_ASSIGNED": "Deadline Assigned",
+      "INSPECTION_IN_PROGRESS": "Inspection In Progress",
+      "REPORTED_TO_COMMITTEE": "Reported to Committee",
+      "REPORT_APPROVED": "Report Approved",
+      "APPROVAL_IN_PROGRESS": "Approval In Progress",
+      "COMMITTEE_APPROVED": "Committee Approved",
+      "PAYMENT_PENDING": "Payment Pending",
+      "PAYMENT_COMPLETED": "Payment Completed",
+      "AUTHORITY_DECISION": "Authority Decision",
+      "CERTIFICATION_ISSUED": "Certification Issued",
+      "UNDER_SUPERVISION": "Under Supervision",
+      "REJECTED": "Rejected",
+      "CANCELLED": "Cancelled"
+    },
+    "enums": {
+      "contractStatus": {
+        "PENDING": "Pending",
+        "COMPLETED": "Completed",
+        "EXPIRED": "Expired",
+        "CANCELLED": "Cancelled"
+      },
+      "paymentPurpose": {
+        "CERTIFICATION": "Certification",
+        "CONTRACT": "Contract",
+        "INSPECTION": "Inspection"
+      },
+      "paymentStatus": {
+        "PENDING": "Pending",
+        "COMPLETED": "Completed",
+        "CANCELLED": "Cancelled"
+      },
+      "attachmentType": {
+        "CONTRACT": "Contract Document"
+      }
+    }
+  },
+  "internationalWorkflow": {
+    "title": "International certification workflow",
+    "description": "Contract and inspection payment are managed separately from the national standard process.",
+    "required": "Required",
+    "contractRequired": "Contract number, start date, and end date are required.",
+    "invalidDates": "Invalid dates",
+    "endDateAfterStart": "Contract end date must be after its start date.",
+    "fileRequired": "Contract file required",
+    "contractFileRequired": "Upload the completed contract before completing this stage.",
+    "contractCompleted": "Contract completed.",
+    "draftSaved": "Contract draft saved.",
+    "contractSaveFailed": "Contract could not be saved.",
+    "transactionRequired": "Transaction ID is required.",
+    "inspectionPaymentCompleted": "Inspection payment completed.",
+    "paymentFailed": "Payment could not be recorded.",
+    "contractNumber": "Contract number",
+    "contractFile": "Contract file",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "remarks": "Remarks",
+    "saveDraft": "Save draft",
+    "saveAndComplete": "Save and complete",
+    "completeContract": "Complete contract",
+    "openContractForm": "Open contract form",
+    "completeConfirmation": "Are you sure you want to complete this contract? The request will move to inspection payment.",
+    "confirmComplete": "Confirm completion",
+    "contractCompletedPaymentHint": "Contract completed. Record the inspection payment to continue.",
+    "transactionId": "Transaction ID",
+    "amount": "Amount",
+    "paymentDate": "Payment date",
+    "paymentReceipt": "Payment receipt",
+    "placeholders": {
+      "contractNumber": "Enter contract number",
+      "transactionId": "Enter transaction ID",
+      "amount": "Enter payment amount",
+      "remarks": "Enter remarks"
+    },
+    "completeInspectionPayment": "Complete inspection payment",
+    "completedSummary": "Contract {{number}} completed ({{start}} – {{end}})."
   },
   "certificationTracking": {
     "badge": "Request Tracking",

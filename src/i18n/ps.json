@@ -1,4 +1,52 @@
 {
+  "internationalRequest": {
+    "management": "د نړیوالو غوښتنو مدیریت",
+    "error": "تېروتنه",
+    "loadError": "نړیوالې غوښتنې پورته نه شوې.",
+    "view": "کتل",
+    "refresh": "تازه کول",
+    "titles": {
+      "submitted": "سپارل شوې نړیوالې غوښتنې",
+      "underReview": "تر بیاکتنې لاندې نړیوالې غوښتنې",
+      "contracts": "نړیوال قراردادونه",
+      "inspectionPayments": "د نړیوالې ارزونې تادیات",
+      "deadlines": "نړیوالې وروستۍ نېټې",
+      "committeeRequests": "د نړیوالې کمېټې غوښتنې",
+      "certificationPayments": "د نړیوالو تصدیق‌لیکونو تادیات",
+      "approvedRequests": "منظورې شوې نړیوالې غوښتنې",
+      "rejectedRequests": "رد شوې نړیوالې غوښتنې"
+    },
+    "columns": {
+      "serialNumber": "مسلسل شمېره",
+      "trackingNumber": "د تعقیب شمېره",
+      "requestType": "د غوښتنې ډول",
+      "certificationType": "د تصدیق‌لیک ډول",
+      "company": "شرکت",
+      "status": "حالت",
+      "createdDate": "د جوړېدو نېټه",
+      "action": "عملیات"
+    },
+    "statuses": {
+      "SUBMITTED": "سپارل شوې",
+      "UNDER_REVIEW": "تر بیاکتنې لاندې",
+      "CONTRACT_PENDING": "قرارداد ته منتظر",
+      "INSPECTION_PAYMENT_PENDING": "د ارزونې تادیې ته منتظر",
+      "DEADLINE_REQUIRED": "وروستۍ نېټې ته اړتیا لري",
+      "DEADLINE_ASSIGNED": "وروستۍ نېټه ټاکل شوې",
+      "INSPECTION_IN_PROGRESS": "ارزونه روانه ده",
+      "REPORTED_TO_COMMITTEE": "کمېټې ته راپور شوې",
+      "REPORT_APPROVED": "راپور منظور شوی",
+      "APPROVAL_IN_PROGRESS": "منظوري روانه ده",
+      "COMMITTEE_APPROVED": "کمېټې منظور کړې",
+      "PAYMENT_PENDING": "تادیې ته منتظر",
+      "PAYMENT_COMPLETED": "تادیه بشپړه شوې",
+      "AUTHORITY_DECISION": "د صلاحیت لرونکي مقام پرېکړه",
+      "CERTIFICATION_ISSUED": "تصدیق‌لیک صادر شوی",
+      "UNDER_SUPERVISION": "تر څارنې لاندې",
+      "REJECTED": "رد شوې",
+      "CANCELLED": "لغوه شوې"
+    }
+  },
   "navbar": {
     "welcome": "ښه راغلاست",
     "notifications": "خبرتیاوې",

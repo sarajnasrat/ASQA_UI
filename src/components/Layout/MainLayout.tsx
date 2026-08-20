@@ -31,7 +31,6 @@ import { PrintCertificationPage } from "../feature/certification/PrintCertificat
 import ZoneList from "../feature/zone/ZoneList";
 import { CommiteeList } from "../feature/commitee/CommiteeList";
 import CommiteeMemberList from "../feature/commiteemember/CommiteeMemberList";
-import { CommiteeAssignmentList } from "../feature/commiteeassignment/CommiteeAssignmentList";
 import { CommiteeAssignmentDetails } from "../feature/commiteeassignment/CommiteeAssignmentDetails.tsx";
 import CertificationRequestView from "../feature/certification-request/CertificationRequestView";
 import { CertificationRequestListDeadLine } from "../feature/setting-deadline/CertificationRequestListDeadLine";
@@ -71,6 +70,13 @@ import InspectionUserList from "../feature/inspectionuser/InspectionUserList";
 import InspectionUserRegistration from "../feature/inspectionuser/InspectionUserRegistration";
 import InspectionUserEdit from "../feature/inspectionuser/InspectionUserEdit";
 import InspectionUserDetails from "../feature/inspectionuser/InspectionUserDetails";
+import InternationalRequestList from "../feature/internationrequest/InternationalRequestList";
+import InternationalRequestDetails from "../feature/internationrequest/InternationalRequestDetails";
+import InternationalApprovedRequest from "../feature/internationrequest/InternationalApprovedRequest";
+import {
+  InternationalInspectionAssignmentList,
+  InternationalApprovalAssignmentList,
+} from "../feature/internationrequest/InternationalCommitteeAssignmentLists";
 
 export const MainLayout = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -194,6 +200,71 @@ export const MainLayout = () => {
                 path="certification-request"
                 element={<CertificationRequestList />}
               />
+              <Route
+                path="international-certification-request"
+                element={<InternationalRequestList title="internationalRequest.titles.submitted" menuPath="/international-certification-request" statuses={[
+                  { value: "SUBMITTED", label: "Submitted", icon: "pi pi-send" },
+                ]} />}
+              />
+              <Route
+                path="international-requst-management"
+                element={<InternationalRequestList title="internationalRequest.titles.submitted" menuPath="/international-requst-management" statuses={[
+                  { value: "SUBMITTED", label: "Submitted", icon: "pi pi-send" },
+                ]} />}
+              />
+              <Route
+                path="international-under-review-request"
+                element={<InternationalRequestList title="internationalRequest.titles.underReview" menuPath="/international-under-review-request" statuses={[
+                  { value: "UNDER_REVIEW", label: "Under Review", icon: "pi pi-search" },
+                ]} />}
+              />
+              <Route
+                path="international-contract-management"
+                element={<InternationalRequestList title="internationalRequest.titles.contracts" menuPath="/international-contract-management" statuses={[
+                  { value: "CONTRACT_PENDING", label: "Contract Pending", icon: "pi pi-file-edit" },
+                ]} />}
+              />
+              <Route
+                path="international-inspection-payment"
+                element={<InternationalRequestList title="internationalRequest.titles.inspectionPayments" menuPath="/international-inspection-payment" statuses={[
+                  { value: "INSPECTION_PAYMENT_PENDING", label: "Inspection Payment Pending", icon: "pi pi-credit-card" },
+                ]} />}
+              />
+              <Route
+                path="international-certification-request-deadline"
+                element={<InternationalRequestList title="internationalRequest.titles.deadlines" menuPath="/international-certification-request-deadline" statuses={[
+                  { value: "DEADLINE_REQUIRED", label: "Deadline Required", icon: "pi pi-calendar-plus" },
+                  { value: "DEADLINE_ASSIGNED", label: "Deadline Assigned", icon: "pi pi-calendar" },
+                  // { value: "INSPECTION_IN_PROGRESS", label: "Inspection In Progress", icon: "pi pi-search" },
+                ]} />}
+              />
+              <Route
+                path="international-commitee-assignment-list"
+                element={<InternationalInspectionAssignmentList />}
+              />
+              <Route
+                path="international-approval-commitee-assignment"
+                element={<InternationalApprovalAssignmentList />}
+              />
+              <Route
+                path="international-payment-management"
+                element={<InternationalRequestList title="internationalRequest.titles.certificationPayments" menuPath="/international-payment-management" statuses={[
+                  { value: "PAYMENT_PENDING", label: "Payment Pending", icon: "pi pi-wallet" },
+                  { value: "PAYMENT_COMPLETED", label: "Payment Completed", icon: "pi pi-check-circle" },
+                ]} />}
+              />
+              <Route
+                path="international-approved-request"
+                element={<InternationalApprovedRequest />}
+              />
+              <Route
+                path="international-rejected-request"
+                element={<InternationalRequestList title="internationalRequest.titles.rejectedRequests" menuPath="/international-rejected-request" statuses={[
+                  { value: "REJECTED", label: "Rejected", icon: "pi pi-times-circle" },
+                  { value: "CANCELLED", label: "Cancelled", icon: "pi pi-ban" },
+                ]} />}
+              />
+              <Route path="international-certification-request/view/:id" element={<InternationalRequestDetails />} />
 
               <Route
                 path="certification-verification"
@@ -253,7 +324,7 @@ export const MainLayout = () => {
               />
               <Route
                 path="certification-request/view/:id"
-                element={<CertificationRequestView />}
+                element={<CertificationRequestView expectedScope="NATIONAL" />}
               />
 
               <Route path="commitee/view/:id" element={<CommiteeDetails />} />

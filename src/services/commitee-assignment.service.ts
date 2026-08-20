@@ -11,12 +11,16 @@ export const CommiteeAssignmentService = {
 getMyCommitteeAssignments(
   userId: number,
   status: string,
+  certificationScope?: "NATIONAL" | "INTERNATIONAL",
+  assignmentType?: "INSPECTION" | "APPROVAL",
   params?: any
 ) {
   return httpClient.get(`${BASE_URL}/my-committees`, {
     params: {
       userId,
       status,
+      ...(certificationScope && { certificationScope }),
+      ...(assignmentType && { assignmentType }),
       ...params,
     },
   });
@@ -45,11 +49,13 @@ getByAssignmentType(
   status?: string,
   page: number = 0,
   size: number = 10,
-  sort: string = "id,desc"
+  sort: string = "id,desc",
+  certificationScope?: "NATIONAL" | "INTERNATIONAL"
 ) {
   return httpClient.get(`${BASE_URL}/type/${assignmentType}`, {
     params: {
       ...(status && { status }),
+      ...(certificationScope && { certificationScope }),
       page,
       size,
       sort,

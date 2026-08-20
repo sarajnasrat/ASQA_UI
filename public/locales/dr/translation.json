@@ -1114,6 +1114,8 @@
       "REJECTED": "رد شده",
       "CANCELLED": "لغو شده",
       "UNDER_REVIEW": "در حال بررسی",
+      "CONTRACT_PENDING": "قرارداد در انتظار",
+      "INSPECTION_PAYMENT_PENDING": "پرداخت تفتیش در انتظار",
       "STANDARDS_REQUIRED": "اضافه نمودن استاندرد",
       "DEADLINE_REQUIRED": "مهلت مورد نیاز"
     },
@@ -3113,6 +3115,117 @@
       "INTERNATIONAL_QUALITY_CERTIFICATION": "تائید نامه کیفی سیستم مدیریتی یا خدمات، محصول",
       "STANDARD_MARK_CERTIFICATION": "اخذ علامت معیار"
     }
+  },
+  "internationalRequest": {
+    "management": "مدیریت درخواست‌های بین‌المللی",
+    "error": "خطا",
+    "loadError": "درخواست‌های بین‌المللی بارگذاری نشد.",
+    "view": "مشاهده",
+    "refresh": "تازه‌سازی",
+    "titles": {
+      "submitted": "درخواست‌های بین‌المللی ارسال‌شده",
+      "underReview": "درخواست‌های بین‌المللی تحت بررسی",
+      "contracts": "قراردادهای بین‌المللی",
+      "inspectionPayments": "پرداخت‌های تفتیش بین‌المللی",
+      "deadlines": "مهلت‌های بین‌المللی",
+      "committeeRequests": "درخواست‌های کمیته بین‌المللی",
+      "inspectionCommitteeAssignments": "وظایف کمیته تفتیش بین‌المللی",
+      "approvalCommitteeAssignments": "وظایف کمیته تأیید بین‌المللی",
+      "certificationPayments": "پرداخت‌های تصدیق بین‌المللی",
+      "approvedRequests": "درخواست‌های بین‌المللی تأییدشده",
+      "rejectedRequests": "درخواست‌های بین‌المللی ردشده"
+    },
+    "columns": {
+      "serialNumber": "شماره مسلسل",
+      "trackingNumber": "شماره تعقیب",
+      "requestType": "نوع درخواست",
+      "certificationType": "نوع تصدیق",
+      "company": "شرکت",
+      "status": "وضعیت",
+      "createdDate": "تاریخ ایجاد",
+      "action": "عملیات"
+    },
+    "statuses": {
+      "SUBMITTED": "ارسال‌شده",
+      "UNDER_REVIEW": "تحت بررسی",
+      "CONTRACT_PENDING": "قرارداد در انتظار",
+      "INSPECTION_PAYMENT_PENDING": "پرداخت تفتیش در انتظار",
+      "DEADLINE_REQUIRED": "تعیین مهلت لازم است",
+      "DEADLINE_ASSIGNED": "مهلت تعیین‌شده",
+      "INSPECTION_IN_PROGRESS": "تفتیش در حال اجرا",
+      "REPORTED_TO_COMMITTEE": "گزارش‌شده به کمیته",
+      "REPORT_APPROVED": "گزارش تأییدشده",
+      "APPROVAL_IN_PROGRESS": "تأیید در حال اجرا",
+      "COMMITTEE_APPROVED": "تأییدشده توسط کمیته",
+      "PAYMENT_PENDING": "پرداخت در انتظار",
+      "PAYMENT_COMPLETED": "پرداخت تکمیل‌شده",
+      "AUTHORITY_DECISION": "تصمیم مقام صلاحیت‌دار",
+      "CERTIFICATION_ISSUED": "تصدیق صادرشده",
+      "UNDER_SUPERVISION": "تحت نظارت",
+      "REJECTED": "ردشده",
+      "CANCELLED": "لغوشده"
+    },
+    "enums": {
+      "contractStatus": {
+        "PENDING": "در انتظار",
+        "COMPLETED": "تکمیل‌شده",
+        "EXPIRED": "منقضی‌شده",
+        "CANCELLED": "لغوشده"
+      },
+      "paymentPurpose": {
+        "CERTIFICATION": "تصدیق",
+        "CONTRACT": "قرارداد",
+        "INSPECTION": "تفتیش"
+      },
+      "paymentStatus": {
+        "PENDING": "در انتظار",
+        "COMPLETED": "تکمیل‌شده",
+        "CANCELLED": "لغوشده"
+      },
+      "attachmentType": {
+        "CONTRACT": "سند قرارداد"
+      }
+    }
+  },
+  "internationalWorkflow": {
+    "title": "روند تصدیق بین‌المللی",
+    "description": "قرارداد و پرداخت تفتیش جدا از روند معیار ملی مدیریت می‌شوند.",
+    "required": "ضروری",
+    "contractRequired": "شماره قرارداد و تاریخ شروع و ختم ضروری است.",
+    "invalidDates": "تاریخ‌های نادرست",
+    "endDateAfterStart": "تاریخ ختم قرارداد باید بعد از تاریخ شروع باشد.",
+    "fileRequired": "سند قرارداد ضروری است",
+    "contractFileRequired": "قبل از تکمیل این مرحله، سند قرارداد را بارگذاری کنید.",
+    "contractCompleted": "قرارداد تکمیل شد.",
+    "draftSaved": "مسوده قرارداد ذخیره شد.",
+    "contractSaveFailed": "قرارداد ذخیره نشد.",
+    "transactionRequired": "شماره معامله ضروری است.",
+    "inspectionPaymentCompleted": "پرداخت تفتیش تکمیل شد.",
+    "paymentFailed": "پرداخت ثبت نشد.",
+    "contractNumber": "شماره قرارداد",
+    "contractFile": "سند قرارداد",
+    "startDate": "تاریخ شروع",
+    "endDate": "تاریخ ختم",
+    "remarks": "ملاحظات",
+    "saveDraft": "ذخیره مسوده",
+    "saveAndComplete": "ذخیره و تکمیل",
+    "completeContract": "تکمیل قرارداد",
+    "openContractForm": "باز کردن فورم قرارداد",
+    "completeConfirmation": "آیا از تکمیل این قرارداد اطمینان دارید؟ درخواست به مرحله پرداخت تفتیش منتقل می‌شود.",
+    "confirmComplete": "تأیید تکمیل",
+    "contractCompletedPaymentHint": "قرارداد تکمیل شد. برای ادامه، پرداخت تفتیش را ثبت کنید.",
+    "transactionId": "شماره معامله",
+    "amount": "مبلغ",
+    "paymentDate": "تاریخ پرداخت",
+    "paymentReceipt": "رسید پرداخت",
+    "placeholders": {
+      "contractNumber": "شماره قرارداد را وارد کنید",
+      "transactionId": "شماره معامله را وارد کنید",
+      "amount": "مبلغ پرداخت را وارد کنید",
+      "remarks": "ملاحظات را وارد کنید"
+    },
+    "completeInspectionPayment": "تکمیل پرداخت تفتیش",
+    "completedSummary": "قرارداد {{number}} تکمیل شد ({{start}} – {{end}})."
   },
   "certificationTracking": {
     "badge": "پیگیری درخواست",

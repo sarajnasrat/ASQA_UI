@@ -3,6 +3,7 @@ import httpClient from "../api/httpClient";
 
 const BASE_URL = "/certificationrequest";
 const PAYMENT_BASE_URL = "/payments";
+const CONTRACT_BASE_URL = "/certification-contracts";
 
 export const CertificationRequestService = {
   // ✅ Get all without pagination
@@ -37,7 +38,8 @@ export const CertificationRequestService = {
     status: string,
     page: number = 0,
     size: number = 10,
-    sort: string = 'id,desc'
+    sort: string = 'id,desc',
+    certificationScope: "NATIONAL" | "INTERNATIONAL" = "NATIONAL",
   ) {
     return httpClient.get(`${BASE_URL}/get-all`, {
       params: {
@@ -45,6 +47,7 @@ export const CertificationRequestService = {
         page: page,
         size: size,
         sort: sort,
+        certificationScope,
       },
     });
   },
@@ -83,7 +86,7 @@ export const CertificationRequestService = {
   ) {
     const params: Record<string, any> = { status };
 
-    if (companyId !== undefined && companyId !== null && companyId !== "") {
+    if (companyId !== undefined && companyId !== null) {
       params.companyId = companyId;
     }
 
@@ -193,6 +196,23 @@ export const CertificationRequestService = {
         },
       }
     );
+  },
+
+  getContract(certificationRequestId: number) {
+    return httpClient.get(`${CONTRACT_BASE_URL}/request/${certificationRequestId}`);
+  },
+
+  saveContract(certificationRequestId: number, formData: FormData) {
+    return httpClient.post(
+      `${CONTRACT_BASE_URL}/request/${certificationRequestId}`,
+      formData,
+      { headers: { "Content-Type": "multipart/form-data" } },
+    );
+  },
+
+  completeInspectionPayment(certificationRequestId: number, formData: FormData) {
+    formData.set("paymentPurpose", "INSPECTION");
+    return this.createPayment(certificationRequestId, formData);
   },
 
   updatePayment(id: number, formData: FormData) {

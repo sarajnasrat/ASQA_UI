@@ -1,4 +1,52 @@
 {
+  "internationalRequest": {
+    "management": "International Request Management",
+    "error": "Error",
+    "loadError": "International requests could not be loaded.",
+    "view": "View",
+    "refresh": "Refresh",
+    "titles": {
+      "submitted": "Submitted International Requests",
+      "underReview": "International Requests Under Review",
+      "contracts": "International Contracts",
+      "inspectionPayments": "International Inspection Payments",
+      "deadlines": "International Deadlines",
+      "committeeRequests": "International Committee Requests",
+      "certificationPayments": "International Certification Payments",
+      "approvedRequests": "International Approved Requests",
+      "rejectedRequests": "International Rejected Requests"
+    },
+    "columns": {
+      "serialNumber": "Serial Number",
+      "trackingNumber": "Tracking Number",
+      "requestType": "Request Type",
+      "certificationType": "Certification Type",
+      "company": "Company",
+      "status": "Status",
+      "createdDate": "Created Date",
+      "action": "Action"
+    },
+    "statuses": {
+      "SUBMITTED": "Submitted",
+      "UNDER_REVIEW": "Under Review",
+      "CONTRACT_PENDING": "Contract Pending",
+      "INSPECTION_PAYMENT_PENDING": "Inspection Payment Pending",
+      "DEADLINE_REQUIRED": "Deadline Required",
+      "DEADLINE_ASSIGNED": "Deadline Assigned",
+      "INSPECTION_IN_PROGRESS": "Inspection In Progress",
+      "REPORTED_TO_COMMITTEE": "Reported to Committee",
+      "REPORT_APPROVED": "Report Approved",
+      "APPROVAL_IN_PROGRESS": "Approval In Progress",
+      "COMMITTEE_APPROVED": "Committee Approved",
+      "PAYMENT_PENDING": "Payment Pending",
+      "PAYMENT_COMPLETED": "Payment Completed",
+      "AUTHORITY_DECISION": "Authority Decision",
+      "CERTIFICATION_ISSUED": "Certification Issued",
+      "UNDER_SUPERVISION": "Under Supervision",
+      "REJECTED": "Rejected",
+      "CANCELLED": "Cancelled"
+    }
+  },
   "navbar": {
     "welcome": "Welcome",
     "notifications": "Notifications",

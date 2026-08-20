@@ -116,6 +116,20 @@ export interface StatusConfig {
   label: string;
 }
 
+export interface CertificationContract {
+  id: number;
+  certificationRequestId: number;
+  contractNumber: string;
+  startDate: string;
+  endDate: string;
+  contractStatus: "PENDING" | "COMPLETED" | "EXPIRED" | "CANCELLED";
+  attachmentId?: number;
+  attachmentName?: string;
+  file?: string;
+  completedAt?: string;
+  remarks?: string;
+}
+
 export interface RollbackOption {
   label: string;
   value: string;

@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 import CommiteeService from "../../../services/comitee.service";
 import FileUploadField from "../../common/FileUploadField";
 import { SmartDatePicker } from "../../common/datepicker/SmartDatePicker";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface Props {
   requestId: number | null;
@@ -56,8 +56,10 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
   const { t } = useTranslation();
   const { showError, showSuccess } = useToast();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [standardRequired, setStandardRequired] = useState<boolean>(false);
+  const [certificationScope, setCertificationScope] = useState<string>("NATIONAL");
   const [status, setStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -81,13 +83,15 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
   const statusOptions = useMemo(() => {
     const allowed =
       currentStatus === "UNDER_REVIEW"
-        ? ["DEADLINE_REQUIRED"]
+        ? certificationScope === "INTERNATIONAL"
+          ? ["CONTRACT_PENDING"]
+          : ["DEADLINE_REQUIRED"]
         : transitionMap[currentStatus] || [];
     return allowed.map((s) => ({
       label: t(`certificationRequest.statusOptions.${s}`),
       value: s,
     }));
-  }, [currentStatus, standardRequired, t]);
+  }, [currentStatus, certificationScope, t]);
 
   useEffect(() => {
     setStatus(statusOptions[0]?.value || null);
@@ -100,6 +104,7 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
         const response = await CertificationRequestService.getById(requestId);
         const request = response?.data?.data || response?.data;
         setStandardRequired(Boolean(request?.standardRequired));
+        setCertificationScope(request?.certificationScope || "NATIONAL");
       } catch {
         setStandardRequired(false);
       }
@@ -144,7 +149,7 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
         return;
       }
 
-      if (currentStatus === "UNDER_REVIEW" && standardRequired) {
+      if (currentStatus === "UNDER_REVIEW" && certificationScope === "NATIONAL" && standardRequired) {
         if (!selectedFile) {
           showError(t("attachment.STANDARD") || "Please upload standard file");
           return;
@@ -158,7 +163,6 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
             CertificationRequestService.standardProvided(
               requestId,
               formData,
-              true,
             ),
           showSuccess,
           showError,
@@ -228,7 +232,9 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
             CertificationRequestService.updateStatus(
               requestId,
               currentStatus === "UNDER_REVIEW"
-                ? standardRequired
+                ? certificationScope === "INTERNATIONAL"
+                  ? "CONTRACT_PENDING"
+                  : standardRequired
                   ? "STANDARDS_PROVIDED"
                   : "DEADLINE_REQUIRED"
                 : status,
@@ -242,45 +248,14 @@ export const CertificationRequestUpdate: React.FC<Props> = ({
       if (response?.status === 200) {
         onSuccess?.();
         onHide();
-        navigateAfterStatusUpdate(
-          currentStatus === "UNDER_REVIEW" && standardRequired
-            ? "STANDARDS_PROVIDED"
-            : status,
-        );
+        const originPath =
+          typeof location.state?.originPath === "string"
+            ? location.state.originPath
+            : location.pathname;
+        navigate(originPath || "/certification-request");
       }
     } finally {
       setLoading(false);
-    }
-  };
-
-  const navigateAfterStatusUpdate = (nextStatus: string) => {
-    switch (nextStatus) {
-      case "UNDER_REVIEW":
-      case "REJECTED":
-      case "REPORT_APPROVED":
-      case "AUTHORITY_DECISION":
-      case "CERTIFICATION_ISSUED":
-        navigate("/certification-request");
-        break;
-      case "PAYMENT_PENDING":
-      case "PAYMENT_COMPLETED":
-        navigate("/payment-management");
-        break;
-      case "STANDARDS_PROVIDED":
-        navigate("/standard-management");
-        break;
-      case "DEADLINE_REQUIRED":
-        navigate("/certification-request-deadline");
-        break;
-      case "DEADLINE_ASSIGNED":
-        navigate("/certification-request-deadline");
-        break;
-      case "INSPECTION_IN_PROGRESS":
-        navigate("/certification-request-deadline");
-        break;
-      default:
-        navigate("/certification-request");
-        break;
     }
   };
 
