@@ -3,6 +3,8 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Toast } from "primereact/toast";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+import { Dialog } from "primereact/dialog";
+import { InputTextarea } from "primereact/inputtextarea";
 import {
   AlertCircle,
   ArrowLeft,
@@ -199,7 +201,7 @@ const statusTransitions: Record<string, string[]> = {
   DRAFT: ["PRINTED"],
   PRINTED: ["SCANNED"],
   CERTIFICATION_ISSUED: ["UNDER_SUPERVISION"],
-  SCANNED: ["CERTIFICATION_ISSUED"],
+  SCANNED: ["CERTIFICATION_ISSUED", "PRINTED"],
   UNDER_SUPERVISION: [],
 };
 
@@ -490,8 +492,11 @@ export const CertificationDetails: React.FC = () => {
 
   const [updateDialogVisible, setUpdateDialogVisible] = useState(false);
   const [selectedCertification, setSelectedCertification] = useState<any>(null);
+  const [rejectDialogVisible, setRejectDialogVisible] = useState(false);
+  const [rejectionReason, setRejectionReason] = useState("");
+  const [rejecting, setRejecting] = useState(false);
 
-  const confirmStatusUpdate = (nextStatus: string) => {
+  const confirmStatusUpdate = async (nextStatus: string) => {
     const normalizedStatus = nextStatus?.trim().toUpperCase();
     if (normalizedStatus === "SCANNED") {
       setSelectedCertification(details);
@@ -499,9 +504,8 @@ export const CertificationDetails: React.FC = () => {
       return;
     }
     if (normalizedStatus === "PRINTED") {
-      navigate(`/certifications/print/${details?.id}`, {
-        state: { returnPath: location.state?.returnPath || "/printed-certification" },
-      });
+      setRejectionReason("");
+      setRejectDialogVisible(true);
       return;
     }
 
@@ -540,6 +544,22 @@ export const CertificationDetails: React.FC = () => {
       style: { width: "520px", maxWidth: "95vw" },
       breakpoints: { "640px": "95vw" },
     });
+  };
+
+  const rejectScannedCertificate = async () => {
+    if (!details?.id || !rejectionReason.trim()) return;
+    setRejecting(true);
+    const response = await handleApi(
+      () => CertificationService.updateCertificationStatus(details.id, "PRINTED", rejectionReason.trim()),
+      () => showToast("success", t("common.success"), t("certification.rejectedToPrinted")),
+      (message: string) => showToast("error", t("common.error"), message),
+      t,
+    );
+    setRejecting(false);
+    if (response) {
+      setRejectDialogVisible(false);
+      navigate(certificationListPath("PRINTED"), { replace: true });
+    }
   };
 
   const toggleSection = (section: keyof typeof expandedSections) => {
@@ -692,7 +712,11 @@ export const CertificationDetails: React.FC = () => {
                             : "bg-green-600 text-white hover:bg-green-700"
                         }`}
                       >
-                        {t(`certification.steps.${status}`, labelize(status))}
+                        {status === "PRINTED" && currentStatus === "SCANNED"
+                          ? t("certification.dialog.returnToPrintPage", {
+                              defaultValue: "Return to Previous Stage",
+                            })
+                          : t(`certification.steps.${status}`, labelize(status))}
                       </button>
                     ))}
                 </div>
@@ -1809,6 +1833,46 @@ export const CertificationDetails: React.FC = () => {
             navigate(certificationListPath("SCANNED"), { replace: true });
           }}
         />
+        <Dialog
+          header={t("certification.dialog.rejectTitle")}
+          visible={rejectDialogVisible}
+          modal
+          style={{ width: "520px" }}
+          onHide={() => !rejecting && setRejectDialogVisible(false)}
+          footer={
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                className="p-button p-component p-button-text"
+                disabled={rejecting}
+                onClick={() => setRejectDialogVisible(false)}
+              >
+                {t("common.cancel")}
+              </button>
+              <button
+                type="button"
+                className="p-button p-component p-button-danger"
+                disabled={rejecting || !rejectionReason.trim()}
+                onClick={rejectScannedCertificate}
+              >
+                {t("certification.dialog.rejectCertificate", { defaultValue: "Reject Certificate" })}
+              </button>
+            </div>
+          }
+        >
+          <p className="mb-3 text-sm text-gray-600">
+            {t("certification.dialog.rejectNotice", { defaultValue: "Explain why this scanned document is incorrect. It will be returned to the Printed section." })}
+          </p>
+          <InputTextarea
+            value={rejectionReason}
+            onChange={(event) => setRejectionReason(event.target.value)}
+            rows={4}
+            autoResize
+            className="w-full"
+            placeholder={t("certification.dialog.rejectionReasonPlaceholder", { defaultValue: "Enter rejection reason" })}
+            disabled={rejecting}
+          />
+        </Dialog>
         <CompanyPdfExport
           ref={pdfExportRef}
           company={company}

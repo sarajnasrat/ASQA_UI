@@ -727,6 +727,11 @@
     "requestDetails": "د تصدیق غوښتنې تفصیلات",
     "trackProgress": "د خپل تصدیق حالت او پرمختګ تعقیب کړئ",
     "dialog": {
+      "returnToPrintPage": "تېر پړاو ته بېرته ستانه شئ",
+      "rejectTitle": "د سکین شوې تصدیق پاڼې ردول",
+      "rejectNotice": "مهرباني وکړئ تشریح کړئ چې ولې دا سکین شوی سند ناسم دی. دا به د چاپ شوې برخې ته بېرته واستول شي.",
+      "rejectCertificate": "سند رد کړئ",
+      "rejectionReasonPlaceholder": "د ردولو دلیل ولیکئ",
       "updateTitle": "تصدیق تازه کړئ",
       "scanOfCertification": "د تصدیق سکین",
       "scanHelperText": "تر ۵ MB پورې PDF، JPG یا PNG فایل اپلوډ کړئ"

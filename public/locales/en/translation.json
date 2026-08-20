@@ -874,9 +874,14 @@
     "requestDetails": "Certification Request Details",
     "trackProgress": "Track the status and progress of your certification",
     "dialog": {
+      "rejectTitle": "Reject Scanned Certificate",
+      "rejectNotice": "Explain why this scanned document is incorrect. It will be returned to the Printed section.",
+      "rejectCertificate": "Reject Certificate",
+      "rejectionReasonPlaceholder": "Enter rejection reason",
       "updateTitle": "Update Certification",
       "scanOfCertification": "Scan Of Certification",
-      "scanHelperText": "Upload a PDF, JPG, or PNG file up to 5 MB"
+      "scanHelperText": "Upload a PDF, JPG, or PNG file up to 5 MB",
+      "returnToPrintPage": "Return to Previous Stage"
     },
     "placeholders": {
       "serialNumber": "Enter serial number"

@@ -89,9 +89,9 @@ const CertificationService = {
       params: { param },
     });
   },
-  updateCertificationStatus(id: number, status: string) {
+  updateCertificationStatus(id: number, status: string, reason?: string) {
   return httpClient.patch(`${CERTIFICATION_BASE}/${id}/status`, null, {
-    params: { status },
+    params: { status, ...(reason ? { reason } : {}) },
   });
   
 },

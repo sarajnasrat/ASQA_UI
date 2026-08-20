@@ -743,6 +743,11 @@
     "requestDetails": "جزییات سند درخواست شده",
     "trackProgress": "تعقیب سند  کیفی درخواست شده",
     "dialog": {
+      "returnToPrintPage": "به مرحله قبلی بازگردید",
+      "rejectTitle": "رد سند اسکن‌ شده",
+      "rejectNotice": "لطفاً توضیح دهید چرا این سند اسکن‌ شده نادرست است. این سند به بخش چاپ‌شده بازگردانده خواهد شد.",
+      "rejectCertificate": "رد سند",
+      "rejectionReasonPlaceholder": "دلیل رد را وارد کنید",
       "updateTitle": "به‌روزرسانی سند ",
       "scanOfCertification": "اسکن سند ",
       "scanHelperText": "فایل PDF، JPG یا PNG را تا ۵ مگابایت آپلود کنید"

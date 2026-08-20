@@ -78,7 +78,7 @@ export const CertificationUpdate: React.FC<CertificationUpdateProps> = ({
           certification.id,
           serialNumber.trim(),
           file,
-          file ? "SCANNED" : undefined,
+          undefined,
         ),
       showSuccess,
       showError,
@@ -98,6 +98,10 @@ export const CertificationUpdate: React.FC<CertificationUpdateProps> = ({
       onHide();
     }
   };
+
+  const isReplacement =
+    certification?.certificationStatus === "CERTIFICATION_ISSUED" &&
+    Boolean(certification?.certificateAttachment || certification?.certificateUrl);
 
   const footer = (
     <div className="flex justify-end gap-2">
@@ -128,6 +132,16 @@ export const CertificationUpdate: React.FC<CertificationUpdateProps> = ({
       draggable={false}
     >
       <div className="flex flex-col gap-4">
+        {isReplacement && (
+          <div className="rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+            <div className="font-semibold">
+              {t("certification.dialog.replacementTitle", { defaultValue: "Replace issued certificate" })}
+            </div>
+            <div className="mt-1">
+              {t("certification.dialog.replacementNotice", { defaultValue: "This upload will be sent for review. The current issued certificate remains official until the replacement is approved." })}
+            </div>
+          </div>
+        )}
         <div className="flex flex-col gap-2">
           <label htmlFor="serialNumber" className="font-medium">
             {t("certification.serialNumber")}
