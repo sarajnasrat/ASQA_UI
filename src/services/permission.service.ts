@@ -10,6 +10,9 @@ export const PermissionService = {
   getPaginatedPermissions(params:any) {
     return httpClient.get(`${USER_BASE}/paginated`, { params });
   },
+  searchPermissions(params:any) {
+    return httpClient.get(`${USER_BASE}/search`, { params });
+  },
   registerPermission(data:any) {
     return httpClient.post(`${USER_BASE}/create`, data);
   },

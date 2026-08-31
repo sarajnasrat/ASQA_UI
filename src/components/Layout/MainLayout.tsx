@@ -102,8 +102,10 @@ export const MainLayout = () => {
 
   const handleCloseUnauthorized = () => {
     setShowUnauthorized(false);
-    // Navigate back to previous page or dashboard
-    navigate(previousPath, { replace: true });
+    const returnPath = (location.state as { fromLogin?: boolean } | null)?.fromLogin
+      ? "/login"
+      : previousPath;
+    navigate(returnPath, { replace: true });
   };
 
   return (
@@ -140,13 +142,13 @@ export const MainLayout = () => {
                   </ProtectedRoute>
                 }
               />
-              <Route path="users/menu" element={<Menu />} />
+              <Route path="menu" element={<Menu />} />
               {/* <Route path="users/new" element={<UserRegistration />} /> */}
               <Route path="users/view/:id" element={<ViewUserDetails />} />
               <Route path="users/edit/:id" element={<EditUser />} />
               <Route path="users/role/:id" element={<ViewDetails />} />
-              <Route path="users/roles" element={<RoleList />} />
-              <Route path="users/permissions" element={<PermissionList />} />
+              <Route path="/roles" element={<RoleList />} />
+              <Route path="/permissions" element={<PermissionList />} />
               <Route path="inspection-users" element={<InspectionUserList />} />
               <Route path="inspection-users/new" element={<InspectionUserRegistration />} />
               <Route path="inspection-users/edit/:id" element={<InspectionUserEdit />} />

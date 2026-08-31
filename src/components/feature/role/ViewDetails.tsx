@@ -144,12 +144,12 @@ export const ViewDetails = () => {
     {
       label: String(t("role.title")),
       icon: "pi pi-shield",
-      url: "/users/roles",
+      url: "/roles",
     },
     {
       label: translatedRole(role) || String(t("role.breadcrumb.roleDetails")),
       icon: "pi pi-info-circle",
-      url: `/users/role/${id}`,
+      url: `/roles/${id}`,
     },
   ];
 
@@ -218,7 +218,7 @@ export const ViewDetails = () => {
                   label={String(t("role.buttons.backToRoles"))}
                   icon="pi pi-arrow-left"
                   className="bg-linear-to-r from-indigo-500 to-purple-600 border-none"
-                  onClick={() => navigate("/users/roles")}
+                  onClick={() => navigate("/roles")}
                 />
               </div>
             </Card>

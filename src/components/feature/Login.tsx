@@ -28,7 +28,22 @@ export const Login = () => {
       const userData: ILoginResponse = res.data.data;
 
       login(userData);
-      navigate("/dashboard");
+      const flattenMenus = (items: any[] = []): any[] =>
+        items.flatMap((item) => [item, ...flattenMenus(item.children)]);
+      const authorizedMenus = flattenMenus(userData.menus).filter(
+        (menu) => menu?.path && menu.path !== "/dashboard",
+      );
+      const dashboardMenu = flattenMenus(userData.menus).find(
+        (menu) => menu?.path === "/dashboard",
+      );
+
+      if (dashboardMenu) {
+        navigate("/dashboard");
+      } else if (authorizedMenus[0]?.path) {
+        navigate(authorizedMenus[0].path);
+      } else {
+        navigate("/unauthorized", { replace: true, state: { fromLogin: true } });
+      }
     } catch (err: any) {
       setError(err.response?.data?.message || t("login.invalidCredentials"));
     } finally {

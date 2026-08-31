@@ -101,7 +101,7 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
       ]);
 
       setPermissions(
-        (permissionsRes.data || []).map((permission: Permission) => ({
+        (permissionsRes.data || []).filter((permission: Permission) => permission.permissionName?.startsWith("VIEW_")).map((permission: Permission) => ({
           ...permission,
           displayLabel: t(
             `permissions.${permission.permissionName}`,

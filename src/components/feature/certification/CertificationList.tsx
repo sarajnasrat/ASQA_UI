@@ -46,6 +46,7 @@ export const CertificationList = ({
 
   const selectedStatus = status;
   const [filterType, setFilterType] = useState<string | null>(null);
+  const [filterScope, setFilterScope] = useState<"NATIONAL" | "INTERNATIONAL" | null>(null);
   const { hasPermission, withPermission } = useAuth();
 
   const getCertificates = async () => {
@@ -58,10 +59,12 @@ export const CertificationList = ({
             filterType,
             selectedStatus,
             params,
+            filterScope || undefined,
           )
         : await CertificationService.getPaginatedCertificationsByStatus(
             selectedStatus,
             params,
+            filterScope || undefined,
           );
 
       setCertifications(response.data.data);
@@ -75,7 +78,7 @@ export const CertificationList = ({
 
   useEffect(() => {
     getCertificates();
-  }, [first, rows, selectedStatus, filterType]);
+  }, [first, rows, selectedStatus, filterType, filterScope]);
 
   const certificationTypeOptions = [
     "STANDARD_MARK_CERTIFICATION",
@@ -89,6 +92,7 @@ export const CertificationList = ({
 
   const clearFilters = () => {
     setFilterType(null);
+    setFilterScope(null);
     setFirst(0);
   };
 
@@ -208,7 +212,25 @@ export const CertificationList = ({
           />
         </div>
 
-        {filterType && (
+        <div className="flex flex-col items-center gap-1">
+          <label htmlFor="certification-scope-filter" className="text-sm font-medium text-gray-700 text-center">
+            {t("certification.filterScopeLabel")}
+          </label>
+          <Dropdown
+            inputId="certification-scope-filter"
+            value={filterScope}
+            options={[
+              { label: t("certification.scopeOptions.NATIONAL"), value: "NATIONAL" },
+              { label: t("certification.scopeOptions.INTERNATIONAL"), value: "INTERNATIONAL" },
+            ]}
+            onChange={(e) => { setFilterScope(e.value); setFirst(0); }}
+            placeholder={t("certification.selectScope")}
+            className="w-full sm:w-64"
+            showClear
+          />
+        </div>
+
+        {(filterType || filterScope) && (
           <Button
             icon="pi pi-filter-slash"
             label={t("certification.clearFilters", "Clear filters")}
@@ -239,10 +261,12 @@ export const CertificationList = ({
                     filterType,
                     selectedStatus,
                     { page: 0, size: totalRecords, sort: "id,desc" },
+                    filterScope || undefined,
                   )
                 : await CertificationService.getPaginatedCertificationsByStatus(
                     selectedStatus,
                     { page: 0, size: totalRecords, sort: "id,desc" },
+                    filterScope || undefined,
                   );
 
             return res.data.data;
@@ -312,6 +336,14 @@ export const CertificationList = ({
       sortable: true,
       body: (rowData: any) =>
         t(`certification.statusOptions.${rowData.certificationStatus}`),
+    },
+    {
+      field: "certificationScope",
+      header: t("certification.scope"),
+      sortable: true,
+      body: (rowData: any) => rowData.certificationScope
+        ? t(`certification.scopeOptions.${rowData.certificationScope}`)
+        : t("common.notSpecified"),
     },
     {
       field: "needSuperVision",

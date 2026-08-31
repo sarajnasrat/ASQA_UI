@@ -136,6 +136,7 @@ export const EditMenu: React.FC<EditMenuProps> = ({
     currentPermissionId: string | number | null,
   ): DropdownOption[] =>
     (items || [])
+      .filter((item: any) => item.permissionName?.startsWith("VIEW_"))
       .map((item: any) => ({
         ...item,
         id: normalizeId(item.id) ?? item.id,

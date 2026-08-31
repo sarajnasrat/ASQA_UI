@@ -680,6 +680,8 @@
       "UNDER_SUPERVISION": "تصویب نهایی تائید نامه کیفی"
     },
     "statusOptions": {
+      "EXPIRED": "در حال انقضا",
+      "SUSPENDED": "معلق",
       "DRAFT": "اولیه",
       "CERTIFICATION_ISSUED": "سند صادر شد",
       "PRINTED": "چاپ شده",
@@ -688,8 +690,10 @@
     },
     "certificateAttachments": "تائید نامه صادر شده",
     "filterTypeLabel": "نوع تائید نامه",
+    "filterScopeLabel": "محدوده تائید نامه",
     "filterStatusLabel": "وضعیت تائید نامه",
     "selectType": "نوع تائید نامه را انتخاب کنید",
+    "selectScope": "محدوده تائید نامه را انتخاب کنید",
     "searchType": "جستجوی نوع تائید نامه",
     "selectStatus": "وضعیت را انتخاب کنید",
     "clearFilters": "پاک کردن فیلترها",
@@ -699,6 +703,8 @@
     "documents": "اسناد",
     "uploadscan": "آپلود سند نهایی اسکن شده",
     "certificationType": "نوع تائید نامه",
+    "scope": "محدوده تائید نامه",
+    "scopeOptions": { "NATIONAL": "ملی", "INTERNATIONAL": "بین‌المللی" },
     "certificateNumber": "شماره تائید نامه",
     "certificateInformation": "اطلاعات تائید نامه",
     "certificateIssued": "تائید نامه صادر شد",
@@ -785,7 +791,7 @@
       "noRecords": "هیچ سابقه‌ای از نظارت وجود ندارد",
       "requirement": "نیاز به نظارت",
       "required": "برای نظارت ضروری است",
-      "underSupervision": "تحت نظارت"
+      "underSupervision": "تکمیل نشده"
     },
     "printPage": {
       "pdfError": "در ایجاد PDF خطا رخ داد. لطفاً دوباره تلاش کنید.",
@@ -977,6 +983,7 @@
     "paymentCompletedNote": "پرداخت انجام شده است. از دکمه ویرایش برای صدور گواهی استفاده کنید.",
     "deleteConfirm": "آیا مطمئن هستید که می‌خواهید درخواست {{serial}} را حذف کنید؟",
     "updateStatus": "به‌روزرسانی وضعیت درخواست تائید نامه",
+    "confirmStatusUpdate": "آیا مطمئن هستید که می‌خواهید وضعیت درخواست را به‌روزرسانی کنید؟",
     "status": "وضعیت درخواست",
     "providestandard": "ارائه استاندارد",
     "setDeadline": "تعیین مهلت",
@@ -1119,7 +1126,7 @@
       "REJECTED": "رد شده",
       "CANCELLED": "لغو شده",
       "UNDER_REVIEW": "در حال بررسی",
-      "CONTRACT_PENDING": "قرارداد در انتظار",
+      "CONTRACT_PENDING": "مرحله امضا قرار داد طرفین",
       "INSPECTION_PAYMENT_PENDING": "پرداخت تفتیش در انتظار",
       "STANDARDS_REQUIRED": "اضافه نمودن استاندرد",
       "DEADLINE_REQUIRED": "مهلت مورد نیاز"
@@ -1222,6 +1229,7 @@
     "error": "خطا",
     "warning": "هشدار",
     "type": {
+      "CONTRACT": "قرارداد",
       "STANDARD": "معیار",
       "COMPANY": "شرکت",
       "CERTIFICATION": "تائید نامه",
@@ -2529,7 +2537,40 @@
     "VIEW_PARTNERORGANIZATION": "نمایش اداره های همکار",
     "VIEW_REQUEST": "نمایش درخواست",
     "VIEW_ORGANIZATIONACTIVITY": "نمایش فعالیت های اداره",
-    "VIEW_REPORTS": "نمایش گزارش ها"
+    "VIEW_REPORTS": "نمایش گزارش ها",
+    "ADD_COMPANYCLASSIFICATION": "افزودن طبقه‌بندی شرکت",
+    "UPDATE_COMPANYCLASSIFICATION": "ویرایش طبقه‌بندی شرکت",
+    "DELETE_COMPANYCLASSIFICATION": "حذف طبقه‌بندی شرکت",
+    "VIEW_COMPANYCLASSIFICATION": "نمایش طبقه‌بندی شرکت",
+    "ADD_SUPERVISIONDURATION": "افزودن مدت نظارت",
+    "UPDATE_SUPERVISIONDURATION": "ویرایش مدت نظارت",
+    "DELETE_SUPERVISIONDURATION": "حذف مدت نظارت",
+    "VIEW_SUPERVISIONDURATION": "نمایش مدت نظارت",
+    "ADD_CERTIFICATIONSUPERVISION": "افزودن نظارت تصدیق‌نامه",
+    "UPDATE_CERTIFICATIONSUPERVISION": "ویرایش نظارت تصدیق‌نامه",
+    "DELETE_CERTIFICATIONSUPERVISION": "حذف نظارت تصدیق‌نامه",
+    "VIEW_CERTIFICATIONSUPERVISION": "نمایش نظارت تصدیق‌نامه",
+    "ADD_CERTIFICATIONSTATUSEVENT": "افزودن رویداد وضعیت تصدیق‌نامه",
+    "UPDATE_CERTIFICATIONSTATUSEVENT": "ویرایش رویداد وضعیت تصدیق‌نامه",
+    "DELETE_CERTIFICATIONSTATUSEVENT": "حذف رویداد وضعیت تصدیق‌نامه",
+    "VIEW_CERTIFICATIONSTATUSEVENT": "نمایش رویداد وضعیت تصدیق‌نامه",
+    "ADD_CERTIFICATIONLIFECYCLEEVENT": "افزودن رویداد چرخه حیات تصدیق‌نامه",
+    "UPDATE_CERTIFICATIONLIFECYCLEEVENT": "ویرایش رویداد چرخه حیات تصدیق‌نامه",
+    "DELETE_CERTIFICATIONLIFECYCLEEVENT": "حذف رویداد چرخه حیات تصدیق‌نامه",
+    "VIEW_CERTIFICATIONLIFECYCLEEVENT": "نمایش رویداد چرخه حیات تصدیق‌نامه",
+    "ADD_CERTIFICATIONCONTRACT": "افزودن قرارداد تصدیق‌نامه",
+    "UPDATE_CERTIFICATIONCONTRACT": "ویرایش قرارداد تصدیق‌نامه",
+    "DELETE_CERTIFICATIONCONTRACT": "حذف قرارداد تصدیق‌نامه",
+    "VIEW_CERTIFICATIONCONTRACT": "نمایش قرارداد تصدیق‌نامه"
+  },
+  "unauthorized": { "accessDenied": "دسترسی رد شد", "title": "اوه! این بخش محدود است", "message": "برای مشاهده این محتوا باید وارد سیستم شده و مجوز لازم را داشته باشید.", "goBack": "بازگشت", "getHelp": "دریافت کمک" },
+  "permissionGroups": {
+    "COMPANYCLASSIFICATION": "طبقه‌بندی شرکت",
+    "SUPERVISIONDURATION": "مدت نظارت",
+    "CERTIFICATIONSUPERVISION": "نظارت تصدیق‌نامه",
+    "CERTIFICATIONSTATUSEVENT": "رویدادهای وضعیت تصدیق‌نامه",
+    "CERTIFICATIONLIFECYCLEEVENT": "رویدادهای چرخه حیات تصدیق‌نامه",
+    "CERTIFICATIONCONTRACT": "قراردادهای تصدیق‌نامه", "CONTACTUS": "تماس با ما", "ORGANIZATIONACTIVITY": "فعالیت سازمان", "LOCATION": "موقعیت", "COMMITEE": "کمیته‌ها", "PAYMENT": "پرداخت‌ها", "CERTIFICATIONREQUEST": "درخواست‌های تصدیق‌نامه", "PERMISSION": "صلاحیت‌ها", "PARTNERORGANIZATION": "سازمان‌های همکار", "MENU": "منوها", "ROLE": "نقش‌ها", "STANDARD": "استانداردها", "REPORTS": "گزارش‌ها", "USER": "کاربران", "REQUEST": "درخواست‌ها", "ABOUTUS": "درباره ما", "AUDITLOG": "گزارش‌های بازرسی", "COMMENT": "نظرات", "ATTACHMENT": "ضمیمه‌ها", "COMPANY": "شرکت‌ها", "CATEGORY": "دسته‌بندی‌ها", "ORGANIZATIONINFO": "اطلاعات سازمان", "NOTIFICATION": "اطلاعیه‌ها", "COMMITEEASSIGNMENT": "تخصیص‌های کمیته", "AUDITLOGDETAIL": "جزئیات گزارش بازرسی", "DISTRICTTRANSLATION": "ترجمه‌های ولسوالی", "ORGANIZATION": "سازمان‌ها", "COMPANYCONTACTPERSON": "اشخاص تماس شرکت", "LANGUAGE": "زبان‌ها", "DISTRICT": "ولسوالی‌ها", "PROVINCETRANSLATION": "ترجمه‌های ولایت", "COUNTRY": "کشورها", "MULTILANGUAGE": "چندزبانه", "INTERNATIONALPARTY": "طرف‌های بین‌المللی", "PROVINCE": "ولایت‌ها", "ADDRESS": "آدرس‌ها", "ZONE": "زون‌ها", "CERTIFICATIONREQUESTSTATUSHISTORY": "تاریخچه وضعیت درخواست تصدیق‌نامه", "COMMITEEMEMBER": "اعضای کمیته", "COMMITEEREPORT": "گزارش‌های کمیته", "COUNTRYTRANSLATION": "ترجمه‌های کشور"
   },
   "permission": {
     "title": "مدیریت صلاحیت‌ها",
@@ -2690,6 +2731,7 @@
   },
   "menu": {
     "management": "مدیریت منو",
+    "searchPlaceholder": "جستجوی منوها...",
     "total": "مجموع",
     "create": "ایجاد منو",
     "createTitle": "ایجاد منوی جدید",

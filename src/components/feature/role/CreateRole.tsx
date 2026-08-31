@@ -7,6 +7,7 @@ import { Checkbox } from "primereact/checkbox";
 import { useForm, Controller } from "react-hook-form";
 import RoleService from "../../../services/role.service";
 import PermissionService from "../../../services/permission.service";
+import { PermissionSelector, hiddenPermissionGroups } from "./PermissionSelector";
 import { useAppToast } from "../../../hooks/useToast";
 
 interface CreateRoleProps {
@@ -121,6 +122,9 @@ export const CreateRole: React.FC<CreateRoleProps> = ({
   const filteredPermissions = permissions.filter((p) =>
     p.permissionName?.toLowerCase().includes(searchTerm.toLowerCase()),
   );
+  const visiblePermissionCount = permissions.filter((p) =>
+    !hiddenPermissionGroups.has(p.permissionName?.replace(/^(VIEW|ADD|UPDATE|DELETE)_/, "")),
+  ).length;
 
   return (
     <Dialog
@@ -207,13 +211,13 @@ export const CreateRole: React.FC<CreateRoleProps> = ({
               {String(t("role.fields.assignPermissions"))}
             </label>
             <span className="text-xs bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full font-medium">
-              {selectedPermissions.length} {String(t("role.labels.of"))}{" "}
-              {permissions.length} {String(t("role.labels.selected"))}
+              {selectedPermissions.filter((p) => !hiddenPermissionGroups.has(p.permissionName?.replace(/^(VIEW|ADD|UPDATE|DELETE)_/, ""))).length} {String(t("role.labels.of"))}{" "}
+              {visiblePermissionCount} {String(t("role.labels.selected"))}
             </span>
           </div>
 
           {/* Search and Actions */}
-          <div className="flex flex-col sm:flex-row gap-3">
+          <div className="hidden flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
               <InputText
                 value={searchTerm}
@@ -240,9 +244,10 @@ export const CreateRole: React.FC<CreateRoleProps> = ({
             </div>
           </div>
 
+          <PermissionSelector permissions={permissions} selectedIds={selectedPermissions.map((p) => String(p.id))} searchTerm={searchTerm} onSearchChange={setSearchTerm} onToggle={togglePermission} onSelectAll={(items) => setSelectedPermissions((prev) => [...prev, ...items.filter((item) => !prev.some((p) => p.id === item.id))])} onClearAll={(items) => setSelectedPermissions(items ? selectedPermissions.filter((p) => !items.some((item) => item.id === p.id)) : [])} />
           {/* Permissions Grid - Responsive columns */}
           <div
-            className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-h-96 overflow-y-auto p-4 bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl shadow-inner"
+            className="hidden grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-h-96 overflow-y-auto p-4 bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl shadow-inner"
             style={{ scrollbarWidth: "thin" }}
           >
             {filteredPermissions.length > 0 ? (
@@ -316,8 +321,8 @@ export const CreateRole: React.FC<CreateRoleProps> = ({
             <div className="text-xs text-gray-500 flex flex-wrap items-center gap-4">
               <span>
                 <i className="pi pi-filter mr-1"></i>
-                {String(t("role.labels.showing"))} {filteredPermissions.length}{" "}
-                {String(t("role.labels.of"))} {permissions.length}
+                {selectedPermissions.filter((p) => !hiddenPermissionGroups.has(p.permissionName?.replace(/^(VIEW|ADD|UPDATE|DELETE)_/, ""))).length}{" "}
+                {String(t("role.labels.of"))} {visiblePermissionCount} {String(t("role.labels.selected"))}
               </span>
               <span>
                 <i className="pi pi-check-circle mr-1 text-indigo-500"></i>
@@ -332,36 +337,22 @@ export const CreateRole: React.FC<CreateRoleProps> = ({
           <Button
             label={String(t("common.cancel"))}
             icon="pi pi-times"
-            text
             raised
             severity="secondary"
             type="button"
+          
             onClick={onClose}
-            className="
-              px-6 py-3 text-gray-700 bg-gray-100 hover:bg-gray-200 
-              rounded-lg transition-all font-medium
-              flex items-center justify-center gap-2
-              border border-transparent
-              hover:shadow-md
-            "
+            className="px-6 py-3 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all font-medium flex items-center justify-center gap-2 border border-transparent hover:shadow-md"
           />
           <Button
             label={String(t("role.buttons.save"))}
             icon="pi pi-save"
             severity="info"
             raised
-            text
             type="submit"
             loading={loading}
             disabled={!selectedPermissions.length}
-            className="
-              px-6 py-3 bg-linear-to-r from-indigo-500 to-indigo-600 
-              hover:from-indigo-600 hover:to-indigo-700 
-              text-white rounded-lg transition-all font-medium 
-              shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed
-              flex items-center justify-center gap-2
-              border border-transparent
-            "
+            className="px-6 py-3 bg-linear-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white rounded-lg transition-all font-medium shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 border border-transparent"
           />
         </div>
       </form>

@@ -1,6 +1,7 @@
 // components/UnauthorizedDialog.tsx
 import { ShieldOff, ArrowLeft, HelpCircle, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 interface UnauthorizedDialogProps {
   isOpen: boolean;
@@ -9,6 +10,7 @@ interface UnauthorizedDialogProps {
 
 export const UnauthorizedDialog: React.FC<UnauthorizedDialogProps> = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   if (!isOpen) return null;
 
@@ -33,15 +35,15 @@ export const UnauthorizedDialog: React.FC<UnauthorizedDialogProps> = ({ isOpen, 
         {/* Status Code */}
         <div className="mb-3">
           <h1 className="text-5xl font-bold text-slate-800">403</h1>
-          <p className="text-slate-500 mt-1">Access Denied</p>
+          <p className="text-slate-500 mt-1">{t('unauthorized.accessDenied')}</p>
         </div>
 
         {/* Friendly Message */}
         <h2 className="text-lg font-semibold text-slate-700 mb-2">
-          Oops! This area is off-limits
+          {t('unauthorized.title')}
         </h2>
         <p className="text-sm text-slate-500 mb-5 leading-relaxed">
-          You need to be logged in with the right permissions to view this content.
+          {t('unauthorized.message')}
         </p>
 
         {/* Action Buttons */}
@@ -51,7 +53,7 @@ export const UnauthorizedDialog: React.FC<UnauthorizedDialogProps> = ({ isOpen, 
             className="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-colors font-medium text-sm"
           >
             <ArrowLeft className="w-4 h-4" />
-            Go Back
+            {t('unauthorized.goBack')}
           </button>
 
           <button
@@ -61,7 +63,7 @@ export const UnauthorizedDialog: React.FC<UnauthorizedDialogProps> = ({ isOpen, 
             className="flex items-center justify-center gap-2 w-full px-4 py-2.5 border border-slate-300 text-slate-600 rounded-lg hover:bg-slate-50 transition-colors font-medium text-sm"
           >
             <HelpCircle className="w-4 h-4" />
-            Get Help
+            {t('unauthorized.getHelp')}
           </button>
         </div>
       </div>

@@ -12,6 +12,7 @@ import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
 import { DynamicTable } from "../../common/DynamicTable";
 import { CreatePermission } from "./CreatePermission";
 import { useAuth } from "../../../context/AuthContext";
+import { InputText } from "primereact/inputtext";
 
 export const PermissionList = () => {
   const { t } = useTranslation();
@@ -23,6 +24,8 @@ export const PermissionList = () => {
   const [first, setFirst] = React.useState(0);
   const [rows, setRows] = React.useState(10);
   const [totalRecords, setTotalRecords] = React.useState(0);
+  const [searchTerm, setSearchTerm] = React.useState("");
+  const [submittedSearchTerm, setSubmittedSearchTerm] = React.useState("");
   const [globalFilter] = React.useState("");
   const [sortField] = React.useState("id");
   const [sortOrder] = React.useState(-1);
@@ -31,11 +34,15 @@ export const PermissionList = () => {
   const getAllPermissions = async () => {
     try {
       setLoading(true);
-      const res = await PermissionService.getPaginatedPermissions({
+      const params = {
         page: first / rows,
         size: rows,
         sort: "id,desc",
-      });
+        keyword: submittedSearchTerm.trim(),
+      };
+      const res = submittedSearchTerm.trim()
+        ? await PermissionService.searchPermissions(params)
+        : await PermissionService.getPaginatedPermissions(params);
       setPermissions(res.data.data);
       setTotalRecords(res.data.totalElements);
     } catch (error) {
@@ -49,9 +56,36 @@ export const PermissionList = () => {
     }
   };
 
+  const runPermissionSearch = async () => {
+    const entered = searchTerm.trim().toLowerCase();
+    if (!entered) {
+      setSubmittedSearchTerm("");
+      setFirst(0);
+      return;
+    }
+
+    let candidates = permissions;
+    if (!candidates.some((permission) =>
+      String(t(`permissions.${permission.permissionName}`, permission.permissionName)).toLowerCase().includes(entered),
+    )) {
+      try {
+        const all = await PermissionService.getAllPermissions();
+        candidates = all.data || [];
+      } catch {
+        candidates = permissions;
+      }
+    }
+
+    const translatedMatch = candidates.find((permission: any) =>
+      String(t(`permissions.${permission.permissionName}`, permission.permissionName)).toLowerCase().includes(entered),
+    );
+    setSubmittedSearchTerm(translatedMatch?.permissionName || searchTerm.trim());
+    setFirst(0);
+  };
+
   useEffect(() => {
     getAllPermissions();
-  }, [first, rows, globalFilter, sortField, sortOrder]);
+  }, [first, rows, globalFilter, sortField, sortOrder, submittedSearchTerm]);
 
   // Action Menu
   const actionTemplate = (rowData: any) => {
@@ -91,6 +125,7 @@ export const PermissionList = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+          <div className="flex w-full gap-2 sm:w-auto"><InputText value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") void runPermissionSearch(); }} placeholder={String(t("permission.placeholders.searchPermissions", "Search permissions..."))} className="w-full sm:w-64" /><Button type="button" icon="pi pi-search" label={String(t("common.search", "Search"))} onClick={() => void runPermissionSearch()} /></div>
           {hasPermission("ADD_PERMISSION") && (
             <Button
               icon="pi pi-plus"
@@ -159,7 +194,7 @@ export const PermissionList = () => {
 
   const breadcrumbItems = [
     { label: String(t("nav.home")), url: "/" },
-    { label: String(t("permission.title")), url: "/users/permissions" },
+    { label: String(t("permission.title")), url: "/permissions" },
   ];
 
   return (

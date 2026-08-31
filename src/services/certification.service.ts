@@ -70,18 +70,19 @@ const CertificationService = {
   // =============================
   // Get PAGINATED Certifications By Status
   // =============================
-  getPaginatedCertificationsByStatus(status: string, params: any) {
+  getPaginatedCertificationsByStatus(status: string, params: any, certificationScope?: "NATIONAL" | "INTERNATIONAL") {
     return httpClient.get(`${CERTIFICATION_BASE}/status/${status}`, {
-      params,
+      params: { ...params, ...(certificationScope ? { certificationScope } : {}) },
     });
   },
   getPaginatedCertificationsByType(
     certificationType: string,
     status: string | undefined,
     params: any,
+    certificationScope?: "NATIONAL" | "INTERNATIONAL",
   ) {
     return httpClient.get(`${CERTIFICATION_BASE}/type/${certificationType}`, {
-      params: { ...params, ...(status ? { status } : {}) },
+      params: { ...params, ...(status ? { status } : {}), ...(certificationScope ? { certificationScope } : {}) },
     });
   },
   verfyCertification(param: any) {

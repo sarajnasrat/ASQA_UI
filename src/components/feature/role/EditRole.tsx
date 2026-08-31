@@ -3,6 +3,7 @@ import { Translation, useTranslation } from "react-i18next";
 import { useAppToast } from "../../../hooks/useToast";
 import { RoleService } from "../../../services/role.service";
 import { PermissionService } from "../../../services/permission.service";
+import { PermissionSelector, hiddenPermissionGroups } from "./PermissionSelector";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { Checkbox } from "primereact/checkbox";
@@ -125,6 +126,9 @@ export const EditRole: React.FC<EditRoleProps> = ({
   const filteredPermissions = permissions.filter((p) =>
     p.permissionName?.toLowerCase().includes(searchTerm.toLowerCase()),
   );
+  const visiblePermissionCount = permissions.filter((p) =>
+    !hiddenPermissionGroups.has(p.permissionName?.replace(/^(VIEW|ADD|UPDATE|DELETE)_/, "")),
+  ).length;
   const translatedRole = (role: any) => (role ? t(`role.${role?.name}`) : "");
   return (
     <Dialog
@@ -202,13 +206,12 @@ export const EditRole: React.FC<EditRoleProps> = ({
               {String(t("role.fields.assignPermissions"))}
             </label>
             <span className="text-xs bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full font-medium">
-              {selectedPermissions.length} {String(t("role.labels.of"))}{" "}
-              {permissions.length} {String(t("role.labels.selected"))}
+              {selectedPermissions.filter((id) => { const p = permissions.find((item) => String(item.id) === id); return p && !hiddenPermissionGroups.has(p.permissionName?.replace(/^(VIEW|ADD|UPDATE|DELETE)_/, "")); }).length} {String(t("role.labels.of"))}{" "}
+              {visiblePermissionCount} {String(t("role.labels.selected"))}
             </span>
           </div>
 
-          {/* Search and Actions */}
-          <div className="flex flex-col sm:flex-row gap-3">
+          <div className="hidden flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
               <InputText
                 value={searchTerm}
@@ -235,9 +238,10 @@ export const EditRole: React.FC<EditRoleProps> = ({
             </div>
           </div>
 
+          <PermissionSelector permissions={permissions} selectedIds={selectedPermissions} searchTerm={searchTerm} onSearchChange={setSearchTerm} onToggle={(permission) => togglePermission(String(permission.id))} onSelectAll={(items) => setSelectedPermissions((prev) => [...new Set([...prev, ...items.map((p) => String(p.id))])])} onClearAll={(items) => setSelectedPermissions(items ? selectedPermissions.filter((id) => !items.some((item) => String(item.id) === id)) : [])} />
           {/* Permissions Grid - Responsive columns */}
           <div
-            className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-h-96 overflow-y-auto p-4 bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl shadow-inner"
+            className="hidden grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-h-96 overflow-y-auto p-4 bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl shadow-inner"
             style={{ scrollbarWidth: "thin" }}
           >
             {filteredPermissions.length > 0 ? (
@@ -309,8 +313,8 @@ export const EditRole: React.FC<EditRoleProps> = ({
             <div className="text-xs text-gray-500 flex flex-wrap items-center gap-4">
               <span>
                 <i className="pi pi-filter mr-1"></i>
-                {String(t("role.labels.showing"))} {filteredPermissions.length}{" "}
-                {String(t("role.labels.of"))} {permissions.length}
+                {selectedPermissions.filter((id) => { const p = permissions.find((item) => String(item.id) === id); return p && !hiddenPermissionGroups.has(p.permissionName?.replace(/^(VIEW|ADD|UPDATE|DELETE)_/, "")); }).length}{" "}
+                {String(t("role.labels.of"))} {visiblePermissionCount} {String(t("role.labels.selected"))}
               </span>
               <span>
                 <i className="pi pi-check-circle mr-1 text-indigo-500"></i>
@@ -326,7 +330,6 @@ export const EditRole: React.FC<EditRoleProps> = ({
             label={String(t("common.cancel"))}
             severity="secondary"
             raised
-            text
             onClick={onClose}
             className="px-6 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors font-medium"
             icon="pi pi-times"
@@ -334,7 +337,6 @@ export const EditRole: React.FC<EditRoleProps> = ({
           <Button
             label={String(t("role.buttons.save"))}
             severity="info"
-            text
             raised
             icon="pi pi-save"
             onClick={handleSubmit}

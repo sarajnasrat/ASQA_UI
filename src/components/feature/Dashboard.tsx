@@ -25,6 +25,7 @@ import {
 } from "chart.js";
 import { Bar, Pie, Line } from "react-chartjs-2";
 import { Skeleton } from "primereact/skeleton";
+import "./Dashboard.css";
 
 // Register ChartJS components
 ChartJS.register(
@@ -110,6 +111,8 @@ export const Dashboard: React.FC = () => {
     "REJECTED",
     "AUTHORITY_DECISION",
     "SUBMITTED",
+    "CONTRACT_PENDING",
+    "INSPECTION_PAYMENT_PENDING",
   ];
   const [dashboardData, setDashboardData] =
     React.useState<DashboardData | null>(null);
@@ -231,7 +234,10 @@ export const Dashboard: React.FC = () => {
 
     return {
       labels: requestChartStatuses.map((status) =>
-        t(`certificationRequest.statusOptions.${status}`, status),
+        t(
+          `dashboard.status.${status}`,
+          t(`certificationRequest.statusOptions.${status}`, status.replaceAll("_", " ")),
+        ),
       ),
       datasets: [
         {
@@ -501,11 +507,17 @@ export const Dashboard: React.FC = () => {
     },
   ];
 
-  const requestStatusCards = Object.entries(dashboardData.requestStatusCounts).map(
+  const requestStatusCards = Object.entries(dashboardData.requestStatusCounts).filter(
+    ([status]) =>
+      status !== "CONTRACT_PENDING" && status !== "INSPECTION_PAYMENT_PENDING",
+  ).map(
     ([status, value]) => ({
       status,
       value,
-      label: t(`certificationRequest.statusOptions.dashboard.${status}`, status),
+      label: t(
+        `certificationRequest.statusOptions.dashboard.${status}`,
+        t(`certificationRequest.statusOptions.${status}`, status.replaceAll("_", " ")),
+      ),
     }),
   );
 
@@ -514,7 +526,10 @@ export const Dashboard: React.FC = () => {
   ).map(([status, value]) => ({
       status,
       value,
-      label: t(`certification.statusOptions.${status}`, status),
+      label: t(
+        `certification.statusOptions.${status}`,
+        status.replaceAll("_", " "),
+      ),
     }));
 
   const companyStatsCards: StatCard[] = [
@@ -559,13 +574,12 @@ export const Dashboard: React.FC = () => {
             <h2 className="text-sm font-semibold text-blue-700">{t("dashboard.cards.certificationRequests")}</h2>
           </div>
           {requestStatusCards.map(({ status, value, label }) => (
-            <div key={`request-${status}`} className="group relative min-h-[100px] overflow-hidden rounded-2xl bg-white p-3 shadow-[0_4px_18px_rgba(30,64,175,0.07)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(30,64,175,0.14)]">
-              <div className="absolute -end-7 -top-7 h-20 w-20 rounded-full bg-blue-100/50 transition-transform duration-300 group-hover:scale-150" />
-              <div className="relative mb-3 flex items-start justify-between gap-2">
-                <p className="max-w-[75%] truncate pt-1 text-xs font-semibold uppercase tracking-wide text-slate-500" title={label}>{label}</p>
-                <div className="rounded-xl bg-blue-100/90 p-2.5 shadow-sm transition-all duration-300 group-hover:bg-blue-600 group-hover:shadow-md"><FileCheck className="h-5 w-5 text-blue-600 transition-colors group-hover:text-white" /></div>
+            <div key={`request-${status}`} className="dash-card dash-card-blue group">
+              <div className="dash-card-orb" />
+              <div className="dash-card-head"><p title={label}>{label}</p>
+                <div className="dash-card-icon"><FileCheck className="h-5 w-5" /></div>
               </div>
-              <p className="relative text-xl font-bold tracking-tight text-slate-800">{value.toLocaleString()}</p>
+              <p className="dash-card-value">{value.toLocaleString()}</p>
             </div>
           ))}
           <div className="col-span-full mt-2 flex items-center gap-2 border-b border-emerald-100 pb-2">
@@ -573,13 +587,12 @@ export const Dashboard: React.FC = () => {
             <h2 className="text-sm font-semibold text-emerald-700">{t("dashboard.cards.certifications")}</h2>
           </div>
           {certificationStatusCards.map(({ status, value, label }) => (
-            <div key={`certification-${status}`} className="group relative min-h-[100px] overflow-hidden rounded-2xl bg-white p-3 shadow-[0_4px_18px_rgba(5,150,105,0.07)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(5,150,105,0.14)]">
-              <div className="absolute -end-7 -top-7 h-20 w-20 rounded-full bg-emerald-100/50 transition-transform duration-300 group-hover:scale-150" />
-              <div className="relative mb-3 flex items-start justify-between gap-2">
-                <p className="max-w-[75%] truncate pt-1 text-xs font-semibold uppercase tracking-wide text-slate-500" title={label}>{label}</p>
-                <div className="rounded-xl bg-emerald-100/90 p-2.5 shadow-sm transition-all duration-300 group-hover:bg-emerald-600 group-hover:shadow-md"><Award className="h-5 w-5 text-emerald-600 transition-colors group-hover:text-white" /></div>
+            <div key={`certification-${status}`} className="dash-card dash-card-green group">
+              <div className="dash-card-orb" />
+              <div className="dash-card-head"><p title={label}>{label}</p>
+                <div className="dash-card-icon"><Award className="h-5 w-5" /></div>
               </div>
-              <p className="relative text-xl font-bold tracking-tight text-slate-800">{value.toLocaleString()}</p>
+              <p className="dash-card-value">{value.toLocaleString()}</p>
             </div>
           ))}
           <div className="col-span-full mt-2 flex items-center gap-2 border-b border-purple-100 pb-2">
@@ -587,13 +600,12 @@ export const Dashboard: React.FC = () => {
             <h2 className="text-sm font-semibold text-purple-700">{t("dashboard.cards.totalCompanies")}</h2>
           </div>
           {companyStatsCards.map((stat, index) => (
-            <div key={`company-${index}`} className="group relative min-h-[100px] overflow-hidden rounded-2xl bg-white p-3 shadow-[0_4px_18px_rgba(124,58,237,0.07)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(124,58,237,0.14)]">
-              <div className="absolute -end-7 -top-7 h-20 w-20 rounded-full bg-purple-100/50 transition-transform duration-300 group-hover:scale-150" />
-              <div className="relative mb-3 flex items-start justify-between gap-2">
-                <p className="max-w-[75%] truncate pt-1 text-xs font-semibold uppercase tracking-wide text-slate-500">{stat.title}</p>
-                <div className={`rounded-xl p-2.5 shadow-sm transition-all duration-300 ${stat.bgColor} group-hover:bg-purple-600 group-hover:shadow-md`}><stat.icon className={`h-5 w-5 ${stat.color} transition-colors group-hover:text-white`} /></div>
+            <div key={`company-${index}`} className="dash-card dash-card-purple group">
+              <div className="dash-card-orb" />
+              <div className="dash-card-head"><p>{stat.title}</p>
+                <div className="dash-card-icon"><stat.icon className="h-5 w-5" /></div>
               </div>
-              <p className="relative text-xl font-bold tracking-tight text-slate-800">{stat.value.toLocaleString()}</p>
+              <p className="dash-card-value">{stat.value.toLocaleString()}</p>
             </div>
           ))}
         </div>

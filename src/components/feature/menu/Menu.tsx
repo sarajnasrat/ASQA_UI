@@ -12,6 +12,7 @@ import { CreateMenu } from "./CreateMenu";
 import { useAuth } from "../../../context/AuthContext";
 import { useTranslation } from "react-i18next";
 import { EditMenu } from "./EditMenu";
+import { InputText } from "primereact/inputtext";
 
 export const Menu = () => {
   const { t, i18n } = useTranslation();
@@ -27,6 +28,8 @@ export const Menu = () => {
   const [first, setFirst] = useState(0);
   const [rows, setRows] = useState(10);
   const [totalRecords, setTotalRecords] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [submittedSearchTerm, setSubmittedSearchTerm] = useState("");
 
   const { toast, showToast } = useAppToast();
 
@@ -43,15 +46,19 @@ export const Menu = () => {
 
   const labelTemplate = (rowData: any) => getMenuLabel(rowData);
 
-  const getAllMenus = async () => {
+  const getAllMenus = async (keyword = submittedSearchTerm, page = first / rows) => {
     try {
       setLoading(true);
 
-      const response = await MenuService.getPaginatedMenus({
-        page: first / rows,
+      const params = {
+        page,
         size: rows,
         sort: "id,desc",
-      });
+        keyword: keyword.trim(),
+      };
+      const response = keyword.trim()
+        ? await MenuService.searchMenus(params)
+        : await MenuService.getPaginatedMenus(params);
 
       setMenuItems(response.data.data);
       setTotalRecords(response.data.totalElements);
@@ -62,9 +69,7 @@ export const Menu = () => {
     }
   };
 
-  useEffect(() => {
-    getAllMenus();
-  }, [rows, first]);
+  useEffect(() => { getAllMenus(); }, [rows, first, submittedSearchTerm]);
 
   const handleDelete = async (id: any) => {
     try {
@@ -147,7 +152,7 @@ export const Menu = () => {
   };
 
   const header = () => (
-    <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-4 px-2">
+      <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-4 px-2">
       <div className="flex items-center gap-3">
         <h2 className="text-2xl font-bold bg-linear-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
           {t("menu.management")}
@@ -159,6 +164,7 @@ export const Menu = () => {
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+        <div className="flex w-full gap-2 sm:w-auto"><InputText value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") { setSubmittedSearchTerm(searchTerm.trim()); setFirst(0); } }} placeholder={String(t("menu.searchPlaceholder"))} className="w-full sm:w-64" /><Button type="button" icon="pi pi-search" label={String(t("common.search", "Search"))} onClick={() => { setSubmittedSearchTerm(searchTerm.trim()); setFirst(0); }} /></div>
         {hasPermission("ADD_MENU") && (
           <Button
             icon="pi pi-plus"

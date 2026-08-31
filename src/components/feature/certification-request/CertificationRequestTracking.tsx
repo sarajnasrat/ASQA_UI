@@ -16,6 +16,7 @@ type CertificationRequestRow = {
   serialNumber?: string;
   trackingNumber?: string;
   requestType?: string;
+  certificationScope?: "NATIONAL" | "INTERNATIONAL";
   requestStatus?: string;
   createdDate?: string;
   company?: {
@@ -75,6 +76,15 @@ export const CertificationRequestTracking = () => {
       default:
         return "secondary";
     }
+  };
+
+  const openRequestDetails = (row: CertificationRequestRow) => {
+    const detailsPath =
+      row.certificationScope === "INTERNATIONAL"
+        ? "/international-certification-request/view"
+        : "/certification-request/view";
+
+    navigate(`${detailsPath}/${row.id}`);
   };
 
   const updateUrl = (nextTracking: string, nextCompanyName: string) => {
@@ -206,7 +216,7 @@ export const CertificationRequestTracking = () => {
             <Button
               icon="pi pi-eye"
               label={t("common.view")}
-              onClick={() => navigate(`/certification-request/view/${row.id}`)}
+              onClick={() => openRequestDetails(row)}
               size="small"
             />
           </div>

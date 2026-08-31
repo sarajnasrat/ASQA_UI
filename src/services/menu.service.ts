@@ -10,6 +10,9 @@ export const MenuService = {
   getPaginatedMenus(params:any) {
     return httpClient.get(`${USER_BASE}/paginated-menus`, { params });
   },
+  searchMenus(params:any) {
+    return httpClient.get(`${USER_BASE}/search`, { params });
+  },
   registerMenu(data:any) {
     return httpClient.post(`${USER_BASE}/create`, data);
   },
