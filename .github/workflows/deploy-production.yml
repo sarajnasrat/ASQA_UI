@@ -58,9 +58,9 @@ jobs:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
         run: |
-          ssh -i "$HOME/.ssh/asqamis_deploy" -o IdentitiesOnly=yes "$DEPLOY_USER@$DEPLOY_HOST" \
+          ssh -p 2267 -i "$HOME/.ssh/asqamis_deploy" -o IdentitiesOnly=yes "$DEPLOY_USER@$DEPLOY_HOST" \
             'mkdir -p /home/asqa/asqamis/frontend-dist'
-          rsync -az --delete -e "ssh -i $HOME/.ssh/asqamis_deploy -o IdentitiesOnly=yes" \
+          rsync -az --delete -e "ssh -p 2267 -i $HOME/.ssh/asqamis_deploy -o IdentitiesOnly=yes" \
             dist/ "$DEPLOY_USER@$DEPLOY_HOST:/home/asqa/asqamis/frontend-dist/"
-          ssh -i "$HOME/.ssh/asqamis_deploy" -o IdentitiesOnly=yes "$DEPLOY_USER@$DEPLOY_HOST" \
+          ssh -p 2267 -i "$HOME/.ssh/asqamis_deploy" -o IdentitiesOnly=yes "$DEPLOY_USER@$DEPLOY_HOST" \
             'cd /home/asqa/asqamis && docker compose up -d --no-deps gateway'
