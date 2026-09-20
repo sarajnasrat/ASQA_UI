@@ -1,4 +1,5 @@
 // pages/Companies.tsx
+import { toApiUrl } from "../../../../config/api";
 import { useState, useEffect } from 'react';
 import { Search, MapPin, Building2, ChevronLeft, ChevronRight, Ban } from 'lucide-react';
 import { useAppToast } from '../../../../hooks/useToast';
@@ -34,8 +35,6 @@ interface Company {
   createdAt?: string;
   updatedAt?: string;
 }
-
-const API_BASE_URL = 'http://localhost:8080';
 
 const Companies = ({ blacklisted = false }: { blacklisted?: boolean }) => {
   const { t, i18n } = useTranslation();
@@ -172,15 +171,15 @@ const Companies = ({ blacklisted = false }: { blacklisted?: boolean }) => {
             <div className="relative max-w-2xl mx-auto pb-20">
               <div className="absolute inset-0 bg-linear-to-r from-blue-400 to-purple-400 rounded-2xl blur opacity-30"></div>
               <div className="relative flex items-center">
-                <Search className="absolute left-5 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <Search className="absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
                   placeholder={t(blacklisted ? 'website.blacklistedCompanies.searchPlaceholder' : 'website.companies.searchPlaceholder')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-14 pr-4 py-5 text-gray-700 bg-white rounded-2xl shadow-2xl focus:ring-4 focus:ring-blue-300 focus:outline-none text-lg"
+                  className={`w-full rounded-2xl bg-white py-5 text-lg text-gray-700 shadow-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 pl-14 pr-40 ${i18n.dir() === 'rtl' ? 'text-right' : 'text-left'}`}
                 />
-                <button className="absolute right-2 top-1/2 transform -translate-y-1/2 px-6 py-2.5 bg-linear-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg">
+                <button className="absolute right-2 top-1/2 -translate-y-1/2 rounded-xl bg-linear-to-r from-blue-600 to-indigo-600 px-6 py-2.5 text-white shadow-lg transition-all duration-300 hover:from-blue-700 hover:to-indigo-700">
                   {t('common.search')}
                 </button>
               </div>
@@ -284,7 +283,7 @@ const Companies = ({ blacklisted = false }: { blacklisted?: boolean }) => {
                             <div className={`w-24 h-20 rounded-lg bg-linear-to-br bg-opacity-10 flex items-center justify-center overflow-hidden shadow-sm`}>
                               {company.logoUrl ? (
                                 <img
-                                  src={`${API_BASE_URL}${company.logoUrl}`}
+                                  src={toApiUrl(company.logoUrl)}
                                   alt={displayName}
                                   className="w-full h-full object-cover"
                                   onError={(e) => {

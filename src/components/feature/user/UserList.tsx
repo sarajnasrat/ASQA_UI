@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { toApiUrl } from "../../../config/api";
 import { useTranslation } from "react-i18next";
 import { Button } from "primereact/button";
 import { MultiSelect } from "primereact/multiselect";
@@ -216,7 +217,7 @@ export const UserList = () => {
       .substring(0, 2);
 
     const imageUrl = rowData.profileImage
-      ? `http://localhost:8080${rowData.profileImage}`
+      ? toApiUrl(rowData.profileImage)
       : null;
 
     // Generate a consistent color based on the name for the fallback avatar

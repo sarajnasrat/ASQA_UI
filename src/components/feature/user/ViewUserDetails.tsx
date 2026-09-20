@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { API_ORIGIN } from "../../../config/api";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
@@ -118,9 +119,7 @@ export const ViewUserDetails = () => {
   const getProfileImageUrl = () => {
     if (!user.profileImage) return null;
     if (user.profileImage.startsWith("http")) return user.profileImage;
-    const baseUrl =
-      import.meta.env.VITE_API_BASE_URL?.replace(/\/api\/?$/, "") || "";
-    return `${baseUrl}${user.profileImage}`;
+    return `${API_ORIGIN}${user.profileImage}`;
   };
 
 

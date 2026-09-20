@@ -53,7 +53,8 @@
       "CERTIFICATE_EXPIRING_SOON": "Certificate Expiring Soon",
       "CERTIFICATE_EXPIRED": "Certificate Expired",
       "INSPECTION_DEADLINE_REACHED": "Inspection Deadline Reached",
-      "INSPECTION_OVERDUE": "Inspection Overdue"
+      "INSPECTION_OVERDUE": "Inspection Overdue",
+      "CERTIFICATE_ISSUED": "Certificate Issued"
     },
     "requestStatuses": {
       "SUBMITTED": "Submitted",
@@ -70,7 +71,8 @@
       "CERTIFICATION_ISSUED": "Certification Issued",
       "REJECTED": "Rejected",
       "CANCELLED": "Cancelled",
-      "COMMITTEE_APPROVED": "تائید هئیت تائید دهی"
+      "COMMITTEE_APPROVED": "تائید هئیت تائید دهی",
+      "CERTIFICATE_ISSUED": "Certification Issued"
     },
     "templates": {
       "requestSubmitted": {
@@ -222,7 +224,10 @@
   },
   "category": {
     "categoryType": "Category Type",
-    "types": { "COMPANY": "Company", "STANDARD": "Standard" },
+    "types": {
+      "COMPANY": "Company",
+      "STANDARD": "Standard"
+    },
     "create": "Create Category",
     "edit": "Edit Category",
     "delete": "Delete Category",
@@ -299,7 +304,18 @@
     "rejectedTitle": "Evaluated Negative Companies",
     "positiveTitle": "Evaluated Positive Companies",
     "classificationBlacklistedCreated": "Blacklisted company created successfully",
-    "classification": { "blacklistButton": "Blacklist Company", "whitelistButton": "Whitelist Company", "blacklistTitle": "Blacklist Company", "changeTitle": "Change Company Classification", "blacklistDescription": "Provide the reason for blacklisting {{name}}.", "confirmWhitelist": "Whitelist {{name}}?", "reason": "Reason", "notes": "Notes", "manualWhitelist": "Manually whitelisted", "updated": "Company classification updated" },
+    "classification": {
+      "blacklistButton": "Blacklist Company",
+      "whitelistButton": "Whitelist Company",
+      "blacklistTitle": "Blacklist Company",
+      "changeTitle": "Change Company Classification",
+      "blacklistDescription": "Provide the reason for blacklisting {{name}}.",
+      "confirmWhitelist": "Whitelist {{name}}?",
+      "reason": "Reason",
+      "notes": "Notes",
+      "manualWhitelist": "Manually whitelisted",
+      "updated": "Company classification updated"
+    },
     "basicInformation": "Basic Information",
     "businessDetails": "Business Details",
     "jawazInformation": "Jawaz Information",
@@ -603,7 +619,8 @@
     "verifiedCompany": "شرکت تأیید شده",
     "verifiedMessage": "این شرکت توسط ASQA تأیید شده است",
     "registeredMember": "عضو ثبت نام شده",
-    "companyAttachments": "اسناد های ارایه شده توسط شرکت"
+    "companyAttachments": "اسناد های ارایه شده توسط شرکت",
+    "certificationrequests": "Certification Requests"
   },
   "forgotPassword": {
     "title": "Forgot Password",
@@ -669,7 +686,13 @@
     "delete_header": "Delete Attachment",
     "referenceTypeLabel": "Reference type",
     "selectReferenceType": "Select reference type",
-    "referenceTypeOptions": { "COMPANY": "Company", "STANDARD": "Standard", "CERTIFICATION": "Certification", "USER": "User", "REQUEST": "Request" },
+    "referenceTypeOptions": {
+      "COMPANY": "Company",
+      "STANDARD": "Standard",
+      "CERTIFICATION": "Certification",
+      "USER": "User",
+      "REQUEST": "Request"
+    },
     "delete_confirmation": "Delete attachment \"{{name}}\"?",
     "attachment_deleted_successfully": "Attachment Deleted Successfully",
     "delete_failed": "Delete Failed",
@@ -691,7 +714,8 @@
       "PAYMENT_BILL": "Payment Bill",
       "AUDIO": "Audio",
       "VIDEO": "Video",
-      "IMAGE": "Image"
+      "IMAGE": "Image",
+      "CONTRACT": "Contract"
     },
     "columns": {
       "id": "ID",
@@ -835,7 +859,10 @@
     "uploadscan": "Upload Final Scanned Certificate",
     "certificationType": "Certification Type",
     "scope": "Certification Scope",
-    "scopeOptions": { "NATIONAL": "National", "INTERNATIONAL": "International" },
+    "scopeOptions": {
+      "NATIONAL": "National",
+      "INTERNATIONAL": "International"
+    },
     "certificateNumber": "Certification Number",
     "certificateInformation": "Certification Information",
     "certificateIssued": "Certificate Issued",
@@ -1044,7 +1071,10 @@
           "services": "Services",
           "product": "Product Quality"
         },
-        "popular": "Most Popular"
+        "popular": "Most Popular",
+        "selectCertificationType": "Select Certification Type",
+        "domesticType": "Domestic Certification Type",
+        "selectedType": "Selected Certification Type"
       },
       "button": {
         "creating": "Creating...",
@@ -1078,7 +1108,8 @@
     "confirmPayment": "تائید پرداخت",
     "validation": {
       "certificationScope": "????? ?????? ????? ?? ?????? ????"
-    }
+    },
+    "all": "All Certifications"
   },
   "certificationRequest": {
     "timeline": "Timeline",
@@ -1180,7 +1211,8 @@
       "startDate": "Start Date",
       "endDate": "End Date",
       "noAttachments": "No attachments",
-      "moreAttachments": "{{count}} more attachment"
+      "moreAttachments": "{{count}} more attachment",
+      "certificationScope": "Certification Scope"
     },
     "placeholder": {
       "requestType": "Select request type",
@@ -1201,22 +1233,20 @@
       "EXTENSION": "Extension"
     },
     "statusOptions": {
-            "public":{
-      "SUBMITTED": "Submitted",
-      "UNDER_REVIEW": "Under Review",
-      "REJECTED": "Rejected",
-      "CANCELLED": "Cancelled",
-      "PAYMENT_PENDING": "Payment Pending",
-      "PAYMENT_COMPLETED": "Payment Completed",
-      "AUTHORITY_DECISION": "Authority Decision",
-      "CERTIFICATION_ISSUED": "Certification Issued",
-      "STANDARDS_PROVIDED": "Standards Provided",
-      "DEADLINE_ASSIGNED": "Deadline Assigned",
-      "INSPECTION_IN_PROGRESS": "Inspection In Progress",
-      "REPORTED_TO_COMMITTEE": "Reported To Committee",
-      "REPORT_APPROVED": "Report Approved"
-     
-
+      "public": {
+        "SUBMITTED": "Submitted",
+        "UNDER_REVIEW": "Under Review",
+        "REJECTED": "Rejected",
+        "CANCELLED": "Cancelled",
+        "PAYMENT_PENDING": "Payment Pending",
+        "PAYMENT_COMPLETED": "Payment Completed",
+        "AUTHORITY_DECISION": "Authority Decision",
+        "CERTIFICATION_ISSUED": "Certification Issued",
+        "STANDARDS_PROVIDED": "Standards Provided",
+        "DEADLINE_ASSIGNED": "Deadline Assigned",
+        "INSPECTION_IN_PROGRESS": "Inspection In Progress",
+        "REPORTED_TO_COMMITTEE": "Reported To Committee",
+        "REPORT_APPROVED": "Report Approved"
       },
       "DRAFT": "Draft",
       "SUBMITTED": "Submitted",
@@ -1238,7 +1268,23 @@
       "UNDER_REVIEW": "Under Review",
       "STANDARDS_REQUIRED": "Standards Required",
       "DEADLINE_REQUIRED": "Deadline Required",
-      "COMMITTEE_APPROVED": "تائید هئیت تائید دهی"
+      "COMMITTEE_APPROVED": "تائید هئیت تائید دهی",
+      "dashboard": {
+        "SUBMITTED": "Submitted",
+        "UNDER_REVIEW": "Under Review",
+        "REJECTED": "Rejected",
+        "CANCELLED": "Cancelled",
+        "PAYMENT_PENDING": "Payment Pending",
+        "PAYMENT_COMPLETED": "Payment Completed",
+        "AUTHORITY_DECISION": "Authority Decision",
+        "CERTIFICATION_ISSUED": "Certification Issued",
+        "STANDARDS_PROVIDED": "Standards Provided",
+        "DEADLINE_ASSIGNED": "Deadline Assigned",
+        "DEADLINE_REQUIRED": "Deadline Required",
+        "INSPECTION_IN_PROGRESS": "Inspection In Progress",
+        "REPORTED_TO_COMMITTEE": "Reported to Committee",
+        "REPORT_APPROVED": "Report Approved"
+      }
     },
     "certificationTypeOptions": {
       "DOMESTIC_QUALITY_CERTIFICATION": "Domestic Quality Certification",
@@ -1315,7 +1361,8 @@
     "scopeOptions": {
       "NATIONAL": " ملی/ داخلی",
       "INTERNATIONAL": "بین المللی/ خارجی"
-    }
+    },
+    "addstandard": "Add Standard"
   },
   "zone": {
     "create": "Create Zone",
@@ -1412,7 +1459,8 @@
     },
     "errors": {
       "submitFailed": "Failed to submit certification request!"
-    }
+    },
+    "downloadPdf": "Download PDF"
   },
   "contactPerson": {
     "info": "Contact Person Information",
@@ -1552,7 +1600,7 @@
       }
     },
     "assignment": {
-          "recommend": "Recommend",
+      "recommend": "Recommend",
       "details": "Committee Assignment Details",
       "viewAssignmentDetails": "Review assignment metadata and related request information.",
       "detailsNotFound": "Assignment not found",
@@ -1623,7 +1671,8 @@
         "rejected": "Rejected",
         "in_progress": "In Progress",
         "completed": "Compeleted",
-        "assigned": "راجع شده"
+        "assigned": "راجع شده",
+        "rolled_back": "Rolled Back"
       },
       "yes": "بله",
       "no": "خیر"
@@ -1693,7 +1742,7 @@
     "asqa": "ASQA",
     "asqaDescription": "Afghanistan Standard Quality Authority",
     "systme": "Standard Quality",
-    "name": "Mangement System",
+    "name": "Management System",
     "save": "Save",
     "cancel": "Cancel",
     "delete": "Delete",
@@ -1751,6 +1800,12 @@
       "fileSize": "?????? ???? ????? ?? ?? ???? ???",
       "fillRequiredFields": "????? ???? ??????? ????? ?? ???? ??? ????",
       "imageOnly": "??? ???? ?????? ???? ???"
+    },
+    "close": "Close",
+    "": {
+      "": {
+        "": {}
+      }
     }
   },
   "home": {
@@ -2031,14 +2086,14 @@
       "update": "Update",
       "save": "Save",
       "tryAgain": "Try Again",
-      "back": "Back"
-      ,"resetPassword": "Reset Password"
+      "back": "Back",
+      "resetPassword": "Reset Password"
     },
     "actions": {
       "edit": "Edit User",
       "delete": "Delete User",
-      "viewDetails": "View Details"
-      ,"resetPassword": "Reset Password"
+      "viewDetails": "View Details",
+      "resetPassword": "Reset Password"
     },
     "messages": {
       "loadFailed": "Failed to load users",
@@ -2053,16 +2108,23 @@
       "userNotFound": "User not found",
       "loadingError": "Error loading user data",
       "roleLoadFailed": "Failed to load roles",
-      "inspection": { "title": "Inspection Users", "searchTitle": "Search Inspection Users", "createTitle": "Create Inspection User", "editTitle": "Edit Inspection User", "detailsTitle": "Inspection User Details", "formSubtitle": "Enter inspection user information" }
-      ,"passwordTooShort": "Password must be at least 6 characters",
+      "inspection": {
+        "title": "Inspection Users",
+        "searchTitle": "Search Inspection Users",
+        "createTitle": "Create Inspection User",
+        "editTitle": "Edit Inspection User",
+        "detailsTitle": "Inspection User Details",
+        "formSubtitle": "Enter inspection user information"
+      },
+      "passwordTooShort": "Password must be at least 6 characters",
       "passwordMismatch": "Passwords do not match",
       "passwordResetSuccess": "Password reset successfully",
       "passwordResetFailed": "Failed to reset password"
     },
     "dialogs": {
       "deleteTitle": "Delete User",
-      "deleteConfirm": "Are you sure you want to delete"
-      ,"resetPasswordTitle": "Reset User Password"
+      "deleteConfirm": "Are you sure you want to delete",
+      "resetPasswordTitle": "Reset User Password"
     },
     "details": {
       "userDetails": "User Details",
@@ -2123,7 +2185,9 @@
       "MONITORING": "Monitoring",
       "SUPER_ADMIN": "Super Admin",
       "COMMITTEE_MEMBER": "Committee Member",
-      "INSPECTOR": "Inspector"
+      "INSPECTOR": "Inspector",
+      "INSPECTION_USERS": "Inspection Users",
+      "DATABASE_EXPERT": "Database Expert"
     },
     "columns": {
       "id": "ID",
@@ -2279,7 +2343,8 @@
     "validation": {
       "roleNameRequired": "Role name is required",
       "roleNameMinLength": "Role name must be at least 3 characters"
-    }
+    },
+    "INSPECTION_USERS": "Inspection Users"
   },
   "permissions": {
     "ADD_USER": "Add User",
@@ -2483,14 +2548,60 @@
     "DELETE_CERTIFICATIONCONTRACT": "Delete Certification Contract",
     "VIEW_CERTIFICATIONCONTRACT": "View Certification Contract"
   },
-  "unauthorized": { "accessDenied": "Access Denied", "title": "Oops! This area is off-limits", "message": "You need to be logged in with the right permissions to view this content.", "goBack": "Go Back", "getHelp": "Get Help" },
+  "unauthorized": {
+    "accessDenied": "Access Denied",
+    "title": "Oops! This area is off-limits",
+    "message": "You need to be logged in with the right permissions to view this content.",
+    "goBack": "Go Back",
+    "getHelp": "Get Help"
+  },
   "permissionGroups": {
     "COMPANYCLASSIFICATION": "Company Classification",
     "SUPERVISIONDURATION": "Supervision Duration",
     "CERTIFICATIONSUPERVISION": "Certification Supervision",
     "CERTIFICATIONSTATUSEVENT": "Certification Status Events",
     "CERTIFICATIONLIFECYCLEEVENT": "Certification Lifecycle Events",
-    "CERTIFICATIONCONTRACT": "Certification Contracts", "CONTACTUS": "Contact Us", "ORGANIZATIONACTIVITY": "Organization Activity", "LOCATION": "Location", "COMMITEE": "Committees", "PAYMENT": "Payments", "CERTIFICATIONREQUEST": "Certification Requests", "PERMISSION": "Permissions", "PARTNERORGANIZATION": "Partner Organizations", "MENU": "Menus", "ROLE": "Roles", "STANDARD": "Standards", "REPORTS": "Reports", "USER": "Users", "REQUEST": "Requests", "ABOUTUS": "About Us", "AUDITLOG": "Audit Logs", "COMMENT": "Comments", "ATTACHMENT": "Attachments", "COMPANY": "Companies", "CATEGORY": "Categories", "ORGANIZATIONINFO": "Organization Information", "NOTIFICATION": "Notifications", "COMMITEEASSIGNMENT": "Committee Assignments", "AUDITLOGDETAIL": "Audit Log Details", "DISTRICTTRANSLATION": "District Translations", "ORGANIZATION": "Organizations", "COMPANYCONTACTPERSON": "Company Contact Persons", "LANGUAGE": "Languages", "DISTRICT": "Districts", "PROVINCETRANSLATION": "Province Translations", "COUNTRY": "Countries", "MULTILANGUAGE": "Multilanguage", "INTERNATIONALPARTY": "International Parties", "PROVINCE": "Provinces", "ADDRESS": "Addresses", "ZONE": "Zones", "CERTIFICATIONREQUESTSTATUSHISTORY": "Certification Request Status History", "COMMITEEMEMBER": "Committee Members", "COMMITEEREPORT": "Committee Reports", "COUNTRYTRANSLATION": "Country Translations"
+    "CERTIFICATIONCONTRACT": "Certification Contracts",
+    "CONTACTUS": "Contact Us",
+    "ORGANIZATIONACTIVITY": "Organization Activity",
+    "LOCATION": "Location",
+    "COMMITEE": "Committees",
+    "PAYMENT": "Payments",
+    "CERTIFICATIONREQUEST": "Certification Requests",
+    "PERMISSION": "Permissions",
+    "PARTNERORGANIZATION": "Partner Organizations",
+    "MENU": "Menus",
+    "ROLE": "Roles",
+    "STANDARD": "Standards",
+    "REPORTS": "Reports",
+    "USER": "Users",
+    "REQUEST": "Requests",
+    "ABOUTUS": "About Us",
+    "AUDITLOG": "Audit Logs",
+    "COMMENT": "Comments",
+    "ATTACHMENT": "Attachments",
+    "COMPANY": "Companies",
+    "CATEGORY": "Categories",
+    "ORGANIZATIONINFO": "Organization Information",
+    "NOTIFICATION": "Notifications",
+    "COMMITEEASSIGNMENT": "Committee Assignments",
+    "AUDITLOGDETAIL": "Audit Log Details",
+    "DISTRICTTRANSLATION": "District Translations",
+    "ORGANIZATION": "Organizations",
+    "COMPANYCONTACTPERSON": "Company Contact Persons",
+    "LANGUAGE": "Languages",
+    "DISTRICT": "Districts",
+    "PROVINCETRANSLATION": "Province Translations",
+    "COUNTRY": "Countries",
+    "MULTILANGUAGE": "Multilanguage",
+    "INTERNATIONALPARTY": "International Parties",
+    "PROVINCE": "Provinces",
+    "ADDRESS": "Addresses",
+    "ZONE": "Zones",
+    "CERTIFICATIONREQUESTSTATUSHISTORY": "Certification Request Status History",
+    "COMMITEEMEMBER": "Committee Members",
+    "COMMITEEREPORT": "Committee Reports",
+    "COUNTRYTRANSLATION": "Country Translations"
   },
   "permission": {
     "title": "Permission Management",
@@ -2917,7 +3028,13 @@
     }
   },
   "website": {
-    "blacklistedCompanies": { "badge": "Blacklisted Companies", "title": "Blacklisted Companies", "titleAccent": "", "description": "Companies currently listed as blacklisted by ASQA.", "searchPlaceholder": "Search blacklisted companies..." },
+    "blacklistedCompanies": {
+      "badge": "Blacklisted Companies",
+      "title": "Blacklisted Companies",
+      "titleAccent": "",
+      "description": "Companies currently listed as blacklisted by ASQA.",
+      "searchPlaceholder": "Search blacklisted companies..."
+    },
     "companies": {
       "badge": "ASQA Certified Companies",
       "title": "Our Certified Companies",
@@ -3169,7 +3286,8 @@
     "certificationTypeOptions": {
       "DOMESTIC_QUALITY_CERTIFICATION": "احذ  علامت معیار",
       "INTERNATIONAL_QUALITY_CERTIFICATION": "تائید نامه کیفی سیستم مدیریتی یا خدمات، محصول",
-      "STANDARD_MARK_CERTIFICATION": "احذ علامت معیار"
+      "STANDARD_MARK_CERTIFICATION": "احذ علامت معیار",
+      "PRODUCT_QUALITY": "Product Quality"
     }
   },
   "internationalRequest": {
@@ -3300,6 +3418,24 @@
     },
     "messages": {
       "loadFailed": "Failed to load certification request tracking data."
+    }
+  },
+  "backup": {
+    "title": "System Backup",
+    "description": "Create a secure ZIP backup containing the application database and uploaded files.",
+    "helper": "Backup generation may take a few moments depending on the amount of data.",
+    "creating": "Creating backup...",
+    "download": "Create & download backup",
+    "restoreTitle": "Restore system backup",
+    "restoreDescription": "Upload a previously created ZIP backup to restore the database and uploaded files.",
+    "restoring": "Restoring backup...",
+    "restore": "Restore backup",
+    "restoreWarning": "Restoring replaces matching data and files. Make sure you selected the correct backup.",
+    "messages": {
+      "success": "Backup created and downloaded successfully.",
+      "error": "Unable to create the backup. Please try again.",
+      "restoreSuccess": "Backup restored successfully.",
+      "restoreError": "Unable to restore the backup. Please verify the ZIP file and try again."
     }
   }
 }

@@ -1,0 +1,66 @@
+name: Deploy ASQA MIS frontend
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "public/**"
+      - "index.html"
+      - "package.json"
+      - "package-lock.json"
+      - "vite.config.ts"
+      - ".env.production"
+      - ".github/workflows/deploy-production.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: asqamis-production-frontend
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out frontend
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build production frontend
+        env:
+          VITE_API_BASE_URL: /api
+        run: npx vite build
+
+      - name: Prepare SSH
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d "$HOME/.ssh"
+          printf '%s\n' "$DEPLOY_SSH_KEY" > "$HOME/.ssh/asqamis_deploy"
+          chmod 600 "$HOME/.ssh/asqamis_deploy"
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/known_hosts"
+
+      - name: Copy frontend files to Ubuntu server
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          ssh -i "$HOME/.ssh/asqamis_deploy" -o IdentitiesOnly=yes "$DEPLOY_USER@$DEPLOY_HOST" \
+            'mkdir -p /home/asqa/asqamis/frontend-dist'
+          rsync -az --delete -e "ssh -i $HOME/.ssh/asqamis_deploy -o IdentitiesOnly=yes" \
+            dist/ "$DEPLOY_USER@$DEPLOY_HOST:/home/asqa/asqamis/frontend-dist/"
+          ssh -i "$HOME/.ssh/asqamis_deploy" -o IdentitiesOnly=yes "$DEPLOY_USER@$DEPLOY_HOST" \
+            'cd /home/asqa/asqamis && docker compose up -d --no-deps gateway'

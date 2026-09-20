@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { API_ORIGIN } from "../../config/api";
 
 type FieldConfig<T> = {
   label: string;
@@ -151,7 +152,7 @@ function DetailsCard<T extends Record<string, any>>({
   // Safely check if image exists
   const hasImage = !!(imageField && data && data[imageField]);
   const imageUrl = hasImage ? String(data[imageField]) : '';
-  const baseUrl = import.meta.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
+  const baseUrl = API_ORIGIN;
   
   // Image size configuration
   const imageSizeClasses = {

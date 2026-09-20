@@ -1,4 +1,5 @@
 // pages/Registration.tsx
+import { API_ORIGIN } from "../../../../config/api";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Toast } from "primereact/toast";
@@ -427,10 +428,7 @@ const Registration = () => {
   const resolveAssetUrl = (path?: string | null) => {
     if (!path) return "";
     if (/^https?:\/\//i.test(path)) return path;
-    const assetBaseUrl =
-      import.meta.env.VITE_API_BASE_URL?.replace(/\/api\/?$/, "") ||
-      "http://localhost:8080";
-    return `${assetBaseUrl}${path.startsWith("/") ? path : `/${path}`}`;
+    return `${API_ORIGIN}${path.startsWith("/") ? path : `/${path}`}`;
   };
 
   const handleDownloadSubmissionPdf = async () => {

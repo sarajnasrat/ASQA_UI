@@ -101,6 +101,8 @@ type ThemeKey = keyof typeof themes;
 type SidebarProps = {
   collapsed: boolean;
   onCollapsedChange: (collapsed: boolean) => void;
+  mobileOpen: boolean;
+  onMobileOpenChange: (open: boolean) => void;
 };
 
 const addInternationalUnderReviewMenu = (items: any[]): any[] => {
@@ -146,13 +148,14 @@ const addInternationalUnderReviewMenu = (items: any[]): any[] => {
 export const Sidebar = ({
   collapsed,
   onCollapsedChange,
+  mobileOpen,
+  onMobileOpenChange,
 }: SidebarProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
 
   const [expandedItems, setExpandedItems] = useState<Set<number>>(new Set());
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [menuItems, setMenuItems] = useState<any[]>([]);
   const [hoveredItem, setHoveredItem] = useState<number | null>(null);
   const [currentTheme, setCurrentTheme] = useState<ThemeKey>("modernBlue");
@@ -171,7 +174,7 @@ export const Sidebar = ({
   }, []);
 
   useEffect(() => {
-    setIsMobileOpen(false);
+    onMobileOpenChange(false);
   }, [location.pathname]);
 
   useEffect(() => {
@@ -183,7 +186,7 @@ export const Sidebar = ({
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
-        setIsMobileOpen(false);
+        onMobileOpenChange(false);
       }
     };
 
@@ -194,7 +197,7 @@ export const Sidebar = ({
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setIsMobileOpen(false);
+        onMobileOpenChange(false);
         setShowThemeSelector(false);
       }
     };
@@ -629,8 +632,7 @@ export const Sidebar = ({
     );
   };
 
-  const toggleButtonSideClass = isRTL ? "left-6" : "right-6";
-  const sidebarTranslateClass = isMobileOpen
+  const sidebarTranslateClass = mobileOpen
     ? "translate-x-0"
     : isRTL
       ? "translate-x-full lg:translate-x-0"
@@ -638,31 +640,19 @@ export const Sidebar = ({
 
   return (
     <>
-      <button
-        onClick={() => setIsMobileOpen((prev) => !prev)}
-        className={`fixed bottom-6 ${toggleButtonSideClass} z-50 rounded-2xl p-3.5 text-white shadow-2xl transition-all duration-200 hover:scale-105 active:scale-95 lg:hidden`}
-        style={{ backgroundColor: getAccentColor }}
-        aria-label={isMobileOpen ? "Close menu" : "Open menu"}
-      >
-        <i
-          className={`pi ${isMobileOpen ? "pi-times" : "pi-bars"}`}
-          style={{ fontSize: "1.1rem" }}
-        />
-      </button>
-
-      {isMobileOpen && (
+      {mobileOpen && (
         <button
           type="button"
-          className="fixed inset-0 z-40 bg-black/45 backdrop-blur-[2px] lg:hidden"
-          onClick={() => setIsMobileOpen(false)}
+          className="fixed inset-0 z-40 bg-black/70 backdrop-blur-[3px] lg:hidden"
+          onClick={() => onMobileOpenChange(false)}
           aria-label="Close sidebar overlay"
         />
       )}
 
       <aside
-        className={`fixed top-0 z-40 flex h-screen flex-col border-r shadow-2xl transition-all duration-300 ease-out lg:sticky lg:shadow-lg ${
+          className={`fixed top-16 z-40 flex h-[calc(100vh-4rem)] flex-col border-r shadow-2xl transition-all duration-300 ease-out lg:sticky lg:top-0 lg:h-screen lg:shadow-lg ${
           theme.sidebarBg
-        } ${theme.border} ${collapsed ? "w-20" : "w-80"} ${sidebarTranslateClass}`}
+        } ${theme.border} w-[min(20rem,calc(100vw-1rem))] ${collapsed ? "lg:w-20" : "lg:w-80"} ${sidebarTranslateClass} app-sidebar`}
         style={{ [isRTL ? "right" : "left"]: 0 }}
         dir={isRTL ? "rtl" : "ltr"}
       >
@@ -675,7 +665,7 @@ export const Sidebar = ({
                   <h1 className={`${theme.headerText} truncate text-lg font-bold tracking-tight`}>
                     {t("common.systme")}
                   </h1>
-                  <p className={`${theme.headerSubtext} mt-0.5 text-xs font-semibold uppercase tracking-[0.18em]`}>
+                  <p className={`${theme.headerSubtext} mt-0.5 whitespace-nowrap text-xs font-semibold tracking-[0.08em]`}>
                     {t("common.name")}
                   </p>
                 </div>

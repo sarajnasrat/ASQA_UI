@@ -65,6 +65,7 @@ import { ApprovalAssignmentList } from "../feature/commiteeassignment/ApprovalAs
 import AuditLogList from "../feature/auditlog/AuditLogList.tsx";
 import UserProfilePage from "../feature/user/profile/UserProfilePage";
 import UserSettingsPage from "../feature/user/profile/UserSettingsPage";
+import BackupPage from "../feature/backup/BackupPage";
 import CertificationRequestTracking from "../feature/certification-request/CertificationRequestTracking.tsx";
 import InspectionUserList from "../feature/inspectionuser/InspectionUserList";
 import InspectionUserRegistration from "../feature/inspectionuser/InspectionUserRegistration";
@@ -80,6 +81,7 @@ import {
 
 export const MainLayout = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [showUnauthorized, setShowUnauthorized] = useState(false);
   const [previousPath, setPreviousPath] = useState<string>("/dashboard");
 
@@ -114,12 +116,14 @@ export const MainLayout = () => {
       <Sidebar
         collapsed={sidebarCollapsed}
         onCollapsedChange={setSidebarCollapsed}
+        mobileOpen={mobileSidebarOpen}
+        onMobileOpenChange={setMobileSidebarOpen}
       />
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
         {/* Navbar with menu click handler */}
-        <Navbar collapsed={sidebarCollapsed} />
+        <Navbar collapsed={sidebarCollapsed} onMenuClick={() => setMobileSidebarOpen((open) => !open)} />
 
         {/* Page Content - Scrollable */}
         <main className="flex-1 overflow-y-auto p-1 sm:p-4 lg:p-1 bg-gray-50">
@@ -445,6 +449,7 @@ export const MainLayout = () => {
               <Route path="comment/view/:id" element={<CommentDetails />} />
               <Route path="notification" element={<NotificationList />} />
               <Route path="audit-log" element={<AuditLogList />} />
+              <Route path="backup" element={<BackupPage />} />
               <Route path="profile" element={<UserProfilePage />} />
               <Route path="settings" element={<UserSettingsPage />} />
 

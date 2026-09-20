@@ -1,4 +1,5 @@
 import { useForm, Controller } from "react-hook-form";
+import { toApiUrl } from "../../../config/api";
 import { Card } from "primereact/card";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
@@ -127,7 +128,7 @@ export const EditUser = ({ userId, onClose, onSaved }: EditUserProps = {}) => {
           active: user.active ?? true,
         });
 
-        setExistingImageUrl(user?.profileImage ? `${import.meta.env.REACT_APP_API_BASE_URL || "http://localhost:8080"}${user.profileImage}` : null);
+        setExistingImageUrl(user?.profileImage ? toApiUrl(user.profileImage) : null);
         setExistingImageName(user?.profileImage?.split("/").pop() || "");
 
       } catch {

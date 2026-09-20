@@ -1,5 +1,6 @@
 import axios, { type AxiosRequestConfig } from "axios";
 import i18n from "../i18n/i18n";
+import { API_BASE_URL } from "../config/api";
 
 let isRefreshing = false;
 
@@ -17,7 +18,7 @@ const processQueue = (error: any, token: string | null = null) => {
 };
 
 const httpClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api",
+  baseURL: API_BASE_URL,
   timeout: 15000,
   headers: { "Content-Type": "application/json" },
   withCredentials: true,

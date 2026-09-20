@@ -7,17 +7,8 @@ import { Dropdown } from "primereact/dropdown";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   const { t, i18n } = useTranslation();
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   // RTL support for Pashto and Dari
   useEffect(() => {
@@ -27,8 +18,8 @@ const Navbar = () => {
   }, [i18n.language]);
 
   const navLinks = [
-    // { name: t("nav.home"), path: "/" },
-    // { name: t("nav.services"), path: "/services" },
+    { name: t("nav.home"), path: "/" },
+    { name: t("nav.services"), path: "/services" },
       { name: t("nav.organizationServices"), path: "/organization-services" },
           { name: t("nav.certificationVerification"), path: "/certification-verification" },
     { name: t("nav.internationalParties"), path: "/international-parties" },
@@ -45,9 +36,9 @@ const Navbar = () => {
   };
 
   const languageOptions = [
-    { label: "English", value: "en", icon: "" },
-    { label: "پښتو", value: "ps", icon: "" },
-    { label: "دری", value: "dr", icon: "" },
+    { label: "English", value: "en", icon: "/us.png" },
+    { label: "پښتو", value: "ps", icon: "/af.png" },
+    { label: "دری", value: "dr", icon: "/af.png" },
   ];
 
   const handleLanguageChange = (e: any) => {
@@ -56,13 +47,14 @@ const Navbar = () => {
 
   return (
     <nav
+      dir={i18n.language === "ps" || i18n.language === "dr" ? "rtl" : "ltr"}
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
-        isScrolled
-          ? "bg-white/95 backdrop-blur-md shadow-md py-4"
-          : "bg-linear-to-r from-slate-50 via-white to-slate-50/80 py-4"
+        isOpen
+          ? "bg-white shadow-md py-4"
+          : "bg-white shadow-md py-4"
       }`}
     >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full px-3 sm:px-5 lg:px-6 xl:px-8">
         <div className="flex justify-between items-center">
           {/* Logo Section - Enhanced with gradient and modern styling */}
           <Link
@@ -86,21 +78,21 @@ const Navbar = () => {
               <span className="text-xl sm:text-2xl font-bold bg-linear-to-r from-gray-800 to-gray-900 bg-clip-text text-transparent tracking-tight">
                 {/* {t("common.asqa")} */}
               </span>
-              <span className="text-1xl font-medium text-gray-500 tracking-wide hidden sm:block">
+              <span className="whitespace-nowrap text-1xl font-medium text-gray-500 tracking-wide hidden sm:block">
                 {t("common.asqaDescription")}
               </span>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1 lg:gap-2">
+          <div className="hidden min-w-0 flex-1 flex-nowrap items-center justify-start gap-1 px-1 lg:flex lg:gap-1 lg:px-2 xl:px-3">
             {/* Navigation Links with modern hover effects */}
-            <div className="flex items-center gap-1 lg:gap-2 mr-2">
+            <div className="flex min-w-0 flex-nowrap items-center gap-0.5 lg:mr-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`relative px-4 py-2.5 text-sm font-semibold rounded-lg transition-all duration-300 ${
+                  className={`relative whitespace-nowrap px-2 py-2 text-xs font-semibold rounded-lg transition-all duration-300 xl:px-3 xl:text-sm ${
                     location.pathname === link.path
                       ? "text-blue-700 bg-blue-50/80"
                       : "text-gray-700 hover:text-blue-600 hover:bg-blue-50/50"
@@ -115,18 +107,18 @@ const Navbar = () => {
             </div>
             <div className="div"></div>
             {/* Language Dropdown - PrimeReact with custom styling */}
-            <div className="mx-1">
+            <div className="mx-0.5 shrink-0">
               <Dropdown
                 value={i18n.language}
                 options={languageOptions}
                 onChange={handleLanguageChange}
                 optionLabel="label"
                 optionValue="value"
-                className="w-32"
-                panelClassName="w-32"
+                className="w-24 xl:w-28"
+                panelClassName="w-28"
                 itemTemplate={(option) => (
                   <div className="flex items-center gap-2 px-3 py-2 cursor-pointer">
-                    <span className="text-lg">{option.icon}</span>
+                    <img src={option.icon} alt={option.label} className="h-5 w-5 rounded-sm object-contain" />
                     <span className="text-sm font-medium text-gray-700">
                       {option.label}
                     </span>
@@ -139,7 +131,7 @@ const Navbar = () => {
             {/* CTA Button - Premium styling */}
             <Link
               to="/registration"
-              className="ml-2 group relative overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-2.5 rounded-xl font-semibold text-sm shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+              className="ml-1 group relative shrink-0 whitespace-nowrap overflow-hidden rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-3 py-2.5 text-xs font-semibold text-white shadow-md transition-all duration-300 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] xl:px-4 xl:text-sm"
             >
               <span className="relative z-10 flex items-center gap-2">
                 <FileText className="w-4 h-4" />
@@ -152,7 +144,7 @@ const Navbar = () => {
           {/* Mobile Menu Button - Refined */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden relative w-10 h-10 flex items-center justify-center rounded-xl bg-gray-50 text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="lg:hidden relative w-10 h-10 flex items-center justify-center rounded-xl bg-gray-50 text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
             aria-label="Toggle menu"
           >
             {isOpen ? <X size={20} /> : <Menu size={20} />}
@@ -161,17 +153,17 @@ const Navbar = () => {
 
         {/* Mobile Menu - Modern slide-down with enhanced styling */}
         <div
-          className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-            isOpen ? "max-h-[500px] opacity-100 mt-4" : "max-h-0 opacity-0"
+          className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+            isOpen ? "max-h-[calc(100vh-6rem)] overflow-y-auto opacity-100 mt-4" : "max-h-0 opacity-0"
           }`}
         >
-          <div className="py-2 space-y-1 border-t border-gray-100 pt-4">
+          <div className="space-y-1 border-t border-gray-100 bg-white px-2 py-2 pt-4 shadow-lg">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
                 onClick={() => setIsOpen(false)}
-                className={`block px-4 py-3 text-base font-semibold rounded-xl transition-all duration-200 ${
+                className={`block whitespace-nowrap px-4 py-3 text-base font-semibold rounded-xl transition-all duration-200 ${
                   location.pathname === link.path
                     ? "bg-blue-50 text-blue-700"
                     : "text-gray-700 hover:bg-gray-50 hover:text-blue-600"
@@ -191,13 +183,13 @@ const Navbar = () => {
                   <button
                     key={lang.value}
                     onClick={() => changeLanguage(lang.value)}
-                    className={`flex flex-col items-center gap-1 py-2 rounded-xl transition-all duration-200 ${
+                    className={`flex flex-col items-center gap-1 whitespace-nowrap py-2 rounded-xl transition-all duration-200 ${
                       i18n.language === lang.value
                         ? "bg-blue-50 text-blue-700 ring-1 ring-blue-200"
                         : "bg-gray-50 text-gray-600 hover:bg-gray-100"
                     }`}
                   >
-                    <span className="text-xl">{lang.icon}</span>
+                    <img src={lang.icon} alt={lang.label} className="h-6 w-6 rounded-sm object-contain" />
                     <span className="text-xs font-medium">{lang.label}</span>
                   </button>
                 ))}
@@ -209,7 +201,7 @@ const Navbar = () => {
               <Link
                 to="/registration"
                 onClick={() => setIsOpen(false)}
-                className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-3 rounded-xl font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-200"
+                className="flex w-full items-center justify-center gap-2 whitespace-nowrap bg-gradient-to-r from-blue-600 to-indigo-600 px-3 py-3 text-sm font-semibold text-white shadow-md transition-all duration-200 hover:shadow-lg sm:px-4"
               >
                 <FileText className="w-4 h-4" />
                 {t("nav.certicificationrequest")}

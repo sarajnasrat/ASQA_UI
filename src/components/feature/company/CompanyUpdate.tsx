@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { toApiUrl } from "../../../config/api";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import { Card } from "primereact/card";
 import { InputText } from "primereact/inputtext";
@@ -96,7 +97,7 @@ export const CompanyUpdate: React.FC = () => {
   const resolveMediaUrl = (path?: string | null) => {
     if (!path) return "";
     if (path.startsWith("http")) return path;
-    return `http://localhost:8080${path}`;
+    return toApiUrl(path);
   };
 
   const parseApiDate = (value?: string | null) => {

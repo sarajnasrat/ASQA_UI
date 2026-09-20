@@ -1,4 +1,5 @@
 // components/feature/registration/CompanyForm.tsx
+import { toApiUrl } from "../../../../config/api";
 import React, { useState, useEffect } from "react";
 import { Building2, Globe, Upload, X } from "lucide-react";
 import { useAppToast } from "../../../../hooks/useToast";
@@ -1215,7 +1216,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
                     src={
                       logoPreview ||
                       (existingLogoUrl
-                        ? `http://localhost:8080${existingLogoUrl}`
+                        ? toApiUrl(existingLogoUrl)
                         : "")
                     }
                     alt={t("company.labels.companyLogo")}
@@ -1267,7 +1268,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
                     src={
                       businessLogoPreview ||
                       (existingBusinessLogoUrl
-                        ? `http://localhost:8080${existingBusinessLogoUrl}`
+                        ? toApiUrl(existingBusinessLogoUrl)
                         : "")
                     }
                     alt={t("company.labels.bussinessLogo")}

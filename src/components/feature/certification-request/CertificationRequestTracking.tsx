@@ -297,6 +297,7 @@ export const CertificationRequestTracking = () => {
                   }}
                   placeholder={t("certificationTracking.placeholders.tracking")}
                   className="w-full rounded-xl border-slate-200 pl-10"
+                  style={{ paddingLeft: "2.75rem" }}
                 />
               </div>
 
@@ -312,6 +313,7 @@ export const CertificationRequestTracking = () => {
                   }}
                   placeholder={t("certificationTracking.placeholders.company")}
                   className="w-full rounded-xl border-slate-200 pl-10"
+                  style={{ paddingLeft: "2.75rem" }}
                 />
               </div>
 

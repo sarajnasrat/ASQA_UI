@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { toApiUrl } from "../../../config/api";
 import { Toast } from "primereact/toast";
 import { Button } from "primereact/button";
 import { TieredMenu } from "primereact/tieredmenu";
@@ -346,7 +347,7 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
       body: (row: any) =>
         row.logoUrl ? (
           <img
-            src={`http://localhost:8080${row.logoUrl}`}
+            src={toApiUrl(row.logoUrl)}
             alt={t("company.labels.companyLogo")}
             className="h-12 w-12 rounded-full border object-cover shadow-sm"
           />

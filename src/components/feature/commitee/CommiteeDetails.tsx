@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { API_ORIGIN } from "../../../config/api";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { useToast } from "../../../hooks/ToastContext";
@@ -108,8 +109,7 @@ export const CommiteeDetails = () => {
   const [expandedAssignment, setExpandedAssignment] = useState<number | null>(
     null,
   );
-  const baseUrl =
-    import.meta.env.VITE_API_BASE_URL?.replace(/\/api\/?$/, "") || "";
+  const baseUrl = API_ORIGIN;
 
   const getCommiteeDetails = async (commiteeId: number) => {
     setLoading(true);

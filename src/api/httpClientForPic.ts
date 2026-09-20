@@ -1,5 +1,6 @@
 import axios, { type AxiosRequestConfig } from "axios";
 import i18n from "../i18n/i18n";
+import { API_ORIGIN } from "../config/api";
 
 let isRefreshing = false;
 
@@ -17,7 +18,7 @@ const processQueue = (error: any, token: string | null = null) => {
 };
 
 const httpClientForPic = axios.create({
-  baseURL: import.meta.env.VITE_API || "http://localhost:8080",
+  baseURL: API_ORIGIN,
   timeout: 15000,
   headers: { "Content-Type": "application/json" },
   withCredentials: true,

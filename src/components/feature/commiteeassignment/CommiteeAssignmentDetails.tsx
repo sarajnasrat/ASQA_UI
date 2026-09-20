@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { API_ORIGIN } from "../../../config/api";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import { Dialog } from "primereact/dialog";
@@ -27,7 +28,7 @@ import CommiteeAssignmentViewCompany from "./assignment-process/CommiteeAssignme
 import CommiteeAssignmentViewDocuments from "./assignment-process/CommiteeAssignmentViewDocuments";
 import type { Assignment } from "./assignment-process/CommiteeAssignmentView.types";
 
-const API_BASE_URL = import.meta.env.VITE_API_API || "http://localhost:8080";
+const API_BASE_URL = API_ORIGIN;
 
 const transitionMap: Record<string, string[]> = {
   ASSIGNED: ["IN_PROGRESS", "REJECTED"],

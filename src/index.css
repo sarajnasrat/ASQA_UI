@@ -12,6 +12,15 @@
   font-family: "Lato", sans-serif !important;
 }
 
+/* Keep sidebar labels on the same readable font as the rest of the app. */
+.app-sidebar,
+.app-sidebar button,
+.app-sidebar span,
+.app-sidebar p,
+.app-sidebar h1 {
+  font-family: inherit;
+}
+
 [dir="rtl"] .p-datatable .p-datatable-tbody > tr > td {
     text-align: right;
 }
@@ -91,6 +100,18 @@
 /* ===== RTL paginator layout ===== */
 [dir="rtl"] .p-paginator {
   direction: rtl;
+}
+
+[dir="rtl"] .p-dropdown-panel,
+[dir="rtl"] .p-overlaypanel {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="ltr"] .p-dropdown-panel,
+[dir="ltr"] .p-overlaypanel {
+  direction: ltr;
+  text-align: left;
 }
 
 /* Center container if needed */

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { API_ORIGIN } from "../../../config/api";
 import { useTranslation } from "react-i18next";
 import CertificationRequestService from "../../../services/CertificationReques.service";
 import {
@@ -45,7 +46,7 @@ type StatusConfigItem = {
 
 type StatusConfig = Record<string, StatusConfigItem>;
 
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = API_ORIGIN;
 
 const formatFileSize = (bytes?: number) => {
   if (!bytes) return "0 Bytes";

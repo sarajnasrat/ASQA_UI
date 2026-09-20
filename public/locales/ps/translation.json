@@ -100,7 +100,8 @@
         "title": "د تفتیش مهلت بشپړ شو",
         "message": "د {{trackingNumber}} غوښتنې د تفتیش مهلت بشپړ شوی او غوښتنه باید وکتل شي."
       }
-    }
+    },
+    "notificationType": "د خبرتیا ډول"
   },
   "languages": {
     "english": "انګلیسي",
@@ -219,7 +220,10 @@
   },
   "category": {
     "categoryType": "د کټګورۍ ډول",
-    "types": { "COMPANY": "شرکت", "STANDARD": "معیاري" },
+    "types": {
+      "COMPANY": "شرکت",
+      "STANDARD": "معیاري"
+    },
     "create": "کټګوري جوړه کړئ",
     "edit": "کټګوري سموله",
     "delete": "کټګوري ړنګه کړئ",
@@ -347,7 +351,18 @@
     "rejectedTitle": "د منفي ارزول شویو شرکتونو لېست",
     "positiveTitle": "هغه شرکتونه چې مثبت ارزول شوي",
     "classificationBlacklistedCreated": "تور لېست شرکت په بریالیتوب جوړ شو",
-    "classification": { "blacklistButton": "شرکت تور لېست ته داخلول", "whitelistButton": "شرکت سپین لېست ته داخلول", "blacklistTitle": "شرکت تور لېست ته داخلول", "changeTitle": "د شرکت طبقه بندي بدلول", "blacklistDescription": "د {{name}} د تور لېست دلیل ولیکئ.", "confirmWhitelist": "{{name}} سپین لېست ته داخل شي؟", "reason": "دلیل", "notes": "یادښتونه", "manualWhitelist": "په لاسي ډول سپین لېست ته داخل شو", "updated": "د شرکت طبقه بندي تازه شوه" },
+    "classification": {
+      "blacklistButton": "شرکت تور لېست ته داخلول",
+      "whitelistButton": "شرکت سپین لېست ته داخلول",
+      "blacklistTitle": "شرکت تور لېست ته داخلول",
+      "changeTitle": "د شرکت طبقه بندي بدلول",
+      "blacklistDescription": "د {{name}} د تور لېست دلیل ولیکئ.",
+      "confirmWhitelist": "{{name}} سپین لېست ته داخل شي؟",
+      "reason": "دلیل",
+      "notes": "یادښتونه",
+      "manualWhitelist": "په لاسي ډول سپین لېست ته داخل شو",
+      "updated": "د شرکت طبقه بندي تازه شوه"
+    },
     "basicInformation": "اساسی معلومات",
     "businessDetails": "سوداګریز جزئیات",
     "jawazInformation": "د جواز معلومات",
@@ -613,11 +628,25 @@
       "contactInfo": "د شرکت د استازي معلومات",
       "requestInfo": "د غوښتنو معلومات",
       "certificationInfo": "د تصدیق نامې معلومات"
+    },
+    "certificationrequests": "د تصدیق غوښتنې",
+    "supervision": {
+      "title": "د څارنې حالت",
+      "description": "د دې شرکت د څارنې معلومات",
+      "reason": "د څارنې دلیل",
+      "reasonPlaceholder": "د څارنې دلیل ولیکئ",
+      "attachments": "ضمیمې",
+      "attachmentHelper": "اړوند سندونه پورته کړئ",
+      "fileSelected": "فایل وټاکل شو",
+      "reasonRequired": "د څارنې دلیل اړین دی",
+      "saved": "د څارنې معلومات خوندي شول",
+      "save": "خوندي کول"
     }
   },
   "nav": {
     "blacklistedCompanies": "د تور لېست شرکتونه",
     "home": "کور",
+    "about": "زموږ په اړه",
     "services": "خدمتونه",
     "companies": "شرکتونه",
     "contact": "اړیکه",
@@ -629,7 +658,8 @@
     "logout": "وتل",
     "certicificationrequest": "د تصدیق غوښتنه",
     "internationalParties": "نړیوال بنسټونه",
-    "organizationServices": "د سازمان خدمتونه"
+    "organizationServices": "د سازمان خدمتونه",
+    "certificationVerification": "د تصدیق د اعتبار کتنه"
   },
   "certification": {
     "latest": "وروستی",
@@ -688,7 +718,10 @@
     "uploadscan": "نهایی سکین شوی سند اپلوډ کړئ",
     "certificationType": "د تصدیق ډول",
     "scope": "د تصدیق ساحه",
-    "scopeOptions": { "NATIONAL": "ملي", "INTERNATIONAL": "نړیواله" },
+    "scopeOptions": {
+      "NATIONAL": "ملي",
+      "INTERNATIONAL": "نړیواله"
+    },
     "certificateNumber": "د تصدیق شمېره",
     "certificateInformation": "د تصدیق معلومات",
     "certificateIssued": "تصدیق صادر شو",
@@ -865,7 +898,10 @@
             "1": "په ملي کچه پیژندل شوی",
             "2": "محلي اطاعت",
             "3": "د بازار اعتبار"
-          }
+          },
+          "requestTitle": "درخواست تائید نامه کیفی",
+          "requestTypeLabel": "نوع درخواست تائید نامه کیفی",
+          "scopeLabel": "اعتبار"
         },
         "international": {
           "title": "نړیوال کیفیت",
@@ -883,9 +919,21 @@
             "1": "کیفیت نښه",
             "2": "د مصرف کونکي باور",
             "3": "سیالي ګټه"
-          }
+          },
+          "requestTitle": "درخواست علامت معیار",
+          "requestTypeLabel": "نوع درخواست علامت معیار",
+          "scopeLabel": "حوزه علامت معیار"
         },
-        "popular": "ډېر مشهور"
+        "popular": "ډېر مشهور",
+        "selectCertificationType": "د تصدیق ډول وټاکئ",
+        "domesticType": "د کورني تصدیق ډول",
+        "selectedType": "ټاکل شوی د تصدیق ډول",
+        "domesticOptions": {
+          "title": "نوع تائید نامه کیفی داخلی را انتخاب کنید",
+          "system": "تائید نامه کیفی سیستم مدیریتی",
+          "services": "تائید نامه کیفی خدمات",
+          "product": "تائید نامه کیفی محصول"
+        }
       },
       "button": {
         "creating": "جوړول کیږي...",
@@ -894,7 +942,8 @@
       "trust": "⚡ ۱۰۰۰+ شرکتونو په بریالیتوب سره خپل تصدیق بشپړ کړی",
       "validation": {
         "requestTypeRequired": "مهرباني وکړئ د غوښتنې یو ډول وټاکئ",
-        "certificationTypeRequired": "مهرباني وکړئ د تصدیق یو ډول وټاکئ"
+        "certificationTypeRequired": "مهرباني وکړئ د تصدیق یو ډول وټاکئ",
+        "domesticCategoryRequired": "لطفاً نوع تائید نامه کیفی داخلی را انتخاب کنید"
       },
       "messages": {
         "created": "د تصدیق غوښتنه په بریالیتوب سره جوړه شوه!",
@@ -917,7 +966,8 @@
     },
     "validation": {
       "certificationScope": "??????? ???? ? ????? ???? ?????"
-    }
+    },
+    "all": "ټول تصدیقونه"
   },
   "certificationRequest": {
     "timeline": "د درخواست پروسه",
@@ -1016,7 +1066,8 @@
       "noAttachments": "هیڅ ضمیمه نشته",
       "moreAttachments": "{{count}} نور ضمیمې",
       "startDate": "تاریخ شروع",
-      "endDate": "تاریخ پایان"
+      "endDate": "تاریخ پایان",
+      "certificationScope": "د تصدیق ساحه"
     },
     "placeholder": {
       "requestType": "د غوښتنې ډول وټاکئ",
@@ -1037,22 +1088,20 @@
       "EXTENSION": "غځول"
     },
     "statusOptions": {
-            "public":{
-      "SUBMITTED": "سپارل شوې",
-      "UNDER_REVIEW": "تر بیاکتنې لاندې",
-      "REJECTED": "رد شوې",
-      "CANCELLED": "لغوه شوې",
-      "PAYMENT_PENDING": "تادیه په تمه ده",
-      "PAYMENT_COMPLETED": " تادیه بشپړه شوه",
-      "AUTHORITY_DECISION": "د مقام حکم ته غوښتنه",
-      "CERTIFICATION_ISSUED": "تصدیق صادر شو",
-      "STANDARDS_PROVIDED": "معیارونه چمتو شوي",
-      "DEADLINE_ASSIGNED": "",
-      "INSPECTION_IN_PROGRESS": "ارزونه روانه ده",
-      "REPORTED_TO_COMMITTEE": "کمیټې ته راپور شوی", 
-      "REPORT_APPROVED": " راپور تصویب شو"
-     
-
+      "public": {
+        "SUBMITTED": "سپارل شوې",
+        "UNDER_REVIEW": "تر بیاکتنې لاندې",
+        "REJECTED": "رد شوې",
+        "CANCELLED": "لغوه شوې",
+        "PAYMENT_PENDING": "تادیه په تمه ده",
+        "PAYMENT_COMPLETED": " تادیه بشپړه شوه",
+        "AUTHORITY_DECISION": "د مقام حکم ته غوښتنه",
+        "CERTIFICATION_ISSUED": "تصدیق صادر شو",
+        "STANDARDS_PROVIDED": "معیارونه چمتو شوي",
+        "DEADLINE_ASSIGNED": "",
+        "INSPECTION_IN_PROGRESS": "ارزونه روانه ده",
+        "REPORTED_TO_COMMITTEE": "کمیټې ته راپور شوی",
+        "REPORT_APPROVED": " راپور تصویب شو"
       },
       "DRAFT": "مسوده",
       "SUBMITTED": "سپارل شوې",
@@ -1074,13 +1123,31 @@
       "INSPECTION_PAYMENT_PENDING": "د تفتیش تادیه په تمه ده",
       "STANDARDS_REQUIRED": "معیارونه اړین دي",
       "DEADLINE_REQUIRED": "نېټه اړینه ده",
-      "COMMITTEE_APPROVED": "تائید هئیت تائید دهی"
+      "COMMITTEE_APPROVED": "تائید هئیت تائید دهی",
+      "dashboard": {
+        "SUBMITTED": "سپارل شوی",
+        "UNDER_REVIEW": "تر بیاکتنې لاندې",
+        "REJECTED": "رد شوی",
+        "CANCELLED": "لغوه شوی",
+        "PAYMENT_PENDING": "د تادیې په تمه",
+        "PAYMENT_COMPLETED": "تادیه بشپړه شوه",
+        "AUTHORITY_DECISION": "د مقام پرېکړه",
+        "CERTIFICATION_ISSUED": "تصدیق صادر شو",
+        "STANDARDS_PROVIDED": "معیارونه وړاندې شول",
+        "DEADLINE_ASSIGNED": "مهلت وټاکل شو",
+        "DEADLINE_REQUIRED": "مهلت اړین دی",
+        "INSPECTION_IN_PROGRESS": "تفتیش روان دی",
+        "REPORTED_TO_COMMITTEE": "کمېټې ته راپور شو",
+        "REPORT_APPROVED": "راپور تایید شو"
+      }
     },
     "certificationTypeOptions": {
       "DOMESTIC_QUALITY_CERTIFICATION": "د کورني کیفیت تصدیق",
       "INTERNATIONAL_QUALITY_CERTIFICATION": "نړیوال کیفیت تصدیق",
       "STANDARD_MARK_CERTIFICATION": "د معیاري نښې تصدیق",
-      "MANAGEMENT_SYSTEM_QUALITY": "د مدیریتي سیستم کیفیت تصدیق"
+      "MANAGEMENT_SYSTEM_QUALITY": "د مدیریتي سیستم کیفیت تصدیق",
+      "SERVICE_QUALITY": "د خدماتو کیفیت تصدیق",
+      "PRODUCT_QUALITY": "د محصول کیفیت تصدیق"
     },
     "fileSize": {
       "zero": "0 بایټ",
@@ -1152,7 +1219,8 @@
     "scopeOptions": {
       "NATIONAL": " ملی/ داخلی",
       "INTERNATIONAL": "بین المللی/ خارجی"
-    }
+    },
+    "addstandard": "معیار اضافه کړئ"
   },
   "attachment": {
     "category": "کټګوري",
@@ -1168,7 +1236,13 @@
     "delete_header": "ضمیمه حذف کول",
     "referenceTypeLabel": "د مرجع ډول",
     "selectReferenceType": "د مرجع ډول انتخاب کړئ",
-    "referenceTypeOptions": { "COMPANY": "شرکت", "STANDARD": "معیاري", "CERTIFICATION": "تصدیق", "USER": "کاروونکی", "REQUEST": "غوښتنه" },
+    "referenceTypeOptions": {
+      "COMPANY": "شرکت",
+      "STANDARD": "معیاري",
+      "CERTIFICATION": "تصدیق",
+      "USER": "کاروونکی",
+      "REQUEST": "غوښتنه"
+    },
     "delete_confirmation": "آیا تاسو غواړئ ضمیمه \"{{name}}\" حذف کړئ؟",
     "attachment_deleted_successfully": "ضمیمه په بریالیتوب سره حذف شوه",
     "delete_failed": "حذف ناکام شو",
@@ -1190,7 +1264,8 @@
       "PAYMENT_BILL": "سند پرداخت",
       "AUDIO": "صوتی",
       "VIDEO": "ویدیو",
-      "IMAGE": "تصویر"
+      "IMAGE": "تصویر",
+      "CONTRACT": "تړون"
     },
     "columns": {
       "id": "شناسه",
@@ -1355,7 +1430,8 @@
     },
     "errors": {
       "submitFailed": "د تصدیق غوښتنه سپارل ناکام شول!"
-    }
+    },
+    "downloadPdf": "PDF ډاونلوډ کړئ"
   },
   "contactPerson": {
     "info": "د شرکت استازی معلومات",
@@ -1495,7 +1571,7 @@
       }
     },
     "assignment": {
-          "recommend": "سپارښتنه وکړئ",
+      "recommend": "سپارښتنه وکړئ",
       "list": "ټاکل شوي تصدیق غوښتنې",
       "create": "ټاکنه جوړه کړئ",
       "edit": "ټاکنه سمه کړئ",
@@ -1548,7 +1624,8 @@
         "rejected": "رد شوی",
         "in_progress": "په روانو کې",
         "completed": "بشپړ شوی",
-        "assigned": "راجع شده"
+        "assigned": "راجع شده",
+        "rolled_back": "بېرته وګرځول شو"
       },
       "details": "جزئیات واگذاری کمیته",
       "viewAssignmentDetails": "بررسی متادیتای واگذاری و اطلاعات درخواست مرتبط",
@@ -1694,7 +1771,13 @@
     "itemsSelected": "{0} توکي ټاکل شوي",
     "...More": "...بیشتر",
     "maxfilesize": "حداکثر حجم فایل: {{size}}",
-    "required": "این فیلد ضروری است"
+    "required": "این فیلد ضروری است",
+    "close": "بندول",
+    "": {
+      "": {
+        "": {}
+      }
+    }
   },
   "home": {
     "badge": "د افغانستان د کیفیت معیارونو اداره",
@@ -1992,7 +2075,14 @@
       "userNotFound": "کاربر یافت نشد",
       "loadingError": "خطا در بارگذاری اطلاعات کاربر",
       "roleLoadFailed": "بارگیری نقش‌ها ناموفق بود",
-      "inspection": { "title": "د تفتیش کاروونکي", "searchTitle": "د تفتیش کاروونکو لټون", "createTitle": "د تفتیش کاروونکی جوړول", "editTitle": "د تفتیش کاروونکی سمول", "detailsTitle": "د تفتیش کاروونکي جزیات", "formSubtitle": "د تفتیش کاروونکي معلومات دننه کړئ" }
+      "inspection": {
+        "title": "د تفتیش کاروونکي",
+        "searchTitle": "د تفتیش کاروونکو لټون",
+        "createTitle": "د تفتیش کاروونکی جوړول",
+        "editTitle": "د تفتیش کاروونکی سمول",
+        "detailsTitle": "د تفتیش کاروونکي جزیات",
+        "formSubtitle": "د تفتیش کاروونکي معلومات دننه کړئ"
+      }
     },
     "dialogs": {
       "deleteTitle": "کارونکی ړنګ کړئ",
@@ -2048,7 +2138,9 @@
       "MONITORING": "څارنه",
       "SUPER_ADMIN": "لوی مدیر",
       "COMMITTEE_MEMBER": "د کمیټې غړی",
-      "INSPECTOR": "تفتیش کوونکی"
+      "INSPECTOR": "تفتیش کوونکی",
+      "INSPECTION_USERS": "د تفتیش کاروونکي",
+      "DATABASE_EXPERT": "د ډیټابېس متخصص"
     },
     "passwordStrength": {
       "weak": "ضعیف",
@@ -2300,14 +2392,60 @@
     "DELETE_CERTIFICATIONCONTRACT": "د تصدیق قرارداد ړنګول",
     "VIEW_CERTIFICATIONCONTRACT": "د تصدیق قرارداد لیدل"
   },
-  "unauthorized": { "accessDenied": "لاسرسی رد شوه", "title": "اوه! دا برخه محدوده ده", "message": "د دې منځپانګې د لیدلو لپاره باید ننوتي یاست او اړین صلاحیت ولرئ.", "goBack": "بېرته ستنېدل", "getHelp": "مرسته ترلاسه کول" },
+  "unauthorized": {
+    "accessDenied": "لاسرسی رد شوه",
+    "title": "اوه! دا برخه محدوده ده",
+    "message": "د دې منځپانګې د لیدلو لپاره باید ننوتي یاست او اړین صلاحیت ولرئ.",
+    "goBack": "بېرته ستنېدل",
+    "getHelp": "مرسته ترلاسه کول"
+  },
   "permissionGroups": {
     "COMPANYCLASSIFICATION": "د شرکت طبقه بندي",
     "SUPERVISIONDURATION": "د څارنې موده",
     "CERTIFICATIONSUPERVISION": "د تصدیق څارنه",
     "CERTIFICATIONSTATUSEVENT": "د تصدیق حالت پېښې",
     "CERTIFICATIONLIFECYCLEEVENT": "د تصدیق د ژوند دورې پېښې",
-    "CERTIFICATIONCONTRACT": "د تصدیق قراردادونه", "CONTACTUS": "موږ سره اړیکه", "ORGANIZATIONACTIVITY": "د سازمان فعالیت", "LOCATION": "ځای", "COMMITEE": "کمېټې", "PAYMENT": "تادیې", "CERTIFICATIONREQUEST": "د تصدیق غوښتنې", "PERMISSION": "صلاحیتونه", "PARTNERORGANIZATION": "شریک سازمانونه", "MENU": "مینوګانې", "ROLE": "رولونه", "STANDARD": "معیارونه", "REPORTS": "راپورونه", "USER": "کاروونکي", "REQUEST": "غوښتنې", "ABOUTUS": "زموږ په اړه", "AUDITLOG": "د پلټنې راپورونه", "COMMENT": "تبصرې", "ATTACHMENT": "ضمیمې", "COMPANY": "شرکتونه", "CATEGORY": "کټګورۍ", "ORGANIZATIONINFO": "د سازمان معلومات", "NOTIFICATION": "خبرتیاوې", "COMMITEEASSIGNMENT": "د کمېټې دندې", "AUDITLOGDETAIL": "د پلټنې راپور جزئیات", "DISTRICTTRANSLATION": "د ولسوالۍ ژباړې", "ORGANIZATION": "سازمانونه", "COMPANYCONTACTPERSON": "د شرکت د اړیکې کسان", "LANGUAGE": "ژبې", "DISTRICT": "ولسوالۍ", "PROVINCETRANSLATION": "د ولایت ژباړې", "COUNTRY": "هیوادونه", "MULTILANGUAGE": "څو ژبې", "INTERNATIONALPARTY": "نړیوالې خواوې", "PROVINCE": "ولایتونه", "ADDRESS": "پتې", "ZONE": "زونونه", "CERTIFICATIONREQUESTSTATUSHISTORY": "د تصدیق غوښتنې د حالت تاریخچه", "COMMITEEMEMBER": "د کمېټې غړي", "COMMITEEREPORT": "د کمېټې راپورونه", "COUNTRYTRANSLATION": "د هېواد ژباړې"
+    "CERTIFICATIONCONTRACT": "د تصدیق قراردادونه",
+    "CONTACTUS": "موږ سره اړیکه",
+    "ORGANIZATIONACTIVITY": "د سازمان فعالیت",
+    "LOCATION": "ځای",
+    "COMMITEE": "کمېټې",
+    "PAYMENT": "تادیې",
+    "CERTIFICATIONREQUEST": "د تصدیق غوښتنې",
+    "PERMISSION": "صلاحیتونه",
+    "PARTNERORGANIZATION": "شریک سازمانونه",
+    "MENU": "مینوګانې",
+    "ROLE": "رولونه",
+    "STANDARD": "معیارونه",
+    "REPORTS": "راپورونه",
+    "USER": "کاروونکي",
+    "REQUEST": "غوښتنې",
+    "ABOUTUS": "زموږ په اړه",
+    "AUDITLOG": "د پلټنې راپورونه",
+    "COMMENT": "تبصرې",
+    "ATTACHMENT": "ضمیمې",
+    "COMPANY": "شرکتونه",
+    "CATEGORY": "کټګورۍ",
+    "ORGANIZATIONINFO": "د سازمان معلومات",
+    "NOTIFICATION": "خبرتیاوې",
+    "COMMITEEASSIGNMENT": "د کمېټې دندې",
+    "AUDITLOGDETAIL": "د پلټنې راپور جزئیات",
+    "DISTRICTTRANSLATION": "د ولسوالۍ ژباړې",
+    "ORGANIZATION": "سازمانونه",
+    "COMPANYCONTACTPERSON": "د شرکت د اړیکې کسان",
+    "LANGUAGE": "ژبې",
+    "DISTRICT": "ولسوالۍ",
+    "PROVINCETRANSLATION": "د ولایت ژباړې",
+    "COUNTRY": "هیوادونه",
+    "MULTILANGUAGE": "څو ژبې",
+    "INTERNATIONALPARTY": "نړیوالې خواوې",
+    "PROVINCE": "ولایتونه",
+    "ADDRESS": "پتې",
+    "ZONE": "زونونه",
+    "CERTIFICATIONREQUESTSTATUSHISTORY": "د تصدیق غوښتنې د حالت تاریخچه",
+    "COMMITEEMEMBER": "د کمېټې غړي",
+    "COMMITEEREPORT": "د کمېټې راپورونه",
+    "COUNTRYTRANSLATION": "د هېواد ژباړې"
   },
   "permission": {
     "title": "د صلاحیتونو مدیریت",
@@ -2459,7 +2597,14 @@
     },
     "detailsTitle": "د اړیکې پیغام جزیات",
     "editDescription": "موجود د اړیکې پیغام تازه کول",
-    "createDescription": "نوی د اړیکې پیغام جوړول"
+    "createDescription": "نوی د اړیکې پیغام جوړول",
+    "placeholder": {
+      "name": "نوم ولیکئ",
+      "lastName": "تخلص ولیکئ",
+      "phoneNumber": "د تلیفون شمېره ولیکئ",
+      "email": "برېښنالیک ولیکئ",
+      "organization": "سازمان ولیکئ"
+    }
   },
   "aboutUs": {
     "title": "زموږ په اړه",
@@ -2659,7 +2804,8 @@
     "validation": {
       "roleNameRequired": "د رول نوم اړین دی",
       "roleNameMinLength": "د رول نوم باید لږ تر لږه ۳ توري ولري"
-    }
+    },
+    "INSPECTION_USERS": "د تفتیش کاروونکي"
   },
   "menu": {
     "management": "د مینو مدیریت",
@@ -2840,7 +2986,13 @@
     }
   },
   "website": {
-    "blacklistedCompanies": { "badge": "د تور لېست شرکتونه", "title": "د تور لېست شرکتونه", "titleAccent": "", "description": "هغه شرکتونه چې د ASQA لخوا په تور لېست کې دي.", "searchPlaceholder": "د تور لېست شرکتونو لټون..." },
+    "blacklistedCompanies": {
+      "badge": "د تور لېست شرکتونه",
+      "title": "د تور لېست شرکتونه",
+      "titleAccent": "",
+      "description": "هغه شرکتونه چې د ASQA لخوا په تور لېست کې دي.",
+      "searchPlaceholder": "د تور لېست شرکتونو لټون..."
+    },
     "internationalParties": {
       "badge": "نړیواله شبکه",
       "title": "نړیوال بنسټونه",
@@ -3092,7 +3244,8 @@
     "certificationTypeOptions": {
       "DOMESTIC_QUALITY_CERTIFICATION": "احذ  علامت معیار",
       "INTERNATIONAL_QUALITY_CERTIFICATION": "تائید نامه کیفی سیستم مدیریتی یا خدمات، محصول",
-      "STANDARD_MARK_CERTIFICATION": "احذ علامت معیار"
+      "STANDARD_MARK_CERTIFICATION": "احذ علامت معیار",
+      "PRODUCT_QUALITY": "د محصول کیفیت تصدیق"
     }
   },
   "internationalRequest": {
@@ -3223,6 +3376,24 @@
     },
     "messages": {
       "loadFailed": "د غوښتنې د پیگیری معلوماتو په بارولو کې ستونزه رامنځته شوه."
+    }
+  },
+  "backup": {
+    "title": "د سیسټم شاتړ",
+    "description": "د اپلېکېشن ډیټابیس او پورته شوو فایلونو خوندي ZIP شاتړ جوړ کړئ.",
+    "helper": "د معلوماتو د اندازې له مخې د شاتړ جوړول څو شېبې وخت نیسي.",
+    "creating": "شاتړ جوړېږي...",
+    "download": "شاتړ جوړ او ډاونلوډ کړئ",
+    "restoreTitle": "د سیسټم شاتړ بېرته راګرځول",
+    "restoreDescription": "د ډیټابیس او پورته شوو فایلونو د بېرته راګرځولو لپاره پخوانی ZIP شاتړ پورته کړئ.",
+    "restoring": "شاتړ بېرته راګرځي...",
+    "restore": "شاتړ بېرته راګرځول",
+    "restoreWarning": "بېرته راګرځول ورته معلومات او فایلونه بدلوي. د سم شاتړ له ټاکلو ډاډ ترلاسه کړئ.",
+    "messages": {
+      "success": "شاتړ په بریالیتوب جوړ او ډاونلوډ شو.",
+      "error": "شاتړ نه شي جوړېدای. بیا هڅه وکړئ.",
+      "restoreSuccess": "شاتړ په بریالیتوب بېرته راوګرځول شو.",
+      "restoreError": "شاتړ نه شي بېرته راګرځېدای. ZIP فایل وګورئ او بیا هڅه وکړئ."
     }
   }
 }

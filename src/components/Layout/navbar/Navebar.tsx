@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { toApiUrl } from "../../../config/api";
 import { useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
@@ -43,7 +44,7 @@ type NavbarProps = {
   onMenuClick?: () => void;
 };
 
-export const Navbar = ({ collapsed = false }: NavbarProps) => {
+export const Navbar = ({ collapsed = false, onMenuClick }: NavbarProps) => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
 
@@ -212,11 +213,19 @@ export const Navbar = ({ collapsed = false }: NavbarProps) => {
     <nav className="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex min-w-0 items-center justify-between gap-3 py-2 sm:h-16 sm:py-0">
-          <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+          <div className="-ml-4 flex min-w-0 flex-row items-center gap-3 sm:ml-0 sm:gap-4" dir="ltr">
+            <button
+              type="button"
+              onClick={onMenuClick}
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-gray-700 hover:bg-gray-100 lg:hidden"
+              aria-label="Open navigation menu"
+            >
+              <i className="pi pi-bars text-lg" />
+            </button>
             <img
               src="/asqanew.png"
               alt="ASQA"
-              className="h-9 w-12 shrink-0 object-contain sm:h-10 sm:w-14"
+              className="order-2 hidden h-9 w-12 shrink-0 object-contain sm:block sm:h-10 sm:w-14"
             />
             <div className="flex min-w-0 items-center gap-4">
               <span
@@ -228,7 +237,7 @@ export const Navbar = ({ collapsed = false }: NavbarProps) => {
               </span>
             </div>
           </div>
-          <div className="flex shrink-0 items-center gap-1 sm:gap-3">
+          <div className="flex shrink-0 items-center gap-2 sm:gap-4">
             <button
               type="button"
               onClick={(e) => notificationOverlayRef.current?.toggle(e)}
@@ -251,7 +260,7 @@ export const Navbar = ({ collapsed = false }: NavbarProps) => {
             <OverlayPanel
               ref={notificationOverlayRef}
               dismissable
-              className="w-[92vw] max-w-md"
+              className="z-[1000] w-[min(92vw,28rem)] max-w-md"
             >
               <div dir={isRTL ? "rtl" : "ltr"} className="min-w-0">
                 <div
@@ -347,7 +356,7 @@ export const Navbar = ({ collapsed = false }: NavbarProps) => {
                   <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden ring-2 ring-transparent group-hover:ring-blue-100 transition-all duration-200">
                     {user?.profileImage ? (
                       <img
-                        src={`http://localhost:8080${user.profileImage}`}
+                        src={toApiUrl(user.profileImage)}
                         alt={`${user?.firstName ?? ""} ${user?.lastName ?? ""}`}
                         className="w-full h-full object-cover"
                         loading="lazy"
@@ -390,13 +399,13 @@ export const Navbar = ({ collapsed = false }: NavbarProps) => {
               </button>
 
               {showUserMenu && (
-                <div className="absolute right-0 mt-2 w-64 sm:w-72 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50 animate-fadeIn">
+                <div dir={isRTL ? "rtl" : "ltr"} className={`absolute top-full z-[1000] mt-3 max-h-[calc(100vh-5.5rem)] w-[min(18rem,calc(100vw-2rem))] overflow-y-auto rounded-xl border border-gray-100 bg-white p-1 shadow-xl animate-fadeIn max-sm:fixed max-sm:top-16 max-sm:left-2 max-sm:right-2 max-sm:mt-0 max-sm:w-auto ${isRTL ? "right-0 left-auto pl-3 text-right" : "right-0 left-auto pl-3 text-left"}`}>
                   <div className="md:hidden p-4 bg-gradient-to-r from-blue-50 to-purple-50 border-b">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600">
                         {user?.profileImage ? (
                           <img
-                            src={`http://localhost:8080${user.profileImage}`}
+                            src={toApiUrl(user.profileImage)}
                             alt="Profile"
                             className="w-full h-full object-cover"
                           />
@@ -435,41 +444,45 @@ export const Navbar = ({ collapsed = false }: NavbarProps) => {
               )}
             </div>
 
-            <Dropdown
+            <div dir={isRTL ? "rtl" : "ltr"} className="flex items-center gap-1 rounded-lg hover:bg-gray-100" title={t("languages.select", "Select language")}>
+              <img
+                src={languageOptions.find((option) => option.value === i18n.language)?.icon}
+                alt={languageOptions.find((option) => option.value === i18n.language)?.label || "Selected language"}
+                className="h-6 w-6 shrink-0 rounded-sm object-contain"
+              />
+              <Dropdown
               value={i18n.language}
               options={languageOptions}
               onChange={handleLanguageChange}
               optionLabel="label"
               optionValue="value"
               itemTemplate={(option: LangOption) => (
-                <div className="flex items-center gap-2 px-2 py-1.5">
+                <div dir={isRTL ? "rtl" : "ltr"} className="flex items-center gap-2 px-2 py-1.5">
                   <img
                     src={option.icon}
                     alt={option.label}
-                    className="w-5 h-5 rounded-sm"
+                    className="h-6 w-6 rounded-sm object-contain"
                   />
                   <span className="text-sm">{option.label}</span>
                 </div>
               )}
-              valueTemplate={(option: LangOption | null) =>
-                option ? (
-                  <div className="flex items-center gap-2">
-                    <img
-                      src={option.icon}
-                      alt={option.label}
-                      className="w-5 h-5 rounded-sm"
-                    />
-                    <span className="hidden sm:inline text-sm">
-                      {option.label}
-                    </span>
-                  </div>
+              valueTemplate={(option: LangOption | string | null) => {
+                const selectedOption = languageOptions.find(
+                  (item) => item.value === i18n.language,
+                ) || (typeof option === "string"
+                  ? languageOptions.find((item) => item.value === option)
+                  : option);
+
+                return selectedOption ? (
+                  <span className="hidden text-sm sm:inline">{selectedOption.label}</span>
                 ) : (
                   <span className="text-sm text-gray-500">Select language</span>
-                )
-              }
-              className="w-11 shrink-0 rounded-lg border-0! shadow-none! transition-colors hover:bg-gray-100 sm:w-auto"
-              panelClassName="min-w-[120px]"
-            />
+                );
+              }}
+              className="w-12 shrink-0 rounded-lg border-0! p-0! shadow-none! transition-colors hover:bg-gray-100 sm:w-auto sm:px-2!"
+              panelClassName="z-[1000] w-[min(12rem,calc(100vw-2rem))]"
+              />
+            </div>
           </div>
 
           <style>{`

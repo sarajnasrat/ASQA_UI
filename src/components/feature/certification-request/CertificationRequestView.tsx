@@ -1,5 +1,6 @@
 // components/feature/certification/CertificationRequestView.tsx
 import React, { useState, useEffect, useRef } from "react";
+import { API_ORIGIN } from "../../../config/api";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Dialog } from "primereact/dialog";
 import { Dropdown } from "primereact/dropdown";
@@ -35,7 +36,7 @@ import type {
   Tracker,
 } from "./certification-process/CertificationRequestView.types";
 
-const API_BASE_URL = "http://localhost:8080";
+const API_BASE_URL = API_ORIGIN;
 
 type StandardAttachmentOption = {
   label: string;
@@ -1190,6 +1191,8 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
 
   const getCertificationTypeLabel = (type: string) => {
     const types: Record<string, string> = {
+      NATIONAL: t("certificationRequest.scopeOptions.NATIONAL"),
+      INTERNATIONAL: t("certificationRequest.scopeOptions.INTERNATIONAL"),
       DOMESTIC_QUALITY_CERTIFICATION: t(
         "certificationRequest.certificationTypeOptions.DOMESTIC_QUALITY_CERTIFICATION",
       ),
@@ -1201,7 +1204,9 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
       ),
       MANAGEMENT_SYSTEM_QUALITY:t("certificationRequest.certificationTypeOptions.MANAGEMENT_SYSTEM_QUALITY"),
       SERVICE_QUALITY:t("certificationRequest.certificationTypeOptions.SERVICE_QUALITY"),
-      PRODUCT_QUALITY:"certificationRequest.certificationTypeOptions.PRODUCT_QUALITY"
+      PRODUCT_QUALITY: t(
+        "certificationRequest.certificationTypeOptions.PRODUCT_QUALITY",
+      ),
     };
     return types[type] || type;
   };
@@ -1373,6 +1378,20 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
         bgColor: "bg-yellow-100",
         icon: <AlertCircle className="h-4 w-4" />,
         label: t("certificationRequest.statusOptions.UNDER_REVIEW"),
+      },
+      CONTRACT_PENDING: {
+        color: "text-violet-700",
+        bgColor: "bg-violet-100",
+        icon: <FileText className="h-4 w-4" />,
+        label: t("certificationRequest.statusOptions.CONTRACT_PENDING"),
+      },
+      INSPECTION_PAYMENT_PENDING: {
+        color: "text-amber-700",
+        bgColor: "bg-amber-100",
+        icon: <AlertCircle className="h-4 w-4" />,
+        label: t(
+          "certificationRequest.statusOptions.INSPECTION_PAYMENT_PENDING",
+        ),
       },
       REJECTED: {
         color: "text-red-700",
@@ -2217,10 +2236,7 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
           assetUrl={(path?: string) => {
             if (!path) return "";
             if (path.startsWith("http")) return path;
-            const baseUrl =
-              import.meta.env.VITE_API_BASE_URL?.replace(/\/api\/?$/, "") ||
-              "http://localhost:8080";
-            return `${baseUrl}${path}`;
+            return `${API_ORIGIN}${path}`;
           }}
           filename={`certification-request-${request?.id || "export"}.pdf`}
           authorityLogoSrc={`${window.location.origin}/asqanew.png`}

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
+import { API_ORIGIN } from "../../../config/api";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Toast } from "primereact/toast";
@@ -165,10 +166,7 @@ export const CompanyDetails: React.FC = () => {
   const assetUrl = (path?: string) => {
     if (!path) return "";
     if (path.startsWith("http")) return path;
-    const baseUrl =
-      import.meta.env.VITE_API_BASE_URL?.replace(/\/api\/?$/, "") ||
-      "http://localhost:8080";
-    return `${baseUrl}${path}`;
+    return `${API_ORIGIN}${path}`;
   };
 
   const getCompanyTypeLabel = (type?: string) => {

@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { API_ORIGIN } from "../../../config/api";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Toast } from "primereact/toast";
@@ -416,10 +417,7 @@ export const CertificationDetails: React.FC = () => {
   const assetUrl = (path?: string) => {
     if (!path) return "";
     if (path.startsWith("http")) return path;
-    const baseUrl =
-      import.meta.env.VITE_API_BASE_URL?.replace(/\/api\/?$/, "") ||
-      "http://localhost:8080";
-    return `${baseUrl}${path}`;
+    return `${API_ORIGIN}${path}`;
   };
 
   const getFileUrl = (attachment?: Attachment) =>
