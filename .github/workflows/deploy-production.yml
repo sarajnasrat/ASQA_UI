@@ -24,6 +24,12 @@ concurrency:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      DEPLOY_HOST: 103.132.98.245
+      DEPLOY_USER: asqa
+      DEPLOY_PORT: "2267"
+      DEPLOY_DIR: /home/asqa/asqamis
+
     steps:
       - name: Check out frontend
         uses: actions/checkout@v4
@@ -44,23 +50,34 @@ jobs:
 
       - name: Prepare SSH
         env:
-          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
-          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          DEPLOY_SSH_KEY_B64: ${{ secrets.DEPLOY_SSH_KEY_B64 }}
         run: |
+          set -euo pipefail
+          test -n "$DEPLOY_SSH_KEY_B64" || { echo "DEPLOY_SSH_KEY_B64 is not configured"; exit 1; }
           install -m 700 -d "$HOME/.ssh"
-          printf '%s\n' "$DEPLOY_SSH_KEY" > "$HOME/.ssh/asqamis_deploy"
-          chmod 600 "$HOME/.ssh/asqamis_deploy"
-          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          printf '%s' "$DEPLOY_SSH_KEY_B64" | tr -d '\r\n ' | base64 --decode > "$HOME/.ssh/deploy_key"
+          chmod 600 "$HOME/.ssh/deploy_key"
+          printf '%s\n' \
+            '[103.132.98.245]:2267 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEJsL1ZgZhks/Mw/fR9opQqenxD/bdfKFzxItUPLWoYw' \
+            > "$HOME/.ssh/known_hosts"
           chmod 600 "$HOME/.ssh/known_hosts"
+          ssh-keygen -y -f "$HOME/.ssh/deploy_key" > /dev/null
+
+      - name: Test SSH connection
+        run: |
+          ssh -p "$DEPLOY_PORT" -i "$HOME/.ssh/deploy_key" \
+            -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o BatchMode=yes \
+            "$DEPLOY_USER@$DEPLOY_HOST" "echo 'SSH connection successful'"
 
       - name: Copy frontend files to Ubuntu server
-        env:
-          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
         run: |
-          ssh -p 2267 -i "$HOME/.ssh/asqamis_deploy" -o IdentitiesOnly=yes "$DEPLOY_USER@$DEPLOY_HOST" \
-            'mkdir -p /home/asqa/asqamis/frontend-dist'
-          rsync -az --delete -e "ssh -p 2267 -i $HOME/.ssh/asqamis_deploy -o IdentitiesOnly=yes" \
-            dist/ "$DEPLOY_USER@$DEPLOY_HOST:/home/asqa/asqamis/frontend-dist/"
-          ssh -p 2267 -i "$HOME/.ssh/asqamis_deploy" -o IdentitiesOnly=yes "$DEPLOY_USER@$DEPLOY_HOST" \
-            'cd /home/asqa/asqamis && docker compose up -d --no-deps gateway'
+          ssh -p "$DEPLOY_PORT" -i "$HOME/.ssh/deploy_key" \
+            -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o BatchMode=yes \
+            "$DEPLOY_USER@$DEPLOY_HOST" "mkdir -p '$DEPLOY_DIR/frontend-dist'"
+          rsync -az --delete \
+            -e "ssh -p $DEPLOY_PORT -i $HOME/.ssh/deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o BatchMode=yes" \
+            dist/ "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_DIR/frontend-dist/"
+          ssh -p "$DEPLOY_PORT" -i "$HOME/.ssh/deploy_key" \
+            -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o BatchMode=yes \
+            "$DEPLOY_USER@$DEPLOY_HOST" \
+            "cd '$DEPLOY_DIR' && docker compose up -d --no-deps gateway && docker compose ps gateway"
