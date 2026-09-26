@@ -501,7 +501,18 @@ export const CertificationDetails: React.FC = () => {
       setUpdateDialogVisible(true);
       return;
     }
-    if (normalizedStatus === "PRINTED") {
+    if (normalizedStatus === "PRINTED" && currentStatus === "DRAFT") {
+      // Open the actual certificate print page. That page changes the status
+      // to PRINTED after the PDF has been printed/downloaded.
+      navigate(`/certifications/print/${details?.id}`, {
+        state: { returnPath: certificationListPath("DRAFT") },
+      });
+      return;
+    }
+    // Returning a scanned certificate to the printed stage is a rejection
+    // workflow. A draft certificate moving to printed is a normal transition
+    // and must not open the rejection dialog.
+    if (normalizedStatus === "PRINTED" && currentStatus === "SCANNED") {
       setRejectionReason("");
       setRejectDialogVisible(true);
       return;
