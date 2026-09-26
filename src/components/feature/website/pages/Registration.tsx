@@ -57,6 +57,21 @@ const REGISTRATION_STORAGE_KEYS = [
   "company_70_attachment_id",
 ];
 
+const clearRegistrationStorage = () => {
+  REGISTRATION_STORAGE_KEYS.forEach((key) => {
+    localStorage.removeItem(key);
+    sessionStorage.removeItem(key);
+  });
+
+  // Attachment IDs are stored using the company ID, so clear every
+  // registration attachment key instead of only a single hard-coded ID.
+  [localStorage, sessionStorage].forEach((storage) => {
+    Object.keys(storage)
+      .filter((key) => /^company_\d+_attachment_id$/.test(key))
+      .forEach((key) => storage.removeItem(key));
+  });
+};
+
 const Registration = () => {
   const { t } = useTranslation();
   const pdfTemplateRef = useRef<HTMLDivElement>(null);
@@ -321,10 +336,7 @@ const Registration = () => {
         setSubmittedRequestData(response.data?.data || null);
         setShowSuccessDialog(true); // Show success dialog instead of toast
         // Clear all persisted registration state after successful completion
-        REGISTRATION_STORAGE_KEYS.forEach((key) => {
-          localStorage.removeItem(key);
-          sessionStorage.removeItem(key);
-        });
+        clearRegistrationStorage();
       } else {
         const errorMessage =
           response.data?.errors?.[0] || t("registration.errors.submitFailed");
@@ -398,10 +410,7 @@ const Registration = () => {
   };
 
   const handleCancel = () => {
-    REGISTRATION_STORAGE_KEYS.forEach((key) => {
-      localStorage.removeItem(key);
-      sessionStorage.removeItem(key);
-    });
+    clearRegistrationStorage();
     navigate("/");
   };
 
