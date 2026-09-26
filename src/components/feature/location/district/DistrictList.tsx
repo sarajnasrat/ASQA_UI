@@ -22,13 +22,14 @@ export const DistrictList = () => {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const { toast, showToast } = useAppToast();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [selectedDistrictId, setSelectedDistrictId] = useState<number | null>(
     null,
   );
   const [showEditDialog, setShowEditDialog] = useState(false);
   const menu = useRef<any>(null);
+  const selectedActionDistrict = useRef<any>(null);
 
   // Pagination
   const [first, setFirst] = useState(0);
@@ -37,7 +38,7 @@ export const DistrictList = () => {
 
   useEffect(() => {
     getAllDistricts();
-  }, [first, rows]);
+  }, [first, rows, i18n.language]);
 
   const [provinces, setProvinces] = useState<any[]>([]);
 
@@ -52,7 +53,7 @@ export const DistrictList = () => {
       }
     };
     fetchProvinces();
-  }, []);
+  }, [i18n.language]);
 
   const getAllDistricts = async () => {
     try {
@@ -118,35 +119,46 @@ export const DistrictList = () => {
   };
 
   const actionTemplate = (rowData: any) => {
-    const items: MenuItem[] = [
-      hasPermission("UPDATE_DISTRICT") && {
-        label: t("common.edit"),
-        icon: "pi pi-pencil",
-        command: () => handleEdit(rowData),
-      },
-      hasPermission("DELETE_DISRICT") && {
-        label: t("common.delete"),
-        icon: "pi pi-trash",
-        command: () => confirmDelete(rowData),
-      },
-      hasPermission("VIEW_DISTRICT") && {
-        label: t("common.view"),
-        icon: "pi pi-eye",
-        command: () => navigate(`/districts/view/${rowData.id}`),
-      },
-    ].filter(Boolean) as MenuItem[];
-
     return (
       <div className="flex justify-center">
-        <TieredMenu model={items} popup ref={menu} />
         <Button
           icon="pi pi-ellipsis-v"
           className="p-button-text p-button-sm"
-          onClick={(e) => menu.current.toggle(e)}
+          onClick={(e) => {
+            selectedActionDistrict.current = rowData;
+            menu.current?.toggle(e);
+          }}
         />
       </div>
     );
   };
+
+  const actionItems: MenuItem[] = [
+    hasPermission("UPDATE_DISTRICT") && {
+      label: t("common.edit"),
+      icon: "pi pi-pencil",
+      command: () => {
+        const district = selectedActionDistrict.current;
+        if (district) handleEdit(district);
+      },
+    },
+    hasPermission("DELETE_DISRICT") && {
+      label: t("common.delete"),
+      icon: "pi pi-trash",
+      command: () => {
+        const district = selectedActionDistrict.current;
+        if (district) confirmDelete(district);
+      },
+    },
+    hasPermission("VIEW_DISTRICT") && {
+      label: t("common.view"),
+      icon: "pi pi-eye",
+      command: () => {
+        const district = selectedActionDistrict.current;
+        if (district) navigate(`/districts/view/${district.id}`);
+      },
+    },
+  ].filter(Boolean) as MenuItem[];
 
   const header = () => {
     return (
@@ -224,6 +236,7 @@ export const DistrictList = () => {
     <>
       <Toast ref={toast} />
       <ConfirmDialog />
+      <TieredMenu model={actionItems} popup ref={menu} />
 
       {showCreateDialog && (
         <DistrictCreate

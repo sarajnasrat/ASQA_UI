@@ -1,4 +1,5 @@
 import httpClient from "../api/httpClient";
+import i18n from "../i18n/i18n";
 
 const PROVINCE_BASE = "/provinces";
 
@@ -6,7 +7,7 @@ export const ProvinceService = {
   // Get all provinces (no pagination)
   getAllProvinces(lang?: string) {
     return httpClient.get(`${PROVINCE_BASE}/all`, {
-      headers: { "Accept-Language": lang || "en" },
+      headers: { "Accept-Language": lang || i18n.language || "en" },
     });
   },
 
@@ -14,14 +15,14 @@ export const ProvinceService = {
   getPaginatedProvinces(params: any, lang?: string) {
     return httpClient.get(`${PROVINCE_BASE}/getAll`, {
       params,
-      headers: { "Accept-Language": lang || "en" },
+      headers: { "Accept-Language": lang || i18n.language || "en" },
     });
   },
 
   // Get single province by ID
   getProvince(id: number | string, lang?: string) {
     return httpClient.get(`${PROVINCE_BASE}/${id}`, {
-      headers: { "Accept-Language": lang || "en" },
+      headers: { "Accept-Language": lang || i18n.language || "en" },
     });
   },
 
@@ -48,7 +49,7 @@ export const ProvinceService = {
   // Get provinces by country ID
   getProvincesByCountryId(countryId: number | string, lang?: string) {
     return httpClient.get(`${PROVINCE_BASE}/by-country/${countryId}`, {
-      headers: { "Accept-Language": lang || "en" },
+      headers: { "Accept-Language": lang || i18n.language || "en" },
     });
   },
 
@@ -56,7 +57,7 @@ export const ProvinceService = {
   searchByProvinceName(name: string, params: any, lang?: string) {
     return httpClient.get(`${PROVINCE_BASE}/search`, {
       params: { name, ...params },
-      headers: { "Accept-Language": lang || "en" },
+      headers: { "Accept-Language": lang || i18n.language || "en" },
     });
   },
 };

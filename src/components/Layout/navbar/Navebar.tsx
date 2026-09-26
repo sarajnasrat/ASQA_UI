@@ -106,7 +106,7 @@ export const Navbar = ({ collapsed = false, onMenuClick }: NavbarProps) => {
     return () => {
       window.removeEventListener(NOTIFICATION_EVENT, loadNotifications);
     };
-  }, []);
+  }, [i18n.language]);
 
   useEffect(() => {
     document.documentElement.dir =

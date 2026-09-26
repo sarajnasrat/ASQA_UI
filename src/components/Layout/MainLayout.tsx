@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { Sidebar } from "./sidebar/Sidebar";
 import { Dashboard } from "../feature/Dashboard";
@@ -87,6 +88,7 @@ export const MainLayout = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
 
   // Track previous path for "Go Back" functionality
   useEffect(() => {
@@ -128,7 +130,7 @@ export const MainLayout = () => {
         {/* Page Content - Scrollable */}
         <main className="flex-1 overflow-y-auto p-1 sm:p-4 lg:p-1 bg-gray-50">
           <div className="max-w-full mx-auto">
-            <Routes>
+            <Routes key={i18n.language}>
               <Route path="dashboard" element={<Dashboard />} />
               <Route
                 path="users"

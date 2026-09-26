@@ -29,7 +29,7 @@ export const ProvinceList: React.FC = () => {
 
     const { toast, showToast } = useAppToast();
     const navigate = useNavigate();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const { hasPermission, withPermission } = useAuth();
 
     // Fetch countries for create/update dropdown
@@ -43,7 +43,7 @@ export const ProvinceList: React.FC = () => {
             }
         };
         fetchCountries();
-    }, []);
+    }, [i18n.language]);
 
     // Fetch provinces with pagination
     const getAllProvinces = async () => {
@@ -61,7 +61,7 @@ export const ProvinceList: React.FC = () => {
 
     useEffect(() => {
         getAllProvinces();
-    }, [first, rows]);
+    }, [first, rows, i18n.language]);
 
     // Create / Edit Success handler
     const handleCreateSuccess = () => {
