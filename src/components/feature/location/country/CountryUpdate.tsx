@@ -45,7 +45,7 @@ export const CountryUpdate: React.FC<CountryUpdateProps> = ({
           countryCode: country?.data.countryCode || "",
           translations: {
             en: country?.data.translations?.en || "",
-            fa: country?.data.translations?.fa || "",
+            dr: country?.data.translations?.dr || country?.data.translations?.fa || "",
             ps: country?.data.translations?.ps || "",
           },
         });

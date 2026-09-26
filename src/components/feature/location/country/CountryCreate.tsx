@@ -31,7 +31,6 @@ export const CountryCreate: React.FC<CountryCreateProps> = ({
     const handleSubmit = async (data: any) => {
         setIsSubmitting(true);
         try {
-            await CountryService.createCountry(data);
             const response = await CountryService.createCountry(data);
 
             toast.current?.show({
@@ -90,7 +89,7 @@ export const CountryCreate: React.FC<CountryCreateProps> = ({
                             onCancel={onClose}
                             defaultValues={{
                                 countryCode: "",
-                                translations: { en: "", fa: "", ps: "" },
+                                translations: { en: "", dr: "", ps: "" },
                             }}
                             isSubmitting={isSubmitting}
                         />

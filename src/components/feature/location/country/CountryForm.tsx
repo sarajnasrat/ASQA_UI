@@ -15,13 +15,13 @@ export const CountryForm: React.FC<CountryFormProps> = ({
   const translationEntries = Object.entries(defaultValues.translations || {});
   const languages = translationEntries.length > 0 
     ? translationEntries.map(([lang]) => lang)
-    : ['ps', 'fa', 'ps'];
+    : ['en', 'dr', 'ps'];
 
   // Language names from translations
   const getLanguageName = (lang: string) => {
     const languageNames: Record<string, string> = {
       en: t('languages.english'),
-      fa: t('languages.persian'),
+      dr: t('languages.persian'),
       ps: t('languages.pashto'),
     };
     return languageNames[lang] || lang.toUpperCase();
@@ -133,7 +133,7 @@ export const CountryForm: React.FC<CountryFormProps> = ({
                     id={`translation-${lang}`}
                     type="text"
                     disabled={isSubmitting}
-                    dir={lang === 'fa' || lang === 'ps' ? 'rtl' : 'ltr'}
+                    dir={lang === 'dr' || lang === 'ps' ? 'rtl' : 'ltr'}
                     className={`
                       w-full px-4 py-2.5 border rounded-lg 
                       focus:outline-none focus:ring-2 transition-all
@@ -142,7 +142,7 @@ export const CountryForm: React.FC<CountryFormProps> = ({
                         : 'border-gray-300 focus:ring-blue-200 focus:border-blue-500'
                       }
                       ${isSubmitting ? 'bg-gray-100 cursor-not-allowed' : ''}
-                      ${lang === 'fa' || lang === 'ps' ? 'text-right' : 'text-left'}
+                      ${lang === 'dr' || lang === 'ps' ? 'text-right' : 'text-left'}
                     `}
                     placeholder={getPlaceholder(lang)}
                   />

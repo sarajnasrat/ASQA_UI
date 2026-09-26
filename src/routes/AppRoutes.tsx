@@ -1,28 +1,32 @@
+import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
-import { Login } from "../components/feature/Login";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { ToastProvider } from "../hooks/ToastContext";
-import Home from "../components/feature/website/pages/Home";
-import { About } from "../components/feature/website/pages/About";
-import Contact from "../components/feature/website/pages/Contact";
-import Services from "../components/feature/website/pages/Services";
-import Registration from "../components/feature/website/pages/Registration";
-import Companies from "../components/feature/website/pages/Companies";
-import BlacklistedCompanies from "../components/feature/website/pages/BlacklistedCompanies";
 import { WebsiteLayout } from "./WebsiteLayout";
-import CertificationTypeSelection from "../components/feature/website/pages/CertificationTypeSelection";
-import CertificationEntrySelection from "../components/feature/website/pages/CertificationEntrySelection";
-import { CertificationDetails } from "../components/feature/certification-request/CertificationDetails";
-import ForgotPassword from "../components/feature/forgotpassword/ForgotPassword";
-import { MainLayout } from "../components/Layout/MainLayout";
-import InternationalParties from "../components/feature/website/pages/InternationalParties";
-import OrganizationServices from "../components/feature/website/pages/OrganizationServices";
-import { CertificationVerification } from "../components/feature/certification/CertificationVerification";
+import AppLoader from "../components/common/AppLoader";
+
+const Home = lazy(() => import("../components/feature/website/pages/Home"));
+const About = lazy(() => import("../components/feature/website/pages/About").then((m) => ({ default: m.About })));
+const Contact = lazy(() => import("../components/feature/website/pages/Contact"));
+const Services = lazy(() => import("../components/feature/website/pages/Services"));
+const Registration = lazy(() => import("../components/feature/website/pages/Registration"));
+const Companies = lazy(() => import("../components/feature/website/pages/Companies"));
+const BlacklistedCompanies = lazy(() => import("../components/feature/website/pages/BlacklistedCompanies"));
+const CertificationTypeSelection = lazy(() => import("../components/feature/website/pages/CertificationTypeSelection"));
+const CertificationEntrySelection = lazy(() => import("../components/feature/website/pages/CertificationEntrySelection"));
+const InternationalParties = lazy(() => import("../components/feature/website/pages/InternationalParties"));
+const OrganizationServices = lazy(() => import("../components/feature/website/pages/OrganizationServices"));
+const CertificationDetails = lazy(() => import("../components/feature/certification-request/CertificationDetails").then((m) => ({ default: m.CertificationDetails })));
+const CertificationVerification = lazy(() => import("../components/feature/certification/CertificationVerification").then((m) => ({ default: m.CertificationVerification })));
+const ForgotPassword = lazy(() => import("../components/feature/forgotpassword/ForgotPassword"));
+const Login = lazy(() => import("../components/feature/Login").then((m) => ({ default: m.Login })));
+const MainLayout = lazy(() => import("../components/Layout/MainLayout").then((m) => ({ default: m.MainLayout })));
 
 export const AppRoutes = () => {
   return (
     <ToastProvider>
-      <Routes>
+      <Suspense fallback={<AppLoader />}>
+        <Routes>
         {/* Public route */}
         <Route element={<WebsiteLayout />}>
           <Route path="/" element={<Home />} />
@@ -70,7 +74,8 @@ export const AppRoutes = () => {
             </ProtectedRoute>
           }
         />
-      </Routes>
+        </Routes>
+      </Suspense>
     </ToastProvider>
   );
 };
