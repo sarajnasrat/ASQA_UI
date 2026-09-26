@@ -45,19 +45,22 @@ export const DistrictUpdate: React.FC<DistrictUpdateProps> = ({
 
   // Load district data if updating
   useEffect(() => {
-    if (!districtId) return;
-  if (!districtId) {
-    reset({
-      provinceId: provinces[0].id, // set first province as default
-      translations: { en: "", dr: "", ps: "" },
-    });}
+    if (!districtId) {
+      reset({
+        provinceId: provinces[0]?.id || null,
+        translations: { en: "", dr: "", ps: "" },
+      });
+      setLoading(false);
+      return;
+    }
+
     const loadDistrict = async () => {
       try {
         const res = await DistrictService.getDistrictTranslation(districtId);
         const district = res.data.data;
         reset({
           provinceId: district?.province?.id || provinces[0]?.id || null,
-          translations: district?.translations || { en: "", fa: "", ps: "" },
+          translations: district?.translations || { en: "", dr: "", ps: "" },
         });
       } catch (error) {
         toast.current?.show({
@@ -98,6 +101,10 @@ export const DistrictUpdate: React.FC<DistrictUpdateProps> = ({
         life: 3000,
       });
       onSuccess();
+      reset({
+        provinceId: null,
+        translations: { en: "", dr: "", ps: "" },
+      });
     } catch (error: any) {
       toast.current?.show({
         severity: "error",
