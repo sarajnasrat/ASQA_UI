@@ -78,21 +78,22 @@ const Navbar = () => {
               <span className="text-xl sm:text-2xl font-bold bg-linear-to-r from-gray-800 to-gray-900 bg-clip-text text-transparent tracking-tight">
                 {/* {t("common.asqa")} */}
               </span>
-              <span className="whitespace-nowrap text-sm font-medium text-gray-500 tracking-wide hidden sm:block 2xl:text-base">
+              <span className="hidden whitespace-nowrap text-sm font-medium tracking-wide text-gray-500 2xl:block 2xl:text-base">
                 {t("common.asqaDescription")}
               </span>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden min-w-0 flex-1 flex-nowrap items-center justify-start gap-2 px-1 2xl:flex 2xl:gap-1 2xl:px-2">
+          <div className="hidden min-w-0 flex-1 flex-nowrap items-center justify-end gap-1 px-1 xl:flex xl:gap-1 2xl:px-2">
             {/* Navigation Links with modern hover effects */}
-            <div className="flex min-w-0 flex-nowrap items-center gap-0.5 2xl:mr-20 2xl:ml-20">
+            <div className="min-w-0 flex-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <div className="flex min-w-max flex-nowrap items-center gap-0.5">
               {navLinks.map((link) => (
                 <Link
                   key={link.path}
                   to={link.path}
-                    className={`relative whitespace-nowrap px-2.5 py-2 text-base font-medium leading-5 rounded-lg transition-all duration-300 2xl:px-3 ${
+                    className={`relative whitespace-nowrap rounded-lg px-2 py-2 text-sm font-medium leading-5 transition-all duration-300 2xl:px-2.5 2xl:text-base ${
                     location.pathname === link.path
                       ? "text-blue-700 bg-blue-50/80"
                       : "text-gray-700 hover:text-blue-600 hover:bg-blue-50/50"
@@ -104,11 +105,12 @@ const Navbar = () => {
                   )}
                 </Link>
               ))}
+              </div>
             </div>
                  {/* CTA Button - Premium styling */}
             <Link
               to="/registration"
-              className="ml-2 group relative shrink-0 whitespace-nowrap overflow-hidden rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-2.5 text-sm font-medium leading-5 text-white shadow-md transition-all duration-300 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]"
+              className="group relative ml-1 shrink-0 whitespace-nowrap overflow-hidden rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-3 py-2.5 text-xs font-medium leading-5 text-white shadow-md transition-all duration-300 hover:scale-[1.02] hover:shadow-xl active:scale-[0.98] 2xl:px-4 2xl:text-sm"
             >
               <span className="relative z-10 flex items-center gap-2">
                 <FileText className="w-4 h-4" />
@@ -141,7 +143,7 @@ const Navbar = () => {
           {/* Mobile Menu Button - Refined */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="2xl:hidden relative w-10 h-10 flex items-center justify-center rounded-xl bg-gray-50 text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gray-50 text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 xl:hidden"
             aria-label="Toggle menu"
             aria-expanded={isOpen}
             aria-controls="website-mobile-menu"
@@ -154,7 +156,7 @@ const Navbar = () => {
         {/* Mobile Menu - Modern slide-down with enhanced styling */}
         <div
           id="website-mobile-menu"
-          className={`2xl:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+          className={`overflow-hidden transition-all duration-300 ease-in-out xl:hidden ${
             isOpen ? "max-h-[70vh] overflow-y-auto opacity-100 mt-4" : "max-h-0 opacity-0"
           }`}
         >
