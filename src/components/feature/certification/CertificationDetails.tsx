@@ -147,6 +147,7 @@ type Company = {
   categories: Category[];
   active: boolean;
   companyType: string;
+  createdDate: string;
 };
 
 type CertificationRequest = {
@@ -1487,7 +1488,7 @@ export const CertificationDetails: React.FC = () => {
                       />
                       <CompanyStatBox
                         label={t("company.table.createdAt")}
-                        value={formatDate(company.createdDate)}
+                        value={formatDate(company?.createdDate)}
                       />
                     </div>
                     <div className="mt-4 rounded-xl border border-gray-200 p-3">

@@ -115,7 +115,13 @@ export const CertificationVerification: React.FC = () => {
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 pt-24">
       {/* Header Section - Matching CertificationDetails style */}
-      <div className="relative bg-linear-to-br from-blue-600 via-indigo-600 to-purple-700 text-white overflow-hidden">
+      <div
+        className="relative flex min-h-[620px] items-center overflow-hidden bg-cover bg-center text-white sm:min-h-[680px] lg:min-h-[760px]"
+        style={{
+          backgroundImage:
+            "linear-gradient(90deg, rgba(7, 25, 60, 0.94) 0%, rgba(20, 50, 110, 0.78) 48%, rgba(30, 20, 90, 0.52) 100%), url('/static/certificate-verification-hero.png')",
+        }}
+      >
         {/* Animated background elements */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full mix-blend-multiply filter blur-3xl animate-blob"></div>
@@ -127,7 +133,7 @@ export const CertificationVerification: React.FC = () => {
         <div className="absolute -bottom-16 -left-16 w-64 h-64 bg-white opacity-5 rounded-full"></div>
         <div className="absolute -top-16 -right-16 w-96 h-96 bg-white opacity-5 rounded-full"></div>
 
-        <div className="relative container mx-auto px-4 py-16">
+        <div className="relative container mx-auto px-4 py-24 sm:py-28 lg:py-32">
           <div className="max-w-4xl mx-auto text-center">
             {/* Badge */}
             <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md rounded-full px-4 py-2 mb-6 border border-white/20">
@@ -192,10 +198,10 @@ export const CertificationVerification: React.FC = () => {
                           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                         />
                       </svg>
-                      {t("common.searching")}
+                      {t("certificationVerification.searchingButton")}
                     </span>
                   ) : (
-                    t("common.search")
+                    t("certificationVerification.searchButton")
                   )}
                 </button>
               </form>

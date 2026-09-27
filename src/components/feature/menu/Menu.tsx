@@ -182,7 +182,7 @@ export const Menu = () => {
           text
           severity="info"
           raised
-          onClick={getAllMenus}
+          onClick={() => void getAllMenus()}
         />
       </div>
     </div>

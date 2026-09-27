@@ -1,4 +1,5 @@
 // pages/Home.js
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -19,6 +20,23 @@ import {
 const Home = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const [activeSlide, setActiveSlide] = useState(0);
+  const heroSlides = [
+    { image: "/static/hero-quality-lab.png", title: t("home.hero.title"), description: t("home.hero.description") },
+    { image: "/static/hero-manufacturing-quality.png", title: t("home.hero.slides.verify.title"), description: t("home.hero.slides.verify.description") },
+    { image: "/static/hero-certification-team.png", title: t("home.hero.slides.trust.title"), description: t("home.hero.slides.trust.description") },
+  ];
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setActiveSlide((current) => (current + 1) % heroSlides.length);
+    }, 6000);
+    return () => window.clearInterval(timer);
+  }, [heroSlides.length]);
+
+  const currentHeroSlide = heroSlides[activeSlide];
+  const sliderTitle = heroSlides[0].title;
+  const sliderDescription = heroSlides[0].description;
 
   const features = [
     {
@@ -120,9 +138,17 @@ const Home = () => {
   return (
     <div className="overflow-hidden pt-24 pb-20">
       {/* Hero Section */}
-      <section className="relative min-h-125 md:min-h-137.5 flex items-center justify-center bg-linear-to-br from-gray-900 via-blue-900 to-indigo-900 text-white overflow-hidden">
+      <section className="relative flex min-h-[460px] items-center justify-center overflow-hidden bg-slate-950 text-white sm:min-h-[500px] lg:min-h-[580px]">
+        <img
+          key={currentHeroSlide.image}
+          src={currentHeroSlide.image}
+          alt=""
+          className="absolute inset-0 block h-full w-full object-cover object-center transition-opacity duration-700"
+          aria-hidden="true"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-950/45 to-slate-950/15" />
         {/* Animated background pattern */}
-        <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0 opacity-0">
           <div
             className="absolute inset-0"
             style={{
@@ -133,7 +159,7 @@ const Home = () => {
         </div>
 
         {/* Floating particles */}
-        <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 hidden overflow-hidden">
           {[...Array(12)].map((_, i) => (
             <div
               key={i}
@@ -150,8 +176,8 @@ const Home = () => {
           ))}
         </div>
 
-        <div className="relative container mx-auto px-4 py-16 md:py-20">
-          <div className="max-w-4xl mx-auto text-center">
+        <div className="relative container mx-auto px-4 py-20 sm:py-24 lg:py-28">
+          <div className="mx-auto max-w-4xl text-center" aria-live="polite">
             {/* Badge */}
             <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md rounded-full px-3 py-1.5 mb-6 border border-white/20">
               {/* <Sparkles className="h-3.5 w-3.5 text-yellow-300" /> */}
@@ -159,19 +185,19 @@ const Home = () => {
             </div>
 
             {/* Main heading */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
-              <span className="bg-linear-to-r from-blue-200 via-white to-purple-200 bg-clip-text text-transparent">
-                {t("home.hero.title")}
+            <h1 className="mb-4 text-3xl font-extrabold leading-tight text-white drop-shadow-lg sm:text-4xl md:text-5xl lg:text-6xl">
+              <span>
+                {sliderTitle}
               </span>
             </h1>
 
             {/* Description */}
-            <p className="text-base md:text-lg mb-6 text-gray-300 max-w-2xl mx-auto leading-relaxed">
-              {t("home.hero.description")}
+            <p className="mb-6 max-w-2xl text-base font-medium leading-relaxed text-slate-100 drop-shadow-md md:mx-auto md:text-lg">
+              {sliderDescription}
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
               <button
                 onClick={() => navigate("/registration")}
                 className="group relative inline-flex items-center bg-linear-to-r from-yellow-400 to-orange-500 text-gray-900 px-6 py-3 rounded-xl font-semibold text-base hover:shadow-xl hover:shadow-orange-500/30 transition-all duration-300 transform hover:scale-105"
@@ -191,6 +217,19 @@ const Home = () => {
               </button>
             </div>
           </div>
+        </div>
+
+        <button type="button" aria-label={t("home.hero.previousSlide")} onClick={() => setActiveSlide((activeSlide - 1 + heroSlides.length) % heroSlides.length)} className="absolute left-3 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white backdrop-blur transition hover:bg-white/20 sm:left-5 sm:h-11 sm:w-11">
+          <ArrowRight className="h-5 w-5 rotate-180" />
+        </button>
+        <button type="button" aria-label={t("home.hero.nextSlide")} onClick={() => setActiveSlide((activeSlide + 1) % heroSlides.length)} className="absolute right-3 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white backdrop-blur transition hover:bg-white/20 sm:right-5 sm:h-11 sm:w-11">
+          <ArrowRight className="h-5 w-5" />
+        </button>
+
+        <div className="absolute bottom-12 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2">
+          {heroSlides.map((slide, index) => (
+            <button key={slide.image} type="button" aria-label={`${t("home.hero.goToSlide")} ${index + 1}`} onClick={() => setActiveSlide(index)} className={`h-2.5 rounded-full transition-all ${index === activeSlide ? "w-8 bg-white" : "w-2.5 bg-white/50 hover:bg-white/80"}`} />
+          ))}
         </div>
 
         {/* Curved bottom */}

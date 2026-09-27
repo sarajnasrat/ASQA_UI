@@ -1813,6 +1813,19 @@
     "hero": {
       "title": "Your Gateway to Quality Certification",
       "description": "Streamline your certification process with ASQA. Get recognized, build trust, and expand your business opportunities.",
+      "slides": {
+        "verify": {
+          "title": "Verify Quality. Trust the Result.",
+          "description": "Check certificate authenticity quickly and confidently through the ASQA verification service."
+        },
+        "trust": {
+          "title": "Quality Standards That Build Trust",
+          "description": "ASQA supports businesses with transparent certification and recognized quality standards."
+        }
+      },
+      "previousSlide": "Previous slide",
+      "nextSlide": "Next slide",
+      "goToSlide": "Go to slide",
       "cta": {
         "start": "Start Your Certification",
         "learn": "Learn More",
@@ -3258,35 +3271,35 @@
     "failedtofetch": "???????? ????? ?????? ?????? ???"
   },
   "certificationVerification": {
-    "title": "تائید اصالت تائید نامه کیفی",
-    "subtitle": "با وارد نمودن شماره تائید نامه کیفی صادر شده می توانید اصالت تائید نامه خویش را در ادراه معیار و کیفیت بررسی نمائید.",
-    "verificationBadge": "تائید اصالت",
-    "certificateNumber": "شماره تائید نامه کیفی",
-    "certificateNumberPlaceholder": "شماره تائید نامه کیفی را وارد کنید",
-    "searchButton": "جستجو",
-    "searchingButton": "در حال جستجو...",
-    "verified": "تأیید شد",
-    "expired": "منقضی شد",
-    "certificateValid": "تائید نامه معتبر معتبر است",
-    "certificateExpired": "تائید نامه پیدا شد، اما منقضی شده است",
-    "certificateDetails": "جزئیات تائید نامه",
-    "certificationType": "نوع تائید نامه",
-    "companyName": "نام شرکت",
-    "issueDate": "تاریخ صدور",
-    "expiryDate": "تاریخ انقضا",
-    "validityInformation": "اطلاعات اعتبار",
-    "certificateActive": "این تائید نامه در حال حاضر فعال و معتبر است.",
-    "certificateExpiredMessage": "این تائید نامه وجود دارد، اما تاریخ انقضای آن گذشته است.",
-    "notSpecified": "تعیین نشده",
-    "error": "تأیید ناموفق بود",
+    "title": "Certificate Authenticity Verification",
+    "subtitle": "Enter the issued certificate number to verify its authenticity with the Afghanistan Standard Quality Authority.",
+    "verificationBadge": "Authenticity Verification",
+    "certificateNumber": "Certificate Number",
+    "certificateNumberPlaceholder": "Enter the certificate number",
+    "searchButton": "Search",
+    "searchingButton": "Searching...",
+    "verified": "Verified",
+    "expired": "Expired",
+    "certificateValid": "Certificate is valid",
+    "certificateExpired": "Certificate found, but it has expired",
+    "certificateDetails": "Certificate Details",
+    "certificationType": "Certification Type",
+    "companyName": "Company Name",
+    "issueDate": "Issue Date",
+    "expiryDate": "Expiry Date",
+    "validityInformation": "Validity Information",
+    "certificateActive": "This certificate is currently active and valid.",
+    "certificateExpiredMessage": "This certificate exists, but its expiry date has passed.",
+    "notSpecified": "Not specified",
+    "error": "Verification failed",
     "errorMessages": {
-      "serialNumberRequired": "لطفاً شماره تائید نامه را وارد کنید.",
-      "noData": "تائید نامه پیدا نشد."
+      "serialNumberRequired": "Please enter the certificate number.",
+      "noData": "Certificate not found."
     },
     "certificationTypeOptions": {
-      "DOMESTIC_QUALITY_CERTIFICATION": "احذ  علامت معیار",
-      "INTERNATIONAL_QUALITY_CERTIFICATION": "تائید نامه کیفی سیستم مدیریتی یا خدمات، محصول",
-      "STANDARD_MARK_CERTIFICATION": "احذ علامت معیار",
+      "DOMESTIC_QUALITY_CERTIFICATION": "Standard Mark Certification",
+      "INTERNATIONAL_QUALITY_CERTIFICATION": "Management System, Service, or Product Quality Certification",
+      "STANDARD_MARK_CERTIFICATION": "Standard Mark Certification",
       "PRODUCT_QUALITY": "Product Quality"
     }
   },

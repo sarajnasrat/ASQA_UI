@@ -1,15 +1,46 @@
 @import "tailwindcss";
+
 @layer base {
-  body {
-    @apply font-sans;
+  html,
+  body,
+  #root {
+    font-family: "Vazirmatn", "Noto Naskh Arabic", "Lato", sans-serif;
   }
+
+  body,
+  button,
+  input,
+  textarea,
+  select,
+  option,
+  .p-component {
+    font-family: inherit;
+  }
+
+  /* English UI typography */
+  html[lang="en"],
+  html[lang="en"] body,
+  html[lang="en"] button,
+  html[lang="en"] input,
+  html[lang="en"] textarea,
+  html[lang="en"] select,
+  html[lang="en"] option,
+  html[lang="en"] .p-component {
+    font-family: Google Sans, Arial, sans-serif, "Noto Color Emoji";
+  }
+}
+
+/* Tailwind's font-sans utility is present on the app root, so keep it aligned
+   with the global Persian font instead of allowing it to reset to sans-serif. */
+.font-sans {
+  font-family: "Vazirmatn", "Noto Naskh Arabic", "Lato", sans-serif;
+}
+
+html[lang="en"] .font-sans {
+  font-family: Google Sans, Arial, sans-serif, "Noto Color Emoji";
 }
 .p-button .pi {
   margin-inline-end: 0.5rem;
-}
-
-.body{
-  font-family: "Lato", sans-serif !important;
 }
 
 /* Keep sidebar labels on the same readable font as the rest of the app. */

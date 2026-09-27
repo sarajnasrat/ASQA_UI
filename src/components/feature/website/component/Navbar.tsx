@@ -1,9 +1,8 @@
 // components/Navbar.js
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, ChevronDown, FileText, Building2 } from "lucide-react";
+import { Menu, X, FileText } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { Dropdown } from "primereact/dropdown";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,7 +14,12 @@ const Navbar = () => {
     const dir =
       i18n.language === "ps" || i18n.language === "dr" ? "rtl" : "ltr";
     document.documentElement.dir = dir;
+    document.documentElement.lang = i18n.language;
   }, [i18n.language]);
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location.pathname]);
 
   const navLinks = [
     { name: t("nav.home"), path: "/" },
@@ -41,17 +45,13 @@ const Navbar = () => {
     { label: "دری", value: "dr", icon: "/af.png" },
   ];
 
-  const handleLanguageChange = (e: any) => {
-    i18n.changeLanguage(e.value);
-  };
-
   return (
     <nav
       dir={i18n.language === "ps" || i18n.language === "dr" ? "rtl" : "ltr"}
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
+      className={`fixed top-0 left-0 w-full z-50 border-b border-blue-200 bg-linear-to-r from-blue-50 via-white to-indigo-50 shadow-sm transition-all duration-500 ${
         isOpen
-          ? "bg-white shadow-md py-4"
-          : "bg-white shadow-md py-4"
+          ? "py-4"
+          : "py-4"
       }`}
     >
       <div className="w-full px-3 sm:px-5 lg:px-6 xl:px-8">
@@ -78,21 +78,21 @@ const Navbar = () => {
               <span className="text-xl sm:text-2xl font-bold bg-linear-to-r from-gray-800 to-gray-900 bg-clip-text text-transparent tracking-tight">
                 {/* {t("common.asqa")} */}
               </span>
-              <span className="whitespace-nowrap text-1xl font-medium text-gray-500 tracking-wide hidden sm:block">
+              <span className="whitespace-nowrap text-sm font-medium text-gray-500 tracking-wide hidden sm:block 2xl:text-base">
                 {t("common.asqaDescription")}
               </span>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden min-w-0 flex-1 flex-nowrap items-center justify-start gap-1 px-1 lg:flex lg:gap-1 lg:px-2 xl:px-3">
+          <div className="hidden min-w-0 flex-1 flex-nowrap items-center justify-start gap-2 px-1 2xl:flex 2xl:gap-1 2xl:px-2">
             {/* Navigation Links with modern hover effects */}
-            <div className="flex min-w-0 flex-nowrap items-center gap-0.5 lg:mr-1">
+            <div className="flex min-w-0 flex-nowrap items-center gap-0.5 2xl:mr-20 2xl:ml-20">
               {navLinks.map((link) => (
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`relative whitespace-nowrap px-2 py-2 text-xs font-semibold rounded-lg transition-all duration-300 xl:px-3 xl:text-sm ${
+                    className={`relative whitespace-nowrap px-2.5 py-2 text-base font-medium leading-5 rounded-lg transition-all duration-300 2xl:px-3 ${
                     location.pathname === link.path
                       ? "text-blue-700 bg-blue-50/80"
                       : "text-gray-700 hover:text-blue-600 hover:bg-blue-50/50"
@@ -105,33 +105,10 @@ const Navbar = () => {
                 </Link>
               ))}
             </div>
-            <div className="div"></div>
-            {/* Language Dropdown - PrimeReact with custom styling */}
-            <div className="mx-0.5 shrink-0">
-              <Dropdown
-                value={i18n.language}
-                options={languageOptions}
-                onChange={handleLanguageChange}
-                optionLabel="label"
-                optionValue="value"
-                className="w-24 xl:w-28"
-                panelClassName="w-28"
-                itemTemplate={(option) => (
-                  <div className="flex items-center gap-2 px-3 py-2 cursor-pointer">
-                    <img src={option.icon} alt={option.label} className="h-5 w-5 rounded-sm object-contain" />
-                    <span className="text-sm font-medium text-gray-700">
-                      {option.label}
-                    </span>
-                  </div>
-                )}
-                appendTo="self"
-              />
-            </div>
-
-            {/* CTA Button - Premium styling */}
+                 {/* CTA Button - Premium styling */}
             <Link
               to="/registration"
-              className="ml-1 group relative shrink-0 whitespace-nowrap overflow-hidden rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-3 py-2.5 text-xs font-semibold text-white shadow-md transition-all duration-300 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] xl:px-4 xl:text-sm"
+              className="ml-2 group relative shrink-0 whitespace-nowrap overflow-hidden rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-2.5 text-sm font-medium leading-5 text-white shadow-md transition-all duration-300 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]"
             >
               <span className="relative z-10 flex items-center gap-2">
                 <FileText className="w-4 h-4" />
@@ -139,13 +116,36 @@ const Navbar = () => {
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-indigo-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </Link>
+            <div className="div"></div>
+            {/* Language buttons: show only the two languages that are not active. */}
+            <div className="mx-2 flex shrink-0 items-center gap-1">
+              {languageOptions
+                .filter((lang) => lang.value !== i18n.language)
+                .map((lang) => (
+                  <button
+                    key={lang.value}
+                    type="button"
+                    onClick={() => changeLanguage(lang.value)}
+                    className="flex items-center gap-1 rounded-lg px-2 py-1.5 text-base font-medium text-gray-600 transition-colors hover:bg-blue-50 hover:text-blue-700"
+                    title={lang.label}
+                  >
+                    <img src={lang.icon} alt="" className="h-4 w-4 rounded-sm object-contain" />
+                    <span>{lang.label}</span>
+                  </button>
+                ))}
+            </div>
+
+       
           </div>
 
           {/* Mobile Menu Button - Refined */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden relative w-10 h-10 flex items-center justify-center rounded-xl bg-gray-50 text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="2xl:hidden relative w-10 h-10 flex items-center justify-center rounded-xl bg-gray-50 text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
             aria-label="Toggle menu"
+            aria-expanded={isOpen}
+            aria-controls="website-mobile-menu"
+            type="button"
           >
             {isOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -153,8 +153,9 @@ const Navbar = () => {
 
         {/* Mobile Menu - Modern slide-down with enhanced styling */}
         <div
-          className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-            isOpen ? "max-h-[calc(100vh-6rem)] overflow-y-auto opacity-100 mt-4" : "max-h-0 opacity-0"
+          id="website-mobile-menu"
+          className={`2xl:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+            isOpen ? "max-h-[70vh] overflow-y-auto opacity-100 mt-4" : "max-h-0 opacity-0"
           }`}
         >
           <div className="space-y-1 border-t border-gray-100 bg-white px-2 py-2 pt-4 shadow-lg">
@@ -178,19 +179,15 @@ const Navbar = () => {
               <p className="text-xs font-medium text-gray-400 uppercase tracking-wider px-3 mb-2">
                 Language
               </p>
-              <div className="grid grid-cols-3 gap-2">
-                {languageOptions.map((lang) => (
+              <div className="grid grid-cols-2 gap-2">
+                {languageOptions.filter((lang) => lang.value !== i18n.language).map((lang) => (
                   <button
                     key={lang.value}
                     onClick={() => changeLanguage(lang.value)}
-                    className={`flex flex-col items-center gap-1 whitespace-nowrap py-2 rounded-xl transition-all duration-200 ${
-                      i18n.language === lang.value
-                        ? "bg-blue-50 text-blue-700 ring-1 ring-blue-200"
-                        : "bg-gray-50 text-gray-600 hover:bg-gray-100"
-                    }`}
+                    className="flex flex-col items-center gap-1 whitespace-nowrap rounded-xl bg-gray-50 py-2 text-gray-600 transition-all duration-200 hover:bg-gray-100"
                   >
                     <img src={lang.icon} alt={lang.label} className="h-6 w-6 rounded-sm object-contain" />
-                    <span className="text-xs font-medium">{lang.label}</span>
+                    <span className="text-sm font-medium">{lang.label}</span>
                   </button>
                 ))}
               </div>

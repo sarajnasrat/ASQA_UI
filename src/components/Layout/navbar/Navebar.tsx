@@ -111,6 +111,7 @@ export const Navbar = ({ collapsed = false, onMenuClick }: NavbarProps) => {
   useEffect(() => {
     document.documentElement.dir =
       i18n.language === "ps" || i18n.language === "dr" ? "rtl" : "ltr";
+    document.documentElement.lang = i18n.language;
   }, [i18n.language]);
 
   const isRTL = i18n.language === "ps" || i18n.language === "dr";
