@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import DatePicker, { DateObject } from 'react-multi-date-picker';
 import persian from 'react-date-object/calendars/persian';
-import persian_fa from 'react-date-object/locales/persian_fa';
+import persian_af from './locales/persian_af';
 import gregorian from 'react-date-object/calendars/gregorian';
 import gregorian_en from 'react-date-object/locales/gregorian_en';
 import arabic from 'react-date-object/calendars/arabic';
@@ -45,7 +45,7 @@ const [selectedDate, setSelectedDate] = useState<DateObject | null>(null);
 
   const getLocale = () => {
     if (calendar === 'persian') {
-      return persian_fa;
+      return persian_af;
     } else if (calendar === 'arabic') {
       return arabic_ar;
     } else {

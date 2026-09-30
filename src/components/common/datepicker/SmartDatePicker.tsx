@@ -7,12 +7,12 @@ import persian from "react-date-object/calendars/persian";
 import arabic from "react-date-object/calendars/arabic";
 
 import gregorian_en from "react-date-object/locales/gregorian_en";
-import persian_fa from "react-date-object/locales/persian_fa";
+import persian_af from "./locales/persian_af";
 import arabic_ar from "react-date-object/locales/arabic_ar";
 
 type CalendarType = "gregorian" | "persian" | "arabic";
 
-const afghanPersianLocale = {
+const afghanPersianLocale = persian_af; /*
   ...persian_fa,
   months: [
     ["حمل", "حم"],
@@ -28,7 +28,7 @@ const afghanPersianLocale = {
     ["دلو", "دل"],
     ["حوت", "حوت"],
   ],
-};
+}; */
 
 interface Props {
   value: any;

@@ -11,6 +11,7 @@ export class IslamicDateFormatter {
   private static readonly SHAMSI_LOCALE = "fa-AF-u-ca-persian";
   private static readonly GREGORIAN_LOCALE = "en-US";
   private static readonly DEFAULT_TIME_ZONE = "UTC";
+  private static readonly AFGHAN_MONTHS = ["حمل", "ثور", "جوزا", "سرطان", "اسد", "سنبله", "میزان", "عقرب", "قوس", "جدی", "دلو", "حوت"];
 
   private static hasExplicitTime(date: DateInput): boolean {
     if (date instanceof Date) {
@@ -99,6 +100,15 @@ export class IslamicDateFormatter {
     return this.buildFormatter(locale, options).format(this.normalizeDate(date));
   }
 
+  private static formatAfghanShamsi(date: DateInput, includeWeekday: boolean): string {
+    const normalized = this.normalizeDate(date);
+    const parts = this.buildFormatter(this.SHAMSI_LOCALE, {
+      ...(includeWeekday ? { weekday: "long" } : {}), day: "numeric", month: "long", year: "numeric",
+    }).formatToParts(normalized);
+    const monthNumber = Number(this.buildFormatter("en-US-u-ca-persian", { month: "numeric" }).format(normalized));
+    return parts.map((part) => part.type === "month" ? this.AFGHAN_MONTHS[monthNumber - 1] || part.value : part.value).join("");
+  }
+
   /**
    * Main view formatter.
    * Kept on the existing API so current view usages render Afghanistan-style
@@ -127,23 +137,14 @@ export class IslamicDateFormatter {
    * Example: ۳۱ جوزا ۱۴۰۵
    */
   static getShamsiDate(date: DateInput): string {
-    return this.formatWithLocale(date, this.SHAMSI_LOCALE, {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
+    return this.formatAfghanShamsi(date, false);
   }
 
   /**
    * Full Afghanistan Shamsi date with weekday.
    */
   static getFullShamsiDate(date: DateInput): string {
-    return this.formatWithLocale(date, this.SHAMSI_LOCALE, {
-      weekday: "long",
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
+    return this.formatAfghanShamsi(date, true);
   }
 
   /**

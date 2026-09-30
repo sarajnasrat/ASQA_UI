@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-multi-date-picker';
 import persian from 'react-date-object/calendars/persian';
-import persian_fa from 'react-date-object/locales/persian_fa';
+import persian_af from './locales/persian_af';
 
 interface HijriRangeDatePickerProps {
   onRangeChange?: (startDate: Date, endDate: Date) => void;
@@ -35,7 +35,7 @@ export const HijriRangeDatePicker: React.FC<HijriRangeDatePickerProps> = ({
         value={dates}
         onChange={handleChange}
         calendar={persian}
-        locale={persian_fa}
+        locale={persian_af}
         format="YYYY/MM/DD"
         range
         placeholder="Select date range"
