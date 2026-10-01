@@ -787,7 +787,7 @@
   },
   "nav": {
     "certificationVerification": "Certification Verification",
-    "home": "Home",
+    "home": "Main Page",
     "services": "Services",
     "companies": "Companies",
     "blacklistedCompanies": "Blacklisted Companies",
@@ -1869,12 +1869,12 @@
       "learnMore": "Learn More"
     },
     "process": {
-      "badge": "Simple 4-Step Process",
+      "badge": "Simple 5-Step Process",
       "title": "Start Your Certification Journey",
       "subtitle": "Follow our streamlined process and get certified faster than ever before",
       "steps": {
         "1": {
-          "title": "Choose Certification",
+          "title": "Request Type Selection",
           "description": "Select the certification that fits your needs"
         },
         "2": {
@@ -1886,8 +1886,12 @@
           "description": "Add primary contact information"
         },
         "4": {
-          "title": "Review & Certificate",
-          "description": "Get certified upon approval"
+          "title": "Documents & Media",
+          "description": "Upload the required supporting documents"
+        },
+        "5": {
+          "title": "Review & Submit",
+          "description": "Review your information and submit the request"
         },
         "step": "?????"
       }
@@ -3115,37 +3119,48 @@
     },
     "services": {
       "header": {
+        "badge": "ASQA Certification Services",
         "title": "Our Services",
-        "description": "Comprehensive certification services for companies worldwide"
+        "description": "Understand every stage of the ASQA certification request, from selecting the request type to final submission."
       },
       "process": {
-        "title": "Certification Process",
-        "description": "A straightforward path to ASQA certification"
+        "title": "Certification Request Process",
+        "description": "The five stages of your online certification request"
+      },
+      "chart": {
+        "title": "Process Overview",
+        "description": "See how the five request stages connect from start to submission."
+      },
+      "timeline": {
+        "title": "Your Certification Journey",
+        "description": "Follow each stage in order and prepare the required information before continuing.",
+        "step": "Step"
       },
       "steps": {
         "1": {
-          "title": "Initial Consultation",
-          "description": "Discuss your certification needs and requirements with our experts"
+          "title": "Request Type Selection",
+          "description": "Choose the certification request that matches your organization and purpose.",
+          "details": { "1": "Choose Quality Certification or Standard Mark.", "2": "For Quality Certification, select the applicable quality category.", "3": "Select whether the request is new or a renewal." }
         },
         "2": {
-          "title": "Company Registration",
-          "description": "Register your company details in our system"
+          "title": "Company Information",
+          "description": "Provide the official identity and business information of your company.",
+          "details": { "1": "Enter the company names and contact information.", "2": "Provide license, TIN, address, and activity information.", "3": "Review company information before continuing." }
         },
         "3": {
-          "title": "Document Submission",
-          "description": "Upload all required documentation for review"
+          "title": "Contact Person",
+          "description": "Identify the authorized person responsible for communication about the request.",
+          "details": { "1": "Enter the contact person's full name and position.", "2": "Provide an active phone number and email address.", "3": "Add the contact person's address information." }
         },
         "4": {
-          "title": "Compliance Review",
-          "description": "Our team reviews your submission against ASQA standards"
+          "title": "Documents & Media",
+          "description": "Upload the supporting files required for your selected certification request.",
+          "details": { "1": "Upload clear and valid supporting documents.", "2": "Use the accepted file formats and size limits.", "3": "Confirm that every required attachment is included." }
         },
         "5": {
-          "title": "Site Assessment",
-          "description": "Optional on-site or virtual assessment of your facilities"
-        },
-        "6": {
-          "title": "Certification Issuance",
-          "description": "Receive your official ASQA certificate upon approval"
+          "title": "Review & Submit",
+          "description": "Review all entered information and submit the completed certification request.",
+          "details": { "1": "Check the request, company, contact, and document information.", "2": "Correct any incomplete or inaccurate details.", "3": "Submit the request and save the tracking number." }
         }
       },
       "benefits": {

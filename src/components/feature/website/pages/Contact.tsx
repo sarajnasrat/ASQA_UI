@@ -215,8 +215,14 @@ const Contact = () => {
 
   return (
     <div className="pt-24 pb-20">
-      <section className="bg-linear-to-r from-blue-600 to-blue-800 text-white py-16">
-        <div className="container mx-auto px-4 text-center">
+      <section
+        className="relative flex min-h-[420px] items-center overflow-hidden bg-cover bg-center py-24 text-white md:min-h-[500px]"
+        style={{
+          backgroundImage:
+            "linear-gradient(90deg, rgba(7, 25, 60, 0.94), rgba(20, 50, 110, 0.76)), url('/static/contact-hero.png')",
+        }}
+      >
+        <div className="relative z-10 container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             {t("website.contact.header.title")}
           </h1>

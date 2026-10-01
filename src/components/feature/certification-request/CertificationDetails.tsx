@@ -56,19 +56,25 @@ export const CertificationDetails = () => {
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 pt-24">
       {/* Header Section */}
-      <div className="relative bg-linear-to-br from-blue-600 via-indigo-600 to-purple-700 text-white overflow-hidden">
+      <div
+        className="relative overflow-hidden bg-cover bg-center text-white"
+        style={{
+          backgroundImage:
+            "linear-gradient(90deg, rgba(7, 25, 60, 0.96) 0%, rgba(20, 50, 110, 0.84) 48%, rgba(30, 20, 90, 0.62) 100%), url('/static/certificate-request-tracking-hero.png')",
+        }}
+      >
         {/* Animated background elements */}
-        <div className="absolute inset-0 opacity-10">
+        <div className="pointer-events-none absolute inset-0 opacity-10">
           <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full mix-blend-multiply filter blur-3xl animate-blob"></div>
           <div className="absolute top-0 right-0 w-96 h-96 bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000"></div>
           <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-4000"></div>
         </div>
 
         {/* Decorative circles */}
-        <div className="absolute -bottom-16 -left-16 w-64 h-64 bg-white opacity-5 rounded-full"></div>
-        <div className="absolute -top-16 -right-16 w-96 h-96 bg-white opacity-5 rounded-full"></div>
+        <div className="pointer-events-none absolute -bottom-16 -left-16 h-64 w-64 rounded-full bg-white opacity-5"></div>
+        <div className="pointer-events-none absolute -right-16 -top-16 h-96 w-96 rounded-full bg-white opacity-5"></div>
 
-        <div className="relative container mx-auto px-4 py-16">
+        <div className="relative z-10 container mx-auto px-4 py-16">
           <div className="max-w-4xl mx-auto text-center">
             {/* Badge */}
             <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md rounded-full px-4 py-2 mb-6 border border-white/20">
@@ -145,20 +151,6 @@ export const CertificationDetails = () => {
           </div>
         </div>
 
-        {/* Decorative wave */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 1440 120"
-            className="w-full h-auto"
-          >
-            <path
-              fill="#f9fafb"
-              fillOpacity="1"
-              d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z"
-            ></path>
-          </svg>
-        </div>
       </div>
 
       {/* Main Content */}

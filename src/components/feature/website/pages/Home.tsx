@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { OrganizationChart } from "primereact/organizationchart";
 import {
   CheckCircle,
   FileText,
@@ -15,11 +16,12 @@ import {
   Target,
   HeartHandshake,
   Rocket,
+  Send,
 } from "lucide-react";
 
 const Home = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [activeSlide, setActiveSlide] = useState(0);
   const heroSlides = [
     { image: "/static/hero-quality-lab.png", title: t("home.hero.title"), description: t("home.hero.description") },
@@ -72,66 +74,83 @@ const Home = () => {
     },
     {
       number: "02",
-      title: t("home.process.steps.2.title"),
+      title: t("registration.steps.companyInfo"),
       description: t("home.process.steps.2.description"),
       icon: <Building2 className="h-6 w-6" />,
       color: "from-indigo-500 to-purple-500",
     },
     {
       number: "03",
-      title: t("home.process.steps.3.title"),
+      title: t("registration.steps.contactPerson"),
       description: t("home.process.steps.3.description"),
       icon: <Users className="h-6 w-6" />,
       color: "from-purple-500 to-pink-500",
     },
     {
       number: "04",
-      title: t("home.process.steps.4.title"),
+      title: t("registration.steps.documents"),
       description: t("home.process.steps.4.description"),
-      icon: <Award className="h-6 w-6" />,
+      icon: <FileText className="h-6 w-6" />,
       color: "from-pink-500 to-rose-500",
+    },
+    {
+      number: "05",
+      title: t("registration.steps.reviewSubmit"),
+      description: t("home.process.steps.5.description"),
+      icon: <Send className="h-6 w-6" />,
+      color: "from-rose-500 to-orange-500",
     },
   ];
 
   const certificationTypes = [
     {
-      icon: <Building2 className="h-8 w-8" />,
-      title: t("home.certificationTypes.domestic.title"),
-      description: t("home.certificationTypes.domestic.description"),
+      icon: <Shield className="h-8 w-8" />,
+      title: t("certification.page.certificationType.domesticType"),
+      description: t("certification.page.certificationType.domestic.description"),
       features: [
-        t("home.certificationTypes.domestic.features.1"),
-        t("home.certificationTypes.domestic.features.2"),
-        t("home.certificationTypes.domestic.features.3"),
+        t("certification.page.certificationType.domesticOptions.system"),
+        t("certification.page.certificationType.domesticOptions.services"),
+        t("certification.page.certificationType.domesticOptions.product"),
       ],
       gradient: "from-blue-500 to-cyan-500",
       lightBg: "bg-blue-50",
       textColor: "text-blue-600",
     },
     {
-      icon: <Globe className="h-8 w-8" />,
-      title: t("home.certificationTypes.international.title"),
-      description: t("home.certificationTypes.international.description"),
-      features: [
-        t("home.certificationTypes.international.features.1"),
-        t("home.certificationTypes.international.features.2"),
-        t("home.certificationTypes.international.features.3"),
-      ],
-      gradient: "from-indigo-500 to-purple-500",
-      lightBg: "bg-indigo-50",
-      textColor: "text-indigo-600",
-    },
-    {
       icon: <Award className="h-8 w-8" />,
-      title: t("home.certificationTypes.standard.title"),
-      description: t("home.certificationTypes.standard.description"),
+      title: t("certification.page.certificationType.standard.title"),
+      description: t("certification.page.certificationType.standard.description"),
       features: [
-        t("home.certificationTypes.standard.features.1"),
-        t("home.certificationTypes.standard.features.2"),
-        t("home.certificationTypes.standard.features.3"),
+        
       ],
       gradient: "from-purple-500 to-pink-500",
       lightBg: "bg-purple-50",
       textColor: "text-purple-600",
+    },
+  ];
+
+  const requestTypeChart = [
+    {
+      label: t("certification.documentTypes"),
+      style: { background: "#2563eb", color: "#ffffff", border: "1px solid #2563eb" },
+      expanded: true,
+      children: [
+        {
+          label: t("certification.page.certificationType.domesticType"),
+          style: { background: "#eff6ff", color: "#1e40af", border: "1px solid #bfdbfe" },
+          expanded: true,
+          children: [
+            { label: t("certification.page.certificationType.domesticOptions.system"), style: { background: "#ffffff", color: "#334155", border: "1px solid #dbeafe" } },
+            { label: t("certification.page.certificationType.domesticOptions.services"), style: { background: "#ffffff", color: "#334155", border: "1px solid #dbeafe" } },
+            { label: t("certification.page.certificationType.domesticOptions.product"), style: { background: "#ffffff", color: "#334155", border: "1px solid #dbeafe" } },
+          ],
+        },
+        {
+          label: t("certification.page.certificationType.standard.title"),
+          style: { background: "#fffbeb", color: "#92400e", border: "1px solid #fde68a" },
+          expanded: true,
+        },
+      ],
     },
   ];
 
@@ -254,14 +273,93 @@ const Home = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              {t("home.certificationTypes.title")}
+              {t("certification.page.certificationType.certificationTypeLabel")}
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              {t("home.certificationTypes.subtitle")}
-            </p>
+      
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="mx-auto max-w-6xl overflow-x-auto rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:p-8">
+            <OrganizationChart
+              className="request-type-chart"
+              value={requestTypeChart}
+              nodeTemplate={(node) => (
+                <div dir={i18n.dir()} className="min-w-40 px-4 py-3 text-center text-sm font-semibold">
+                  {node.label}
+                </div>
+              )}
+            />
+            <style>{`
+              .request-type-chart {
+                min-width: max-content;
+                direction: ltr;
+              }
+
+              .request-type-chart .p-organizationchart-table {
+                border-collapse: separate !important;
+                border-spacing: 0 !important;
+                direction: ltr !important;
+              }
+
+              .request-type-chart .p-organizationchart-node-content {
+                overflow: hidden;
+                border-radius: 0.75rem !important;
+                padding: 0 !important;
+                box-shadow: 0 4px 12px rgb(15 23 42 / 0.1);
+              }
+
+              .request-type-chart .p-node-toggler {
+                display: none !important;
+              }
+
+              .request-type-chart .p-organizationchart-line-down {
+                margin: 0 auto !important;
+                height: 24px !important;
+                width: 2px !important;
+                border: 0 !important;
+                background-color: #94a3b8 !important;
+              }
+
+              .request-type-chart .p-organizationchart-line-top {
+                border-top: 2px solid #94a3b8 !important;
+              }
+
+              .request-type-chart .p-organizationchart-line-left {
+                border-right: 1px solid #94a3b8 !important;
+              }
+
+              .request-type-chart .p-organizationchart-line-right {
+                border-left: 1px solid #94a3b8 !important;
+              }
+
+              @media (max-width: 767px) {
+                .request-type-chart .p-organizationchart-table > tbody > tr > td {
+                  padding-inline: 0.35rem !important;
+                }
+
+                .request-type-chart .p-organizationchart-node-content > div > div {
+                  min-width: 8.5rem;
+                  max-width: 11rem;
+                  white-space: normal;
+                }
+              }
+            `}</style>
+          </div>
+          {/*
+          <div className="relative mx-auto max-w-6xl">
+            <div className="relative z-10 mx-auto mb-10 max-w-sm rounded-2xl border-2 border-blue-200 bg-white p-5 text-center shadow-lg">
+              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md">
+                <Target className="h-6 w-6" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900">
+                {t("certification.page.requestType.title")}
+              </h3>
+              <p className="mt-2 text-sm text-slate-500">
+                {t("certification.page.requestType.subtitle")}
+              </p>
+            </div>
+            <div className="absolute left-1/2 top-28 hidden h-8 w-px -translate-x-1/2 bg-blue-200 md:block" />
+            <div className="absolute left-1/4 right-1/4 top-36 hidden h-px bg-blue-200 md:block" />
+            <div className="grid gap-8 md:grid-cols-2">
             {certificationTypes.map((type, index) => (
               <div
                 key={index}
@@ -284,19 +382,26 @@ const Home = () => {
                 </h3>
                 <p className="text-gray-600 mb-4">{type.description}</p>
 
-                <ul className="space-y-2 mb-6">
+                {type.features.length > 0 && <div className="relative mt-6 border-t border-slate-100 pt-5">
+                  <div className="absolute -top-1 left-8 h-2 w-2 rounded-full bg-slate-300" />
+                  <div className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
+                    {type.title}
+                  </div>
+                  <div className={`grid gap-3 ${type.features.length === 3 ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}>
                   {type.features.map((feature, idx) => (
-                    <li
+                    <div
                       key={idx}
-                      className="flex items-center text-sm text-gray-600"
+                      className={`flex min-h-16 items-center gap-2 rounded-xl border ${type.border} ${type.lightBg} px-3 py-3 text-sm font-medium text-slate-700 transition-transform duration-300 hover:-translate-y-1`}
                     >
-                      <CheckCircle
-                        className={`h-4 w-4 ${type.textColor} mr-2`}
-                      />
-                      {feature}
-                    </li>
+                      <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white ${type.textColor} shadow-sm`}>
+                        <CheckCircle className="h-4 w-4" />
+                      </span>
+                      <span>{feature}</span>
+                    </div>
                   ))}
-                </ul>
+                  </div>
+                </div>
+                }
 
                 <button
                   onClick={() => navigate("/registration")}
@@ -311,7 +416,8 @@ const Home = () => {
                 ></div>
               </div>
             ))}
-          </div>
+            </div>
+          </div> */}
         </div>
       </section>
 
@@ -337,15 +443,18 @@ const Home = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 relative">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-x-10 lg:gap-y-12 relative">
             {steps.map((step, index) => (
               <div key={index} className="relative group">
-                <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 h-full flex flex-col">
-                  <div className="flex items-center space-x-3 mb-4">
+                <div className="relative z-10 bg-white rounded-2xl p-6 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-100 h-full flex flex-col">
+                  <div className="flex items-center space-x-3 mb-5">
                     <div
                       className={`w-12 h-12 rounded-xl bg-linear-to-br ${step.color} flex items-center justify-center text-white font-bold text-lg shadow-md`}
                     >
                       {step.number}
+                    </div>
+                    <div className="text-blue-600 bg-blue-50 rounded-lg p-2" aria-hidden="true">
+                      {step.icon}
                     </div>
                     <h3 className="text-lg font-semibold text-gray-900 flex-1">
                       {step.title}
@@ -356,16 +465,6 @@ const Home = () => {
                     {step.description}
                   </p>
 
-                  <div className="mt-4 pt-4 border-t border-gray-100">
-                    <div className="flex justify-between items-center">
-                      <span className="text-xs text-gray-400">
-                        {t("home.process.steps.step")} {step.number}
-                      </span>
-                      <div
-                        className={`w-8 h-1 bg-linear-to-r ${step.color} rounded-full opacity-50`}
-                      ></div>
-                    </div>
-                  </div>
                 </div>
               </div>
             ))}
@@ -398,15 +497,17 @@ const Home = () => {
                   className={`absolute inset-0 bg-linear-to-br ${feature.gradient} opacity-0 group-hover:opacity-5 rounded-3xl transition-opacity duration-500`}
                 ></div>
 
-                <div
-                  className={`relative mb-8 w-16 h-16 bg-linear-to-br ${feature.gradient} rounded-2xl flex items-center justify-center shadow-lg ${feature.shadow} group-hover:scale-110 transition-transform duration-500`}
-                >
-                  {feature.icon}
+                <div className="relative mb-6 flex items-center gap-4">
+                  <div
+                    className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-linear-to-br ${feature.gradient} shadow-lg ${feature.shadow} transition-transform duration-500 group-hover:scale-110`}
+                  >
+                    {feature.icon}
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 transition-colors group-hover:text-blue-600">
+                    {feature.title}
+                  </h3>
                 </div>
 
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors">
-                  {feature.title}
-                </h3>
                 <p className="text-gray-600 leading-relaxed">
                   {feature.description}
                 </p>

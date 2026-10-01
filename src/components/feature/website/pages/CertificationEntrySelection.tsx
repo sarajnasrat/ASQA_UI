@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Award, Building2, CheckCircle2, ShieldCheck } from "lucide-react";
+import { ArrowRight, CheckCircle2, ShieldCheck } from "lucide-react";
 
 interface CertificationEntrySelectionProps {
   onSelect?: (value: string) => void;
@@ -46,7 +46,7 @@ const CertificationEntrySelection = ({
         t("certification.page.requestType.renewal.title"),
         t("certification.page.certificationScope.title"),
       ],
-      icon: Award,
+      icon: ShieldCheck,
       accent: "from-amber-500 to-orange-500",
       bg: "bg-orange-50",
       text: "text-orange-700",
@@ -56,24 +56,14 @@ const CertificationEntrySelection = ({
   ];
 
   const content = (
-    <div className={embedded ? "" : "container mx-auto px-4 py-12 max-w-5xl"}>
-      {/* <div className={embedded ? "text-center mb-8" : "text-center mb-10"}>
-        <div className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700 mb-5">
-          <span className="h-2 w-2 rounded-full bg-blue-500"></span>
-          {t("registration.steps.certificationrequest")}
-        </div>
-        <div className="inline-flex items-center justify-center w-20 h-20 bg-linear-to-br from-blue-600 via-blue-700 to-cyan-600 rounded-[28px] shadow-lg shadow-blue-200/70 mb-6">
-          <Building2 className="w-10 h-10 text-white" />
-        </div>
-        <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-gray-900 mb-3">
-          {t("certification.page.certificationType.title")}
+    <div className={embedded ? "" : "container mx-auto max-w-5xl px-4 py-12"}>
+      <div className={embedded ? "mb-8 text-start" : "mb-10 text-center"}>
+        <h1 className="mb-3 text-3xl font-bold tracking-tight text-slate-900 md:text-2xl">
+          {t("certification.page.certificationType.certificationTypeLabel")}
         </h1>
-        <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-          {t("certification.page.certificationType.subtitle")}
-        </p>
-      </div> */}
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         {options.map((option) => {
           const Icon = option.icon;
           const isSelected = selectedValue === option.value;
@@ -92,38 +82,37 @@ const CertificationEntrySelection = ({
                 });
               }}
               className={`
-          group relative rounded-2xl border bg-white p-5 
+          group relative flex min-h-[330px] flex-col overflow-hidden rounded-3xl border bg-white p-6 text-start
           transition-all duration-300 ease-in-out
           ${
             isSelected
-              ? `${option.border} shadow-lg ${option.glow} ring-1`
-              : "border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300"
+              ? `${option.border} shadow-xl ${option.glow} ring-2 ring-offset-2`
+              : "border-slate-200 shadow-sm hover:-translate-y-1 hover:border-slate-300 hover:shadow-xl"
           }
-          hover:-translate-y-1 active:translate-y-0
-          focus:outline-none focus:ring-2 
+          active:translate-y-0 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
         `}
             >
               {/* Subtle gradient overlay */}
               <div
                 className={`
-            absolute inset-0 rounded-2xl bg-linear-to-br ${option.accent} 
+            absolute inset-0 rounded-3xl bg-linear-to-br ${option.accent}
             transition-opacity duration-500
-            ${isSelected ? "opacity-8" : "opacity-0 group-hover:opacity-5"}
+            ${isSelected ? "opacity-[0.08]" : "opacity-0 group-hover:opacity-[0.04]"}
           `}
               />
 
               {/* Top accent line */}
               <div
                 className={`
-            absolute inset-x-4 top-0 h-0.5 rounded-full bg-gradient-to-r ${option.accent} 
+            absolute inset-x-6 top-0 h-1 rounded-full bg-gradient-to-r ${option.accent}
             transition-all duration-300 origin-center
             ${isSelected ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"}
           `}
               />
 
-              <div className="relative">
+              <div className="relative flex h-full flex-col">
                 {/* Header */}
-                <div className="flex items-start justify-between mb-3">
+                <div className="mb-5 flex items-center gap-4">
                   <div
                     className={`
                 inline-flex items-center justify-center w-12 h-12 rounded-xl 
@@ -134,39 +123,32 @@ const CertificationEntrySelection = ({
                   >
                     <Icon className={`w-6 h-6 ${option.text}`} />
                   </div>
-{/* 
-                  <span
-                    className={`
-                inline-flex items-center gap-1.5 rounded-full px-3 py-0.5 text-xs font-medium
-                transition-all duration-300
-                ${
-                  isSelected
-                    ? `${option.bg} ${option.text}`
-                    : "bg-gray-50 text-gray-400 group-hover:bg-gray-100 group-hover:text-gray-600"
-                }
-              `}
-                  >
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    {isSelected ? t("common.selected") : t("common.continue")}
-                  </span> */}
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-xl font-bold text-slate-900">
+                      {option.title}
+                    </h3>
+                    {isSelected && (
+                      <span
+                        className={`mt-1 inline-flex items-center gap-1 text-xs font-semibold ${option.text}`}
+                      >
+                        <CheckCircle2 className="h-3.5 w-3.5" />
+                        {t("common.selected")}
+                      </span>
+                    )}
+                  </div>
                 </div>
 
-                {/* Title */}
-                <h3 className="text-lg font-semibold text-gray-900 mb-1.5">
-                  {option.title}
-                </h3>
-
                 {/* Description */}
-                <p className="text-sm text-gray-600 leading-relaxed mb-4">
+                <p className="mb-5 text-sm leading-6 text-slate-600">
                   {option.description}
                 </p>
 
                 {/* Highlights */}
-                <div className="space-y-2 mb-4">
+                <div className="mb-6 space-y-3">
                   {option.highlights.map((item) => (
                     <div
                       key={item}
-                      className="flex items-center gap-2.5 text-sm text-gray-600"
+                      className="flex items-center gap-3 text-sm text-slate-600"
                     >
                       <span
                         className={`inline-flex h-5 w-5 items-center justify-center rounded-full ${option.bg}`}
@@ -179,7 +161,10 @@ const CertificationEntrySelection = ({
                 </div>
 
                 {/* Footer */}
-                <div className="flex items-center justify-end pt-3 border-t border-gray-100">
+                <div className="mt-auto flex items-center justify-between border-t border-slate-100 pt-4">
+                  <span className={`text-sm font-semibold ${option.text}`}>
+                    {isSelected ? t("common.selected") : t("common.continue")}
+                  </span>
                   <span
                     className={`
                 h-9 w-9 rounded-full ${option.bg} 
@@ -188,15 +173,12 @@ const CertificationEntrySelection = ({
                 ${isSelected ? "scale-110" : "group-hover:scale-110 group-hover:translate-x-0.5"}
               `}
                   >
-                    <CheckCircle2 className={`w-4 h-4 ${option.text}`} />
+                    <ArrowRight
+                      className={`h-4 w-4 ${option.text} transition-transform group-hover:translate-x-1 rtl:rotate-180`}
+                    />
                   </span>
                 </div>
               </div>
-
-              {/* Selection indicator */}
-              {isSelected && (
-                <div className="absolute -inset-px rounded-2xl border-2 border-transparent bg-gradient-to-r from-transparent via-${option.color}-500/20 to-transparent pointer-events-none" />
-              )}
             </button>
           );
         })}

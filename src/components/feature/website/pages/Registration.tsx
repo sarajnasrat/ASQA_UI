@@ -29,6 +29,7 @@ import CertificationRequestService from "../../../../services/CertificationReque
 import { useTranslation } from "react-i18next";
 import CertificationTypeSelection from "./CertificationTypeSelection";
 import CertificationEntrySelection from "./CertificationEntrySelection";
+import { translateBackendErrors } from "../../../../utils/backendMessage";
 
 interface LocationState {
   certificationMainType?: string;
@@ -338,8 +339,10 @@ const Registration = () => {
         // Clear all persisted registration state after successful completion
         clearRegistrationStorage();
       } else {
-        const errorMessage =
-          response.data?.errors?.[0] || t("registration.errors.submitFailed");
+          const errorMessage = translateBackendErrors(
+            response.data?.errors,
+            t("registration.errors.submitFailed"),
+          );
         showToast("error", t("common.error"), errorMessage);
       }
     } catch (error: any) {

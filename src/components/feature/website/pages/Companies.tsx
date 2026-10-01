@@ -1,7 +1,7 @@
 // pages/Companies.tsx
 import { toApiUrl } from "../../../../config/api";
 import { useState, useEffect } from 'react';
-import { Search, MapPin, Building2, ChevronLeft, ChevronRight, Ban } from 'lucide-react';
+import { Search, MapPin, Building2, ChevronLeft, ChevronRight, Ban, Mail, Phone, CheckCircle2 } from 'lucide-react';
 import { useAppToast } from '../../../../hooks/useToast';
 import CompanyService from '../../../../services/company.service';
 import { useTranslation } from 'react-i18next';
@@ -131,19 +131,19 @@ const Companies = ({ blacklisted = false }: { blacklisted?: boolean }) => {
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 pt-24 pb-20">
       {/* Header with curved design */}
-      <div className="relative bg-linear-to-br from-blue-600 via-indigo-600 to-purple-700 text-white overflow-hidden">
+      <div className="relative overflow-hidden bg-cover bg-center text-white" style={{ backgroundImage: `linear-gradient(90deg, rgba(7, 25, 60, 0.94), rgba(20, 50, 110, 0.72)), url('${blacklisted ? '/static/blacklisted-companies-hero.png' : '/static/companies-hero.png'}')` }}>
         {/* Animated background elements */}
-        <div className="absolute inset-0 opacity-10">
+        <div className="pointer-events-none absolute inset-0 opacity-10">
           <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full mix-blend-multiply filter blur-3xl animate-blob"></div>
           <div className="absolute top-0 right-0 w-96 h-96 bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000"></div>
           <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-4000"></div>
         </div>
 
         {/* Decorative circles */}
-        <div className="absolute -bottom-16 -left-16 w-64 h-64 bg-white opacity-5 rounded-full"></div>
-        <div className="absolute -top-16 -right-16 w-96 h-96 bg-white opacity-5 rounded-full"></div>
+        <div className="pointer-events-none absolute -bottom-16 -left-16 h-64 w-64 rounded-full bg-white opacity-5"></div>
+        <div className="pointer-events-none absolute -right-16 -top-16 h-96 w-96 rounded-full bg-white opacity-5"></div>
 
-        <div className="relative container mx-auto px-4 py-10">
+        <div className="relative z-10 container mx-auto px-4 py-10">
           <div className="max-w-4xl mx-auto text-center">
             {/* Badge */}
             <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md rounded-full px-4 py-2 mb-6 border border-white/20">
@@ -171,7 +171,7 @@ const Companies = ({ blacklisted = false }: { blacklisted?: boolean }) => {
             <div className="relative max-w-2xl mx-auto pb-20">
               <div className="absolute inset-0 bg-linear-to-r from-blue-400 to-purple-400 rounded-2xl blur opacity-30"></div>
               <div className="relative flex items-center">
-                <Search className="absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                <Search className="pointer-events-none absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
                   placeholder={t(blacklisted ? 'website.blacklistedCompanies.searchPlaceholder' : 'website.companies.searchPlaceholder')}
@@ -188,12 +188,6 @@ const Companies = ({ blacklisted = false }: { blacklisted?: boolean }) => {
           </div>
         </div>
 
-        {/* Decorative wave */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" className="w-full h-auto">
-            <path fill="#f9fafb" fillOpacity="1" d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z"></path>
-          </svg>
-        </div>
       </div>
 
       {/* Companies Grid */}
@@ -267,65 +261,63 @@ const Companies = ({ blacklisted = false }: { blacklisted?: boolean }) => {
                   const colorGradient = getCompanyColor(displayName);
 
                   return (
-                    <div
+                    <article
                       key={company.id}
-                      className="group relative bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden border border-gray-100"
+                      className="group relative flex min-h-[285px] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-xl"
                     >
-                      {/* Simple top border accent */}
-                      <div className={`absolute top-0 left-0 right-0 h-1 bg-linear-to-r ${colorGradient} opacity-70`}></div>
+                      <div className={`h-1.5 bg-linear-to-r ${colorGradient}`} />
 
-                      {/* Card Content */}
-                      <div className="p-5">
-                        {/* Header with Logo and Name */}
-                        <div className="flex items-start space-x-3 mb-4">
-                          {/* Logo - Smaller and cleaner */}
-                          <div className="relative shrink-0">
-                            <div className={`w-24 h-20 rounded-lg bg-linear-to-br bg-opacity-10 flex items-center justify-center overflow-hidden shadow-sm`}>
+                      <div className="flex flex-1 flex-col p-5">
+                        <div className="mb-5 flex items-start gap-4">
+                          <div className={`flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-linear-to-br ${colorGradient} bg-opacity-10 shadow-sm ring-1 ring-slate-100`}>
                               {company.logoUrl ? (
                                 <img
                                   src={toApiUrl(company.logoUrl)}
                                   alt={displayName}
-                                  className="w-full h-full object-cover"
+                                  className="h-full w-full object-contain bg-white p-2"
                                   onError={(e) => {
                                     const target = e.target as HTMLImageElement;
                                     target.style.display = 'none';
                                     const parent = target.parentElement;
                                     if (parent) {
                                       parent.classList.add('flex', 'items-center', 'justify-center');
-                                      parent.innerHTML = `<span className="text-lg font-semibold text-gray-700">${getInitials(displayName)}</span>`;
+                                      parent.innerHTML = `<span class="text-xl font-bold text-white">${getInitials(displayName)}</span>`;
                                     }
                                   }}
                                 />
                               ) : (
-                                <span className="text-lg font-semibold text-gray-700">
+                                <span className="text-xl font-bold text-white">
                                   {getInitials(displayName)}
                                 </span>
                               )}
                             </div>
-                          </div>
 
-                          {/* Company Name and Type */}
-                          <div className="flex-1 min-w-0">
-                            <h3 className="text-base font-semibold text-gray-900 truncate group-hover:text-blue-600 transition-colors">
+                          <div className="min-w-0 flex-1">
+                            <div className="mb-2 flex items-start justify-between gap-2">
+                              <h3 className="line-clamp-2 min-h-[3rem] break-words text-base font-bold leading-6 text-slate-900 [overflow-wrap:anywhere] transition-colors group-hover:text-blue-600">
                               {displayName}
-                            </h3>
-                            <p className="text-xs text-gray-500 mt-0.5">
-                              {company.companyType ? t(`company.typeOptions.${company.companyType}`, company.companyType.replace(/_/g, ' ')) : t('website.companies.companyFallback')}
-                            </p>
+                              </h3>
+                              <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" aria-label={t('common.verified', 'Verified')} />
+                            </div>
+                            <span className="mt-2 inline-flex max-w-full rounded-full bg-slate-100 px-3 py-1.5 text-xs font-medium leading-4 text-slate-600">
+                              <span className="truncate">{company.companyType ? t(`company.typeOptions.${company.companyType}`, company.companyType.replace(/_/g, ' ')) : t('website.companies.companyFallback')}</span>
+                            </span>
                           </div>
                         </div>
 
-                        {/* Address - Simplified */}
-                        <div className="mb-4">
-                          <div className="flex items-start space-x-2 text-sm text-gray-600">
-                            <MapPin className="h-4 w-4 text-gray-400 shrink-0 mt-0.5" />
-                            <p className="text-sm line-clamp-2">
+                        <div className="space-y-3 text-sm text-slate-600">
+                          <div className="flex items-start gap-3">
+                            <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-blue-500" />
+                            <p className="line-clamp-2 leading-5">
                               {company.mainBranchAddress || company.address || t('website.companies.addressNotSpecified')}
                             </p>
                           </div>
+                          {company.phoneNumber && <div className="flex items-center gap-3"><Phone className="h-4 w-4 shrink-0 text-blue-500" /><span className="truncate">{company.phoneNumber}</span></div>}
+                          {company.email && <div className="flex items-center gap-3"><Mail className="h-4 w-4 shrink-0 text-blue-500" /><span className="truncate">{company.email}</span></div>}
                         </div>
+
                       </div>
-                    </div>
+                    </article>
                   );
                 })}
               </div>)

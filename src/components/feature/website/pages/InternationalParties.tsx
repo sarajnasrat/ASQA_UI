@@ -76,9 +76,9 @@ const InternationalParties = () => {
   return (
     <div className="overflow-hidden pt-24 pb-20">
       {/* Hero Section - Matching Home page style */}
-      <section className="relative min-h-125 flex items-center justify-center bg-linear-to-br from-gray-900 via-blue-900 to-indigo-900 text-white overflow-hidden">
+      <section className="relative min-h-125 flex items-center justify-center overflow-hidden bg-cover bg-center text-white" style={{ backgroundImage: "linear-gradient(90deg, rgba(7, 25, 60, 0.94), rgba(20, 50, 110, 0.72)), url('/static/international-parties-hero.png')" }}>
         {/* Animated background pattern */}
-        <div className="absolute inset-0 opacity-10">
+        <div className="pointer-events-none absolute inset-0 opacity-10">
           <div
             className="absolute inset-0"
             style={{
@@ -88,25 +88,7 @@ const InternationalParties = () => {
           ></div>
         </div>
 
-        {/* Floating particles */}
-        <div className="absolute inset-0 overflow-hidden">
-          {[...Array(12)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute rounded-full bg-white/5 animate-float"
-              style={{
-                width: Math.random() * 150 + 30 + "px",
-                height: Math.random() * 150 + 30 + "px",
-                left: Math.random() * 100 + "%",
-                top: Math.random() * 100 + "%",
-                animationDelay: Math.random() * 5 + "s",
-                animationDuration: Math.random() * 10 + 10 + "s",
-              }}
-            />
-          ))}
-        </div>
-
-        <div className="relative container mx-auto px-4 py-16 md:py-20">
+        <div className="relative z-10 container mx-auto px-4 py-16 md:py-20">
           <div className="max-w-4xl mx-auto text-center">
             {/* Badge */}
             <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md rounded-full px-3 py-1.5 mb-6 border border-white/20">
@@ -132,21 +114,6 @@ const InternationalParties = () => {
           </div>
         </div>
 
-        {/* Curved bottom */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg
-            viewBox="0 0 1440 80"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-full h-auto"
-          >
-            <path
-              d="M0 80L48 72C96 64 192 48 288 40C384 32 480 32 576 40C672 48 768 64 864 72C960 80 1056 80 1152 72C1248 64 1344 48 1392 40L1440 32V80H1392C1344 80 1248 80 1152 80C1056 80 960 80 864 80C768 80 672 80 576 80C480 80 384 80 288 80C192 80 96 80 48 80H0Z"
-              fill="white"
-              fillOpacity="0.9"
-            />
-          </svg>
-        </div>
       </section>
 
       {/* Parties List Section */}

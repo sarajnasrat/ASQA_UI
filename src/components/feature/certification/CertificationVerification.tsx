@@ -123,17 +123,17 @@ export const CertificationVerification: React.FC = () => {
         }}
       >
         {/* Animated background elements */}
-        <div className="absolute inset-0 opacity-10">
+        <div className="pointer-events-none absolute inset-0 opacity-10">
           <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full mix-blend-multiply filter blur-3xl animate-blob"></div>
           <div className="absolute top-0 right-0 w-96 h-96 bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000"></div>
           <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-4000"></div>
         </div>
 
         {/* Decorative circles */}
-        <div className="absolute -bottom-16 -left-16 w-64 h-64 bg-white opacity-5 rounded-full"></div>
-        <div className="absolute -top-16 -right-16 w-96 h-96 bg-white opacity-5 rounded-full"></div>
+        <div className="pointer-events-none absolute -bottom-16 -left-16 h-64 w-64 rounded-full bg-white opacity-5"></div>
+        <div className="pointer-events-none absolute -right-16 -top-16 h-96 w-96 rounded-full bg-white opacity-5"></div>
 
-        <div className="relative container mx-auto px-4 py-24 sm:py-28 lg:py-32">
+        <div className="relative z-10 container mx-auto px-4 py-24 sm:py-28 lg:py-32">
           <div className="max-w-4xl mx-auto text-center">
             {/* Badge */}
             <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md rounded-full px-4 py-2 mb-6 border border-white/20">
