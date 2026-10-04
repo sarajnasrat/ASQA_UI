@@ -429,25 +429,34 @@
       "aboutCompanyEn": "Enter company information in English",
       "aboutCompanyDr": "Enter company information in Dari",
       "aboutCompanyPs": "Enter company information in Pashto",
-      "websiteUrl": "Enter website URL (e.g., https://www.company.com)",
+      "websiteUrl": "http://www.example.com https://www.example.com",
       "establishYear": "Select establishment year",
       "companyOwnerNameEn": "Enter owner name in English",
       "companyOwnerNameDr": "Enter owner name in Dari",
       "companyOwnerNamePs": "Enter owner name in Pashto"
     },
     "validation": {
+      "companyOwnerNameEn": {
+        "invalidCharacters": "Use English letters only; numbers are not allowed"
+      },
+      "companyOwnerNameDr": {
+        "invalidCharacters": "Use Dari characters only; English letters and numbers are not allowed"
+      },
       "companyNameEN": {
         "required": "Company name (English) is required",
+        "invalidCharacters": "Use English letters only; numbers are not allowed",
         "minLength": "Company name must be at least 2 characters",
         "maxLength": "Company name cannot exceed 100 characters"
       },
       "companyNameDR": {
         "required": "Company name (Dari) is required",
+        "invalidCharacters": "Use Dari characters only; English letters and numbers are not allowed",
         "minLength": "Company name must be at least 2 characters",
         "maxLength": "Company name cannot exceed 100 characters"
       },
       "companyNamePS": {
         "required": "Company name (Pashto) is required",
+        "invalidCharacters": "Use Pashto characters only; English letters and numbers are not allowed",
         "minLength": "Company name must be at least 2 characters",
         "maxLength": "Company name cannot exceed 100 characters"
       },
@@ -457,7 +466,7 @@
       },
       "phoneNumber": {
         "required": "Phone number is required",
-        "invalid": "Please enter a valid phone number"
+        "invalid": "Enter a valid phone number using digits only (a leading + is allowed)"
       },
       "address": {
         "required": "Address is required",
@@ -1027,6 +1036,11 @@
           "title": "Renewal",
           "description": "Renew your existing certification"
         }
+      },
+      "companyRegistration": {
+        "title": "Have you registered your company before?",
+        "registered": "Yes, my company is registered",
+        "newRequest": "No, this is a new request"
       },
       "certificationType": {
         "title": "Select Certification Type",

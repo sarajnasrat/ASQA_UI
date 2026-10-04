@@ -63,6 +63,11 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
   });
   const [isLookingUpCompany, setIsLookingUpCompany] = useState(false);
   const [renewalCompanyData, setRenewalCompanyData] = useState<any>(null);
+  const [isCompanyRegistered, setIsCompanyRegistered] = useState(false);
+
+  const requiresJawazNumber =
+    formData.requestType === "RENEWAL" ||
+    (formData.requestType === "NEW" && isCompanyRegistered);
 
   const { showError, showSuccess } = useToast();
   const [internalIsSubmitting, setInternalIsSubmitting] = useState(false);
@@ -313,12 +318,15 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
       isValid = false;
     }
 
-    if (formData.requestType === "RENEWAL" && !formData.jawazNumber.trim()) {
+    if (requiresJawazNumber && !formData.jawazNumber.trim()) {
       newErrors.jawazNumber = t("company.validation.jawazNumber.required");
       isValid = false;
     }
 
-    if (!formData.mainType) {
+    if (
+      formData.certificationType !== "STANDARD_MARK_CERTIFICATION" &&
+      !formData.mainType
+    ) {
       newErrors.mainType = t("certification.validation.certificationScope");
       isValid = false;
     }
@@ -336,7 +344,7 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
     setIsSubmitting(true);
     let fetchedRenewalCompanyData = renewalCompanyData;
 
-    if (formData.requestType === "RENEWAL") {
+    if (requiresJawazNumber) {
       setIsLookingUpCompany(true);
       const companyResponse = await handleApi(
         () => CompanyService.getCompanyByJawazNumber(formData.jawazNumber.trim()),
@@ -358,6 +366,7 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
 
     const requestData = {
       requestType: formData.requestType,
+      jawazNumber: formData.jawazNumber.trim() || undefined,
       requestStatus: "DRAFT",
       certificationScope: normalizeCertificationScope(formData.mainType),
       certificationMainType: normalizeCertificationScope(formData.mainType),
@@ -462,7 +471,7 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
         newData.domesticCategory = "";
       }
 
-      if (field === "requestType" && value !== "RENEWAL") {
+      if (field === "requestType" && value !== "RENEWAL" && !isCompanyRegistered) {
         newData.jawazNumber = "";
         setRenewalCompanyData(null);
       }
@@ -547,34 +556,36 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
               )}
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {certificationScopeLabel}{" "}
-                <span className="text-red-500">*</span>
-              </label>
-              <select
-                value={formData.mainType}
-                onChange={(e) => handleInputChange("mainType", e.target.value)}
-                className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors ${
-                  errors.mainType ? "border-red-500" : "border-gray-300"
-                }`}
-              >
-                <option value="">
-                  {t("common.select")} {certificationScopeLabel}
-                </option>
-                {mainTypeOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
+            {formData.certificationType !== "STANDARD_MARK_CERTIFICATION" && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {certificationScopeLabel}{" "}
+                  <span className="text-red-500">*</span>
+                </label>
+                <select
+                  value={formData.mainType}
+                  onChange={(e) => handleInputChange("mainType", e.target.value)}
+                  className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors ${
+                    errors.mainType ? "border-red-500" : "border-gray-300"
+                  }`}
+                >
+                  <option value="">
+                    {t("common.select")} {certificationScopeLabel}
                   </option>
-                ))}
-              </select>
-              {errors.mainType && (
-                <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
-                  <AlertCircle className="h-4 w-4" />
-                  {errors.mainType}
-                </p>
-              )}
-            </div>
+                  {mainTypeOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+                {errors.mainType && (
+                  <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
+                    <AlertCircle className="h-4 w-4" />
+                    {errors.mainType}
+                  </p>
+                )}
+              </div>
+            )}
 
             {formData.requestType === "RENEWAL" && (
               <div>
@@ -638,6 +649,74 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
         </div>
       )}
 
+      {formData.certificationType && formData.requestType === "NEW" && (
+        <>
+          <fieldset className="rounded-xl border border-gray-200 p-5">
+            <legend className="px-1 text-sm font-medium text-gray-700">
+              {t("certification.page.companyRegistration.title")}
+              <span className="text-red-500"> *</span>
+            </legend>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {[
+                { value: "REGISTERED", key: "registered" },
+                { value: "NEW", key: "newRequest" },
+              ].map((option) => (
+                <label
+                  key={option.value}
+                  className={`flex cursor-pointer items-center gap-3 rounded-lg border p-4 transition-colors ${
+                    isCompanyRegistered === (option.value === "REGISTERED")
+                      ? "border-blue-500 bg-blue-50"
+                      : "border-gray-300 hover:border-blue-300"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="companyRegistrationStatus"
+                    value={option.value}
+                    checked={isCompanyRegistered === (option.value === "REGISTERED")}
+                    onChange={() => {
+                      const registered = option.value === "REGISTERED";
+                      setIsCompanyRegistered(registered);
+                      if (!registered) {
+                        handleInputChange("jawazNumber", "");
+                        setRenewalCompanyData(null);
+                      }
+                    }}
+                    className="h-4 w-4 accent-blue-600"
+                  />
+                  <span className="text-sm font-medium text-gray-800">
+                    {t(`certification.page.companyRegistration.${option.key}`)}
+                  </span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+
+          {formData.requestType === "NEW" && isCompanyRegistered && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {t("company.labels.jawazNumber")} <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                value={formData.jawazNumber}
+                onChange={(e) => handleInputChange("jawazNumber", e.target.value)}
+                placeholder={t("company.placeholder.jawazNumber")}
+                className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors ${
+                  errors.jawazNumber ? "border-red-500" : "border-gray-300"
+                }`}
+              />
+              {errors.jawazNumber && (
+                <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
+                  <AlertCircle className="h-4 w-4" />
+                  {errors.jawazNumber}
+                </p>
+              )}
+            </div>
+          )}
+        </>
+      )}
+
 
       <div className="flex justify-end gap-3 pt-4">
         {onCancel && (
@@ -660,9 +739,10 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
             (formData.certificationType === "DOMESTIC_QUALITY_CERTIFICATION" &&
               !formData.domesticCategory) ||
             !formData.requestType ||
-            (formData.requestType === "RENEWAL" &&
+            (requiresJawazNumber &&
               !formData.jawazNumber.trim()) ||
-            !formData.mainType
+            (formData.certificationType !== "STANDARD_MARK_CERTIFICATION" &&
+              !formData.mainType)
           }
           className="px-8 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >

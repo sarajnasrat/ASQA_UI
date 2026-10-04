@@ -320,16 +320,24 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
 
     if (!formData.companyNameEN)
       newErrors.companyNameEN = t("company.validation.companyNameEN.required");
+    else if (!/^[A-Za-z\s&.,'’()\-/]+$/.test(formData.companyNameEN))
+      newErrors.companyNameEN = t("company.validation.companyNameEN.invalidCharacters");
     if (!formData.companyNameDR)
       newErrors.companyNameDR = t("company.validation.companyNameDR.required");
+    else if (!/^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\s،؛.!؟'’()\-/]+$/.test(formData.companyNameDR))
+      newErrors.companyNameDR = t("company.validation.companyNameDR.invalidCharacters");
     if (!formData.companyNamePS)
       newErrors.companyNamePS = t("company.validation.companyNamePS.required");
+    else if (!/^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\s،؛.!؟'’()\-/]+$/.test(formData.companyNamePS))
+      newErrors.companyNamePS = t("company.validation.companyNamePS.invalidCharacters");
     if (!formData.email)
       newErrors.email = t("company.validation.email.required");
     else if (!/\S+@\S+\.\S+/.test(formData.email))
       newErrors.email = t("company.validation.email.invalid");
     if (!formData.phoneNumber)
       newErrors.phoneNumber = t("company.validation.phoneNumber.required");
+    else if (!/^\+?[0-9\s().-]+$/.test(formData.phoneNumber))
+      newErrors.phoneNumber = t("company.validation.phoneNumber.invalid");
     if (!formData.address)
       newErrors.address = t("company.validation.address.required");
     if (!formData.mainBranchAddress)
@@ -357,9 +365,17 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
       newErrors.companyOwnerNameEn = t(
         "company.validation.companyOwnerNameEn.required",
       );
+    else if (!/^[A-Za-z\s&.,'’()\-/]+$/.test(formData.companyOwnerNameEn))
+      newErrors.companyOwnerNameEn = t(
+        "company.validation.companyOwnerNameEn.invalidCharacters",
+      );
     if (!formData.companyOwnerNameDr)
       newErrors.companyOwnerNameDr = t(
         "company.validation.companyOwnerNameDr.required",
+      );
+    else if (!/^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\s،؛.!؟'’()\-/]+$/.test(formData.companyOwnerNameDr))
+      newErrors.companyOwnerNameDr = t(
+        "company.validation.companyOwnerNameDr.invalidCharacters",
       );
 
     if (!formData.aboutCompanyEn)
@@ -592,7 +608,40 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name as keyof typeof formData]) {
+    const companyNameValidation: Record<string, { pattern: RegExp; errorKey: string }> = {
+      companyNameEN: {
+        pattern: /^[A-Za-z\s&.,'’()\-/]+$/,
+        errorKey: "company.validation.companyNameEN.invalidCharacters",
+      },
+      companyNameDR: {
+        pattern: /^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\s،؛.!؟'’()\-/]+$/,
+        errorKey: "company.validation.companyNameDR.invalidCharacters",
+      },
+      companyNamePS: {
+        pattern: /^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\s،؛.!؟'’()\-/]+$/,
+        errorKey: "company.validation.companyNamePS.invalidCharacters",
+      },
+      companyOwnerNameEn: {
+        pattern: /^[A-Za-z\s&.,'’()\-/]+$/,
+        errorKey: "company.validation.companyOwnerNameEn.invalidCharacters",
+      },
+      companyOwnerNameDr: {
+        pattern: /^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\s،؛.!؟'’()\-/]+$/,
+        errorKey: "company.validation.companyOwnerNameDr.invalidCharacters",
+      },
+    };
+    const nameValidation = companyNameValidation[name];
+    if (name === "phoneNumber" && value && !/^\+?[0-9\s().-]+$/.test(value)) {
+      setErrors((prev) => ({
+        ...prev,
+        phoneNumber: t("company.validation.phoneNumber.invalid"),
+      }));
+      return;
+    }
+
+    if (nameValidation && value && !nameValidation.pattern.test(value)) {
+      setErrors((prev) => ({ ...prev, [name]: t(nameValidation.errorKey) }));
+    } else if (errors[name as keyof typeof formData]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
@@ -733,6 +782,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
               name="phoneNumber"
               value={formData.phoneNumber}
               onChange={handleInputChange}
+              inputMode="tel"
               placeholder={t("company.placeholder.phoneNumber")}
               className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-shadow ${
                 errors.phoneNumber ? "border-red-500" : "border-gray-300"

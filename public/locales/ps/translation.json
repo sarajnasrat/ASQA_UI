@@ -470,25 +470,34 @@
       "aboutCompanyEn": "د شرکت معلومات په انګلیسي کې دننه کړئ",
       "aboutCompanyDr": "د شرکت معلومات په دری کې دننه کړئ",
       "aboutCompanyPs": "د شرکت معلومات په پښتو کې دننه کړئ",
-      "websiteUrl": "ویب پته دننه کړئ (مثال: https://www.company.com)",
+      "websiteUrl": "http://www.example.com https://www.example.com",
       "establishYear": "د تاسیس کال وټاکئ",
       "companyOwnerNameEn": "د مالک نوم په انګلیسي کې دننه کړئ",
       "companyOwnerNameDr": "د مالک نوم په دری کې دننه کړئ",
       "companyOwnerNamePs": "د مالک نوم په پښتو کې دننه کړئ"
     },
     "validation": {
+      "companyOwnerNameEn": {
+        "invalidCharacters": "د مالک انګلیسي نوم لپاره یوازې انګلیسي توري وکاروئ؛ شمېرې اجازه نه لري"
+      },
+      "companyOwnerNameDr": {
+        "invalidCharacters": "د مالک دري نوم لپاره یوازې دري توري وکاروئ؛ انګلیسي توري او شمېرې اجازه نه لري"
+      },
       "companyNameEN": {
         "required": "د شرکت نوم (انګلیسي) اړین دی",
+        "invalidCharacters": "د انګلیسي شرکت نوم لپاره یوازې انګلیسي توري وکاروئ؛ شمېرې اجازه نه لري",
         "minLength": "د شرکت نوم باید لږ تر لږه ۲ توري وي",
         "maxLength": "د شرکت نوم له ۱۰۰ تورو څخه زیات نشي"
       },
       "companyNameDR": {
         "required": "د شرکت نوم (دری) اړین دی",
+        "invalidCharacters": "د دري شرکت نوم لپاره یوازې دري توري وکاروئ؛ انګلیسي توري او شمېرې اجازه نه لري",
         "minLength": "د شرکت نوم باید لږ تر لږه ۲ توري وي",
         "maxLength": "د شرکت نوم له ۱۰۰ تورو څخه زیات نشي"
       },
       "companyNamePS": {
         "required": "د شرکت نوم (پښتو) اړین دی",
+        "invalidCharacters": "د پښتو شرکت نوم لپاره یوازې پښتو توري وکاروئ؛ انګلیسي توري او شمېرې اجازه نه لري",
         "minLength": "د شرکت نوم باید لږ تر لږه ۲ توري وي",
         "maxLength": "د شرکت نوم له ۱۰۰ تورو څخه زیات نشي"
       },
@@ -498,7 +507,7 @@
       },
       "phoneNumber": {
         "required": "د تلیفون شمېره اړینه ده",
-        "invalid": "مهرباني وکړئ یوه معتبره تلیفون شمېره دننه کړئ"
+        "invalid": "د تلیفون شمېره یوازې په عددونو ولیکئ (په پیل کې + اجازه لري)"
       },
       "address": {
         "required": "پته اړینه ده",
@@ -887,6 +896,11 @@
           "title": "نوي کول",
           "description": "خپل موجوده تصدیق نوي کړئ"
         }
+      },
+      "companyRegistration": {
+        "title": "ایا تاسو مخکې خپل شرکت ثبت کړی دی؟",
+        "registered": "هو، زما شرکت ثبت شوی دی",
+        "newRequest": "نه، دا نوې غوښتنه ده"
       },
       "certificationType": {
         "title": "۲. د تصدیق ډول وټاکئ",

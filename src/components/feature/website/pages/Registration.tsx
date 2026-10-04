@@ -789,7 +789,7 @@ const Registration = () => {
                           onClick={() => {
                             setShowSuccessDialog(false);
                             if (trackingNumber) {
-                              navigate(`/track-request?tracking=${trackingNumber}`);
+                              navigate(`/certification-detals?tracking=${encodeURIComponent(trackingNumber)}`);
                             } else {
                               navigate("/");
                             }

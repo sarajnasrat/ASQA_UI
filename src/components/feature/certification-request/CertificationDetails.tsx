@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useSearchParams } from "react-router-dom";
 import CertificationRequestTracker from "./CertificationRequestTracker";
 
 import {
@@ -22,10 +23,20 @@ import {
 
 export const CertificationDetails = () => {
   const { t } = useTranslation();
+  const [searchParams] = useSearchParams();
   const [searchValue, setSearchValue] = useState("");
   const [requestId, setRequestId] = useState<string | null>(null);
   const [searched, setSearched] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const trackingNumber = searchParams.get("tracking")?.trim() || "";
+    if (!trackingNumber) return;
+
+    setSearchValue(trackingNumber);
+    setRequestId(trackingNumber);
+    setSearched(true);
+  }, [searchParams]);
 
   const handleSearch = async () => {
     const query = searchValue.trim();
