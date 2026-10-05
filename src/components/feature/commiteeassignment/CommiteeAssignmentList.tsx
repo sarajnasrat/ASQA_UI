@@ -8,6 +8,7 @@ import { Toast } from "primereact/toast";
 import { Tag } from "primereact/tag";
 
 import { useTranslation } from "react-i18next";
+import { getLocalizedCompanyName } from "../../../utils/companyName";
 
 import { handleApi } from "../../../hooks/handleApi";
 import { useToast } from "../../../hooks/ToastContext";
@@ -23,7 +24,7 @@ import ExcelExport from "../../common/ExcelExport";
 import { useAuth } from "../../../context/AuthContext";
 
 export const CommiteeAssignmentList: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
   const toast = useRef<Toast>(null);
@@ -72,11 +73,6 @@ export const CommiteeAssignmentList: React.FC = () => {
         res = await CommiteeAssignmentService.getMyCommitteeAssignments(
           user.id,
           status,
-          {
-            page: first / rows,
-            size: rows,
-            sort: "id,desc",
-          },
         );
       }
 
@@ -213,10 +209,19 @@ export const CommiteeAssignmentList: React.FC = () => {
         ),
     },
 
+    {
+      field: "certificationRequest.company",
+      header: t("company.labels.companyName"),
+      body: (row: any) =>
+        getLocalizedCompanyName(
+          row.certificationRequest?.company || row.company,
+          i18n.resolvedLanguage || i18n.language,
+        ) || t("common.notSpecified"),
+    },
     // ================= COMMITTEE =================
     {
       field: "committee.name",
-      header: t("commitee.name"),
+      header: t("commitee.assignment.committeeName"),
       body: (row: any) => row.committee?.name,
     },
 

@@ -1740,9 +1740,7 @@
     "create": "Create Committee",
     "edit": "Edit Committee",
     "delete": "Delete Committee",
-    "name": {
-      "required": "The committee name is required."
-    },
+    "name": "Committee Name",
     "description": "Description",
     "type": {
       "required": "The committee type is required."
@@ -1879,7 +1877,8 @@
         "notallowed": "This file is not allowed for the committee assignment."
       },
       "found": "Assignment committee found successfully.",
-      "notfound": "Assignment committee was not found."
+      "notfound": "Assignment committee was not found.",
+      "committeeName": "Committee Name"
     },
     "member": {
       "list": "Committee Members",
@@ -1958,6 +1957,11 @@
       "found": "Report committee found successfully.",
       "notfound": "Report committee was not found.",
       "updated": "Report committee updated successfully."
+    },
+    "errors": {
+      "name": {
+        "required": "The committee name is required."
+      }
     }
   },
   "common": {
