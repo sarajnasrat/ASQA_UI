@@ -4,6 +4,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import { Dialog } from "primereact/dialog";
 import { Dropdown } from "primereact/dropdown";
+import FileUploadField from "../../common/FileUploadField";
 import { useTranslation } from "react-i18next";
 import {
   AlertCircle,
@@ -72,6 +73,7 @@ export const CommiteeAssignmentDetails: React.FC = () => {
   const [preferredStatus, setPreferredStatus] = useState<string | null>(null);
   const [rollbackVisible, setRollbackVisible] = useState(false);
   const [rollbackStatus, setRollbackStatus] = useState<string | null>(null);
+  const [recommendationFile, setRecommendationFile] = useState<File | null>(null);
   const [expandedSections, setExpandedSections] = useState({
     timeline: true,
     assignmentInfo: true,
@@ -198,6 +200,7 @@ export const CommiteeAssignmentDetails: React.FC = () => {
           request.id,
           rollbackStatus,
           request.company?.id,
+          recommendationFile || undefined,
         ),
       () =>
         showSuccess(
@@ -211,6 +214,7 @@ export const CommiteeAssignmentDetails: React.FC = () => {
     if (response?.status === 200) {
       setRollbackVisible(false);
       setRollbackStatus(null);
+      setRecommendationFile(null);
       loadAssignment();
     }
   };
@@ -520,9 +524,10 @@ export const CommiteeAssignmentDetails: React.FC = () => {
         onHide={() => {
           setRollbackVisible(false);
           setRollbackStatus(null);
+          setRecommendationFile(null);
         }}
         header={t("commitee.assignment.recommend")}
-        style={{ width: "32rem" }}
+        style={{ width: "42rem", maxWidth: "95vw" }}
         footer={
           <div className="flex justify-end gap-2">
             <button
@@ -530,6 +535,7 @@ export const CommiteeAssignmentDetails: React.FC = () => {
               onClick={() => {
                 setRollbackVisible(false);
                 setRollbackStatus(null);
+                setRecommendationFile(null);
               }}
               className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700"
             >
@@ -557,6 +563,15 @@ export const CommiteeAssignmentDetails: React.FC = () => {
             onChange={(e) => setRollbackStatus(e.value)}
             placeholder={t("commitee.assignment.rollbackSelect")}
           />
+          {rollbackVisible && (
+            <FileUploadField
+              label={t("commitee.assignment.dialog.uploadReportFile")}
+              name="recommendationFile"
+              accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
+              maxFileSize={5000000}
+              onFileSelect={(file) => setRecommendationFile(file)}
+            />
+          )}
         </div>
       </Dialog>
     </div>

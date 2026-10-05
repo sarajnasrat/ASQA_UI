@@ -123,15 +123,19 @@ patchUpdate(id: number, data: any, file?: File) {
   });
 },
 
-rollbackRequest(requestId: number, status: string, companyId?: number) {
+rollbackRequest(requestId: number, status: string, companyId?: number, file?: File) {
   const params: Record<string, any> = { status };
 
-  if (companyId !== undefined && companyId !== null && companyId !== "") {
+  if (companyId !== undefined && companyId !== null) {
     params.companyId = companyId;
   }
 
-  return httpClient.patch(`/certificationrequest/${requestId}/status`, null, {
+  const formData = new FormData();
+  if (file) formData.append("file", file);
+
+  return httpClient.patch(`/certificationrequest/${requestId}/status`, file ? formData : null, {
     params,
+    ...(file && { headers: { "Content-Type": "multipart/form-data" } }),
   });
 },
 

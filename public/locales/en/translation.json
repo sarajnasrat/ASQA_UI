@@ -1878,7 +1878,9 @@
       },
       "found": "Assignment committee found successfully.",
       "notfound": "Assignment committee was not found.",
-      "committeeName": "Committee Name"
+      "committeeName": "Committee Name",
+      "rollbackDescription": "Select the request status you recommend returning to. You may attach a supporting report.",
+      "rollbackSelect": "Select a request status"
     },
     "member": {
       "list": "Committee Members",
