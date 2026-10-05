@@ -108,7 +108,9 @@ const CommiteeAssignmentViewHeader: React.FC<Props> = ({
           </div>
           {hasPermission("UPDATE_CERTIFICATION") && (
           <div className="flex flex-col sm:flex-row gap-3  lg:w-auto">
-              {showRecommendation && request?.requestStatus && (
+              {showRecommendation &&
+                assignment.assignmentStatus?.toUpperCase() !== "COMPLETED" &&
+                request?.requestStatus && (
                 <button
                   type="button"
                   onClick={onRollbackRequest}
@@ -118,7 +120,9 @@ const CommiteeAssignmentViewHeader: React.FC<Props> = ({
                 </button>
               )}
 
-              {getNextStatuses().map((nextStatus) => {
+              {getNextStatuses()
+                .filter((status) => !(assignment.committee?.committeeType?.toUpperCase() === "INSPECTION" && status === "REJECTED"))
+                .map((nextStatus) => {
                 const isReject = nextStatus === "REJECTED";
 
                 return (

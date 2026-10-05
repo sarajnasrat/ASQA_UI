@@ -1377,7 +1377,14 @@
       "NATIONAL": " ملی/ داخلی",
       "INTERNATIONAL": "بین المللی/ خارجی"
     },
-    "addstandard": "معیار اضافه کړئ"
+    "addstandard": "معیار اضافه کړئ",
+    "skipPaymentAndContinue": "تادیه پرېږدئ او دوام وکړئ",
+    "paymentChoicePrompt": "د دوام لاره وټاکئ:",
+    "savePaymentPrompt": "ایا غواړئ تادیه ثبت کړئ؟",
+    "paymentChoiceYes": "هو",
+    "paymentChoiceNo": "نه",
+    "skipPaymentConfirmation": "تادیه نه ترسره کېږي او غوښتنلیک د چارواکو د پرېکړې پړاو ته ځي.",
+    "processPayment": "تادیه ترسره کړئ"
   },
   "attachment": {
     "category": "کټګوري",

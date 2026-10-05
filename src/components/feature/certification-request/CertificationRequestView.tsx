@@ -53,8 +53,8 @@ const transitionMap: Record<string, string[]> = {
   DEADLINE_ASSIGNED: ["INSPECTION_IN_PROGRESS"],
   INSPECTION_IN_PROGRESS: ["REPORTED_TO_COMMITTEE"],
   REPORTED_TO_COMMITTEE: ["REPORT_APPROVED", "REJECTED"],
-  COMMITTEE_APPROVED: ["PAYMENT_PENDING"],
-  PAYMENT_PENDING: ["PAYMENT_COMPLETED"],
+  COMMITTEE_APPROVED: ["PAYMENT_PENDING", "AUTHORITY_DECISION"],
+  PAYMENT_PENDING: ["PAYMENT_COMPLETED", "AUTHORITY_DECISION"],
   PAYMENT_COMPLETED: ["AUTHORITY_DECISION"],
   // Final issuance is performed from the certification module.
   AUTHORITY_DECISION: [],
@@ -971,8 +971,11 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
         t("certificationRequest.paymentCompleted") ||
         "Payment will be marked as completed.",
       AUTHORITY_DECISION:
-        t("certificationRequest.certificateIssued") ||
-        "Certificate will be issued for this request.",
+        request.requestStatus === "PAYMENT_PENDING"
+          ? t("certificationRequest.skipPaymentConfirmation") ||
+            "Payment will be skipped and the request will move to authority decision."
+          : t("certificationRequest.certificateIssued") ||
+            "The request will move to authority decision.",
       UNDER_SUPERVISION:
         t("certificationRequest.underSupervision") ||
         "This request will be moved under supervision.",

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   ArrowLeft,
   CheckCircle,
@@ -7,7 +7,6 @@ import {
   Hash,
   Calendar,
   XCircle,
-  Printer,
 } from "lucide-react";
 import type {
   CertificationRequest,
@@ -56,6 +55,7 @@ const CertificationRequestViewHeader: React.FC<Props> = ({
   t,
 }) => {
   const { hasPermission } = useAuth();
+  const [willProcessPayment, setWillProcessPayment] = useState<boolean | null>(null);
   const breadcrumbItems = [
     {
       label: t("certificationRequest.list"),
@@ -86,7 +86,7 @@ const CertificationRequestViewHeader: React.FC<Props> = ({
               >
                 {statusConfig.icon}
                 {statusConfig.label === "COMMITTEE_REPORTED" ||
-                statusConfig.label === "COMMITTEE_APPROVED" 
+                statusConfig.label === "COMMITTEE_APPROVED"
                   ? t(
                       `certificationRequest.statusOptions.${statusConfig.label}`,
                     )
@@ -116,17 +116,93 @@ const CertificationRequestViewHeader: React.FC<Props> = ({
               </div>
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+          <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-start sm:w-auto">
             <button
               type="button"
               onClick={onDownloadPdf}
-              className="flex items-center justify-center px-6 py-2.5 border-2 border-gray-400 text-gray-700 hover:bg-gray-50 active:bg-gray-100 font-medium rounded-lg transition-all duration-200 w-full sm:w-auto"
+              className="flex h-11 w-full shrink-0 items-center justify-center self-start rounded-lg border-2 border-gray-400 px-6 font-medium text-gray-700 transition-all duration-200 hover:bg-gray-50 active:bg-gray-100 sm:w-auto"
             >
               <Download className="h-4 w-4 mr-2" />
               {t("common.download")}
             </button>
             {hasPermission("UPDATE_CERTIFICATIONREQUEST") && (
               <>
+              {request.requestStatus === "COMMITTEE_APPROVED" && (
+                <div className="flex min-w-0 flex-col gap-2 rounded-xl border border-amber-200 bg-amber-50 p-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+                  <span className="px-2 text-sm font-medium text-amber-900 sm:shrink-0">
+                    {t("certificationRequest.savePaymentPrompt")}
+                  </span>
+                  <div className="flex flex-row flex-wrap items-center gap-2">
+                    <label className="inline-flex min-h-10 cursor-pointer items-center gap-2 whitespace-nowrap rounded-lg border border-blue-600 bg-white px-3 py-2 text-sm font-medium text-blue-700">
+                      <input
+                        type="checkbox"
+                        checked={willProcessPayment === true}
+                        onChange={(event) =>
+                          setWillProcessPayment(
+                            event.target.checked ? true : null,
+                          )
+                        }
+                        className="h-4 w-4 accent-blue-600"
+                      />
+                      {t("certificationRequest.paymentChoiceYes")}
+                    </label>
+                    <label className="inline-flex min-h-10 cursor-pointer items-center gap-2 whitespace-nowrap rounded-lg border border-orange-600 bg-white px-3 py-2 text-sm font-medium text-orange-700">
+                      <input
+                        type="checkbox"
+                        checked={willProcessPayment === false}
+                        onChange={(event) =>
+                          setWillProcessPayment(
+                            event.target.checked ? false : null,
+                          )
+                        }
+                        className="h-4 w-4 accent-orange-600"
+                      />
+                      {t("certificationRequest.paymentChoiceNo")}
+                    </label>
+                  </div>
+                  {willProcessPayment === true && (
+                    <button
+                      type="button"
+                      onClick={() => onStatusAction("PAYMENT_PENDING")}
+                      className="w-full rounded-lg border-2 border-green-600 bg-white px-4 py-2 text-sm font-medium text-green-700 hover:bg-green-50 sm:w-auto"
+                    >
+                      {getStatusButtonLabel("PAYMENT_PENDING")}
+                    </button>
+                  )}
+                  {willProcessPayment === false && (
+                    <button
+                      type="button"
+                      onClick={() => onStatusAction("AUTHORITY_DECISION")}
+                      className="w-full rounded-lg border-2 border-orange-600 bg-white px-4 py-2 text-sm font-medium text-orange-700 hover:bg-orange-50 sm:w-auto"
+                    >
+                      {getStatusButtonLabel("AUTHORITY_DECISION")}
+                    </button>
+                  )}
+                </div>
+              )}
+              {request.requestStatus === "PAYMENT_PENDING" && (
+                <div className="flex flex-col gap-2 rounded-xl border border-amber-200 bg-amber-50 p-2 sm:flex-row sm:items-center">
+                  <span className="px-2 text-sm font-medium text-amber-900">
+                    {t("certificationRequest.paymentChoicePrompt")}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      request.isPrint ? onOpenPaymentDialog() : onPrintBill()
+                    }
+                    className="rounded-lg border border-blue-600 bg-white px-3 py-2 text-sm font-medium text-blue-700 hover:bg-blue-50"
+                  >
+                    {t("certificationRequest.processPayment")}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onStatusAction("AUTHORITY_DECISION")}
+                    className="rounded-lg border border-orange-600 bg-white px-3 py-2 text-sm font-medium text-orange-700 hover:bg-orange-50"
+                  >
+                    {t("certificationRequest.skipPaymentAndContinue")}
+                  </button>
+                </div>
+              )}
               {request.certificationScope === "INTERNATIONAL" &&
                 request.requestStatus === "CONTRACT_PENDING" &&
                 onOpenContractDialog && (
@@ -152,7 +228,17 @@ const CertificationRequestViewHeader: React.FC<Props> = ({
                   </button>
                 )}
               {!finalStates.includes(request.requestStatus) &&
-                getNextStatuses().map((nextStatus) => {
+                getNextStatuses()
+                  .filter(
+                    (status) =>
+                      status !== "REJECTED" &&
+                      !(
+                        request.requestStatus === "COMMITTEE_APPROVED" &&
+                        (status === "PAYMENT_PENDING" ||
+                          status === "AUTHORITY_DECISION")
+                      ),
+                  )
+                  .map((nextStatus) => {
                   const isReject = nextStatus === "REJECTED";
 
                   return (
@@ -181,17 +267,6 @@ const CertificationRequestViewHeader: React.FC<Props> = ({
                 })}
               {request.requestStatus === "PAYMENT_PENDING" && (
                 <>
-                  {request.isPrint === false && (
-                    <button
-                      type="button"
-                      onClick={onPrintBill}
-                      className="flex items-center justify-center px-6 py-2.5 border-2 border-blue-600 text-blue-700 hover:bg-blue-50 active:bg-blue-100 font-medium rounded-lg transition-all duration-200 w-full sm:w-auto"
-                    >
-                      <Printer className="h-4 w-4 mr-2 " />
-                      {t("certificationRequest.printBill") || "Print Bill"}
-                    </button>
-                  )}
-
                   {request.isScanned === false &&
                     request.isPrint === true &&
                     hasPermission("UPDATE_CERTIFICATIONREQUEST") && (

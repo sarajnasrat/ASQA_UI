@@ -1539,7 +1539,14 @@
       "NATIONAL": " ملی/ داخلی",
       "INTERNATIONAL": "بین المللی/ خارجی"
     },
-    "addstandard": "Add Standard"
+    "addstandard": "Add Standard",
+    "skipPaymentAndContinue": "Skip payment and continue",
+    "paymentChoicePrompt": "Choose how to proceed:",
+    "savePaymentPrompt": "Do you want to save payment?",
+    "paymentChoiceYes": "Yes",
+    "paymentChoiceNo": "No",
+    "skipPaymentConfirmation": "Payment will be skipped and the request will move to authority decision.",
+    "processPayment": "Process payment"
   },
   "zone": {
     "create": "Create Zone",

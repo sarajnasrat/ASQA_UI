@@ -1379,7 +1379,14 @@
       "totalAmountDue": "مجموع مبلغ قابل پرداخت",
       "contactSupport": "با پشتیبانی تماس بگیرید",
       "printInvoice": "چاپ فاکتور"
-    }
+    },
+    "skipPaymentAndContinue": "از پرداخت صرف‌نظر کنید و ادامه دهید",
+    "paymentChoicePrompt": "روش ادامه را انتخاب کنید:",
+    "savePaymentPrompt": "آیا می‌خواهید پرداخت را ثبت کنید؟",
+    "paymentChoiceYes": "بله",
+    "paymentChoiceNo": "خیر",
+    "skipPaymentConfirmation": "پرداخت انجام نمی‌شود و درخواست به مرحله تصمیم مقام مربوط انتقال می‌یابد.",
+    "processPayment": "پرداخت را انجام دهید"
   },
   "attachment": {
     "category": "دسته",
