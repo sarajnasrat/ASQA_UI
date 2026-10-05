@@ -59,13 +59,9 @@ export const CountryForm: React.FC<CountryFormProps> = ({
           control={control}
           rules={{ 
             required: getValidationMessage('countryCode', 'required'),
-            minLength: {
-              value: 2,
-              message: getValidationMessage('countryCode', 'minLength'),
-            },
-            maxLength: {
-              value: 3,
-              message: getValidationMessage('countryCode', 'maxLength'),
+            pattern: {
+              value: /^\+?\d{1,8}$/,
+              message: getValidationMessage('countryCode', 'invalid'),
             },
           }}
           render={({ field }) => (
@@ -74,6 +70,8 @@ export const CountryForm: React.FC<CountryFormProps> = ({
                 {...field}
                 id="countryCode"
                 type="text"
+                inputMode="tel"
+                maxLength={9}
                 disabled={isSubmitting}
                 className={`
                   w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 transition-all
@@ -85,11 +83,6 @@ export const CountryForm: React.FC<CountryFormProps> = ({
                 `}
                 placeholder={t('country.form.placeholder.countryCode')}
               />
-              {field.value && !errors.countryCode && (
-                <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                  <i className="pi pi-check-circle text-green-500" />
-                </div>
-              )}
             </div>
           )}
         />

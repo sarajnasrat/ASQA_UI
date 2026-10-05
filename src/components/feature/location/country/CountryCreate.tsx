@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Toast } from "primereact/toast";
 import CountryService from "../../../../services/country.service";
+import { handleApi } from "../../../../hooks/handleApi";
 import { CountryForm } from "./CountryForm";
 import { useTranslation } from "react-i18next";
 
@@ -31,22 +32,15 @@ export const CountryCreate: React.FC<CountryCreateProps> = ({
     const handleSubmit = async (data: any) => {
         setIsSubmitting(true);
         try {
-            const response = await CountryService.createCountry(data);
-
-            toast.current?.show({
-                severity: "success",
-                summary: t("common.success"),
-                detail: t(response.data.message),
-                life: 3000,
-            });
-            onSuccess(); // Call success callback
-        } catch (error: any) {
-            toast.current?.show({
-                severity: "error",
-                summary: t("common.error"),
-                detail: error.response?.data?.message || t("country.createFailed"),
-                life: 5000,
-            });
+            const response = await handleApi(
+                () => CountryService.createCountry(data),
+                (summary, detail) =>
+                    toast.current?.show({ severity: "success", summary, detail, life: 3000 }),
+                (summary, detail) =>
+                    toast.current?.show({ severity: "error", summary, detail, life: 5000 }),
+                t,
+            );
+            if (response) onSuccess();
         } finally {
             setIsSubmitting(false);
         }

@@ -2,6 +2,7 @@ import  { useEffect, useRef, useState } from "react";
 import { useAppToast } from "../../../../hooks/useToast";
 import { useNavigate } from "react-router-dom";
 import CountryService from "../../../../services/country.service";
+import { handleApi } from "../../../../hooks/handleApi";
 import { Button } from "primereact/button";
 import { TieredMenu } from "primereact/tieredmenu";
 import type { MenuItem } from "primereact/menuitem";
@@ -117,13 +118,14 @@ export const CountryList = () => {
   };
 
   const handleDelete = async (id: any) => {
-    try {
-      await CountryService.deleteCountry(id);
-      showToast("success", t("common.success"), t("country.deleted"));
-      await getAllCountries();
-    } catch (error) {
-      showToast("error", t("common.error"), t("country.deleteFailed"));
-    }
+    const response = await handleApi(
+      () => CountryService.deleteCountry(id),
+      (summary, detail) => showToast("success", summary, detail || ""),
+      (summary, detail) => showToast("error", summary, detail || ""),
+      t,
+    );
+
+    if (response) await getAllCountries();
   };
 
   const actionTemplate = (rowData: any) => {

@@ -52,6 +52,7 @@ interface Address {
 
 interface ContactPersonFormProps {
   companyId: number;
+  isExistingCompany: boolean;
   requestType?: string;
   onSuccess: () => void;
   onCancel: () => void;
@@ -61,6 +62,7 @@ interface ContactPersonFormProps {
 
 const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
   companyId,
+  isExistingCompany,
   requestType,
   onSuccess,
   onCancel,
@@ -142,6 +144,11 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
   }, []);
 
   useEffect(() => {
+    if (!isExistingCompany) {
+      resetContactPersonForm();
+      return;
+    }
+
     const contactPersonId = Number(localStorage.getItem("contactPersonId"));
 
     if (contactPersonId && !isCreatingNew) {
@@ -152,7 +159,7 @@ const ContactPersonForm: React.FC<ContactPersonFormProps> = ({
     if (companyId && !isCreatingNew) {
       getActiveCompanyContactPersonByCompanyId(companyId);
     }
-  }, [companyId, isCreatingNew]);
+  }, [companyId, isCreatingNew, isExistingCompany]);
 
   const loadCountries = async () => {
     try {
@@ -250,7 +257,13 @@ const loadDistrictsByProvince = async (
 
   const getContactPersonById = async (id: number) => {
     try {
-      const response = await CompanyContactPersonService.getById(id);
+      const response = await handleApi(
+        () => CompanyContactPersonService.getById(id),
+        () => {},
+        showError,
+        t,
+      );
+      if (!response) return;
       const data = response.data.data;
       localStorage.setItem("contactPersonId", String(data?.id || id));
       setIsCreatingNew(false);
@@ -268,10 +281,19 @@ const loadDistrictsByProvince = async (
     currentCompanyId: number,
   ) => {
     try {
-      const response =
-        await CompanyContactPersonService.getActiveCompanyContactPersonByCompanyId(
-          currentCompanyId,
-        );
+      const response = await handleApi(
+        () =>
+          CompanyContactPersonService.getActiveCompanyContactPersonByCompanyId(
+            currentCompanyId,
+          ),
+        () => {},
+        showError,
+        t,
+      );
+      if (!response) {
+        resetContactPersonForm();
+        return;
+      }
       const data = response.data?.data || response.data;
 
       if (!data) {
@@ -358,10 +380,12 @@ const loadDistrictsByProvince = async (
       newErrors.position = t("contactPerson.errors.positionRequired");
     if (!formData.email?.trim())
       newErrors.email = t("contactPerson.errors.emailRequired");
-    else if (!/\S+@\S+\.\S+/.test(formData.email))
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
       newErrors.email = t("contactPerson.errors.emailInvalid");
     if (!formData.phoneNumber?.trim())
       newErrors.phoneNumber = t("contactPerson.errors.phoneRequired");
+    else if (!/^\+?\d{1,16}$/.test(formData.phoneNumber))
+      newErrors.phoneNumber = t("contactPerson.errors.phoneInvalid");
 
     setErrors(newErrors);
 
@@ -385,6 +409,26 @@ const loadDistrictsByProvince = async (
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    if (name === "phoneNumber") {
+      const digitCount = (value.match(/\d/g) || []).length;
+      if (digitCount > 16) {
+        setErrors((prev) => ({
+          ...prev,
+          phoneNumber: t("contactPerson.errors.phoneInvalid"),
+        }));
+        return;
+      }
+
+      setFormData((prev) => ({ ...prev, phoneNumber: value }));
+      setErrors((prev) => ({
+        ...prev,
+        phoneNumber: value && !/^\+?\d{0,16}$/.test(value)
+          ? t("contactPerson.errors.phoneInvalid")
+          : "",
+      }));
+      return;
+    }
+
     setFormData((prev) => ({ ...prev, [name]: value }));
     if (errors[name as keyof typeof formData]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
@@ -499,6 +543,8 @@ const loadDistrictsByProvince = async (
           t,
         );
       }
+
+      if (!response) return;
 
       // Save contactPersonId after success
       if (response) {

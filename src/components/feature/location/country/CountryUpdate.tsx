@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Toast } from "primereact/toast";
 import CountryService from "../../../../services/country.service";
+import { handleApi } from "../../../../hooks/handleApi";
 import { CountryForm } from "./CountryForm";
 import { useTranslation } from "react-i18next";
 import SkeletonForm from "../../../common/SkeletonForm";
@@ -69,23 +70,16 @@ export const CountryUpdate: React.FC<CountryUpdateProps> = ({
     setIsSubmitting(true);
 
     try {
-      const response = await CountryService.updateCountry(countryId, data);
+      const response = await handleApi(
+        () => CountryService.updateCountry(countryId, data),
+        (summary, detail) =>
+          toast.current?.show({ severity: "success", summary, detail, life: 3000 }),
+        (summary, detail) =>
+          toast.current?.show({ severity: "error", summary, detail, life: 5000 }),
+        t,
+      );
 
-      toast.current?.show({
-        severity: "success",
-        summary: t("common.success"),
-        detail: t(response.data.message),
-        life: 3000,
-      });
-
-      onSuccess();
-    } catch (error: any) {
-      toast.current?.show({
-        severity: "error",
-        summary: "Error",
-        detail: error.response?.data?.message || t("country.updateFailed"),
-        life: 5000,
-      });
+      if (response) onSuccess();
     } finally {
       setIsSubmitting(false);
     }

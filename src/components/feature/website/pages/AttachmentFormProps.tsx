@@ -44,7 +44,18 @@ const AttachmentForm: React.FC<AttachmentFormProps> = ({
 
   const getAttachmentById = async (id: number) => {
     try {
-      const response = await AttachmentService.getById(id);
+      const response = await handleApi(
+        () => AttachmentService.getById(id),
+        () => {},
+        showError,
+        t,
+      );
+      if (!response) {
+        localStorage.removeItem(storageKey);
+        setAttachment(null);
+        setAttachmentId(null);
+        return null;
+      }
 
       const attachmentData = response?.data?.data || response?.data;
 
@@ -182,6 +193,7 @@ const AttachmentForm: React.FC<AttachmentFormProps> = ({
           ),
         showSuccess,
         showError,
+        t,
       );
 
       if (response) {
@@ -199,6 +211,7 @@ const AttachmentForm: React.FC<AttachmentFormProps> = ({
           ),
         showSuccess,
         showError,
+        t,
       );
 
       const createdId = response?.data?.id || response?.data?.data?.id;

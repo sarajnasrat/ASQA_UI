@@ -21,6 +21,7 @@ import StatusTabMenu, { type StatusTabItem } from "../../common/StatusTabMenu";
 import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 import ExcelExport from "../../common/ExcelExport";
 import { useAuth } from "../../../context/AuthContext";
+import { getLocalizedCompanyName } from "../../../utils/companyName";
 
 type InspectionAssignmentListProps = {
   certificationScope?: "NATIONAL" | "INTERNATIONAL";
@@ -33,7 +34,7 @@ export const InspectionAssignmentList: React.FC<InspectionAssignmentListProps> =
   listPath = "/commitee-assignment-list",
   titleKey = "commitee.assignment.list",
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
   const toast = useRef<Toast>(null);
@@ -208,6 +209,16 @@ const loadData = async () => {
         t(
           `certificationRequest.typeOptions.${row.certificationRequest.requestType}`,
         ),
+    },
+
+    {
+      field: "certificationRequest.company",
+      header: t("company.labels.companyName"),
+      body: (row: any) =>
+        getLocalizedCompanyName(
+          row.certificationRequest?.company || row.company,
+          i18n.resolvedLanguage || i18n.language,
+        ) || t("common.notSpecified"),
     },
 
     {

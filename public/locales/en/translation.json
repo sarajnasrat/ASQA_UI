@@ -105,6 +105,21 @@
         "title": "Inspection deadline completed",
         "message": "The inspection deadline for request {{trackingNumber}} has completed and the request should be inspected."
       }
+    },
+    "forbidden": "You are not allowed to access this notification.",
+    "marked": {
+      "all": {
+        "read": "All notifications were marked as read."
+      },
+      "read": "The notification was marked as read."
+    },
+    "notfound": "Notification was not found.",
+    "scheduled": {
+      "processed": "scheduled Notification processed successfully"
+    },
+    "unread": {
+      "count": "Unread notification count retrieved successfully.",
+      "list": "Unread notifications retrieved successfully."
     }
   },
   "languages": {
@@ -135,7 +150,8 @@
         "countryCode": {
           "required": "Country code is required",
           "minLength": "Country code must be at least 2 characters",
-          "maxLength": "Country code must not exceed 3 characters"
+          "maxLength": "Country code must not exceed 8 digits",
+          "invalid": "Country code may contain digits and an optional leading +, with a maximum of 8 digits"
         },
         "translations": {
           "required": "English name is required"
@@ -149,8 +165,41 @@
     "loadSingleFailed": "Failed to load country",
     "updateFailed": "Failed to update country",
     "createFailed": "Failed to create country",
-    "deleted": "Country deleted successfully",
-    "deleteFailed": "Failed to delete country"
+    "deleted": "Country deleted successfully.",
+    "deleteFailed": "Failed to delete country",
+    "batchpartialfail": "Some countries in the batch could not be processed.",
+    "faildtodelete": "The country could not be deleted.",
+    "faildtoupdate": "The country could not be updated.",
+    "failtobatchinsert": "The country batch could not be added.",
+    "fetched": "Country information loaded successfully.",
+    "notfound": "Country was not found.",
+    "servererror": "A country server error occurred.",
+    "updated": "Country updated successfully.",
+    "errors": {
+      "code": {
+        "required": "Country code is required.",
+        "already": {
+          "exists": "A country with this code already exists."
+        }
+      },
+      "translations": {
+        "required": "At least one country translation is required."
+      },
+      "translation": {
+        "name": {
+          "required": "Country translation names are required."
+        }
+      },
+      "language": {
+        "invalid": "The selected language is invalid."
+      },
+      "name": {
+        "already": {
+          "exists": "A country with this name already exists."
+        }
+      },
+      "invalidLanguageCode": "Invalid language code."
+    }
   },
   "district": {
     "create": "Create District",
@@ -186,7 +235,12 @@
     "updateFailed": "Failed to update district",
     "deleted": "District deleted successfully",
     "deleteFailed": "Failed to delete district",
-    "province": "Province"
+    "province": "Province",
+    "fetched": "District retrieved successfully.",
+    "notfound": "District was not found.",
+    "notnull": "A district must be selected.",
+    "sameprovinceexist": "A district with this name already exists in the province.",
+    "updated": "District updated successfully."
   },
   "province": {
     "create": "Create Province",
@@ -220,7 +274,12 @@
     "loadCountriesFailed": "Failed to load countries",
     "updated": "Province updated successfully",
     "deleted": "Province deleted successfully",
-    "deleteFailed": "Failed to delete province"
+    "deleteFailed": "Failed to delete province",
+    "fetched": "Province retrieved successfully.",
+    "namerequired": "The province name is required.",
+    "notfound": "Province was not found.",
+    "sameprovinceexist": "A province with this name already exists.",
+    "servererror": "A province server error occurred."
   },
   "category": {
     "categoryType": "Category Type",
@@ -251,7 +310,9 @@
       "type": {
         "required": "Category type is required"
       }
-    }
+    },
+    "failedtodelete": "Category could not be deleted.",
+    "notfound": "Category was not found."
   },
   "login": {
     "welcomeBack": "Welcome Back",
@@ -281,9 +342,9 @@
   },
   "company": {
     "companytyperequired": "Company type is required",
-    "selectvalid": "Select a valid company type",
-    "invalidformat": "Invalid format",
-    "invalidjson": "Invalid JSON format",
+    "selectvalid": "Select a valid company type.",
+    "invalidformat": "The company information format is invalid.",
+    "invalidjson": "The company information contains invalid JSON.",
     "create": "Create Company",
     "edit": "Edit Company",
     "delete": "Delete Company",
@@ -311,7 +372,9 @@
       "changeTitle": "Change Company Classification",
       "blacklistDescription": "Provide the reason for blacklisting {{name}}.",
       "confirmWhitelist": "Whitelist {{name}}?",
-      "reason": "Reason",
+      "reason": {
+        "required": "A reason is required for this company classification."
+      },
       "notes": "Notes",
       "manualWhitelist": "Manually whitelisted",
       "updated": "Company classification updated"
@@ -330,7 +393,11 @@
     "documentsCount": "Documents",
     "socialLinks": "Social Links",
     "links": "Links",
-    "businessLogo": "Business Logo",
+    "businessLogo": {
+      "upload": {
+        "failed": "The business logo could not be uploaded."
+      }
+    },
     "companyLogo": "Company Logo",
     "companyLogos": "Company Logos",
     "basicInfo": "Basic Information",
@@ -437,10 +504,10 @@
     },
     "validation": {
       "companyOwnerNameEn": {
-        "invalidCharacters": "Use English letters only; numbers are not allowed"
+        "required": "Owner name (English) is required"
       },
       "companyOwnerNameDr": {
-        "invalidCharacters": "Use Dari characters only; English letters and numbers are not allowed"
+        "required": "Owner name (Dari) is required"
       },
       "companyNameEN": {
         "required": "Company name (English) is required",
@@ -502,12 +569,6 @@
         "required": "Establishment year is required",
         "invalid": "Please enter a valid year"
       },
-      "companyOwnerNameEn": {
-        "required": "Owner name (English) is required"
-      },
-      "companyOwnerNameDr": {
-        "required": "Owner name (Dari) is required"
-      },
       "companyOwnerNamePs": {
         "required": "Owner name (Pashto) is required"
       },
@@ -542,7 +603,8 @@
       "ACTIVE": "Active",
       "INACTIVE": "Inactive",
       "PENDING": "Pending",
-      "SUSPENDED": "Suspended"
+      "SUSPENDED": "Suspended",
+      "invalid": "The company status is invalid."
     },
     "messages": {
       "createSuccess": "Company has been successfully registered",
@@ -629,7 +691,85 @@
     "verifiedMessage": "این شرکت توسط ASQA تأیید شده است",
     "registeredMember": "عضو ثبت نام شده",
     "companyAttachments": "اسناد های ارایه شده توسط شرکت",
-    "certificationrequests": "Certification Requests"
+    "certificationrequests": "Certification Requests",
+    "address": {
+      "isrequired": "The company address is required."
+    },
+    "alreadyexist": "This company already exists.",
+    "alreadyexists": "This company already exists.",
+    "blacklisted": {
+      "created": "Blacklisted company created successfully."
+    },
+    "bussinessLogoUrl": {
+      "isrequired": "The business logo is required."
+    },
+    "categories": {
+      "invalid": "Select valid company categories."
+    },
+    "companyType": {
+      "invalid": "Select a valid company type."
+    },
+    "contactperson": {
+      "created": "Contact person company created successfully.",
+      "exists": "This contact person already exists.",
+      "failedtocreate": "Contact person company could not be created.",
+      "failedtoretrieve": "Contact person company could not be retrieved.",
+      "failedtoupdate": "Contact person company could not be updated.",
+      "found": "Contact person company found successfully.",
+      "notfound": "Contact person company was not found.",
+      "updated": "Contact person company updated successfully."
+    },
+    "created": "Company created successfully.",
+    "db": {
+      "constraint": {
+        "violation": "Company information conflicts with a database rule."
+      }
+    },
+    "email": {
+      "alreadyexists": "This email address is already registered.",
+      "isrequired": "The company email address is required."
+    },
+    "establishYear": {
+      "isrequired": "Establishment year for establishyear company is required."
+    },
+    "failedtocreatecompany": "The company could not be created.",
+    "failedtodeletecompany": "The company could not be deleted.",
+    "failedtoretrievecompany": "The company could not be retrieved.",
+    "failedtoupdatecompany": "The company could not be updated.",
+    "id": {
+      "required": "The company ID is required."
+    },
+    "jawazNumber": {
+      "alreadyexists": "This Jawaz number is already registered.",
+      "isrequired": "The company Jawaz number is required."
+    },
+    "jawaznumberalreadyexist": "This Jawaz number is already registered.",
+    "logo": {
+      "upload": {
+        "failed": "The company logo could not be uploaded."
+      }
+    },
+    "name": {
+      "required": "The company name is required."
+    },
+    "nameDR": {
+      "isrequired": "The company name in Dari is required."
+    },
+    "nameEN": {
+      "isrequired": "The company name in English is required."
+    },
+    "namePS": {
+      "isrequired": "The company name in Pashto is required."
+    },
+    "notfound": "Company was not found.",
+    "phoneNumber": {
+      "isrequired": "The company phone number is required."
+    },
+    "retrieved": "Company retrieved successfully.",
+    "tinNumber": {
+      "isrequired": "Tin number for tinnumber company is required."
+    },
+    "updated": "Company updated successfully."
   },
   "forgotPassword": {
     "title": "Forgot Password",
@@ -790,9 +930,29 @@
     "preview": "Preview",
     "unknown": "Unknown",
     "unknown_file": "Unknown file",
-    "reference": "Reference",
+    "reference": {
+      "type": {
+        "required": "Type for reference type attachment is required."
+      }
+    },
     "select_reference": "Select reference",
-    "sizeUnitKb": "KB"
+    "sizeUnitKb": "KB",
+    "created": "Attachment created successfully.",
+    "deleted": "Attachment deleted successfully.",
+    "failedtocreate": "Attachment could not be created.",
+    "failedtodelete": "Attachment could not be deleted.",
+    "failedtoupdate": "Attachment could not be updated.",
+    "file": {
+      "required": "File for file attachment is required."
+    },
+    "invalid": {
+      "reference": {
+        "type": "The attachment reference type is invalid."
+      }
+    },
+    "notfound": "Attachment was not found.",
+    "retrieved": "Attachment retrieved successfully.",
+    "updated": "Attachment updated successfully."
   },
   "nav": {
     "certificationVerification": "Certification Verification",
@@ -1182,6 +1342,9 @@
     "confirmUnderReview": "Confirm Start Review",
     "requestWillBeUnderReview": "This will set the request status to 'Under Review' and notify to the applicant. Are you sure you want to proceed?",
     "deadlineRequired": "Set Deadline",
+    "noStandardConfirmationTitle": "Continue without a standard?",
+    "noStandardConfirmationMessage": "No standard has been selected. Do you want to continue without adding a standard?",
+    "continueWithoutStandard": "Continue without standard",
     "startReview": "Start Review",
     "reject": "Reject",
     "rejectReason": "Reject Reason",
@@ -1387,7 +1550,7 @@
     "created": "Zone created successfully",
     "updated": "Zone updated successfully",
     "deleted": "Zone deleted successfully",
-    "servererror": "Failed to load zones",
+    "servererror": "A zone server error occurred.",
     "loadFailed": "Failed to load zone",
     "deleteFailed": "Failed to delete zone",
     "updateFailed": "Failed to update zone",
@@ -1401,7 +1564,8 @@
       "label": "Zone Name",
       "required": "Zone name is required",
       "placeholder": "Enter zone name",
-      "exists": "Zone with this name already exists"
+      "exists": "Zone with this name already exists",
+      "exist": "A zone with this name already exists."
     }
   },
   "registration": {
@@ -1471,6 +1635,15 @@
       "trackingCopyFailed": "Failed to copy tracking number. Please copy it manually.",
       "noTrackingNumber": "No tracking number available to copy."
     },
+    "backend": {
+      "noCompanyForJawaz": "No company was found for the entered Jawaz number.",
+      "activeRequestExists": "Your company already has a certification request in progress. You can create a new request after the previous one is issued.",
+      "companyBlacklisted": "This company is blacklisted and cannot create a certification request.",
+      "companySuspended": "This company is suspended and cannot create a certification request.",
+      "companyUnderReview": "This company is under review. It must be whitelisted before creating a certification request.",
+      "companyOnWatchlist": "This company is on the watchlist. It must be whitelisted before creating a certification request.",
+      "companyNotWhitelisted": "This company has not been reviewed. It must be whitelisted before creating a certification request."
+    },
     "errors": {
       "submitFailed": "Failed to submit certification request!"
     },
@@ -1491,14 +1664,15 @@
       "positionRequired": "Position is required",
       "emailRequired": "Email is required",
       "emailInvalid": "Please enter a valid email address",
-      "phoneRequired": "Phone number is required"
+      "phoneRequired": "Phone number is required",
+      "phoneInvalid": "Please enter a valid number with no more than 16 digits."
     },
     "placeholders": {
       "firstName": "Enter first name",
       "lastName": "Enter last name",
       "position": "e.g., Manager, Director",
       "email": "example@email.com",
-      "phoneNumber": "+93 123 456 789"
+      "phoneNumber": "+937989384"
     },
     "addresses": {
       "title": "Addresses",
@@ -1566,9 +1740,13 @@
     "create": "Create Committee",
     "edit": "Edit Committee",
     "delete": "Delete Committee",
-    "name": "Committee Name",
+    "name": {
+      "required": "The committee name is required."
+    },
     "description": "Description",
-    "type": "Committee Type",
+    "type": {
+      "required": "The committee type is required."
+    },
     "active": "Active",
     "updated": "Committee updated successfully",
     "deleted": "Committee deleted successfully",
@@ -1689,7 +1867,19 @@
         "rolled_back": "Rolled Back"
       },
       "yes": "بله",
-      "no": "خیر"
+      "no": "خیر",
+      "approval": {
+        "notfound": "Assignment approval committee was not found."
+      },
+      "created": "Assignment committee created successfully.",
+      "failedtocreate": "Assignment committee could not be created.",
+      "failedtodelete": "Assignment committee could not be deleted.",
+      "failedtoupdate": "Assignment committee could not be updated.",
+      "file": {
+        "notallowed": "This file is not allowed for the committee assignment."
+      },
+      "found": "Assignment committee found successfully.",
+      "notfound": "Assignment committee was not found."
     },
     "member": {
       "list": "Committee Members",
@@ -1729,7 +1919,45 @@
       "memberDirectoratePlaceholder": "Enter directorate",
       "positionPlaceholder": "Enter position",
       "memberDirectorate": "Directorate",
-      "position": "Position"
+      "position": "Position",
+      "created": "Member committee created successfully.",
+      "emptylist": "Add at least one committee member.",
+      "failedtocreate": "Member committee could not be created.",
+      "failedtodelete": "Member committee could not be deleted.",
+      "failedtoupdate": "Member committee could not be updated.",
+      "found": "Member committee found successfully.",
+      "notfound": "Member committee was not found."
+    },
+    "cannot": {
+      "assign": {
+        "empty": "A committee with no members cannot be assigned."
+      }
+    },
+    "created": "Committee created successfully.",
+    "duplicate": {
+      "name": {
+        "and": {
+          "type": "A committee with this name and type already exists."
+        }
+      }
+    },
+    "failedtocreate": "Committee could not be created.",
+    "failedtodelete": "Committee could not be deleted.",
+    "failedtoupdate": "Committee could not be updated.",
+    "found": "Committee found successfully.",
+    "id": {
+      "required": "The committee ID is required."
+    },
+    "notfound": "Committee was not found.",
+    "report": {
+      "created": "Report committee created successfully.",
+      "deleted": "Report committee deleted successfully.",
+      "failedtocreate": "Report committee could not be created.",
+      "failedtodelete": "Report committee could not be deleted.",
+      "failedtoupdate": "Report committee could not be updated.",
+      "found": "Report committee found successfully.",
+      "notfound": "Report committee was not found.",
+      "updated": "Report committee updated successfully."
     }
   },
   "common": {
@@ -1820,7 +2048,17 @@
       "": {
         "": {}
       }
-    }
+    },
+    "accessdenied": "Access denied.",
+    "dbconstraint": "The operation conflicts with a database rule.",
+    "endpoint": {
+      "notfound": "The requested endpoint was not found."
+    },
+    "invalidenum": "The provided value is invalid.",
+    "invalidjson": "The request contains invalid JSON.",
+    "methodnotsupported": "This operation is not supported.",
+    "unexpectederror": "An unexpected error occurred.",
+    "validationerror": "Please check the provided information."
   },
   "home": {
     "badge": "Afghanistan Quality Standards Authority",
@@ -2059,8 +2297,8 @@
       "button": "Reset Password",
       "passwordTooShort": "Password must be at least 6 characters",
       "passwordMismatch": "Passwords do not match",
-      "success": "Password reset successfully",
-      "failed": "Failed to reset password"
+      "success": "The password was reset successfully.",
+      "failed": "The password could not be reset."
     },
     "search": {
       "title": "Search Users",
@@ -2260,7 +2498,45 @@
       "updated": "User updated successfully",
       "created": "User created successfully",
       "deleted": "User deleted successfully"
-    }
+    },
+    "codealreadyused": "This user code is already in use.",
+    "confirm": {
+      "password": {
+        "required": "Password confirmation is required."
+      }
+    },
+    "current": {
+      "password": {
+        "invalid": "The current password is incorrect.",
+        "required": "The current password is required."
+      }
+    },
+    "fileuploaderror": "The file could not be uploaded.",
+    "invalidotp": "The one-time password is invalid.",
+    "new": {
+      "password": {
+        "required": "The new password is required."
+      }
+    },
+    "newpasswordnotmatch": "The new password and confirmation do not match.",
+    "notauthenticated": "Please sign in to continue.",
+    "notfound": "User was not found.",
+    "notfoundwithselectedemail": "No user was found with this email address.",
+    "otpexpired": "The one-time password has expired.",
+    "otpisvalid": "The OTP is valid.",
+    "otpsent": "The OTP was sent successfully.",
+    "password": {
+      "changed": "The password was changed successfully.",
+      "mismatch": "The passwords do not match.",
+      "request": {
+        "required": "A password reset request is required."
+      },
+      "too": {
+        "short": "The password is too short."
+      }
+    },
+    "passwordchanged": "The password was changed successfully.",
+    "updated": "User updated successfully."
   },
   "role": {
     "title": "Role Management",
@@ -2375,7 +2651,8 @@
       "roleNameRequired": "Role name is required",
       "roleNameMinLength": "Role name must be at least 3 characters"
     },
-    "INSPECTION_USERS": "Inspection Users"
+    "INSPECTION_USERS": "Inspection Users",
+    "updated": "Role updated successfully."
   },
   "permissions": {
     "ADD_USER": "Add User",
@@ -2738,7 +3015,16 @@
     "validation": {
       "requiredFields": "Full name, email, subject and body are required.",
       "invalidEmail": "Please enter a valid email."
-    }
+    },
+    "created": "Comment created successfully.",
+    "deleted": "Comment deleted successfully.",
+    "failedtocreate": "Comment could not be created.",
+    "failedtodelete": "Comment could not be deleted.",
+    "failedtofetch": "Comment could not be retrieved.",
+    "failedtoupdate": "Comment could not be updated.",
+    "fetched": "Comment retrieved successfully.",
+    "notfound": "Comment was not found.",
+    "updated": "Comment updated successfully."
   },
   "contactUs": {
     "title": "Contact Us Messages",
@@ -2929,7 +3215,17 @@
     "validation": {
       "englishLabelRequired": "English label is required",
       "pathRequired": "Menu path is required"
-    }
+    },
+    "deleted": "Menu deleted successfully.",
+    "failedtodelete": "Menu could not be deleted.",
+    "failedtoload": "The menu could not be loaded.",
+    "failedtoupdate": "Menu could not be updated.",
+    "found": "Menu found successfully.",
+    "notfound": "Menu was not found.",
+    "parent": {
+      "cannotbesame": "A menu cannot be its own parent."
+    },
+    "updated": "Menu updated successfully."
   },
   "internationalParty": {
     "title": "International Parties",
@@ -3154,27 +3450,47 @@
         "1": {
           "title": "Request Type Selection",
           "description": "Choose the certification request that matches your organization and purpose.",
-          "details": { "1": "Choose Quality Certification or Standard Mark.", "2": "For Quality Certification, select the applicable quality category.", "3": "Select whether the request is new or a renewal." }
+          "details": {
+            "1": "Choose Quality Certification or Standard Mark.",
+            "2": "For Quality Certification, select the applicable quality category.",
+            "3": "Select whether the request is new or a renewal."
+          }
         },
         "2": {
           "title": "Company Information",
           "description": "Provide the official identity and business information of your company.",
-          "details": { "1": "Enter the company names and contact information.", "2": "Provide license, TIN, address, and activity information.", "3": "Review company information before continuing." }
+          "details": {
+            "1": "Enter the company names and contact information.",
+            "2": "Provide license, TIN, address, and activity information.",
+            "3": "Review company information before continuing."
+          }
         },
         "3": {
           "title": "Contact Person",
           "description": "Identify the authorized person responsible for communication about the request.",
-          "details": { "1": "Enter the contact person's full name and position.", "2": "Provide an active phone number and email address.", "3": "Add the contact person's address information." }
+          "details": {
+            "1": "Enter the contact person's full name and position.",
+            "2": "Provide an active phone number and email address.",
+            "3": "Add the contact person's address information."
+          }
         },
         "4": {
           "title": "Documents & Media",
           "description": "Upload the supporting files required for your selected certification request.",
-          "details": { "1": "Upload clear and valid supporting documents.", "2": "Use the accepted file formats and size limits.", "3": "Confirm that every required attachment is included." }
+          "details": {
+            "1": "Upload clear and valid supporting documents.",
+            "2": "Use the accepted file formats and size limits.",
+            "3": "Confirm that every required attachment is included."
+          }
         },
         "5": {
           "title": "Review & Submit",
           "description": "Review all entered information and submit the completed certification request.",
-          "details": { "1": "Check the request, company, contact, and document information.", "2": "Correct any incomplete or inaccurate details.", "3": "Submit the request and save the tracking number." }
+          "details": {
+            "1": "Check the request, company, contact, and document information.",
+            "2": "Correct any incomplete or inaccurate details.",
+            "3": "Submit the request and save the tracking number."
+          }
         }
       },
       "benefits": {
@@ -3297,7 +3613,16 @@
     }
   },
   "organization": {
-    "failedtofetch": "???????? ????? ?????? ?????? ???"
+    "failedtofetch": "Organization information could not be retrieved.",
+    "alreadyexists": "Organization already exists.",
+    "created": "Organization created successfully.",
+    "deleted": "Organization deleted successfully.",
+    "failedtocreate": "Organization could not be created.",
+    "failedtodelete": "Organization could not be deleted.",
+    "failedtoupdate": "Organization could not be updated.",
+    "fetched": "Organization retrieved successfully.",
+    "notfound": "Organization was not found.",
+    "updated": "Organization updated successfully."
   },
   "certificationVerification": {
     "title": "Certificate Authenticity Verification",
@@ -3479,5 +3804,271 @@
       "restoreSuccess": "Backup restored successfully.",
       "restoreError": "Unable to restore the backup. Please verify the ZIP file and try again."
     }
+  },
+  "aboutus": {
+    "created": "About us created successfully.",
+    "deleted": "About us deleted successfully.",
+    "failedtocreate": "About us could not be created.",
+    "failedtodelete": "About us could not be deleted.",
+    "failedtofetch": "About us could not be retrieved.",
+    "failedtoupdate": "About us could not be updated.",
+    "fetched": "About us retrieved successfully.",
+    "notfound": "About us was not found.",
+    "updated": "About us updated successfully."
+  },
+  "address": {
+    "created": "Address created successfully.",
+    "deleted": "Address deleted successfully.",
+    "faildtodelete": "The address could not be deleted.",
+    "faildtoupdate": "The address could not be updated.",
+    "fetched": "Address retrieved successfully.",
+    "notfetched": "The address could not be retrieved.",
+    "notfound": "Address was not found.",
+    "notnull": "Address details are required.",
+    "sameaddresswithdetailsexist": "An address with these details already exists.",
+    "updated": "Address updated successfully."
+  },
+  "auditlog": {
+    "fetched": "Audit log retrieved successfully.",
+    "notfound": "Audit log was not found."
+  },
+  "certificate": {
+    "deleted": "Certificate deleted successfully.",
+    "details": {
+      "fetched": "Details certificate retrieved successfully."
+    },
+    "expired": {
+      "is": {
+        "date": {
+          "driven": "The certificate expiration date is managed automatically."
+        }
+      }
+    },
+    "fetched": "Certificate retrieved successfully.",
+    "invalid": {
+      "request": {
+        "status": "The request status does not allow certificate issuance."
+      }
+    },
+    "issue": {
+      "from": {
+        "certification": {
+          "module": "Issue this certificate from the certification module."
+        }
+      }
+    },
+    "issued": "The certificate was issued successfully.",
+    "notfound": "Certificate was not found.",
+    "number": {
+      "required": "The certificate number is required."
+    },
+    "rejection": {
+      "reason": {
+        "required": "A certificate rejection reason is required."
+      }
+    },
+    "serialnumber": {
+      "updated": "The certificate serial number was updated successfully."
+    },
+    "servererror": "A certificate server error occurred.",
+    "status": {
+      "updated": "The certificate status was updated successfully."
+    }
+  },
+  "certificationrequest": {
+    "cannotdeleteafterprocessing": "A certification request cannot be deleted after processing has started.",
+    "cannotupdateafterstart": "A certification request cannot be updated after processing has started.",
+    "created": "Certification request created successfully.",
+    "deleted": "Certification request deleted successfully.",
+    "failedtodelete": "Certification request could not be deleted.",
+    "failedtoupdate": "Certification request could not be updated.",
+    "invalid": "The certification request is invalid.",
+    "notfound": "Certification request was not found.",
+    "scope": {
+      "required": "Scope for scope certification request is required."
+    },
+    "updated": "Certification request updated successfully."
+  },
+  "committee": {
+    "already": {
+      "assigned": "A committee is already assigned to this request."
+    },
+    "assigned": "The committee was assigned successfully."
+  },
+  "contactus": {
+    "created": "Contact message created successfully.",
+    "deleted": "Contact message deleted successfully.",
+    "failedtocreate": "Contact message could not be created.",
+    "failedtodelete": "Contact message could not be deleted.",
+    "failedtofetch": "Contact message could not be retrieved.",
+    "failedtoupdate": "Contact message could not be updated.",
+    "fetched": "Contact message retrieved successfully.",
+    "notfound": "Contact message was not found.",
+    "updated": "Contact message updated successfully."
+  },
+  "contract": {
+    "file": {
+      "required": "File for file contract is required."
+    },
+    "international": {
+      "only": "Contracts are available only for international requests."
+    },
+    "invalid": {
+      "date": {
+        "range": "The contract date range is invalid."
+      },
+      "request": {
+        "status": "The request status does not allow a contract."
+      }
+    },
+    "notfound": "Contract was not found.",
+    "number": {
+      "exists": "This contract number already exists."
+    },
+    "required": {
+      "fields": "Complete all required contract fields."
+    },
+    "retrieved": "Contract retrieved successfully.",
+    "saved": "The contract was saved successfully."
+  },
+  "deadline": {
+    "assigned": {
+      "success": "The deadline was assigned successfully."
+    }
+  },
+  "districts": {
+    "fetched": "Districts retrieved successfully."
+  },
+  "file": {
+    "upload": {
+      "failed": "File upload failed."
+    }
+  },
+  "found": "The requested item was found.",
+  "inspection": {
+    "started": {
+      "failed": "The inspection could not be started.",
+      "success": "The inspection started successfully."
+    }
+  },
+  "internationalparty": {
+    "alreadyexists": "International party already exists.",
+    "created": "International party created successfully.",
+    "deleted": "International party deleted successfully.",
+    "failedtocreate": "International party could not be created.",
+    "failedtodelete": "International party could not be deleted.",
+    "failedtofetch": "International party could not be retrieved.",
+    "failedtoupdate": "International party could not be updated.",
+    "fetched": "International party retrieved successfully.",
+    "notfound": "International party was not found.",
+    "updated": "International party updated successfully."
+  },
+  "invalid": {
+    "status": {
+      "transition": "This status change is not allowed."
+    }
+  },
+  "isPrint": {
+    "update": {
+      "failed": "The print status could not be updated."
+    },
+    "updated": "Print status updated successfully."
+  },
+  "isScanned": {
+    "update": {
+      "failed": "The scan status could not be updated."
+    },
+    "updated": "Scan status updated successfully."
+  },
+  "language": {
+    "created": "Language created successfully.",
+    "deleted": "Language deleted successfully.",
+    "fetched": "Language retrieved successfully.",
+    "idrequired": "The language ID is required.",
+    "nameisrequired": "The language name is required.",
+    "notfound": "Language was not found.",
+    "updated": "Language updated successfully."
+  },
+  "notauthenticated": "Authentication is required.",
+  "notfound": "The requested item was not found.",
+  "organizationinfo": {
+    "created": "Organization information created successfully.",
+    "deleted": "Organization information deleted successfully.",
+    "failedtocreate": "Organization information could not be created.",
+    "failedtodelete": "Organization information could not be deleted.",
+    "failedtofetch": "Organization information could not be retrieved.",
+    "failedtoupdate": "Organization information could not be updated.",
+    "fetched": "Organization information retrieved successfully.",
+    "notfound": "Organization information was not found.",
+    "updated": "Organization information updated successfully."
+  },
+  "payment": {
+    "already": {
+      "exists": "already Payment already exists."
+    },
+    "created": "Payment created successfully.",
+    "deleted": "Payment deleted successfully.",
+    "failedtocreate": "Payment could not be created.",
+    "failedtodelete": "Payment could not be deleted.",
+    "failedtoupdate": "Payment could not be updated.",
+    "invalid": {
+      "request": {
+        "status": "The request status does not allow this payment."
+      }
+    },
+    "notfound": "Payment was not found.",
+    "request": {
+      "missing": {
+        "certificate": {
+          "data": "Certificate information is missing from the request."
+        }
+      }
+    },
+    "retrieved": "Payment retrieved successfully.",
+    "transactionid": {
+      "exists": "This payment transaction ID already exists.",
+      "required": "A payment transaction ID is required."
+    },
+    "updated": "Payment updated successfully."
+  },
+  "provinces": {
+    "fetched": "Provinces retrieved successfully."
+  },
+  "rejection": {
+    "reason": {
+      "required": "A rejection reason is required.",
+      "update": {
+        "failed": "The rejection reason could not be updated."
+      },
+      "updated": {
+        "success": "The rejection reason was updated successfully."
+      }
+    }
+  },
+  "request": {
+    "id": {
+      "required": "The request ID is required."
+    },
+    "notfound": "Request was not found."
+  },
+  "rollback": {
+    "count": {
+      "found": "Rollback count retrieved successfully."
+    }
+  },
+  "standard": {
+    "national": {
+      "only": "Standards can be assigned only to national requests."
+    },
+    "not": {
+      "required": {
+        "for": {
+          "request": "A standard is not required for this request."
+        }
+      }
+    }
+  },
+  "status": {
+    "updated": "Request status updated successfully."
   }
 }

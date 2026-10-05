@@ -16,6 +16,7 @@ import {
   XCircle,
 } from "lucide-react";
 import { useAppToast } from "../../../hooks/useToast";
+import { useToast } from "../../../hooks/ToastContext";
 import { handleApi } from "../../../hooks/handleApi";
 import { useTranslation } from "react-i18next";
 import CertificationRequestService from "../../../services/CertificationReques.service";
@@ -120,6 +121,7 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
   const location = useLocation();
   const { t } = useTranslation();
   const { toast, showToast } = useAppToast();
+  const { showSuccess: showGlobalSuccess, showError: showGlobalError } = useToast();
   const [tracker, setTracker] = useState<Tracker[]>([]);
   const [request, setRequest] = useState<CertificationRequest | null>(null);
   const [loading, setLoading] = useState(true);
@@ -162,6 +164,8 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
 
   const [paymentDialogVisible, setPaymentDialogVisible] = useState(false);
   const [statusDialogVisible, setStatusDialogVisible] = useState(false);
+  const [noStandardConfirmationVisible, setNoStandardConfirmationVisible] =
+    useState(false);
   const [internationalContractDialogVisible, setInternationalContractDialogVisible] = useState(false);
   const [internationalInspectionPaymentDialogVisible, setInternationalInspectionPaymentDialogVisible] = useState(false);
   const [pendingStatus, setPendingStatus] = useState<string | null>(null);
@@ -1000,16 +1004,14 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
     const cleanReason = options?.rejectionReason?.trim() || "";
 
     const showSuccess = (summary: string, detail?: string) => {
-      showToast(
-        "success",
+      showGlobalSuccess(
         summary || t("common.success"),
         detail || getStatusButtonLabel(nextStatus),
       );
     };
 
     const showError = (summary: string, detail?: string) => {
-      showToast(
-        "error",
+      showGlobalError(
         summary || t("common.error"),
         detail || t("common.somethingWentWrong") || "Something went wrong",
       );
@@ -1044,7 +1046,7 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
           ),
         showSuccess,
         showError,
-        undefined,
+        t,
       );
     } else if (
       request.requestStatus === "UNDER_REVIEW" &&
@@ -1070,7 +1072,7 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
             ),
           showSuccess,
           showError,
-          undefined,
+          t,
         );
         if (!response) {
           return response;
@@ -1088,7 +1090,7 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
           ),
         showSuccess,
         showError,
-        undefined,
+        t,
       );
     } else if (effectiveNextStatus === "STANDARDS_PROVIDED") {
       if (!options?.standardFile) {
@@ -1103,7 +1105,7 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
         () => CertificationRequestService.standardProvided(request.id, formData),
         showSuccess,
         showError,
-        undefined,
+        t,
       );
     } else if (effectiveNextStatus === "DEADLINE_ASSIGNED") {
       if (!options?.startDate || !options?.endDate) {
@@ -1129,7 +1131,7 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
           ),
         showSuccess,
         showError,
-        undefined,
+        t,
       );
     } else if (effectiveNextStatus === "INSPECTION_IN_PROGRESS") {
       if (!options?.committeeId) {
@@ -1145,7 +1147,7 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
           ),
         showSuccess,
         showError,
-        undefined,
+        t,
       );
     } else {
       response = await handleApi(
@@ -1161,7 +1163,7 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
             ),
         showSuccess,
         showError,
-        undefined,
+        t,
       );
     }
 
@@ -1264,16 +1266,18 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
     setStatusDialogVisible(true);
   };
 
-  const submitStatusDialog = async () => {
+  const submitStatusDialog = async (confirmedWithoutStandard = false) => {
     if (!pendingStatus || statusSubmitting) return;
 
     const isReject = pendingStatus === "REJECTED";
     const isUnderReviewDecision =
       request?.requestStatus === "UNDER_REVIEW" &&
       pendingStatus === "STANDARDS_PROVIDED";
+    const effectiveStandardRequiredChoice =
+      standardRequiredChoice && !confirmedWithoutStandard;
     const isStandardProvided =
       pendingStatus === "STANDARDS_PROVIDED" &&
-      (!isUnderReviewDecision || standardRequiredChoice);
+      (!isUnderReviewDecision || effectiveStandardRequiredChoice);
     const isDeadlineAssigned = pendingStatus === "DEADLINE_ASSIGNED";
     const isInspectionInProgress = pendingStatus === "INSPECTION_IN_PROGRESS";
 
@@ -1284,6 +1288,16 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
         t("certificationRequest.enterRejectionReason") ||
           "Please provide a rejection reason",
       );
+      return;
+    }
+
+    if (
+      isUnderReviewDecision &&
+      !confirmedWithoutStandard &&
+      !selectedStandardFile &&
+      !selectedStandardAttachmentId
+    ) {
+      setNoStandardConfirmationVisible(true);
       return;
     }
 
@@ -1328,7 +1342,9 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
       setStatusSubmitting(true);
       const response = await handleStatusUpdate(pendingStatus, {
         rejectionReason: isReject ? rejectionReason : null,
-        standardRequired: isUnderReviewDecision ? standardRequiredChoice : undefined,
+        standardRequired: isUnderReviewDecision
+          ? effectiveStandardRequiredChoice
+          : undefined,
         standardFile: isStandardProvided ? selectedStandardFile : null,
         startDate: isDeadlineAssigned ? selectedStartDate : null,
         endDate: isDeadlineAssigned ? selectedEndDate : null,
@@ -1588,6 +1604,40 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
       <Toast ref={toast} position="top-right" />
       <div className="container mx-auto px-4 max-w-7xl">
         <Dialog
+          header={t("certificationRequest.noStandardConfirmationTitle")}
+          visible={noStandardConfirmationVisible}
+          onHide={() => setNoStandardConfirmationVisible(false)}
+          draggable={false}
+          resizable={false}
+          style={{ width: "440px", maxWidth: "95vw" }}
+          footer={
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setNoStandardConfirmationVisible(false)}
+                className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-700 hover:bg-gray-50"
+              >
+                {t("common.cancel")}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setNoStandardConfirmationVisible(false);
+                  void submitStatusDialog(true);
+                }}
+                className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+              >
+                {t("certificationRequest.continueWithoutStandard")}
+              </button>
+            </div>
+          }
+        >
+          <p className="text-sm leading-6 text-gray-600">
+            {t("certificationRequest.noStandardConfirmationMessage")}
+          </p>
+        </Dialog>
+
+        <Dialog
           header={
             <div className="flex items-center gap-3 border-b border-gray-100 px-6 py-4 bg-white rounded-t-xl">
               <div
@@ -1627,7 +1677,7 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
               </button>
               <button
                 type="button"
-                onClick={submitStatusDialog}
+                onClick={() => void submitStatusDialog()}
                 disabled={statusSubmitting}
                 className={
                   isRejectDialog

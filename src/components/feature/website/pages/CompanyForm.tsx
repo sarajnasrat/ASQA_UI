@@ -68,6 +68,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
 }) => {
   const { t } = useTranslation();
   const { showToast } = useAppToast();
+  const { showError, showSuccess } = useToast();
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
@@ -211,8 +212,13 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
     if (!companyId || prefillCompanyData) return;
 
     try {
-      const res = await CompanyService.getCompanyById(Number(companyId));
-      setCompany(res.data);
+      const res = await handleApi(
+        () => CompanyService.getCompanyById(Number(companyId)),
+        () => {},
+        showError,
+        t,
+      );
+      if (res) setCompany(res.data);
     } catch (err) {
       console.log(err);
     }
@@ -386,7 +392,6 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  const { showError, showSuccess } = useToast();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -425,9 +430,10 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
             companyData,
             companyLogo,
             businessLogo,
-          ),
+        ),
         showSuccess,
         showError,
+        t,
       );
     }
     // ✅ CREATE MODE
@@ -442,6 +448,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({
         () => CompanyService.createCompany(formDataToSend),
         showSuccess,
         showError,
+        t,
       );
     }
 

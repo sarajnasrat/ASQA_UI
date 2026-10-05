@@ -22,6 +22,7 @@ import {
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { useAppToast } from "../../../../hooks/useToast";
+import { handleApi } from "../../../../hooks/handleApi";
 import ContactPersonForm from "./ContactPersonForm";
 import AttachmentForm from "./AttachmentFormProps";
 import CompanyForm from "./CompanyForm";
@@ -29,7 +30,6 @@ import CertificationRequestService from "../../../../services/CertificationReque
 import { useTranslation } from "react-i18next";
 import CertificationTypeSelection from "./CertificationTypeSelection";
 import CertificationEntrySelection from "./CertificationEntrySelection";
-import { translateBackendErrors } from "../../../../utils/backendMessage";
 
 interface LocationState {
   certificationMainType?: string;
@@ -319,18 +319,20 @@ const Registration = () => {
     setShowConfirmationModal(false);
 
     try {
-      const response = companyId
-        ? await CertificationRequestService.submitAndReview(
+      const response = await handleApi(
+        () =>
+          CertificationRequestService.submitAndReview(
             certificationInfo.requestId,
             "SUBMITTED",
-            companyId,
-          )
-        : await CertificationRequestService.submitAndReview(
-            certificationInfo.requestId,
-            "SUBMITTED",
-          );
+            companyId ?? undefined,
+          ),
+        () => {},
+        (summary, detail) =>
+          showToast("error", summary, detail || t("common.somethingWentWrong")),
+        t,
+      );
 
-      if (response.data?.success) {
+      if (response?.data?.success) {
         // Extract tracking number from response
         const trackingNum = response.data?.data?.trackingNumber;
         setTrackingNumber(trackingNum);
@@ -338,12 +340,6 @@ const Registration = () => {
         setShowSuccessDialog(true); // Show success dialog instead of toast
         // Clear all persisted registration state after successful completion
         clearRegistrationStorage();
-      } else {
-          const errorMessage = translateBackendErrors(
-            response.data?.errors,
-            t("registration.errors.submitFailed"),
-          );
-        showToast("error", t("common.error"), errorMessage);
       }
     } catch (error: any) {
       console.error("Failed to submit request:", error);
@@ -548,8 +544,9 @@ const Registration = () => {
       case 3:
         if (!companyId) return null;
         return (
-          <ContactPersonForm
+        <ContactPersonForm
             companyId={companyId}
+            isExistingCompany={Boolean(renewalCompanyData?.id)}
             requestType={certificationInfo?.requestType}
             onSuccess={handleContactSuccess}
             onCancel={handlePreviousStep}

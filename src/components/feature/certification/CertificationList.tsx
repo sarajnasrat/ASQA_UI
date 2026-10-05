@@ -15,6 +15,7 @@ import ExcelExport from "../../common/ExcelExport";
 import { CertificationUpdate } from "./CertificationUpdate";
 import { useAuth } from "../../../context/AuthContext";
 import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
+import { getLocalizedCompanyName } from "../../../utils/companyName";
 
 type CertificationStatus =
   | "UNDER_SUPERVISION"
@@ -38,7 +39,7 @@ export const CertificationList = ({
   const [rows, setRows] = useState(10);
   const [totalRecords, setTotalRecords] = useState(0);
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { toast, showToast } = useAppToast();
 
   const [updateDialogVisible, setUpdateDialogVisible] = useState(false);
@@ -320,6 +321,17 @@ export const CertificationList = ({
       field: "certificateNumber",
       header: t("certification.number"),
       sortable: true,
+    },
+    {
+      field: "company",
+      header: t("company.labels.companyName"),
+      body: (rowData: any) =>
+        getLocalizedCompanyName(
+          rowData.company ||
+            rowData.certificationRequest?.company ||
+            rowData.request?.company,
+          i18n.resolvedLanguage || i18n.language,
+        ) || t("common.notSpecified"),
     },
     {
       field: "certificationType",
