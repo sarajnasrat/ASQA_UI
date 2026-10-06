@@ -104,6 +104,10 @@
       "inspectionOverdue": {
         "title": "Inspection deadline completed",
         "message": "The inspection deadline for request {{trackingNumber}} has completed and the request should be inspected."
+      },
+      "inspectionDeadlineReached": {
+        "title": "Inspection deadline reached",
+        "message": "The inspection deadline for request {{trackingNumber}} has been reached."
       }
     },
     "forbidden": "You are not allowed to access this notification.",

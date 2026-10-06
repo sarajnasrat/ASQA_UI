@@ -47,6 +47,8 @@
     "types": {
       "REQUEST_SUBMITTED": "د غوښتنې ثبت",
       "REQUEST_STATUS_CHANGED": "د غوښتنې د حالت بدلون",
+      "AUTHORITY_DECISION": "د صلاحیت لرونکي مقام پرېکړه",
+      "CERTIFICATION_ISSUED": "تصدیق صادر شو",
       "CERTIFICATE_ISSUED": "سند صادر شو",
       "CERTIFICATE_EXPIRING_SOON": "سند ژر ختمېږي",
       "CERTIFICATE_EXPIRED": "سند ختم شوی",
@@ -64,6 +66,8 @@
       "REPORT_APPROVED": "راپور تایید شو",
       "PAYMENT_PENDING": "د تادیې په انتظار",
       "PAYMENT_COMPLETED": "تادیه بشپړه شوه",
+      "AUTHORITY_DECISION": "د صلاحیت لرونکي مقام پرېکړه",
+      "CERTIFICATION_ISSUED": "تصدیق صادر شو",
       "CERTIFICATE_ISSUED": "سند صادر شو",
       "REJECTED": "رد شو",
       "CANCELLED": "لغوه شو",
@@ -99,6 +103,10 @@
       "inspectionOverdue": {
         "title": "د تفتیش مهلت بشپړ شو",
         "message": "د {{trackingNumber}} غوښتنې د تفتیش مهلت بشپړ شوی او غوښتنه باید وکتل شي."
+      },
+      "inspectionDeadlineReached": {
+        "title": "د تفتیش مهلت راورسېد",
+        "message": "د {{trackingNumber}} غوښتنې د تفتیش مهلت راورسېد."
       }
     },
     "notificationType": "د خبرتیا ډول",

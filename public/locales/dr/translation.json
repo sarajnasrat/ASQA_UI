@@ -48,6 +48,8 @@
     "types": {
       "REQUEST_SUBMITTED": "ثبت درخواست",
       "REQUEST_STATUS_CHANGED": "تغییر وضعیت درخواست",
+      "AUTHORITY_DECISION": "تصمیم مقام صلاحیت‌دار",
+      "CERTIFICATION_ISSUED": "تصدیق صادر شد",
       "CERTIFICATE_ISSUED": "صدور سند",
       "CERTIFICATE_EXPIRING_SOON": "نزدیک شدن ختم اعتبار سند",
       "CERTIFICATE_EXPIRED": "ختم اعتبار سند",
@@ -66,6 +68,8 @@
       "REPORT_APPROVED": "گزارش تایید شد",
       "PAYMENT_PENDING": "در انتظار پرداخت",
       "PAYMENT_COMPLETED": "پرداخت تکمیل شد",
+      "AUTHORITY_DECISION": "تصمیم مقام صلاحیت‌دار",
+      "CERTIFICATION_ISSUED": "تصدیق صادر شد",
       "CERTIFICATE_ISSUED": "سند صادر شده",
       "REJECTED": "رد شد",
       "CANCELLED": "لغو شد"
@@ -100,6 +104,10 @@
       "inspectionOverdue": {
         "title": "مهلت بررسی تکمیل شد",
         "message": "مهلت بررسی برای درخواست {{trackingNumber}} تکمیل شده و درخواست باید بررسی شود."
+      },
+      "inspectionDeadlineReached": {
+        "title": "مهلت بررسی فرا رسیده است",
+        "message": "مهلت بررسی درخواست {{trackingNumber}} فرا رسیده است."
       }
     },
     "forbidden": "شما اجازهٔ دسترسی به این اطلاعیه را ندارید.",
