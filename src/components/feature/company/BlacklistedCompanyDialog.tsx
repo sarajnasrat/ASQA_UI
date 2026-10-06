@@ -13,7 +13,8 @@ import type { CompanyType } from "./company";
 type Props = { visible: boolean; onHide: () => void; onSuccess: () => void };
 
 export default function BlacklistedCompanyDialog({ visible, onHide, onSuccess }: Props) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const dialogDirection = ["dr", "ps", "fa", "ar"].includes(i18n.language.split("-")[0]) ? "rtl" : "ltr";
   const { showError, showSuccess } = useToast();
   const [form, setForm] = useState({ companyNameEN: "", companyNameDR: "", companyNamePS: "", email: "", phoneNumber: "", companyType: "PRIVATE", address: "", reason: "" });
   const [saving, setSaving] = useState(false);
@@ -41,7 +42,7 @@ export default function BlacklistedCompanyDialog({ visible, onHide, onSuccess }:
     }
     finally { setSaving(false); }
   };
-  return <Dialog header={t("company.classification.blacklistTitle")} visible={visible} onHide={onHide} modal className="w-full max-w-3xl rounded-2xl overflow-hidden">
+  return <Dialog header={t("company.classification.blacklistTitle")} visible={visible} onHide={onHide} modal dir={dialogDirection} className="company-classification-dialog w-full max-w-3xl rounded-2xl overflow-hidden text-start">
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
       {(["companyNameEN", "companyNameDR", "companyNamePS", "email", "phoneNumber", "address"] as const).map(field => <div key={field}>
         <label className="mb-1 block font-medium">{t(`company.labels.${field}`)} *</label>

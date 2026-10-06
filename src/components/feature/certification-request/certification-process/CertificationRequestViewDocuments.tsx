@@ -1,6 +1,7 @@
 import React from "react";
 import { FileText, Building2, File, Eye, Download } from "lucide-react";
 import type { CertificationRequest } from "./CertificationRequestView.types";
+import AttachmentMediaSection, { attachmentMediaKind } from "../../../common/AttachmentMediaSection";
 
 interface Props {
   request: CertificationRequest;
@@ -15,27 +16,29 @@ const CertificationRequestViewDocuments: React.FC<Props> = ({
   apiBaseUrl,
   t,
 }) => {
-  const companyAttachments = [...(request.company?.attachments ?? [])].reverse();
+  const allAttachments = [...(request.attachments || []), ...(request.company?.attachments || [])];
+  const requestAttachments = (request.attachments || []).filter((attachment) => !attachmentMediaKind(attachment));
+  const companyAttachments = [...(request.company?.attachments ?? [])].reverse().filter((attachment) => !attachmentMediaKind(attachment));
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
           <FileText className="h-5 w-5 text-blue-600" />
-          {t("certificationRequest.requestAttachments")} ({request.attachments?.length || 0})
+          {t("certificationRequest.requestAttachments")} ({requestAttachments.length})
         </h3>
-        {request.attachments && request.attachments.length > 0 ? (
+        {requestAttachments.length > 0 ? (
           <div className="space-y-3">
-            {request.attachments.map((attachment) => (
+            {requestAttachments.map((attachment) => (
               <div
                 key={attachment.id}
-                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                className="flex min-w-0 items-center justify-between gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
               >
-                <div className="flex items-center gap-3 flex-1">
+                <div className="flex min-w-0 items-center gap-3 flex-1">
                   <File className="h-5 w-5 text-blue-500 shrink-0" />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <p className="font-medium text-gray-900 truncate">
+                      <p dir="auto" className="w-full min-w-0 font-medium text-gray-900 whitespace-normal [overflow-wrap:anywhere]" title={attachment.attachmentName}>
                         {attachment.attachmentName}
                       </p>
                       {attachment.attachmentReferenceType && (
@@ -94,13 +97,13 @@ const CertificationRequestViewDocuments: React.FC<Props> = ({
               return (
               <div
                 key={attachment.id}
-                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                className="flex min-w-0 items-center justify-between gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
               >
-                <div className="flex items-center gap-3">
-                  <File className="h-5 w-5 text-green-500" />
-                  <div>
+                <div className="flex min-w-0 flex-1 items-center gap-3">
+                  <File className="h-5 w-5 shrink-0 text-green-500" />
+                  <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <p className="font-medium text-gray-900">
+                      <p dir="auto" className="w-full min-w-0 font-medium text-gray-900 whitespace-normal [overflow-wrap:anywhere]" title={attachment.attachmentName}>
                         {attachment.attachmentName}
                       </p>
                       <span
@@ -118,7 +121,7 @@ const CertificationRequestViewDocuments: React.FC<Props> = ({
                     <p className="text-xs text-gray-500">{formatFileSize(attachment.fileSize)}</p>
                   </div>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex shrink-0 gap-2">
                   <a
                     href={`${apiBaseUrl}${attachment.file}`}
                     target="_blank"
@@ -148,6 +151,7 @@ const CertificationRequestViewDocuments: React.FC<Props> = ({
           </div>
         )}
       </div>
+      <AttachmentMediaSection attachments={allAttachments} />
     </div>
   );
 };

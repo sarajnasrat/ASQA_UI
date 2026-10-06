@@ -426,8 +426,13 @@
       "confirmSuspend": "{{name}} ځنډول؟",
       "manualSuspension": "په لاسي ډول ځنډول شوی",
       "changeTitle": "د شرکت طبقه بندي بدلول",
+      "suspendTitle": "شرکت تعلیق کړئ",
+      "suspendDescription": "د {{name}} د تعلیق دلیل ولیکئ.",
       "blacklistDescription": "د {{name}} د تور لېست دلیل ولیکئ.",
       "confirmWhitelist": "{{name}} سپین لېست ته داخل شي؟",
+      "restrictionExplanation": "دا شرکت نشي کولای د تصدیق‌نامې غوښتنه جوړه کړي یا د غوښتنو او تصدیق‌نامو حالت بدل کړي.",
+      "reasonHelp": "د دې اقدام دلیل په روښانه ډول ولیکئ. دلیل به د شرکتونو په لېست کې ښکاره شي.",
+      "reasonPlaceholder": "د دې اقدام دلیل ولیکئ",
       "reasonLabel": "دلیل",
       "reason": {
         "required": "د شرکت د دې ډلبندۍ لپاره د دلیل لیکل اړین دي."
@@ -1089,6 +1094,7 @@
           "scopeLabel": "حوزه علامت معیار"
         },
         "popular": "ډېر مشهور",
+        "certificationTypeLabel": "د تصدیق ډول",
         "selectCertificationType": "د تصدیق ډول وټاکئ",
         "domesticType": "د کورني تصدیق ډول",
         "selectedType": "ټاکل شوی د تصدیق ډول",
@@ -1809,6 +1815,8 @@
       "confirmComplete": "ایا تاسو ډاډه یاست چې دا ټاکنه بشپړه نښه کړئ؟",
       "notMentioned": "نه دی یاد شوی",
       "payments": "تادیات",
+      "mediaFiles": "ویډیو او غږیز فایلونه",
+      "documentFiles": "اسناد او انځورونه",
       "noPaymentRecords": "د تادیاتو هېڅ ریکارډ ونه موندل شو.",
       "timelineEvents": "د مهالوېش پېښې",
       "schedule": "مهالوېش",

@@ -1,3 +1,4 @@
+import { refreshSession } from "./sessionRefresh";
 import axios, { type AxiosRequestConfig } from "axios";
 import i18n from "../i18n/i18n";
 import { API_BASE_URL } from "../config/api";
@@ -70,6 +71,7 @@ httpClient.interceptors.response.use(
       originalRequest.url !== "/users/refresh-token"
     ) {
       if (isRefreshing) {
+        originalRequest._retry = true;
         return new Promise<string>((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         })
@@ -87,13 +89,7 @@ httpClient.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const res = await httpClient.post("/users/refresh-token");
-
-        const newAccessToken = res?.data?.data?.accessToken;
-
-        if (!newAccessToken) {
-          throw new Error("No access token returned");
-        }
+        const newAccessToken = await refreshSession();
 
         localStorage.setItem("accessToken", newAccessToken);
 
@@ -107,20 +103,13 @@ httpClient.interceptors.response.use(
         return httpClient(originalRequest);
       } catch (err) {
         processQueue(err, null);
-        forceLogout();
+        if (axios.isAxiosError(err) && [401, 403, 404].includes(err.response?.status || 0)) {
+          forceLogout();
+        }
         return Promise.reject(err);
       } finally {
         isRefreshing = false;
       }
-    }
-
-    if (
-      localStorage.getItem("accessToken") &&
-      !error.response &&
-      originalRequest.url !== "/users/login" &&
-      originalRequest.url !== "/users/refresh-token"
-    ) {
-      forceLogout();
     }
 
     return Promise.reject(error);

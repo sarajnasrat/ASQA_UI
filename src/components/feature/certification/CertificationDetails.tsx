@@ -54,6 +54,7 @@ import type { TFunction } from "i18next";
 import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
 import CompanyPdfExport, { type CompanyPdfExportHandle } from "../../common/pdf/CompanyPdfExport";
 import FileUploadField from "../../common/FileUploadField";
+import AttachmentMediaSection, { attachmentMediaKind } from "../../common/AttachmentMediaSection";
 
 // Type Definitions
 type Attachment = {
@@ -1821,7 +1822,7 @@ export const CertificationDetails: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <AttachmentCard
                 title={t("certification.requestAttachments")}
-                attachments={requestAttachments}
+                attachments={requestAttachments.filter((attachment) => !attachmentMediaKind(attachment))}
                 getFileName={getFileName}
                 getFileUrl={getFileUrl}
                 formatFileSize={formatFileSize}
@@ -1831,7 +1832,7 @@ export const CertificationDetails: React.FC = () => {
               />
               <AttachmentCard
                 title={t("certification.certificateAttachments")}
-                attachments={certificateAttachments}
+                attachments={certificateAttachments.filter((attachment) => !attachmentMediaKind(attachment))}
                 getFileName={getFileName}
                 getFileUrl={getFileUrl}
                 formatFileSize={formatFileSize}
@@ -1841,7 +1842,7 @@ export const CertificationDetails: React.FC = () => {
               />
               <AttachmentCard
                 title={t("company.labels.companyAttachments")}
-                attachments={companyAttachments}
+                attachments={companyAttachments.filter((attachment) => !attachmentMediaKind(attachment))}
                 getFileName={getFileName}
                 getFileUrl={getFileUrl}
                 formatFileSize={formatFileSize}
@@ -1859,6 +1860,7 @@ export const CertificationDetails: React.FC = () => {
                 emptyMessage={t("common.noDocuments")}
                 getFileTypeIcon={getFileTypeIcon}
               /> */}
+              <AttachmentMediaSection attachments={[...requestAttachments, ...certificateAttachments, ...companyAttachments, ...paymentAttachments]} />
             </div>
           )}
         </div>
@@ -2133,11 +2135,11 @@ const AttachmentCard = ({
                 </p>
               </div>
             </div> */}
-            <div className="flex items-center gap-3 flex-1">
+            <div className="flex min-w-0 items-center gap-3 flex-1">
               <File className="h-5 w-5 text-blue-500 shrink-0" />
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <p className="font-medium text-gray-900 truncate">
+                  <p dir="auto" className="w-full min-w-0 font-medium text-gray-900 whitespace-normal [overflow-wrap:anywhere]" title={attachment.attachmentName}>
                     {attachment.attachmentName}
                   </p>
                   {showCurrentOldLabels && (

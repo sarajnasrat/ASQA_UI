@@ -427,8 +427,13 @@
       "confirmSuspend": "{{name}} تعلیق شود؟",
       "manualSuspension": "به‌صورت دستی تعلیق شد",
       "changeTitle": "تغییر طبقه‌بندی شرکت",
+      "suspendTitle": "تعلیق شرکت",
+      "suspendDescription": "دلیل تعلیق {{name}} را وارد کنید.",
       "blacklistDescription": "دلیل درج {{name}} در لیست سیاه را وارد کنید.",
       "confirmWhitelist": "آیا {{name}} در لیست سفید قرار گیرد؟",
+      "restrictionExplanation": "این شرکت نمی‌تواند درخواست تصدیق‌نامه ایجاد کند یا وضعیت درخواست‌ها و تصدیق‌نامه‌ها را تغییر دهد.",
+      "reasonHelp": "دلیل این اقدام را واضح بنویسید. دلیل در فهرست شرکت‌ها نمایش داده می‌شود.",
+      "reasonPlaceholder": "دلیل این اقدام را وارد کنید",
       "reasonLabel": "دلیل",
       "reason": {
         "required": "برای این طبقه‌بندی شرکت، ذکر دلیل الزامی است."
@@ -1923,6 +1928,8 @@
       "confirmComplete": "آیا مطمئن هستید که می‌خواهید این تخصیص را تکمیل‌شده علامت‌گذاری کنید؟",
       "notMentioned": "ذکر نشده",
       "payments": "پرداخت‌ها",
+      "mediaFiles": "ویدیو و صدا",
+      "documentFiles": "اسناد و تصاویر",
       "noPaymentRecords": "هیچ رکورد پرداختی یافت نشد.",
       "timelineEvents": "رویدادهای جدول زمانی",
       "schedule": "زمان‌بندی",

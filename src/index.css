@@ -375,3 +375,33 @@ html[dir="rtl"] .p-dropdown-clear-icon {
   padding-right: 1.5rem;
   margin-right: 0 !important;
 }
+
+/* Classification dialogs are rendered in a portal, so direction belongs to the dialog. */
+.company-classification-dialog .p-dialog-header,
+.company-classification-dialog .p-dialog-content {
+  text-align: start;
+}
+
+.company-classification-dialog .p-dialog-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.company-classification-dialog .p-dialog-header-icons {
+  margin-inline-start: 1rem;
+  margin-inline-end: 0;
+}
+
+.company-classification-dialog .p-button {
+  gap: 0.5rem;
+}
+
+.company-classification-dialog .p-button .p-button-icon-left,
+.company-classification-dialog .p-button .p-button-icon-right,
+.company-classification-dialog .p-button .p-button-loading-icon {
+  margin: 0;
+}
+
+.company-classification-dialog .p-inputtextarea {
+  text-align: start;
+}

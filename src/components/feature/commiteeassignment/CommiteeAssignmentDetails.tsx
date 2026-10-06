@@ -360,6 +360,7 @@ export const CommiteeAssignmentDetails: React.FC = () => {
         "certificationRequest.certificationTypeOptions.MANAGEMENT_SYSTEM_QUALITY",
       ),
       SERVICE_QUALITY: t("certificationRequest.certificationTypeOptions.SERVICE_QUALITY"),
+      PRODUCT_QUALITY: t("certificationRequest.certificationTypeOptions.PRODUCT_QUALITY"),
     };
     return type ? types[type] || type : "-";
   };

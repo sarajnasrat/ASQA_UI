@@ -176,8 +176,8 @@ export const CommiteeAssingmentUpdate: React.FC<Props> = ({
               <FileUploadField
                 label={t("commitee.assignment.dialog.uploadReportFile")}
                 name="file"
-                accept=".pdf,.doc,.docx,.png,.jpg"
-                maxFileSize={5000000}
+                accept=".pdf,.png,.jpg,.jpeg,.webp,.mp4,.webm,.mov,.avi,.mp3,.wav,.ogg,.m4a"
+                maxFileSize={100 * 1024 * 1024}
                 onFileSelect={(file: any) => setSelectedFile(file)}
               />
             </div>

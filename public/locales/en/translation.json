@@ -379,8 +379,13 @@
       "confirmSuspend": "Suspend {{name}}?",
       "manualSuspension": "Manually suspended",
       "changeTitle": "Change Company Classification",
+      "suspendTitle": "Suspend company",
+      "suspendDescription": "Provide the reason for suspending {{name}}.",
       "blacklistDescription": "Provide the reason for blacklisting {{name}}.",
       "confirmWhitelist": "Whitelist {{name}}?",
+      "restrictionExplanation": "This company will be blocked from creating certification requests and changing request or certificate statuses.",
+      "reasonHelp": "Explain why this action is needed. The reason will appear in the company list.",
+      "reasonPlaceholder": "Enter the reason for this action",
       "reasonLabel": "Reason",
       "reason": {
         "required": "A reason is required for this company classification."
@@ -1256,6 +1261,7 @@
           "product": "Product Quality"
         },
         "popular": "Most Popular",
+        "certificationTypeLabel": "Certification Type",
         "selectCertificationType": "Select Certification Type",
         "domesticType": "Domestic Certification Type",
         "selectedType": "Selected Certification Type"
@@ -1856,6 +1862,8 @@
       "confirmComplete": "Are you sure you want to mark this assignment as completed?",
       "notMentioned": "Not Mentioned",
       "payments": "Payments",
+      "mediaFiles": "Video and audio",
+      "documentFiles": "Documents and images",
       "noPaymentRecords": "No payment records found.",
       "timelineEvents": "Timeline Events",
       "schedule": "Schedule",

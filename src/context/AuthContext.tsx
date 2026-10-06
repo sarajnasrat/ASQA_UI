@@ -81,10 +81,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       logout();
     };
 
+    const handleTokenRefreshed = (event: Event) => {
+      setPermissions(getPermissionsFromToken((event as CustomEvent<string>).detail));
+    };
+    window.addEventListener("auth:token-refreshed", handleTokenRefreshed);
     window.addEventListener("auth:force-logout", handleForceLogout);
 
     return () => {
       window.removeEventListener("auth:force-logout", handleForceLogout);
+      window.removeEventListener("auth:token-refreshed", handleTokenRefreshed);
     };
   }, [logout]);
 

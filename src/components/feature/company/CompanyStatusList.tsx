@@ -105,9 +105,10 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
   const [first, setFirst] = useState(0);
   const [rows, setRows] = useState(10);
   const [totalRecords, setTotalRecords] = useState(0);
-  const [classificationDialog, setClassificationDialog] = useState<{ company: any; type: "WHITELISTED" | "BLACKLISTED" } | null>(null);
+  const [classificationDialog, setClassificationDialog] = useState<{ company: any; type: "BLACKLISTED" | "SUSPENDED" } | null>(null);
   const [classificationReason, setClassificationReason] = useState("");
-  const [classificationNotes, setClassificationNotes] = useState("");
+  const dialogDirection = ["dr", "ps", "fa", "ar"].includes(i18n.language.split("-")[0]) ? "rtl" : "ltr";
+  const [classificationSaving, setClassificationSaving] = useState(false);
   const [showBlacklistRegistration, setShowBlacklistRegistration] = useState(false);
 
   const activeStatuses = statuses?.length
@@ -157,17 +158,14 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
   };
 
   const changeClassification = (company: any, type: "WHITELISTED" | "BLACKLISTED" | "SUSPENDED") => {
-    if (type === "BLACKLISTED") {
+    if (type === "BLACKLISTED" || type === "SUSPENDED") {
       setClassificationReason("");
-      setClassificationNotes("");
       setClassificationDialog({ company, type });
       return;
     }
     confirmDialog({
       message: t(
-        type === "SUSPENDED"
-          ? "company.classification.confirmSuspend"
-          : "company.classification.confirmWhitelist",
+        "company.classification.confirmWhitelist",
         { name: company.companyNameEN || t("common.notSpecified") },
       ),
       header: t("company.classification.changeTitle"),
@@ -179,7 +177,7 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
           await CompanyService.changeClassification(
             company.id,
             type,
-            t(type === "SUSPENDED" ? "company.classification.manualSuspension" : "company.classification.manualWhitelist"),
+            t("company.classification.manualWhitelist"),
           );
           toast.current?.show({ severity: "success", summary: t("common.success"), detail: t("company.classification.updated"), life: 3000 });
           getCompanies();
@@ -191,15 +189,18 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
   };
 
   const submitClassification = async () => {
-    if (!classificationDialog || !classificationReason.trim()) return;
+    if (!classificationDialog || !classificationReason.trim() || classificationSaving) return;
+    setClassificationSaving(true);
     try {
       await CompanyService.changeClassification(classificationDialog.company.id, classificationDialog.type,
-        classificationReason.trim(), classificationNotes.trim() || undefined);
+        classificationReason.trim());
       setClassificationDialog(null);
       toast.current?.show({ severity: "success", summary: t("common.success"), detail: t("company.classification.updated"), life: 3000 });
       getCompanies();
     } catch {
       toast.current?.show({ severity: "error", summary: t("common.error"), detail: t("company.loadFailed"), life: 3000 });
+    } finally {
+      setClassificationSaving(false);
     }
   };
 
@@ -451,6 +452,12 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
         </span>
       ),
     },
+    ...(["BLACKLISTED", "SUSPENDED"].includes(resolvedClassification || "") ? [{
+      field: "classificationReason",
+      header: t("company.classification.reasonLabel"),
+      style: { minWidth: "240px" },
+      body: (row: any) => <span className="whitespace-pre-wrap break-words">{row.classificationReason || t("common.notSpecified")}</span>,
+    }] : []),
     {
       header: t("common.action"),
       body: actionTemplate,
@@ -464,23 +471,61 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
     <>
       <Toast ref={toast} />
       <ConfirmDialog />
-      <Dialog header={t("company.classification.blacklistTitle")} visible={!!classificationDialog}
-        onHide={() => setClassificationDialog(null)} modal className="w-full max-w-lg">
-        <div className="flex flex-col gap-4">
-          <p>{t("company.classification.blacklistDescription", { name: classificationDialog?.company?.companyNameEN || "" })}</p>
+      <Dialog
+        visible={!!classificationDialog}
+        onHide={() => { if (!classificationSaving) setClassificationDialog(null); }}
+        modal
+        draggable={false}
+        closable={!classificationSaving}
+        closeOnEscape={!classificationSaving}
+        dir={dialogDirection}
+        className="company-classification-dialog w-[calc(100vw-2rem)] max-w-lg overflow-hidden rounded-2xl"
+        contentClassName="!px-6 !pb-6"
+        header={
+          <div className="flex items-center gap-3 text-start">
+            <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${classificationDialog?.type === "SUSPENDED" ? "bg-amber-100 text-amber-700" : "bg-red-100 text-red-700"}`}>
+              <i className={`pi ${classificationDialog?.type === "SUSPENDED" ? "pi-pause" : "pi-ban"} text-lg`} aria-hidden="true" />
+            </span>
+            <span className="text-lg font-semibold text-slate-900">
+              {t(classificationDialog?.type === "SUSPENDED" ? "company.classification.suspendTitle" : "company.classification.blacklistTitle")}
+            </span>
+          </div>
+        }
+      >
+        <form onSubmit={(event) => { event.preventDefault(); void submitClassification(); }} className="space-y-5 text-start" dir={dialogDirection}>
+          <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+            <p className="mb-1 text-xs font-medium text-slate-500">{t("company.labels.companyName")}</p>
+            <p className="break-words font-semibold text-slate-900">
+              {(i18n.language === "dr" ? classificationDialog?.company?.companyNameDR : i18n.language === "ps" ? classificationDialog?.company?.companyNamePS : classificationDialog?.company?.companyNameEN)
+                || classificationDialog?.company?.companyNameEN || classificationDialog?.company?.companyNameDR || classificationDialog?.company?.companyNamePS || t("common.notSpecified")}
+            </p>
+          </div>
+          <p className="text-sm leading-6 text-slate-600">{t("company.classification.restrictionExplanation")}</p>
           <div>
-            <label className="mb-1 block font-medium">{t("company.classification.reasonLabel")} *</label>
-            <InputTextarea value={classificationReason} onChange={(e) => setClassificationReason(e.target.value)} rows={3} className="w-full" autoResize />
+            <label htmlFor="classification-reason" className="mb-2 block text-sm font-semibold text-slate-800">
+              {t("company.classification.reasonLabel")} <span className="text-red-600">*</span>
+            </label>
+            <InputTextarea
+              id="classification-reason"
+              value={classificationReason}
+              onChange={(event) => setClassificationReason(event.target.value)}
+              rows={4}
+              required
+              autoFocus
+              disabled={classificationSaving}
+              aria-describedby="classification-reason-help"
+              placeholder={t("company.classification.reasonPlaceholder")}
+              dir={dialogDirection}
+              className="w-full rounded-xl !p-3 text-start text-sm leading-6"
+              autoResize
+            />
+            <p id="classification-reason-help" className="mt-2 text-xs leading-5 text-slate-500">{t("company.classification.reasonHelp")}</p>
           </div>
-          <div>
-            <label className="mb-1 block font-medium">{t("company.classification.notes")}</label>
-            <InputTextarea value={classificationNotes} onChange={(e) => setClassificationNotes(e.target.value)} rows={3} className="w-full" autoResize />
+          <div className="flex flex-wrap justify-end gap-3 border-t border-slate-100 pt-4">
+            <Button type="button" label={t("common.cancel")} outlined severity="secondary" disabled={classificationSaving} onClick={() => setClassificationDialog(null)} className="rounded-lg" />
+            <Button type="submit" label={t(classificationDialog?.type === "SUSPENDED" ? "company.classification.suspendButton" : "company.classification.blacklistButton")} icon={classificationDialog?.type === "SUSPENDED" ? "pi-pause" : "pi-ban"} severity={classificationDialog?.type === "SUSPENDED" ? "warning" : "danger"} loading={classificationSaving} disabled={!classificationReason.trim() || classificationSaving} className="rounded-lg" />
           </div>
-          <div className="flex justify-end gap-2">
-            <Button label={t("common.cancel")} text onClick={() => setClassificationDialog(null)} />
-            <Button label={t("company.classification.blacklistButton")} severity="danger" disabled={!classificationReason.trim()} onClick={submitClassification} />
-          </div>
-        </div>
+        </form>
       </Dialog>
       <BlacklistedCompanyDialog visible={showBlacklistRegistration} onHide={() => setShowBlacklistRegistration(false)} onSuccess={() => { setShowBlacklistRegistration(false); getCompanies(); }} />
       <DynamicBreadcrumb
