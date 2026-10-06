@@ -414,12 +414,22 @@
     "positiveTitle": "شرکت های که مثبت ارزیابی شده",
     "classificationBlacklistedCreated": "شرکت در لیست سیاه با موفقیت ایجاد شد",
     "classification": {
+      "statusOptions": {
+        "UNREVIEWED": "بررسی‌نشده",
+        "WHITELISTED": "در لیست سفید",
+        "BLACKLISTED": "در لیست سیاه",
+        "SUSPENDED": "تعلیق‌شده"
+      },
       "blacklistButton": "شرکت در لیست سیاه",
       "whitelistButton": "شرکت در لیست سفید",
       "blacklistTitle": "شرکت در لیست سیاه",
+      "suspendButton": "تعلیق شرکت",
+      "confirmSuspend": "{{name}} تعلیق شود؟",
+      "manualSuspension": "به‌صورت دستی تعلیق شد",
       "changeTitle": "تغییر طبقه‌بندی شرکت",
       "blacklistDescription": "دلیل درج {{name}} در لیست سیاه را وارد کنید.",
       "confirmWhitelist": "آیا {{name}} در لیست سفید قرار گیرد؟",
+      "reasonLabel": "دلیل",
       "reason": {
         "required": "برای این طبقه‌بندی شرکت، ذکر دلیل الزامی است."
       },
@@ -1258,6 +1268,8 @@
       "dashboard": {
         "SUBMITTED": "دریافتی",
         "UNDER_REVIEW": "درحال بررسی",
+        "CONTRACT_PENDING": "در انتظار امضای قرارداد",
+        "INSPECTION_PAYMENT_PENDING": "در انتظار پرداخت هزینه تفتیش",
         "REJECTED": "رد شده",
         "CANCELLED": "لغو شده",
         "PAYMENT_PENDING": "در انتظار پرداخت",
@@ -1274,6 +1286,8 @@
       "public": {
         "SUBMITTED": "ثبت شده در سیستم",
         "UNDER_REVIEW": "در حال بررسی ",
+        "CONTRACT_PENDING": "در انتظار امضای قرارداد",
+        "INSPECTION_PAYMENT_PENDING": "در انتظار پرداخت هزینه تفتیش",
         "REJECTED": "رد شد",
         "CANCELLED": "لغو شده",
         "PAYMENT_PENDING": "در انتظار پرداخت",
@@ -1623,7 +1637,15 @@
       "companySuspended": "?????? ??? ???? ????? ??? ??? ? ????????? ??????? ?????????? ????? ???.",
       "companyUnderReview": "??? ???? ?? ??? ????? ???. ??? ?? ????? ??????? ?????????? ???? ?? ????? ???? ???? ????.",
       "companyOnWatchlist": "??? ???? ?? ????? ????? ???? ????. ??? ?? ????? ??????? ?????????? ???? ?? ????? ???? ???? ????.",
-      "companyNotWhitelisted": "??? ???? ???? ????? ???? ???. ??? ?? ????? ??????? ?????????? ???? ?? ????? ???? ???? ????."
+      "companyNotWhitelisted": "??? ???? ???? ????? ???? ???. ??? ?? ????? ??????? ?????????? ???? ?? ????? ???? ???? ????.",
+      "requestCreateCompanyBlacklisted": "به‌دلیل قرار داشتن شرکت مربوط در فهرست سیاه، درخواست تصدیق ایجاد نمی‌شود.",
+      "requestCreateCompanySuspended": "به‌دلیل تعلیق شرکت مربوط، درخواست تصدیق ایجاد نمی‌شود.",
+      "requestStatusChangeCompanyBlacklisted": "به‌دلیل قرار داشتن شرکت مربوط در فهرست سیاه، وضعیت درخواست تصدیق تغییر نمی‌کند.",
+      "requestStatusChangeCompanySuspended": "به‌دلیل تعلیق شرکت مربوط، وضعیت درخواست تصدیق تغییر نمی‌کند.",
+      "certificationCreateCompanyBlacklisted": "به‌دلیل قرار داشتن شرکت مربوط در فهرست سیاه، تصدیق ایجاد نمی‌شود.",
+      "certificationCreateCompanySuspended": "به‌دلیل تعلیق شرکت مربوط، تصدیق ایجاد نمی‌شود.",
+      "certificationStatusChangeCompanyBlacklisted": "به‌دلیل قرار داشتن شرکت مربوط در فهرست سیاه، وضعیت تصدیق تغییر نمی‌کند.",
+      "certificationStatusChangeCompanySuspended": "به‌دلیل تعلیق شرکت مربوط، وضعیت تصدیق تغییر نمی‌کند."
     },
     "errors": {
       "submitFailed": "ارسال درخواست گواهینامه ناموفق بود!"
@@ -2175,6 +2197,7 @@
       "INTERNATIONAL_QUALITY_CERTIFICATION": "تائید نامه کیفی سیستم مدیریتی یا خدمات محصول(بین المللی)",
       "STANDARD_MARK_CERTIFICATION": "اخذ علامت معیار",
       "MANAGEMENT_SYSTEM_QUALITY": "تائید نامه کیفی سیستم مدیریتی",
+      "SERVICE_QUALITY": "تائید نامه کیفی خدمات",
       "international": {
         "title": "تائید نامه کیفی سیستم مدیرتی یا خدمات، محصول(بین المللی)",
         "description": "برای گسترش بازار جهانی",

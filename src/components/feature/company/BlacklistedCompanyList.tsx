@@ -41,9 +41,9 @@ export default function BlacklistedCompanyList() {
     { field: "companyName", header: t("company.labels.companyName"), style: { minWidth: "220px" }, body: (row: any) => <span className="font-semibold">{getName(row)}</span> },
     { field: "email", header: t("company.labels.email"), style: { minWidth: "220px" }, body: (row: any) => <span>{row.email || t("common.notSpecified")}</span> },
     { field: "phoneNumber", header: t("company.labels.phoneNumber"), style: { minWidth: "160px" }, body: (row: any) => <span>{row.phoneNumber || t("common.notSpecified")}</span> },
-    { field: "companyType", header: t("company.labels.companyType"), style: { minWidth: "160px" }, body: (row: any) => <span>{row.companyType?.replace(/_/g, " ") || t("common.notSpecified")}</span> },
+    { field: "companyType", header: t("company.labels.companyType"), style: { minWidth: "160px" }, body: (row: any) => <span>{row.companyType ? t(`company.typeOptions.${row.companyType}`, { defaultValue: row.companyType.replace(/_/g, " ") }) : t("common.notSpecified")}</span> },
     { field: "address", header: t("company.labels.address"), style: { minWidth: "220px" }, body: (row: any) => <span>{row.address || t("common.notSpecified")}</span> },
-    { field: "classificationReason", header: t("company.classification.reason"), style: { minWidth: "240px" }, body: (row: any) => <span className="text-indigo-700">{row.classificationReason || t("common.notSpecified")}</span> },
+    { field: "classificationReason", header: t("company.classification.reasonLabel"), style: { minWidth: "240px" }, body: (row: any) => <span className="text-indigo-700">{row.classificationReason || t("common.notSpecified")}</span> },
   ];
 
   const header = () => <div className="mb-4 flex flex-col items-center justify-between gap-4 px-2 md:flex-row">

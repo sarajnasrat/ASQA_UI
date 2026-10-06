@@ -353,21 +353,20 @@ export const MainLayout = () => {
               />
               <Route path="company/blacklisted" element={<BlacklistedCompanyList />} />
               <Route
+                path="company/suspended"
+                element={
+                  <CompanyStatusList
+                    classificationType="SUSPENDED"
+                    title="company.classification.statusOptions.SUSPENDED"
+                  />
+                }
+              />
+              <Route
                 path="company/under-review"
                 element={
                   <CompanyStatusList
-                    classificationType="UNDER_REVIEW"
-                    statuses={[
-                      "SUBMITTED",
-                      "UNDER_REVIEW",
-                      "STANDARDS_PROVIDED",
-                      "DEADLINE_REQUIRED",
-                      "DEADLINE_ASSIGNED",
-                      "INSPECTION_IN_PROGRESS",
-                      "REPORTED_TO_COMMITTEE",
-                      "REPORT_APPROVED",
-                      "PAYMENT_PENDING",
-                    ]}
+                    classificationType="UNREVIEWED"
+                    title="company.classification.statusOptions.UNREVIEWED"
                   />
                 }
               />

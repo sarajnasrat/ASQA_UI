@@ -413,12 +413,22 @@
     "positiveTitle": "هغه شرکتونه چې مثبت ارزول شوي",
     "classificationBlacklistedCreated": "تور لېست شرکت په بریالیتوب جوړ شو",
     "classification": {
+      "statusOptions": {
+        "UNREVIEWED": "ناکتل شوی",
+        "WHITELISTED": "سپین لېست شوی",
+        "BLACKLISTED": "تور لېست شوی",
+        "SUSPENDED": "ځنډول شوی"
+      },
       "blacklistButton": "شرکت تور لېست ته داخلول",
       "whitelistButton": "شرکت سپین لېست ته داخلول",
       "blacklistTitle": "شرکت تور لېست ته داخلول",
+      "suspendButton": "شرکت ځنډول",
+      "confirmSuspend": "{{name}} ځنډول؟",
+      "manualSuspension": "په لاسي ډول ځنډول شوی",
       "changeTitle": "د شرکت طبقه بندي بدلول",
       "blacklistDescription": "د {{name}} د تور لېست دلیل ولیکئ.",
       "confirmWhitelist": "{{name}} سپین لېست ته داخل شي؟",
+      "reasonLabel": "دلیل",
       "reason": {
         "required": "د شرکت د دې ډلبندۍ لپاره د دلیل لیکل اړین دي."
       },
@@ -1248,6 +1258,8 @@
       "public": {
         "SUBMITTED": "سپارل شوې",
         "UNDER_REVIEW": "تر بیاکتنې لاندې",
+        "CONTRACT_PENDING": "د تړون لاسلیک ته په تمه",
+        "INSPECTION_PAYMENT_PENDING": "د تفتیش تادیه په تمه ده",
         "REJECTED": "رد شوې",
         "CANCELLED": "لغوه شوې",
         "PAYMENT_PENDING": "تادیه په تمه ده",
@@ -1284,6 +1296,8 @@
       "dashboard": {
         "SUBMITTED": "سپارل شوی",
         "UNDER_REVIEW": "تر بیاکتنې لاندې",
+        "CONTRACT_PENDING": "د تړون لاسلیک ته په تمه",
+        "INSPECTION_PAYMENT_PENDING": "د تفتیش تادیه په تمه ده",
         "REJECTED": "رد شوی",
         "CANCELLED": "لغوه شوی",
         "PAYMENT_PENDING": "د تادیې په تمه",
@@ -1614,13 +1628,21 @@
       "noTrackingNumber": "د کاپي کولو لپاره د تعقیب شمېره نشته."
     },
     "backend": {
-      "noCompanyForJawaz": "? ????? ??? ???? ????? ????? ??? ???? ??? ????? ??.",
-      "activeRequestExists": "? ?? ???? ? ????? ?????? ?? ???? ????? ??. ? ??? ?????? ?? ?????? ???? ???? ?????? ?????? ????? ??.",
-      "companyBlacklisted": "?? ???? ?? ??? ???? ?? ?? ?? ? ????? ?????? ??? ??????.",
-      "companySuspended": "? ?? ???? ?????? ????? ??? ?? ? ????? ?????? ??? ??????.",
-      "companyUnderReview": "?? ???? ?? ?????? ????? ??. ? ????? ?????? ?? ?????? ???? ???? ?? ???? ???? ?? ???? ??.",
-      "companyOnWatchlist": "?? ???? ? ??? ?? ???? ?? ??. ? ????? ?????? ?? ?????? ???? ???? ?? ???? ???? ?? ???? ??.",
-      "companyNotWhitelisted": "?? ???? ?? ????? ??? ?? ??. ? ????? ?????? ?? ?????? ???? ???? ?? ???? ???? ?? ???? ??."
+      "noCompanyForJawaz": "د ورکړل شوي جواز شمېرې لپاره هېڅ شرکت ونه موندل شو.",
+      "activeRequestExists": "ستاسو شرکت د تصدیق غوښتنه لا روانه لري. نوې غوښتنه یوازې هغه وخت جوړولی شئ چې پخوانۍ غوښتنه صادره شي.",
+      "companyBlacklisted": "دا شرکت په تور لېست کې دی او د تصدیق غوښتنه نه شي جوړولی.",
+      "companySuspended": "دا شرکت ځنډول شوی او د تصدیق غوښتنه نه شي جوړولی.",
+      "companyUnderReview": "دا شرکت تر ارزونې لاندې دی. د تصدیق غوښتنې جوړولو لپاره باید سپین لېست ته شامل شي.",
+      "companyOnWatchlist": "دا شرکت د څارنې په لېست کې دی. د تصدیق غوښتنې جوړولو لپاره باید سپین لېست ته شامل شي.",
+      "companyNotWhitelisted": "دا شرکت ارزول شوی نه دی. د تصدیق غوښتنې جوړولو لپاره باید سپین لېست ته شامل شي.",
+      "requestCreateCompanyBlacklisted": "د تور لېست شرکت له امله د تصدیق غوښتنه نه شي جوړېدای.",
+      "requestCreateCompanySuspended": "د ځنډول شوي شرکت له امله د تصدیق غوښتنه نه شي جوړېدای.",
+      "requestStatusChangeCompanyBlacklisted": "د تور لېست شرکت له امله د تصدیق غوښتنې حالت نه شي بدلېدای.",
+      "requestStatusChangeCompanySuspended": "د ځنډول شوي شرکت له امله د تصدیق غوښتنې حالت نه شي بدلېدای.",
+      "certificationCreateCompanyBlacklisted": "د تور لېست شرکت له امله تصدیق نه شي جوړېدای.",
+      "certificationCreateCompanySuspended": "د ځنډول شوي شرکت له امله تصدیق نه شي جوړېدای.",
+      "certificationStatusChangeCompanyBlacklisted": "د تور لېست شرکت له امله د تصدیق حالت نه شي بدلېدای.",
+      "certificationStatusChangeCompanySuspended": "د ځنډول شوي شرکت له امله د تصدیق حالت نه شي بدلېدای."
     },
     "errors": {
       "submitFailed": "د تصدیق غوښتنه سپارل ناکام شول!"
@@ -2071,6 +2093,7 @@
       "INTERNATIONAL_QUALITY_CERTIFICATION": "نړیوال کیفیت تصدیق",
       "STANDARD_MARK_CERTIFICATION": "د معیاري نښې تصدیق",
       "MANAGEMENT_SYSTEM_QUALITY": "د مدیریتي سیستم کیفیت تصدیق",
+      "SERVICE_QUALITY": "د خدماتو کیفیت تصدیق",
       "international": {
         "title": "نړیوال کیفیت",
         "description": "د نړیوال بازار پراختیا لپاره",

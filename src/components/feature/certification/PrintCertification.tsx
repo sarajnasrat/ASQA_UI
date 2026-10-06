@@ -1,11 +1,13 @@
 import React, { useRef, useState } from "react";
 import { Button } from "primereact/button";
+import { Toast } from "primereact/toast";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { QRCodeCanvas } from "qrcode.react";
 import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 import { useTranslation } from "react-i18next";
 import CertificationService from "../../../services/certification.service";
+import { translateBackendMessage } from "../../../utils/backendMessage";
 
 interface Props {
   certification: any;
@@ -14,6 +16,7 @@ interface Props {
 
 export const PrintCertification: React.FC<Props> = ({ certification, onPrinted }) => {
   const certificateRef = useRef<HTMLDivElement>(null);
+  const toast = useRef<Toast>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isPrinting, setIsPrinting] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -44,15 +47,45 @@ export const PrintCertification: React.FC<Props> = ({ certification, onPrinted }
     return t(`home.certificationTypes.${type}`);
   };
 
-  const handlePrint = async () => {
-    try {
-      await CertificationService.updateCertificationStatus(
-      Number(certification.id),
-      "PRINTED",
+  const markAsPrinted = async () => {
+    const showBackendError = (data: any) => {
+      const validationError = Array.isArray(data?.validationErrors)
+        ? data.validationErrors.find((item: any) => item?.code || item?.message)
+        : undefined;
+      const backendError =
+        (Array.isArray(data?.errors) && data.errors.find((item: unknown) => typeof item === "string")) ||
+        validationError?.code ||
+        validationError?.message ||
+        data?.extra?.message ||
+        data?.message;
+      const detail = translateBackendMessage(
+        backendError,
+        t("common.somethingWentWrong"),
+        (key) => t(key),
       );
+      toast.current?.show({
+        severity: "error",
+        summary: t("common.error"),
+        detail,
+        life: 5000,
+      });
+    };
+
+    try {
+      const response = await CertificationService.updateCertificationStatus(
+        Number(certification.id),
+        "PRINTED",
+      );
+      const data = response?.data;
+      if (data?.statusCode >= 400 || data?.success === false || data?.errors?.length) {
+        showBackendError(data);
+        return false;
+      }
       onPrinted?.();
-    } catch (error) {
-      console.error("Error updating certification status:", error);
+      return true;
+    } catch (error: any) {
+      showBackendError(error?.response?.data || error?.data || error);
+      return false;
     }
   };
 
@@ -66,7 +99,23 @@ export const PrintCertification: React.FC<Props> = ({ certification, onPrinted }
     }
     setProgress(10);
 
+    let printWindow: Window | null = null;
     try {
+      // Open the tab synchronously from the click handler so browsers do not
+      // block it after the asynchronous status check.
+      if (forPrint) {
+        printWindow = window.open("about:blank", "_blank");
+        if (!printWindow) {
+          toast.current?.show({
+            severity: "error",
+            summary: t("common.error"),
+            detail: t("common.somethingWentWrong"),
+            life: 5000,
+          });
+          return;
+        }
+      }
+
       const element = certificateRef.current;
       const originalWidth = element.style.width;
       const originalTransform = element.style.transform;
@@ -121,26 +170,32 @@ export const PrintCertification: React.FC<Props> = ({ certification, onPrinted }
 
       setProgress(90);
 
+      // A failed API response must stop the workflow before any PDF is opened,
+      // printed, or downloaded.
+      if (!(await markAsPrinted())) {
+        printWindow?.close();
+        return;
+      }
+
       if (forPrint) {
         const pdfBlob = pdf.output("blob");
         const pdfUrl = URL.createObjectURL(pdfBlob);
-        const printWindow = window.open(pdfUrl, "_blank");
-
-        if (printWindow) {
-          printWindow.addEventListener("load", () => {
-            printWindow.print();
-            handlePrint();
+        const popup = printWindow;
+        if (popup) {
+          popup.addEventListener("load", () => {
+            popup.addEventListener("afterprint", () => URL.revokeObjectURL(pdfUrl), { once: true });
+            popup.print();
           });
+          popup.location.href = pdfUrl;
         }
 
         setTimeout(() => {
           URL.revokeObjectURL(pdfUrl);
-        }, 100);
+        }, 60000);
       } else {
         pdf.save(
           `final-certificate-${certification.certificateNumber || "asqa"}.pdf`,
         );
-        handlePrint();
       }
 
       setProgress(100);
@@ -169,6 +224,7 @@ export const PrintCertification: React.FC<Props> = ({ certification, onPrinted }
 
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 flex justify-center items-center p-8">
+      <Toast ref={toast} />
       <div className="flex flex-col items-center gap-8">
         <div
           id="certificate-content"

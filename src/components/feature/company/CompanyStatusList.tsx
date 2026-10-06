@@ -18,7 +18,7 @@ import { useAuth } from "../../../context/AuthContext";
 import BlacklistedCompanyDialog from "./BlacklistedCompanyDialog";
 
 interface CompanyStatusListProps {
-  classificationType?: "WHITELISTED" | "BLACKLISTED" | "UNDER_REVIEW" | "UNREVIEWED";
+  classificationType?: "UNREVIEWED" | "WHITELISTED" | "BLACKLISTED" | "SUSPENDED";
   status?:
     | "DRAFT"
     | "SUBMITTED"
@@ -117,14 +117,17 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
       : [];
   const primaryStatus = activeStatuses[0];
   const mappedStatuses = activeStatuses.filter(isMappedStatus);
-  const activeSidebarPath = mappedStatuses[0]
-    ? STATUS_ROUTES[mappedStatuses[0]]
-    : "/company";
+  const resolvedClassification = classificationType;
+  const classificationRoutes: Partial<Record<NonNullable<typeof resolvedClassification>, string>> = {
+    UNREVIEWED: "/company/under-review",
+    SUSPENDED: "/company/suspended",
+  };
+  const activeSidebarPath =
+    (resolvedClassification && classificationRoutes[resolvedClassification]) ||
+    (mappedStatuses[0] ? STATUS_ROUTES[mappedStatuses[0]] : "/company");
   const pageTitle =
     title ? t(title) :
     `${t("company.list")}`;
-
-  const resolvedClassification = classificationType;
 
   const getCompanies = async () => {
     setLoading(true);
@@ -153,7 +156,7 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
     }
   };
 
-  const changeClassification = (company: any, type: "WHITELISTED" | "BLACKLISTED") => {
+  const changeClassification = (company: any, type: "WHITELISTED" | "BLACKLISTED" | "SUSPENDED") => {
     if (type === "BLACKLISTED") {
       setClassificationReason("");
       setClassificationNotes("");
@@ -161,15 +164,24 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
       return;
     }
     confirmDialog({
-      message: t("company.classification.confirmWhitelist", { name: company.companyNameEN || t("common.notSpecified") }),
+      message: t(
+        type === "SUSPENDED"
+          ? "company.classification.confirmSuspend"
+          : "company.classification.confirmWhitelist",
+        { name: company.companyNameEN || t("common.notSpecified") },
+      ),
       header: t("company.classification.changeTitle"),
       icon: "pi pi-exclamation-triangle",
       acceptLabel: "Yes",
       rejectLabel: t("common.cancel"),
       accept: async () => {
         try {
-          await CompanyService.changeClassification(company.id, type, t("company.classification.manualWhitelist"));
-          toast.current?.show({ severity: "success", summary: t("common.success"), detail: "Classification updated", life: 3000 });
+          await CompanyService.changeClassification(
+            company.id,
+            type,
+            t(type === "SUSPENDED" ? "company.classification.manualSuspension" : "company.classification.manualWhitelist"),
+          );
+          toast.current?.show({ severity: "success", summary: t("common.success"), detail: t("company.classification.updated"), life: 3000 });
           getCompanies();
         } catch {
           toast.current?.show({ severity: "error", summary: t("common.error"), detail: t("company.loadFailed"), life: 3000 });
@@ -192,9 +204,9 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
   };
 
   useEffect(() => {
-    if (!activeStatuses.length) return;
+    if (!activeStatuses.length && !resolvedClassification) return;
     getCompanies();
-  }, [first, rows, activeStatuses.join(",")]);
+  }, [first, rows, activeStatuses.join(","), resolvedClassification]);
 
   const handleDelete = async (id: number) => {
     try {
@@ -234,6 +246,7 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
     const items: MenuItem[] = [
       ...(rowData.classificationType !== "BLACKLISTED" ? [{ label: t("company.classification.blacklistButton"), icon: "pi pi-ban", command: () => changeClassification(rowData, "BLACKLISTED") }] : []),
       ...(rowData.classificationType !== "WHITELISTED" ? [{ label: t("company.classification.whitelistButton"), icon: "pi pi-check", command: () => changeClassification(rowData, "WHITELISTED") }] : []),
+      ...(["WHITELISTED", "UNREVIEWED"].includes(rowData.classificationType) ? [{ label: t("company.classification.suspendButton"), icon: "pi pi-pause", command: () => changeClassification(rowData, "SUSPENDED") }] : []),
       ...withPermission("UPDATE_COMPANY", {
         label: t("common.edit"),
         icon: "pi pi-pencil",
@@ -308,16 +321,25 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
         <ExcelExport
           data={companies}
           totalElements={totalRecords}
-          fileName={`companies-${activeStatuses.join("-").toLowerCase()}`}
+          fileName={`companies-${(resolvedClassification || activeStatuses.join("-")).toLowerCase()}`}
           sheetName={
             title ||
             (mappedStatuses.length
               ? mappedStatuses
                   .map((item) => t(`certificationRequest.statusOptions.${item}`))
                   .join(", ")
+            : resolvedClassification
+              ? t(`company.classification.statusOptions.${resolvedClassification}`)
               : t("company.list"))
           }
           fetchAllData={async () => {
+            if (resolvedClassification) {
+              const res = await CompanyService.getPaginatedCompaniesByClassification(
+                resolvedClassification,
+                { page: 0, size: 100000, sort: "id,desc" },
+              );
+              return res.data.data;
+            }
             const res =
               activeStatuses.length > 1
                 ? await CompanyService.getAllCompaniesByRequestStatuses(
@@ -398,7 +420,11 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
       header: t("company.labels.companyType") || "Company Type",
       style: { minWidth: "160px" },
       body: (row: any) => (
-        <span>{row.companyType || t("common.notSpecified")}</span>
+        <span>
+          {row.companyType
+            ? t(`company.typeOptions.${row.companyType}`, { defaultValue: row.companyType.replace(/_/g, " ") })
+            : t("common.notSpecified")}
+        </span>
       ),
     },
     {
@@ -408,14 +434,20 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
       body: (row: any) => (
         <span
           className={`rounded-full px-3 py-1 text-xs font-medium ${
-            row.active
+            resolvedClassification === "WHITELISTED" || (!resolvedClassification && row.active)
               ? "bg-green-100 text-green-700"
-              : "bg-red-100 text-red-700"
+              : resolvedClassification === "SUSPENDED"
+                ? "bg-amber-100 text-amber-700"
+                : resolvedClassification === "UNREVIEWED"
+                  ? "bg-gray-100 text-gray-700"
+                  : "bg-red-100 text-red-700"
           }`}
         >
-          {row.active
-            ? t("common.active") || "Active"
-            : t("common.inactive") || "Inactive"}
+          {resolvedClassification
+            ? t(`company.classification.statusOptions.${row.classificationType || resolvedClassification}`)
+            : row.active
+              ? t("common.active") || "Active"
+              : t("common.inactive") || "Inactive"}
         </span>
       ),
     },
@@ -437,7 +469,7 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
         <div className="flex flex-col gap-4">
           <p>{t("company.classification.blacklistDescription", { name: classificationDialog?.company?.companyNameEN || "" })}</p>
           <div>
-            <label className="mb-1 block font-medium">{t("company.classification.reason")} *</label>
+            <label className="mb-1 block font-medium">{t("company.classification.reasonLabel")} *</label>
             <InputTextarea value={classificationReason} onChange={(e) => setClassificationReason(e.target.value)} rows={3} className="w-full" autoResize />
           </div>
           <div>

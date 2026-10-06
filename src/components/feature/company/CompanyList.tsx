@@ -255,7 +255,13 @@ export const CompanyList: React.FC = () => {
       field: "companyType",
       header: t("company.labels.companyType") || "Company Type",
       style: { minWidth: "160px" },
-      body: (row: any) => <span>{row.companyType || t("common.notSpecified")}</span>,
+      body: (row: any) => (
+        <span>
+          {row.companyType
+            ? t(`company.typeOptions.${row.companyType}`, { defaultValue: row.companyType.replace(/_/g, " ") })
+            : t("common.notSpecified")}
+        </span>
+      ),
     },
 
     {

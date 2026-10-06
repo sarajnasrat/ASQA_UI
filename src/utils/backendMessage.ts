@@ -18,6 +18,22 @@ const backendMessageAliases: Record<string, string> = {
     "registration.backend.companyOnWatchlist",
   "Your company has not been reviewed. It must be whitelisted before creating a certification request.":
     "registration.backend.companyNotWhitelisted",
+  "certification.request.create.company.blacklisted":
+    "registration.backend.requestCreateCompanyBlacklisted",
+  "certification.request.create.company.suspended":
+    "registration.backend.requestCreateCompanySuspended",
+  "certification.request.status.change.company.blacklisted":
+    "registration.backend.requestStatusChangeCompanyBlacklisted",
+  "certification.request.status.change.company.suspended":
+    "registration.backend.requestStatusChangeCompanySuspended",
+  "certification.create.company.blacklisted":
+    "registration.backend.certificationCreateCompanyBlacklisted",
+  "certification.create.company.suspended":
+    "registration.backend.certificationCreateCompanySuspended",
+  "certification.status.change.company.blacklisted":
+    "registration.backend.certificationStatusChangeCompanyBlacklisted",
+  "certification.status.change.company.suspended":
+    "registration.backend.certificationStatusChangeCompanySuspended",
 };
 
 const humanizeMessageKey = (value: string) =>

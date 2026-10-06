@@ -366,12 +366,22 @@
     "positiveTitle": "Evaluated Positive Companies",
     "classificationBlacklistedCreated": "Blacklisted company created successfully",
     "classification": {
+      "statusOptions": {
+        "UNREVIEWED": "Unreviewed",
+        "WHITELISTED": "Whitelisted",
+        "BLACKLISTED": "Blacklisted",
+        "SUSPENDED": "Suspended"
+      },
       "blacklistButton": "Blacklist Company",
       "whitelistButton": "Whitelist Company",
       "blacklistTitle": "Blacklist Company",
+      "suspendButton": "Suspend Company",
+      "confirmSuspend": "Suspend {{name}}?",
+      "manualSuspension": "Manually suspended",
       "changeTitle": "Change Company Classification",
       "blacklistDescription": "Provide the reason for blacklisting {{name}}.",
       "confirmWhitelist": "Whitelist {{name}}?",
+      "reasonLabel": "Reason",
       "reason": {
         "required": "A reason is required for this company classification."
       },
@@ -1413,6 +1423,8 @@
       "public": {
         "SUBMITTED": "Submitted",
         "UNDER_REVIEW": "Under Review",
+        "CONTRACT_PENDING": "Contract Pending",
+        "INSPECTION_PAYMENT_PENDING": "Inspection Payment Pending",
         "REJECTED": "Rejected",
         "CANCELLED": "Cancelled",
         "PAYMENT_PENDING": "Payment Pending",
@@ -1449,6 +1461,8 @@
       "dashboard": {
         "SUBMITTED": "Submitted",
         "UNDER_REVIEW": "Under Review",
+        "CONTRACT_PENDING": "Contract Pending",
+        "INSPECTION_PAYMENT_PENDING": "Inspection Payment Pending",
         "REJECTED": "Rejected",
         "CANCELLED": "Cancelled",
         "PAYMENT_PENDING": "Payment Pending",
@@ -1649,7 +1663,15 @@
       "companySuspended": "This company is suspended and cannot create a certification request.",
       "companyUnderReview": "This company is under review. It must be whitelisted before creating a certification request.",
       "companyOnWatchlist": "This company is on the watchlist. It must be whitelisted before creating a certification request.",
-      "companyNotWhitelisted": "This company has not been reviewed. It must be whitelisted before creating a certification request."
+      "companyNotWhitelisted": "This company has not been reviewed. It must be whitelisted before creating a certification request.",
+      "requestCreateCompanyBlacklisted": "Cannot create a certification request because the associated company is blacklisted.",
+      "requestCreateCompanySuspended": "Cannot create a certification request because the associated company is suspended.",
+      "requestStatusChangeCompanyBlacklisted": "Cannot change the certification request status because the associated company is blacklisted.",
+      "requestStatusChangeCompanySuspended": "Cannot change the certification request status because the associated company is suspended.",
+      "certificationCreateCompanyBlacklisted": "Cannot create a certification because the associated company is blacklisted.",
+      "certificationCreateCompanySuspended": "Cannot create a certification because the associated company is suspended.",
+      "certificationStatusChangeCompanyBlacklisted": "Cannot change the certification status because the associated company is blacklisted.",
+      "certificationStatusChangeCompanySuspended": "Cannot change the certification status because the associated company is suspended."
     },
     "errors": {
       "submitFailed": "Failed to submit certification request!"
@@ -2113,6 +2135,7 @@
       "INTERNATIONAL_QUALITY_CERTIFICATION": "نړیوال کیفیت تصدیق",
       "STANDARD_MARK_CERTIFICATION": "د معیاري نښې تصدیق",
       "MANAGEMENT_SYSTEM_QUALITY": "Management System Quality",
+      "SERVICE_QUALITY": "Service Quality",
       "international": {
         "title": "International Quality",
         "description": "For global market expansion",

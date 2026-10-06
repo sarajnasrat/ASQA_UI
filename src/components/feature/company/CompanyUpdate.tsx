@@ -467,7 +467,7 @@ export const CompanyUpdate: React.FC = () => {
                           id="companyType"
                           {...field}
                           options={companyTypeOptions.map((c) => ({
-                            label: c.replace(/_/g, " "),
+                            label: t(`company.typeOptions.${c}`, { defaultValue: c.replace(/_/g, " ") }),
                             value: c,
                           }))}
                           placeholder="Select Company Type"

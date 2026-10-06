@@ -46,6 +46,7 @@ import {
 
 import CertificationService from "../../../services/certification.service";
 import { handleApi } from "../../../hooks/handleApi";
+import { translateBackendMessage } from "../../../utils/backendMessage";
 import { CertificationUpdate } from "./CertificationUpdate";
 import { useAppToast } from "../../../hooks/useToast";
 import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
@@ -475,16 +476,54 @@ export const CertificationDetails: React.FC = () => {
 
   const getNextStatuses = () => statusTransitions[currentStatus] || [];
 
+  const getStatusChangeError = (data: any) => {
+    const validationError = Array.isArray(data?.validationErrors)
+      ? data.validationErrors.find((item: any) => item?.code || item?.message)
+      : undefined;
+    const backendError =
+      (Array.isArray(data?.errors) && data.errors.find((item: unknown) => typeof item === "string")) ||
+      validationError?.code ||
+      validationError?.message;
+
+    if (backendError) {
+      const translated = translateBackendMessage(
+        backendError,
+        "",
+        (key) => String(t(key)),
+      );
+      if (translated && translated !== backendError) return translated;
+    }
+
+    return data?.extra?.message || data?.message || t("common.somethingWentWrong");
+  };
+
+  const changeCertificationStatus = async (nextStatus: string, reason?: string) => {
+    try {
+      const response = await CertificationService.updateCertificationStatus(
+        details.id,
+        nextStatus,
+        reason,
+      );
+      const data = response?.data;
+      if (data?.statusCode >= 400 || data?.success === false || data?.errors?.length) {
+        showToast("error", t("common.error"), getStatusChangeError(data));
+        return false;
+      }
+      return true;
+    } catch (error: any) {
+      showToast(
+        "error",
+        t("common.error"),
+        getStatusChangeError(error?.response?.data || error?.data || error),
+      );
+      return false;
+    }
+  };
+
   const updateStatus = async (nextStatus: string) => {
     if (!details?.id) return;
-    const response = await handleApi(
-      () =>
-        CertificationService.updateCertificationStatus(details.id, nextStatus),
-      () => showToast("success", t("common.success"), labelize(nextStatus)),
-      (message: string) => showToast("error", t("common.error"), message),
-      t,
-    );
-    if (response) {
+    if (await changeCertificationStatus(nextStatus)) {
+      showToast("success", t("common.success"), labelize(nextStatus));
       navigate(certificationListPath(nextStatus), { replace: true });
     }
   };
@@ -559,14 +598,10 @@ export const CertificationDetails: React.FC = () => {
   const rejectScannedCertificate = async () => {
     if (!details?.id || !rejectionReason.trim()) return;
     setRejecting(true);
-    const response = await handleApi(
-      () => CertificationService.updateCertificationStatus(details.id, "PRINTED", rejectionReason.trim()),
-      () => showToast("success", t("common.success"), t("certification.rejectedToPrinted")),
-      (message: string) => showToast("error", t("common.error"), message),
-      t,
-    );
+    const updated = await changeCertificationStatus("PRINTED", rejectionReason.trim());
     setRejecting(false);
-    if (response) {
+    if (updated) {
+      showToast("success", t("common.success"), t("certification.rejectedToPrinted"));
       setRejectDialogVisible(false);
       navigate(certificationListPath("PRINTED"), { replace: true });
     }
