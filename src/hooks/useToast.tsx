@@ -1,10 +1,10 @@
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
 import { Toast } from "primereact/toast";
 
 export const useAppToast = () => {
   const toast = useRef<Toast>(null);
 
-  const showToast = (
+  const showToast = useCallback((
     severity: "success" | "info" | "warn" | "error",
     summary: string,
     detail: string,
@@ -16,7 +16,7 @@ export const useAppToast = () => {
       detail,
       life,
     });
-  };
+  }, []);
 
   return { toast, showToast };
 };

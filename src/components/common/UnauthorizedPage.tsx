@@ -1,6 +1,5 @@
 // components/UnauthorizedDialog.tsx
 import { ShieldOff, ArrowLeft, HelpCircle, X } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 interface UnauthorizedDialogProps {
@@ -9,7 +8,6 @@ interface UnauthorizedDialogProps {
 }
 
 export const UnauthorizedDialog: React.FC<UnauthorizedDialogProps> = ({ isOpen, onClose }) => {
-  const navigate = useNavigate();
   const { t } = useTranslation();
 
   if (!isOpen) return null;
@@ -49,7 +47,7 @@ export const UnauthorizedDialog: React.FC<UnauthorizedDialogProps> = ({ isOpen, 
         {/* Action Buttons */}
         <div className="flex flex-col gap-2">
           <button
-            onClick={() => navigate(-1)}
+            onClick={onClose}
             className="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-colors font-medium text-sm"
           >
             <ArrowLeft className="w-4 h-4" />

@@ -15,6 +15,7 @@ import type {
 } from "../interface/auth.interface";
 import type { IUser } from "../interface/user.interface";
 import type { MenuItem } from "primereact/menuitem";
+import MenuService from "../services/menu.service";
 
 const AuthContext = createContext<IAuthContext | undefined>(undefined);
 
@@ -36,15 +37,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const [user, setUser] = useState<IUser | null>(null);
   const [menus, setMenus] = useState<IMenu[]>([]);
+  const [routeMenus, setRouteMenus] = useState<IMenu[]>([]);
+  const [routeMenusReady, setRouteMenusReady] = useState(false);
   const [roles, setRoles] = useState<string[]>([]);
   const [permissions, setPermissions] = useState<string[]>([]);
   const [authReady, setAuthReady] = useState(false);
+
+  const refreshMenus = useCallback(async () => {
+    if (!localStorage.getItem("accessToken")) return;
+    const response = await MenuService.getSidebar();
+    if (!Array.isArray(response.data)) throw new Error("Invalid sidebar response");
+    if (!localStorage.getItem("accessToken")) return;
+    setMenus(response.data);
+    localStorage.setItem("menus", JSON.stringify(response.data));
+  }, []);
+
+  const refreshRouteMenus = useCallback(async () => {
+    if (!localStorage.getItem("accessToken")) return;
+    const response = await MenuService.getAllMenus();
+    if (!Array.isArray(response.data)) throw new Error("Invalid route menu response");
+    if (!localStorage.getItem("accessToken")) return;
+    setRouteMenus(response.data);
+    localStorage.setItem("routeMenus", JSON.stringify(response.data));
+  }, []);
 
   const logout = useCallback(() => {
     localStorage.clear();
 
     setUser(null);
     setMenus([]);
+    setRouteMenus([]);
     setRoles([]);
     setPermissions([]);
 
@@ -54,6 +76,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     const storedMenus = localStorage.getItem("menus");
+    const storedRouteMenus = localStorage.getItem("routeMenus");
     const storedRoles = localStorage.getItem("roles");
     const token = localStorage.getItem("accessToken");
 
@@ -65,16 +88,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       setMenus(JSON.parse(storedMenus));
     }
 
+    if (storedRouteMenus) {
+      setRouteMenus(JSON.parse(storedRouteMenus));
+    }
+
     if (storedRoles) {
       setRoles(JSON.parse(storedRoles));
     }
 
     if (token) {
       setPermissions(getPermissionsFromToken(token));
+      void refreshMenus().catch(() => { /* Keep cached navigation until the next refresh. */ });
+      void refreshRouteMenus()
+        .catch(() => { /* Keep cached route metadata if the catalog is unavailable. */ })
+        .finally(() => setRouteMenusReady(true));
+    } else {
+      setRouteMenusReady(true);
     }
 
     setAuthReady(true);
-  }, []);
+  }, [refreshMenus, refreshRouteMenus]);
 
   useEffect(() => {
     const handleForceLogout = () => {
@@ -83,6 +116,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const handleTokenRefreshed = (event: Event) => {
       setPermissions(getPermissionsFromToken((event as CustomEvent<string>).detail));
+      void refreshMenus().catch(() => { /* A subsequent refresh will retry. */ });
+      void refreshRouteMenus().catch(() => { /* Keep cached route metadata until the next refresh. */ });
     };
     window.addEventListener("auth:token-refreshed", handleTokenRefreshed);
     window.addEventListener("auth:force-logout", handleForceLogout);
@@ -91,7 +126,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       window.removeEventListener("auth:force-logout", handleForceLogout);
       window.removeEventListener("auth:token-refreshed", handleTokenRefreshed);
     };
-  }, [logout]);
+  }, [logout, refreshMenus, refreshRouteMenus]);
 
   const login = (data: ILoginResponse) => {
     localStorage.setItem("accessToken", data.accessToken);
@@ -109,6 +144,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
     localStorage.setItem("user", JSON.stringify(userData));
     localStorage.setItem("menus", JSON.stringify(data.menus));
+    localStorage.setItem("routeMenus", JSON.stringify(data.menus));
     localStorage.setItem(
       "committeeIds",
       JSON.stringify(data.committeeIds || []),
@@ -121,8 +157,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
     setUser(userData);
     setMenus(data.menus);
+    setRouteMenus(data.menus);
+    setRouteMenusReady(false);
     setRoles(roleNames);
     setPermissions(getPermissionsFromToken(data.accessToken));
+    void refreshRouteMenus()
+      .catch(() => { /* Fall back to the menu catalog returned by login. */ })
+      .finally(() => setRouteMenusReady(true));
   };
 
   const hasPermission = (permission: string) => {
@@ -143,6 +184,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         roles,
         user,
         menus,
+        routeMenus,
+        routeMenusReady,
         permissions,
         hasRole,
         hasPermission,
@@ -150,6 +193,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         isAuthenticated: !!user,
         login,
         logout,
+        refreshMenus,
         authReady,
       }}
     >

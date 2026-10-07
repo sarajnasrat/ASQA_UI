@@ -27,6 +27,7 @@ interface Permission {
 }
 
 interface ParentMenuOption {
+  type?: "GROUP" | "ROUTE";
   id: string | number;
   labelEn?: string;
   labelPs?: string;
@@ -35,6 +36,7 @@ interface ParentMenuOption {
 }
 
 interface MenuForm {
+  type: "GROUP" | "ROUTE";
   labelEn: string;
   labelPs: string;
   labelDr: string;
@@ -60,14 +62,17 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
   const [permissionId, setPermissionId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [fetchingData, setFetchingData] = useState(false);
+  const [dataReady, setDataReady] = useState(false);
 
   const {
     control,
     handleSubmit,
+    watch,
     reset,
     formState: { errors },
   } = useForm<MenuForm>({
     defaultValues: {
+      type: "ROUTE",
       labelEn: "",
       labelPs: "",
       labelDr: "",
@@ -77,6 +82,7 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
       active: true,
     },
   });
+  const menuType = watch("type");
 
   useEffect(() => {
     if (visible) fetchData();
@@ -93,6 +99,7 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
 
   const fetchData = async () => {
     setFetchingData(true);
+    setDataReady(false);
 
     try {
       const [permissionsRes, menusRes] = await Promise.all([
@@ -110,7 +117,7 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
         })),
       );
       setParentMenus(
-        (menusRes.data || []).map((menu: ParentMenuOption) => ({
+        (menusRes.data || []).filter((menu: ParentMenuOption) => menu.type === "GROUP").map((menu: ParentMenuOption) => ({
           ...menu,
           displayLabel:
             i18n.language === "ps"
@@ -120,6 +127,7 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
                 : menu.labelEn || menu.labelDr || menu.labelPs,
         })),
       );
+      setDataReady(true);
     } catch {
       showToast("error", t("common.error"), t("menu.loadFailed"));
     } finally {
@@ -128,6 +136,10 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
   };
 
   const onSubmit = async (data: MenuForm) => {
+    if (data.type === "GROUP" && !permissionId) {
+      showToast("error", t("common.error"), t("menu.typeValidation.groupPermission"));
+      return;
+    }
     setLoading(true);
 
     try {
@@ -135,7 +147,8 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
         labelEn: data.labelEn,
         labelPs: data.labelPs,
         labelDr: data.labelDr,
-        path: data.path,
+        type: data.type,
+        path: data.type === "GROUP" ? null : data.path,
         icon: data.icon || "pi pi-circle",
         sortOrder: data.sortOrder,
         active: data.active,
@@ -283,6 +296,15 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
 
                 {/* PATH */}
                 <div className="space-y-1.5">
+                  <label className="block text-sm font-medium text-gray-700">{t("menu.menuType")}</label>
+                  <Controller name="type" control={control} render={({ field }) => (
+                    <Dropdown value={field.value} onChange={(event) => field.onChange(event.value)}
+                      options={[{ label: t("menu.types.GROUP"), value: "GROUP" }, { label: t("menu.types.ROUTE"), value: "ROUTE" }]}
+                      className="w-full" />
+                  )} />
+                  {menuType === "GROUP" && <p className="text-xs text-gray-500">{t("menu.groupHint")}</p>}
+                </div>
+                <div hidden={menuType === "GROUP"} className="space-y-1.5">
                   <label className="block text-sm font-medium text-gray-700">
                     {t("menu.menuPath")} <span className="text-red-500">*</span>
                   </label>
@@ -290,7 +312,7 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
                   <Controller
                     name="path"
                     control={control}
-                    rules={{ required: t("menu.validation.pathRequired") }}
+                    rules={{ required: menuType === "ROUTE" ? t("menu.validation.pathRequired") : false }}
                     render={({ field }) => (
                       <div className="relative">
                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">
@@ -444,7 +466,7 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
 
                   <div className="space-y-1.5">
                     <label className="block text-sm font-medium text-gray-700">
-                      {t("menu.requiredPermission")}
+                      {t("menu.requiredPermission")} {menuType === "GROUP" && <span className="text-red-500">*</span>}
                     </label>
 
                     <Dropdown
@@ -465,6 +487,7 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
                   </div>
                 </div>
               </div>
+              <p className="mt-6 text-xs text-gray-500">{t("menu.manageRolesFromRole")}</p>
             </div>
           )}
 
@@ -480,6 +503,7 @@ export const CreateMenu: React.FC<CreateMenuProps> = ({
             <Button
               label={t("common.create")}
               icon="pi pi-check"
+              disabled={fetchingData || !dataReady}
               loading={loading}
               className="px-6 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={handleSubmit(onSubmit)}

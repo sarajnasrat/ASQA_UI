@@ -52,6 +52,13 @@ const actionSeverityMap: Record<string, "success" | "info" | "warning" | "danger
 
 const normalizeText = (value?: string | null) => value?.trim() || "-";
 
+const normalizeRoleKey = (roleName: string) => {
+  const normalizedRole = roleName.trim().toUpperCase();
+  return normalizedRole.startsWith("ROLE_")
+    ? normalizedRole
+    : `ROLE_${normalizedRole}`;
+};
+
 const AuditLogList = () => {
   const { t } = useTranslation();
   const { showError } = useToast();
@@ -149,7 +156,13 @@ const AuditLogList = () => {
     {
       field: "roleName",
       header: t("auditLog.columns.role"),
-      body: (row: AuditLogItem) => normalizeText(row.roleName),
+      body: (row: AuditLogItem) => {
+        const roleName = row.roleName?.trim();
+        if (!roleName) return "-";
+
+        const roleKey = normalizeRoleKey(roleName);
+        return t(`role.${roleKey}`, { defaultValue: roleName });
+      },
     },
     {
       field: "entityName",

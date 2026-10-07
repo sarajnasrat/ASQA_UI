@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Translation, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { useAppToast } from "../../../hooks/useToast";
 import { RoleService } from "../../../services/role.service";
 import { PermissionService } from "../../../services/permission.service";
@@ -30,6 +30,8 @@ export const EditRole: React.FC<EditRoleProps> = ({
   const [permissions, setPermissions] = useState<any[]>([]);
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [menuIds, setMenuIds] = useState<number[]>([]);
+  const [dataReady, setDataReady] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const { showError, showSuccess } = useToast();
   // Load data when dialog opens
@@ -39,12 +41,15 @@ export const EditRole: React.FC<EditRoleProps> = ({
     } else {
       // Reset when dialog closes
       setRole({});
+      setMenuIds([]);
+      setDataReady(false);
       setSelectedPermissions([]);
       setSearchTerm("");
     }
-  }, [visible]);
+  }, [visible, roleId]);
 
   const fetchData = async () => {
+    setDataReady(false);
     try {
       setLoading(true);
 
@@ -54,6 +59,8 @@ export const EditRole: React.FC<EditRoleProps> = ({
       ]);
 
       const roleData = roleRes.data.data;
+      if (!roleData || !Array.isArray(roleData.menuIds)) throw new Error("Invalid role response");
+      setMenuIds(roleData.menuIds.map(Number));
       const allPermissions = permissionRes.data;
 
       setRole(roleData);
@@ -63,6 +70,7 @@ export const EditRole: React.FC<EditRoleProps> = ({
       const selected =
         roleData.permissions?.map((p: any) => String(p.id)) || [];
       setSelectedPermissions(selected);
+      setDataReady(true);
     } catch (error) {
       showToast(
         "error",
@@ -95,18 +103,18 @@ export const EditRole: React.FC<EditRoleProps> = ({
       setLoading(true);
 
       const payload = {
-        ...role,
-        permissions: selectedPermissions
-          .map((id) => permissions.find((p) => String(p.id) === id))
-          .filter(Boolean),
+        name: role.name,
+        menuIds,
+        permissions: selectedPermissions.map((id) => ({ id: Number(id) })),
       };
 
-      await handleApi(
+      const response = await handleApi(
         () => RoleService.updateRole(roleId, payload),
         showSuccess,
         showError,
         t,
       );
+      if (!response) return;
 
       onSuccess();
       onClose();
@@ -342,7 +350,7 @@ export const EditRole: React.FC<EditRoleProps> = ({
             onClick={handleSubmit}
             loading={loading}
             className="px-6 py-3 bg-linear-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white rounded-lg transition-all font-medium shadow-md hover:shadow-lg disabled:opacity-50"
-            disabled={!role?.name}
+            disabled={loading || !dataReady || !role?.name?.trim()}
           />
         </div>
       </div>

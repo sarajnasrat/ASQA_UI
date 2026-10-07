@@ -2587,6 +2587,32 @@
     "updated": "User updated successfully."
   },
   "role": {
+    "navigation": {
+      "title": "Sidebar menus",
+      "placeholder": "Select menus for this role",
+      "empty": "No menus available",
+      "hint": "Select sidebar menus for this role. Each menu also requires its related permission. Parent menus may appear to group selected children. Menu selection does not grant access permissions.",
+      "none": "No sidebar menus are assigned. Access through other pages still depends on permissions.",
+      "inactive": "Inactive",
+      "loadFailed": "Could not load role permissions and menus. Reopen the form to retry.",
+      "invalidMenus": "One or more selected menus no longer exist."
+    },
+    "menuEditor": {
+      "title": "Edit role menus",
+      "subtitle": "Choose which sections appear in the sidebar for",
+      "selectionLabel": "Sidebar access",
+      "selected": "menus selected",
+      "selectAll": "Select all",
+      "clear": "Clear",
+      "available": "Available menus",
+      "helper": "Select the pages this role should see in its navigation.",
+      "items": "items",
+      "search": "Search menu names...",
+      "noResults": "No menus match your search.",
+      "under": "Under",
+      "unnamed": "Untitled menu",
+      "permissionNote": "Menu visibility is managed here. Page permissions stay unchanged."
+    },
     "title": "Role Management",
     "total": "Total",
     "labels": {
@@ -2646,6 +2672,7 @@
     },
     "actions": {
       "edit": "Edit Role",
+      "editMenus": "Edit menus",
       "viewDetails": "View Details",
       "delete": "Delete Role"
     },
@@ -3214,6 +3241,29 @@
     "contactInformation": "اطلاعات تماس"
   },
   "menu": {
+    "menuType": "Menu type",
+    "types": {
+      "GROUP": "Group",
+      "ROUTE": "Route"
+    },
+    "groupHint": "Groups organize child menus and require a feature permission. They have no page path.",
+    "typeValidation": {
+      "groupPath": "Groups cannot have a path.",
+      "groupPermission": "Select a feature permission for the group.",
+      "routePath": "Enter a path for the route.",
+      "routeHasChildren": "Move this menu's children before changing it to a route.",
+      "parentMissing": "The parent menu was not found.",
+      "parentGroup": "The parent must be a group.",
+      "parentCycle": "A menu cannot be its own ancestor."
+    },
+    "manageRolesFromRole": "Assign sidebar visibility from Create Role or Edit Role.",
+    "sidebarRoles": "Roles that see this sidebar link",
+    "sidebarRolesPlaceholder": "Select roles",
+    "sidebarRolesHint": "Selected roles see this link when they also have the required permission. Page and stepper access depend on permissions. A parent may appear to group a visible child.",
+    "noSidebarRolesHint": "No roles selected: this link is hidden. A parent may still appear to group an assigned child.",
+    "noSidebarRoles": "No assigned roles",
+    "sidebarRefreshFailed": "Menu saved, but the sidebar could not refresh. Reload to retry.",
+
     "management": "Menu Management",
     "searchPlaceholder": "Search menus...",
     "total": "Total",

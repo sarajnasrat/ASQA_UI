@@ -12,6 +12,7 @@ import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
 import { DynamicTable } from "../../common/DynamicTable";
 import { CreateRole } from "./CreateRole";
 import { EditRole } from "./EditRole";
+import { EditRoleMenusDialog } from "./EditRoleMenusDialog";
 import { Badge } from "primereact/badge";
 import { Tooltip } from "primereact/tooltip";
 import { Tag } from "primereact/tag";
@@ -23,7 +24,7 @@ export const RoleList = () => {
   const [loading, setLoading] = useState(true);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [expandedRows] = useState<Record<string, boolean>>({});
-  const { hasPermission, withPermission } = useAuth();
+  const { hasPermission, withPermission, refreshMenus } = useAuth();
   const navigate = useNavigate();
 
   // Pagination state
@@ -34,6 +35,7 @@ export const RoleList = () => {
 
   const [editRoleId, setEditRoleId] = useState<string>("");
   const [showEditDialog, setShowEditDialog] = useState(false);
+  const [showEditMenusDialog, setShowEditMenusDialog] = useState(false);
 
   useEffect(() => {
     getRoles();
@@ -79,6 +81,11 @@ export const RoleList = () => {
     return t(`role.${role.name}`, {
       defaultValue: t(`user.roles.${roleName}`, { defaultValue: role.name }),
     });
+  };
+
+  const handleEditMenus = (role: any) => {
+    setEditRoleId(role.id);
+    setShowEditMenusDialog(true);
   };
   const confirmDelete = (role: any) => {
     confirmDialog({
@@ -201,6 +208,13 @@ export const RoleList = () => {
         icon: "pi pi-pencil",
         command: () => handleEdit(rowData),
         className: "hover:bg-blue-50",
+      }),
+
+      ...withPermission("UPDATE_ROLE", {
+        label: t("role.actions.editMenus", { defaultValue: "Edit menus" }),
+        icon: "pi pi-sitemap",
+        command: () => handleEditMenus(rowData),
+        className: "hover:bg-indigo-50",
       }),
 
       ...withPermission("VIEW_ROLE", {
@@ -438,6 +452,7 @@ export const RoleList = () => {
         onClose={() => setShowCreateDialog(false)}
         onSuccess={() => {
           getRoles();
+          void refreshMenus().catch(() => showToast("warn", t("common.error"), t("menu.sidebarRefreshFailed")));
           setShowCreateDialog(false);
         }}
       />
@@ -449,7 +464,21 @@ export const RoleList = () => {
           onClose={() => setShowEditDialog(false)}
           onSuccess={() => {
             getRoles();
+            void refreshMenus().catch(() => showToast("warn", t("common.error"), t("menu.sidebarRefreshFailed")));
             setShowEditDialog(false);
+          }}
+        />
+      )}
+
+      {showEditMenusDialog && (
+        <EditRoleMenusDialog
+          roleId={editRoleId}
+          visible={showEditMenusDialog}
+          onClose={() => setShowEditMenusDialog(false)}
+          onSuccess={() => {
+            getRoles();
+            void refreshMenus().catch(() => showToast("warn", t("common.error"), t("menu.sidebarRefreshFailed")));
+            setShowEditMenusDialog(false);
           }}
         />
       )}

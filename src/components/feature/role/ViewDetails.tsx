@@ -10,6 +10,8 @@ import { Toast } from "primereact/toast";
 import { Tooltip } from "primereact/tooltip";
 import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
 import RoleService from "../../../services/role.service";
+import MenuService from "../../../services/menu.service";
+import { MenuSelector, type SidebarMenuOption } from "./MenuSelector";
 import { useAppToast } from "../../../hooks/useToast";
 import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 
@@ -25,6 +27,7 @@ interface Role {
   name: string;
   description?: string;
   permissions: Permission[];
+  menuIds?: number[];
   createdAt?: string;
   updatedAt?: string;
   createdBy?: string;
@@ -39,6 +42,12 @@ export const ViewDetails = () => {
   const { toast, showToast } = useAppToast();
 
   const [role, setRole] = useState<Role | null>(null);
+  const [menus, setMenus] = useState<SidebarMenuOption[]>([]);
+
+  useEffect(() => {
+    MenuService.getAllMenus().then((response) => setMenus(response.data || []))
+      .catch(() => showToast("error", t("common.error"), t("role.navigation.loadFailed")));
+  }, [id]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState(0);
 
@@ -281,6 +290,7 @@ export const ViewDetails = () => {
                   )}
 
                   <Divider className="my-4" />
+                  <MenuSelector menus={menus} selectedIds={(role.menuIds || []).map(Number)} onChange={() => {}} disabled />
 
                   <div className="space-y-3">
                     <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">

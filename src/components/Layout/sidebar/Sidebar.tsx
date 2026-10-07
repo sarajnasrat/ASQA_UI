@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ElementType, type MouseEvent } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../../../context/AuthContext";
 import "primeicons/primeicons.css";
 
 const themes = {
@@ -105,46 +106,6 @@ type SidebarProps = {
   onMobileOpenChange: (open: boolean) => void;
 };
 
-const addInternationalUnderReviewMenu = (items: any[]): any[] => {
-  const underReviewPath = "/international-under-review-request";
-  const managementPath = "/international-requst-management";
-  const alreadyExists = (nodes: any[]): boolean =>
-    nodes.some((item) =>
-      item?.path === underReviewPath ||
-      (Array.isArray(item?.children) && alreadyExists(item.children)),
-    );
-
-  if (alreadyExists(items)) return items;
-
-  const addBesideManagement = (nodes: any[]): any[] => {
-    const result: any[] = [];
-    nodes.forEach((item) => {
-      const children = Array.isArray(item?.children)
-        ? addBesideManagement(item.children)
-        : item?.children;
-      const current = children === item?.children ? item : { ...item, children };
-      result.push(current);
-
-      if (item?.path === managementPath) {
-        result.push({
-          ...item,
-          id: -91001,
-          path: underReviewPath,
-          icon: "pi pi-search",
-          translationKey: "internationalRequest.titles.underReview",
-          labelEn: "Under Review International Requests",
-          labelDr: "درخواست‌های بین‌المللی تحت بررسی",
-          labelPs: "تر بیاکتنې لاندې نړیوالې غوښتنې",
-          children: [],
-        });
-      }
-    });
-    return result;
-  };
-
-  return addBesideManagement(items);
-};
-
 export const Sidebar = ({
   collapsed,
   onCollapsedChange,
@@ -154,6 +115,7 @@ export const Sidebar = ({
   const location = useLocation();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
+  const { menus } = useAuth();
 
   const [expandedItems, setExpandedItems] = useState<Set<number>>(new Set());
   const [menuItems, setMenuItems] = useState<any[]>([]);
@@ -169,9 +131,8 @@ export const Sidebar = ({
       : location.pathname;
 
   useEffect(() => {
-    const storedMenus = JSON.parse(localStorage.getItem("menus") || "[]");
-    setMenuItems(addInternationalUnderReviewMenu(storedMenus));
-  }, []);
+    setMenuItems(menus);
+  }, [menus]);
 
   useEffect(() => {
     onMobileOpenChange(false);
@@ -246,13 +207,13 @@ export const Sidebar = ({
     }
   };
 
-  const normalizePath = (path?: string) => {
+  const normalizePath = (path?: string | null) => {
     if (!path) return "";
     if (path === "/") return "/";
     return `/${path.replace(/^\/+/, "").replace(/\/+$/, "")}`;
   };
 
-  const matchesPath = (path?: string) => {
+  const matchesPath = (path?: string | null) => {
     const normalizedPath = normalizePath(path);
     const normalizedLocation = normalizePath(activeSidebarPath);
 
@@ -294,7 +255,7 @@ export const Sidebar = ({
     return Array.from(expandedIds);
   };
 
-  const isActive = (path?: string) => matchesPath(path);
+  const isActive = (path?: string | null) => matchesPath(path);
 
   const collectDescendantIds = (item: any): number[] => {
     if (!item?.children?.length) return [];
@@ -365,28 +326,30 @@ export const Sidebar = ({
   };
 
   const handleMenuItemClick = (item: any) => {
-    if (item.children?.length) {
+    if (item.type === "GROUP" || (!item.type && item.children?.length)) {
       toggleSubmenu(item.id);
       return;
     }
 
-    navigate(normalizePath(item.path));
+    if (item.path) navigate(normalizePath(item.path));
   };
 
   const renderChildren = (children: any[], level = 1) =>
     children.map((child) => {
+      const isGroup = child.type === "GROUP" || (!child.type && Boolean(child.children?.length));
+      const ChildControl: ElementType = isGroup ? "button" : Link;
       const childActive = isActive(child.path) || hasActiveDescendant(child);
-      const hasGrandChildren = child.children && child.children.length > 0;
+      const hasGrandChildren = isGroup && child.children && child.children.length > 0;
       const isExpanded = expandedItems.has(child.id);
       const isHovered = hoveredItem === child.id;
 
       return (
         <div key={child.id} className="relative">
-          <Link
-            to={normalizePath(child.path)}
-            className="group relative block rounded-xl outline-none"
-            onClick={(e) => {
-              if (hasGrandChildren) {
+          <ChildControl
+            {...(isGroup ? { type: "button", "aria-expanded": isExpanded } : { to: normalizePath(child.path) })}
+            className="group relative block w-full text-start rounded-xl outline-none"
+            onClick={(e: MouseEvent<HTMLElement>) => {
+              if (isGroup) {
                 e.preventDefault();
                 toggleSubmenu(child.id);
               }
@@ -473,7 +436,7 @@ export const Sidebar = ({
                 }}
               />
             )}
-          </Link>
+          </ChildControl>
 
           {hasGrandChildren && !collapsed && (
             <div
@@ -506,7 +469,7 @@ export const Sidebar = ({
 
   const renderMenuItem = (item: any) => {
     const active = isActive(item.path) || hasActiveDescendant(item);
-    const hasChildren = item.children && item.children.length > 0;
+    const hasChildren = (item.type === "GROUP" || !item.type) && item.children && item.children.length > 0;
     const isExpanded = expandedItems.has(item.id);
     const isHovered = hoveredItem === item.id;
 

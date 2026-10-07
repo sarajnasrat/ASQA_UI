@@ -7,6 +7,8 @@ import { Checkbox } from "primereact/checkbox";
 import { useForm, Controller } from "react-hook-form";
 import RoleService from "../../../services/role.service";
 import PermissionService from "../../../services/permission.service";
+import MenuService from "../../../services/menu.service";
+import { MenuSelector, type SidebarMenuOption } from "./MenuSelector";
 import { PermissionSelector, hiddenPermissionGroups } from "./PermissionSelector";
 import { useAppToast } from "../../../hooks/useToast";
 
@@ -26,6 +28,9 @@ export const CreateRole: React.FC<CreateRoleProps> = ({
   const [permissions, setPermissions] = useState<any[]>([]);
   const [selectedPermissions, setSelectedPermissions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [menus, setMenus] = useState<SidebarMenuOption[]>([]);
+  const [menuIds, setMenuIds] = useState<number[]>([]);
+  const [dataReady, setDataReady] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
   const {
@@ -45,21 +50,26 @@ export const CreateRole: React.FC<CreateRoleProps> = ({
     } else {
       reset();
       setSelectedPermissions([]);
+      setMenuIds([]);
+      setDataReady(false);
       setSearchTerm("");
     }
   }, [visible]);
 
   const loadPermissions = async () => {
+    setDataReady(false);
     try {
       setLoading(true);
-      const res = await PermissionService.getAllPermissions();
+      const [res, menusRes] = await Promise.all([PermissionService.getAllPermissions(), MenuService.getAllMenus()]);
       setPermissions(res.data || []);
+      setMenus(menusRes.data || []);
+      setDataReady(true);
     } catch (error) {
       console.error("Failed to load permissions");
       showToast(
         "error",
         t("common.error"),
-        String(t("role.messages.permissionsLoadFailed")),
+        String(t("role.navigation.loadFailed")),
       );
     } finally {
       setLoading(false);
@@ -91,12 +101,14 @@ export const CreateRole: React.FC<CreateRoleProps> = ({
 
       const payload = {
         name: data.name,
+        menuIds,
         permissions: selectedPermissions.map((p) => ({
-          id: p.id,
+          id: Number(p.id),
         })),
       };
 
-      await RoleService.registerRole(payload);
+      const response = await RoleService.registerRole(payload);
+      if (response.data?.success === false) throw new Error("Role creation failed");
 
       showToast(
         "success",
@@ -332,6 +344,7 @@ export const CreateRole: React.FC<CreateRoleProps> = ({
           )}
         </div>
 
+        <MenuSelector menus={menus} selectedIds={menuIds} onChange={setMenuIds} />
         {/* Action Buttons */}
         <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 mt-6 pt-4 border-t border-gray-200">
           <Button
@@ -351,7 +364,7 @@ export const CreateRole: React.FC<CreateRoleProps> = ({
             raised
             type="submit"
             loading={loading}
-            disabled={!selectedPermissions.length}
+            disabled={loading || !dataReady}
             className="px-6 py-3 bg-linear-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white rounded-lg transition-all font-medium shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 border border-transparent"
           />
         </div>

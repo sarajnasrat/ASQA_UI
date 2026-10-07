@@ -38,6 +38,7 @@ import { CertificationRequestListDeadLine } from "../feature/setting-deadline/Ce
 import { CertificationRequestListStandardManagement } from "../feature/standardmanagement/CertificationRequestListStandardManagement";
 import { ProtectedRoute } from "../../routes/ProtectedRoute";
 import { UnauthorizedDialog } from "../common/UnauthorizedPage";
+import { useAuth } from "../../context/AuthContext";
 import { CertificationRequestPayment } from "../feature/certificationpayment/CertificationRequestPayment";
 import { CertificationRequestReport } from "../feature/report/CertificationRequestReport";
 import { CommiteeDetails } from "../feature/commitee/CommiteeDetails";
@@ -80,22 +81,24 @@ import {
   InternationalApprovalAssignmentList,
 } from "../feature/internationrequest/InternationalCommitteeAssignmentLists";
 
+const firstMenuPath = (menus: any[]): string | undefined => {
+  for (const menu of menus) {
+    if (typeof menu.path === "string" && menu.path.trim()) return menu.path;
+    const childPath = firstMenuPath(Array.isArray(menu.children) ? menu.children : []);
+    if (childPath) return childPath;
+  }
+  return undefined;
+};
+
 export const MainLayout = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [showUnauthorized, setShowUnauthorized] = useState(false);
-  const [previousPath, setPreviousPath] = useState<string>("/dashboard");
 
   const location = useLocation();
   const navigate = useNavigate();
   const { i18n } = useTranslation();
-
-  // Track previous path for "Go Back" functionality
-  useEffect(() => {
-    if (location.pathname !== "/unauthorized") {
-      setPreviousPath(location.pathname);
-    }
-  }, [location]);
+  const { menus } = useAuth();
 
   // Watch for unauthorized route and show dialog
   useEffect(() => {
@@ -106,9 +109,7 @@ export const MainLayout = () => {
 
   const handleCloseUnauthorized = () => {
     setShowUnauthorized(false);
-    const returnPath = (location.state as { fromLogin?: boolean } | null)?.fromLogin
-      ? "/login"
-      : previousPath;
+    const returnPath = firstMenuPath(menus) || "/login";
     navigate(returnPath, { replace: true });
   };
 
@@ -336,7 +337,7 @@ export const MainLayout = () => {
               />
 
               <Route path="commitee/view/:id" element={<CommiteeDetails />} />
-              <Route path="company" element={<CompanyList />} />
+              <Route path="company" element={<ProtectedRoute permission="VIEW_COMPANY"><CompanyList /></ProtectedRoute>} />
               <Route
                 path="company/certificate-issued"
                 element={<CompanyStatusList classificationType="WHITELISTED" status="CERTIFICATION_ISSUED" title="company.positiveTitle" />}
@@ -398,9 +399,9 @@ export const MainLayout = () => {
                   />
                 }
               />
-              <Route path="company/create" element={<CompanyCreate />} />
-              <Route path="company/view/:id" element={<CompanyDetails />} />
-              <Route path="company/edit/:id" element={<CompanyUpdate />} />
+              <Route path="company/create" element={<ProtectedRoute permission="ADD_COMPANY"><CompanyCreate /></ProtectedRoute>} />
+              <Route path="company/view/:id" element={<ProtectedRoute permission="VIEW_COMPANY"><CompanyDetails /></ProtectedRoute>} />
+              <Route path="company/edit/:id" element={<ProtectedRoute permission="UPDATE_COMPANY"><CompanyUpdate /></ProtectedRoute>} />
               <Route path="about-us" element={<AboutUsList />} />
               <Route
                 path="about-us/view/:id"
@@ -454,7 +455,7 @@ export const MainLayout = () => {
               <Route path="profile" element={<UserProfilePage />} />
               <Route path="settings" element={<UserSettingsPage />} />
 
-              {/* Remove the unauthorized route from here */}
+              <Route path="unauthorized" element={<div />} />
               <Route path="*" element={<div>404 Not Found</div>} />
             </Routes>
           </div>

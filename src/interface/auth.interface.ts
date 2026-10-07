@@ -7,10 +7,13 @@ export interface IAuthContext {
   isAuthenticated: boolean;
   authReady: boolean; // ✅ NEW: indicates if auth state is initialized
   menus: IMenu[]; // ✅ add menus here
+  routeMenus: IMenu[];
+  routeMenusReady: boolean;
   permissions: string[]; // ✅ NEW
   hasPermission: (p: string) => boolean; // ✅ NEW
   login: (data: ILoginResponse) => void;
   logout: () => void;
+  refreshMenus: () => Promise<void>;
   withPermission: (permission: string, item: MenuItem) => MenuItem[];
   roles: string[];
   hasRole: (role: string) => boolean;
@@ -35,8 +38,15 @@ export interface ILoginResponse {
 export interface IMenu {
   id: number;
   name: string;
-  path: string;
+  type?: "GROUP" | "ROUTE";
+  path: string | null;
   icon?: string;
   parentId?: number | null;
   children?: IMenu[];
+  roleIds?: number[];
+  labelEn?: string;
+  labelDr?: string;
+  labelPs?: string;
+  permissionId?: number | null;
+  permissionName?: string | null;
 }

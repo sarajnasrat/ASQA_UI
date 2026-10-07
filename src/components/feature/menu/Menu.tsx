@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppToast } from "../../../hooks/useToast";
 import MenuService from "../../../services/menu.service";
+import RoleService from "../../../services/role.service";
 import { Button } from "primereact/button";
 import { TieredMenu } from "primereact/tieredmenu";
 import type { MenuItem } from "primereact/menuitem";
@@ -23,7 +24,18 @@ export const Menu = () => {
   const [editMenuId, setEditMenuId] = useState<string>("");
   const [showEditDialog, setShowEditDialog] = useState(false);
 
-  const { hasPermission, withPermission } = useAuth();
+  const { hasPermission, withPermission, refreshMenus } = useAuth();
+  const [roleNames, setRoleNames] = useState<Record<number, string>>({});
+
+  useEffect(() => {
+    RoleService.getAllRoles().then((response) => {
+      setRoleNames(Object.fromEntries((response.data || []).map((role: { id: number; name: string }) => [role.id, role.name])));
+    }).catch(() => showToast("error", t("common.error"), t("menu.loadFailed")));
+  }, []);
+
+  const refreshSidebar = () => {
+    void refreshMenus().catch(() => showToast("warn", t("common.error"), t("menu.sidebarRefreshFailed")));
+  };
 
   const [first, setFirst] = useState(0);
   const [rows, setRows] = useState(10);
@@ -76,6 +88,7 @@ export const Menu = () => {
       await MenuService.deleteMenu(id);
       showToast("success", t("common.success"), t("menu.deleteSuccess"));
       await getAllMenus();
+      refreshSidebar();
     } catch (error) {
       showToast("error", t("common.error"), t("menu.deleteFailed"));
     }
@@ -206,9 +219,17 @@ export const Menu = () => {
       sortField: "path",
     },
     {
+      header: t("menu.menuType"),
+      body: (row: { type?: "GROUP" | "ROUTE" }) => t(`menu.types.${row.type || "ROUTE"}`),
+    },
+    {
       header: t("menu.columns.icon"),
       field: "icon",
       sortField: "icon",
+    },
+    {
+      header: t("menu.sidebarRoles"),
+      body: (row: { roleIds?: number[] }) => (row.roleIds || []).map((id) => roleNames[id] || String(id)).join(", ") || t("menu.noSidebarRoles"),
     },
     {
       header: t("common.action"),
@@ -253,6 +274,7 @@ export const Menu = () => {
         onClose={() => setShowCreateDialog(false)}
         onSuccess={() => {
           getAllMenus();
+          refreshSidebar();
           setShowCreateDialog(false);
         }}
       />
@@ -264,6 +286,7 @@ export const Menu = () => {
           onClose={() => setShowEditDialog(false)}
           onSuccess={() => {
             getAllMenus();
+            refreshSidebar();
             setShowEditDialog(false);
           }}
         />
