@@ -75,7 +75,7 @@ const Companies = ({ blacklisted = false }: { blacklisted?: boolean }) => {
 
       const response = blacklisted
         ? await CompanyService.getBlacklistedCompanies(params)
-        : await CompanyService.getPaginatedCompanies(params);
+        : await CompanyService.getPaginatedCompaniesByClassification("WHITELISTED", params);
       const companyData = response.data.content || response.data.data || [];
       setCompanies(companyData);
       setFilteredCompanies(companyData);
