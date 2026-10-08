@@ -56,6 +56,19 @@ export const Menu = () => {
     }
   };
 
+  const getRoleLabel = (roleName?: string) => {
+    if (!roleName) return "";
+    const normalizedRole = roleName.trim().toUpperCase();
+    const roleKey = normalizedRole.startsWith("ROLE_")
+      ? normalizedRole
+      : `ROLE_${normalizedRole}`;
+    const shortRoleName = normalizedRole.replace(/^ROLE_/, "");
+
+    return t(`role.${roleKey}`, {
+      defaultValue: t(`user.roles.${shortRoleName}`, { defaultValue: roleName }),
+    });
+  };
+
   const labelTemplate = (rowData: any) => getMenuLabel(rowData);
 
   const getAllMenus = async (keyword = submittedSearchTerm, page = first / rows) => {
@@ -229,7 +242,10 @@ export const Menu = () => {
     },
     {
       header: t("menu.sidebarRoles"),
-      body: (row: { roleIds?: number[] }) => (row.roleIds || []).map((id) => roleNames[id] || String(id)).join(", ") || t("menu.noSidebarRoles"),
+      body: (row: { roleIds?: number[] }) =>
+        (row.roleIds || [])
+          .map((id) => getRoleLabel(roleNames[id]) || String(id))
+          .join(", ") || t("menu.noSidebarRoles"),
     },
     {
       header: t("common.action"),
