@@ -54,15 +54,6 @@ export const UnauthorizedDialog: React.FC<UnauthorizedDialogProps> = ({ isOpen, 
             {t('unauthorized.goBack')}
           </button>
 
-          <button
-            onClick={() => {
-              window.location.href = 'mailto:support@company.com';
-            }}
-            className="flex items-center justify-center gap-2 w-full px-4 py-2.5 border border-slate-300 text-slate-600 rounded-lg hover:bg-slate-50 transition-colors font-medium text-sm"
-          >
-            <HelpCircle className="w-4 h-4" />
-            {t('unauthorized.getHelp')}
-          </button>
         </div>
       </div>
     </div>

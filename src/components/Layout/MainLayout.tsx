@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { Sidebar } from "./sidebar/Sidebar";
+import { useColorMode } from "../../context/ColorModeContext";
+import { APPEARANCE_PALETTES } from "../../config/appearancePalettes";
 import { Dashboard } from "../feature/Dashboard";
 import { UserList } from "../feature/user/UserList";
 import { Menu } from "../feature/menu/Menu";
@@ -91,6 +93,27 @@ const firstMenuPath = (menus: any[]): string | undefined => {
 };
 
 export const MainLayout = () => {
+  const { mode, primaryColor } = useColorMode();
+  useEffect(() => {
+    const root = document.documentElement;
+    root.dataset.colorMode = mode;
+    root.dataset.primaryColor = primaryColor;
+    root.dataset.appTheme = primaryColor;
+    const palette = APPEARANCE_PALETTES.find((item) => item.id === (primaryColor === "default" ? "blue" : primaryColor))!;
+    [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950].forEach((shade, index) => {
+      root.style.setProperty(`--primary-${shade}`, palette.scale[index]);
+    });
+    root.style.setProperty("--app-theme-primary", "var(--primary-600)");
+    root.style.setProperty("--app-theme-dark", "var(--primary-700)");
+    root.style.setProperty("--app-theme-foreground", "#ffffff");
+    root.style.colorScheme = mode;
+    return () => {
+      delete root.dataset.colorMode;
+      delete root.dataset.primaryColor;
+      delete root.dataset.appTheme;
+      root.style.removeProperty("color-scheme");
+    };
+  }, [mode, primaryColor]);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [showUnauthorized, setShowUnauthorized] = useState(false);
@@ -99,6 +122,8 @@ export const MainLayout = () => {
   const navigate = useNavigate();
   const { i18n } = useTranslation();
   const { menus } = useAuth();
+
+  console.log("location.pathname", location.pathname);
 
   // Watch for unauthorized route and show dialog
   useEffect(() => {
@@ -114,7 +139,7 @@ export const MainLayout = () => {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-50">
+    <div className="asqa-internal flex h-screen overflow-hidden bg-gray-50">
       {/* Sidebar with props */}
       <Sidebar
         collapsed={sidebarCollapsed}
@@ -190,7 +215,11 @@ export const MainLayout = () => {
               />
               <Route
                 path="commitee-assignment/view/:id"
-                element={<CommiteeAssignmentDetails />}
+                element={
+                  <ProtectedRoute permission="VIEW_COMMITEEASSIGNMENT">
+                    <CommiteeAssignmentDetails />
+                  </ProtectedRoute>
+                }
               />
               <Route path="commitee-list" element={<CommiteeList />} />
               <Route

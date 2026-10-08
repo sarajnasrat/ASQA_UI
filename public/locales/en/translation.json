@@ -1,4 +1,33 @@
 {
+  "appearance": {
+    "title": "Appearance",
+    "mode": "Mode",
+    "light": "Light",
+    "dark": "Dark",
+    "primaryColor": "Primary color",
+    "colors": {
+      "default": "Default",
+      "defaultTitle": "Default (original ASQA blue)",
+      "slate": "Slate",
+      "emerald": "Emerald",
+      "green": "Green",
+      "lime": "Lime",
+      "orange": "Orange",
+      "amber": "Amber",
+      "yellow": "Yellow",
+      "teal": "Teal",
+      "cyan": "Cyan",
+      "sky": "Sky",
+      "blue": "Blue",
+      "indigo": "Indigo",
+      "violet": "Violet",
+      "purple": "Purple",
+      "fuchsia": "Fuchsia",
+      "pink": "Pink",
+      "rose": "Rose",
+      "red": "Red"
+    }
+  },
   "navbar": {
     "welcome": "Afganistan Standard Quality and Authority(ASQA) Certification Management System",
     "notifications": "Notifications",
@@ -2073,6 +2102,7 @@
     "saveAndContinue": "Save & Continue",
     "status": "Status",
     "createdDate": "Created Date",
+    "updatedDate": "Updated Date",
     "selectScope": "Please first select a scope",
     "selectRequest": "Please first select a request",
     "pleaseWait": "Please wait",

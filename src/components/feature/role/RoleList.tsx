@@ -17,6 +17,7 @@ import { Badge } from "primereact/badge";
 import { Tooltip } from "primereact/tooltip";
 import { Tag } from "primereact/tag";
 import { useAuth } from "../../../context/AuthContext";
+import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 
 export const RoleList = () => {
   const { t, i18n } = useTranslation();
@@ -410,6 +411,22 @@ export const RoleList = () => {
       field: "permissions",
       body: permissionsTemplate,
       style: { minWidth: "300px" },
+    },
+    {
+      field: "createdDate",
+      header: t("common.createdDate"),
+      body: (rowData: any) =>
+        rowData.createdDate
+          ? IslamicDateFormatter.formatQamari(rowData.createdDate, true)
+          : "-",
+    },
+    {
+      field: "updatedDate",
+      header: t("common.updatedDate"),
+      body: (rowData: any) =>
+        rowData.updatedDate
+          ? IslamicDateFormatter.formatQamari(rowData.updatedDate, true)
+          : "-",
     },
     {
       header: t("role.columns.actions"),

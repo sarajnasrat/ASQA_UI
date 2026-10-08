@@ -121,7 +121,6 @@ export const Sidebar = ({
   const [menuItems, setMenuItems] = useState<any[]>([]);
   const [hoveredItem, setHoveredItem] = useState<number | null>(null);
   const [currentTheme, setCurrentTheme] = useState<ThemeKey>("modernBlue");
-  const [showThemeSelector, setShowThemeSelector] = useState(false);
 
   const theme = themes[currentTheme];
   const isRTL = i18n.language === "ps" || i18n.language === "dr";
@@ -139,12 +138,6 @@ export const Sidebar = ({
   }, [location.pathname]);
 
   useEffect(() => {
-    if (collapsed) {
-      setShowThemeSelector(false);
-    }
-  }, [collapsed]);
-
-  useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
         onMobileOpenChange(false);
@@ -159,7 +152,6 @@ export const Sidebar = ({
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         onMobileOpenChange(false);
-        setShowThemeSelector(false);
       }
     };
 
@@ -676,88 +668,6 @@ export const Sidebar = ({
           </div>
         </nav>
 
-        <div className={`relative shrink-0 border-t p-4 ${theme.border}`}>
-          {!collapsed ? (
-            <div className="space-y-3">
-              <div className="relative">
-                <button
-                  onClick={() => setShowThemeSelector((prev) => !prev)}
-                  className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-left transition-colors duration-200 ${theme.itemHover}`}
-                  aria-label="Change theme"
-                >
-                  <div className="flex items-center gap-2">
-                    <i className={`pi pi-palette text-sm ${theme.iconDefault}`} />
-                    <span className={`text-sm font-medium ${theme.textDefault}`}>
-                      {theme.name}
-                    </span>
-                  </div>
-                  <i
-                    className={`pi pi-chevron-down text-xs transition-transform duration-200 ${
-                      showThemeSelector ? "rotate-180" : ""
-                    } ${theme.iconDefault}`}
-                  />
-                </button>
-
-                {showThemeSelector && (
-                  <div
-                    className={`absolute bottom-full z-50 mb-2 min-w-[170px] rounded-xl border bg-white p-2 shadow-xl ${
-                      theme.border
-                    } ${isRTL ? "right-0" : "left-0"}`}
-                  >
-                    {(Object.keys(themes) as ThemeKey[]).map((key) => (
-                      <button
-                        key={key}
-                        onClick={() => {
-                          setCurrentTheme(key);
-                          setShowThemeSelector(false);
-                        }}
-                        className={`flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm transition-colors duration-200 ${
-                          currentTheme === key
-                            ? "bg-gray-100 font-semibold text-gray-900"
-                            : "text-gray-700 hover:bg-gray-50"
-                        }`}
-                      >
-                        <span
-                          className="h-3 w-3 rounded-full"
-                          style={{
-                            backgroundColor:
-                              key === "darkSlate"
-                                ? "#6366f1"
-                                : key === "emeraldGreen"
-                                  ? "#059669"
-                                  : key === "purpleIndigo"
-                                    ? "#7c3aed"
-                                    : key === "lightMinimal"
-                                      ? "#1f2937"
-                                      : "#2563eb",
-                          }}
-                        />
-                        <span>{themes[key].name}</span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <div className="pt-1 text-center">
-                <p className="text-[0.6875rem] font-medium text-gray-400">
-                  © 2026 ASQA System
-                </p>
-                <p className="mt-0.5 text-[0.625rem] text-gray-300">v2.0.0</p>
-              </div>
-            </div>
-          ) : (
-            <div className="flex justify-center">
-              <button
-                onClick={() => onCollapsedChange(false)}
-                className={`rounded-lg p-2 transition-colors duration-200 ${theme.itemHover}`}
-                aria-label="Expand sidebar"
-              >
-                <i className={`pi pi-palette text-sm ${theme.iconDefault}`} />
-              </button>
-            </div>
-          )}
-        </div>
       </aside>
 
       <style>{`

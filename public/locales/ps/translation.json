@@ -1,4 +1,33 @@
 {
+  "appearance": {
+    "title": "بڼه",
+    "mode": "حالت",
+    "light": "روښانه",
+    "dark": "تیاره",
+    "primaryColor": "اصلي رنګ",
+    "colors": {
+      "default": "ډیفالټ",
+      "defaultTitle": "ډیفالټ (د ASQA اصلي آبي رنګ)",
+      "slate": "سلیټ",
+      "emerald": "زمردي",
+      "green": "شنه",
+      "lime": "لیمويي",
+      "orange": "نارنجي",
+      "amber": "امبر",
+      "yellow": "ژېړ",
+      "teal": "شین آبي",
+      "cyan": "سیان",
+      "sky": "اسماني",
+      "blue": "آبي",
+      "indigo": "نیلي",
+      "violet": "بنفشي",
+      "purple": "ارغواني",
+      "fuchsia": "فوشیا",
+      "pink": "ګلابي",
+      "rose": "ګلابي سور",
+      "red": "سور"
+    }
+  },
   "navbar": {
     "welcome": "د افغانستان د کیفیت معیارونو اداره (ASQA) د تصدیق مدیریت سیسټم",
     "notifications": "خبرتیاوې",
@@ -2038,6 +2067,7 @@
     "saveAndContinue": "خوندي کړئ او ادامه ورکړئ",
     "status": "حالت",
     "createdDate": "د جوړېدو نیټه",
+    "updatedDate": "د تازه کېدو نیټه",
     "selectScope": "مهرباني وکړئ لومړی یوه ساحه وټاکئ",
     "selectRequest": "مهرباني وکړئ لومړی یوه غوښتنه وټاکئ",
     "pleaseWait": "مهرباني وکړئ انتظار وکړئ",

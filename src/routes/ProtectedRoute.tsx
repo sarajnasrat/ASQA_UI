@@ -43,6 +43,17 @@ const findMatchingMenu = (pathname: string, items: unknown[]) =>
       normalizePath(String(right.path)).length - normalizePath(String(left.path)).length,
     )[0];
 
+const getRoutePermission = (pathname: string) => {
+  const pathSegments = normalizePath(pathname).split("/").filter(Boolean);
+  if (
+    pathSegments.length === 3 &&
+    menuPathMatches(pathname, "/commitee-assignment/view/:id")
+  ) {
+    return "VIEW_COMMITEEASSIGNMENT";
+  }
+  return undefined;
+};
+
 interface ProtectedRouteProps {
   children: ReactNode;
   permission?: string;
@@ -71,6 +82,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   const routeMenu = findMatchingMenu(currentPath, routeMenus);
   const routePermission = (permission ||
+    getRoutePermission(currentPath) ||
     (typeof routeMenu?.permissionName === "string" ? routeMenu.permissionName : undefined))
       ?.trim()
       .toUpperCase();

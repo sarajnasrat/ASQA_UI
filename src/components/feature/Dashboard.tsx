@@ -553,7 +553,7 @@ export const Dashboard: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="app-dashboard min-h-screen bg-gray-50">
       <div className="px-3 py-3 md:px-6 md:py-6 max-w-8xl w mx-auto">
         {/* Header Section */}
         <div className="mb-6">

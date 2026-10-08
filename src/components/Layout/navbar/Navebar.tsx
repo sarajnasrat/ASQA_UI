@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
 import { useTranslation } from "react-i18next";
+import { AppearanceSelector } from "./AppearanceSelector";
 import "primeicons/primeicons.css";
 import { Badge } from "primereact/badge";
 import { OverlayPanel } from "primereact/overlaypanel";
@@ -211,7 +212,7 @@ export const Navbar = ({ collapsed = false, onMenuClick }: NavbarProps) => {
   };
 
   return (
-    <nav className="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
+    <nav className="asqa-navbar sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex min-w-0 items-center justify-between gap-3 py-2 sm:h-16 sm:py-0">
           <div className="-ml-4 flex min-w-0 flex-row items-center gap-3 sm:ml-0 sm:gap-4" dir="ltr">
@@ -239,6 +240,7 @@ export const Navbar = ({ collapsed = false, onMenuClick }: NavbarProps) => {
             </div>
           </div>
           <div className="flex shrink-0 items-center gap-2 sm:gap-4">
+            <AppearanceSelector />
             <button
               type="button"
               onClick={(e) => notificationOverlayRef.current?.toggle(e)}
@@ -261,7 +263,7 @@ export const Navbar = ({ collapsed = false, onMenuClick }: NavbarProps) => {
             <OverlayPanel
               ref={notificationOverlayRef}
               dismissable
-              className="z-[1000] w-[min(92vw,28rem)] max-w-md"
+              className="navbar-notifications z-[1000] w-[min(92vw,28rem)] max-w-md"
             >
               <div dir={isRTL ? "rtl" : "ltr"} className="min-w-0">
                 <div
@@ -438,6 +440,8 @@ export const Navbar = ({ collapsed = false, onMenuClick }: NavbarProps) => {
                       onClick={handleLogout}
                       label={t("navbar.logout")}
                       icon="pi pi-sign-out"
+                      severity="danger"
+                      text
                       className="w-full bg-red-50 hover:bg-red-100 text-red-600 border-none justify-start gap-3 px-4 py-2.5 rounded-lg text-sm transition-colors"
                     />
                   </div>

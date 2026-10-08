@@ -1,0 +1,1152 @@
+/* Application appearance tokens ----------------------------------------- */
+[data-color-mode="light"] {
+  --sidebar-expanded-width: 22rem;
+  --sidebar-collapsed-width: 5.5rem;
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --surface: #ffffff;
+  --surface-elevated: #ffffff;
+  --surface-secondary: #f1f5f9;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --muted: #e2e8f0;
+  --muted-foreground: #64748b;
+  --border: #cbd5e1;
+  --border-subtle: #e2e8f0;
+  --input: #ffffff;
+  --primary: var(--primary-600, #198ace);
+  --primary-hover: var(--primary-700, #1368b0);
+  --primary-active: var(--primary-800, #0e5a96);
+  --primary-foreground: var(--app-theme-foreground, #ffffff);
+  --primary-accent: var(--primary-600, #198ace);
+  --primary-subtle: var(--primary-50, #f5fbff);
+  --primary-subtle-foreground: var(--primary-800, #0e5a96);
+  --primary-border: var(--primary-200, #c8e6f5);
+  --primary-focus: color-mix(in srgb, var(--primary-500, #198ace) 28%, transparent);
+  --secondary: #f1f5f9;
+  --secondary-foreground: #334155;
+  --accent: #e0f0ff;
+  --accent-foreground: #0e5a96;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --overlay: rgb(15 23 42 / 45%);
+  --shadow-color: rgb(15 23 42 / 10%);
+  --chart-grid: #e2e8f0;
+  --chart-text: #64748b;
+}
+
+[data-color-mode="dark"] {
+  --background: #0b1220;
+  --foreground: #e5edf7;
+  --surface: #111b2e;
+  --surface-elevated: #172338;
+  --surface-secondary: #1c2940;
+  --card: #111b2e;
+  --card-foreground: #e5edf7;
+  --muted: #25344d;
+  --muted-foreground: #9fb0c7;
+  --border: #34445e;
+  --border-subtle: #26364f;
+  --input: #162238;
+  --primary: var(--primary-700, #1368b0);
+  --primary-hover: var(--primary-800, #0e5a96);
+  --primary-active: var(--primary-900, #0a416d);
+  --primary-foreground: #ffffff;
+  --primary-accent: var(--primary-400, #5ab5dc);
+  --primary-subtle: color-mix(in srgb, var(--primary-500, #198ace) 18%, var(--surface));
+  --primary-subtle-foreground: var(--primary-300, #9fd4ea);
+  --primary-border: color-mix(in srgb, var(--primary-400, #5ab5dc) 52%, var(--border));
+  --primary-focus: color-mix(in srgb, var(--primary-400, #5ab5dc) 36%, transparent);
+  --nav-background: #111b2e;
+  --nav-foreground: #e5edf7;
+  --nav-muted-foreground: #9fb0c7;
+  --nav-hover-background: #1c2940;
+  --nav-hover-foreground: #e5edf7;
+  --nav-active-background: var(--primary-subtle);
+  --nav-active-foreground: var(--primary-subtle-foreground);
+  --tab-background: transparent;
+  --tab-foreground: #9fb0c7;
+  --tab-hover-background: #1c2940;
+  --tab-hover-foreground: #e5edf7;
+  --tab-active-background: var(--primary-subtle);
+  --tab-active-foreground: var(--primary-subtle-foreground);
+  --secondary: #1c2940;
+  --secondary-foreground: #dce7f5;
+  --accent: #173b57;
+  --accent-foreground: #8ed2fa;
+  --destructive: #f87171;
+  --destructive-foreground: #1f0909;
+  --overlay: rgb(2 6 23 / 72%);
+  --shadow-color: rgb(0 0 0 / 35%);
+  --chart-grid: #2b3b55;
+  --chart-text: #a9b8cc;
+}
+
+
+/* System primary theme ---------------------------------------------------
+   PrimeReact and custom/Tailwind UI consume the same palette. Semantic
+   success, warning and danger classes are intentionally excluded. */
+[data-app-theme] {
+  --primary-color: var(--primary);
+  --primary-color-text: var(--primary-foreground);
+  --highlight-bg: var(--primary-subtle);
+  --highlight-text-color: var(--primary-active);
+  --focus-ring: 0 0 0 0.2rem var(--primary-focus);
+}
+
+[data-color-mode="dark"] {
+  --highlight-bg: var(--primary-subtle);
+  --highlight-text-color: var(--primary-subtle-foreground);
+}
+
+/* Established blue/indigo utilities in this codebase represent the former
+   brand color. Bridge them to semantic tokens without editing every screen. */
+[data-app-theme] .bg-blue-500,
+[data-app-theme] .bg-blue-600,
+[data-app-theme] .bg-indigo-500,
+[data-app-theme] .bg-indigo-600,
+[data-app-theme] .bg-\[\#198ace\] {
+  background-color: var(--primary) !important;
+}
+
+[data-app-theme] .hover\:bg-blue-600:hover,
+[data-app-theme] .hover\:bg-blue-700:hover,
+[data-app-theme] .hover\:bg-indigo-600:hover,
+[data-app-theme] .hover\:bg-indigo-700:hover,
+[data-app-theme] .hover\:bg-\[\#1368b0\]:hover {
+  background-color: var(--primary-hover) !important;
+}
+
+[data-app-theme] .active\:bg-blue-700:active,
+[data-app-theme] .active\:bg-indigo-700:active {
+  background-color: var(--primary-active) !important;
+}
+
+[data-app-theme] .bg-blue-50,
+[data-app-theme] .bg-indigo-50,
+[data-app-theme] .bg-blue-100,
+[data-app-theme] .bg-indigo-100,
+[data-app-theme] .hover\:bg-blue-50:hover,
+[data-app-theme] .hover\:bg-indigo-50:hover,
+[data-app-theme] .hover\:bg-blue-100:hover,
+[data-app-theme] .hover\:bg-indigo-100:hover {
+  background-color: var(--primary-subtle) !important;
+}
+
+[data-app-theme] .text-blue-500,
+[data-app-theme] .text-blue-600,
+[data-app-theme] .text-blue-700,
+[data-app-theme] .text-blue-800,
+[data-app-theme] .text-indigo-500,
+[data-app-theme] .text-indigo-600,
+[data-app-theme] .text-indigo-700,
+[data-app-theme] .text-indigo-800,
+[data-app-theme] .text-\[\#198ace\],
+[data-app-theme] .hover\:text-blue-600:hover,
+[data-app-theme] .hover\:text-blue-700:hover,
+[data-app-theme] .hover\:text-indigo-600:hover,
+[data-app-theme] .hover\:text-indigo-700:hover {
+  color: var(--primary) !important;
+}
+
+[data-app-theme] .border-blue-100,
+[data-app-theme] .border-blue-200,
+[data-app-theme] .border-blue-300,
+[data-app-theme] .border-indigo-100,
+[data-app-theme] .border-indigo-200,
+[data-app-theme] .border-indigo-300,
+[data-app-theme] .hover\:border-blue-300:hover,
+[data-app-theme] .hover\:border-blue-400:hover,
+[data-app-theme] .hover\:border-indigo-300:hover,
+[data-app-theme] .hover\:border-indigo-400:hover {
+  border-color: var(--primary-border) !important;
+}
+
+[data-app-theme] .border-blue-500,
+[data-app-theme] .border-blue-600,
+[data-app-theme] .border-blue-700,
+[data-app-theme] .border-indigo-500,
+[data-app-theme] .border-indigo-600,
+[data-app-theme] .border-indigo-700,
+[data-app-theme] .border-\[\#198ace\] {
+  border-color: var(--primary) !important;
+}
+
+[data-app-theme] .ring-blue-200,
+[data-app-theme] .ring-blue-400,
+[data-app-theme] .ring-blue-500,
+[data-app-theme] .ring-indigo-200,
+[data-app-theme] .ring-indigo-400,
+[data-app-theme] .ring-indigo-500,
+[data-app-theme] .focus\:ring-blue-200:focus,
+[data-app-theme] .focus\:ring-blue-500:focus,
+[data-app-theme] .focus\:ring-indigo-500:focus,
+[data-app-theme] .focus\:ring-\[\#198ace\]:focus,
+[data-app-theme] .focus-visible\:ring-blue-200:focus-visible {
+  --tw-ring-color: var(--primary-focus) !important;
+}
+
+[data-app-theme] .focus\:border-blue-500:focus,
+[data-app-theme] .focus\:border-indigo-500:focus,
+[data-app-theme] .focus\:border-\[\#198ace\]:focus {
+  border-color: var(--primary) !important;
+}
+
+[data-app-theme] .from-blue-500,
+[data-app-theme] .from-blue-600,
+[data-app-theme] .from-indigo-500,
+[data-app-theme] .from-indigo-600 {
+  --tw-gradient-from: var(--primary) var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: color-mix(in srgb, var(--primary) 0%, transparent) var(--tw-gradient-to-position) !important;
+}
+
+[data-app-theme] .from-\[\#198ace\] {
+  --tw-gradient-from: var(--primary) var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: color-mix(in srgb, var(--primary) 0%, transparent) var(--tw-gradient-to-position) !important;
+}
+
+[data-app-theme] .to-blue-600,
+[data-app-theme] .to-blue-700,
+[data-app-theme] .to-indigo-600,
+[data-app-theme] .to-indigo-700 {
+  --tw-gradient-to: var(--primary-hover) var(--tw-gradient-to-position) !important;
+}
+
+[data-app-theme] .to-\[\#63b3ed\] {
+  --tw-gradient-to: var(--primary-hover) var(--tw-gradient-to-position) !important;
+}
+
+/* Native and shared form interaction states */
+[data-app-theme] input:not([type="checkbox"]):not([type="radio"]):focus,
+[data-app-theme] textarea:focus,
+[data-app-theme] select:focus,
+[data-app-theme] .app-form-control:focus,
+[data-app-theme] .app-form-control:focus-visible {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 3px var(--primary-focus) !important;
+}
+
+[data-app-theme] input[type="checkbox"],
+[data-app-theme] input[type="radio"] {
+  accent-color: var(--primary);
+}
+
+/* PrimeReact primary and selected states */
+[data-app-theme] .p-button:not(.p-button-danger):not(.p-button-success):not(.p-button-warning):not(.p-button-secondary):not(.p-button-outlined):not(.p-button-text) {
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+}
+
+[data-app-theme] .p-button:not(.p-button-danger):not(.p-button-success):not(.p-button-warning):not(.p-button-secondary):not(.p-button-outlined):not(.p-button-text):enabled:hover {
+  background: var(--primary-hover) !important;
+  border-color: var(--primary-hover) !important;
+}
+
+[data-app-theme] .p-checkbox .p-checkbox-box.p-highlight,
+[data-app-theme] .p-radiobutton .p-radiobutton-box.p-highlight,
+[data-app-theme] .p-inputswitch.p-highlight .p-inputswitch-slider,
+[data-app-theme] .p-selectbutton .p-button.p-highlight {
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+}
+
+[data-app-theme] .p-dropdown-item.p-highlight,
+[data-app-theme] .p-multiselect-item.p-highlight,
+[data-app-theme] .p-listbox-item.p-highlight,
+[data-app-theme] .p-tree .p-treenode-content.p-highlight,
+[data-app-theme] .p-datepicker td > span.p-highlight,
+[data-app-theme] .select__option--is-selected {
+  background: var(--primary-subtle) !important;
+  color: var(--primary-subtle-foreground) !important;
+}
+
+[data-app-theme] .p-paginator .p-paginator-page.p-highlight {
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+  box-shadow: 0 0 0 3px var(--primary-focus) !important;
+}
+
+[data-app-theme] .p-progressbar .p-progressbar-value,
+[data-app-theme] .p-slider .p-slider-range,
+[data-app-theme] .p-slider .p-slider-handle,
+[data-app-theme] .p-steps .p-steps-item.p-highlight .p-steps-number {
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+}
+
+[data-app-theme] .p-progress-spinner-circle {
+  stroke: var(--primary) !important;
+}
+
+[data-app-theme] .p-inputtext:enabled:focus,
+[data-app-theme] .p-dropdown:not(.p-disabled).p-focus,
+[data-app-theme] .p-multiselect:not(.p-disabled).p-focus,
+[data-app-theme] .p-inputnumber:not(.p-disabled).p-inputwrapper-focus .p-inputtext {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 0.2rem var(--primary-focus) !important;
+}
+
+[data-app-theme] .p-inputswitch:not(.p-disabled):hover .p-inputswitch-slider,
+[data-app-theme] .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box:hover,
+[data-app-theme] .p-radiobutton:not(.p-radiobutton-disabled) .p-radiobutton-box:hover {
+  border-color: var(--primary) !important;
+}
+
+[data-app-theme] .p-tabview-nav li.p-highlight .p-tabview-nav-link,
+[data-app-theme] [role="tab"][aria-selected="true"] {
+  border-color: var(--primary) !important;
+  color: var(--primary) !important;
+}
+
+[data-app-theme] a:not(.app-navigation a):not([class*="text-red"]):not([class*="text-green"]):focus-visible,
+[data-app-theme] button:focus-visible {
+  outline-color: var(--primary);
+}
+
+[data-app-theme] .selected-btn-style,
+[data-app-theme] .selected-btn-style:hover {
+  border-color: var(--primary) !important;
+  background-color: var(--primary-subtle) !important;
+  color: var(--primary-active) !important;
+  box-shadow: 0 2px 6px var(--primary-focus) !important;
+}
+
+[data-app-theme] .primary-custom-btn-style,
+[data-app-theme] .primary-custom-btn-styles,
+[data-app-theme] .primary-custom-btn-style:hover,
+[data-app-theme] .primary-custom-btn-styles:hover {
+  color: var(--primary) !important;
+}
+
+[data-app-theme] .wcr-button-primary.p-button,
+[data-app-theme] .wcr-button-primary:not(.p-button) {
+  border-color: var(--primary) !important;
+  background: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+}
+
+[data-app-theme] .wcr-button-primary.p-button:hover,
+[data-app-theme] .wcr-button-primary:not(.p-button):hover {
+  border-color: var(--primary-hover) !important;
+  background: var(--primary-hover) !important;
+}
+
+/* Dark mode compatibility layer -----------------------------------------
+   Shared components use the tokens directly. These rules cover established
+   screens that still use Tailwind surface/text utilities and portal based UI. */
+[data-color-mode="dark"] .dashboard-layout,
+[data-color-mode="dark"] .dashboard-content,
+[data-color-mode="dark"] .dashboard-main,
+[data-color-mode="dark"] main {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+[data-color-mode="dark"] .bg-white:not(.app-navigation):not(.app-navigation *),
+[data-color-mode="dark"] .bg-gray-50:not(.app-navigation):not(.app-navigation *),
+[data-color-mode="dark"] .bg-slate-50:not(.app-navigation):not(.app-navigation *) {
+  background-color: var(--surface) !important;
+}
+
+[data-color-mode="dark"] .bg-gray-100:not(.app-navigation):not(.app-navigation *),
+[data-color-mode="dark"] .bg-slate-100:not(.app-navigation):not(.app-navigation *),
+[data-color-mode="dark"] .bg-gray-200:not(.app-navigation):not(.app-navigation *),
+[data-color-mode="dark"] .bg-slate-200:not(.app-navigation):not(.app-navigation *) {
+  background-color: var(--surface-secondary) !important;
+}
+
+[data-color-mode="dark"] .bg-slate-50\/70,
+[data-color-mode="dark"] .bg-white\/70,
+[data-color-mode="dark"] .bg-white\/80,
+[data-color-mode="dark"] .bg-white\/90 {
+  background-color: color-mix(in srgb, var(--surface) 88%, transparent) !important;
+}
+
+[data-color-mode="dark"] .text-black:not(.app-navigation):not(.app-navigation *),
+[data-color-mode="dark"] .text-gray-950:not(.app-navigation):not(.app-navigation *),
+[data-color-mode="dark"] .text-gray-900:not(.app-navigation):not(.app-navigation *),
+[data-color-mode="dark"] .text-gray-800:not(.app-navigation):not(.app-navigation *),
+[data-color-mode="dark"] .text-slate-950:not(.app-navigation):not(.app-navigation *),
+[data-color-mode="dark"] .text-slate-900:not(.app-navigation):not(.app-navigation *),
+[data-color-mode="dark"] .text-slate-800:not(.app-navigation):not(.app-navigation *) {
+  color: var(--foreground) !important;
+}
+
+[data-color-mode="dark"] .text-gray-700:not(.app-navigation):not(.app-navigation *),
+[data-color-mode="dark"] .text-gray-600:not(.app-navigation):not(.app-navigation *),
+[data-color-mode="dark"] .text-slate-700:not(.app-navigation):not(.app-navigation *),
+[data-color-mode="dark"] .text-slate-600:not(.app-navigation):not(.app-navigation *) {
+  color: var(--secondary-foreground) !important;
+}
+
+[data-color-mode="dark"] .text-gray-500:not(.app-navigation):not(.app-navigation *),
+[data-color-mode="dark"] .text-gray-400:not(.app-navigation):not(.app-navigation *),
+[data-color-mode="dark"] .text-slate-500:not(.app-navigation):not(.app-navigation *),
+[data-color-mode="dark"] .text-slate-400:not(.app-navigation):not(.app-navigation *) {
+  color: var(--muted-foreground) !important;
+}
+
+[data-color-mode="dark"] .border-gray-100:not(.app-navigation):not(.app-navigation *),
+[data-color-mode="dark"] .border-gray-200:not(.app-navigation):not(.app-navigation *),
+[data-color-mode="dark"] .border-gray-300:not(.app-navigation):not(.app-navigation *),
+[data-color-mode="dark"] .border-slate-100:not(.app-navigation):not(.app-navigation *),
+[data-color-mode="dark"] .border-slate-200:not(.app-navigation):not(.app-navigation *),
+[data-color-mode="dark"] .border-slate-300:not(.app-navigation):not(.app-navigation *) {
+  border-color: var(--border) !important;
+}
+
+[data-color-mode="dark"] input:not([type="checkbox"]):not([type="radio"]),
+[data-color-mode="dark"] textarea,
+[data-color-mode="dark"] select {
+  background-color: var(--input);
+  border-color: var(--border);
+  color: var(--foreground);
+  -webkit-text-fill-color: var(--foreground);
+}
+
+[data-color-mode="dark"] input::placeholder,
+[data-color-mode="dark"] textarea::placeholder {
+  color: var(--muted-foreground);
+  opacity: 1;
+}
+
+[data-color-mode="dark"] input:disabled,
+[data-color-mode="dark"] textarea:disabled,
+[data-color-mode="dark"] select:disabled,
+[data-color-mode="dark"] input[readonly],
+[data-color-mode="dark"] textarea[readonly] {
+  background-color: var(--surface-secondary);
+  color: var(--muted-foreground);
+  -webkit-text-fill-color: var(--muted-foreground);
+  opacity: 1;
+}
+
+[data-color-mode="dark"] select option {
+  background-color: var(--surface-elevated);
+  color: var(--foreground);
+}
+
+[data-color-mode="dark"] .shadow-sm,
+[data-color-mode="dark"] .shadow-md,
+[data-color-mode="dark"] .shadow-lg,
+[data-color-mode="dark"] .shadow-xl,
+[data-color-mode="dark"] .shadow-2xl {
+  --tw-shadow-color: var(--shadow-color);
+}
+
+[data-color-mode="dark"] .hover\:bg-slate-50:not(.app-navigation):not(.app-navigation *):hover,
+[data-color-mode="dark"] .hover\:bg-gray-50:not(.app-navigation):not(.app-navigation *):hover,
+[data-color-mode="dark"] .hover\:bg-slate-100:not(.app-navigation):not(.app-navigation *):hover,
+[data-color-mode="dark"] .hover\:bg-gray-100:not(.app-navigation):not(.app-navigation *):hover {
+  background-color: var(--surface-secondary) !important;
+}
+
+/* PrimeReact surfaces and portals */
+[data-color-mode="dark"] .p-component,
+[data-color-mode="dark"] .p-inputtext,
+[data-color-mode="dark"] .p-dropdown,
+[data-color-mode="dark"] .p-multiselect,
+[data-color-mode="dark"] .p-calendar,
+[data-color-mode="dark"] .p-inputnumber-input {
+  color: var(--foreground);
+}
+
+[data-color-mode="dark"] .p-inputtext,
+[data-color-mode="dark"] .p-dropdown,
+[data-color-mode="dark"] .p-multiselect,
+[data-color-mode="dark"] .p-calendar .p-inputtext,
+[data-color-mode="dark"] .p-inputnumber-input {
+  background: var(--input) !important;
+  border-color: var(--border) !important;
+}
+
+[data-color-mode="dark"] .p-dropdown-label,
+[data-color-mode="dark"] .p-multiselect-label,
+[data-color-mode="dark"] .p-dropdown-trigger,
+[data-color-mode="dark"] .p-multiselect-trigger {
+  color: var(--foreground) !important;
+}
+
+[data-color-mode="dark"] .p-dropdown-panel,
+[data-color-mode="dark"] .p-multiselect-panel,
+[data-color-mode="dark"] .p-datepicker,
+[data-color-mode="dark"] .p-dialog,
+[data-color-mode="dark"] .p-overlaypanel,
+[data-color-mode="dark"] .p-menu,
+[data-color-mode="dark"] .p-tieredmenu,
+[data-color-mode="dark"] .p-confirm-dialog {
+  background: var(--surface-elevated) !important;
+  border-color: var(--border) !important;
+  color: var(--foreground) !important;
+}
+
+[data-color-mode="dark"] .p-dropdown-header,
+[data-color-mode="dark"] .p-multiselect-header,
+[data-color-mode="dark"] .p-datepicker-header,
+[data-color-mode="dark"] .p-dialog-header,
+[data-color-mode="dark"] .p-dialog-content,
+[data-color-mode="dark"] .p-dialog-footer {
+  background: var(--surface-elevated) !important;
+  border-color: var(--border) !important;
+  color: var(--foreground) !important;
+}
+
+[data-color-mode="dark"] .p-dropdown-items,
+[data-color-mode="dark"] .p-multiselect-items,
+[data-color-mode="dark"] .p-menu-list,
+[data-color-mode="dark"] .p-tieredmenu-root-list {
+  background: var(--surface-elevated) !important;
+}
+
+[data-color-mode="dark"] .p-dropdown-item,
+[data-color-mode="dark"] .p-multiselect-item,
+[data-color-mode="dark"] .p-menuitem-link,
+[data-color-mode="dark"] .p-datepicker td > span {
+  color: var(--foreground) !important;
+}
+
+[data-color-mode="dark"] .p-dropdown-item:not(.p-highlight):not(.p-disabled):hover,
+[data-color-mode="dark"] .p-multiselect-item:not(.p-highlight):not(.p-disabled):hover,
+[data-color-mode="dark"] .p-menuitem-link:hover,
+[data-color-mode="dark"] .p-datepicker td > span:not(.p-highlight):hover {
+  background: var(--surface-secondary) !important;
+}
+
+[data-color-mode="dark"] .p-dropdown-item.p-highlight,
+[data-color-mode="dark"] .p-multiselect-item.p-highlight,
+[data-color-mode="dark"] .p-listbox-item.p-highlight,
+[data-color-mode="dark"] .p-tree .p-treenode-content.p-highlight,
+[data-color-mode="dark"] .p-datepicker td > span.p-highlight,
+[data-color-mode="dark"] .p-menuitem.p-highlight > .p-menuitem-content,
+[data-color-mode="dark"] .p-menuitem.p-focus > .p-menuitem-content {
+  background: var(--primary-subtle) !important;
+  color: var(--primary-subtle-foreground) !important;
+}
+
+[data-color-mode="dark"] .p-menuitem.p-highlight > .p-menuitem-content .p-menuitem-link,
+[data-color-mode="dark"] .p-menuitem.p-highlight > .p-menuitem-content .p-menuitem-text,
+[data-color-mode="dark"] .p-menuitem.p-highlight > .p-menuitem-content .p-menuitem-icon,
+[data-color-mode="dark"] .p-menuitem.p-focus > .p-menuitem-content .p-menuitem-link,
+[data-color-mode="dark"] .p-menuitem.p-focus > .p-menuitem-content .p-menuitem-text,
+[data-color-mode="dark"] .p-menuitem.p-focus > .p-menuitem-content .p-menuitem-icon {
+  color: var(--primary-subtle-foreground) !important;
+}
+
+[data-color-mode="dark"] .p-menuitem:not(.p-highlight) > .p-menuitem-content .p-menuitem-link,
+[data-color-mode="dark"] .p-menuitem:not(.p-highlight) > .p-menuitem-content .p-menuitem-text,
+[data-color-mode="dark"] .p-menuitem:not(.p-highlight) > .p-menuitem-content .p-menuitem-icon {
+  color: var(--foreground) !important;
+}
+
+[data-color-mode="dark"] .p-datatable,
+[data-color-mode="dark"] .p-datatable-wrapper,
+[data-color-mode="dark"] .p-datatable-table,
+[data-color-mode="dark"] .p-datatable-header,
+[data-color-mode="dark"] .p-datatable-footer,
+[data-color-mode="dark"] .p-paginator {
+  background: var(--surface) !important;
+  border-color: var(--border) !important;
+  color: var(--foreground) !important;
+}
+
+[data-color-mode="dark"] .p-datatable .p-datatable-thead > tr > th {
+  background: var(--surface-secondary) !important;
+  border-color: var(--border) !important;
+  color: var(--foreground) !important;
+}
+
+[data-color-mode="dark"] .p-datatable .p-datatable-tbody > tr {
+  background: var(--surface) !important;
+  color: var(--foreground) !important;
+}
+
+[data-color-mode="dark"] .p-datatable .p-datatable-tbody > tr:nth-child(even) {
+  background: color-mix(in srgb, var(--surface-secondary) 48%, var(--surface)) !important;
+}
+
+[data-color-mode="dark"] .p-datatable .p-datatable-tbody > tr:not(.p-highlight):hover {
+  background: var(--surface-secondary) !important;
+}
+
+[data-color-mode="dark"] .p-datatable .p-datatable-tbody > tr > td {
+  border-color: var(--border-subtle) !important;
+  color: var(--foreground) !important;
+}
+
+[data-color-mode="dark"] .p-paginator .p-paginator-page,
+[data-color-mode="dark"] .p-paginator .p-paginator-prev,
+[data-color-mode="dark"] .p-paginator .p-paginator-next,
+[data-color-mode="dark"] .p-paginator .p-paginator-first,
+[data-color-mode="dark"] .p-paginator .p-paginator-last,
+[data-color-mode="dark"] .p-paginator .p-dropdown {
+  color: var(--muted-foreground) !important;
+}
+
+[data-color-mode="dark"] .p-tabview,
+[data-color-mode="dark"] .p-tabview-nav,
+[data-color-mode="dark"] .p-tabview-panels,
+[data-color-mode="dark"] .p-accordion-header-link,
+[data-color-mode="dark"] .p-accordion-content {
+  background: var(--surface) !important;
+  border-color: var(--border) !important;
+  color: var(--foreground) !important;
+}
+
+[data-color-mode="dark"] .p-tabview-nav li .p-tabview-nav-link {
+  background: var(--tab-background) !important;
+  color: var(--tab-foreground) !important;
+  border-color: var(--border);
+}
+
+[data-color-mode="dark"] .p-tabview-nav li:not(.p-highlight) .p-tabview-nav-link:hover {
+  background: var(--tab-hover-background) !important;
+  color: var(--tab-hover-foreground) !important;
+}
+
+[data-color-mode="dark"] .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+  background: var(--tab-active-background) !important;
+  border-color: var(--primary-accent) !important;
+  color: var(--tab-active-foreground) !important;
+}
+
+[data-color-mode="dark"] .p-tabview-nav li.p-disabled .p-tabview-nav-link {
+  background: transparent !important;
+  color: var(--muted-foreground) !important;
+  opacity: 0.55;
+}
+
+[data-color-mode="dark"] [role="tab"] {
+  background: var(--tab-background) !important;
+  color: var(--tab-foreground) !important;
+}
+
+[data-color-mode="dark"] [role="tab"]:not([aria-selected="true"]):not(:disabled):hover {
+  background: var(--tab-hover-background) !important;
+  color: var(--tab-hover-foreground) !important;
+}
+
+[data-color-mode="dark"] [role="tab"][aria-selected="true"] {
+  background: var(--tab-active-background) !important;
+  border-color: var(--primary-accent) !important;
+  color: var(--tab-active-foreground) !important;
+}
+
+[data-color-mode="dark"] [role="tab"]:disabled,
+[data-color-mode="dark"] [role="tab"][aria-disabled="true"] {
+  background: transparent !important;
+  color: var(--muted-foreground) !important;
+  opacity: 0.55;
+}
+
+/* Other portal libraries used across forms */
+[data-color-mode="dark"] .rmdp-wrapper,
+[data-color-mode="dark"] .rmdp-calendar,
+[data-color-mode="dark"] .rmdp-top-class,
+[data-color-mode="dark"] .rmdp-day-picker,
+[data-color-mode="dark"] .rmdp-header-values,
+[data-color-mode="dark"] .rmdp-week-day {
+  background: var(--surface-elevated) !important;
+  color: var(--foreground) !important;
+}
+
+[data-color-mode="dark"] .rmdp-day span:not(.highlight) {
+  color: var(--foreground);
+}
+
+[data-color-mode="dark"] .rmdp-day:not(.rmdp-disabled):not(.rmdp-day-hidden) span:hover {
+  background: var(--surface-secondary) !important;
+}
+
+[data-color-mode="dark"] .swal2-popup {
+  background: var(--surface-elevated);
+  color: var(--foreground);
+}
+
+[data-color-mode="dark"] .swal2-title,
+[data-color-mode="dark"] .swal2-html-container,
+[data-color-mode="dark"] .swal2-close {
+  color: var(--foreground);
+}
+
+[data-color-mode="dark"] .p-toast-message {
+  box-shadow: 0 12px 28px var(--shadow-color);
+}
+
+[data-color-mode="dark"] .app-data-table,
+[data-color-mode="dark"] .app-form-checkbox-control {
+  border-color: var(--border) !important;
+}
+
+[data-color-mode="dark"] .min-h-screen.bg-gray-50,
+[data-color-mode="dark"] .min-h-screen.bg-slate-50 {
+  background-color: var(--background) !important;
+}
+
+[data-color-mode="dark"] .select__control,
+[data-color-mode="dark"] .select__menu,
+[data-color-mode="dark"] .select__menu-list {
+  background-color: var(--surface-elevated) !important;
+  border-color: var(--border) !important;
+  color: var(--foreground) !important;
+}
+
+[data-color-mode="dark"] .select__single-value,
+[data-color-mode="dark"] .select__input-container,
+[data-color-mode="dark"] .select__option {
+  color: var(--foreground) !important;
+}
+
+[data-color-mode="dark"] .select__placeholder,
+[data-color-mode="dark"] .select__indicator,
+[data-color-mode="dark"] .select__input-container {
+  color: var(--muted-foreground) !important;
+}
+
+[data-color-mode="dark"] .select__indicator-separator {
+  background-color: var(--border) !important;
+}
+
+[data-color-mode="dark"] .select__option--is-focused {
+  background-color: var(--surface-secondary) !important;
+}
+
+[data-color-mode="dark"] .select__option--is-selected {
+  background-color: var(--primary-subtle) !important;
+  color: var(--primary-subtle-foreground) !important;
+}
+
+[data-color-mode="dark"] [data-sonner-toast],
+[data-color-mode="dark"] .go2072408551,
+[data-color-mode="dark"] .react-hot-toast {
+  background: var(--surface-elevated) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+/* Printed documents retain their official light appearance. */
+@media print {
+  [data-color-mode="dark"] #print-content,
+  [data-color-mode="dark"] #print-content * {
+    color-scheme: light;
+  }
+}
+
+/* Appearance navigation behavior ---------------------------------------
+   Light mode uses the selected palette for navigation. Dark mode keeps all
+   navigation surfaces dark and uses the selected palette only as an accent. */
+[data-color-mode="light"] header.app-navigation {
+  background: var(--primary-600) !important;
+  color: var(--app-theme-foreground) !important;
+}
+
+[data-color-mode="light"] header.app-navigation > div > a,
+[data-color-mode="light"] header.app-navigation > div > a .text-slate-500 {
+  color: var(--app-theme-foreground) !important;
+}
+
+[data-color-mode="light"] header.app-navigation .bg-blue-600,
+[data-color-mode="light"] header.app-navigation .hover\:bg-blue-700:hover {
+  background: var(--primary-700) !important;
+  border-color: var(--primary-800) !important;
+  color: var(--app-theme-foreground) !important;
+}
+
+[data-color-mode="light"] aside.app-navigation {
+  background: var(--primary-700) !important;
+  border-color: var(--primary-800) !important;
+  color: var(--app-theme-foreground) !important;
+}
+
+[data-color-mode="light"] aside.app-navigation > div:first-child,
+[data-color-mode="light"] aside.app-navigation .bg-blue-600 {
+  background: var(--primary-800) !important;
+  color: var(--app-theme-foreground) !important;
+}
+
+[data-color-mode="light"] aside.app-navigation .text-gray-800,
+[data-color-mode="light"] aside.app-navigation .text-gray-600,
+[data-color-mode="light"] aside.app-navigation .text-gray-500,
+[data-color-mode="light"] aside.app-navigation .text-slate-500 {
+  color: var(--app-theme-foreground) !important;
+}
+
+[data-color-mode="light"] aside.app-navigation .bg-slate-100 {
+  background: rgb(255 255 255 / 14%) !important;
+}
+
+[data-color-mode="light"] aside.app-navigation .hover\:bg-slate-50:hover {
+  background: rgb(255 255 255 / 14%) !important;
+  color: var(--app-theme-foreground) !important;
+}
+
+[data-color-mode="light"] aside.app-navigation .hover\:bg-blue-100:hover {
+  background: var(--primary-100) !important;
+  color: var(--primary-900) !important;
+}
+
+[data-color-mode="dark"] header.app-navigation,
+[data-color-mode="dark"] aside.app-navigation {
+  background: var(--nav-background) !important;
+  border-color: var(--border) !important;
+  color: var(--nav-foreground) !important;
+}
+
+[data-color-mode="dark"] header.app-navigation > div > a,
+[data-color-mode="dark"] header.app-navigation > div > a .text-slate-500,
+[data-color-mode="dark"] .app-navigation .text-gray-800,
+[data-color-mode="dark"] .app-navigation .text-gray-700,
+[data-color-mode="dark"] .app-navigation .text-gray-600,
+[data-color-mode="dark"] .app-navigation .text-gray-500,
+[data-color-mode="dark"] .app-navigation .text-slate-500 {
+  color: var(--nav-foreground) !important;
+}
+
+[data-color-mode="dark"] aside.app-navigation > div:first-child,
+[data-color-mode="dark"] header.app-navigation .bg-blue-600,
+[data-color-mode="dark"] aside.app-navigation .bg-blue-600 {
+  background: var(--surface-secondary) !important;
+  border-color: var(--border) !important;
+  color: var(--foreground) !important;
+}
+
+[data-color-mode="dark"] aside.app-navigation nav .bg-blue-600 {
+  background: var(--nav-active-background) !important;
+  color: var(--nav-active-foreground) !important;
+  box-shadow: inset 3px 0 0 var(--primary-accent) !important;
+}
+
+[dir="rtl"] [data-color-mode="dark"] aside.app-navigation nav .bg-blue-600,
+[data-color-mode="dark"][dir="rtl"] aside.app-navigation nav .bg-blue-600 {
+  box-shadow: inset -3px 0 0 var(--primary-accent) !important;
+}
+
+[data-color-mode="dark"] aside.app-navigation nav .bg-blue-600 .text-white,
+[data-color-mode="dark"] aside.app-navigation nav .bg-blue-600 i {
+  color: var(--nav-active-foreground) !important;
+}
+
+[data-color-mode="dark"] aside.app-navigation .hover\:bg-slate-50:hover,
+[data-color-mode="dark"] aside.app-navigation .hover\:bg-blue-100:hover {
+  background: var(--nav-hover-background) !important;
+  color: var(--nav-hover-foreground) !important;
+}
+
+[data-color-mode="dark"] aside.app-navigation nav .bg-slate-100 {
+  background: var(--surface-secondary) !important;
+  color: var(--nav-muted-foreground) !important;
+}
+
+[data-color-mode="dark"] aside.app-navigation nav .text-gray-500,
+[data-color-mode="dark"] aside.app-navigation nav .text-slate-500 {
+  color: var(--nav-muted-foreground) !important;
+}
+
+[data-color-mode="dark"] aside.app-navigation nav .text-gray-600,
+[data-color-mode="dark"] aside.app-navigation nav .text-gray-700,
+[data-color-mode="dark"] aside.app-navigation nav .text-gray-800 {
+  color: var(--nav-foreground) !important;
+}
+
+[data-color-mode="dark"] aside.app-navigation nav .border-gray-200 {
+  border-color: var(--border) !important;
+}
+
+[data-color-mode="dark"] aside.app-navigation nav button:focus-visible,
+[data-color-mode="dark"] aside.app-navigation nav a:focus-visible,
+[data-color-mode="dark"] [role="tab"]:focus-visible {
+  outline: 2px solid var(--primary-accent) !important;
+  outline-offset: 2px;
+}
+
+[data-color-mode="dark"] .app-navigation .bg-white,
+[data-color-mode="dark"] .app-navigation .appearance-trigger {
+  background: var(--surface-elevated) !important;
+  border-color: var(--border) !important;
+  color: var(--foreground) !important;
+}
+
+.app-navigation .appearance-panel {
+  background: var(--surface-elevated) !important;
+  border-color: var(--border) !important;
+  color: var(--foreground) !important;
+}
+
+.app-navigation .appearance-panel .text-slate-900,
+.app-navigation .appearance-panel .text-slate-800 {
+  color: var(--foreground) !important;
+}
+
+.app-navigation .appearance-panel .text-slate-500 {
+  color: var(--muted-foreground) !important;
+}
+
+.app-navigation .appearance-panel .bg-slate-100 {
+  background: var(--surface-secondary) !important;
+}
+
+.app-navigation .appearance-panel .bg-white {
+  background: var(--surface-elevated) !important;
+  color: var(--foreground) !important;
+}
+
+/* The Default palette restores the application's original light navigation. */
+[data-color-mode="light"][data-app-theme="default"] header.app-navigation {
+  background: #f3f4f6 !important;
+  color: #1f2937 !important;
+}
+
+[data-color-mode="light"][data-app-theme="default"] header.app-navigation > div > a {
+  color: #000000 !important;
+}
+
+[data-color-mode="light"][data-app-theme="default"] header.app-navigation > div > a .text-slate-500 {
+  color: #64748b !important;
+}
+
+[data-color-mode="light"][data-app-theme="default"] header.app-navigation .bg-blue-600 {
+  background: #198ace !important;
+  border-color: #1368b0 !important;
+  color: #ffffff !important;
+}
+
+[data-color-mode="light"][data-app-theme="default"] header.app-navigation .hover\:bg-blue-700:hover {
+  background: #1368b0 !important;
+  border-color: #0e5a96 !important;
+  color: #ffffff !important;
+}
+
+[data-color-mode="light"][data-app-theme="default"] aside.app-navigation {
+  background: #ffffff !important;
+  border-color: #e5e7eb !important;
+  color: #1f2937 !important;
+}
+
+[data-color-mode="light"][data-app-theme="default"] aside.app-navigation > div:first-child,
+[data-color-mode="light"][data-app-theme="default"] aside.app-navigation nav .bg-blue-600 {
+  background: #198ace !important;
+  color: #ffffff !important;
+}
+
+[data-color-mode="light"][data-app-theme="default"] aside.app-navigation > div:first-child {
+  border-color: #1368b0 !important;
+}
+
+[data-color-mode="light"][data-app-theme="default"] aside.app-navigation nav .bg-blue-600 .text-white,
+[data-color-mode="light"][data-app-theme="default"] aside.app-navigation nav .bg-blue-600 i {
+  color: #ffffff !important;
+}
+
+[data-color-mode="light"][data-app-theme="default"] aside.app-navigation .text-gray-800 {
+  color: #1f2937 !important;
+}
+
+[data-color-mode="light"][data-app-theme="default"] aside.app-navigation .text-gray-600 {
+  color: #4b5563 !important;
+}
+
+[data-color-mode="light"][data-app-theme="default"] aside.app-navigation .text-gray-500 {
+  color: #6b7280 !important;
+}
+
+[data-color-mode="light"][data-app-theme="default"] aside.app-navigation .text-slate-500 {
+  color: #64748b !important;
+}
+
+[data-color-mode="light"][data-app-theme="default"] aside.app-navigation .bg-slate-100 {
+  background: #f1f5f9 !important;
+}
+
+[data-color-mode="light"][data-app-theme="default"] aside.app-navigation .hover\:bg-slate-50:hover {
+  background: #f8fafc !important;
+  color: #1f2937 !important;
+}
+
+[data-color-mode="light"][data-app-theme="default"] aside.app-navigation .hover\:bg-blue-100:hover {
+  background: #e0f0ff !important;
+  color: #0e5a96 !important;
+}
+[data-app-theme] { --app-primary: var(--primary); }
+[data-color-mode="light"] .app-sidebar { background: var(--primary-700) !important; }
+[data-color-mode="light"] .app-sidebar :is(.text-gray-700, .text-gray-400, .text-gray-600) { color: #fff !important; }
+[data-app-theme] .app-sidebar nav { background: transparent !important; }
+[data-app-theme] .app-sidebar .bg-blue-50 { background: var(--primary-subtle) !important; }
+[data-app-theme] .app-sidebar .bg-blue-50 :is(span, i) { color: var(--primary-subtle-foreground) !important; }
+/* ASQA navigation, dashboard and PrimeReact tab adapters. */
+html[data-app-theme] { --app-primary: var(--primary); }
+html[data-color-mode="light"] .asqa-internal > div > nav {
+  background: var(--primary-600) !important;
+  border-color: var(--primary-700) !important;
+}
+html[data-color-mode="light"] .app-sidebar {
+  background: var(--primary-700) !important;
+  border-color: var(--primary-800) !important;
+}
+html[data-color-mode="light"] .app-sidebar :is(.text-gray-700, .text-gray-600, .text-gray-400) { color: #fff !important; }
+html[data-app-theme] .app-sidebar nav { background: transparent !important; }
+html[data-app-theme] :is(.p-tabmenu-nav, .p-tabview-nav) {
+  background: var(--surface) !important;
+  border-color: var(--border) !important;
+}
+html[data-app-theme] :is(.p-tabmenu .p-menuitem-link, .p-tabview .p-tabview-nav-link) {
+  background: var(--surface) !important;
+  color: var(--muted-foreground) !important;
+  border-color: var(--border) !important;
+}
+html[data-app-theme] :is(.p-tabmenu .p-highlight .p-menuitem-link, .p-tabview .p-highlight .p-tabview-nav-link) {
+  background: var(--primary-subtle) !important;
+  color: var(--primary-subtle-foreground) !important;
+  border-color: var(--primary-accent) !important;
+}
+html[data-app-theme] :is(.p-tabmenu .p-highlight .p-menuitem-text, .p-tabmenu .p-highlight .p-menuitem-icon) { color: var(--primary-subtle-foreground) !important; }
+html[data-color-mode="dark"] :is(.p-tabview-panels, .p-tabview-panel, .p-tabmenu, .p-tabview) {
+  background: var(--surface) !important;
+  color: var(--foreground) !important;
+}
+html[data-app-theme] .app-dashboard :is(.bg-purple-50, .bg-emerald-50, .bg-green-50, .bg-orange-50, .bg-blue-50, .bg-indigo-50) { background: var(--primary-subtle) !important; }
+html[data-app-theme] .app-dashboard :is(.text-purple-600, .text-emerald-600, .text-green-600, .text-orange-600, .text-blue-600, .text-indigo-600) { color: var(--primary-accent) !important; }
+html[data-app-theme] .app-dashboard :is(.border-emerald-100, .border-blue-100, .border-indigo-100) { border-color: var(--primary-border) !important; }
+html[data-app-theme] .app-dashboard :is(.bg-emerald-600, .bg-purple-600) { background: var(--primary) !important; }
+html[data-app-theme] :is(.from-blue-600, .from-indigo-600) {
+  --tw-gradient-from: var(--primary);
+  --tw-gradient-stops: var(--primary), var(--primary-hover);
+}
+html[data-app-theme] :is(.to-blue-700, .to-indigo-700) { --tw-gradient-to: var(--primary-hover); }
+html[data-app-theme] .p-datatable .p-datatable-thead > tr > th {
+  background: var(--primary-subtle) !important;
+  color: var(--primary-subtle-foreground) !important;
+  border-color: var(--primary-border) !important;
+}
+
+/* Navbar controls and their portals share surfaces, not the navigation foreground. */
+html[data-app-theme] .asqa-navbar {
+  background: var(--primary-600) !important;
+  border-color: var(--primary-700) !important;
+  color: var(--primary-foreground) !important;
+}
+html[data-color-mode="dark"] .asqa-navbar {
+  background: var(--surface) !important;
+  border-color: var(--border) !important;
+  color: var(--foreground) !important;
+}
+html[data-app-theme] .asqa-navbar :is(.text-gray-400, .text-gray-500, .text-gray-600, .text-gray-700, .text-gray-800) {
+  color: inherit !important;
+}
+html[data-app-theme] .asqa-navbar :is(.hover\:bg-gray-100):hover {
+  background: var(--primary-subtle) !important;
+  color: var(--primary-subtle-foreground) !important;
+}
+html[data-app-theme] .asqa-navbar :is(section, .absolute.bg-white) {
+  background: var(--surface-elevated) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+html[data-app-theme] .asqa-navbar section :is(button, span, .pi) {
+  color: inherit !important;
+}
+html[data-app-theme] .asqa-navbar .p-dropdown {
+  background: var(--surface-elevated) !important;
+  color: var(--foreground) !important;
+}
+html[data-app-theme] .asqa-navbar .p-dropdown :is(span, .p-dropdown-trigger) {
+  color: var(--foreground) !important;
+}
+html[data-app-theme] .asqa-navbar :is(.bg-purple-50, .bg-blue-50) {
+  background: var(--primary-subtle) !important;
+}
+html[data-app-theme] .asqa-navbar :is(.text-purple-600, .text-blue-600) {
+  color: var(--primary-accent) !important;
+}
+html[data-app-theme] .asqa-navbar :is(.from-blue-500, .to-purple-600) {
+  background-image: linear-gradient(135deg, var(--primary-500), var(--primary-700)) !important;
+}
+html[data-app-theme] .asqa-navbar .from-blue-50 {
+  background-image: none !important;
+  background-color: var(--primary-subtle) !important;
+  color: var(--primary-subtle-foreground) !important;
+}
+html[data-app-theme] .navbar-notifications .bg-blue-50\/70 {
+  background: var(--primary-subtle) !important;
+}
+html[data-app-theme] .navbar-notifications .hover\:bg-blue-50:hover {
+  background: var(--primary-subtle) !important;
+}
+html[data-color-mode="dark"] .asqa-navbar .bg-red-50 {
+  background: color-mix(in srgb, #ef4444 15%, var(--surface)) !important;
+}
+
+/* Body-mounted overlays, their content, arrows and modal backdrops. */
+html[data-color-mode="dark"] :is(.p-overlaypanel, .p-overlaypanel-content, .p-sidebar, .p-sidebar-content, .p-autocomplete-panel, .p-password-panel, .p-tieredmenu .p-submenu-list, .p-contextmenu, .p-megamenu) {
+  background: var(--surface-elevated) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+html[data-color-mode="dark"] :is(.p-dialog-mask.p-component-overlay, .p-sidebar-mask.p-component-overlay, .p-blockui.p-component-overlay) {
+  background-color: var(--overlay) !important;
+}
+html[data-color-mode="dark"] .p-overlaypanel::after {
+  border-color: transparent !important;
+  border-bottom-color: var(--surface-elevated) !important;
+}
+html[data-color-mode="dark"] .p-overlaypanel::before {
+  border-color: transparent !important;
+  border-bottom-color: var(--border) !important;
+}
+html[data-color-mode="dark"] .p-overlaypanel.p-overlaypanel-flipped::after {
+  border-bottom-color: transparent !important;
+  border-top-color: var(--surface-elevated) !important;
+}
+html[data-color-mode="dark"] .p-overlaypanel.p-overlaypanel-flipped::before {
+  border-bottom-color: transparent !important;
+  border-top-color: var(--border) !important;
+}
+html[data-color-mode="dark"] :is(.p-overlaypanel-close, .p-sidebar-close) {
+  background: var(--surface-secondary) !important;
+  color: var(--foreground) !important;
+}
+html[data-color-mode="dark"] .p-tooltip .p-tooltip-text {
+  background: var(--surface-elevated) !important;
+  color: var(--foreground) !important;
+  border: 1px solid var(--border);
+}
+html[data-color-mode="dark"] .p-tooltip-right .p-tooltip-arrow { border-right-color: var(--surface-elevated) !important; }
+html[data-color-mode="dark"] .p-tooltip-left .p-tooltip-arrow { border-left-color: var(--surface-elevated) !important; }
+html[data-color-mode="dark"] .p-tooltip-top .p-tooltip-arrow { border-top-color: var(--surface-elevated) !important; }
+html[data-color-mode="dark"] .p-tooltip-bottom .p-tooltip-arrow { border-bottom-color: var(--surface-elevated) !important; }
+
+/* Light surfaces use dark text; navigation inherits its contrasting foreground. */
+html[data-color-mode="light"] .asqa-navbar :is(section, .absolute.bg-white) {
+  color: var(--foreground) !important;
+}
+html[data-color-mode="light"] .asqa-navbar :is(section, .absolute.bg-white) :is(button, span, p, legend, h2, .pi) {
+  color: var(--foreground) !important;
+}
+html[data-color-mode="light"] .app-sidebar :is(.bg-blue-50, .hover\:bg-blue-50:hover) :is(span, i) {
+  color: var(--primary-subtle-foreground) !important;
+}
+html[data-color-mode="light"] .asqa-navbar section :is(.text-gray-500, legend) {
+  color: var(--muted-foreground) !important;
+}
+html[data-color-mode="light"] .asqa-navbar .bg-red-50 :is(span, .pi) {
+  color: #b91c1c !important;
+}
+html[data-color-mode="light"] :is(.p-overlaypanel, .p-dropdown-panel, .p-menu, .p-tieredmenu, .p-dialog-content) {
+  color: var(--foreground);
+}
+
+/* Default restores ASQA's original Modern Blue navigation. */
+html[data-color-mode="light"][data-app-theme="default"] .asqa-navbar,
+html[data-color-mode="light"][data-app-theme="default"] .asqa-internal > div > nav,
+html[data-color-mode="light"][data-app-theme="default"] .app-sidebar {
+  background: #fff !important;
+  color: #374151 !important;
+  border-color: #e5e7eb !important;
+}
+html[data-color-mode="light"][data-app-theme="default"] .app-sidebar :is(.text-gray-700, .text-gray-600) { color: #374151 !important; }
+html[data-color-mode="light"][data-app-theme="default"] .app-sidebar .text-gray-400 { color: #9ca3af !important; }
+html[data-color-mode="light"][data-app-theme="default"] .app-sidebar > div:first-child {
+  background: linear-gradient(to right, #2563eb, #1d4ed8) !important;
+  color: #fff !important;
+}

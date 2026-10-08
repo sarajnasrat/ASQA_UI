@@ -5,6 +5,7 @@ import "./index.css";
 import App from "./App.tsx";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
+import { ColorModeProvider } from "./context/ColorModeContext";
 import "./i18n/i18n";
 import AppLoader from "./components/common/AppLoader.tsx";
 
@@ -14,9 +15,11 @@ createRoot(document.getElementById("root")!).render(
       <Suspense
         fallback={<AppLoader />}
       >
-        <AuthProvider>
-          <App />
-        </AuthProvider>
+        <ColorModeProvider>
+          <AuthProvider>
+            <App />
+          </AuthProvider>
+        </ColorModeProvider>
       </Suspense>
     </StrictMode>
   </BrowserRouter>,

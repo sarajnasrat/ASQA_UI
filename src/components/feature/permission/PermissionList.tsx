@@ -1,11 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAppToast } from "../../../hooks/useToast";
-import { useNavigate } from "react-router-dom";
 import PermissionService from "../../../services/permission.service";
 import { Button } from "primereact/button";
-import type { MenuItem } from "primereact/menuitem";
-import { TieredMenu } from "primereact/tieredmenu";
 import { Toast } from "primereact/toast";
 import { ConfirmDialog } from "primereact/confirmdialog";
 import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
@@ -20,7 +17,6 @@ export const PermissionList = () => {
   const [loading, setLoading] = React.useState(true);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const { toast, showToast } = useAppToast();
-  const navigate = useNavigate();
   const [first, setFirst] = React.useState(0);
   const [rows, setRows] = React.useState(10);
   const [totalRecords, setTotalRecords] = React.useState(0);
@@ -29,7 +25,7 @@ export const PermissionList = () => {
   const [globalFilter] = React.useState("");
   const [sortField] = React.useState("id");
   const [sortOrder] = React.useState(-1);
-  const { hasPermission, withPermission } = useAuth();
+  const { hasPermission } = useAuth();
 
   const getAllPermissions = async () => {
     try {
@@ -86,30 +82,6 @@ export const PermissionList = () => {
   useEffect(() => {
     getAllPermissions();
   }, [first, rows, globalFilter, sortField, sortOrder, submittedSearchTerm]);
-
-  // Action Menu
-  const actionTemplate = (rowData: any) => {
-    const menu = useRef<any>(null);
-
-    const items: MenuItem[] = [
-      ...withPermission("VIEW_PERMISSION", {
-        label: String(t("permission.actions.viewDetails")),
-        icon: "pi pi-eye",
-        command: () => navigate(`/permissions/view/${rowData.id}`),
-      }),
-    ];
-
-    return (
-      <div className="flex justify-center">
-        <TieredMenu model={items} popup ref={menu} />
-        <Button
-          icon="pi pi-ellipsis-v"
-          className="p-button-text p-button-sm"
-          onClick={(e) => menu.current.toggle(e)}
-        />
-      </div>
-    );
-  };
 
   // Header
   const header = () => {
@@ -184,11 +156,6 @@ export const PermissionList = () => {
           </div>
         );
       },
-    },
-    {
-      header: String(t("permission.columns.actions")),
-      body: actionTemplate,
-      style: { width: "120px" },
     },
   ];
 
