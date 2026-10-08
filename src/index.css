@@ -405,3 +405,81 @@ html[dir="rtl"] .p-dropdown-clear-icon {
 .company-classification-dialog .p-inputtextarea {
   text-align: start;
 }
+/* Consistent form controls inside the user creation dialog. */
+.user-registration-control,
+.user-registration-password .p-password-input {
+  min-height: 2.875rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.625rem;
+  background: #fff;
+  padding: 0.7rem 0.875rem;
+  color: #0f172a;
+  box-shadow: 0 1px 2px rgb(15 23 42 / 5%);
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.user-registration-control:enabled:hover,
+.user-registration-password .p-password-input:enabled:hover {
+  border-color: #94a3b8;
+}
+
+.user-registration-control:enabled:focus,
+.user-registration-password .p-password-input:enabled:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgb(59 130 246 / 15%);
+  outline: none;
+}
+
+.user-registration-control.p-invalid,
+.user-registration-password.p-invalid .p-password-input {
+  border-color: #ef4444;
+}
+
+.user-registration-control.p-dropdown {
+  display: flex;
+  align-items: center;
+  padding: 0 0.875rem;
+}
+
+.user-registration-control.p-dropdown .p-dropdown-label {
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.user-registration-password,
+.user-registration-password .p-password-input {
+  width: 100%;
+}
+
+.user-registration-password,
+.user-registration-password.p-password {
+  display: flex !important;
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: none !important;
+}
+
+.user-registration-password .p-password-input,
+.user-registration-password input.p-inputtext {
+  flex: 1 1 auto;
+  width: 100% !important;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.user-registration-password .p-password-toggle-mask {
+  width: 2.75rem;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  inset-inline-end: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 0.625rem 0.625rem 0;
+}
+
+[dir="rtl"] .user-registration-password .p-password-toggle-mask {
+  border-radius: 0.625rem 0 0 0.625rem;
+}

@@ -214,13 +214,13 @@ export const EditUser = ({ userId, onClose, onSaved }: EditUserProps = {}) => {
             dismissableMask
             onHide={() => (onClose ? onClose() : navigate("/users"))}
             header={t("user.breadcrumb.editUser")}
-            className="w-[min(96vw,1100px)]"
-            contentClassName="max-h-[78vh] overflow-y-auto"
+            className="w-[min(98vw,1200px)] max-h-[90vh]"
+            contentClassName="max-h-[calc(90vh-5rem)] overflow-y-auto"
           >
           <div>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div className="order-first flex justify-center min-w-0 lg:col-span-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-x-6 gap-y-5">
+                <div className="order-first flex justify-center min-w-0 col-span-1 md:col-span-2">
                   <div className="relative h-40 w-40 overflow-visible rounded-full border-4 border-white bg-blue-100 shadow-lg ring-4 ring-blue-50">
                     {profilePreviewUrl || existingImageUrl ? <img src={profilePreviewUrl || existingImageUrl || ""} alt={t("user.labels.profileImage")} className="h-full w-full rounded-full object-cover" /> : <div className="flex h-full w-full items-center justify-center rounded-full text-2xl font-semibold text-blue-500"><i className="pi pi-user" /></div>}
                     <label htmlFor="user-edit-profile-image" className="absolute bottom-0 right-0 z-10 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 border-white bg-blue-600 text-white shadow-lg transition hover:scale-105 hover:bg-blue-700"><i className="pi pi-camera text-base" /></label>
@@ -233,10 +233,10 @@ export const EditUser = ({ userId, onClose, onSaved }: EditUserProps = {}) => {
                   rules={{ required: t("user.validation.firstNameRequired") }}
                   render={({ field }) => (
                     <div>
-                      <label className="font-medium">
+                      <label className="mb-2 block text-sm font-semibold text-slate-700">
                         {t("user.fields.firstName")}
                       </label>
-                      <InputText {...field} className="w-full" />
+                      <InputText {...field} className="user-registration-control w-full" />
                       {errors.firstName && (
                         <small className="text-red-500">
                           {errors.firstName.message}
@@ -252,10 +252,10 @@ export const EditUser = ({ userId, onClose, onSaved }: EditUserProps = {}) => {
                   rules={{ required: t("user.validation.lastNameRequired") }}
                   render={({ field }) => (
                     <div>
-                      <label className="font-medium">
+                      <label className="mb-2 block text-sm font-semibold text-slate-700">
                         {t("user.fields.lastName")}
                       </label>
-                      <InputText {...field} className="w-full" />
+                      <InputText {...field} className="user-registration-control w-full" />
                       {errors.lastName && (
                         <small className="text-red-500">
                           {errors.lastName.message}
@@ -277,14 +277,14 @@ export const EditUser = ({ userId, onClose, onSaved }: EditUserProps = {}) => {
                   }}
                   render={({ field }) => (
                     <div>
-                      <label className="font-medium">
+                      <label className="mb-2 block text-sm font-semibold text-slate-700">
                         {t("user.fields.phoneNumber")}
                       </label>
                       <InputText
                         {...field}
                         placeholder={t("user.placeholders.phoneNumber")}
                         maxLength={10}
-                        className="w-full"
+                        className="user-registration-control w-full"
                       />
                       {errors.phoneNumber && (
                         <small className="text-red-500">
@@ -307,10 +307,10 @@ export const EditUser = ({ userId, onClose, onSaved }: EditUserProps = {}) => {
                   }}
                   render={({ field }) => (
                     <div>
-                      <label className="font-medium">
+                      <label className="mb-2 block text-sm font-semibold text-slate-700">
                         {t("user.fields.email")}
                       </label>
-                      <InputText {...field} type="email" className="w-full" />
+                      <InputText {...field} type="email" className="user-registration-control w-full" />
                       {errors.email && (
                         <small className="text-red-500">
                           {errors.email.message}
@@ -326,14 +326,14 @@ export const EditUser = ({ userId, onClose, onSaved }: EditUserProps = {}) => {
                   rules={{ required: t("user.validation.roleRequired") }}
                   render={({ field }) => (
                     <div>
-                      <label className="font-medium">
+                      <label className="mb-2 block text-sm font-semibold text-slate-700">
                         {t("user.fields.role")}
                       </label>
                       <Dropdown
                         {...field}
                         options={roles}
                         placeholder={t("user.placeholders.selectRole")}
-                        className="w-full"
+                        className="user-registration-control w-full"
                       />
                       {errors.role && (
                         <small className="text-red-500">
@@ -348,7 +348,7 @@ export const EditUser = ({ userId, onClose, onSaved }: EditUserProps = {}) => {
                   name="active"
                   control={control}
                   render={({ field }) => (
-                    <div className="flex items-center gap-2">
+                    <div className="order-last flex items-center gap-2 md:col-span-2">
                       <Checkbox inputId="user-edit-active" checked={field.value ?? true} onChange={(e) => field.onChange(e.checked)} />
                       <label htmlFor="user-edit-active" className="text-sm font-medium text-gray-700">{t("user.status.active")}</label>
                     </div>
@@ -361,7 +361,7 @@ export const EditUser = ({ userId, onClose, onSaved }: EditUserProps = {}) => {
                   rules={{ required: t("user.validation.zoneRequired") }}
                   render={({ field }) => (
                     <div>
-                      <label className="font-medium">
+                      <label className="mb-2 block text-sm font-semibold text-slate-700">
                         {t("user.fields.zone")}{" "}
                         <span className="text-red-500">*</span>
                       </label>

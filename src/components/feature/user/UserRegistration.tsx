@@ -209,15 +209,15 @@ export const UserRegistration = ({ onClose, onSaved }: UserRegistrationProps = {
           dismissableMask
           onHide={() => (onClose ? onClose() : navigate("/users"))}
           header={t("user.form.title.create")}
-          className="w-[min(96vw,900px)]"
-          contentClassName="max-h-[78vh] overflow-y-auto"
+          className="w-[min(98vw,1200px)] max-h-[90vh]"
+          contentClassName="max-h-[calc(90vh-5rem)] overflow-y-auto"
         >
         <div>
   
 
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4">
-              <div className="order-first flex justify-center min-w-0 lg:col-span-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-x-6 gap-y-5">
+              <div className="order-first flex justify-center min-w-0 col-span-1 md:col-span-2">
                 <div className="relative h-40 w-40 overflow-visible rounded-full border-4 border-white bg-blue-100 shadow-lg ring-4 ring-blue-50">
                   {profilePreviewUrl ? <img src={profilePreviewUrl} alt={t("user.labels.profileImage")} className="h-full w-full rounded-full object-cover" /> : <div className="flex h-full w-full items-center justify-center rounded-full text-2xl font-semibold text-blue-500"><i className="pi pi-user" /></div>}
                   <label htmlFor="user-profile-image" className="absolute bottom-0 right-0 z-10 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 border-white bg-blue-600 text-white shadow-lg transition hover:scale-105 hover:bg-blue-700"><i className="pi pi-camera text-base" /></label>
@@ -231,14 +231,14 @@ export const UserRegistration = ({ onClose, onSaved }: UserRegistrationProps = {
                 rules={{ required: t("user.validation.firstNameRequired") }}
                 render={({ field }) => (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="mb-2 block text-sm font-semibold text-slate-700">
                       {t("user.fields.firstName")}{" "}
                       <span className="text-red-500">*</span>
                     </label>
                     <InputText
                       {...field}
                       placeholder={t("user.placeholders.firstName")}
-                      className={`w-full ${errors.firstName ? "p-invalid" : ""}`}
+                      className={`user-registration-control w-full ${errors.firstName ? "p-invalid" : ""}`}
                     />
                     {errors.firstName && (
                       <small className="text-red-500 block mt-1">
@@ -256,14 +256,14 @@ export const UserRegistration = ({ onClose, onSaved }: UserRegistrationProps = {
                 rules={{ required: t("user.validation.lastNameRequired") }}
                 render={({ field }) => (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="mb-2 block text-sm font-semibold text-slate-700">
                       {t("user.fields.lastName")}{" "}
                       <span className="text-red-500">*</span>
                     </label>
                     <InputText
                       {...field}
                       placeholder={t("user.placeholders.lastName")}
-                      className={`w-full ${errors.lastName ? "p-invalid" : ""}`}
+                      className={`user-registration-control w-full ${errors.lastName ? "p-invalid" : ""}`}
                     />
                     {errors.lastName && (
                       <small className="text-red-500 block mt-1">
@@ -287,7 +287,7 @@ export const UserRegistration = ({ onClose, onSaved }: UserRegistrationProps = {
                 }}
                 render={({ field }) => (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="mb-2 block text-sm font-semibold text-slate-700">
                       {t("user.fields.phoneNumber")}{" "}
                       <span className="text-red-500">*</span>
                     </label>
@@ -295,7 +295,7 @@ export const UserRegistration = ({ onClose, onSaved }: UserRegistrationProps = {
                       {...field}
                       placeholder={t("user.placeholders.phoneNumber")}
                       maxLength={10}
-                      className={`w-full ${errors.phoneNumber ? "p-invalid" : ""}`}
+                      className={`user-registration-control w-full ${errors.phoneNumber ? "p-invalid" : ""}`}
                     />
                     {errors.phoneNumber && (
                       <small className="text-red-500 block mt-1">
@@ -319,7 +319,7 @@ export const UserRegistration = ({ onClose, onSaved }: UserRegistrationProps = {
                 }}
                 render={({ field }) => (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="mb-2 block text-sm font-semibold text-slate-700">
                       {t("user.fields.email")}{" "}
                       <span className="text-red-500">*</span>
                     </label>
@@ -327,7 +327,7 @@ export const UserRegistration = ({ onClose, onSaved }: UserRegistrationProps = {
                       {...field}
                       type="email"
                       placeholder={t("user.placeholders.email")}
-                      className={`w-full ${errors.email ? "p-invalid" : ""}`}
+                      className={`user-registration-control w-full ${errors.email ? "p-invalid" : ""}`}
                     />
                     {errors.email && (
                       <small className="text-red-500 block mt-1">
@@ -350,8 +350,8 @@ export const UserRegistration = ({ onClose, onSaved }: UserRegistrationProps = {
                   },
                 }}
                 render={({ field }) => (
-                  <div style={{ width: "100%" }}>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <div className="min-w-0 w-full md:col-span-1">
+                    <label className="mb-2 block text-sm font-semibold text-slate-700">
                       {t("user.fields.password")}{" "}
                       <span className="text-red-500">*</span>
                     </label>
@@ -360,8 +360,10 @@ export const UserRegistration = ({ onClose, onSaved }: UserRegistrationProps = {
                       toggleMask
                       feedback={false}
                       placeholder={t("user.placeholders.password")}
-                      className={`w-full ${errors.password ? "p-invalid" : ""}`}
-                      inputClassName="w-full"
+                      className={`user-registration-password !w-full ${errors.password ? "p-invalid" : ""}`}
+                      inputClassName="user-registration-control w-full"
+                      style={{ width: "20rem" }}
+                      inputStyle={{ width: "100%" }}
                     />
                     {passwordValue && (
                       <div className="mt-2">
@@ -399,8 +401,8 @@ export const UserRegistration = ({ onClose, onSaved }: UserRegistrationProps = {
                     value === passwordValue || t("user.validation.passwordsNotMatch"),
                 }}
                 render={({ field }) => (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <div className="min-w-0 w-full md:col-span-1">
+                    <label className="mb-2 block text-sm font-semibold text-slate-700">
                       {t("user.fields.confirmPassword")}{" "}
                       <span className="text-red-500">*</span>
                     </label>
@@ -409,8 +411,9 @@ export const UserRegistration = ({ onClose, onSaved }: UserRegistrationProps = {
                       toggleMask
                       feedback={false}
                       placeholder={t("user.placeholders.confirmPassword")}
-                      className={`w-full ${errors.confirmPassword ? "p-invalid" : ""}`}
-                      inputClassName="w-full"
+                      className={`user-registration-password w-full! ${errors.confirmPassword ? "p-invalid" : ""}`}
+                      inputClassName="user-registration-control w-full"
+                 
                     />
                     {field.value && passwordValue && field.value !== passwordValue && (
                       <small className="text-orange-500 block mt-1">
@@ -438,7 +441,7 @@ export const UserRegistration = ({ onClose, onSaved }: UserRegistrationProps = {
                 rules={{ required: t("user.validation.roleRequired") }}
                 render={({ field }) => (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="mb-2 block text-sm font-semibold text-slate-700">
                       {t("user.fields.role")}{" "}
                       <span className="text-red-500">*</span>
                     </label>
@@ -446,7 +449,7 @@ export const UserRegistration = ({ onClose, onSaved }: UserRegistrationProps = {
                       {...field}
                       options={roles}
                       placeholder={t("user.placeholders.selectRole")}
-                      className={`w-full ${errors.role ? "p-invalid" : ""}`}
+                      className={`user-registration-control w-full ${errors.role ? "p-invalid" : ""}`}
                     />
                     {errors.role && (
                       <small className="text-red-500 block mt-1">
@@ -462,7 +465,7 @@ export const UserRegistration = ({ onClose, onSaved }: UserRegistrationProps = {
                 control={control}
                 defaultValue={true}
                 render={({ field }) => (
-                  <div className="flex items-center gap-2">
+                  <div className="order-last flex items-center gap-2 md:col-span-2">
                     <Checkbox inputId="user-active" checked={field.value ?? true} onChange={(e) => field.onChange(e.checked)} />
                     <label htmlFor="user-active" className="text-sm font-medium text-gray-700">{t("user.status.active")}</label>
                   </div>
@@ -476,7 +479,7 @@ export const UserRegistration = ({ onClose, onSaved }: UserRegistrationProps = {
                 rules={{ required: t("user.validation.zoneRequired") }}
                 render={({ field }) => (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="mb-2 block text-sm font-semibold text-slate-700">
                       {t("user.fields.zone")}{" "}
                       <span className="text-red-500">*</span>
                     </label>
@@ -484,7 +487,7 @@ export const UserRegistration = ({ onClose, onSaved }: UserRegistrationProps = {
                       {...field}
                       options={zones}
                       placeholder={t("user.placeholders.selectZone")}
-                      className={`w-full ${errors.zoneId ? "p-invalid" : ""}`}
+                      className={`user-registration-control w-full ${errors.zoneId ? "p-invalid" : ""}`}
                     />
                     {errors.zoneId && (
                       <small className="text-red-500 block mt-1">
