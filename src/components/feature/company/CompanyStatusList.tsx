@@ -75,7 +75,7 @@ const STATUS_LABELS: Record<CompanyRequestStatus, string> = {
 };
 
 const STATUS_ROUTES: Record<CompanyRequestStatus, string> = {
-  CERTIFICATION_ISSUED: "/company/certification-issued",
+  CERTIFICATION_ISSUED: "/company/certificate-issued",
   REJECTED: "/company/rejected",
   UNDER_REVIEW: "/company/under-review",
   INSPECTION_IN_PROGRESS: "/company/inspection-in-progress",

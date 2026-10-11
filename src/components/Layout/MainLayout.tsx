@@ -366,10 +366,16 @@ export const MainLayout = () => {
               />
 
               <Route path="commitee/view/:id" element={<CommiteeDetails />} />
+              <Route path="inspection-commitee/view/:id" element={<CommiteeDetails />} />
+              <Route path="approva-commitee/view/:id" element={<CommiteeDetails />} />
               <Route path="company" element={<ProtectedRoute permission="VIEW_COMPANY"><CompanyList /></ProtectedRoute>} />
               <Route
                 path="company/certificate-issued"
-                element={<CompanyStatusList classificationType="WHITELISTED" status="CERTIFICATION_ISSUED" title="company.positiveTitle" />}
+                element={<ProtectedRoute permission="VIEW_COMPANY"><CompanyStatusList classificationType="WHITELISTED" status="CERTIFICATION_ISSUED" title="company.positiveTitle" /></ProtectedRoute>}
+              />
+              <Route
+                path="company/certification-issued"
+                element={<ProtectedRoute permission="VIEW_COMPANY"><CompanyStatusList classificationType="WHITELISTED" status="CERTIFICATION_ISSUED" title="company.positiveTitle" /></ProtectedRoute>}
               />
               <Route
                 path="company/rejected"
@@ -429,7 +435,7 @@ export const MainLayout = () => {
                 }
               />
               <Route path="company/create" element={<ProtectedRoute permission="ADD_COMPANY"><CompanyCreate /></ProtectedRoute>} />
-              <Route path="company/view/:id" element={<ProtectedRoute permission="VIEW_COMPANY"><CompanyDetails /></ProtectedRoute>} />
+              <Route path="company/view/:id" element={<CompanyDetails />} />
               <Route path="company/edit/:id" element={<ProtectedRoute permission="UPDATE_COMPANY"><CompanyUpdate /></ProtectedRoute>} />
               <Route path="about-us" element={<AboutUsList />} />
               <Route

@@ -172,7 +172,7 @@ export const InspectionCommiteeList: React.FC = () => {
       ...withPermission("VIEW_COMMITEE", {
         label: t("common.view"),
         icon: "pi pi-eye",
-        command: () => navigate(`/commitee/view/${rowData.id}`),
+        command: () => navigate(`/inspection-commitee/view/${rowData.id}`),
       }),
       ...withPermission("ADD_COMMITEEMEMBER", {
         label: t("commitee.createMember"),

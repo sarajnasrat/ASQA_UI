@@ -40,6 +40,8 @@ const findMatchingMenu = (pathname: string, items: unknown[]) =>
       return menuPathMatches(pathname, menu.path);
     })
     .sort((left, right) =>
+      (typeof right.permissionName === "string" ? 1 : 0) -
+        (typeof left.permissionName === "string" ? 1 : 0) ||
       normalizePath(String(right.path)).length - normalizePath(String(left.path)).length,
     )[0];
 
@@ -81,9 +83,18 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   if (currentPath === "/unauthorized") return <>{children}</>;
 
   const routeMenu = findMatchingMenu(currentPath, routeMenus);
+  const originPath = typeof location.state?.activeSidebarPath === "string"
+    ? normalizePath(location.state.activeSidebarPath)
+    : typeof location.state?.originPath === "string"
+      ? normalizePath(location.state.originPath)
+      : typeof location.state?.returnPath === "string"
+        ? normalizePath(location.state.returnPath)
+        : undefined;
+  const originMenu = originPath ? findMatchingMenu(originPath, routeMenus) : undefined;
   const routePermission = (permission ||
     getRoutePermission(currentPath) ||
-    (typeof routeMenu?.permissionName === "string" ? routeMenu.permissionName : undefined))
+    (typeof routeMenu?.permissionName === "string" ? routeMenu.permissionName : undefined) ||
+    (typeof originMenu?.permissionName === "string" ? originMenu.permissionName : undefined))
       ?.trim()
       .toUpperCase();
   if (routePermission && !hasPermission(routePermission)) {
