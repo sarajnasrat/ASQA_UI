@@ -29,7 +29,17 @@ export interface ReportFilterDTO {
   status?: RequestStatus;
 
   modules?: ReportModule[];
+  companyClassifications?: CompanyClassificationType[];
+  committeeTypes?: CommitteeType[];
 }
+
+export type CommitteeType = "APPROVAL" | "INSPECTION";
+
+export type CompanyClassificationType =
+  | "UNREVIEWED"
+  | "WHITELISTED"
+  | "BLACKLISTED"
+  | "SUSPENDED";
 
 export interface ReportResponseDTO {
   totalRequests?: number;
@@ -39,12 +49,14 @@ export interface ReportResponseDTO {
   inActiveUsers?: number;
 
   totalCompanies?: number;
-  activeCompanies?: number;
-  inActiveCompanies?: number;
+  totalUnreviewedCompanies?: number;
+  totalWhitelistedCompanies?: number;
+  totalBlacklistedCompanies?: number;
+  totalSuspendedCompanies?: number;
 
   totalCommitee?: number;
-  activeCommitee?: number;
-  inActiveCommitee?: number;
+  totalApprovalCommittees?: number;
+  totalInspectionCommittees?: number;
 
   totalMenu?: number;
 

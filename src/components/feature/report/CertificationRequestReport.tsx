@@ -30,9 +30,13 @@ type ReportData = {
   activeUsers?: number;
   inActiveUsers?: number;
   totalCompanies?: number;
+  totalUnreviewedCompanies?: number;
+  totalWhitelistedCompanies?: number;
+  totalBlacklistedCompanies?: number;
+  totalSuspendedCompanies?: number;
   totalCommitee?: number;
-  activeCommitee?: number;
-  inActiveCommitee?: number;
+  totalApprovalCommittees?: number;
+  totalInspectionCommittees?: number;
   totalMenu?: number;
   totalCertifications?: number;
   totalSubmittedRequest?: number;
@@ -43,6 +47,17 @@ type ReportData = {
 
 export const CertificationRequestReport = () => {
   const { t, i18n } = useTranslation();
+  const isRtl = i18n.language === "dr" || i18n.language === "ps" || i18n.dir() === "rtl";
+  const companyClassifications = [
+    { key: "UNREVIEWED", value: "totalUnreviewedCompanies" },
+    { key: "WHITELISTED", value: "totalWhitelistedCompanies" },
+    { key: "BLACKLISTED", value: "totalBlacklistedCompanies" },
+    { key: "SUSPENDED", value: "totalSuspendedCompanies" },
+  ] as const;
+  const committeeTypes = [
+    { key: "APPROVAL", value: "totalApprovalCommittees" },
+    { key: "INSPECTION", value: "totalInspectionCommittees" },
+  ] as const;
   const currentDate = new Date();
   const currentShamsiDate = new DateObject({
     date: currentDate,
@@ -50,6 +65,7 @@ export const CertificationRequestReport = () => {
   });
   const currentShamsiYear = Number(currentShamsiDate.year);
   const currentShamsiMonth = Number(currentShamsiDate.month.number);
+  const shamsiFileDate = () => new DateObject({ date: new Date(), calendar: persian }).format("YYYY-MM-DD");
   const shamsiMonthNames = [
     "حمل",
     "ثور",
@@ -75,6 +91,14 @@ export const CertificationRequestReport = () => {
     ReportModule.USER,
     ReportModule.COMMITTEE,
   ]);
+  const [selectedCompanyClassifications, setSelectedCompanyClassifications] = useState<string[]>([]);
+  const [selectedCommitteeTypes, setSelectedCommitteeTypes] = useState<string[]>(committeeTypes.map(({ key }) => key));
+  const visibleCompanyClassifications = companyClassifications.filter(({ key }) =>
+    selectedModules.includes(ReportModule.COMPANY) && selectedCompanyClassifications.includes(key),
+  );
+  const visibleCommitteeTypes = committeeTypes.filter(({ key }) =>
+    selectedModules.includes(ReportModule.COMMITTEE) && selectedCommitteeTypes.includes(key),
+  );
   const [loading, setLoading] = useState<boolean>(false);
   const [exporting, setExporting] = useState<boolean>(false);
   const [reportData, setReportData] = useState<ReportData | null>(null);
@@ -138,11 +162,39 @@ export const CertificationRequestReport = () => {
   }, []);
 
   const toggleModule = (module: ReportModule) => {
-    setSelectedModules((prev) =>
-      prev.includes(module)
-        ? prev.filter((m) => m !== module)
-        : [...prev, module],
-    );
+    const modules = selectedModules.includes(module)
+      ? selectedModules.filter((item) => item !== module)
+      : [...selectedModules, module];
+    const companyClassificationsForReport = module === ReportModule.COMPANY
+      ? (modules.includes(module) ? companyClassifications.map(({ key }) => key) : [])
+      : selectedCompanyClassifications;
+    const committeeTypesForReport = module === ReportModule.COMMITTEE
+      ? (modules.includes(module) ? committeeTypes.map(({ key }) => key) : [])
+      : selectedCommitteeTypes;
+    if (module === ReportModule.COMPANY) {
+      setSelectedCompanyClassifications(companyClassificationsForReport);
+    }
+    if (module === ReportModule.COMMITTEE) {
+      setSelectedCommitteeTypes(committeeTypesForReport);
+    }
+    setSelectedModules(modules);
+    generateReport({ modules, companyClassifications: companyClassificationsForReport, committeeTypes: committeeTypesForReport });
+  };
+
+  const toggleCompanyClassification = (key: string) => {
+    const companyClassificationsForReport = selectedCompanyClassifications.includes(key)
+      ? selectedCompanyClassifications.filter((value) => value !== key)
+      : [...selectedCompanyClassifications, key];
+    setSelectedCompanyClassifications(companyClassificationsForReport);
+    generateReport({ companyClassifications: companyClassificationsForReport });
+  };
+
+  const toggleCommitteeType = (key: string) => {
+    const types = selectedCommitteeTypes.includes(key)
+      ? selectedCommitteeTypes.filter((value) => value !== key)
+      : [...selectedCommitteeTypes, key];
+    setSelectedCommitteeTypes(types);
+    generateReport({ committeeTypes: types });
   };
 
   const getModuleLabel = (module: ReportModule): string => {
@@ -157,6 +209,8 @@ export const CertificationRequestReport = () => {
       startDate: string;
       endDate: string;
       modules: ReportModule[];
+      companyClassifications: string[];
+      committeeTypes: string[];
     }>,
   ) => {
     const selectedReportType = customValues?.reportType ?? reportType;
@@ -165,6 +219,8 @@ export const CertificationRequestReport = () => {
     const selectedStartDate = customValues?.startDate ?? startDate;
     const selectedEndDate = customValues?.endDate ?? endDate;
     const selectedModulesList = customValues?.modules ?? selectedModules;
+    const selectedClassifications = customValues?.companyClassifications ?? selectedCompanyClassifications;
+    const selectedTypes = customValues?.committeeTypes ?? selectedCommitteeTypes;
 
     if (
       selectedReportType === "range" &&
@@ -178,6 +234,8 @@ export const CertificationRequestReport = () => {
 
       const payload: any = {
         modules: selectedModulesList,
+        companyClassifications: selectedClassifications,
+        committeeTypes: selectedTypes,
       };
 
       if (selectedReportType === "yearly") {
@@ -265,22 +323,22 @@ export const CertificationRequestReport = () => {
           Metric: t("report.totalCommittee"),
           Value: reportData.totalCommitee || 0,
         },
-        {
+        ...visibleCommitteeTypes.map(({ key, value }) => ({
           Category: t("report.committeeStatistics"),
-          Metric: t("report.activeCommittee"),
-          Value: reportData.activeCommitee || 0,
-        },
-        {
-          Category: t("report.committeeStatistics"),
-          Metric: t("report.inactiveCommittee"),
-          Value: reportData.inActiveCommitee || 0,
-        },
+          Metric: t(`commitee.types.${key.toLowerCase()}`),
+          Value: reportData[value] || 0,
+        })),
         { Category: "", Metric: "", Value: "" },
         {
           Category: t("report.additionalStatistics"),
           Metric: t("report.totalCompanies"),
           Value: reportData.totalCompanies || 0,
         },
+        ...visibleCompanyClassifications.map(({ key, value }) => ({
+          Category: t("report.additionalStatistics"),
+          Metric: t(`company.classification.statusOptions.${key}`),
+          Value: reportData[value] || 0,
+        })),
         {
           Category: t("report.additionalStatistics"),
           Metric: t("report.totalCertifications"),
@@ -299,7 +357,7 @@ export const CertificationRequestReport = () => {
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, t("report.systemReport"));
 
-      const fileName = `${t("report.systemReport")}_${new Date().toISOString().split("T")[0]}.xlsx`;
+      const fileName = `${t("report.systemReport")}_${shamsiFileDate()}.xlsx`;
       XLSX.writeFile(wb, fileName);
     } catch (error) {
       console.error("Failed to export report:", error);
@@ -344,7 +402,7 @@ export const CertificationRequestReport = () => {
       mergedCell.value = t("report.systemReports");
 
       // Add data rows
-      worksheet.addRow([t("report.generatedOn"), new Date().toLocaleString()]);
+      worksheet.addRow([t("report.generatedOn"), IslamicDateFormatter.formatQamari(new Date(), true)]);
       worksheet.addRow([
         t("report.reportType"),
         reportType === "yearly"
@@ -353,11 +411,6 @@ export const CertificationRequestReport = () => {
             ? t("report.monthlyReport")
             : t("report.customRange"),
       ]);
-      worksheet.addRow([
-        t("report.selectedModules"),
-        selectedModules.map((m) => getModuleLabel(m)).join(", "),
-      ]);
-
       // Request Statistics Section Header - Merged across both columns
       const reqSectionRow = worksheet.addRow([
         t("report.requestStatistics"),
@@ -454,14 +507,9 @@ export const CertificationRequestReport = () => {
         t("report.totalCommittee"),
         reportData.totalCommitee || 0,
       ]);
-      worksheet.addRow([
-        t("report.activeCommittee"),
-        reportData.activeCommitee || 0,
-      ]);
-      worksheet.addRow([
-        t("report.inactiveCommittee"),
-        reportData.inActiveCommitee || 0,
-      ]);
+      visibleCommitteeTypes.forEach(({ key, value }) =>
+        worksheet.addRow([t(`commitee.types.${key.toLowerCase()}`), reportData[value] || 0]),
+      );
 
       // Additional Statistics Section Header - Merged across both columns
       const additionalSectionRow = worksheet.addRow([
@@ -490,6 +538,12 @@ export const CertificationRequestReport = () => {
         t("report.totalCompanies"),
         reportData.totalCompanies || 0,
       ]);
+      visibleCompanyClassifications.forEach(({ key, value }) =>
+        worksheet.addRow([
+          t(`company.classification.statusOptions.${key}`),
+          reportData[value] || 0,
+        ]),
+      );
       worksheet.addRow([
         t("report.totalCertifications"),
         reportData.totalCertifications || 0,
@@ -631,21 +685,21 @@ export const CertificationRequestReport = () => {
           name: t("report.totalCommittee"),
           value: reportData.totalCommitee || 0,
         },
-        {
+        ...visibleCommitteeTypes.map(({ key, value }) => ({
           type: t("report.committeeStatistics"),
-          name: t("report.activeCommittee"),
-          value: reportData.activeCommitee || 0,
-        },
-        {
-          type: t("report.committeeStatistics"),
-          name: t("report.inactiveCommittee"),
-          value: reportData.inActiveCommitee || 0,
-        },
+          name: t(`commitee.types.${key.toLowerCase()}`),
+          value: reportData[value] || 0,
+        })),
         {
           type: t("report.additionalStatistics"),
           name: t("report.totalCompanies"),
           value: reportData.totalCompanies || 0,
         },
+        ...visibleCompanyClassifications.map(({ key, value }) => ({
+          type: t("report.additionalStatistics"),
+          name: t(`company.classification.statusOptions.${key}`),
+          value: reportData[value] || 0,
+        })),
         {
           type: t("report.additionalStatistics"),
           name: t("report.totalCertifications"),
@@ -692,7 +746,7 @@ export const CertificationRequestReport = () => {
       const link = document.createElement("a");
       const url = URL.createObjectURL(blob);
       link.href = url;
-      link.download = `${t("report.systemReport")}_Detailed_${new Date().toISOString().split("T")[0]}.xlsx`;
+      link.download = `${t("report.systemReport")}_Detailed_${shamsiFileDate()}.xlsx`;
       link.click();
       URL.revokeObjectURL(url);
     } catch (error) {
@@ -732,7 +786,15 @@ export const CertificationRequestReport = () => {
 
   const handleModulesChange = (modules: ReportModule[]) => {
     setSelectedModules(modules);
-    generateReport({ modules });
+    const companyClassificationsForReport = modules.includes(ReportModule.COMPANY)
+      ? companyClassifications.map(({ key }) => key)
+      : [];
+    setSelectedCompanyClassifications(companyClassificationsForReport);
+    const committeeTypesForReport = modules.includes(ReportModule.COMMITTEE)
+      ? committeeTypes.map(({ key }) => key)
+      : [];
+    setSelectedCommitteeTypes(committeeTypesForReport);
+    generateReport({ modules, companyClassifications: companyClassificationsForReport, committeeTypes: committeeTypesForReport });
   };
 
   const formatDate = (dateString: string) => {
@@ -937,20 +999,37 @@ export const CertificationRequestReport = () => {
                     </button>
                     <div className="my-2 h-px bg-gray-200" />
                     {Object.values(ReportModule).map((module) => (
-                      <label
-                        key={module}
-                        className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 hover:bg-gray-50"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={selectedModules.includes(module)}
-                          onChange={() => toggleModule(module)}
-                          className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                        />
-                        <span className="text-sm text-gray-700">
-                          {getModuleLabel(module)}
-                        </span>
-                      </label>
+                      <div key={module}>
+                        <label className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 hover:bg-gray-50">
+                          <input
+                            type="checkbox"
+                            checked={selectedModules.includes(module)}
+                            onChange={() => toggleModule(module)}
+                            className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                          />
+                          <span className="text-sm text-gray-700">{getModuleLabel(module)}</span>
+                        </label>
+                        {module === ReportModule.COMPANY && selectedModules.includes(ReportModule.COMPANY) && (
+                          <div className={isRtl ? "mr-7 border-r border-gray-200 pr-2" : "ml-7 border-l border-gray-200 pl-2"}>
+                            {companyClassifications.map(({ key }) => (
+                              <label key={key} className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-1.5 hover:bg-gray-50">
+                                <input type="checkbox" checked={selectedCompanyClassifications.includes(key)} onChange={() => toggleCompanyClassification(key)} />
+                                <span className="text-sm text-gray-700">{t(`company.classification.statusOptions.${key}`)}</span>
+                              </label>
+                            ))}
+                          </div>
+                        )}
+                        {module === ReportModule.COMMITTEE && selectedModules.includes(ReportModule.COMMITTEE) && (
+                          <div className={isRtl ? "mr-7 border-r border-gray-200 pr-2" : "ml-7 border-l border-gray-200 pl-2"}>
+                            {committeeTypes.map(({ key }) => (
+                              <label key={key} className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-1.5 hover:bg-gray-50">
+                                <input type="checkbox" checked={selectedCommitteeTypes.includes(key)} onChange={() => toggleCommitteeType(key)} />
+                                <span className="text-sm text-gray-700">{t(`commitee.types.${key.toLowerCase()}`)}</span>
+                              </label>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -1246,7 +1325,7 @@ export const CertificationRequestReport = () => {
                     </svg>
                   }
                 />
-                 <StatCard
+                 {selectedModules.includes(ReportModule.COMMITTEE) && <StatCard
                   title={t("report.totalCommittee")}
                   value={reportData.totalCommitee}
                   icon={
@@ -1264,26 +1343,15 @@ export const CertificationRequestReport = () => {
                       />
                     </svg>
                   }
-                />
-                     <StatCard
-                  title={t("report.activeCommittee")}
-                  value={reportData.activeCommitee}
-                  icon={
-                    <svg
-                      className="h-4 w-4 text-teal-600"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                  }
-                />
+                />}
+                {visibleCommitteeTypes.map(({ key, value }) => (
+                  <StatCard
+                    key={key}
+                    title={t(`commitee.types.${key.toLowerCase()}`)}
+                    value={reportData[value]}
+                    icon={<i className="pi pi-users text-orange-600" />}
+                  />
+                ))}
               </div>
             </div>
 
@@ -1296,27 +1364,7 @@ export const CertificationRequestReport = () => {
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                
            
-                <StatCard
-                  title={t("report.inactiveCommittee")}
-                  value={reportData.inActiveCommitee}
-                  icon={
-                    <svg
-                      className="h-4 w-4 text-gray-600"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                  }
-                />
-
-                     <StatCard
+                {selectedModules.includes(ReportModule.COMPANY) && <StatCard
                   title={t("report.totalCompanies")}
                   value={reportData.totalCompanies}
                   icon={
@@ -1334,7 +1382,15 @@ export const CertificationRequestReport = () => {
                       />
                     </svg>
                   }
-                />
+                />}
+                {visibleCompanyClassifications.map(({ key, value }) => (
+                  <StatCard
+                    key={key}
+                    title={t(`company.classification.statusOptions.${key}`)}
+                    value={reportData[value]}
+                    icon={<i className="pi pi-building text-cyan-600" />}
+                  />
+                ))}
                 <StatCard
                   title={t("report.totalCertifications")}
                   value={reportData.totalCertifications}
