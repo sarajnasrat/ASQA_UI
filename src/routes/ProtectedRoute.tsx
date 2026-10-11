@@ -81,6 +81,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
   const currentPath = normalizePath(location.pathname);
   if (currentPath === "/unauthorized") return <>{children}</>;
+  if (currentPath === "/profile" || currentPath === "/settings") return <>{children}</>;
 
   const routeMenu = findMatchingMenu(currentPath, routeMenus);
   const originPath = typeof location.state?.activeSidebarPath === "string"

@@ -375,7 +375,7 @@ export const Navbar = ({ collapsed = false, onMenuClick }: NavbarProps) => {
                   <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full" />
                 </div>
 
-                <div className="hidden text-left md:block max-w-37.5">
+                <div className={`hidden max-w-37.5 md:block ${isRTL ? "text-right" : "text-left"}`}>
                   <p className="text-sm font-medium text-gray-700 truncate">
                     {user?.firstName} {user?.lastName}
                   </p>
@@ -402,9 +402,9 @@ export const Navbar = ({ collapsed = false, onMenuClick }: NavbarProps) => {
               </button>
 
               {showUserMenu && (
-                <div dir={isRTL ? "rtl" : "ltr"} className={`absolute top-full z-[1000] mt-3 max-h-[calc(100vh-5.5rem)] w-[min(18rem,calc(100vw-2rem))] overflow-y-auto rounded-xl border border-gray-100 bg-white p-1 shadow-xl animate-fadeIn max-sm:fixed max-sm:top-16 max-sm:left-2 max-sm:right-2 max-sm:mt-0 max-sm:w-auto ${isRTL ? "right-0 left-auto pl-3 text-right" : "right-0 left-auto pl-3 text-left"}`}>
+                <div dir={isRTL ? "rtl" : "ltr"} className={`absolute top-full z-[1000] mt-3 max-h-[calc(100vh-5.5rem)] w-[min(18rem,calc(100vw-2rem))] overflow-y-auto rounded-xl border border-gray-100 bg-white p-1 shadow-xl animate-fadeIn max-sm:fixed max-sm:top-16 max-sm:left-2 max-sm:right-2 max-sm:mt-0 max-sm:w-auto ${isRTL ? "right-0 left-auto pr-3 text-right" : "right-0 left-auto pl-3 text-left"}`}>
                   <div className="md:hidden p-4 bg-gradient-to-r from-blue-50 to-purple-50 border-b">
-                    <div className="flex items-center gap-3">
+                    <div className={`flex items-center gap-3 ${isRTL ? "text-right" : "text-left"}`}>
                       <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600">
                         {user?.profileImage ? (
                           <img
@@ -432,18 +432,19 @@ export const Navbar = ({ collapsed = false, onMenuClick }: NavbarProps) => {
                   </div>
 
                   <UserProfileMenuLinks
+                    isRTL={isRTL}
                     onLinkClick={() => setShowUserMenu(false)}
                   />
 
-                  <div className="p-3 border-t border-gray-100">
-                    <Button
+                  <div className={`p-3 border-t border-gray-100 ${isRTL ? "text-right" : "text-left"}`}>
+                    <button
+                      type="button"
                       onClick={handleLogout}
-                      label={t("navbar.logout")}
-                      icon="pi pi-sign-out"
-                      severity="danger"
-                      text
-                      className="w-full bg-red-50 hover:bg-red-100 text-red-600 border-none justify-start gap-3 px-4 py-2.5 rounded-lg text-sm transition-colors"
-                    />
+                      className="flex w-full items-center gap-3 rounded-lg bg-red-50 px-4 py-2.5 text-sm text-red-600 transition-colors hover:bg-red-100"
+                    >
+                      <i className="pi pi-sign-out" aria-hidden="true" />
+                      <span>{t("navbar.logout")}</span>
+                    </button>
                   </div>
                 </div>
               )}
