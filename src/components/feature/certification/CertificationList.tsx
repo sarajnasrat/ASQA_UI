@@ -46,6 +46,11 @@ export const CertificationList = ({
   const [selectedCertification, setSelectedCertification] = useState<any>(null);
 
   const selectedStatus = status;
+  const certificationStatusLabel = t(
+    `certification.statusOptions.${selectedStatus}`,
+    { defaultValue: t("certification.management") },
+  );
+  const certificationDocumentLabel = `${t("certification.document")} - ${certificationStatusLabel}`;
   const [filterType, setFilterType] = useState<string | null>(null);
   const [filterScope, setFilterScope] = useState<"NATIONAL" | "INTERNATIONAL" | null>(null);
   const { hasPermission, withPermission } = useAuth();
@@ -179,7 +184,7 @@ export const CertificationList = ({
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <h2 className="text-2xl font-bold text-blue-700">
-            {t("certification.management")}
+            {certificationDocumentLabel}
           </h2>
           <span className="bg-blue-100 text-blue-800 text-xs font-medium px-3 py-1 rounded-full">
             {totalRecords} {t("common.total")}
@@ -394,7 +399,7 @@ export const CertificationList = ({
   ];
 
   const breadcrumbItems = [
-    { label: t("certification.management"), url: "/certifications" },
+    { label: certificationStatusLabel, url: "/certifications" },
   ];
 
   return (
@@ -419,7 +424,7 @@ export const CertificationList = ({
       />
 
       <DynamicTable
-        title={t("certification.management")}
+        title={certificationDocumentLabel}
         value={certifications}
         columns={columns}
         header={header()}

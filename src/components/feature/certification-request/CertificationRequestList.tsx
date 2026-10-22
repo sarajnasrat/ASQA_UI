@@ -9,7 +9,7 @@ import { TieredMenu } from "primereact/tieredmenu";
 
 import CertificationRequestService from "../../../services/CertificationReques.service";
 
-import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
+import CertificationRequestBreadcrumb from "./CertificationRequestBreadcrumb";
 import { DynamicTable } from "../../common/DynamicTable";
 import { CertificationRequestUpdate } from "./CertificationRequestUpdate";
 import type { StatusTabItem } from "../../common/StatusTabMenu";
@@ -59,11 +59,7 @@ export const CertificationRequestList = () => {
 
   // ================= TAB ITEMS =================
   const statusTabs: StatusTabItem[] = [
-    {
-      label: t("certificationRequest.tabOptions.SUBMITTED"),
-      value: "SUBMITTED",
-      icon: "pi pi-send",
-    },
+    { label: t("certificationRequest.statusOptions.SUBMITTED"), value: "SUBMITTED", icon: "pi pi-send" },
   ];
 
   // ================= LOAD DATA =================
@@ -404,9 +400,7 @@ export const CertificationRequestList = () => {
       <Toast ref={toast} />
       <ConfirmDialog />
 
-      <DynamicBreadcrumb
-        items={[{ label: t("certificationRequest.list"), url: "" }]}
-      />
+      <CertificationRequestBreadcrumb status={status} />
 
       {/* ================= TAB MENU ================= */}
       <StatusTabMenu

@@ -199,7 +199,9 @@ export const InspectionCommiteeList: React.FC = () => {
   // ================= HEADER =================
   const header = () => (
     <div className="flex justify-between items-center mb-4 px-2">
-      <h2 className="text-2xl font-bold text-blue-700">{t("commitee.list")}</h2>
+      <h2 className="text-2xl font-bold text-blue-700">
+        {t("commitee.types.inspection")}
+      </h2>
 
       <div className="flex gap-3">
         {hasPermission("ADD_COMMENT") && (
@@ -286,7 +288,9 @@ export const InspectionCommiteeList: React.FC = () => {
     },
   ];
 
-  const breadcrumbItems = [{ label: t("commitee.list"), url: "/commitee" }];
+  const breadcrumbItems = [
+    { label: t("commitee.types.inspection"), url: "/inspection-commitee" },
+  ];
 
   return (
     <>
@@ -322,7 +326,7 @@ export const InspectionCommiteeList: React.FC = () => {
       <DynamicBreadcrumb items={breadcrumbItems} />
 
       <DynamicTable
-        title={t("commitee.list")}
+        title={t("commitee.types.inspection")}
         value={commiteeList}
         columns={columns}
         header={header()}

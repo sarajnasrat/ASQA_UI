@@ -161,7 +161,7 @@ export const CommiteeMemberCreate: React.FC<Props> = ({
 
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div
-          className="animate-in fade-in zoom-in max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white shadow-2xl duration-200"
+          className="animate-in fade-in zoom-in max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-xl bg-white shadow-2xl duration-200"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="sticky top-0 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-4">

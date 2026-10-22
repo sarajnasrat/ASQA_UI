@@ -9,7 +9,7 @@ import { TieredMenu } from "primereact/tieredmenu";
 
 import CertificationRequestService from "../../../services/CertificationReques.service";
 
-import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
+import CertificationRequestBreadcrumb from "../certification-request/CertificationRequestBreadcrumb";
 import { DynamicTable } from "../../common/DynamicTable";
 
 import type { StatusTabItem } from "../../common/StatusTabMenu";
@@ -623,8 +623,13 @@ export const CertificationRequestListDeadLine = () => {
       <Toast ref={toast} />
       <ConfirmDialog />
 
-      <DynamicBreadcrumb
-        items={[{ label: t("certificationRequest.list"), url: "" }]}
+      <CertificationRequestBreadcrumb
+        status={status}
+        labelKey={
+          status === "DEADLINE_ASSIGNED"
+            ? "certificationRequest.inspectionCommitteeReferral"
+            : undefined
+        }
       />
 
       {/* ================= TAB MENU ================= */}

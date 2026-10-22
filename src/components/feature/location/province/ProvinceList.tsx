@@ -127,11 +127,6 @@ export const ProvinceList: React.FC = () => {
                 icon: "pi pi-trash",
                 command: () => confirmDelete(rowData),
             },
-            hasPermission("VIEW_PROVINCE") && {
-                label: t("common.view"),
-                icon: "pi pi-eye",
-                command: () => navigate(`/provinces/view/${rowData.id}`),
-            },
         ].filter(Boolean) as MenuItem[];
 
         return (
@@ -161,7 +156,6 @@ export const ProvinceList: React.FC = () => {
                     raised
                     severity="info"
                     onClick={() => setShowCreateDialog(true)}
-                    className="bg-blue-600 hover:bg-blue-700 border-none shadow-md hover:shadow-lg transition-all"
                 />
             )}
                 <Button

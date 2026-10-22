@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Toast } from "primereact/toast";
 import { Button } from "primereact/button";
 import CertificationRequestService from "../../../services/CertificationReques.service";
-import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
+import CertificationRequestBreadcrumb from "../certification-request/CertificationRequestBreadcrumb";
 import { DynamicTable } from "../../common/DynamicTable";
 import StatusTabMenu, { type StatusTabItem } from "../../common/StatusTabMenu";
 import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
@@ -106,10 +106,11 @@ export default function InternationalRequestList({ title, statuses, menuPath }: 
   return (
     <>
       <Toast ref={toast} />
-      <DynamicBreadcrumb items={[
-        { label: t("internationalRequest.management"), url: "/international-requst-management" },
-        { label: t(title, title), url: "" },
-      ]} />
+      <CertificationRequestBreadcrumb
+        status={currentStatus}
+        international
+        listUrl={menuPath}
+      />
       <StatusTabMenu
         items={tabs}
         activeIndex={activeIndex}

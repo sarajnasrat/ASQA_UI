@@ -144,11 +144,6 @@ export const CountryList = () => {
         command: () => confirmDelete(rowData),
       },
 
-      hasPermission("VIEW_COUNTRY") && {
-        label: t("common.view"),
-        icon: "pi pi-eye",
-        command: () => navigate(`/countries/view/${rowData.id}`),
-      },
     ].filter(Boolean) as MenuItem[];
 
     return (
@@ -183,7 +178,6 @@ export const CountryList = () => {
             raised
             severity="info"
             onClick={() => setShowCreateDialog(true)}
-            className="bg-blue-600 hover:bg-blue-700 border-none shadow-md hover:shadow-lg transition-all"
           />)}
 
           <Button

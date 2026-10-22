@@ -56,9 +56,21 @@ const CertificationRequestViewHeader: React.FC<Props> = ({
 }) => {
   const { hasPermission } = useAuth();
   const [willProcessPayment, setWillProcessPayment] = useState<boolean | null>(null);
+  const requestListLabelKey =
+    listUrl === "/approved-request"
+      ? "certificationRequest.committeeApprovedReports"
+      : request.requestStatus === "DEADLINE_ASSIGNED"
+      ? "certificationRequest.inspectionCommitteeReferral"
+      : listUrl === "/standard-management"
+        ? "certificationRequest.standardsManagement"
+        : undefined;
   const breadcrumbItems = [
     {
-      label: t("certificationRequest.list"),
+      label: requestListLabelKey
+        ? t(requestListLabelKey)
+        : t(`certificationRequest.statusOptions.${request.requestStatus}`, {
+            defaultValue: t("certificationRequest.list"),
+          }),
       url: listUrl,
     },
     {

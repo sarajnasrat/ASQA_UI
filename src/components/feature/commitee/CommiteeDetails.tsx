@@ -404,7 +404,13 @@ export const CommiteeDetails = () => {
   };
 
   const breadcrumbItems = [
-    { label: t("commitee.list"), url: "/commitee-list" },
+    {
+      label: getCommitteeTypeTranslation(commiteeDetails.committeeType),
+      url:
+        commiteeDetails.committeeType?.toLowerCase() === "approval"
+          ? "/approva-commitee"
+          : "/inspection-commitee",
+    },
     { label: t("commitee.details.title"), url: `/commitee/view/${id}` },
   ];
 

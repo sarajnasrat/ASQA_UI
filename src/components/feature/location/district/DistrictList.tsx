@@ -150,14 +150,6 @@ export const DistrictList = () => {
         if (district) confirmDelete(district);
       },
     },
-    hasPermission("VIEW_DISTRICT") && {
-      label: t("common.view"),
-      icon: "pi pi-eye",
-      command: () => {
-        const district = selectedActionDistrict.current;
-        if (district) navigate(`/districts/view/${district.id}`);
-      },
-    },
   ].filter(Boolean) as MenuItem[];
 
   const header = () => {
@@ -179,7 +171,6 @@ export const DistrictList = () => {
             raised
             severity="info"
             onClick={() => setShowCreateDialog(true)}
-            className="bg-blue-600 hover:bg-blue-700 border-none shadow-md hover:shadow-lg transition-all"
           />
           <Button
             icon="pi pi-sync"

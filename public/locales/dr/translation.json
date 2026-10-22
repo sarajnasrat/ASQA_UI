@@ -86,7 +86,7 @@
       "INSPECTION_OVERDUE": "تاخیر در بررسی"
     },
     "requestStatuses": {
-      "COMMITTEE_APPROVED": "تائید هئیت تائید دهی",
+  "COMMITTEE_APPROVED": "گزارش تائید شده هیئت تائید دهی",
       "SUBMITTED": "ثبت شده",
       "UNDER_REVIEW": "تحت بررسی",
       "STANDARDS_PROVIDED": "استندردها ارائه شد",
@@ -868,6 +868,7 @@
     "organizationServices": "فعالیت ریاست تائید نامه های کیفی"
   },
   "certification": {
+    "document": "سند",
     "createdDate": "تاریخ ایجاد",
     "printable": "چاپ شده",
     "scanned": "اسکن شده",
@@ -1186,6 +1187,9 @@
     }
   },
   "certificationRequest": {
+    "inspectionCommitteeReferral": "راجع نمودن به هئیت تفتیش",
+    "standardsManagement": "مدیریت استانداردها",
+    "committeeApprovedReports": "گزارش های تائید شده هئیت تائید دهی",
     "addstandard": "افزودن استاندارد",
     "printable": "چاپ شده",
     "scanned": "سکن شده",
@@ -1350,7 +1354,7 @@
         "REPORTED_TO_COMMITTEE": "گزارش به کمیته تائید دهی ",
         "REPORT_APPROVED": "گزارش تایید شده"
       },
-      "COMMITTEE_APPROVED": "تائید هئیت تائید دهی",
+      "COMMITTEE_APPROVED": "گزارش  تائید شده هئیت تائید دهی",
       "DRAFT": "پیش‌ نویس",
       "SUBMITTED": "ارسال شده",
       "REGISTERED": "اهدای سند ثبت دیتابیس",

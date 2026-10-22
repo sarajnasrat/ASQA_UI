@@ -100,7 +100,7 @@
       "CERTIFICATION_ISSUED": "Certification Issued",
       "REJECTED": "Rejected",
       "CANCELLED": "Cancelled",
-      "COMMITTEE_APPROVED": "تائید هئیت تائید دهی",
+    "COMMITTEE_APPROVED": "Committee Approved",
       "CERTIFICATE_ISSUED": "Certification Issued"
     },
     "templates": {
@@ -1023,6 +1023,7 @@
     "organizationServices": "Organization Services"
   },
   "certification": {
+    "document": "Document",
     "createdDate": "Created Date",
     "printable": "Printable",
     "scanned": "Scanned",
@@ -1341,6 +1342,9 @@
     "all": "All Certifications"
   },
   "certificationRequest": {
+    "inspectionCommitteeReferral": "Referral to Inspection Committee",
+    "standardsManagement": "Standards Management",
+    "committeeApprovedReports": "Committee Approval Reports",
     "timeline": "Timeline",
     "progress": "Progress",
     "reviewMessage": "Request Process",

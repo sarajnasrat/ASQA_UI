@@ -151,7 +151,6 @@ export const CategoryList: React.FC = () => {
             raised
             severity="info"
             onClick={() => setShowCreateDialog(true)}
-            className="bg-blue-600 hover:bg-blue-700 border-none shadow-md hover:shadow-lg transition-all"
           />
         )}
         <Button
@@ -203,7 +202,13 @@ export const CategoryList: React.FC = () => {
       field: "categoryType",
       header: t("category.categoryType"),
       style: { minWidth: "160px" },
-      body: (row: any) => <span className="font-medium text-blue-700">{row.categoryType || "COMPANY"}</span>,
+      body: (row: any) => (
+        <span className="font-medium text-blue-700">
+          {t(`category.types.${row.categoryType || "COMPANY"}`, {
+            defaultValue: row.categoryType || "COMPANY",
+          })}
+        </span>
+      ),
     },
     {
       header: t("common.action"),

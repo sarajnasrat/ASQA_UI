@@ -195,10 +195,24 @@ export const MainLayout = () => {
                   </ProtectedRoute>
                 }
               />
-              <Route path="district" element={<DistrictList />} />
+              <Route
+                path="district"
+                element={
+                  <ProtectedRoute permission="VIEW_DISTRICT">
+                    <DistrictList />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="reports" element={<CertificationRequestReport />} />
 
-              <Route path="province" element={<ProvinceList />} />
+              <Route
+                path="province"
+                element={
+                  <ProtectedRoute permission="VIEW_PROVINCE">
+                    <ProvinceList />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="general-info" element={<OrganizationInfoList />} />
               <Route path="category" element={<CategoryList />} />
               <Route

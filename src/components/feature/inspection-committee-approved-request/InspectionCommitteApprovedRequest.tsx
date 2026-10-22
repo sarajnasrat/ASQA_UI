@@ -13,7 +13,7 @@ import { InputText } from "primereact/inputtext";
 import CertificationRequestService from "../../../services/CertificationReques.service";
 import { handleApi } from "../../../hooks/handleApi";
 
-import DynamicBreadcrumb from "../../common/DynamicBreadcrumb";
+import CertificationRequestBreadcrumb from "../certification-request/CertificationRequestBreadcrumb";
 import { DynamicTable } from "../../common/DynamicTable";
 
 import type { StatusTabItem } from "../../common/StatusTabMenu";
@@ -580,8 +580,10 @@ export const InspectionCommitteApprovedRequest = ({
       <Toast ref={toast} />
       <ConfirmDialog />
 
-      <DynamicBreadcrumb
-        items={[{ label: t(titleKey), url: menuPath }]}
+      <CertificationRequestBreadcrumb
+        status={status}
+        listUrl={menuPath}
+        labelKey="certificationRequest.committeeApprovedReports"
       />
 
       <StatusTabMenu

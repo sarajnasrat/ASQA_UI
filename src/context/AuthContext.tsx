@@ -177,7 +177,38 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const hasPermission = (permission: string) => {
-    return permissions.includes(permission.trim().toUpperCase());
+    const normalizedPermission = permission.trim().toUpperCase();
+    const equivalentPermissions: Record<string, string[]> = {
+      VIEW_COUNTRY: ["VIEW_COUNTRY", "VIEW_COUNTRIES"],
+      VIEW_PROVINCE: ["VIEW_PROVINCE", "VIEW_PROVINCES"],
+      VIEW_DISTRICT: ["VIEW_DISTRICT", "VIEW_DISTRICTS"],
+    };
+    const acceptedPermissions = equivalentPermissions[normalizedPermission] || [
+      normalizedPermission,
+    ];
+    if (acceptedPermissions.some((value) => permissions.includes(value))) {
+      return true;
+    }
+
+    const menuPermissions = [
+      ...menus,
+      ...routeMenus,
+    ].flatMap((menu: any) => {
+      const collect = (item: any): string[] => {
+        if (!item || typeof item !== "object") return [];
+        return [
+          typeof item.permissionName === "string" ? item.permissionName : "",
+          ...(Array.isArray(item.children)
+            ? item.children.flatMap(collect)
+            : []),
+        ];
+      };
+      return collect(menu);
+    });
+
+    return menuPermissions.some((value) =>
+      acceptedPermissions.includes(value.trim().toUpperCase()),
+    );
   };
 
   const withPermission = (permission: string, item: MenuItem): MenuItem[] => {

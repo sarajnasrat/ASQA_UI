@@ -100,7 +100,7 @@
       "CERTIFICATE_ISSUED": "سند صادر شو",
       "REJECTED": "رد شو",
       "CANCELLED": "لغوه شو",
-      "COMMITTEE_APPROVED": "تائید هئیت تائید دهی"
+      "COMMITTEE_APPROVED": "تائید شده توسط هئیت تائید دهی"
     },
     "templates": {
       "requestSubmitted": {
@@ -132,7 +132,8 @@
       "inspectionOverdue": {
         "title": "د تفتیش مهلت بشپړ شو",
         "message": "د {{trackingNumber}} غوښتنې د تفتیش مهلت بشپړ شوی او غوښتنه باید وکتل شي."
-      },
+      }
+,
       "inspectionDeadlineReached": {
         "title": "د تفتیش مهلت راورسېد",
         "message": "د {{trackingNumber}} غوښتنې د تفتیش مهلت راورسېد."
@@ -866,6 +867,7 @@
     "certificationVerification": "د تصدیق د اعتبار کتنه"
   },
   "certification": {
+    "document": "سند",
     "createdDate": "د جوړېدو نېټه",
     "printable": "چاپ شوی",
     "scanned": "سکین شوی",
@@ -1183,6 +1185,9 @@
     "all": "ټول تصدیقونه"
   },
   "certificationRequest": {
+    "inspectionCommitteeReferral": "د تفتیش کمېټې ته راجع کول",
+    "standardsManagement": "د معیارونو مدیریت",
+    "committeeApprovedReports": "د تایید ورکوونکي پلاوي تایید شوي راپورونه",
     "timeline": "د درخواست پروسه",
     "progress": "جریان",
     "reviewMessage": "پیگیری درخواست",
@@ -1341,7 +1346,7 @@
       "INSPECTION_PAYMENT_PENDING": "د تفتیش تادیه په تمه ده",
       "STANDARDS_REQUIRED": "معیارونه اړین دي",
       "DEADLINE_REQUIRED": "نېټه اړینه ده",
-      "COMMITTEE_APPROVED": "تائید هئیت تائید دهی",
+  "COMMITTEE_APPROVED": "تائید شده هئیت تائید دهی",
       "dashboard": {
         "SUBMITTED": "سپارل شوی",
         "UNDER_REVIEW": "تر بیاکتنې لاندې",
