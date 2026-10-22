@@ -746,7 +746,10 @@
     "pdf": {
       "emirate": "د افغانستان اسلامي امارت",
       "authority": "د معيار او کیفیت اداره",
+      "secondaryTitle": "تخنیکي معاونیت",
       "directorate": "د کيفي تصدیق نامو ریاست",
+      "certificationRequestDepartment": "د اسنادو د کنټرول او ساتنې آمریت",
+      "mismanagementdepartment": "د MIS عمومي مدیریت",
       "companyInfo": "د شرکت معلومات",
       "contactInfo": "د شرکت د استازي معلومات",
       "requestInfo": "د غوښتنو معلومات",
@@ -863,6 +866,9 @@
     "certificationVerification": "د تصدیق د اعتبار کتنه"
   },
   "certification": {
+    "createdDate": "د جوړېدو نېټه",
+    "printable": "چاپ شوی",
+    "scanned": "سکین شوی",
     "latest": "وروستی",
     "selectExistingStandard": "موجود معیار وټاکئ",
     "uploadNewStandard": "نوی معیار پورته کړئ",
@@ -2012,6 +2018,7 @@
     }
   },
   "common": {
+    "no": "نه",
     "or": "یا",
     "months": "میاشتې",
     "selectDateType": "د تاریخ ډول",

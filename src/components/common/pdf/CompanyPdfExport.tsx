@@ -46,8 +46,11 @@ const CompanyPdfExport = React.forwardRef<
     },
     ref,
   ) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const pdfTemplateRef = React.useRef<HTMLDivElement>(null);
+    const isRtl = !i18n.language.startsWith("en");
+    const pageDirection = isRtl ? "rtl" : "ltr";
+    const pageTextAlign = isRtl ? "right" : "left";
 
     const formatDate = React.useCallback((value?: string) => {
       if (!value) return "-";
@@ -58,6 +61,11 @@ const CompanyPdfExport = React.forwardRef<
       if (!value) return "-";
       return IslamicDateFormatter.formatQamari(value, true);
     }, []);
+
+    const formatPhone = React.useCallback(
+      (value?: string) => (value ? `\u200E${value}` : t("common.notSpecified")),
+      [t],
+    );
 
     const labelize = React.useCallback((value?: string) => {
       return value
@@ -70,9 +78,14 @@ const CompanyPdfExport = React.forwardRef<
 
     const formatContactAddress = React.useCallback(
       (address: any) =>
-        [address?.district?.districtName, address?.details]
+        [
+          address?.district?.districtName,
+          address?.district?.province?.provinceName,
+          address?.district?.province?.country?.countryName,
+          address?.details,
+        ]
           .filter(Boolean)
-          .join(" - ") || t("common.notSpecified"),
+          .join(", ") || t("common.notSpecified"),
       [t],
     );
 
@@ -98,6 +111,20 @@ const CompanyPdfExport = React.forwardRef<
 
     const primaryContact = sortedContactPersons[0];
 
+    const localizedOwnerName =
+      i18n.language.startsWith("ps")
+        ? company?.companyOwnerNamePs
+        : i18n.language.startsWith("en")
+          ? company?.companyOwnerNameEn
+          : company?.companyOwnerNameDr;
+
+    const localizedCompanyName =
+      i18n.language.startsWith("ps")
+        ? company?.companyNamePS
+        : i18n.language.startsWith("en")
+          ? company?.companyNameEN
+          : company?.companyNameDR;
+
     const companyCategoriesText =
       company?.categories
         ?.map((category: any) => category.categoryName)
@@ -106,52 +133,46 @@ const CompanyPdfExport = React.forwardRef<
 
     const pdfCompanyRows: [string, string, string, string][] = [
       [
-        t("company.labels.companyOwnerNameDr"),
-        company?.companyOwnerNameDr || t("common.notSpecified"),
+        t("company.labels.companyOwnerName"),
+        localizedOwnerName || t("common.notSpecified"),
         t("company.labels.email"),
         company?.email || t("common.notSpecified"),
       ],
       [
-        t("company.labels.companyOwnerNameEn"),
-        company?.companyOwnerNameEn || t("common.notSpecified"),
         t("company.labels.phoneNumber"),
-        company?.phoneNumber || t("common.notSpecified"),
-      ],
-      [
-        t("company.labels.ownerNameDr"),
-        company?.companyOwnerNameDr || t("common.notSpecified"),
+        formatPhone(company?.phoneNumber),
         t("company.labels.jawazIssueDate"),
         formatDate(company?.jawazIssueDate),
       ],
       [
-        t("company.labels.companyNamePS"),
-        company?.companyNamePS || t("common.notSpecified"),
+        t("company.labels.companyName"),
+        localizedCompanyName || t("common.notSpecified"),
         t("company.labels.jawazExpiryDate"),
         formatDate(company?.jawazExpiryDate),
       ],
       [
         t("company.labels.mainBranchAddress"),
         company?.mainBranchAddress || t("common.notSpecified"),
-        t("company.labels.tinNumber"),
-        company?.tinNumber || t("common.notSpecified"),
+        t("company.labels.establishYear"),
+        formatDate(company?.establishYear),
       ],
       [
         t("company.labels.activityPlace"),
         company?.activityPlace || t("common.notSpecified"),
-        t("company.labels.businessLogo"),
-        company?.bussinessLogoUrl ? t("common.yes") : t("common.no"),
-      ],
-      [
         t("company.labels.activityType"),
         company?.activityType || t("common.notSpecified"),
-        t("company.labels.categories"),
-        companyCategoriesText,
       ],
       [
-        t("company.labels.establishYear"),
-        formatDate(company?.establishYear),
-        t("company.table.createdAt"),
-        formatDateTime(company?.createdDate),
+        t("company.labels.jawazNumber"),
+        company?.jawazNumber || t("common.notSpecified"),
+        t("company.labels.tinNumber"),
+        company?.tinNumber || t("common.notSpecified"),
+      ],
+      [
+        t("company.labels.categories"),
+        companyCategoriesText,
+        "",
+        "",
       ],
       [
         t("company.labels.address"),
@@ -163,20 +184,22 @@ const CompanyPdfExport = React.forwardRef<
 
     const pdfContactRows: [string, string, string, string][] = [
       [
-        t("common.name"),
-        primaryContact
-          ? [primaryContact.firstName, primaryContact.lastName]
-              .filter(Boolean)
-              .join(" ")
-          : t("common.notSpecified"),
-        t("company.labels.phoneNumber"),
-        primaryContact?.phoneNumber || t("common.notSpecified"),
+        t("contactPerson.firstName"),
+        primaryContact?.firstName || t("common.notSpecified"),
+        t("contactPerson.lastName"),
+        primaryContact?.lastName || t("common.notSpecified"),
       ],
       [
         t("contactPerson.position"),
         primaryContact?.position || t("common.notSpecified"),
         t("company.labels.email"),
         primaryContact?.email || t("common.notSpecified"),
+      ],
+      [
+        t("company.labels.phoneNumber"),
+        formatPhone(primaryContact?.phoneNumber),
+        "",
+        "",
       ],
       [
         t("company.labels.address"),
@@ -257,12 +280,7 @@ const CompanyPdfExport = React.forwardRef<
               ],
             ],
           }))
-        : [
-            {
-              title: t("company.pdf.certificationInfo"),
-              rows: [[t("common.details"), t("company.messages.noData"), "", ""]],
-            },
-          ];
+        : [];
 
     const pdfExportSections = React.useMemo<PdfSection[]>(
       () => [
@@ -276,8 +294,8 @@ const CompanyPdfExport = React.forwardRef<
 
     const pdfPages = React.useMemo(() => {
       const pages: PdfSection[][] = [];
-      const firstPageSections = pdfExportSections.slice(0, 2);
-      const remainingSections = pdfExportSections.slice(2);
+      const firstPageSections = pdfExportSections.slice(0, 3);
+      const remainingSections = pdfExportSections.slice(3);
 
       if (firstPageSections.length > 0) {
         pages.push(firstPageSections);
@@ -384,7 +402,7 @@ const CompanyPdfExport = React.forwardRef<
             color: "#111827",
             fontFamily: "Arial, sans-serif",
             background: "#ffffff",
-            direction: "rtl",
+            direction: pageDirection,
           }}
         >
           {pdfPages.map((pageSections, pageIndex) => (
@@ -414,7 +432,7 @@ const CompanyPdfExport = React.forwardRef<
                     alignItems: "center",
                     columnGap: "24px",
                     marginBottom: "34px",
-                    direction: "ltr",
+                    direction: pageDirection,
                   }}
                 >
                   <div style={{ display: "flex", justifyContent: "flex-start" }}>
@@ -427,7 +445,7 @@ const CompanyPdfExport = React.forwardRef<
                   <div
                     style={{
                       textAlign: "center",
-                      direction: "rtl",
+                      direction: pageDirection,
                       color: "#111827",
                       lineHeight: 1.8,
                     }}
@@ -435,22 +453,37 @@ const CompanyPdfExport = React.forwardRef<
                     <div style={{ fontSize: "18px", fontWeight: 700 }}>
                       {t("company.pdf.emirate")}
                     </div>
+                       <div style={{ fontSize: "16px", fontWeight: 700 }}>
+                      {t("company.pdf.secondaryTitle")}
+                    </div>
                     <div style={{ fontSize: "16px", fontWeight: 700 }}>
                       {t("company.pdf.authority")}
                     </div>
+                 
                     <div style={{ fontSize: "16px", fontWeight: 700 }}>
                       {t("company.pdf.directorate")}
+                    </div>
+                    <div style={{ fontSize: "15px", fontWeight: 700 }}>
+                      {t("company.pdf.certificationRequestDepartment")}
+                    </div>
+                    <div style={{ fontSize: "15px", fontWeight: 700 }}>
+                      {t("company.pdf.mismanagementdepartment")}
                     </div>
                   </div>
                   <div style={{ display: "flex", justifyContent: "flex-end" }}>
                     <img
                       src={
-                        assetUrl(company?.bussinessLogoUrl || company?.logoUrl) ||
+                        assetUrl(company?.logoUrl) ||
                         fallbackLogoSrc ||
                         `${window.location.origin}/MOLSA-LOGO.png`
                       }
                       alt="Company Logo"
-                      style={{ width: "86px", height: "54px", objectFit: "contain" }}
+                      style={{
+                        width: "110px",
+                        height: "70px",
+                        objectFit: "contain",
+                        justifySelf: "center",
+                      }}
                     />
                   </div>
                 </div>
@@ -459,16 +492,16 @@ const CompanyPdfExport = React.forwardRef<
                   <div
                     key={section.title}
                     style={{
-                      marginBottom:
-                        sectionIndex === pageSections.length - 1 ? "0" : "26px",
+                    marginBottom:
+                        sectionIndex === pageSections.length - 1 ? "0" : "14px",
                     }}
                   >
                     <div
                       style={{
                         fontSize: "16px",
                         fontWeight: 700,
-                        textAlign: "right",
-                        marginBottom: "10px",
+                        textAlign: pageTextAlign,
+                        marginBottom: "6px",
                       }}
                     >
                       {section.title}
@@ -478,8 +511,8 @@ const CompanyPdfExport = React.forwardRef<
                         width: "100%",
                         borderCollapse: "collapse",
                         tableLayout: "fixed",
-                        fontSize: "12px",
-                        direction: "rtl",
+                        fontSize: "10px",
+                        direction: pageDirection,
                       }}
                     >
                       <tbody>
@@ -490,15 +523,16 @@ const CompanyPdfExport = React.forwardRef<
                                 <td
                                   style={{
                                     width: "18%",
+                                    border: "0.5px solid #111827",
                                     borderRight: "0.5px solid #111827",
                                     borderBottom: "0.5px solid #111827",
                                     borderTop:
                                       rowIndex === 0
                                         ? "0.5px solid #111827"
                                         : undefined,
-                                    padding: "10px 10px",
+                                    padding: "6px 8px",
                                     fontWeight: 700,
-                                    textAlign: "right",
+                                    textAlign: pageTextAlign,
                                     verticalAlign: "middle",
                                   }}
                                 >
@@ -507,6 +541,7 @@ const CompanyPdfExport = React.forwardRef<
                                 <td
                                   colSpan={3}
                                   style={{
+                                    border: "0.5px solid #111827",
                                     borderRight: "0.5px solid #111827",
                                     borderLeft: "0.5px solid #111827",
                                     borderBottom: "0.5px solid #111827",
@@ -514,9 +549,9 @@ const CompanyPdfExport = React.forwardRef<
                                       rowIndex === 0
                                         ? "0.5px solid #111827"
                                         : undefined,
-                                    padding: "10px 10px",
+                                    padding: "6px 8px",
                                     wordBreak: "break-word",
-                                    textAlign: "right",
+                                    textAlign: pageTextAlign,
                                     verticalAlign: "middle",
                                   }}
                                 >
@@ -528,15 +563,16 @@ const CompanyPdfExport = React.forwardRef<
                                 <td
                                   style={{
                                     width: "18%",
+                                    border: "0.5px solid #111827",
                                     borderRight: "0.5px solid #111827",
                                     borderBottom: "0.5px solid #111827",
                                     borderTop:
                                       rowIndex === 0
                                         ? "0.5px solid #111827"
                                         : undefined,
-                                    padding: "10px 10px",
+                                    padding: "6px 8px",
                                     fontWeight: 700,
-                                    textAlign: "right",
+                                    textAlign: pageTextAlign,
                                     verticalAlign: "middle",
                                   }}
                                 >
@@ -545,15 +581,21 @@ const CompanyPdfExport = React.forwardRef<
                                 <td
                                   style={{
                                     width: "32%",
+                                    border: "0.5px solid #111827",
                                     borderRight: "0.5px solid #111827",
                                     borderBottom: "0.5px solid #111827",
                                     borderTop:
                                       rowIndex === 0
                                         ? "0.5px solid #111827"
                                         : undefined,
-                                    padding: "10px 10px",
+                                    padding: "6px 8px",
                                     wordBreak: "break-word",
-                                    textAlign: "right",
+                                    textAlign: pageTextAlign,
+                                    direction:
+                                      row[0] === t("company.labels.phoneNumber")
+                                        ? "ltr"
+                                        : pageDirection,
+                                    unicodeBidi: "plaintext",
                                     verticalAlign: "middle",
                                   }}
                                 >
@@ -562,15 +604,16 @@ const CompanyPdfExport = React.forwardRef<
                                 <td
                                   style={{
                                     width: "18%",
+                                    border: "0.5px solid #111827",
                                     borderRight: "0.5px solid #111827",
                                     borderBottom: "0.5px solid #111827",
                                     borderTop:
                                       rowIndex === 0
                                         ? "0.5px solid #111827"
                                         : undefined,
-                                    padding: "10px 10px",
+                                    padding: "6px 8px",
                                     fontWeight: 700,
-                                    textAlign: "right",
+                                    textAlign: pageTextAlign,
                                     verticalAlign: "middle",
                                   }}
                                 >
@@ -579,6 +622,7 @@ const CompanyPdfExport = React.forwardRef<
                                 <td
                                   style={{
                                     width: "32%",
+                                    border: "0.5px solid #111827",
                                     borderRight: "0.5px solid #111827",
                                     borderLeft: "0.5px solid #111827",
                                     borderBottom: "0.5px solid #111827",
@@ -586,9 +630,14 @@ const CompanyPdfExport = React.forwardRef<
                                       rowIndex === 0
                                         ? "0.5px solid #111827"
                                         : undefined,
-                                    padding: "10px 10px",
+                                    padding: "6px 8px",
                                     wordBreak: "break-word",
-                                    textAlign: "right",
+                                    textAlign: pageTextAlign,
+                                    direction:
+                                      row[2] === t("company.labels.phoneNumber")
+                                        ? "ltr"
+                                        : pageDirection,
+                                    unicodeBidi: "plaintext",
                                     verticalAlign: "middle",
                                   }}
                                 >

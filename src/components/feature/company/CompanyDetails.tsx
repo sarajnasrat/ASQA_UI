@@ -206,9 +206,14 @@ export const CompanyDetails: React.FC = () => {
   };
 
   const formatContactAddress = (address: any) =>
-    [address?.district?.districtName, address?.details]
+    [
+      address?.district?.districtName,
+      address?.district?.province?.provinceName,
+      address?.district?.province?.country?.countryName,
+      address?.details,
+    ]
       .filter(Boolean)
-      .join(" - ") || t("common.notSpecified");
+      .join(", ") || t("common.notSpecified");
 
   const phoneDisplayClass =
     "inline-block text-left [direction:ltr] [unicode-bidi:isolate]";
@@ -273,7 +278,7 @@ export const CompanyDetails: React.FC = () => {
     },
     {
       label: t("company.table.createdAt"),
-      value: formatDateTime(company?.createdDate),
+      value: formatDateTime(company?.createdDate || company?.createdAt),
     },
   ];
   const companyAddressItem = {
@@ -382,7 +387,7 @@ export const CompanyDetails: React.FC = () => {
                       <CalendarDays className="h-4 w-4" />
                       <span>
                         {t("company.table.createdAt")}:{" "}
-                        {formatDateTime(company.createdDate)}
+                        {formatDateTime(company.createdDate || company.createdAt)}
                       </span>
                     </div>
                   </div>

@@ -21,13 +21,23 @@ const AuthContext = createContext<IAuthContext | undefined>(undefined);
 
 const getPermissionsFromToken = (token: string) => {
   const decoded: any = jwtDecode(token);
+  const claims = [decoded.permissions, decoded.authorities, decoded.roles]
+    .flatMap((value) => {
+      if (Array.isArray(value)) return value;
+      if (typeof value === "string") return value.split(",");
+      return [];
+    })
+    .map((value) => {
+      if (typeof value === "string") return value;
+      if (value && typeof value === "object") {
+        return value.authority ?? value.permissionName ?? value.name ?? "";
+      }
+      return "";
+    })
+    .map((permission) => String(permission).trim().toUpperCase())
+    .filter(Boolean);
 
-  return (
-    decoded.roles
-      ?.split(",")
-      .map((permission: string) => permission.trim().toUpperCase())
-      .filter(Boolean) ?? []
-  );
+  return [...new Set(claims)];
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -167,7 +177,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const hasPermission = (permission: string) => {
-    return permissions.includes(permission);
+    return permissions.includes(permission.trim().toUpperCase());
   };
 
   const withPermission = (permission: string, item: MenuItem): MenuItem[] => {

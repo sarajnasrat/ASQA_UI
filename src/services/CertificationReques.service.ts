@@ -1,5 +1,6 @@
 // services/certificationRequest.service.ts
 import httpClient from "../api/httpClient";
+import i18n from "../i18n/i18n";
 
 const BASE_URL = "/certificationrequest";
 const PAYMENT_BASE_URL = "/payments";
@@ -54,7 +55,11 @@ export const CertificationRequestService = {
   
   // ✅ Get by ID
   getById(id: number) {
-    return httpClient.get(`${BASE_URL}/${id}`);
+    return httpClient.get(`${BASE_URL}/${id}`, {
+      headers: {
+        "Accept-Language": i18n.language || "en",
+      },
+    });
   },
 
   getRequestTracker(id: string) {

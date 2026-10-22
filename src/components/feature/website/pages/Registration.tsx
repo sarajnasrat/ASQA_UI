@@ -74,7 +74,7 @@ const clearRegistrationStorage = () => {
 };
 
 const Registration = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const pdfTemplateRef = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState<number>(1);
   const [companyId, setCompanyId] = useState<number | null>(null);
@@ -841,12 +841,9 @@ const Registration = () => {
     requestInfo: t("certificationRequest.pdf.requestInfo") || t("certificationRequest.requestInformation"),
     companyInfo: t("company.companyInfo") || t("company.labels.companyInfo"),
     contactInfo: t("contactPerson.info"),
-    requestId: t("certificationRequest.labels.requestId") || "ID",
     requestStatus: t("certificationRequest.labels.requestStatus"),
     certificationType: t("certificationRequest.labels.certificationType"),
-    companyNameEn: t("company.labels.companyNameEN"),
-    companyNameDr: t("company.labels.companyNameDR"),
-    companyNamePs: t("company.labels.companyNamePS"),
+    companyName: t("company.labels.companyName"),
     email: t("company.labels.email"),
     phoneNumber: t("company.labels.phoneNumber"),
     address: t("company.labels.address"),
@@ -859,11 +856,15 @@ const Registration = () => {
     firstName: t("contactPerson.firstName"),
     lastName: t("contactPerson.lastName"),
     position: t("contactPerson.position"),
-    headerTitle: t("certificationRequest.pdf.headerTitle") || "Field",
-    headerInfo: t("certificationRequest.pdf.headerInfo") || "Value",
-    detailsTitle: t("certificationRequest.pdf.detailsTitle") || "Details",
     footer: t("certificationRequest.pdf.footer") || "This document was generated automatically by the ASQA request system.",
   };
+  const pdfDirection = i18n.language.startsWith("en") ? "ltr" : "rtl";
+  const pdfTextAlign = pdfDirection === "ltr" ? "left" : "right";
+  const localizedCompanyName = i18n.language.startsWith("ps")
+    ? company.companyNamePS
+    : i18n.language.startsWith("en")
+      ? company.companyNameEN
+      : company.companyNameDR;
   const translateRequestType = (value: string) =>
     value ? t(`certificationRequest.typeOptions.${value}`) || value : "-";
   const translateRequestStatus = (value: string) =>
@@ -871,35 +872,21 @@ const Registration = () => {
   const translateCertificationType = (value: string) =>
     value ? t(`certificationRequest.certificationTypeOptions.${value}`) || value : "-";
   const requestRows = [
-    [pdfText.requestId, String(request.id ?? "-")],
-    [pdfText.serialNumber, request.serialNumber || "-"],
-    [pdfText.trackingNumber, request.trackingNumber || "-"],
-    [pdfText.requestType, translateRequestType(request.requestType || "")],
-    [pdfText.requestStatus, translateRequestStatus(request.requestStatus || "")],
-    [pdfText.certificationType, translateCertificationType(request.certificationType || "")],
-    [pdfText.createdDate, formatDateTime(request.createdDate)],
+    [pdfText.serialNumber, request.serialNumber || "-", pdfText.trackingNumber, request.trackingNumber || "-"],
+    [pdfText.requestType, translateRequestType(request.requestType || ""), pdfText.requestStatus, translateRequestStatus(request.requestStatus || "")],
+    [pdfText.certificationType, translateCertificationType(request.certificationType || ""), pdfText.createdDate, formatDateTime(request.createdDate)],
   ];
   const companyRows = [
-    [pdfText.companyNameEn, company.companyNameEN || "-"],
-    [pdfText.companyNameDr, company.companyNameDR || "-"],
-    [pdfText.companyNamePs, company.companyNamePS || "-"],
-    [pdfText.phoneNumber, company.phoneNumber || "-"],
-    [pdfText.email, company.email || "-"],
-    [pdfText.address, company.address || "-"],
-    [pdfText.mainBranchAddress, company.mainBranchAddress || "-"],
-    [pdfText.activityPlace, company.activityPlace || "-"],
-    [pdfText.jawazNumber, company.jawazNumber || "-"],
-    [pdfText.tinNumber, company.tinNumber || "-"],
-    [pdfText.website, company.websiteUrl || "-"],
-    [pdfText.category, companyCategories || "-"],
+    [pdfText.companyName, localizedCompanyName || "-", pdfText.phoneNumber, company.phoneNumber || "-"],
+    [pdfText.email, company.email || "-", pdfText.address, company.address || "-"],
+    [pdfText.mainBranchAddress, company.mainBranchAddress || "-", pdfText.activityPlace, company.activityPlace || "-"],
+    [pdfText.jawazNumber, company.jawazNumber || "-", pdfText.tinNumber, company.tinNumber || "-"],
+    [pdfText.website, company.websiteUrl || "-", pdfText.category, companyCategories || "-"],
   ];
   const contactRows = [
-    [pdfText.firstName, contact.firstName || "-"],
-    [pdfText.lastName, contact.lastName || "-"],
-    [pdfText.position, contact.position || "-"],
-    [pdfText.phoneNumber, contact.phoneNumber || "-"],
-    [pdfText.email, contact.email || "-"],
-    [pdfText.address, getAddressLine(contact.addresses)],
+    [pdfText.firstName, contact.firstName || "-", pdfText.lastName, contact.lastName || "-"],
+    [pdfText.position, contact.position || "-", pdfText.phoneNumber, contact.phoneNumber || "-"],
+    [pdfText.email, contact.email || "-", pdfText.address, getAddressLine(contact.addresses)],
   ];
 
   return (
@@ -964,7 +951,7 @@ const Registration = () => {
       <div className="fixed -left-[9999px] top-0 pointer-events-none opacity-0">
         <div
           ref={pdfTemplateRef}
-          dir="rtl"
+          dir={pdfDirection}
           style={{
             width: "1020px",
             background: "#ffffff",
@@ -1016,21 +1003,17 @@ const Registration = () => {
             { title: pdfText.contactInfo, rows: contactRows },
           ].map((section) => (
             <div key={section.title} style={{ marginBottom: "12px" }}>
-              <div style={{ background: "#f3f4f6", border: "1px solid #d1d5db", borderBottom: "none", padding: "8px 10px", fontWeight: 700, fontSize: "13px" }}>
+              <div style={{ background: "#f3f4f6", border: "1px solid #d1d5db", borderBottom: "none", padding: "6px 8px", fontWeight: 700, fontSize: "12px", textAlign: pdfTextAlign }}>
                 {section.title}
               </div>
-              <table style={{ width: "100%", borderCollapse: "collapse", tableLayout: "fixed", border: "1px solid #d1d5db", fontSize: "11px" }}>
-                <thead>
-                  <tr>
-                    <th style={{ width: "34%", background: "#f8fafc", borderBottom: "1px solid #d1d5db", padding: "7px 8px", textAlign: "right" }}>{pdfText.headerTitle}</th>
-                    <th style={{ background: "#f8fafc", borderBottom: "1px solid #d1d5db", padding: "7px 8px", textAlign: "right" }}>{pdfText.detailsTitle}</th>
-                  </tr>
-                </thead>
+              <table style={{ width: "100%", borderCollapse: "collapse", tableLayout: "fixed", border: "1px solid #d1d5db", fontSize: "10px", direction: pdfDirection }}>
                 <tbody>
-                  {section.rows.map(([label, value], index) => (
+                  {section.rows.map(([label1, value1, label2, value2], index) => (
                     <tr key={`${section.title}-${index}`} style={{ background: index % 2 === 0 ? "#fcfcfc" : "#ffffff" }}>
-                      <td style={{ borderBottom: "1px solid #e5e7eb", borderLeft: "1px solid #e5e7eb", padding: "7px 8px", fontWeight: 700 }}>{label}</td>
-                      <td style={{ borderBottom: "1px solid #e5e7eb", padding: "7px 8px", wordBreak: "break-word" }}>{value || "-"}</td>
+                      <td style={{ width: "18%", border: "1px solid #e5e7eb", padding: "6px 8px", fontWeight: 700, textAlign: pdfTextAlign }}>{label1}</td>
+                      <td style={{ width: "32%", border: "1px solid #e5e7eb", padding: "6px 8px", wordBreak: "break-word", textAlign: pdfTextAlign }}>{value1 || "-"}</td>
+                      <td style={{ width: "18%", border: "1px solid #e5e7eb", padding: "6px 8px", fontWeight: 700, textAlign: pdfTextAlign }}>{label2}</td>
+                      <td style={{ width: "32%", border: "1px solid #e5e7eb", padding: "6px 8px", wordBreak: "break-word", textAlign: pdfTextAlign }}>{value2 || "-"}</td>
                     </tr>
                   ))}
                 </tbody>

@@ -724,7 +724,10 @@
     "pdf": {
       "emirate": "Islamic Emirate of Afghanistan",
       "authority": "Standards and Quality Authority",
+      "secondaryTitle": "Technical Deputy Directorate",
       "directorate": "Quality Certification Directorate",
+      "certificationRequestDepartment": "Document Control and Records Maintenance Department",
+      "mismanagementdepartment": "General MIS Management",
       "companyInfo": "Company Information",
       "contactInfo": "Company Representative Information",
       "requestInfo": "Request Information",
@@ -1020,6 +1023,9 @@
     "organizationServices": "Organization Services"
   },
   "certification": {
+    "createdDate": "Created Date",
+    "printable": "Printable",
+    "scanned": "Scanned",
     "latest": "Latest",
     "selectExistingStandard": "Select existing standard",
     "uploadNewStandard": "Upload new standard",
@@ -2037,6 +2043,7 @@
     }
   },
   "common": {
+    "no": "No",
     "or": "OR",
     "months": "Months",
     "selectDateType": "selectDateType",
