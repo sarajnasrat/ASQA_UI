@@ -190,7 +190,7 @@ export const CommiteeUpdate: React.FC<CommiteeUpdateProps> = ({
 
                   <div className="space-y-1.5">
                     <label className="flex flex-wrap items-center gap-1 text-sm font-semibold text-gray-700">
-                      {t("commitee.type")}
+                      {t("commitee.details.committeeType")}
                       <span className="text-base text-red-500">*</span>
                     </label>
                     <Controller

@@ -176,7 +176,7 @@ export const CommiteeCreate: React.FC<CommiteeCreateProps> = ({
 
                 <div className="space-y-1.5">
                   <label className="flex items-center gap-1 text-sm font-semibold text-gray-700">
-                    {t("commitee.type")}
+                    {t("commitee.details.committeeType")}
                     <span className="text-base text-red-500">*</span>
                   </label>
 
