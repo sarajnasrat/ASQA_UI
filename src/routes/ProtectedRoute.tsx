@@ -47,6 +47,13 @@ const findMatchingMenu = (pathname: string, items: unknown[]) =>
 
 const getRoutePermission = (pathname: string) => {
   const pathSegments = normalizePath(pathname).split("/").filter(Boolean);
+  const normalizedPath = normalizePath(pathname);
+  if (
+    normalizedPath === "/manage-certification-request" ||
+    normalizedPath.startsWith("/certification-request/manage/")
+  ) {
+    return "UPDATE_CERTIFICATIONREQUEST";
+  }
   if (
     pathSegments.length === 3 &&
     menuPathMatches(pathname, "/commitee-assignment/view/:id")

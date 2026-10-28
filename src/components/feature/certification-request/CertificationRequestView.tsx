@@ -61,6 +61,26 @@ const transitionMap: Record<string, string[]> = {
 };
 
 const finalStates = ["UNDER_SUPERVISION", "REJECTED", "CANCELLED"];
+const managementStatuses = [
+  "DRAFT",
+  "SUBMITTED",
+  "UNDER_REVIEW",
+  "STANDARDS_PROVIDED",
+  "DEADLINE_REQUIRED",
+  "DEADLINE_ASSIGNED",
+  "INSPECTION_IN_PROGRESS",
+  "REPORTED_TO_COMMITTEE",
+  "REPORT_APPROVED",
+  "CONTRACT_PENDING",
+  "INSPECTION_PAYMENT_PENDING",
+  "PAYMENT_PENDING",
+  "PAYMENT_COMPLETED",
+  "AUTHORITY_DECISION",
+  "UNDER_SUPERVISION",
+  "CERTIFICATION_ISSUED",
+  "REJECTED",
+  "CANCELLED",
+];
 
 interface CommitteeOption {
   label: string;
@@ -113,9 +133,10 @@ const CommitteeSelectionField: React.FC<{
 
 type CertificationRequestViewProps = {
   expectedScope?: "NATIONAL" | "INTERNATIONAL";
+  managementMode?: boolean;
 };
 
-const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ expectedScope }) => {
+const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ expectedScope, managementMode = false }) => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
@@ -294,6 +315,9 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
   };
 
   const getNextStatuses = () => {
+    if (managementMode) {
+      return managementStatuses.filter((status) => status !== request?.requestStatus);
+    }
     if (!request?.requestStatus) return [];
     if (request.requestStatus === "UNDER_REVIEW") {
       return request.certificationScope === "INTERNATIONAL"
@@ -971,7 +995,7 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
         t("certificationRequest.paymentCompleted") ||
         "Payment will be marked as completed.",
       AUTHORITY_DECISION:
-        request.requestStatus === "PAYMENT_PENDING"
+        request?.requestStatus === "PAYMENT_PENDING"
           ? t("certificationRequest.skipPaymentConfirmation") ||
             "Payment will be skipped and the request will move to authority decision."
           : t("certificationRequest.certificateIssued") ||
@@ -1356,6 +1380,10 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
 
       if (response?.status === 200) {
         closeStatusDialog();
+        if (managementMode) {
+          navigate("/manage-certification-request", { replace: true });
+          return;
+        }
         const originPath =
           typeof location.state?.originPath === "string"
             ? location.state.originPath
@@ -2185,6 +2213,7 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
           statusConfig={statusConfig}
           finalStates={finalStates}
           getNextStatuses={getNextStatuses}
+          managementMode={managementMode}
           getStatusButtonLabel={getStatusButtonLabel}
           getCertificationTypeLabel={getCertificationTypeLabel}
           onBack={() => navigate(-1)}

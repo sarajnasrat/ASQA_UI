@@ -602,7 +602,8 @@
         "required": "نام مالک (انگلیسی) الزامی است"
       },
       "companyOwnerNameDr": {
-        "required": "نام مالک (دری) الزامی است"
+        "required": "نام مالک (دری) الزامی است",
+        "invalidCharacters": "برای نام مالک فقط از حروف دری استفاده کنید؛ حروف انگلیسی و اعداد مجاز نیستند"
       },
       "companyNameEN": {
         "required": "نام شرکت (انگلیسی) الزامی است",
@@ -1187,6 +1188,7 @@
     }
   },
   "certificationRequest": {
+    "manage": { "badge": "مدیریت درخواست‌ها", "title": "مدیریت درخواست‌های تائید", "description": "درخواست را جستجو کرده و وضعیت آن را تغییر دهید.", "emptyTitle": "جستجوی درخواست برای مدیریت", "emptyDescription": "شماره پیگیری یا نام شرکت را وارد کنید.", "selectStatus": "وضعیت جدید را انتخاب کنید" },
     "inspectionCommitteeReferral": "راجع نمودن به هئیت تفتیش",
     "standardsManagement": "مدیریت استانداردها",
     "committeeApprovedReports": "گزارش های تائید شده هئیت تائید دهی",
@@ -1321,7 +1323,7 @@
     "statusOptions": {
       "dashboard": {
         "SUBMITTED": "دریافتی",
-        "UNDER_REVIEW": "درحال بررسی",
+        "UNDER_REVIEW": "راحع نمودن به چک و بررسی",
         "CONTRACT_PENDING": "در انتظار امضای قرارداد",
         "INSPECTION_PAYMENT_PENDING": "در انتظار پرداخت هزینه تفتیش",
         "REJECTED": "رد شده",
@@ -1370,7 +1372,7 @@
       "UNDER_SUPERVISION": "تحت نظارت",
       "REJECTED": "رد شده",
       "CANCELLED": "لغو شده",
-      "UNDER_REVIEW": "در حال بررسی",
+      "UNDER_REVIEW": "راجع نمودن به چک و بررسی",
       "CONTRACT_PENDING": "مرحله امضا قرار داد طرفین",
       "INSPECTION_PAYMENT_PENDING": "پرداخت تفتیش در انتظار",
       "STANDARDS_REQUIRED": "اضافه نمودن استاندرد",

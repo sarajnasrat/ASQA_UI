@@ -40,6 +40,14 @@ const getPermissionsFromToken = (token: string) => {
   return [...new Set(claims)];
 };
 
+const canonicalPermission = (permission: string) => {
+  const normalized = permission.trim().toUpperCase().replace(/[^A-Z0-9_]/g, "_");
+  const [action, ...resourceParts] = normalized.split("_");
+  const resource = resourceParts.join("_").replace(/S$/, "");
+  const canonicalAction = action === "EDIT" ? "UPDATE" : action === "CREATE" ? "ADD" : action;
+  return `${canonicalAction}_${resource}`;
+};
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
@@ -182,11 +190,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       VIEW_COUNTRY: ["VIEW_COUNTRY", "VIEW_COUNTRIES"],
       VIEW_PROVINCE: ["VIEW_PROVINCE", "VIEW_PROVINCES"],
       VIEW_DISTRICT: ["VIEW_DISTRICT", "VIEW_DISTRICTS"],
+      UPDATE_COMPANY: [
+        "UPDATE_COMPANY",
+        "UPDATE_COMPANIES",
+        "EDIT_COMPANY",
+        "EDIT_COMPANIES",
+        "COMPANY_UPDATE",
+      ],
     };
-    const acceptedPermissions = equivalentPermissions[normalizedPermission] || [
-      normalizedPermission,
-    ];
-    if (acceptedPermissions.some((value) => permissions.includes(value))) {
+    const acceptedPermissions = equivalentPermissions[normalizedPermission] || [normalizedPermission];
+    const acceptedCanonicalPermissions = acceptedPermissions.map(canonicalPermission);
+    if (permissions.some((value) => acceptedCanonicalPermissions.includes(canonicalPermission(value)))) {
       return true;
     }
 
@@ -207,7 +221,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     });
 
     return menuPermissions.some((value) =>
-      acceptedPermissions.includes(value.trim().toUpperCase()),
+      acceptedCanonicalPermissions.includes(canonicalPermission(value)),
     );
   };
 

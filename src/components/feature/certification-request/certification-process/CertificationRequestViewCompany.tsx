@@ -62,7 +62,14 @@ const CertificationRequestViewCompany: React.FC<Props> = ({
   const translatedCompanyType = (type: any) =>
     type ? t(`company.typeOptions.${type?.companyType}`) : "";
   const handleEdit = () => {
-    navigate("/company/edit/" + request.company.id);
+    navigate(`/company/edit/${request.company.id}`, {
+      state: {
+        originPath: window.location.pathname,
+        activeSidebarPath: window.location.pathname.startsWith("/international-certification-request")
+          ? "/international-certification-request"
+          : "/certification-request",
+      },
+    });
   };
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

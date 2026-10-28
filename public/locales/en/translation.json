@@ -1354,6 +1354,7 @@
     "edit": "Edit Certification Request",
     "delete": "Delete Certification Request",
     "list": "Certification Request List",
+    "manage": { "badge": "Request Management", "title": "Manage Certification Requests", "description": "Search a request and change it to any workflow status.", "emptyTitle": "Search for a request to manage", "emptyDescription": "Enter a tracking number or company name.", "selectStatus": "Select new status" },
     "refersh": "Refresh",
     "created": "Certification request created successfully",
     "updated": "Certification request updated successfully",

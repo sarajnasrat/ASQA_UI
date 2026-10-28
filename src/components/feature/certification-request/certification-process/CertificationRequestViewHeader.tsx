@@ -15,6 +15,7 @@ import type {
 import { useAuth } from "../../../../context/AuthContext";
 import { IslamicDateFormatter } from "../../../common/datepicker/IslamicDateFormatter";
 import DynamicBreadcrumb from "../../../common/DynamicBreadcrumb";
+import { Dropdown } from "primereact/dropdown";
 
 interface Props {
   request: CertificationRequest;
@@ -22,6 +23,7 @@ interface Props {
   statusConfig: StatusConfig;
   finalStates: string[];
   getNextStatuses: () => string[];
+  managementMode?: boolean;
   getStatusButtonLabel: (status: string) => string;
   getCertificationTypeLabel: (type: string) => string;
   onBack: () => void;
@@ -51,6 +53,7 @@ const CertificationRequestViewHeader: React.FC<Props> = ({
   onOpenPaymentDialog,
   onOpenContractDialog,
   onOpenInspectionPaymentDialog,
+  managementMode = false,
 
   t,
 }) => {
@@ -129,15 +132,38 @@ const CertificationRequestViewHeader: React.FC<Props> = ({
             </div>
           </div>
           <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-start sm:w-auto">
-            <button
-              type="button"
-              onClick={onDownloadPdf}
-              className="flex h-11 w-full shrink-0 items-center justify-center self-start rounded-lg border-2 border-gray-400 px-6 font-medium text-gray-700 transition-all duration-200 hover:bg-gray-50 active:bg-gray-100 sm:w-auto"
-            >
-              <Download className="h-4 w-4 mr-2" />
-              {t("common.download")}
-            </button>
-            {hasPermission("UPDATE_CERTIFICATIONREQUEST") && (
+            {managementMode && (
+              <div className="flex w-full min-w-64 flex-col gap-1 sm:w-64">
+                <label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  {t("certificationRequest.status")}
+                </label>
+                <Dropdown
+                  className="w-full"
+                  options={[request.requestStatus, ...getNextStatuses()]
+                    .filter((status, index, statuses) => status && statuses.indexOf(status) === index)
+                    .map((status) => ({
+                      label: getStatusButtonLabel(status),
+                      value: status,
+                    }))}
+                  placeholder={t("certificationRequest.manage.selectStatus")}
+                  onChange={(event) =>
+                    event.value && event.value !== request.requestStatus && onStatusAction(event.value)
+                  }
+                  value={request.requestStatus}
+                />
+              </div>
+            )}
+            {!managementMode && (
+              <button
+                type="button"
+                onClick={onDownloadPdf}
+                className="flex h-11 w-full shrink-0 items-center justify-center self-start rounded-lg border-2 border-gray-400 px-6 font-medium text-gray-700 transition-all duration-200 hover:bg-gray-50 active:bg-gray-100 sm:w-auto"
+              >
+                <Download className="h-4 w-4 mr-2" />
+                {t("common.download")}
+              </button>
+            )}
+            {hasPermission("UPDATE_CERTIFICATIONREQUEST") && !managementMode && (
               <>
               {request.requestStatus === "COMMITTEE_APPROVED" && (
                 <div className="flex min-w-0 flex-col gap-2 rounded-xl border border-amber-200 bg-amber-50 p-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">

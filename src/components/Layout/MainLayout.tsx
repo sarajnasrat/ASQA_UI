@@ -71,6 +71,8 @@ import UserProfilePage from "../feature/user/profile/UserProfilePage";
 import UserSettingsPage from "../feature/user/profile/UserSettingsPage";
 import BackupPage from "../feature/backup/BackupPage";
 import CertificationRequestTracking from "../feature/certification-request/CertificationRequestTracking.tsx";
+import ManageCertificationRequest from "../feature/certification-request/ManageCertificationRequest";
+import ManageCertificationRequestView from "../feature/certification-request/ManageCertificationRequestView";
 import InspectionUserList from "../feature/inspectionuser/InspectionUserList";
 import InspectionUserRegistration from "../feature/inspectionuser/InspectionUserRegistration";
 import InspectionUserEdit from "../feature/inspectionuser/InspectionUserEdit";
@@ -223,6 +225,8 @@ export const MainLayout = () => {
                 path="request-tracking"
                 element={<CertificationRequestTracking />}
               />
+              <Route path="manage-certification-request" element={<ManageCertificationRequest />} />
+              <Route path="certification-request/manage/view/:id" element={<ManageCertificationRequestView />} />
               <Route
                 path="approval-commitee-assignment"
                 element={<ApprovalAssignmentList />}
