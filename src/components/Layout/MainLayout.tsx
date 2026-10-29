@@ -381,7 +381,7 @@ export const MainLayout = () => {
               />
               <Route
                 path="certification-request/view/:id"
-                element={<CertificationRequestView expectedScope="NATIONAL" />}
+                element={<CertificationRequestView />}
               />
 
               <Route path="commitee/view/:id" element={<CommiteeDetails />} />
