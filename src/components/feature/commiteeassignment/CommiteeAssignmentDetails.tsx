@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { API_ORIGIN } from "../../../config/api";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+import { ConfirmDialog } from "primereact/confirmdialog";
 import { Dialog } from "primereact/dialog";
 import { Dropdown } from "primereact/dropdown";
 import FileUploadField from "../../common/FileUploadField";
@@ -74,6 +74,7 @@ export const CommiteeAssignmentDetails: React.FC = () => {
   const [rollbackVisible, setRollbackVisible] = useState(false);
   const [rollbackStatus, setRollbackStatus] = useState<string | null>(null);
   const [recommendationFile, setRecommendationFile] = useState<File | null>(null);
+  const [confirmationStatus, setConfirmationStatus] = useState<string | null>(null);
   const [expandedSections, setExpandedSections] = useState({
     timeline: true,
     assignmentInfo: true,
@@ -178,17 +179,7 @@ export const CommiteeAssignmentDetails: React.FC = () => {
       return;
     }
 
-    confirmDialog({
-      message:
-        nextStatus === "IN_PROGRESS"
-          ? t("commitee.assignment.confirmStartProgress")
-          : t("commitee.assignment.confirmComplete"),
-      header: t("common.confirmation"),
-      icon: "pi pi-exclamation-triangle",
-      acceptLabel: t("commitee.assignment.yes"),
-      rejectLabel: t("commitee.assignment.no"),
-      accept: () => handleAssignmentStatusChange(nextStatus),
-    });
+    setConfirmationStatus(nextStatus);
   };
 
   const handleRollbackRequest = async () => {
@@ -429,6 +420,57 @@ export const CommiteeAssignmentDetails: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 pb-10">
       <ConfirmDialog />
+      <Dialog
+        visible={Boolean(confirmationStatus)}
+        onHide={() => setConfirmationStatus(null)}
+        modal
+        draggable={false}
+        resizable={false}
+        header={
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-700">
+              <AlertCircle className="h-5 w-5" />
+            </div>
+            <span className="text-lg font-semibold text-slate-900">
+              {t("common.confirmation")}
+            </span>
+          </div>
+        }
+        style={{ width: "min(700px, 95vw)" }}
+        footer={
+          <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+            <button type="button" onClick={() => setConfirmationStatus(null)} className="rounded-lg border border-slate-300 px-5 py-2.5 text-slate-700 hover:bg-slate-50">
+              {t("commitee.assignment.no")}
+            </button>
+            <button type="button" onClick={() => { const status = confirmationStatus; setConfirmationStatus(null); if (status) void handleAssignmentStatusChange(status); }} className="rounded-lg bg-blue-600 px-5 py-2.5 font-medium text-white hover:bg-blue-700">
+              {t("commitee.assignment.yes")}
+            </button>
+          </div>
+        }
+      >
+        <div className="space-y-5 py-2">
+          <div className="rounded-xl border border-blue-100 bg-blue-50 p-4">
+            <p className="text-base font-semibold text-blue-950">
+              {assignment.committee?.committeeType?.toUpperCase() === "APPROVAL"
+                ? t("commitee.assignment.confirmStartApproval", { defaultValue: "Do you want to start the approval process for this request?" })
+                : t("commitee.assignment.confirmStartInspection", { defaultValue: "Do you want to start the inspection process for this request?" })}
+            </p>
+          </div>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">{t("certificationRequest.labels.requestType")}</p>
+              <p className="mt-1 font-medium text-slate-900">{getCertificationTypeLabel(request?.certificationType)}</p>
+            </div>
+            <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">{t("company.labels.companyName")}</p>
+              <p className="mt-1 font-medium text-slate-900">{getCompanyName() || "-"}</p>
+            </div>
+          </div>
+          <div className="rounded-xl border border-slate-200 p-4 text-sm text-slate-600">
+            {t("certificationRequest.labels.trackingNumber")}: <span className="font-medium text-slate-900">{request?.trackingNumber || request?.serialNumber || "-"}</span>
+          </div>
+        </div>
+      </Dialog>
       <div className="container mx-auto px-4 max-w-7xl">
         <CommiteeAssignmentViewHeader
           assignment={assignment}

@@ -106,6 +106,7 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
   const [rows, setRows] = useState(10);
   const [totalRecords, setTotalRecords] = useState(0);
   const [classificationDialog, setClassificationDialog] = useState<{ company: any; type: "BLACKLISTED" | "SUSPENDED" } | null>(null);
+  const [whitelistDialog, setWhitelistDialog] = useState<any | null>(null);
   const [classificationReason, setClassificationReason] = useState("");
   const dialogDirection = ["dr", "ps", "fa", "ar"].includes(i18n.language.split("-")[0]) ? "rtl" : "ltr";
   const [classificationSaving, setClassificationSaving] = useState(false);
@@ -129,6 +130,13 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
   const pageTitle =
     title ? t(title) :
     `${t("company.list")}`;
+
+  const getCompanyDisplayName = (company: any) => {
+    const language = i18n.language.split("-")[0];
+    if (language === "dr" && company?.companyNameDR) return company.companyNameDR;
+    if (language === "ps" && company?.companyNamePS) return company.companyNamePS;
+    return company?.companyNameEN || company?.companyNameDR || company?.companyNamePS || company?.companyName || t("common.notSpecified");
+  };
 
   const getCompanies = async () => {
     setLoading(true);
@@ -163,29 +171,23 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
       setClassificationDialog({ company, type });
       return;
     }
-    confirmDialog({
-      message: t(
-        "company.classification.confirmWhitelist",
-        { name: company.companyNameEN || t("common.notSpecified") },
-      ),
-      header: t("company.classification.changeTitle"),
-      icon: "pi pi-exclamation-triangle",
-      acceptLabel: "Yes",
-      rejectLabel: t("common.cancel"),
-      accept: async () => {
-        try {
-          await CompanyService.changeClassification(
-            company.id,
-            type,
-            t("company.classification.manualWhitelist"),
-          );
-          toast.current?.show({ severity: "success", summary: t("common.success"), detail: t("company.classification.updated"), life: 3000 });
-          getCompanies();
-        } catch {
-          toast.current?.show({ severity: "error", summary: t("common.error"), detail: t("company.loadFailed"), life: 3000 });
-        }
-      },
-    });
+    setWhitelistDialog(company);
+  };
+
+  const submitWhitelist = async () => {
+    if (!whitelistDialog) return;
+    try {
+      await CompanyService.changeClassification(
+        whitelistDialog.id,
+        "WHITELISTED",
+        t("company.classification.manualWhitelist"),
+      );
+      setWhitelistDialog(null);
+      toast.current?.show({ severity: "success", summary: t("common.success"), detail: t("company.classification.updated"), life: 3000 });
+      getCompanies();
+    } catch {
+      toast.current?.show({ severity: "error", summary: t("common.error"), detail: t("company.loadFailed"), life: 3000 });
+    }
   };
 
   const submitClassification = async () => {
@@ -251,7 +253,12 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
       ...withPermission("UPDATE_COMPANY", {
         label: t("common.edit"),
         icon: "pi pi-pencil",
-        command: () => navigate(`/company/edit/${rowData.id}`),
+        command: () => navigate(`/company/edit/${rowData.id}`, {
+          state: {
+            originPath: window.location.pathname,
+            activeSidebarPath: window.location.pathname,
+          },
+        }),
       }),
       {
         label: t("common.delete"),
@@ -471,6 +478,28 @@ export const CompanyStatusList: React.FC<CompanyStatusListProps> = ({
     <>
       <Toast ref={toast} />
       <ConfirmDialog />
+      <Dialog
+        visible={!!whitelistDialog}
+        onHide={() => setWhitelistDialog(null)}
+        modal
+        draggable={false}
+        dir={dialogDirection}
+        className="w-[calc(100vw-2rem)] max-w-lg overflow-hidden rounded-2xl"
+        contentClassName="!px-6 !pb-6"
+        header={<div className="flex items-center gap-3 text-start"><span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700"><i className="pi pi-check text-lg" /></span><span className="text-lg font-semibold text-slate-900">{t("company.classification.confirmWhitelistTitle", { name: getCompanyDisplayName(whitelistDialog) })}</span></div>}
+      >
+        <div className="space-y-5 text-start" dir={dialogDirection}>
+          <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3">
+            <p className="mb-1 text-xs font-medium text-emerald-700">{t("company.labels.companyName")}</p>
+            <p className="break-words font-semibold text-slate-900">{getCompanyDisplayName(whitelistDialog)}</p>
+          </div>
+          <p className="text-sm leading-6 text-slate-600">{t("company.classification.confirmWhitelist", { name: getCompanyDisplayName(whitelistDialog) })}</p>
+          <div className="flex flex-wrap justify-end gap-3 border-t border-slate-100 pt-4">
+            <Button label={t("common.cancel")} outlined severity="secondary" onClick={() => setWhitelistDialog(null)} className="rounded-lg" />
+            <Button label={t("common.yes")} icon="pi pi-check" severity="success" onClick={() => void submitWhitelist()} className="rounded-lg" />
+          </div>
+        </div>
+      </Dialog>
       <Dialog
         visible={!!classificationDialog}
         onHide={() => { if (!classificationSaving) setClassificationDialog(null); }}

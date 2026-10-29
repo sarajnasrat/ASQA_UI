@@ -425,6 +425,10 @@
     "pressEsc": "د لغوه کولو لپاره ESC کېکاږئ"
   },
   "company": {
+    "notfoundbyjawaz": "د ورکړل شوې جواز شمېرې سره هېڅ شرکت ونه موندل شو.",
+    "blacklisted": { "cannotcreaterequest": "دا شرکت په تور لېست کې دی او د تصدیق غوښتنه نشي جوړولی." },
+    "suspended": { "cannotcreaterequest": "دا شرکت ځنډول شوی او د تصدیق غوښتنه نشي جوړولی." },
+    "notwhitelisted": { "cannotcreaterequest": "دا شرکت په سپین لېست کې نه دی او د تصدیق غوښتنه نشي جوړولی." },
     "companytyperequired": "د شرکت ډول اړین دی",
     "companyOwnerName": "د مالک نوم",
     "selectvalid": "د شرکت سم ډول وټاکئ.",
@@ -468,6 +472,7 @@
       "suspendDescription": "د {{name}} د تعلیق دلیل ولیکئ.",
       "blacklistDescription": "د {{name}} د تور لېست دلیل ولیکئ.",
       "confirmWhitelist": "{{name}} سپین لېست ته داخل شي؟",
+      "confirmWhitelistTitle": "په سپین لېست کې د شرکت درج کول: {{name}}",
       "restrictionExplanation": "دا شرکت نشي کولای د تصدیق‌نامې غوښتنه جوړه کړي یا د غوښتنو او تصدیق‌نامو حالت بدل کړي.",
       "reasonHelp": "د دې اقدام دلیل په روښانه ډول ولیکئ. دلیل به د شرکتونو په لېست کې ښکاره شي.",
       "reasonPlaceholder": "د دې اقدام دلیل ولیکئ",
@@ -1186,6 +1191,12 @@
     "all": "ټول تصدیقونه"
   },
   "certificationRequest": {
+    "invoiceTitle": "انوایس",
+    "billedTo": "بل شوی ته",
+    "invoiceDate": "د انوایس نېټه",
+    "invoiceCertificationType": "د تصدیق ډول",
+    "invoiceCompanyName": "د شرکت نوم",
+    "invoiceAmountToPay": "د ورکړې وړ مبلغ",
     "manage": { "badge": "د غوښتنو مدیریت", "title": "د تصدیق غوښتنو مدیریت", "description": "غوښتنه ولټوئ او حالت یې بدل کړئ.", "emptyTitle": "د مدیریت لپاره غوښتنه ولټوئ", "emptyDescription": "د تعقیب شمېره یا د شرکت نوم دننه کړئ.", "selectStatus": "نوی حالت وټاکئ" },
     "inspectionCommitteeReferral": "د تفتیش کمېټې ته راجع کول",
     "standardsManagement": "د معیارونو مدیریت",
@@ -1422,6 +1433,9 @@
       "dueDate": "د ورکړې وروستۍ نېټه",
       "itemNo": "شمېره",
       "itemDescription": "د توکي تشریح",
+      "invoiceCertificationType": "د تصدیق ډول",
+      "invoiceCompanyName": "د شرکت نوم",
+      "invoiceAmountToPay": "د ورکړې وړ مبلغ",
       "price": "بیه",
       "quantity": "تعداد",
       "amount": "مقدار",
@@ -1862,6 +1876,7 @@
       "assignmentBy": "لخوا ټاکل شوی",
       "assignmentAt": "د ټاکلو وخت",
       "confirmStartProgress": "ایا تاسو ډاډه یاست چې دا ټاکنه په روانو کې نښه کړئ؟",
+      "confirmStartApproval": "ایا غواړئ د دې غوښتنې د تایید پروسه پیل کړئ؟",
       "confirmComplete": "ایا تاسو ډاډه یاست چې دا ټاکنه بشپړه نښه کړئ؟",
       "notMentioned": "نه دی یاد شوی",
       "payments": "تادیات",
@@ -3967,6 +3982,7 @@
     }
   },
   "certificationrequest": {
+    "duplicateunissuedtype": "د دې شرکت لپاره د همدې ډول یوه نه‌صادره شوې د تصدیق غوښتنه له مخکې شته.",
     "cannotdeleteafterprocessing": "د تصدیق غوښتنه د پروسس له پیل وروسته نه شي حذف کېدای.",
     "cannotupdateafterstart": "د تصدیق غوښتنه د پروسس له پیل وروسته نه شي سمېدای.",
     "created": "د تصدیق غوښتنه په بریالیتوب سره جوړ شو",
@@ -4158,6 +4174,22 @@
         }
       }
     }
+  },
+  "paymentPrice": {
+    "title": "د تادیې بیې",
+    "description": "د تصدیق غوښتنو لپاره کارېدونکې د تادیې بیې مدیریت کړئ.",
+    "create": "د تادیې بیه زیاتول",
+    "createTitle": "د تادیې بیه جوړول",
+    "editTitle": "د تادیې بیه سمول",
+    "price": "بیه",
+    "active": "فعال",
+    "inactive": "غیرفعال",
+    "deleteConfirm": "ایا ډاډه یاست چې دا د تادیې بیه حذف کړئ؟",
+    "deleteSuccess": "د تادیې بیه په بریالیتوب حذف شوه.",
+    "createSuccess": "د تادیې بیه په بریالیتوب جوړه شوه.",
+    "updateSuccess": "د تادیې بیه په بریالیتوب تازه شوه.",
+    "validation": { "priceRequired": "مهرباني وکړئ له صفر څخه لوړه بیه دننه کړئ." },
+    "columns": { "id": "شناسه", "price": "بیه", "status": "حالت" }
   },
   "status": {
     "updated": "د غوښتنې حالت په بریالیتوب سره تازه شو."

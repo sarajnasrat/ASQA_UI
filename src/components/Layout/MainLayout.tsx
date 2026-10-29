@@ -68,6 +68,7 @@ import { InspectionAssignmentList } from "../feature/commiteeassignment/Inspecti
 import { ApprovalAssignmentList } from "../feature/commiteeassignment/ApprovalAssignmentList.tsx";
 import AuditLogList from "../feature/auditlog/AuditLogList.tsx";
 import UserProfilePage from "../feature/user/profile/UserProfilePage";
+import PaymentPriceList from "../feature/paymentprice/PaymentPriceList";
 import UserSettingsPage from "../feature/user/profile/UserSettingsPage";
 import BackupPage from "../feature/backup/BackupPage";
 import CertificationRequestTracking from "../feature/certification-request/CertificationRequestTracking.tsx";
@@ -456,6 +457,7 @@ export const MainLayout = () => {
               <Route path="company/view/:id" element={<CompanyDetails />} />
               <Route path="company/edit/:id" element={<ProtectedRoute permission="UPDATE_COMPANY"><CompanyUpdate /></ProtectedRoute>} />
               <Route path="about-us" element={<AboutUsList />} />
+              <Route path="payment-prices" element={<PaymentPriceList />} />
               <Route
                 path="about-us/view/:id"
                 element={

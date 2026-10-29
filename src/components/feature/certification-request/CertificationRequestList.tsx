@@ -72,6 +72,7 @@ export const CertificationRequestList = () => {
         first / rows,
         rows,
         "id,desc",
+        null,
       );
 
       setData(res.data.data);
@@ -386,6 +387,7 @@ export const CertificationRequestList = () => {
                 first / rows,
                 rows,
                 "id,desc",
+                null,
               );
 
             return res.data.data;

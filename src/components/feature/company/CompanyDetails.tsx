@@ -3,6 +3,7 @@ import { API_ORIGIN } from "../../../config/api";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Toast } from "primereact/toast";
+import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
 import CompanyPdfExport, { type CompanyPdfExportHandle } from "../../common/pdf/CompanyPdfExport";
 import {
@@ -32,10 +33,13 @@ import {
   Linkedin,
   Instagram,
   Youtube,
+  Trash2,
 } from "lucide-react";
 
 import CompanyService from "../../../services/company.service";
 import { handleApi } from "../../../hooks/handleApi";
+import AttachmentService from "../../../services/attachment.service";
+import { useAuth } from "../../../context/AuthContext";
 
 export const CompanyDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -43,6 +47,8 @@ export const CompanyDetails: React.FC = () => {
   const { t, i18n } = useTranslation();
   const toast = React.useRef<Toast>(null);
   const pdfExportRef = React.useRef<CompanyPdfExportHandle>(null);
+  const { hasPermission } = useAuth();
+  const [deletingAttachmentId, setDeletingAttachmentId] = useState<number | null>(null);
 
   const [company, setCompany] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -167,6 +173,41 @@ export const CompanyDetails: React.FC = () => {
     if (!path) return "";
     if (path.startsWith("http")) return path;
     return `${API_ORIGIN}${path}`;
+  };
+
+  const canDeleteAttachment = hasPermission("DELETE_ATTACHMENT");
+  const deleteAttachment = (attachment: any) => {
+    if (!attachment?.id) return;
+    confirmDialog({
+      header: t("attachment.deleteTitle", { defaultValue: t("common.delete") }),
+      message: t("attachment.deleteConfirmation", { defaultValue: t("common.confirmDelete") }),
+      icon: "pi pi-exclamation-triangle",
+      acceptClassName: "p-button-danger",
+      accept: async () => {
+        try {
+          setDeletingAttachmentId(Number(attachment.id));
+          await AttachmentService.delete(Number(attachment.id));
+          setCompany((current: any) => current ? {
+            ...current,
+            attachments: (current.attachments || []).filter((item: any) => item.id !== attachment.id),
+            certificationRequests: (current.certificationRequests || []).map((request: any) => ({
+              ...request,
+              attachments: (request.attachments || []).filter((item: any) => item.id !== attachment.id),
+            })),
+            certifications: (current.certifications || []).map((certification: any) => ({
+              ...certification,
+              attachments: (certification.attachments || []).filter((item: any) => item.id !== attachment.id),
+              certificateAttachment: certification.certificateAttachment?.id === attachment.id ? null : certification.certificateAttachment,
+            })),
+          } : current);
+          showSuccess(t("common.success"), t("attachment.deleted", { defaultValue: t("common.deleted") }));
+        } catch {
+          showError(t("common.error"), t("attachment.deleteFailed", { defaultValue: t("common.error") }));
+        } finally {
+          setDeletingAttachmentId(null);
+        }
+      },
+    });
   };
 
   const getCompanyTypeLabel = (type?: string) => {
@@ -335,6 +376,7 @@ export const CompanyDetails: React.FC = () => {
   return (
     <>
       <Toast ref={toast} />
+      <ConfirmDialog />
       <div className="min-h-screen bg-gray-50 pt-24 pb-20">
         <div className="container mx-auto px-4 max-w-7xl">
           {/* Header */}
@@ -401,7 +443,12 @@ export const CompanyDetails: React.FC = () => {
                     {t("common.download")}
                   </button>
                   <button
-                    onClick={() => navigate(`/company/edit/${id}`)}
+                    onClick={() => navigate(`/company/edit/${id}`, {
+                      state: {
+                        originPath: window.location.pathname,
+                        activeSidebarPath: window.location.pathname,
+                      },
+                    })}
                     className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
                   >
                     <Building2 className="h-4 w-4" />
@@ -1111,6 +1158,18 @@ export const CompanyDetails: React.FC = () => {
                             >
                               <Download className="h-4 w-4" />
                             </a>
+                            {canDeleteAttachment && (
+                              <button
+                                type="button"
+                                onClick={() => deleteAttachment(doc)}
+                                disabled={deletingAttachmentId === Number(doc.id)}
+                                className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-md p-1.5 text-red-500 transition-colors hover:bg-red-50 hover:text-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+                                title={t("common.delete")}
+                                aria-label={t("common.delete")}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            )}
                           </div>
                         </div>
                       ))}
@@ -1229,6 +1288,18 @@ export const CompanyDetails: React.FC = () => {
                                         >
                                           <Download className="h-4 w-4" />
                                         </a>
+                                        {canDeleteAttachment && (
+                                          <button
+                                            type="button"
+                                            onClick={() => deleteAttachment(doc)}
+                                            disabled={deletingAttachmentId === Number(doc.id)}
+                                            className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-md p-1.5 text-red-500 transition-colors hover:bg-red-50 hover:text-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+                                            title={t("common.delete")}
+                                            aria-label={t("common.delete")}
+                                          >
+                                            <Trash2 className="h-4 w-4" />
+                                          </button>
+                                        )}
                                       </div>
                                     </div>
                                   ),

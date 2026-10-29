@@ -54,6 +54,9 @@ const getRoutePermission = (pathname: string) => {
   ) {
     return "UPDATE_CERTIFICATIONREQUEST";
   }
+  if (normalizedPath === "/payment-prices") {
+    return "VIEW_PAYMENT";
+  }
   if (
     pathSegments.length === 3 &&
     menuPathMatches(pathname, "/commitee-assignment/view/:id")

@@ -197,6 +197,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         "EDIT_COMPANIES",
         "COMPANY_UPDATE",
       ],
+      VIEW_PAYMENT: ["VIEW_PAYMENT", "VIEW_PAYMENTPRICE", "VIEW_PAYMENTPRICES"],
+      ADD_PAYMENT: ["ADD_PAYMENT", "ADD_PAYMENTPRICE", "ADD_PAYMENTPRICES"],
+      UPDATE_PAYMENT: ["UPDATE_PAYMENT", "UPDATE_PAYMENTPRICE", "UPDATE_PAYMENTPRICES"],
+      DELETE_PAYMENT: ["DELETE_PAYMENT", "DELETE_PAYMENTPRICE", "DELETE_PAYMENTPRICES"],
     };
     const acceptedPermissions = equivalentPermissions[normalizedPermission] || [normalizedPermission];
     const acceptedCanonicalPermissions = acceptedPermissions.map(canonicalPermission);

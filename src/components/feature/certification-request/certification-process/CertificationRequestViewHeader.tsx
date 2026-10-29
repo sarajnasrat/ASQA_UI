@@ -220,24 +220,12 @@ const CertificationRequestViewHeader: React.FC<Props> = ({
               )}
               {request.requestStatus === "PAYMENT_PENDING" && (
                 <div className="flex flex-col gap-2 rounded-xl border border-amber-200 bg-amber-50 p-2 sm:flex-row sm:items-center">
-                  <span className="px-2 text-sm font-medium text-amber-900">
-                    {t("certificationRequest.paymentChoicePrompt")}
-                  </span>
                   <button
                     type="button"
-                    onClick={() =>
-                      request.isPrint ? onOpenPaymentDialog() : onPrintBill()
-                    }
-                    className="rounded-lg border border-blue-600 bg-white px-3 py-2 text-sm font-medium text-blue-700 hover:bg-blue-50"
+                    onClick={onPrintBill}
+                    className="rounded-lg border border-slate-600 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
                   >
-                    {t("certificationRequest.processPayment")}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => onStatusAction("AUTHORITY_DECISION")}
-                    className="rounded-lg border border-orange-600 bg-white px-3 py-2 text-sm font-medium text-orange-700 hover:bg-orange-50"
-                  >
-                    {t("certificationRequest.skipPaymentAndContinue")}
+                    {t("certificationRequest.printBill")}
                   </button>
                 </div>
               )}

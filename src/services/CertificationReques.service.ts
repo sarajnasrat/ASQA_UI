@@ -40,16 +40,17 @@ export const CertificationRequestService = {
     page: number = 0,
     size: number = 10,
     sort: string = 'id,desc',
-    certificationScope: "NATIONAL" | "INTERNATIONAL" = "NATIONAL",
+    certificationScope: "NATIONAL" | "INTERNATIONAL" | null = "NATIONAL",
   ) {
+    const params: Record<string, unknown> = {
+      status,
+      page,
+      size,
+      sort,
+    };
+    if (certificationScope) params.certificationScope = certificationScope;
     return httpClient.get(`${BASE_URL}/get-all`, {
-      params: {
-        status: status,
-        page: page,
-        size: size,
-        sort: sort,
-        certificationScope,
-      },
+      params,
     });
   },
   

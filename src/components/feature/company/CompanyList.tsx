@@ -92,7 +92,12 @@ export const CompanyList: React.FC = () => {
       ...withPermission("UPDATE_COMPANY", {
         label: t("common.edit"),
         icon: "pi pi-pencil",
-        command: () => navigate(`/company/edit/${rowData.id}`),
+        command: () => navigate(`/company/edit/${rowData.id}`, {
+          state: {
+            originPath: window.location.pathname,
+            activeSidebarPath: window.location.pathname,
+          },
+        }),
       }),
       {
         label: t("common.delete"),

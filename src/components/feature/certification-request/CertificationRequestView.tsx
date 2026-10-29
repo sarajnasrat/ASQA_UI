@@ -22,6 +22,7 @@ import { useTranslation } from "react-i18next";
 import CertificationRequestService from "../../../services/CertificationReques.service";
 import AttachmentService from "../../../services/attachment.service";
 import CommiteeService from "../../../services/comitee.service";
+import PaymentPriceService from "../../../services/paymentPrice.service";
 import FileUploadField from "../../common/FileUploadField";
 import { SmartDatePicker } from "../../common/datepicker/SmartDatePicker";
 import { IslamicDateFormatter } from "../../common/datepicker/IslamicDateFormatter";
@@ -140,7 +141,7 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { toast, showToast } = useAppToast();
   const { showSuccess: showGlobalSuccess, showError: showGlobalError } = useToast();
   const [tracker, setTracker] = useState<Tracker[]>([]);
@@ -197,6 +198,8 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
   const [paymentAmount, setPaymentAmount] = useState<string>("");
   const [uploadingPayment, setUploadingPayment] = useState(false);
   const [requestPrinted, setRequestPrinted] = useState(false);
+  const [activePaymentPrice, setActivePaymentPrice] = useState<number | null>(null);
+  const [paymentDetails, setPaymentDetails] = useState<any | null>(null);
   const pdfExportRef = useRef<CompanyPdfExportHandle>(null);
 
   const getFallbackListUrl = (status?: string) => {
@@ -223,6 +226,28 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
       loadRequestDetail();
     }
   }, [id]);
+
+  useEffect(() => {
+    const loadActivePaymentPrice = async () => {
+      try {
+        const response = await PaymentPriceService.getActive();
+        const activeResponse = response?.data?.data || response?.data;
+        const active = Array.isArray(activeResponse)
+          ? activeResponse.find((item: any) => item?.active ?? item?.isActive)
+          : activeResponse;
+        setActivePaymentPrice(active?.price != null ? Number(active.price) : null);
+      } catch {
+        setActivePaymentPrice(null);
+      }
+    };
+    void loadActivePaymentPrice();
+  }, []);
+
+  useEffect(() => {
+    if (paymentDialogVisible && activePaymentPrice !== null) {
+      setPaymentAmount(String(activePaymentPrice));
+    }
+  }, [paymentDialogVisible, activePaymentPrice]);
 
   useEffect(() => {
     const loadCommittees = async () => {
@@ -294,6 +319,16 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
         return;
       }
       setRequest(loadedRequest);
+      try {
+        const paymentResponse = await CertificationRequestService.getPaymentDetails(loadedRequest.id);
+        const paymentPayload = paymentResponse?.data?.data ?? paymentResponse?.data;
+        const latestPayment = Array.isArray(paymentPayload)
+          ? paymentPayload[paymentPayload.length - 1]
+          : paymentPayload;
+        setPaymentDetails(latestPayment || null);
+      } catch {
+        setPaymentDetails(null);
+      }
       setTracker(loadedRequest.trackers || []);
       setRequestPrinted(false);
     }
@@ -346,18 +381,20 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
 
     const companyName = getCompanyName() || "";
     const invoiceNumber = request.serialNumber || `INV-${Date.now()}`;
-    const invoiceDate = IslamicDateFormatter.formatQamari(new Date());
-    const dueDate = IslamicDateFormatter.formatQamari(
-      new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    const invoiceDate = IslamicDateFormatter.formatQamari(
+      request.createdDate || new Date(),
     );
     const itemDescription = getCertificationTypeLabel(request.certificationType);
-    const billAmount =
-      (request as any).paymentAmount !== undefined &&
-      (request as any).paymentAmount !== null &&
-      (request as any).paymentAmount !== ""
-        ? String((request as any).paymentAmount)
-        : "Contact Support";
-    const logoUrl = `${window.location.origin}/asqanew.png`;
+    const invoiceDirection = i18n.language.startsWith("en") ? "ltr" : "rtl";
+    const authorityLogoUrl = `${window.location.origin}/asqanew.png`;
+    const companyLogoUrl = request.company?.logoUrl
+      ? (request.company.logoUrl.startsWith("http")
+        ? request.company.logoUrl
+        : `${API_BASE_URL}${request.company.logoUrl}`)
+      : `${window.location.origin}/MOLSA-LOGO.png`;
+    const billAmount = activePaymentPrice !== null
+      ? activePaymentPrice.toLocaleString(undefined, { maximumFractionDigits: 2 })
+      : String((request as any).paymentAmount || "0");
 
     const billContent = `
       <!DOCTYPE html>
@@ -400,19 +437,48 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
           }
 
           .top-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 10px;
+            display: grid;
+            grid-template-columns: 145px 1fr 145px;
+            align-items: center;
+            column-gap: 24px;
+            margin-bottom: 24px;
+            padding-bottom: 18px;
           }
 
+          .header-logo {
+            width: 120px;
+            height: 76px;
+            object-fit: contain;
+          }
+
+          .header-logo.company {
+            width: 140px;
+            height: 90px;
+            justify-self: end;
+          }
+
+          .authority-header {
+            text-align: center;
+            color: #111827;
+            line-height: 1.8;
+          }
+
+          .authority-header div:nth-child(1) { font-size: 18px; font-weight: 700; }
+          .authority-header div:nth-child(2),
+          .authority-header div:nth-child(3),
+          .authority-header div:nth-child(4) { font-size: 16px; font-weight: 700; }
+          .authority-header div:nth-child(5),
+          .authority-header div:nth-child(6) { font-size: 15px; font-weight: 700; }
+
           .invoice-title {
-            font-size: 56px;
-            line-height: 0.9;
+            font-size: 42px;
+            line-height: 1;
             font-weight: 800;
             letter-spacing: -0.04em;
             color: #28345f;
             text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 22px;
           }
 
           .logo-circle {
@@ -431,7 +497,7 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
           .logo-circle img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
           }
 
           .company-block {
@@ -479,6 +545,7 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
             grid-template-columns: 1fr auto;
             gap: 8px 14px;
             align-content: start;
+            direction: ${invoiceDirection};
           }
 
           .meta-col .label {
@@ -498,12 +565,8 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
           .items-table {
             width: 100%;
             border-collapse: collapse;
+            border: 1px solid #cbd5e1;
             margin-bottom: 18px;
-          }
-
-          .items-table thead tr {
-            border-top: 2px solid #e76657;
-            border-bottom: 2px solid #e76657;
           }
 
           .items-table thead th {
@@ -513,7 +576,8 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
             font-size: 12px;
             font-weight: 800;
             text-transform: uppercase;
-            background: transparent;
+            background: #eef2ff;
+            border: 1px solid #94a3b8;
           }
 
           .items-table tbody td {
@@ -521,20 +585,17 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
             font-size: 13px;
             color: #111;
             vertical-align: top;
+            border: 1px solid #cbd5e1;
           }
 
-          .items-table th:nth-child(1),
-          .items-table td:nth-child(1) {
-            width: 44px;
-            text-align: center;
+          .items-table th:last-child,
+          .items-table td:last-child {
+            text-align: right;
           }
 
-          .items-table th:nth-child(3),
-          .items-table td:nth-child(3),
-          .items-table th:nth-child(4),
-          .items-table td:nth-child(4),
-          .items-table th:nth-child(5),
-          .items-table td:nth-child(5) {
+          .items-table.rtl th,
+          .items-table.rtl td {
+            direction: rtl;
             text-align: right;
           }
 
@@ -751,79 +812,43 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
         <div class="page-wrap">
           <div class="invoice">
             <div class="top-row">
-              <h1 class="invoice-title">Invoice</h1>
-              <div class="logo-circle">
-                <img src="${logoUrl}" alt="ASQA" />
+              <img class="header-logo" src="${authorityLogoUrl}" alt="ASQA" />
+              <div class="authority-header">
+                <div>${t("company.pdf.emirate")}</div>
+                <div>${t("company.pdf.secondaryTitle")}</div>
+                <div>${t("company.pdf.authority")}</div>
+                <div>${t("company.pdf.directorate")}</div>
+                <div>${t("company.pdf.certificationRequestDepartment")}</div>
+                <div>${t("company.pdf.mismanagementdepartment")}</div>
               </div>
+              <img class="header-logo company" src="${companyLogoUrl}" alt="Company Logo" />
             </div>
 
-            <div class="company-block">
-              <div class="name">ASQA</div>
-              <div>Kabul, Afghanistan</div>
-              <div>Afghanistan Quality Standards Authority</div>
-            </div>
+            <h1 class="invoice-title">${t("certificationRequest.invoiceTitle")}</h1>
 
-            <div class="info-grid">
-              <div class="info-col">
-                <h3>Bill To</h3>
-                <p class="person">${companyName || "-"}</p>
-                <p>Certification Request Holder</p>
-                <p>${request.trackingNumber || "-"}</p>
-              </div>
-
-              <div class="info-col">
-                <h3>Ship To</h3>
-                <p class="person">${companyName || "-"}</p>
-                <p>Certification Service</p>
-                <p>${itemDescription}</p>
-              </div>
-
+            <div class="info-grid" dir="${invoiceDirection}">
               <div class="meta-col">
-                <div class="label">Invoice #</div>
-                <div class="value">${invoiceNumber}</div>
-                <div class="label">Invoice Date</div>
-                <div class="value">${invoiceDate}</div>
-                <div class="label">P.O.#</div>
-                <div class="value">${request.trackingNumber || "-"}</div>
-                <div class="label">Due Date</div>
-                <div class="value">${dueDate}</div>
+                <div class="label">${t("certificationRequest.invoiceDate")}</div>
+                <div class="value"><bdi>${invoiceDate}</bdi></div>
               </div>
             </div>
 
-            <table class="items-table">
+            <table class="items-table ${invoiceDirection === "rtl" ? "rtl" : ""}">
               <thead>
                 <tr>
-                  <th>Qty</th>
-                  <th>Description</th>
-                  <th>Unit Price</th>
-                  <th>Qty</th>
-                  <th>Amount</th>
+                  <th>${t("certificationRequest.invoiceCertificationType")}</th>
+                  <th>${t("certificationRequest.invoiceCompanyName")}</th>
+                  <th>${t("certificationRequest.invoiceAmountToPay")}</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>1</td>
                   <td>${itemDescription}</td>
-                  <td>${billAmount}</td>
-                  <td>1</td>
+                  <td>${companyName || "-"}</td>
                   <td>${billAmount}</td>
                 </tr>
               </tbody>
             </table>
-
-            <div class="totals">
-              <div class="totals-row">
-                <span>Subtotal</span>
-                <span>${billAmount}</span>
-              </div>
-              <div class="totals-row">
-                <span>Service Tax 0%</span>
-                <span>0.00</span>
-              </div>
-        
-            </div>
-
-       
 
             <div class="bottom-row">
               <div class="terms">
@@ -871,9 +896,11 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
         : new Date().toISOString().slice(0, 10),
     );
     setPaymentAmount(
-      (request as any).paymentAmount
-        ? String((request as any).paymentAmount)
-        : "",
+      activePaymentPrice !== null
+        ? String(activePaymentPrice)
+        : (request as any).paymentAmount
+          ? String((request as any).paymentAmount)
+          : "",
     );
     setPaymentDialogVisible(true);
   };
@@ -940,23 +967,6 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
     }
 
     setUploadingPayment(false);
-  };
-
-  const downloadPaymentReceipt = async () => {
-    if (!request) return;
-
-    const resp = await handleApi(
-      () => CertificationRequestService.getPaymentReceipt(request.id),
-      () => {},
-      (message: string) => showToast("error", t("common.error"), message),
-      t,
-    );
-
-    if (resp?.data) {
-      const blob = resp.data;
-      const url = window.URL.createObjectURL(new Blob([blob]));
-      window.open(url, "_blank");
-    }
   };
 
   const getStatusConfirmationMessage = (status: string) => {
@@ -1629,6 +1639,12 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
   const dialogRequestId =
     request?.serialNumber || request?.trackingNumber || "";
   const dialogCompanyName = getCompanyName() || "";
+  const displayedPayment =
+    paymentDetails ||
+    (Array.isArray((request as any).payments)
+      ? (request as any).payments[(request as any).payments.length - 1]
+      : (request as any).payments) ||
+    request;
 
   return (
     <div className="min-h-screen bg-gray-50  pb-10">
@@ -2081,12 +2097,12 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
                       <input
                         type="number"
                         value={paymentAmount}
-                        onChange={(e) => setPaymentAmount(e.target.value)}
+                        readOnly
                         placeholder={
                           t("certificationRequest.paymentAmount") ||
                           "Payment Amount"
                         }
-                        className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full cursor-not-allowed rounded-lg border border-gray-300 bg-gray-100 px-3 py-2 text-gray-700 focus:outline-none"
                       />
                     </div>
                   </div>
@@ -2141,7 +2157,7 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
                         "Transaction ID"}
                     </span>
                     <span className="font-medium text-gray-900">
-                      {(request as any).payments.transactionId || "-"}
+                      {displayedPayment?.transactionId || displayedPayment?.referenceNumber || "-"}
                     </span>
                   </div>
                   <div>
@@ -2149,9 +2165,9 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
                       {t("certificationRequest.paymentDate") || "Payment Date"}
                     </span>
                     <span className="font-medium text-gray-900">
-                      {(request as any).paymentDate
+                      {displayedPayment?.paymentDate
                         ? IslamicDateFormatter.formatQamari(
-                            (request as any).paymentDate,
+                            displayedPayment.paymentDate,
                           )
                         : "-"}
                     </span>
@@ -2162,39 +2178,8 @@ const CertificationRequestView: React.FC<CertificationRequestViewProps> = ({ exp
                         "Payment Amount"}
                     </span>
                     <span className="font-medium text-gray-900">
-                      {(request as any).paymentAmount || "-"}
+                      {displayedPayment?.paymentAmount ?? "-"}
                     </span>
-                  </div>
-                  <div>
-                    <span className="block text-xs text-gray-500">
-                      {t("certificationRequest.scannedBill") || "Scanned Bill"}
-                    </span>
-                    <div className="flex flex-wrap gap-2 mt-1">
-                      <button
-                        type="button"
-                        onClick={downloadPaymentReceipt}
-                        className="px-3 py-1 rounded-md bg-blue-600 text-white text-sm"
-                      >
-                        {t("common.view") || "View"}
-                      </button>
-                      <a
-                        href={
-                          (request as any).paymentReceiptUrl ||
-                          (request as any).receiptFilePath ||
-                          "#"
-                        }
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`px-3 py-1 rounded-md text-sm ${
-                          (request as any).paymentReceiptUrl ||
-                          (request as any).receiptFilePath
-                            ? "bg-gray-100 text-gray-800"
-                            : "text-gray-400"
-                        }`}
-                      >
-                        {t("common.download") || "Download"}
-                      </a>
-                    </div>
                   </div>
                 </div>
 

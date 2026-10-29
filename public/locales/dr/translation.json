@@ -425,6 +425,10 @@
     "pressEsc": "برای لغو ESC را فشار دهید"
   },
   "company": {
+    "notfoundbyjawaz": "با شماره جواز واردشده هیچ شرکتی پیدا نشد.",
+    "blacklisted": { "cannotcreaterequest": "این شرکت در فهرست سیاه قرار دارد و نمی‌تواند درخواست تصدیق ایجاد کند." },
+    "suspended": { "cannotcreaterequest": "این شرکت تعلیق شده است و نمی‌تواند درخواست تصدیق ایجاد کند." },
+    "notwhitelisted": { "cannotcreaterequest": "این شرکت در فهرست سفید نیست و نمی‌تواند درخواست تصدیق ایجاد کند." },
     "certificationrequests": "درخواست ها",
     "companytyperequired": "نوع شرکت الزامی است",
     "companyOwnerName": "نام مالک",
@@ -469,6 +473,7 @@
       "suspendDescription": "دلیل تعلیق {{name}} را وارد کنید.",
       "blacklistDescription": "دلیل درج {{name}} در لیست سیاه را وارد کنید.",
       "confirmWhitelist": "آیا {{name}} در لیست سفید قرار گیرد؟",
+      "confirmWhitelistTitle": "درج شرکت در لیست سفید: {{name}}",
       "restrictionExplanation": "این شرکت نمی‌تواند درخواست تصدیق‌نامه ایجاد کند یا وضعیت درخواست‌ها و تصدیق‌نامه‌ها را تغییر دهد.",
       "reasonHelp": "دلیل این اقدام را واضح بنویسید. دلیل در فهرست شرکت‌ها نمایش داده می‌شود.",
       "reasonPlaceholder": "دلیل این اقدام را وارد کنید",
@@ -1188,6 +1193,12 @@
     }
   },
   "certificationRequest": {
+    "invoiceTitle": "سند پرداخت",
+    "billedTo": "بل شده به",
+    "invoiceDate": "تاریخ سند پرداخت",
+    "invoiceCertificationType": "نوع تصدیق",
+    "invoiceCompanyName": "نام شرکت",
+    "invoiceAmountToPay": "مبلغ قابل پرداخت",
     "manage": { "badge": "مدیریت درخواست‌ها", "title": "مدیریت درخواست‌های تائید", "description": "درخواست را جستجو کرده و وضعیت آن را تغییر دهید.", "emptyTitle": "جستجوی درخواست برای مدیریت", "emptyDescription": "شماره پیگیری یا نام شرکت را وارد کنید.", "selectStatus": "وضعیت جدید را انتخاب کنید" },
     "inspectionCommitteeReferral": "راجع نمودن به هئیت تفتیش",
     "standardsManagement": "مدیریت استانداردها",
@@ -1432,10 +1443,13 @@
       "invoiceNumber": "شماره فاکتور",
       "authority": "اداره ستندرد و کیفیت افغانستان",
       "billedTo": "بل شده به",
-      "invoiceDate": "تاریخ فاکتور",
+      "invoiceDate": "تاریخ سند پرداخت",
       "dueDate": "تاریخ سررسید",
       "itemNo": "شماره",
       "itemDescription": "شرح مورد",
+      "invoiceCertificationType": "نوع تصدیق",
+      "invoiceCompanyName": "نام شرکت",
+      "invoiceAmountToPay": "مبلغ قابل پرداخت",
       "price": "قیمت",
       "quantity": "تعداد",
       "amount": "مبلغ",
@@ -1976,6 +1990,7 @@
       "assignmentBy": " راجع داده شده توسط",
       "assignmentAt": "تاریخ راجع  ",
       "confirmStartProgress": "آیامی خواهید پروسه تفتیش درخواست را آعاز نمائید؟",
+      "confirmStartApproval": "آیا می‌خواهید روند تأیید این درخواست را آغاز کنید؟",
       "confirmComplete": "آیا مطمئن هستید که می‌خواهید این تخصیص را تکمیل‌شده علامت‌گذاری کنید؟",
       "notMentioned": "ذکر نشده",
       "payments": "پرداخت‌ها",
@@ -3974,6 +3989,7 @@
     }
   },
   "certificationrequest": {
+    "duplicateunissuedtype": "یک درخواست تصدیق صادرنشده از این نوع برای این شرکت از قبل وجود دارد.",
     "cannotdeleteafterprocessing": "پس از آغاز روند رسیدگی، درخواست تصدیق قابل حذف نیست.",
     "cannotupdateafterstart": "پس از آغاز روند رسیدگی، درخواست تصدیق قابل ویرایش نیست.",
     "created": "درخواست تصدیق با موفقیت ایجاد شد",
@@ -4165,6 +4181,22 @@
         }
       }
     }
+  },
+  "paymentPrice": {
+    "title": "قیمت‌های پرداخت",
+    "description": "قیمت‌های پرداخت مورد استفاده برای درخواست‌های تصدیق را مدیریت کنید.",
+    "create": "افزودن قیمت پرداخت",
+    "createTitle": "ایجاد قیمت پرداخت",
+    "editTitle": "ویرایش قیمت پرداخت",
+    "price": "قیمت",
+    "active": "فعال",
+    "inactive": "غیرفعال",
+    "deleteConfirm": "آیا مطمئن هستید که می‌خواهید این قیمت پرداخت را حذف کنید؟",
+    "deleteSuccess": "قیمت پرداخت با موفقیت حذف شد.",
+    "createSuccess": "قیمت پرداخت با موفقیت ایجاد شد.",
+    "updateSuccess": "قیمت پرداخت با موفقیت به‌روزرسانی شد.",
+    "validation": { "priceRequired": "لطفاً قیمتی بیشتر از صفر وارد کنید." },
+    "columns": { "id": "شناسه", "price": "قیمت", "status": "وضعیت" }
   },
   "status": {
     "updated": "وضعیت درخواست با موفقیت به‌روزرسانی شد."

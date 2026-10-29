@@ -347,11 +347,12 @@ const loadData = async () => {
       value: "COMPLETED",
       icon: "pi pi-exclamation-circle",
     },
-    {
-      label: t("commitee.assignment.status.rejected"),
-      value: "REJECTED",
-      icon: "pi pi-cancel",
-    }
+    // Rejected tab is temporarily disabled.
+    // {
+    //   label: t("commitee.assignment.status.rejected"),
+    //   value: "REJECTED",
+    //   icon: "pi pi-cancel",
+    // }
   ];
 
   return (

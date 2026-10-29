@@ -32,6 +32,8 @@ interface StatusHistory {
   id: number;
   status: string;
   changedAt: string;
+  startDate?: string;
+  endDate?: string;
   changedBy?: string;
   comments?: string;
   attachments?: Attachment[];
@@ -111,6 +113,12 @@ const useStatusConfig = (): StatusConfig => {
       icon: <AlertCircle size={14} />,
       color: "text-amber-600",
       bg: "bg-amber-50",
+    },
+    AUTHORITY_DECISION: {
+      label: t("certificationRequest.statusOptions.public.AUTHORITY_DECISION"),
+      icon: <AlertCircle size={14} />,
+      color: "text-orange-600",
+      bg: "bg-orange-50",
     },
     CERTIFICATION_ISSUED: {
       label: t("certificationRequest.statusOptions.public.CERTIFICATION_ISSUED"),
@@ -327,6 +335,25 @@ const TimelineItem = ({
         <p className="text-sm text-gray-600 mt-1">
           {t("certification.updatedBy")} <strong>{item.changedBy}</strong>
         </p>
+      )}
+
+      {item.status === "DEADLINE_ASSIGNED" && (item.startDate || item.endDate) && (
+        <div className="mt-3 rounded-lg border border-orange-100 bg-orange-50 p-3 text-sm text-gray-700">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            {item.startDate && (
+              <div>
+                <span className="font-medium">{t("common.startDate")}:</span>{" "}
+                {IslamicDateFormatter.formatQamari(item.startDate, true)}
+              </div>
+            )}
+            {item.endDate && (
+              <div>
+                <span className="font-medium">{t("common.endDate")}:</span>{" "}
+                {IslamicDateFormatter.formatQamari(item.endDate, true)}
+              </div>
+            )}
+          </div>
+        </div>
       )}
 
       {item.comments && (

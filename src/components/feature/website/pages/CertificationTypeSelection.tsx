@@ -21,6 +21,11 @@ const normalizeCertificationScope = (value?: string) => {
   return value || "";
 };
 
+const getCertificationScope = (certificationType: string, scope?: string) =>
+  certificationType === "STANDARD_MARK_CERTIFICATION"
+    ? "NATIONAL"
+    : normalizeCertificationScope(scope);
+
 interface CertificationTypeSelectionProps {
   onSuccess?: (
     requestType: string,
@@ -368,8 +373,17 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
       requestType: formData.requestType,
       jawazNumber: formData.jawazNumber.trim() || undefined,
       requestStatus: "DRAFT",
-      certificationScope: normalizeCertificationScope(formData.mainType),
-      certificationMainType: normalizeCertificationScope(formData.mainType),
+      // Standard Mark Certification is always a national request. Keep this
+      // enforced here as well as in the UI because the scope selector is
+      // intentionally hidden for this certification type.
+      certificationScope: getCertificationScope(
+        formData.certificationType,
+        formData.mainType,
+      ),
+      certificationMainType: getCertificationScope(
+        formData.certificationType,
+        formData.mainType,
+      ),
       certificationType:
         formData.certificationType === "DOMESTIC_QUALITY_CERTIFICATION"
           ? formData.domesticCategory
@@ -469,6 +483,9 @@ const CertificationTypeSelection: React.FC<CertificationTypeSelectionProps> = ({
 
       if (field === "certificationType") {
         newData.domesticCategory = "";
+        if (value === "STANDARD_MARK_CERTIFICATION") {
+          newData.mainType = "NATIONAL";
+        }
       }
 
       if (field === "requestType" && value !== "RENEWAL" && !isCompanyRegistered) {
